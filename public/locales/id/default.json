@@ -48,7 +48,7 @@
     "search": "Cari",
     "successUpdatePasswordMessage": "Password berhasil diubah",
     "class": "Kelas",
-    "brand": "Brand",
+    "brand": "Merk",
     "model": "Model",
     "year": "Tahun",
     "type": "Jenis",
@@ -133,6 +133,7 @@
     "chooseBrand": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.brand)",
     "chooseModel": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.model)",
     "formHeavyEquipment": "$t(commonTypography.form) $t(heavyEquipment.heavyEquipmentTitle)",
-    "detailReference": "$t(commonTypography.detail) $t(commonTypography.reference) $t(commonTypography.heavyEquipment)"
+    "detailReference": "$t(commonTypography.detail) $t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
+    "successCreateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dibuat"
   }
 }

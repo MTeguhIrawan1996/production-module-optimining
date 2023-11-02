@@ -39,7 +39,7 @@
       "siujpDate": "Tanggal SIUJP",
       "ippNumber": "Nomor IPP",
       "ippDate": "Tanggal IPP",
-      "brandHeavyEquipment": "brand Alat Berat",
+      "brandHeavyEquipment": "Merk Alat Berat",
       "modelHeavyEquipment": "Model Alat Berat",
       "typeHeavyEquipment": "Jenis Alat Berat",
       "specHeavyEquipment": "Spesifikasi Alat Berat",
@@ -47,8 +47,8 @@
       "photoOrDocument": "Foto/Dokumen"
     },
     "fieldDescription": {
-      "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG atau .PNG",
-      "photoDescription": "Maksimal 10Mb dengan extention .JPEG .JPG atau .PNG",
+      "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",
+      "photoDescription3": "Jumlah file maksimal 3 dengan ukuran 10MB extention .JPEG .JPG .PNG atau .WEBP",
       "uploadPdfDescription": "Unggah Dokumen Maksimal 10Mb dengan extention PDF"
     },
     "modal": {

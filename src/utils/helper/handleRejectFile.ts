@@ -15,6 +15,7 @@ export const handleRejectFile = <T>({
   const errorMessages = {
     'file-too-large': 'Ukuran file tidak sesuai',
     'file-invalid-type': 'Format file tidak sesuai',
+    'too-many-files': 'Jumlah file tidak sesuai',
     default: 'Periksa kembali file anda',
   };
 

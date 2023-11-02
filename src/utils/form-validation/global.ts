@@ -78,18 +78,33 @@ export const zImageRequired = z
     }
   );
 
-export const zImageArrayRequired = z.array(
-  z
-    .custom<File>()
-    .refine((file) => file, { message: 'Harus diisi' })
-    .refine(
-      (file) =>
-        file &&
-        ['image/png', 'image/jpeg', 'image/png', 'image/webp'].includes(
-          file.type
-        ),
-      {
-        message: 'File harus Foto',
-      }
-    )
-);
+export const zImageArrayRequired = z
+  .custom<File>()
+  .refine(
+    (file) =>
+      file &&
+      ['image/png', 'image/jpeg', 'image/png', 'image/webp'].includes(
+        file.type
+      ),
+    {
+      message: 'File harus Foto',
+    }
+  )
+  .array()
+  .nonempty({
+    message: 'Foto wajib diisi',
+  });
+
+export const zImageArrayOptional = z
+  .custom<File>()
+  .refine(
+    (file) =>
+      file &&
+      ['image/png', 'image/jpeg', 'image/png', 'image/webp'].includes(
+        file.type
+      ),
+    {
+      message: 'File harus Foto',
+    }
+  )
+  .array();

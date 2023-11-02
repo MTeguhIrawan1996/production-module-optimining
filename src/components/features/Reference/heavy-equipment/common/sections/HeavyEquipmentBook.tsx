@@ -102,7 +102,6 @@ const HeavyEquipmentBook = () => {
     };
   }, []);
   const modelItems = modelData?.map(renderModel);
-
   /* #endregion  /**======== FilterData =========== */
 
   /* #   /**=========== FilterRender =========== */

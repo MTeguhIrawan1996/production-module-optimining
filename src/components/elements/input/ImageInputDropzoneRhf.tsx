@@ -66,14 +66,14 @@ const ImageInputDropzoneRhf: React.FC<IImageInputDropzoneRhfProps> = ({
     const previews: JSX.Element[] = field.value?.map(
       (file: FileWithPath & IFile, index: number) => {
         const serverFile = 'id' in file;
-        // const imageUrl = URL.createObjectURL(file);
+        const imageUrl = URL.createObjectURL(file);
         return (
           <Stack key={index} align="center" spacing="xs">
             <NextImageFill
               src={
                 serverFile
                   ? `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${file.url}`
-                  : URL.createObjectURL(file)
+                  : imageUrl
               }
               alt={file.name}
               figureProps={{

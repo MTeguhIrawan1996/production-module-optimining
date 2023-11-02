@@ -1,41 +1,132 @@
-import { FileWithPath } from '@mantine/dropzone';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useDebouncedValue } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
+import { IconCheck } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import {
+  IBrandData,
+  useReadAllBrand,
+} from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
+import {
+  IHeavyEquipmentModelData,
+  useReadAllHeavyEquipmentModel,
+} from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentModel';
+import {
+  IHeavyEquipmentTypeData,
+  useReadAllHeavyEquipmentType,
+} from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
+import {
+  ICreateHeavyEquipmentValues,
+  useCreateHeavyEquipment,
+} from '@/services/restapi/heavy-equipment/useCreateHeavyEquipment';
+import { createHeavyEquipmentSchema } from '@/utils/form-validation/reference-heavy-equipment/heavy-equipment-validation';
+import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 
 import { ControllerGroup, ControllerProps } from '@/types/global';
 
-interface ICreateHeavyEquipmentValues {
-  modelId: string;
-  spec: string;
-  year: string;
-  photos: FileWithPath[] | string | null;
-  brand: string;
-}
-
 const CreateHeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const [brandSearchTerm, setBrandSearchTerm] = React.useState<string>('');
+  const [brandSearchQuery] = useDebouncedValue<string>(brandSearchTerm, 400);
+  const [typeSearchTerm, settypeSearchTerm] = React.useState<string>('');
+  const [typeSearchQuery] = useDebouncedValue<string>(typeSearchTerm, 400);
+  const [modelSearchTerm, setModelSearchTerm] = React.useState<string>('');
+  const [modelSearchQuery] = useDebouncedValue<string>(modelSearchTerm, 400);
 
   /* #   /**=========== Methods =========== */
-
   const methods = useForm<ICreateHeavyEquipmentValues>({
+    resolver: zodResolver(createHeavyEquipmentSchema),
     defaultValues: {
       photos: [],
       modelId: '',
+      brandId: '',
+      typeId: '',
       spec: '',
-      year: '',
-      brand: '',
+      createdYear: '',
     },
     mode: 'onBlur',
   });
-
+  const brandId = methods.watch('brandId');
+  const typeId = methods.watch('typeId');
   /* #endregion  /**======== Methods =========== */
+
+  /* #   /**=========== Query =========== */
+  const { brandsData } = useReadAllBrand({
+    variables: {
+      limit: 15,
+      search: brandSearchQuery === '' ? null : brandSearchQuery,
+    },
+  });
+  const { typesData } = useReadAllHeavyEquipmentType({
+    variables: {
+      limit: 15,
+      search: typeSearchQuery === '' ? null : typeSearchQuery,
+      brandId,
+    },
+  });
+  const { modelData } = useReadAllHeavyEquipmentModel({
+    variables: {
+      limit: 15,
+      search: modelSearchQuery === '' ? null : modelSearchQuery,
+      brandId,
+      typeId,
+    },
+  });
+  const { mutate, isLoading } = useCreateHeavyEquipment({
+    onError: (err) => {
+      if (err.response) {
+        const errorArry = errorRestBadRequestField(err);
+        errorArry?.forEach(({ name, type, message }) => {
+          methods.setError(name, { type, message });
+        });
+      }
+    },
+    onSuccess: () => {
+      notifications.show({
+        color: 'green',
+        title: 'Selamat',
+        message: t('heavyEquipment.successCreateMessage'),
+        icon: <IconCheck />,
+      });
+      router.push('/reference/heavy-equipment');
+      methods.reset();
+    },
+  });
+  /* #endregion  /**======== Query =========== */
+
+  /* #   /**=========== FilterData =========== */
+  const renderBrands = React.useCallback((value: IBrandData) => {
+    return {
+      label: value.name,
+      value: value.id,
+    };
+  }, []);
+  const brandItems = brandsData?.map(renderBrands);
+
+  const renderTypes = React.useCallback((value: IHeavyEquipmentTypeData) => {
+    return {
+      label: value.name,
+      value: value.id,
+    };
+  }, []);
+  const typeItems = typesData?.map(renderTypes);
+
+  const renderModel = React.useCallback((value: IHeavyEquipmentModelData) => {
+    return {
+      label: value.name,
+      value: value.id,
+    };
+  }, []);
+  const modelItems = modelData?.map(renderModel);
+  /* #endregion  /**======== FilterData =========== */
 
   /* #   /**=========== Field =========== */
   const fieldCreateHeavyEquipment = React.useMemo(() => {
@@ -43,7 +134,7 @@ const CreateHeavyEquipmentBook = () => {
       control: 'image-dropzone',
       name: 'photos',
       label: 'photo',
-      description: 'photoDescription',
+      description: 'photoDescription3',
       maxSize: 10 * 1024 ** 2 /* 10MB */,
       multiple: true,
       maxFiles: 3,
@@ -66,27 +157,60 @@ const CreateHeavyEquipmentBook = () => {
         formControllers: [
           {
             control: 'select-input',
-            data: [],
-            name: 'brand',
+            data: brandItems ?? [],
+            name: 'brandId',
             label: 'brandHeavyEquipment',
+            placeholder: t('heavyEquipment.chooseBrand'),
             colSpan: 6,
             withAsterisk: true,
+            searchable: true,
+            clearable: true,
+            nothingFound: null,
+            onSearchChange: setBrandSearchTerm,
+            searchValue: brandSearchTerm,
+            onChange: (value) => {
+              methods.setValue('brandId', value ?? '');
+              methods.setValue('typeId', '');
+              methods.setValue('modelId', '');
+              methods.trigger('brandId');
+            },
           },
           {
             control: 'select-input',
-            data: [],
-            name: 'brand',
+            data: typeItems ?? [],
+            name: 'typeId',
             label: 'typeHeavyEquipment',
+            placeholder: t('heavyEquipment.chooseType'),
             colSpan: 6,
             withAsterisk: true,
+            onChange: (value) => {
+              methods.setValue('typeId', value ?? '');
+              methods.setValue('modelId', '');
+              methods.trigger('typeId');
+            },
+            searchable: true,
+            clearable: true,
+            nothingFound: null,
+            onSearchChange: settypeSearchTerm,
+            searchValue: typeSearchTerm,
           },
           {
             control: 'select-input',
-            data: [],
-            name: 'brand',
+            onChange: (value) => {
+              methods.setValue('modelId', value ?? '');
+              methods.trigger('modelId');
+            },
+            name: 'modelId',
+            data: modelItems ?? [],
             label: 'modelHeavyEquipment',
+            placeholder: t('heavyEquipment.chooseModel'),
             colSpan: 6,
             withAsterisk: true,
+            searchable: true,
+            clearable: true,
+            nothingFound: null,
+            onSearchChange: setModelSearchTerm,
+            searchValue: modelSearchTerm,
           },
           {
             control: 'text-input',
@@ -112,18 +236,39 @@ const CreateHeavyEquipmentBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  }, [
+    brandItems,
+    brandSearchTerm,
+    modelItems,
+    modelSearchTerm,
+    typeItems,
+    typeSearchTerm,
+  ]);
   /* #endregion  /**======== Field =========== */
+
+  /* #   /**=========== HandleSubmitFc =========== */
+  const handleSubmitForm: SubmitHandler<ICreateHeavyEquipmentValues> = (
+    data
+  ) => {
+    const { modelId, createdYear, photos, spec } = data;
+    mutate({
+      modelId,
+      createdYear,
+      photos,
+      spec,
+    });
+  };
+  /* #endregion  /**======== HandleSubmitFc =========== */
+
   return (
     <DashboardCard p={0}>
       <GlobalFormGroup
         field={fieldCreateHeavyEquipment}
         methods={methods}
-        // eslint-disable-next-line no-console
-        submitForm={(data) => console.log(data)}
+        submitForm={handleSubmitForm}
         submitButton={{
           label: t('commonTypography.save'),
+          loading: isLoading,
         }}
         backButton={{
           onClick: () => router.back(),
