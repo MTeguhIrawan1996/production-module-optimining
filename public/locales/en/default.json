@@ -1,0 +1,138 @@
+{
+  "halloworld": "Hallo World",
+  "commonTypography": {
+    "company": "Perusahaan",
+    "companyType": "Jenis Perusahaan",
+    "companyName": "Nama Perusahaan",
+    "companyCode": "Kode Perusahaan",
+    "companyLogo": "Logo Perusahaan",
+    "next": "Selanjutnya",
+    "address": "Alamat",
+    "director": "Direktur",
+    "action": "Aksi",
+    "create": "Tambah",
+    "read": "Lihat",
+    "update": "Ubah",
+    "delete": "Hapus",
+    "detail": "Detail",
+    "login": "Masuk",
+    "description": "Deskripsi",
+    "save": "Simpan",
+    "cancelled": "Batal",
+    "back": "Kembali",
+    "validation": "Validasi",
+    "edit": "Edit",
+    "role": "Role",
+    "name": "Nama",
+    "information": "Informasi",
+    "choose": "Pilih",
+    "chooseAll": "Pilih Semua",
+    "setting": "Pengaturan",
+    "contact": "Kontak",
+    "dataNotfound": "Belum ada data",
+    "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG atau .PNG",
+    "modalNonActiveTitle": "Kamu yakin ingin nonaktifkan pengguna?",
+    "modalActiveTitle": "Aktifkan Pengguna?",
+    "modalNonActiveDescription": "Pengguna yang dinonaktifkan suatu saat bisa diaktifkan kembali",
+    "modalActiveDescription": "Pengguna yang diaktifkan suatu saat bisa dinonaktifkan kembali",
+    "alertTitleConfirmDelete": "Apakah Anda yakin ingin menghapus?",
+    "alertDescConfirmDelete": "Setelah Anda menyetujui, data  akan terhapus",
+    "activeLabel": "Aktif",
+    "nonActiveLabel": "Nonaktif",
+    "activate": "Aktfikan",
+    "disableIt": "Nonaktifkan",
+    "reference": "Referensi",
+    "heavyEquipment": "Alat Berat",
+    "user": "Pengguna",
+    "form": "Formulir",
+    "search": "Cari",
+    "successUpdatePasswordMessage": "Password berhasil diubah",
+    "class": "Kelas",
+    "brand": "brand",
+    "model": "Model",
+    "year": "Tahun",
+    "type": "Jenis",
+    "document": "Dokumen"
+  },
+  "sideBar": {
+    "dashboard": "Dashboard",
+    "masterData": "Master Data",
+    "company": "$t(commonTypography.company)",
+    "companyType": "$t(commonTypography.companyType)",
+    "reference": "$t(commonTypography.reference)",
+    "setting": "$t(commonTypography.setting)",
+    "managementRole": "Manajemen $t(commonTypography.role)",
+    "user": "$t(commonTypography.user)",
+    "heavyEquipmentClass": "$t(commonTypography.class) $t(commonTypography.heavyEquipment)",
+    "heavyEquipment": "$t(commonTypography.heavyEquipment)"
+  },
+  "auth": {
+    "button": {
+      "login": "$t(commonTypography.login)"
+    },
+    "title": "$t(commonTypography.login) to Optimining"
+  },
+  "managementRole": {
+    "managementRoleTitle": "Manajemen $t(commonTypography.role)",
+    "createRole": "$t(commonTypography.create) $t(commonTypography.role)",
+    "editRole": "$t(commonTypography.edit) $t(commonTypography.role)",
+    "readRole": "$t(commonTypography.detail) $t(commonTypography.role)",
+    "formManagementRole": "$t(commonTypography.form) $t(managementRole.managementRoleTitle)",
+    "roleName": "$t(commonTypography.name) $t(commonTypography.role)",
+    "information": "$t(commonTypography.information)",
+    "accessSetting": "$t(commonTypography.setting) Hak Akses",
+    "accessPermission": "Izin Akses",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.role)",
+    "successCreateMessage": "$t(commonTypography.role) berhasil dibuat",
+    "successDeleteMessage": "$t(commonTypography.role) berhasil dihapus",
+    "successUpdateMessage": "$t(commonTypography.role) berhasil diubah",
+    "field": {
+      "accessMasterDataCompany": "Master Data - Perusahaan",
+      "accessMasterDataSDM": "Master Data - SDM",
+      "accessMasterDataHeavyEquipment": "Master Data - Alat Berat",
+      "accessMasterDataPlan": "Master Data - Rencana",
+      "accessMasterDataLocation": "Master Data - Lokasi",
+      "accessMasterDataMaterial": "Master Data - Material",
+      "accessMasterDataWorkingHoursePlan": "Master Data - Working Hourse Plan",
+      "accessMasterDataSpatial": "Master Data - Data Spasial"
+    }
+  },
+  "user": {
+    "userTitle": "$t(commonTypography.user)",
+    "createUser": "$t(commonTypography.create) $t(commonTypography.user)",
+    "formUser": "$t(commonTypography.form) $t(user.userTitle)",
+    "successCreateMessage": "$t(user.userTitle) berhasil dibuat",
+    "successDeleteMessage": "$t(user.userTitle) berhasil dihapus",
+    "successUpdateMessage": "$t(user.userTitle) berhasil diubah",
+    "successUpdateStatusActiveMessage": "$t(user.userTitle) berhasil diaktifkan",
+    "successUpdateStatusNonActiveMessage": "$t(user.userTitle) berhasil dinonaktfikan",
+    "searchPlaceholder": "$t(commonTypography.search) $t(commonTypography.user)",
+    "activeUser": "$t(commonTypography.activate) pengguna",
+    "nonActiveUser": "$t(commonTypography.disableIt) pengguna",
+    "button": {
+      "createUser": "$t(createUser)"
+    },
+    "table": {
+      "activeStatus": "Status Aktif"
+    }
+  },
+  "companyType": {
+    "companyTypeTitle": "$t(commonTypography.companyType)"
+  },
+  "company": {
+    "createCompany": "$t(commonTypography.create) $t(commonTypography.company)",
+    "chooseCompanyType": "$t(commonTypography.choose) $t(commonTypography.companyType)",
+    "formCompany": "$t(commonTypography.form) $t(commonTypography.company)",
+    "profileCompany": "Profil $t(commonTypography.company)"
+  },
+  "heavyEquipment": {
+    "heavyEquipmentTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
+    "createHeavyEquipment": "$t(commonTypography.create) $t(commonTypography.heavyEquipment)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type), $t(commonTypography.brand), $t(commonTypography.model), dan $t(commonTypography.year)",
+    "chooseType": "$t(commonTypography.choose)/cari $t(commonTypography.type)",
+    "chooseBrand": "$t(commonTypography.choose)/cari $t(commonTypography.brand)",
+    "chooseModel": "$t(commonTypography.choose)/cari $t(commonTypography.model)",
+    "formHeavyEquipment": "$t(commonTypography.form) $t(heavyEquipment.heavyEquipmentTitle)",
+    "detailReference": "$t(commonTypography.detail) $t(commonTypography.reference) $t(commonTypography.heavyEquipment)"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "components": {
+    "field": {
+      "name": "Nama",
+      "fullname": "Nama Lengkap",
+      "username": "Username",
+      "usernameOrEmail": "Username/Email",
+      "email": "Email",
+      "phoneNumber": "No Telepon",
+      "oldPassword": "Password Lama",
+      "confirmPassword": "Konfirmasi Password",
+      "newPassword": "Password Baru",
+      "password": "Password",
+      "description": "Deskripsi",
+      "roleName": "Nama Role",
+      "role": "Role",
+      "photo": "Foto",
+      "companyName": "Nama Perusahaan",
+      "companyAlias": "Nama Alias Perusahaan",
+      "province": "Provinsi",
+      "regency": "Kabupaten/Kota",
+      "subdistrict": "Kecamatan",
+      "village": "Desa/Keluarahan",
+      "address": "Alamat",
+      "contactNumberOne": "Nomor Kontak 1",
+      "contactNumberTwo": "Nomor Kontak 2",
+      "emailOne": "Email 1",
+      "emailTwo": "Email 2",
+      "faxNumber": "Fax Number",
+      "code": "Code",
+      "nib": "NIB (Nomor Izin Berusaha)",
+      "companyType": "Jenis Perusahaan",
+      "businessPermit": "Izin Usaha",
+      "companyLogo": "Logo Perusahaan",
+      "uploadPdf": "Unggah Dokumen",
+      "iupNumber": "Nomor IUP",
+      "iupDate": "Tanggal IUP",
+      "siujpNumber": "Nomor SIUJP",
+      "siujpDate": "Tanggal SIUJP",
+      "ippNumber": "Nomor IPP",
+      "ippDate": "Tanggal IPP",
+      "brandHeavyEquipment": "Merk Alat Berat",
+      "modelHeavyEquipment": "Model Alat Berat",
+      "typeHeavyEquipment": "Jenis Alat Berat",
+      "specHeavyEquipment": "Spesifikasi Alat Berat",
+      "productionYear": "Tahun Pembuatan",
+      "photoOrDocument": "Foto/Dokumen"
+    },
+    "fieldDescription": {
+      "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG atau .PNG",
+      "photoDescription": "Maksimal 10Mb dengan extention .JPEG .JPG atau .PNG",
+      "uploadPdfDescription": "Unggah Dokumen Maksimal 10Mb dengan extention PDF"
+    },
+    "modal": {
+      "updatePasswordModal": {
+        "title": "Ubah Password"
+      }
+    }
+  }
+}

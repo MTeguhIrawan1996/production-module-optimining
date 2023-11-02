@@ -1,0 +1,19 @@
+include: '.gitlab-ci/node.yml'
+
+variables:
+  GIT_STRATEGY: fetch
+  GIT_CLEAN_FLAGS: -ffdx -e node_modules/ -e .npm/ -e .yarn/
+
+dev:
+  extends: .yarn # or .npm
+  stage: deploy
+  only:
+    - dev
+  script:
+    - rm -f .env && ln -s .gitlab-ci/dev.env .env
+    - rm -f ecosystem.config.js && ln -s .gitlab-ci/dev.ecosystem.config.js ecosystem.config.js
+    - bash .gitlab-ci/dev.script.sh
+  after_script:
+    - pm2 restart ecosystem.config.js
+  tags:
+    - ns1.optimap.id-dev01-ssh
