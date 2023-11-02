@@ -52,7 +52,8 @@
     "model": "Model",
     "year": "Tahun",
     "type": "Jenis",
-    "document": "Dokumen"
+    "document": "Dokumen",
+    "yesDelete": "Ya Hapus"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -134,6 +135,8 @@
     "chooseModel": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.model)",
     "formHeavyEquipment": "$t(commonTypography.form) $t(heavyEquipment.heavyEquipmentTitle)",
     "detailReference": "$t(commonTypography.detail) $t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
-    "successCreateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dibuat"
+    "successCreateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dibuat",
+    "successDeleteMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dihapus",
+    "alertDescConfirmDelete": "Data kemungkinan berelasi dengan data lain"
   }
 }

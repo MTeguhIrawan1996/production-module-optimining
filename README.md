@@ -30,6 +30,12 @@ It is encouraged to use **yarn** so the husky hooks can work properly.
 yarn install
 ```
 
+### 2. Prepare husky lint stage
+
+```bash
+yarn prepare
+```
+
 ### 3. Run the development server
 
 You can start the server using this command:

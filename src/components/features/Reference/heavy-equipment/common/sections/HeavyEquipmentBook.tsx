@@ -1,5 +1,7 @@
 import { SelectProps } from '@mantine/core';
 import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,8 +10,10 @@ import {
   DashboardCard,
   GlobalKebabButton,
   MantineDataTable,
+  ModalConfirmation,
 } from '@/components/elements';
 
+import { useDeleteHeavyEquipmentReference } from '@/services/graphql/mutation/reference-heavy-equipment/useDeleteRefrenceHeavyEquipment';
 import {
   IBrandData,
   useReadAllBrand,
@@ -28,6 +32,9 @@ const HeavyEquipmentBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [page, setPage] = React.useState<number>(1);
+  const [id, setId] = React.useState<string>('');
+  const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
+    React.useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [brandSearchTerm, setBrandSearchTerm] = React.useState<string>('');
   const [brandSearchQuery] = useDebouncedValue<string>(brandSearchTerm, 400);
@@ -61,11 +68,11 @@ const HeavyEquipmentBook = () => {
       typeId,
     },
   });
-
   const {
     heavyEquipmentsData,
     heavyEquipmentDataLoading,
     heavyEquipmentsDataMeta,
+    refetchHeavyEquipments,
   } = useReadAllHeavyEquipment({
     variables: {
       limit: 10,
@@ -74,6 +81,27 @@ const HeavyEquipmentBook = () => {
       brandId,
       typeId,
       modelId,
+    },
+  });
+  const [executeDelete, { loading }] = useDeleteHeavyEquipmentReference({
+    onCompleted: () => {
+      refetchHeavyEquipments();
+      setIsOpenDeleteConfirmation((prev) => !prev);
+      setPage(1);
+      notifications.show({
+        color: 'green',
+        title: 'Selamat',
+        message: t('heavyEquipment.successDeleteMessage'),
+        icon: <IconCheck />,
+      });
+    },
+    onError: ({ message }) => {
+      notifications.show({
+        color: 'red',
+        title: 'Gagal',
+        message: message,
+        icon: <IconX />,
+      });
     },
   });
   /* #endregion  /**======== Query =========== */
@@ -165,8 +193,17 @@ const HeavyEquipmentBook = () => {
     modelSearchTerm,
     modelItems,
   ]);
+  /* #endregion  /**======== FilterRender =========== */
 
-  /* #endregion  /**======== Filter =========== */
+  /* #   /**=========== HandleClickFc =========== */
+  const handleDelete = async () => {
+    await executeDelete({
+      variables: {
+        id,
+      },
+    });
+  };
+  /* #endregion  /**======== HandleClickFc =========== */
 
   const renderTable = React.useMemo(() => {
     return (
@@ -214,6 +251,8 @@ const HeavyEquipmentBook = () => {
                     actionDelete={{
                       onClick: (e) => {
                         e.stopPropagation();
+                        setIsOpenDeleteConfirmation((prev) => !prev);
+                        setId(id);
                       },
                     }}
                   />
@@ -263,6 +302,27 @@ const HeavyEquipmentBook = () => {
       }}
     >
       {renderTable}
+      <ModalConfirmation
+        isOpenModalConfirmation={isOpenDeleteConfirmation}
+        actionModalConfirmation={() =>
+          setIsOpenDeleteConfirmation((prev) => !prev)
+        }
+        actionButton={{
+          label: t('commonTypography.yesDelete'),
+          color: 'red',
+          onClick: handleDelete,
+          loading: loading,
+        }}
+        backButton={{
+          label: 'Batal',
+        }}
+        modalType={{
+          type: 'default',
+          title: t('commonTypography.alertTitleConfirmDelete'),
+          description: t('heavyEquipment.alertDescConfirmDelete'),
+        }}
+        withDivider
+      />
     </DashboardCard>
   );
 };
