@@ -1,7 +1,7 @@
 # Next.js + Tailwind CSS + TypeScript Starter and Boilerplate
 
 <div align="center">
-  <h2>🔋 ts-nextjs-mantine ui</h2>
+  <h2>🔋 ts-nextjs13-mantine ui</h2>
 </div>
 
 ## Features
