@@ -31,7 +31,7 @@ export interface IUserData {
   email: string;
   phoneNumber: string | null;
   isActive: boolean;
-  photo: Pick<IFile, 'url' | 'originalFilename'> | null;
+  photo: Pick<IFile, 'url' | 'originalFileName'> | null;
   role: {
     id: string;
     name: string;

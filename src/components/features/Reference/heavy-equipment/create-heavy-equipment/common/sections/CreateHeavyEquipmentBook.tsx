@@ -134,10 +134,10 @@ const CreateHeavyEquipmentBook = () => {
       control: 'image-dropzone',
       name: 'photos',
       label: 'photo',
-      description: 'photoDescription3',
+      description: 'photoDescription5',
       maxSize: 10 * 1024 ** 2 /* 10MB */,
       multiple: true,
-      maxFiles: 3,
+      maxFiles: 5,
       enableDeletePhoto: true,
       onDrop: (value) => {
         methods.setValue('photos', value);
@@ -164,7 +164,6 @@ const CreateHeavyEquipmentBook = () => {
             colSpan: 6,
             withAsterisk: true,
             searchable: true,
-            clearable: true,
             nothingFound: null,
             onSearchChange: setBrandSearchTerm,
             searchValue: brandSearchTerm,
@@ -189,7 +188,6 @@ const CreateHeavyEquipmentBook = () => {
               methods.trigger('typeId');
             },
             searchable: true,
-            clearable: true,
             nothingFound: null,
             onSearchChange: settypeSearchTerm,
             searchValue: typeSearchTerm,
@@ -207,7 +205,6 @@ const CreateHeavyEquipmentBook = () => {
             colSpan: 6,
             withAsterisk: true,
             searchable: true,
-            clearable: true,
             nothingFound: null,
             onSearchChange: setModelSearchTerm,
             searchValue: modelSearchTerm,

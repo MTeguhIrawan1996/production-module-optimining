@@ -72,7 +72,7 @@ export interface IFile {
   path: string;
   filename: string;
   url: string;
-  originalFilename: string;
+  originalFileName: string;
   mime: string;
 }
 

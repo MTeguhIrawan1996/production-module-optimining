@@ -30,6 +30,7 @@
     "setting": "Pengaturan",
     "contact": "Kontak",
     "dataNotfound": "Belum ada data",
+    "documentNotFound": "Dokumen tidak ditemukan...",
     "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG atau .PNG",
     "modalNonActiveTitle": "Kamu yakin ingin nonaktifkan pengguna?",
     "modalActiveTitle": "Aktifkan Pengguna?",
@@ -53,7 +54,8 @@
     "year": "Tahun",
     "type": "Jenis",
     "document": "Dokumen",
-    "yesDelete": "Ya Hapus"
+    "yesDelete": "Ya Hapus",
+    "photo": "Foto"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -129,6 +131,8 @@
   "heavyEquipment": {
     "heavyEquipmentTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
     "createHeavyEquipment": "$t(commonTypography.create) $t(commonTypography.heavyEquipment)",
+    "readHeavyEquipment": "$t(commonTypography.detail) $t(commonTypography.heavyEquipment)",
+    "informationHeavyEquipment": "$t(commonTypography.information) $t(heavyEquipment.heavyEquipmentTitle)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type), $t(commonTypography.brand), $t(commonTypography.model), dan $t(commonTypography.year)",
     "chooseType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.type)",
     "chooseBrand": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.brand)",
@@ -137,6 +141,8 @@
     "detailReference": "$t(commonTypography.detail) $t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
     "successCreateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dibuat",
     "successDeleteMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dihapus",
-    "alertDescConfirmDelete": "Data kemungkinan berelasi dengan data lain"
+    "alertDescConfirmDelete": "Data kemungkinan berelasi dengan data lain",
+    "specHeavyEquipment": "Spesifikasi $t(commonTypography.heavyEquipment)",
+    "productionYear": "$t(commonTypography.year) Pembuatan"
   }
 }

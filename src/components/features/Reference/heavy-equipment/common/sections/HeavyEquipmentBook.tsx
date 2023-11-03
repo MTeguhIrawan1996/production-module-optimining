@@ -146,7 +146,6 @@ const HeavyEquipmentBook = () => {
         label: t('commonTypography.brand'),
         placeholder: t('heavyEquipment.chooseBrand'),
         searchable: true,
-        clearable: true,
         nothingFound: null,
         onSearchChange: setBrandSearchTerm,
         searchValue: brandSearchTerm,
@@ -162,7 +161,6 @@ const HeavyEquipmentBook = () => {
         label: t('commonTypography.type'),
         placeholder: t('heavyEquipment.chooseType'),
         searchable: true,
-        clearable: true,
         nothingFound: null,
         onSearchChange: settypeSearchTerm,
         searchValue: typeSearchTerm,
@@ -177,7 +175,6 @@ const HeavyEquipmentBook = () => {
         label: t('commonTypography.model'),
         placeholder: t('heavyEquipment.chooseModel'),
         searchable: true,
-        clearable: true,
         nothingFound: null,
         onSearchChange: setModelSearchTerm,
         searchValue: modelSearchTerm,
@@ -187,7 +184,7 @@ const HeavyEquipmentBook = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     brandSearchTerm,
-    brandItems,
+    brandsData,
     typeSearchTerm,
     typeItems,
     modelSearchTerm,

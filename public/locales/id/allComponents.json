@@ -49,6 +49,7 @@
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",
       "photoDescription3": "Jumlah file maksimal 3 dengan ukuran 10MB extention .JPEG .JPG .PNG atau .WEBP",
+      "photoDescription5": "Jumlah file maksimal 5 dengan ukuran 10MB extention .JPEG .JPG .PNG atau .WEBP",
       "uploadPdfDescription": "Unggah Dokumen Maksimal 10Mb dengan extention PDF"
     },
     "modal": {
