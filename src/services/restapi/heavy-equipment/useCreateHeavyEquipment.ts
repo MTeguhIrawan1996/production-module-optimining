@@ -19,7 +19,7 @@ export interface ICreateHeavyEquipmentResponse {
   message: string;
 }
 
-const CreateUser = async ({
+const CreateHeavyEquipment = async ({
   modelId,
   createdYear,
   photos,
@@ -62,7 +62,7 @@ export const useCreateHeavyEquipment = ({
     Omit<ICreateHeavyEquipmentValues, 'brandId' | 'typeId'>
   >({
     mutationFn: async ({ modelId, createdYear, photos, spec }) => {
-      const data = await CreateUser({
+      const data = await CreateHeavyEquipment({
         modelId,
         createdYear,
         photos,

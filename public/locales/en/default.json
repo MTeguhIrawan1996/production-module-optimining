@@ -131,6 +131,7 @@
   "heavyEquipment": {
     "heavyEquipmentTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
     "createHeavyEquipment": "$t(commonTypography.create) $t(commonTypography.heavyEquipment)",
+    "editHeavyEquipment": "$t(commonTypography.edit) $t(commonTypography.heavyEquipment)",
     "readHeavyEquipment": "$t(commonTypography.detail) $t(commonTypography.heavyEquipment)",
     "informationHeavyEquipment": "$t(commonTypography.information) $t(heavyEquipment.heavyEquipmentTitle)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type), $t(commonTypography.brand), $t(commonTypography.model), dan $t(commonTypography.year)",
@@ -140,6 +141,7 @@
     "formHeavyEquipment": "$t(commonTypography.form) $t(heavyEquipment.heavyEquipmentTitle)",
     "detailReference": "$t(commonTypography.detail) $t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
     "successCreateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dibuat",
+    "successUpdateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil diubah",
     "successDeleteMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dihapus",
     "alertDescConfirmDelete": "Data kemungkinan berelasi dengan data lain",
     "specHeavyEquipment": "Spesifikasi $t(commonTypography.heavyEquipment)",

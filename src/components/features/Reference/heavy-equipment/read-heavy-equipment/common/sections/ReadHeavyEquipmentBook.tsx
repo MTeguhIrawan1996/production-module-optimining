@@ -32,12 +32,12 @@ const ReadHEavyEquipmentBook = () => {
   /* #   /**=========== PhotosData =========== */
   const photosCallback = React.useCallback(
     (
-      { filename, originalFileName, url }: Omit<IFile, 'mime' | 'path'>,
+      { fileName, originalFileName, url }: Omit<IFile, 'mime' | 'path'>,
       i: number
     ) => {
       return {
         type: i > 0 ? '' : 'photo',
-        fileName: filename,
+        fileName: fileName,
         src: url,
         alt: originalFileName,
       };
@@ -60,6 +60,10 @@ const ReadHEavyEquipmentBook = () => {
       withBorder
       shadow="xs"
       isLoading={heavyEquipmentReferenceDataLoading}
+      enebleBack
+      paperStackProps={{
+        spacing: 'sm',
+      }}
     >
       <Tabs
         defaultValue="information"

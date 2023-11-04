@@ -33,7 +33,7 @@ export interface IAuthUserData {
   username: string;
   email: string;
   phoneNumber: string;
-  photo: Pick<IFile, 'url' | 'originalFileName' | 'filename'> | null;
+  photo: Pick<IFile, 'url' | 'originalFileName' | 'fileName'> | null;
   role: {
     id: string;
     name: string;

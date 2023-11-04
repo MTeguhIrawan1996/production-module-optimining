@@ -11,6 +11,7 @@ import CompanyTypePage from '@/components/features/Reference/company-type/common
 import HeavyEquipmentPage from '@/components/features/Reference/heavy-equipment/common';
 import CreateHeavyEquipmentPage from '@/components/features/Reference/heavy-equipment/create-heavy-equipment/common';
 import ReadHeavyEquipmentPage from '@/components/features/Reference/heavy-equipment/read-heavy-equipment/common';
+import UpdateHeavyEquipmentPage from '@/components/features/Reference/heavy-equipment/update-heavy-equipment/common';
 import HeavyEquipmentClassPage from '@/components/features/Reference/heavy-equipment-class/common';
 import ManagementRolePage from '@/components/features/Setting/management-role/common';
 import CreateManagementRolePage from '@/components/features/Setting/management-role/create-management-role/common';
@@ -39,6 +40,7 @@ export {
   ReadCompanyPage,
   ReadHeavyEquipmentPage,
   ReadManagementRolePage,
+  UpdateHeavyEquipmentPage,
   UpdateManagementRolePage,
   UpdateUserPage,
   UserPage,

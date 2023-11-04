@@ -70,7 +70,7 @@ export interface IMeta {
 export interface IFile {
   id: string;
   path: string;
-  filename: string;
+  fileName: string;
   url: string;
   originalFileName: string;
   mime: string;

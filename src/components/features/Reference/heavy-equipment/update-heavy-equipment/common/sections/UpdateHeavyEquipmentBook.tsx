@@ -9,31 +9,34 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAllBrand } from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
+import { useReadAllHeavyEquipmentModel } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentModel';
+import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
+import { useReadOneHeavyEquipmentReference } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipment';
 import {
-  IBrandData,
-  useReadAllBrand,
-} from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
-import {
-  IHeavyEquipmentModelData,
-  useReadAllHeavyEquipmentModel,
-} from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentModel';
-import {
-  IHeavyEquipmentTypeData,
-  useReadAllHeavyEquipmentType,
-} from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
-import {
-  ICreateHeavyEquipmentValues,
-  useCreateHeavyEquipment,
-} from '@/services/restapi/heavy-equipment/useCreateHeavyEquipment';
+  IUpdateHeavyEquipmentValuesQuery,
+  useUpdateHeavyEquipment,
+} from '@/services/restapi/heavy-equipment/useUpdateHeavyEquipment';
 import { createHeavyEquipmentSchema } from '@/utils/form-validation/reference-heavy-equipment/heavy-equipment-validation';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
+import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
-import { ControllerGroup, ControllerProps } from '@/types/global';
+import { ControllerGroup, ControllerProps, IFile } from '@/types/global';
 
-const CreateHeavyEquipmentBook = () => {
+type IUpdateHeavyEquipmentValues = Omit<
+  IUpdateHeavyEquipmentValuesQuery,
+  'id' | 'deletedPhotoIds'
+>;
+
+const UpdateHeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
+  const [serverPhotos, setServerPhotos] = React.useState<
+    Omit<IFile, 'mime' | 'path'>[] | null
+  >([]);
+  const [deletedPhotoIds, setDeletedPhotoIds] = React.useState<string[]>([]);
   const [brandSearchTerm, setBrandSearchTerm] = React.useState<string>('');
   const [brandSearchQuery] = useDebouncedValue<string>(brandSearchTerm, 400);
   const [typeSearchTerm, settypeSearchTerm] = React.useState<string>('');
@@ -42,7 +45,7 @@ const CreateHeavyEquipmentBook = () => {
   const [modelSearchQuery] = useDebouncedValue<string>(modelSearchTerm, 400);
 
   /* #   /**=========== Methods =========== */
-  const methods = useForm<ICreateHeavyEquipmentValues>({
+  const methods = useForm<IUpdateHeavyEquipmentValues>({
     resolver: zodResolver(createHeavyEquipmentSchema),
     defaultValues: {
       photos: [],
@@ -56,31 +59,55 @@ const CreateHeavyEquipmentBook = () => {
   });
   const brandId = methods.watch('brandId');
   const typeId = methods.watch('typeId');
+  const modelId = methods.watch('modelId');
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
+  const { heavyEquipmentReferenceData } = useReadOneHeavyEquipmentReference({
+    variables: {
+      id,
+    },
+    skip: !router.isReady,
+    onCompleted: (data) => {
+      methods.setValue(
+        'brandId',
+        data.heavyEquipmentReference.model.type.brand.id
+      );
+      methods.setValue('typeId', data.heavyEquipmentReference.model.type.id);
+      methods.setValue('modelId', data.heavyEquipmentReference.model.id);
+      methods.setValue('spec', data.heavyEquipmentReference.spec);
+      methods.setValue(
+        'createdYear',
+        `${data.heavyEquipmentReference.createdYear}`
+      );
+      setServerPhotos(data.heavyEquipmentReference.photos);
+    },
+  });
   const { brandsData } = useReadAllBrand({
     variables: {
       limit: 15,
       search: brandSearchQuery === '' ? null : brandSearchQuery,
     },
+    skip: !heavyEquipmentReferenceData,
   });
   const { typesData } = useReadAllHeavyEquipmentType({
     variables: {
       limit: 15,
       search: typeSearchQuery === '' ? null : typeSearchQuery,
-      brandId,
+      brandId: brandId === '' ? null : brandId,
     },
+    skip: !heavyEquipmentReferenceData,
   });
   const { modelsData } = useReadAllHeavyEquipmentModel({
     variables: {
       limit: 15,
       search: modelSearchQuery === '' ? null : modelSearchQuery,
-      brandId,
-      typeId,
+      brandId: brandId === '' ? null : brandId,
+      typeId: typeId === '' ? null : typeId,
     },
+    skip: !heavyEquipmentReferenceData,
   });
-  const { mutate, isLoading } = useCreateHeavyEquipment({
+  const { mutate, isLoading } = useUpdateHeavyEquipment({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -93,7 +120,7 @@ const CreateHeavyEquipmentBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('heavyEquipment.successCreateMessage'),
+        message: t('heavyEquipment.successUpdateMessage'),
         icon: <IconCheck />,
       });
       router.push('/reference/heavy-equipment');
@@ -103,29 +130,27 @@ const CreateHeavyEquipmentBook = () => {
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== FilterData =========== */
-  const renderBrands = React.useCallback((value: IBrandData) => {
-    return {
-      label: value.name,
-      value: value.id,
-    };
-  }, []);
-  const brandItems = brandsData?.map(renderBrands);
-
-  const renderTypes = React.useCallback((value: IHeavyEquipmentTypeData) => {
-    return {
-      label: value.name,
-      value: value.id,
-    };
-  }, []);
-  const typeItems = typesData?.map(renderTypes);
-
-  const renderModel = React.useCallback((value: IHeavyEquipmentModelData) => {
-    return {
-      label: value.name,
-      value: value.id,
-    };
-  }, []);
-  const modelItems = modelsData?.map(renderModel);
+  const { combinedItems, uncombinedItem } = useCombineFilterItems({
+    data: brandsData ?? [],
+    combinedId: heavyEquipmentReferenceData?.model.type.brand.id ?? '',
+    combinedName: heavyEquipmentReferenceData?.model.type.brand.name ?? '',
+  });
+  const {
+    combinedItems: combinedTypeItems,
+    uncombinedItem: uncombinedTypeItems,
+  } = useCombineFilterItems({
+    data: typesData ?? [],
+    combinedId: heavyEquipmentReferenceData?.model.type.id ?? '',
+    combinedName: heavyEquipmentReferenceData?.model.type.name ?? '',
+  });
+  const {
+    combinedItems: combinedModelItems,
+    uncombinedItem: uncombinedModelItems,
+  } = useCombineFilterItems({
+    data: modelsData ?? [],
+    combinedId: heavyEquipmentReferenceData?.model.id ?? '',
+    combinedName: heavyEquipmentReferenceData?.model.name ?? '',
+  });
   /* #endregion  /**======== FilterData =========== */
 
   /* #   /**=========== Field =========== */
@@ -137,14 +162,18 @@ const CreateHeavyEquipmentBook = () => {
       description: 'photoDescription5',
       maxSize: 10 * 1024 ** 2 /* 10MB */,
       multiple: true,
-      maxFiles: 5,
+      maxFiles: serverPhotos ? 5 - serverPhotos.length : 5,
       enableDeletePhoto: true,
+      serverPhotos: serverPhotos,
       onDrop: (value) => {
         methods.setValue('photos', value);
         methods.clearErrors('photos');
       },
+      deletedPhotoIds: deletedPhotoIds,
+      handleDeleteServerPhotos: (id) =>
+        setDeletedPhotoIds((prev) => [...prev, id]),
       onReject: (files) =>
-        handleRejectFile<ICreateHeavyEquipmentValues>({
+        handleRejectFile<IUpdateHeavyEquipmentValues>({
           methods,
           files,
           field: 'photos',
@@ -157,12 +186,13 @@ const CreateHeavyEquipmentBook = () => {
         formControllers: [
           {
             control: 'select-input',
-            data: brandItems ?? [],
+            data: brandId === '' ? uncombinedItem : combinedItems,
             name: 'brandId',
             label: 'brandHeavyEquipment',
             placeholder: t('heavyEquipment.chooseBrand'),
             colSpan: 6,
             withAsterisk: true,
+            clearable: true,
             searchable: true,
             nothingFound: null,
             onSearchChange: setBrandSearchTerm,
@@ -176,12 +206,13 @@ const CreateHeavyEquipmentBook = () => {
           },
           {
             control: 'select-input',
-            data: typeItems ?? [],
+            data: typeId === '' ? uncombinedTypeItems : combinedTypeItems,
             name: 'typeId',
             label: 'typeHeavyEquipment',
             placeholder: t('heavyEquipment.chooseType'),
             colSpan: 6,
             withAsterisk: true,
+            clearable: true,
             onChange: (value) => {
               methods.setValue('typeId', value ?? '');
               methods.setValue('modelId', '');
@@ -199,11 +230,12 @@ const CreateHeavyEquipmentBook = () => {
               methods.trigger('modelId');
             },
             name: 'modelId',
-            data: modelItems ?? [],
+            data: modelId === '' ? uncombinedModelItems : combinedModelItems,
             label: 'modelHeavyEquipment',
             placeholder: t('heavyEquipment.chooseModel'),
             colSpan: 6,
             withAsterisk: true,
+            clearable: true,
             searchable: true,
             nothingFound: null,
             onSearchChange: setModelSearchTerm,
@@ -234,17 +266,23 @@ const CreateHeavyEquipmentBook = () => {
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    brandItems,
+    modelId,
+    brandId,
+    typeId,
+    combinedItems,
+    uncombinedItem,
     brandSearchTerm,
-    modelItems,
+    combinedModelItems,
     modelSearchTerm,
-    typeItems,
+    uncombinedModelItems,
+    combinedTypeItems,
     typeSearchTerm,
+    uncombinedTypeItems,
   ]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
-  const handleSubmitForm: SubmitHandler<ICreateHeavyEquipmentValues> = (
+  const handleSubmitForm: SubmitHandler<IUpdateHeavyEquipmentValues> = (
     data
   ) => {
     const { modelId, createdYear, photos, spec } = data;
@@ -253,6 +291,8 @@ const CreateHeavyEquipmentBook = () => {
       createdYear,
       photos,
       spec,
+      deletedPhotoIds,
+      id,
     });
   };
   /* #endregion  /**======== HandleSubmitFc =========== */
@@ -275,4 +315,4 @@ const CreateHeavyEquipmentBook = () => {
   );
 };
 
-export default CreateHeavyEquipmentBook;
+export default UpdateHeavyEquipmentBook;

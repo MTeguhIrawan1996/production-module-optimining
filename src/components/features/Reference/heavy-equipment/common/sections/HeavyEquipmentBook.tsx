@@ -14,19 +14,11 @@ import {
 } from '@/components/elements';
 
 import { useDeleteHeavyEquipmentReference } from '@/services/graphql/mutation/reference-heavy-equipment/useDeleteRefrenceHeavyEquipment';
-import {
-  IBrandData,
-  useReadAllBrand,
-} from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
+import { useReadAllBrand } from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
 import { useReadAllHeavyEquipment } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipment';
-import {
-  IHeavyEquipmentModelData,
-  useReadAllHeavyEquipmentModel,
-} from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentModel';
-import {
-  IHeavyEquipmentTypeData,
-  useReadAllHeavyEquipmentType,
-} from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
+import { useReadAllHeavyEquipmentModel } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentModel';
+import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
+import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 const HeavyEquipmentBook = () => {
   const router = useRouter();
@@ -60,7 +52,7 @@ const HeavyEquipmentBook = () => {
       brandId,
     },
   });
-  const { modelData } = useReadAllHeavyEquipmentModel({
+  const { modelsData } = useReadAllHeavyEquipmentModel({
     variables: {
       limit: 15,
       search: modelSearchQuery === '' ? null : modelSearchQuery,
@@ -107,29 +99,16 @@ const HeavyEquipmentBook = () => {
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== FilterData =========== */
-  const renderBrands = React.useCallback((value: IBrandData) => {
-    return {
-      label: value.name,
-      value: value.id,
-    };
-  }, []);
-  const brandItems = brandsData?.map(renderBrands);
 
-  const renderTypes = React.useCallback((value: IHeavyEquipmentTypeData) => {
-    return {
-      label: value.name,
-      value: value.id,
-    };
-  }, []);
-  const typeItems = typesData?.map(renderTypes);
-
-  const renderModel = React.useCallback((value: IHeavyEquipmentModelData) => {
-    return {
-      label: value.name,
-      value: value.id,
-    };
-  }, []);
-  const modelItems = modelData?.map(renderModel);
+  const { uncombinedItem: brandItems } = useCombineFilterItems({
+    data: brandsData ?? [],
+  });
+  const { uncombinedItem: typeItems } = useCombineFilterItems({
+    data: typesData ?? [],
+  });
+  const { uncombinedItem: modelItems } = useCombineFilterItems({
+    data: modelsData ?? [],
+  });
   /* #endregion  /**======== FilterData =========== */
 
   /* #   /**=========== FilterRender =========== */
@@ -147,6 +126,7 @@ const HeavyEquipmentBook = () => {
         placeholder: t('heavyEquipment.chooseBrand'),
         searchable: true,
         nothingFound: null,
+        clearable: true,
         onSearchChange: setBrandSearchTerm,
         searchValue: brandSearchTerm,
       },
@@ -162,6 +142,7 @@ const HeavyEquipmentBook = () => {
         placeholder: t('heavyEquipment.chooseType'),
         searchable: true,
         nothingFound: null,
+        clearable: true,
         onSearchChange: settypeSearchTerm,
         searchValue: typeSearchTerm,
       },
@@ -175,6 +156,7 @@ const HeavyEquipmentBook = () => {
         label: t('commonTypography.model'),
         placeholder: t('heavyEquipment.chooseModel'),
         searchable: true,
+        clearable: true,
         nothingFound: null,
         onSearchChange: setModelSearchTerm,
         searchValue: modelSearchTerm,
