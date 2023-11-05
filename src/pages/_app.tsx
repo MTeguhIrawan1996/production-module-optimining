@@ -44,8 +44,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  const title = 'OneDev Starter Template';
-  const description = 'OneDev';
+  const title = 'Optimap';
+  const description = 'Optimap';
   const url = `${process.env.NEXT_PUBLIC_URL}`;
 
   return (
