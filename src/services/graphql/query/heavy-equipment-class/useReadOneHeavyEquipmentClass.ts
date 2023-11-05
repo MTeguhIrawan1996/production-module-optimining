@@ -1,7 +1,7 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
 export const READ_ONE_HEAVY_EQUIPMENT_CLASS = gql`
-  query ReadHeavyEquipmentClass($id: String!) {
+  query ReadOneHeavyEquipmentClass($id: String!) {
     heavyEquipmentClass(id: $id) {
       id
       name

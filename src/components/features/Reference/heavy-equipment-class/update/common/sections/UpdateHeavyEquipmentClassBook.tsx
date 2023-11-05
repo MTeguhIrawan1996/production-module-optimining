@@ -11,17 +11,19 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 import { ISelectTypesHeavyEquipment } from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 
 import {
-  ICreateHeavyEquipmentClassRequest,
-  useCreateHeavyEquipmentClass,
-} from '@/services/graphql/mutation/heavy-equipment-class/useCreateHeavyEquipmentClass';
+  IUpdateHeavyEquipmentClassRequest,
+  useUpdateHeavyEquipmentClass,
+} from '@/services/graphql/mutation/heavy-equipment-class/useUpdateHeavyEquipmentClass';
+import { useReadOneHeavyEquipmentClass } from '@/services/graphql/query/heavy-equipment-class/useReadOneHeavyEquipmentClass';
 import { createHeavyEquipmentClassSchema } from '@/utils/form-validation/reference-heavy-equipment-class/heavy-equipment-class';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup, ControllerProps } from '@/types/global';
 
-const CreateHeavyEquipmentClassBook = () => {
+const UpdateHeavyEquipmentClassBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
   const [otherTypesField, setOtherTypesField] = React.useState<
     ISelectTypesHeavyEquipment[]
   >([
@@ -32,7 +34,7 @@ const CreateHeavyEquipmentClassBook = () => {
   ]);
 
   /* #   /**=========== Methods =========== */
-  const methods = useForm<ICreateHeavyEquipmentClassRequest>({
+  const methods = useForm<Omit<IUpdateHeavyEquipmentClassRequest, 'id'>>({
     resolver: zodResolver(createHeavyEquipmentClassSchema),
     defaultValues: {
       name: '',
@@ -46,12 +48,35 @@ const CreateHeavyEquipmentClassBook = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  const [executeCreate, { loading }] = useCreateHeavyEquipmentClass({
+  const { heavyEquipmentClassDataLoading } = useReadOneHeavyEquipmentClass({
+    variables: {
+      id,
+    },
+    skip: !router.isReady,
+    onCompleted: ({ heavyEquipmentClass }) => {
+      const newOtherTypes = heavyEquipmentClass.heavyEquipmentTypes.map(
+        (val, i) => {
+          return {
+            key: i + 1,
+            id: val.id,
+          };
+        }
+      );
+      const idsArray = heavyEquipmentClass.heavyEquipmentTypes.map(
+        (item) => item.id
+      );
+      methods.setValue('name', heavyEquipmentClass.name);
+      methods.setValue('heavyEquipmentTypeIds', idsArray);
+      setOtherTypesField(newOtherTypes);
+    },
+  });
+
+  const [executeUpdate, { loading }] = useUpdateHeavyEquipmentClass({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('heavyEquipmentClass.successCreateMessage'),
+        message: t('heavyEquipmentClass.successUpdateMessage'),
         icon: <IconCheck />,
       });
       methods.reset();
@@ -60,7 +85,9 @@ const CreateHeavyEquipmentClassBook = () => {
     onError: (error) => {
       if (error.graphQLErrors) {
         const errorArry =
-          errorBadRequestField<ICreateHeavyEquipmentClassRequest>(error);
+          errorBadRequestField<Omit<IUpdateHeavyEquipmentClassRequest, 'id'>>(
+            error
+          );
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
             methods.setError(name, { type, message });
@@ -80,12 +107,13 @@ const CreateHeavyEquipmentClassBook = () => {
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Fc =========== */
-  const handleSubmitForm: SubmitHandler<ICreateHeavyEquipmentClassRequest> = (
+  const handleSubmitForm: SubmitHandler<IUpdateHeavyEquipmentClassRequest> = (
     data
   ) => {
     const { name, heavyEquipmentTypeIds } = data;
-    executeCreate({
+    executeUpdate({
       variables: {
+        id,
         name,
         heavyEquipmentTypeIds,
       },
@@ -133,7 +161,7 @@ const CreateHeavyEquipmentClassBook = () => {
   /* #endregion  /**======== Fc =========== */
 
   /* #   /**=========== Field =========== */
-  const fieldCreateHeavyEquipmentClass = React.useMemo(() => {
+  const fieldHeavyEquipmentClass = React.useMemo(() => {
     const selectedTypes: ControllerProps[] = otherTypesField.map(
       ({ id, key }) => ({
         control: 'select-heavy-equipment-types-input',
@@ -193,9 +221,9 @@ const CreateHeavyEquipmentClassBook = () => {
   /* #endregion  /**======== Field =========== */
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={heavyEquipmentClassDataLoading}>
       <GlobalFormGroup
-        field={fieldCreateHeavyEquipmentClass}
+        field={fieldHeavyEquipmentClass}
         methods={methods}
         submitForm={handleSubmitForm}
         submitButton={{
@@ -210,4 +238,4 @@ const CreateHeavyEquipmentClassBook = () => {
   );
 };
 
-export default CreateHeavyEquipmentClassBook;
+export default UpdateHeavyEquipmentClassBook;

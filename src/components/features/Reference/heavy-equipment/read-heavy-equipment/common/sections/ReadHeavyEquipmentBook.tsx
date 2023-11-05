@@ -52,6 +52,7 @@ const ReadHEavyEquipmentBook = () => {
       title={t('heavyEquipment.heavyEquipmentTitle')}
       updateButton={{
         label: 'Edit',
+        onClick: () => router.push(`/reference/heavy-equipment/update/${id}`),
       }}
       titleStyle={{
         fw: 700,

@@ -21,7 +21,7 @@ export interface IUpdateHeavyEquipmentResponse {
   message: string;
 }
 
-const CreateUser = async ({
+const UpdateHeavyEquipment = async ({
   modelId,
   createdYear,
   photos,
@@ -85,7 +85,7 @@ export const useUpdateHeavyEquipment = ({
       id,
       spec,
     }) => {
-      const data = await CreateUser({
+      const data = await UpdateHeavyEquipment({
         modelId,
         createdYear,
         photos,
