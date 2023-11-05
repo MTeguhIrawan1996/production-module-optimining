@@ -8,6 +8,7 @@ import {
   PasswordInputRhf,
   PdfInputDropzoneRhf,
   RadioInputRhf,
+  SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
   TextInputRhf,
 } from '@/components/elements';
@@ -34,6 +35,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <RadioInputRhf {...props} />;
     case 'date-input':
       return <DateInputRhf {...props} />;
+    case 'select-heavy-equipment-types-input':
+      return <SelectHeavyEquipmentTypesInput {...props} />;
     default:
       return null;
   }

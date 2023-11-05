@@ -44,6 +44,7 @@
     "disableIt": "Nonaktifkan",
     "reference": "Referensi",
     "heavyEquipment": "Alat Berat",
+    "heavyEquipmentClass": "Kelas Alat Berat",
     "user": "Pengguna",
     "form": "Formulir",
     "search": "Cari",
@@ -53,6 +54,7 @@
     "model": "Model",
     "year": "Tahun",
     "type": "Jenis",
+    "heavyEquipmentType": "Jenis Alat Berat",
     "document": "Dokumen",
     "yesDelete": "Ya Hapus",
     "photo": "Foto"
@@ -146,5 +148,21 @@
     "alertDescConfirmDelete": "Data kemungkinan berelasi dengan data lain",
     "specHeavyEquipment": "Spesifikasi $t(commonTypography.heavyEquipment)",
     "productionYear": "$t(commonTypography.year) Pembuatan"
+  },
+  "heavyEquipmentClass": {
+    "heavyEquipmentClassTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipmentClass)",
+    "createHeavyEquipmentClass": "$t(commonTypography.create) $t(commonTypography.heavyEquipmentClass)",
+    "editHeavyEquipmentClass": "$t(commonTypography.edit) $t(commonTypography.heavyEquipmentClass)",
+    "readHeavyEquipmentClass": "$t(commonTypography.detail) $t(commonTypography.heavyEquipmentClass)",
+    "informationHeavyEquipmentClass": "$t(commonTypography.information) $t(heavyEquipmentClass.heavyEquipmentClassTitle)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.class) dan $t(commonTypography.type)",
+    "chooseType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.type)",
+    "formHeavyEquipmentClass": "$t(commonTypography.form) $t(heavyEquipmentClass.heavyEquipmentClassTitle)",
+    "detailReference": "$t(commonTypography.detail) $t(commonTypography.reference) $t(commonTypography.heavyEquipmentClass)",
+    "successCreateMessage": "$t(heavyEquipmentClass.heavyEquipmentClassTitle) berhasil dibuat",
+    "successUpdateMessage": "$t(heavyEquipmentClass.heavyEquipmentClassTitle) berhasil diubah",
+    "successDeleteMessage": "$t(heavyEquipmentClass.heavyEquipmentClassTitle) berhasil dihapus",
+    "alertDescConfirmDelete": "Data kemungkinan berelasi dengan data lain",
+    "createHeavyEquipmentClassType": "$t(commonTypography.create) $t(commonTypography.type)"
   }
 }

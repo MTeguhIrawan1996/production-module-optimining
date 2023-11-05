@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import UpdateHeavyEquipmentBook from '@/components/features/Reference/heavy-equipment/update-heavy-equipment/common/sections/UpdateHeavyEquipmentBook';
+import CreateHeavyEquipmentClassBook from '@/components/features/Reference/heavy-equipment-class/create/common/sections/CreateHeavyEquipmentClassBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const UpdateHeavyEquipmentPage = () => {
+const CreateHeavyEquipmentClassPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -20,11 +20,11 @@ const UpdateHeavyEquipmentPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('heavyEquipment.heavyEquipmentTitle'),
+        label: t('heavyEquipmentClass.heavyEquipmentClassTitle'),
         path: '/setting/management-role',
       },
       {
-        label: t('heavyEquipment.editHeavyEquipment'),
+        label: t('heavyEquipmentClass.createHeavyEquipmentClass'),
         path: router.asPath,
       },
     ]);
@@ -35,7 +35,7 @@ const UpdateHeavyEquipmentPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('heavyEquipment.formHeavyEquipment'),
+          title: t('heavyEquipmentClass.formHeavyEquipmentClass'),
           mb: 'xl',
         }}
       >
@@ -56,7 +56,7 @@ const UpdateHeavyEquipmentPage = () => {
             </Tabs.List>
           </ScrollArea>
           <Tabs.Panel value="information">
-            <UpdateHeavyEquipmentBook />
+            <CreateHeavyEquipmentClassBook />
           </Tabs.Panel>
         </Tabs>
       </InnerWrapper>
@@ -64,4 +64,4 @@ const UpdateHeavyEquipmentPage = () => {
   );
 };
 
-export default UpdateHeavyEquipmentPage;
+export default CreateHeavyEquipmentClassPage;

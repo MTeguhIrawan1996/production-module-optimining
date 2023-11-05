@@ -154,7 +154,7 @@ const UpdateHeavyEquipmentBook = () => {
   /* #endregion  /**======== FilterData =========== */
 
   /* #   /**=========== Field =========== */
-  const fieldCreateHeavyEquipment = React.useMemo(() => {
+  const field = React.useMemo(() => {
     const imageInput: ControllerProps = {
       control: 'image-dropzone',
       name: 'photos',
@@ -300,7 +300,7 @@ const UpdateHeavyEquipmentBook = () => {
   return (
     <DashboardCard p={0}>
       <GlobalFormGroup
-        field={fieldCreateHeavyEquipment}
+        field={field}
         methods={methods}
         submitForm={handleSubmitForm}
         submitButton={{

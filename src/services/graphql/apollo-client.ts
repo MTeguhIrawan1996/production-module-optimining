@@ -70,7 +70,11 @@ const getClient = (tokenServer?: ISessionServer | null) => {
   });
 
   const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
-    const blackList = ['ReadAllBrand', 'ReadAllHeavyEquipmentType'];
+    const blackList = [
+      'ReadAllBrand',
+      'ReadAllHeavyEquipmentType',
+      'ReadAllHeavyEquipmentModel',
+    ];
 
     if (blackList.includes(operation.operationName)) {
       return;

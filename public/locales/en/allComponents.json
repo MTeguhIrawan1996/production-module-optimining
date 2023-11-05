@@ -28,6 +28,7 @@
       "emailTwo": "Email 2",
       "faxNumber": "Fax Number",
       "code": "Code",
+      "type": "Jenis",
       "nib": "NIB (Nomor Izin Berusaha)",
       "companyType": "Jenis Perusahaan",
       "businessPermit": "Izin Usaha",
@@ -44,7 +45,8 @@
       "typeHeavyEquipment": "Jenis Alat Berat",
       "specHeavyEquipment": "Spesifikasi Alat Berat",
       "productionYear": "Tahun Pembuatan",
-      "photoOrDocument": "Foto/Dokumen"
+      "photoOrDocument": "Foto/Dokumen",
+      "heavyEquipmentClass": "Kelas Alat Berat"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",

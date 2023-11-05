@@ -26,6 +26,7 @@ import NumberInputRhf from '@/components/elements/input/NumberInputRhf';
 import PasswordInputRhf from '@/components/elements/input/PasswordInputRhf';
 import PdfInputDropzoneRhf from '@/components/elements/input/PdfInputDropzoneRhf';
 import RadioInputRhf from '@/components/elements/input/RadioInputRhf';
+import SelectHeavyEquipmentTypesInput from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
 import TextInputRhf from '@/components/elements/input/TextInputRhf';
 import PrimaryLink from '@/components/elements/link/PrimaryLink';
@@ -76,6 +77,7 @@ export {
   RadioInputRhf,
   RootWrapper,
   SearchBar,
+  SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
   SelectionButtonModal,
   TextButton,
