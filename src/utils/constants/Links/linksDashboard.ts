@@ -16,6 +16,11 @@ export const linksDashboard: IMenuItem[] = [
         href: '/master-data/company',
         access: ['all'],
       },
+      {
+        label: 'humanResources',
+        href: '/master-data/human-resources',
+        access: ['all'],
+      },
     ],
   },
   {

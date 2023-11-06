@@ -6,6 +6,7 @@ import FormExamplePage from '@/components/features/Example/form-example/common';
 import CompanyPage from '@/components/features/MasterData/company/common';
 import CreateCompanyPage from '@/components/features/MasterData/company/create-company/common';
 import ReadCompanyPage from '@/components/features/MasterData/company/read-company/common';
+import HumanResourcesPage from '@/components/features/MasterData/humanResources/common';
 import ProfilePage from '@/components/features/Profile/common';
 import CompanyTypePage from '@/components/features/Reference/company-type/common';
 import HeavyEquipmentPage from '@/components/features/Reference/heavy-equipment/common';
@@ -39,6 +40,7 @@ export {
   FormExamplePage,
   HeavyEquipmentClassPage,
   HeavyEquipmentPage,
+  HumanResourcesPage,
   ManagementRolePage,
   ProfilePage,
   ReadCompanyPage,

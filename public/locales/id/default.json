@@ -58,7 +58,11 @@
     "heavyEquipmentType": "Jenis Alat Berat",
     "document": "Dokumen",
     "yesDelete": "Ya Hapus",
-    "photo": "Foto"
+    "photo": "Foto",
+    "humanResources": "SDM",
+    "phoneNumber": "Nomor Telepon",
+    "identityNumber": "NIK",
+    "email": "Email"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -70,7 +74,8 @@
     "managementRole": "Manajemen $t(commonTypography.role)",
     "user": "$t(commonTypography.user)",
     "heavyEquipmentClass": "$t(commonTypography.class) $t(commonTypography.heavyEquipment)",
-    "heavyEquipment": "$t(commonTypography.heavyEquipment)"
+    "heavyEquipment": "$t(commonTypography.heavyEquipment)",
+    "humanResources": "$t(commonTypography.humanResources)"
   },
   "auth": {
     "button": {
@@ -167,5 +172,10 @@
     "successDeleteMessage": "$t(heavyEquipmentClass.heavyEquipmentClassTitle) berhasil dihapus",
     "alertDescConfirmDelete": "Data kemungkinan berelasi dengan data lain",
     "createHeavyEquipmentClassType": "$t(commonTypography.create) $t(commonTypography.type)"
+  },
+  "humanResources": {
+    "createHumanResources": "$t(commonTypography.create) $t(commonTypography.humanResources)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) dan $t(commonTypography.identityNumber)",
+    "successDeleteMessage": "$t(commonTypography.humanResources) berhasil dihapus"
   }
 }
