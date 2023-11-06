@@ -15,13 +15,14 @@ import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 export interface ISelectTypesHeavyEquipment {
   id: string;
   key: number;
+  name: string;
 }
 
 export type ISelectHeavyEquipmentTypesInputProps = {
   control: 'select-heavy-equipment-types-input';
   name: string;
   fields: ISelectTypesHeavyEquipment[];
-  handleSetValue?: (value: string) => void;
+  handleSetValue?: (value: string, name?: string) => void;
   handleClearValue?: () => void;
   deleteFieldButton?: {
     onDeletedField: () => void;
@@ -48,6 +49,8 @@ const SelectHeavyEquipmentTypesInput: React.FC<
   handleSetValue,
   handleClearValue,
   deleteFieldButton,
+  value,
+  key,
   error,
   ...rest
 }) => {
@@ -61,6 +64,8 @@ const SelectHeavyEquipmentTypesInput: React.FC<
     ...restDeletedField
   } = deleteFieldButton || {};
 
+  const currentValues = fields.find((val) => val.id === value);
+
   const { typesData } = useReadAllHeavyEquipmentType({
     variables: {
       limit: 15,
@@ -68,9 +73,12 @@ const SelectHeavyEquipmentTypesInput: React.FC<
     },
   });
 
-  const { uncombinedItem: typeItems } = useCombineFilterItems({
-    data: typesData ?? [],
-  });
+  const { combinedItems: typeItems, uncombinedItem: typeUncombineItem } =
+    useCombineFilterItems({
+      data: typesData ?? [],
+      combinedId: currentValues?.id,
+      combinedName: currentValues?.name,
+    });
 
   return (
     <Stack spacing={8}>
@@ -92,8 +100,9 @@ const SelectHeavyEquipmentTypesInput: React.FC<
           })}
           name={name}
           data-control={control}
+          value={value}
           label={label ? t(`components.field.${label}`) : null}
-          data={typeItems}
+          data={currentValues?.id !== '' ? typeItems : typeUncombineItem}
           searchable={true}
           clearable={true}
           onSearchChange={setTypeSearchTerm}
@@ -104,7 +113,8 @@ const SelectHeavyEquipmentTypesInput: React.FC<
               handleClearValue?.();
               return;
             }
-            handleSetValue?.(value);
+            const label = typesData?.find((val) => val.id === value);
+            handleSetValue?.(value, label?.name ?? '');
           }}
           {...rest}
         />

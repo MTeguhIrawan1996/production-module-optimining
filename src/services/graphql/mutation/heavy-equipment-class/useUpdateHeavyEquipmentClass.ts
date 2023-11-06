@@ -2,12 +2,13 @@ import { ApolloError, gql, useMutation } from '@apollo/client';
 
 export const UPDATE_HEAVY_EQUIPMENT_CALSS = gql`
   mutation UpdateHeavyEquipmentClass(
-    $id: string!
+    $id: String!
     $name: String!
     $heavyEquipmentTypeIds: [String!]!
   ) {
     updateHeavyEquipmentClass(
       updateHeavyEquipmentClassInput: {
+        id: $id
         name: $name
         heavyEquipmentTypeIds: $heavyEquipmentTypeIds
       }

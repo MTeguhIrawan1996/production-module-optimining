@@ -28,6 +28,7 @@ const CreateHeavyEquipmentClassBook = () => {
     {
       key: 1,
       id: '',
+      name: '',
     },
   ]);
 
@@ -97,6 +98,7 @@ const CreateHeavyEquipmentClassBook = () => {
     const newOtherTypesField = {
       key: otherTypesField[lastIndex].key + 1,
       id: '',
+      name: '',
     };
     setOtherTypesField([...otherTypesField, newOtherTypesField]);
   };
@@ -111,9 +113,11 @@ const CreateHeavyEquipmentClassBook = () => {
     }
   };
 
-  const handleUpdateId = (key: number, newId: string) => {
+  const handleUpdateId = (key: number, newId: string, name: string) => {
     setOtherTypesField((prevData) =>
-      prevData.map((item) => (item.key === key ? { ...item, id: newId } : item))
+      prevData.map((item) =>
+        item.key === key ? { ...item, id: newId, name } : item
+      )
     );
     const newArray = otherTypesField
       .map((item) => (item.key === key ? newId : item.id))
@@ -123,7 +127,9 @@ const CreateHeavyEquipmentClassBook = () => {
 
   const handleClearId = (key: number) => {
     setOtherTypesField((prevData) =>
-      prevData.map((item) => (item.key === key ? { ...item, id: '' } : item))
+      prevData.map((item) =>
+        item.key === key ? { ...item, id: '', name: '' } : item
+      )
     );
     const newArray = otherTypesField
       .map((item) => (item.key === key ? '' : item.id))
@@ -143,8 +149,8 @@ const CreateHeavyEquipmentClassBook = () => {
         value: id,
         withAsterisk: true,
         placeholder: t('heavyEquipment.chooseType'),
-        handleSetValue: (value) => {
-          handleUpdateId(key, value);
+        handleSetValue: (value, name) => {
+          handleUpdateId(key, value, name ?? '');
           methods.trigger('heavyEquipmentTypeIds');
         },
         handleClearValue: () => {
