@@ -37,7 +37,8 @@
     "modalNonActiveDescription": "Pengguna yang dinonaktifkan suatu saat bisa diaktifkan kembali",
     "modalActiveDescription": "Pengguna yang diaktifkan suatu saat bisa dinonaktifkan kembali",
     "alertTitleConfirmDelete": "Apakah Anda yakin ingin menghapus?",
-    "alertDescConfirmDelete": "Setelah Anda menyetujui, data  akan terhapus",
+    "alertDescConfirmDelete": "Setelah Anda menyetujui, data akan terhapus",
+    "alertDescConfirmDeleteMasterData": "Data yang ada di master data akan berelasi dengan data yang lain",
     "activeLabel": "Aktif",
     "nonActiveLabel": "Nonaktif",
     "activate": "Aktfikan",
@@ -128,7 +129,9 @@
     "createCompany": "$t(commonTypography.create) $t(commonTypography.company)",
     "chooseCompanyType": "$t(commonTypography.choose) $t(commonTypography.companyType)",
     "formCompany": "$t(commonTypography.form) $t(commonTypography.company)",
-    "profileCompany": "Profil $t(commonTypography.company)"
+    "profileCompany": "Profil $t(commonTypography.company)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.companyName)",
+    "successDeleteMessage": "$t(commonTypography.company) berhasil dihapus"
   },
   "heavyEquipment": {
     "heavyEquipmentTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipment)",

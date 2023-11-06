@@ -1,5 +1,4 @@
-import { SelectProps } from '@mantine/core';
-import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
+import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -14,9 +13,7 @@ import {
 } from '@/components/elements';
 
 import { useDeleteHeavyEquipmentClass } from '@/services/graphql/mutation/heavy-equipment-class/useDeleteHeavyEquipmentClass';
-import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
 import { useReadAllHeavyEquipmentClass } from '@/services/graphql/query/heavy-equipment-class/useReadAllHeavyEquipmentClass';
-import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 const HeavyEquipmentClassBook = () => {
   const router = useRouter();
@@ -26,17 +23,8 @@ const HeavyEquipmentClassBook = () => {
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
-  const [typeSearchTerm, settypeSearchTerm] = React.useState<string>('');
-  const [typeSearchQuery] = useDebouncedValue<string>(typeSearchTerm, 400);
-  const [typeId, setTypeId] = React.useState<string | null>(null);
 
   /* #   /**=========== Query =========== */
-  const { typesData } = useReadAllHeavyEquipmentType({
-    variables: {
-      limit: 15,
-      search: typeSearchQuery === '' ? null : typeSearchQuery,
-    },
-  });
   const {
     heavyEquipmentClassesData,
     heavyEquipmentClassesDataLoading,
@@ -47,7 +35,6 @@ const HeavyEquipmentClassBook = () => {
       limit: 10,
       page: page,
       search: searchQuery === '' ? null : searchQuery,
-      // typeId,
     },
   });
   const [executeDelete, { loading }] = useDeleteHeavyEquipmentClass({
@@ -72,36 +59,6 @@ const HeavyEquipmentClassBook = () => {
     },
   });
   /* #endregion  /**======== Query =========== */
-
-  /* #   /**=========== FilterData =========== */
-  const { uncombinedItem: typeItems } = useCombineFilterItems({
-    data: typesData ?? [],
-  });
-  /* #endregion  /**======== FilterData =========== */
-
-  /* #   /**=========== FilterRender =========== */
-  const filter = React.useMemo(() => {
-    const item: SelectProps[] = [
-      {
-        onChange: (value) => {
-          setPage(1);
-          setTypeId(value);
-        },
-        value: typeId,
-        data: typeItems ?? [],
-        label: t('commonTypography.type'),
-        placeholder: t('heavyEquipment.chooseType'),
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: settypeSearchTerm,
-        searchValue: typeSearchTerm,
-      },
-    ];
-    return item;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [typeSearchTerm, typeItems]);
-  /* #endregion  /**======== FilterRender =========== */
 
   /* #   /**=========== HandleClickFc =========== */
   const handleDelete = async () => {
@@ -128,8 +85,12 @@ const HeavyEquipmentClassBook = () => {
             {
               accessor: 'type',
               title: t('commonTypography.type'),
-
-              render: ({ heavyEquipmentTypes }) => heavyEquipmentTypes[0].name,
+              noWrap: false,
+              width: 450,
+              render: ({ heavyEquipmentTypes }) => {
+                const type = heavyEquipmentTypes.map((val) => val.name);
+                return type?.join(', ');
+              },
             },
             {
               accessor: 'action',
@@ -202,9 +163,6 @@ const HeavyEquipmentClassBook = () => {
           setPage(1);
         },
         placeholder: t('heavyEquipmentClass.searchPlaceholder'),
-      }}
-      MultipleFilter={{
-        MultipleFilterData: filter,
       }}
     >
       {renderTable}
