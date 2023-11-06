@@ -63,8 +63,8 @@ export const useReadAllHeavyEquipmentModel = ({
   skip?: boolean;
 }) => {
   const {
-    data: modelData,
-    loading: modelDataLoading,
+    data: modelsData,
+    loading: modelsDataLoading,
     refetch,
   } = useQuery<IHeavyEquipmentModelResponse, IHeavyEquipmentModelRequest>(
     READ_ALL_HEAVY_EQUIPMENT_MODEL,
@@ -80,9 +80,9 @@ export const useReadAllHeavyEquipmentModel = ({
   );
 
   return {
-    modelData: modelData?.heavyEquipmentModels.data,
-    modelDataMeta: modelData?.heavyEquipmentModels.meta,
-    modelDataLoading,
-    refetchModelData: refetch,
+    modelsData: modelsData?.heavyEquipmentModels.data,
+    modelsDataMeta: modelsData?.heavyEquipmentModels.meta,
+    modelsDataLoading,
+    refetchModelsData: refetch,
   };
 };

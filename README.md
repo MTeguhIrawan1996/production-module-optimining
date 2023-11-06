@@ -1,7 +1,7 @@
 # Next.js + Tailwind CSS + TypeScript Starter and Boilerplate
 
 <div align="center">
-  <h2>🔋 ts-nextjs-mantine ui</h2>
+  <h2>🔋 ts-nextjs13-mantine ui</h2>
 </div>
 
 ## Features
@@ -28,6 +28,12 @@ It is encouraged to use **yarn** so the husky hooks can work properly.
 
 ```bash
 yarn install
+```
+
+### 2. Prepare husky lint stage
+
+```bash
+yarn prepare
 ```
 
 ### 3. Run the development server

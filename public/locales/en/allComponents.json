@@ -28,6 +28,7 @@
       "emailTwo": "Email 2",
       "faxNumber": "Fax Number",
       "code": "Code",
+      "type": "Jenis",
       "nib": "NIB (Nomor Izin Berusaha)",
       "companyType": "Jenis Perusahaan",
       "businessPermit": "Izin Usaha",
@@ -39,16 +40,18 @@
       "siujpDate": "Tanggal SIUJP",
       "ippNumber": "Nomor IPP",
       "ippDate": "Tanggal IPP",
-      "brandHeavyEquipment": "brand Alat Berat",
+      "brandHeavyEquipment": "Merk Alat Berat",
       "modelHeavyEquipment": "Model Alat Berat",
       "typeHeavyEquipment": "Jenis Alat Berat",
       "specHeavyEquipment": "Spesifikasi Alat Berat",
       "productionYear": "Tahun Pembuatan",
-      "photoOrDocument": "Foto/Dokumen"
+      "photoOrDocument": "Foto/Dokumen",
+      "heavyEquipmentClass": "Kelas Alat Berat"
     },
     "fieldDescription": {
-      "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG atau .PNG",
-      "photoDescription": "Maksimal 10Mb dengan extention .JPEG .JPG atau .PNG",
+      "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",
+      "photoDescription3": "Jumlah file maksimal 3 dengan ukuran 10MB extention .JPEG .JPG .PNG atau .WEBP",
+      "photoDescription5": "Jumlah file maksimal 5 dengan ukuran 10MB extention .JPEG .JPG .PNG atau .WEBP",
       "uploadPdfDescription": "Unggah Dokumen Maksimal 10Mb dengan extention PDF"
     },
     "modal": {

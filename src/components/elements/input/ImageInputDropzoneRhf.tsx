@@ -31,6 +31,9 @@ export type IImageInputDropzoneRhfProps = {
   description?: string;
   withAsterisk?: boolean;
   enableDeletePhoto?: boolean;
+  serverPhotos?: Partial<IFile>[] | null;
+  deletedPhotoIds?: string[];
+  handleDeleteServerPhotos?: (id: string) => void;
 } & Omit<DropzoneProps, 'name' | 'children'>;
 
 const useStyles = createStyles(() => ({
@@ -46,6 +49,9 @@ const ImageInputDropzoneRhf: React.FC<IImageInputDropzoneRhfProps> = ({
   label,
   withAsterisk,
   enableDeletePhoto,
+  serverPhotos,
+  deletedPhotoIds,
+  handleDeleteServerPhotos,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -62,20 +68,18 @@ const ImageInputDropzoneRhf: React.FC<IImageInputDropzoneRhfProps> = ({
     if (newFilterFile) replace(newFilterFile);
   };
 
-  const ImageMemo = React.useMemo(() => {
-    const previews: JSX.Element[] = field.value?.map(
-      (file: FileWithPath & IFile, index: number) => {
-        const serverFile = 'id' in file;
-        // const imageUrl = URL.createObjectURL(file);
+  const handleDeleteServerPhotosId = (id: string) => {
+    handleDeleteServerPhotos?.(id);
+  };
+
+  const ImageMemoLocal = React.useMemo(() => {
+    const previewsLocal: JSX.Element[] = field.value?.map(
+      (file: FileWithPath, index: number) => {
         return (
           <Stack key={index} align="center" spacing="xs">
             <NextImageFill
-              src={
-                serverFile
-                  ? `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${file.url}`
-                  : URL.createObjectURL(file)
-              }
               alt={file.name}
+              src={URL.createObjectURL(file)}
               figureProps={{
                 w: '100%',
                 h: 160,
@@ -97,9 +101,46 @@ const ImageInputDropzoneRhf: React.FC<IImageInputDropzoneRhfProps> = ({
       }
     );
 
-    return previews;
+    return previewsLocal;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [field.value]);
+
+  const ImageMemoServer = React.useMemo(() => {
+    if (serverPhotos) {
+      const previewsServer: JSX.Element[] = serverPhotos
+        ?.filter(
+          (file) => !deletedPhotoIds?.some((idDelete) => idDelete === file.id)
+        )
+        .map((file, index: number) => {
+          return (
+            <Stack key={index} align="center" spacing="xs">
+              <NextImageFill
+                alt={file.fileName ?? ''}
+                src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${file.url}`}
+                figureProps={{
+                  w: '100%',
+                  h: 160,
+                  radius: 'sm',
+                }}
+                imageClassName={classes.image}
+              />
+              {enableDeletePhoto ? (
+                <TextButton
+                  label={t('commonTypography.delete', { ns: 'default' })}
+                  color="red"
+                  buttonProps={{
+                    onClick: () => handleDeleteServerPhotosId(file?.id ?? ''),
+                  }}
+                />
+              ) : null}
+            </Stack>
+          );
+        });
+      return previewsServer;
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serverPhotos, deletedPhotoIds]);
 
   return (
     <Stack spacing={8}>
@@ -176,9 +217,10 @@ const ImageInputDropzoneRhf: React.FC<IImageInputDropzoneRhfProps> = ({
           { maxWidth: 'sm', cols: 1 },
           { maxWidth: 'md', cols: 2 },
         ]}
-        mt={ImageMemo?.length > 0 ? 'sm' : 0}
+        mt={ImageMemoLocal?.length > 0 ? 'sm' : 0}
       >
-        {ImageMemo}
+        {ImageMemoServer}
+        {ImageMemoLocal}
       </SimpleGrid>
     </Stack>
   );

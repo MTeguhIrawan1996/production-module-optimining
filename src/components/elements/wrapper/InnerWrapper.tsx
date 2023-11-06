@@ -2,8 +2,8 @@ import {
   Box,
   Container,
   ContainerProps,
-  TextProps,
   Title,
+  TitleProps,
 } from '@mantine/core';
 import * as React from 'react';
 
@@ -11,7 +11,7 @@ import * as React from 'react';
 interface IInnerWrapperProps {
   titleProps?: {
     title: string;
-  } & TextProps;
+  } & TitleProps;
   containerProps?: ContainerProps;
 }
 
@@ -20,7 +20,13 @@ const InnerWrapper: React.FC<IInnerWrapperProps> = ({
   titleProps,
   containerProps,
 }) => {
-  const { title, ...rest } = titleProps || {};
+  const {
+    title,
+    fw = 500,
+    order = 1,
+    size: sizeTitle = 'h2',
+    ...rest
+  } = titleProps || {};
   const {
     size = 'xl',
     pt = 'md',
@@ -32,7 +38,7 @@ const InnerWrapper: React.FC<IInnerWrapperProps> = ({
     <Box component="section" w="100%" px={32}>
       <Container size={size} pt={pt} pb={pb} px={px} {...restContainerProps}>
         {titleProps && (
-          <Title order={1} size="h2" fw={500} {...rest}>
+          <Title order={order} size={sizeTitle} fw={fw} {...rest}>
             {title}
           </Title>
         )}

@@ -26,6 +26,7 @@ import NumberInputRhf from '@/components/elements/input/NumberInputRhf';
 import PasswordInputRhf from '@/components/elements/input/PasswordInputRhf';
 import PdfInputDropzoneRhf from '@/components/elements/input/PdfInputDropzoneRhf';
 import RadioInputRhf from '@/components/elements/input/RadioInputRhf';
+import SelectHeavyEquipmentTypesInput from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
 import TextInputRhf from '@/components/elements/input/TextInputRhf';
 import PrimaryLink from '@/components/elements/link/PrimaryLink';
@@ -35,6 +36,7 @@ import SelectionButtonModal from '@/components/elements/modal/SelectionButtonMod
 import UpdatePasswordModal from '@/components/elements/modal/UpdatePasswordModal';
 import GlobalPagination from '@/components/elements/pagination/GlobalPagination';
 import PaginationSkeleton from '@/components/elements/skeleton/PaginationSkeleton';
+import GlobalHeaderDetail from '@/components/elements/ui/GlobalHeaderDetail';
 import AuthWrapper from '@/components/elements/wrapper/AuthWrapper';
 import InnerWrapper from '@/components/elements/wrapper/InnerWrapper';
 import RootWrapper from '@/components/elements/wrapper/RootWrapper';
@@ -53,6 +55,7 @@ export {
   GlobalActionTable,
   GlobalBadgeStatus,
   GlobalFormGroup,
+  GlobalHeaderDetail,
   GlobalKebabButton,
   GlobalPagination,
   ImageInputDropzoneRhf,
@@ -74,6 +77,7 @@ export {
   RadioInputRhf,
   RootWrapper,
   SearchBar,
+  SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
   SelectionButtonModal,
   TextButton,

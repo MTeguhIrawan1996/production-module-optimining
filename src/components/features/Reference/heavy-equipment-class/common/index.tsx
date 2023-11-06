@@ -18,7 +18,10 @@ const HeavyEquipmentClassPage = () => {
 
   React.useEffect(() => {
     setBreadcrumbs([
-      { label: t('companyType.companyTypeTitle'), path: router.asPath },
+      {
+        label: t('heavyEquipmentClass.heavyEquipmentClassTitle'),
+        path: router.asPath,
+      },
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
@@ -26,7 +29,10 @@ const HeavyEquipmentClassPage = () => {
   return (
     <RootWrapper>
       <InnerWrapper
-        titleProps={{ title: t('companyType.companyTypeTitle'), mb: 'md' }}
+        titleProps={{
+          title: t('heavyEquipmentClass.heavyEquipmentClassTitle'),
+          mb: 'md',
+        }}
       >
         <HeavyEquipmentClassBook />
       </InnerWrapper>

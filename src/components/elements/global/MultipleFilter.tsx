@@ -30,8 +30,7 @@ const MultipleFilter: React.FC<IMultipleFilterProps> = ({
         />
       );
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [MultipleFilter]
+    []
   );
 
   const selectItems = MultipleFilterData.map(renderSelectItem);

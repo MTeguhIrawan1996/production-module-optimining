@@ -45,7 +45,7 @@ const ReadManagementRoleBook = () => {
       title={t('managementRole.managementRoleTitle')}
       titleStyle={{
         fw: 700,
-        fz: 34,
+        fz: 30,
       }}
       updateButton={{
         label: 'Edit',

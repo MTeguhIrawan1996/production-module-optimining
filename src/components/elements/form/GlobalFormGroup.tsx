@@ -29,6 +29,7 @@ interface IGlobalFormGroupProps {
   nextButton?: Partial<IPrimaryButtonProps>;
   validationButton?: Partial<IPrimaryButtonProps>;
   backButton?: Partial<IPrimaryButtonProps>;
+  children?: React.ReactNode;
 }
 
 const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
@@ -39,6 +40,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
   nextButton,
   validationButton,
   backButton,
+  children,
 }) => {
   const { t } = useTranslation('default');
   const {
@@ -78,40 +80,42 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
               return (
                 <Paper p={24} key={i} withBorder>
                   <Stack spacing={8}>
-                    <SimpleGrid cols={2} mb="sm">
-                      {enableGroupLabel && (
-                        <Text
-                          component="span"
-                          fw={400}
-                          fz={16}
-                          sx={{ alignSelf: 'center' }}
-                        >
-                          {group}
-                        </Text>
-                      )}
-                      {actionGroup ? (
-                        <Group spacing="xs" position="right">
-                          {addButton ? (
-                            <PrimaryButton
-                              leftIcon={<IconPlus size="20px" />}
-                              {...addButton}
-                            />
-                          ) : null}
-                          {deleteButton ? (
-                            <PrimaryButton
-                              color="red.5"
-                              variant="light"
-                              styles={(theme) => ({
-                                root: {
-                                  border: `1px solid ${theme.colors.red[3]}`,
-                                },
-                              })}
-                              {...deleteButton}
-                            />
-                          ) : null}
-                        </Group>
-                      ) : null}
-                    </SimpleGrid>
+                    {enableGroupLabel || actionGroup ? (
+                      <SimpleGrid cols={2} mb="sm">
+                        {enableGroupLabel && (
+                          <Text
+                            component="span"
+                            fw={400}
+                            fz={16}
+                            sx={{ alignSelf: 'center' }}
+                          >
+                            {group}
+                          </Text>
+                        )}
+                        {actionGroup ? (
+                          <Group spacing="xs" position="right">
+                            {addButton ? (
+                              <PrimaryButton
+                                leftIcon={<IconPlus size="20px" />}
+                                {...addButton}
+                              />
+                            ) : null}
+                            {deleteButton ? (
+                              <PrimaryButton
+                                color="red.5"
+                                variant="light"
+                                styles={(theme) => ({
+                                  root: {
+                                    border: `1px solid ${theme.colors.red[3]}`,
+                                  },
+                                })}
+                                {...deleteButton}
+                              />
+                            ) : null}
+                          </Group>
+                        ) : null}
+                      </SimpleGrid>
+                    ) : null}
                     <Grid gutter="md">
                       {formControllers.map(
                         ({ colSpan = 12, name, ...rest }, index) => {
@@ -142,6 +146,11 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                 </Paper>
               );
             }
+          )}
+          {children && (
+            <Paper p={24} withBorder>
+              {children}
+            </Paper>
           )}
           {/* Submit Button */}
           <Group position={backButton ? 'apart' : 'right'}>

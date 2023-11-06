@@ -35,7 +35,7 @@ const CreateHeavyEquipmentPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('heavyEquipment.heavyEquipmentTitle'),
+          title: t('heavyEquipment.formHeavyEquipment'),
           mb: 'xl',
         }}
       >
@@ -48,7 +48,7 @@ const CreateHeavyEquipmentPage = () => {
             },
           }}
         >
-          <ScrollArea w="100%" pb="xs" px={0}>
+          <ScrollArea w="100%" px={0} h={55}>
             <Tabs.List>
               <Tabs.Tab value="information" fz={14} fw={500}>
                 {t('commonTypography.information')}

@@ -10,6 +10,7 @@ import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { IPasswordInputProps } from '@/components/elements/input/PasswordInputRhf';
 import { IPdfInputDropzoneRhfProps } from '@/components/elements/input/PdfInputDropzoneRhf';
 import { IRadioInputProps } from '@/components/elements/input/RadioInputRhf';
+import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
 
@@ -28,6 +29,7 @@ export type ControllerProps =
   | (IPdfInputDropzoneRhfProps & CommonProps)
   | (INumberInputProps & CommonProps)
   | (IRadioInputProps & CommonProps)
+  | (ISelectHeavyEquipmentTypesInputProps & CommonProps)
   | (IDateInputProps & CommonProps);
 
 export type ControllerGroup = {
@@ -70,9 +72,9 @@ export interface IMeta {
 export interface IFile {
   id: string;
   path: string;
-  filename: string;
+  fileName: string;
   url: string;
-  originalFilename: string;
+  originalFileName: string;
   mime: string;
 }
 
