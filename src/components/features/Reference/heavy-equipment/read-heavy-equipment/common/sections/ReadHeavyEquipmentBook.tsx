@@ -37,9 +37,9 @@ const ReadHEavyEquipmentBook = () => {
     ) => {
       return {
         type: i > 0 ? '' : 'photo',
-        fileName: fileName,
+        fileName: originalFileName,
         src: url,
-        alt: originalFileName,
+        alt: fileName,
       };
     },
     []

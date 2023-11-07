@@ -81,6 +81,8 @@ const getClient = (tokenServer?: ISessionServer | null) => {
       'ReadAllProvince',
       'ReadAllSubDistrict',
       'ReadAllIdentityType',
+      'ReadAllVillage',
+      'ReadAllRegency',
     ];
 
     if (blackList.includes(operation.operationName)) {

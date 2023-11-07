@@ -63,26 +63,27 @@ const UpdateHeavyEquipmentBook = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  const { heavyEquipmentReferenceData } = useReadOneHeavyEquipmentReference({
-    variables: {
-      id,
-    },
-    skip: !router.isReady,
-    onCompleted: (data) => {
-      methods.setValue(
-        'brandId',
-        data.heavyEquipmentReference.model.type.brand.id
-      );
-      methods.setValue('typeId', data.heavyEquipmentReference.model.type.id);
-      methods.setValue('modelId', data.heavyEquipmentReference.model.id);
-      methods.setValue('spec', data.heavyEquipmentReference.spec);
-      methods.setValue(
-        'createdYear',
-        `${data.heavyEquipmentReference.createdYear}`
-      );
-      setServerPhotos(data.heavyEquipmentReference.photos);
-    },
-  });
+  const { heavyEquipmentReferenceData, heavyEquipmentReferenceDataLoading } =
+    useReadOneHeavyEquipmentReference({
+      variables: {
+        id,
+      },
+      skip: !router.isReady,
+      onCompleted: (data) => {
+        methods.setValue(
+          'brandId',
+          data.heavyEquipmentReference.model.type.brand.id
+        );
+        methods.setValue('typeId', data.heavyEquipmentReference.model.type.id);
+        methods.setValue('modelId', data.heavyEquipmentReference.model.id);
+        methods.setValue('spec', data.heavyEquipmentReference.spec);
+        methods.setValue(
+          'createdYear',
+          `${data.heavyEquipmentReference.createdYear}`
+        );
+        setServerPhotos(data.heavyEquipmentReference.photos);
+      },
+    });
   const { brandsData } = useReadAllBrand({
     variables: {
       limit: 15,
@@ -298,7 +299,7 @@ const UpdateHeavyEquipmentBook = () => {
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={heavyEquipmentReferenceDataLoading}>
       <GlobalFormGroup
         field={field}
         methods={methods}
