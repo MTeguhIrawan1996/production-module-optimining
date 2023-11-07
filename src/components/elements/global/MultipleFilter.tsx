@@ -1,5 +1,6 @@
 import { Select, SelectProps, SimpleGrid } from '@mantine/core';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface IMultipleFilterProps {
   MultipleFilterData: SelectProps[];
@@ -10,14 +11,20 @@ const MultipleFilter: React.FC<IMultipleFilterProps> = ({
   MultipleFilterData,
   colSpan = 3,
 }) => {
+  const { t } = useTranslation('default');
   const renderSelectItem = React.useCallback(
-    (value: SelectProps, index: number) => {
+    ({ placeholder, ...value }: SelectProps, index: number) => {
       return (
         <Select
           key={index}
           labelProps={{
             style: { fontWeight: 500, fontSize: 14, marginBottom: 8 },
           }}
+          placeholder={
+            placeholder
+              ? t(`commonTypography.${placeholder}`, { ns: 'default' })
+              : undefined
+          }
           styles={(theme) => ({
             item: {
               borderRadius: theme.spacing.xs,
@@ -30,6 +37,7 @@ const MultipleFilter: React.FC<IMultipleFilterProps> = ({
         />
       );
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 

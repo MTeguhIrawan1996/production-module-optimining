@@ -22,7 +22,7 @@ import TextButton from '@/components/elements/button/TextButton';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 import NextImageFill from '@/components/elements/global/NextImageFill';
 
-import { IFile } from '@/types/global';
+import { CommonProps, IFile } from '@/types/global';
 
 export type IImageInputDropzoneRhfProps = {
   control: 'image-dropzone';
@@ -34,7 +34,8 @@ export type IImageInputDropzoneRhfProps = {
   serverPhotos?: Partial<IFile>[] | null;
   deletedPhotoIds?: string[];
   handleDeleteServerPhotos?: (id: string) => void;
-} & Omit<DropzoneProps, 'name' | 'children'>;
+} & Omit<DropzoneProps, 'name' | 'children'> &
+  CommonProps;
 
 const useStyles = createStyles(() => ({
   image: {

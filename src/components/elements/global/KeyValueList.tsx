@@ -18,7 +18,7 @@ interface IFlexTypeProps extends Omit<FlexProps, 'children'> {
 }
 interface IKeyValueItemProps {
   dataKey: string;
-  value: string;
+  value?: string | null;
   keyStyleText?: TextProps;
   valueStyleText?: TextProps;
 }
@@ -45,7 +45,7 @@ const GridItem: React.FC<IKeyValueItemProps & IGridTypeProps> = ({
     </Grid.Col>
     <Grid.Col span={valueSpan ?? 6}>
       <Text span fw={400} fz={18} color="dark.5" {...valueStyleText}>
-        {value}
+        {value ?? '-'}
       </Text>
     </Grid.Col>
   </Grid>
@@ -62,9 +62,8 @@ const FlexItem: React.FC<IKeyValueItemProps & IFlexTypeProps> = ({
     <Text span fw={400} fz={18} color="dark.3" {...keyStyleText}>
       {dataKey}
     </Text>
-
     <Text span fw={400} fz={18} color="dark.5" {...valueStyleText}>
-      {value}
+      {value ?? '-'}
     </Text>
   </Flex>
 );

@@ -6,15 +6,19 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
+import { CommonProps } from '@/types/global';
+
 export type ISelectInputRhfProps = {
   control: 'select-input';
   name: string;
-} & Omit<SelectProps, 'name'>;
+} & Omit<SelectProps, 'name'> &
+  CommonProps;
 
 const SelectInputRhf: React.FC<ISelectInputRhfProps> = ({
   name,
   control,
   label,
+  placeholder,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -36,6 +40,11 @@ const SelectInputRhf: React.FC<ISelectInputRhfProps> = ({
       })}
       data-control={control}
       label={label ? t(`components.field.${label}`) : null}
+      placeholder={
+        placeholder
+          ? t(`commonTypography.${placeholder}`, { ns: 'default' })
+          : undefined
+      }
       error={
         fieldState &&
         fieldState.error && (

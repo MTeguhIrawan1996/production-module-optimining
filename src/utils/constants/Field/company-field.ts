@@ -19,6 +19,12 @@ export const address: ControllerProps = {
   label: 'address',
   withAsterisk: true,
 };
+export const domicileAddress: ControllerProps = {
+  control: 'text-input',
+  name: 'domicileAddress',
+  label: 'address',
+  withAsterisk: true,
+};
 
 export const firstContact: ControllerProps = {
   control: 'text-input',

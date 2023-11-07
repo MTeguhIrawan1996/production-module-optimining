@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next';
 import NextImageFill from '@/components/elements/global/NextImageFill';
 
 type IImageProps = {
-  type: string;
-  fileName: string;
-  src: string;
-  alt: string;
+  type?: string;
+  fileName?: string;
+  src?: string;
+  alt?: string;
 };
 
 interface IGlobalHeaderDetailProps {
@@ -46,7 +46,7 @@ const GlobalHeaderDetail: React.FC<IGlobalHeaderDetailProps> = ({
                 figureProps={{
                   w: '100%',
                 }}
-                alt={alt}
+                alt={alt ?? 'notfound'}
               />
               <Text
                 component="span"
@@ -54,6 +54,7 @@ const GlobalHeaderDetail: React.FC<IGlobalHeaderDetailProps> = ({
                 fw={400}
                 fz={12}
                 color="dark.5"
+                truncate
               >
                 {fileName}
               </Text>

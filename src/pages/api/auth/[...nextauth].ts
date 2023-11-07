@@ -1,4 +1,5 @@
 import { GraphQLClient } from 'graphql-request';
+import Cookies from 'js-cookie';
 import type { NextAuthOptions } from 'next-auth';
 import NextAuth from 'next-auth';
 import { JWT } from 'next-auth/jwt';
@@ -13,11 +14,14 @@ import {
   REFRESH_TOKEN,
 } from '@/services/graphql/mutation/auth/useRefreshToken';
 
+const storedLanguage = Cookies.get('language');
+const initialLanguage = storedLanguage || 'id';
+
 const client = new GraphQLClient(
   process.env.NEXT_PUBLIC_GRAPHQL_API_URL || '',
   {
     headers: {
-      'Accept-Language': 'id',
+      'Accept-Language': initialLanguage,
     },
   }
 );

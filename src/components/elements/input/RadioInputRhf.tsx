@@ -11,12 +11,15 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
+import { CommonProps } from '@/types/global';
+
 export type IRadioInputProps = {
   control: 'radio-input';
   name: string;
   radioComponent: RadioProps[];
   radioComponentWrapper?: FlexProps;
-} & Omit<RadioGroupProps, 'name' | 'children'>;
+} & Omit<RadioGroupProps, 'name' | 'children'> &
+  CommonProps;
 
 const RadioInputRhf: React.FC<IRadioInputProps> = ({
   name,
