@@ -8,6 +8,7 @@ import CreateCompanyPage from '@/components/features/MasterData/company/create-c
 import ReadCompanyPage from '@/components/features/MasterData/company/read-company/common';
 import HumanResourcesPage from '@/components/features/MasterData/humanResources/common';
 import CreateHumanResourcesPage from '@/components/features/MasterData/humanResources/create/common';
+import UpdateHumanResourcesPage from '@/components/features/MasterData/humanResources/update/common';
 import ProfilePage from '@/components/features/Profile/common';
 import CompanyTypePage from '@/components/features/Reference/company-type/common';
 import HeavyEquipmentPage from '@/components/features/Reference/heavy-equipment/common';
@@ -51,6 +52,7 @@ export {
   ReadManagementRolePage,
   UpdateHeavyEquipmentClassPage,
   UpdateHeavyEquipmentPage,
+  UpdateHumanResourcesPage,
   UpdateManagementRolePage,
   UpdateUserPage,
   UserPage,

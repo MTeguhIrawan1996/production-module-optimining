@@ -116,7 +116,9 @@ const HumanResourcesBook = () => {
                     actionUpdate={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        router.push(`/master-data/human-resources/read/${id}`);
+                        router.push(
+                          `/master-data/human-resources/update/${id}`
+                        );
                       },
                     }}
                     actionDelete={{

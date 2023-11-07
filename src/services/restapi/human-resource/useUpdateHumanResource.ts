@@ -6,7 +6,8 @@ import { dateToString } from '@/utils/helper/dateToString';
 
 import { AxiosRestErrorResponse } from '@/types/global';
 
-export interface ICreateHumanResourceValues {
+export interface IUpdateHumanResourceValues {
+  id: string;
   name: string;
   alias: string;
   isWni: string;
@@ -38,16 +39,21 @@ export interface ICreateHumanResourceValues {
 }
 
 type INameValue = {
-  name: string;
-  value: string | null | undefined | FileWithPath[];
+  id: string;
+  data: {
+    name: string;
+    value: string | null | undefined | FileWithPath[];
+  }[];
+  deletedPhoto: boolean | null;
+  deletedIdentityPhoto: boolean | null;
 };
 
-export interface ICreateHumanResourceResponse {
-  data: ICreateHumanResourceValues;
+export interface IUpdateHumanResourceResponse {
+  data: IUpdateHumanResourceValues;
   message: string;
 }
 
-const CreateHumanResource = async (props: INameValue[]) => {
+const UpdateHumanResource = async (props: INameValue) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
   const exclude = [
@@ -58,25 +64,28 @@ const CreateHumanResource = async (props: INameValue[]) => {
     'regencyId',
     'subdistrictId',
   ];
-
-  props.forEach(({ name, value }) => {
+  bodyFormData.append('id', props.id);
+  if (props.deletedPhoto) {
+    bodyFormData.append('deletePhoto', 'true');
+  }
+  if (props.deletedIdentityPhoto) {
+    bodyFormData.append('deleteIdentityPhoto', 'true');
+  }
+  props.data.forEach(({ name, value }) => {
     if (!exclude.includes(name) && value) {
       if (name === 'photo' && typeof value !== 'string') {
         value.forEach((image) => {
           bodyFormData.append('photo', image);
         });
-        return;
       }
       if (name === 'identityPhoto' && typeof value !== 'string') {
         value.forEach((image) => {
           bodyFormData.append('identityPhoto', image);
         });
-        return;
       }
       if (name === 'dob') {
         const date = dateToString(value as string);
         bodyFormData.append('dob', date);
-        return;
       }
       if (
         name !== 'identityPhoto' &&
@@ -84,31 +93,33 @@ const CreateHumanResource = async (props: INameValue[]) => {
         typeof value === 'string'
       ) {
         bodyFormData.append(`${name}`, value);
-        return;
       }
     }
   });
 
-  const response = await axiosAuth.post(`/human-resources`, bodyFormData);
+  const response = await axiosAuth.patch(
+    `/human-resources/${props.id}`,
+    bodyFormData
+  );
   return response?.data;
 };
 
-export const useCreateHumanResource = ({
+export const useUpdateHumanResource = ({
   onError,
   onSuccess,
 }: {
-  onSuccess?: (success: ICreateHumanResourceResponse) => void;
+  onSuccess?: (success: IUpdateHumanResourceResponse) => void;
   onError?: (
-    error: AxiosRestErrorResponse<ICreateHumanResourceValues>
+    error: AxiosRestErrorResponse<Omit<IUpdateHumanResourceValues, 'id'>>
   ) => unknown;
 }) => {
   return useMutation<
-    ICreateHumanResourceResponse,
-    AxiosRestErrorResponse<ICreateHumanResourceValues>,
-    INameValue[]
+    IUpdateHumanResourceResponse,
+    AxiosRestErrorResponse<Omit<IUpdateHumanResourceValues, 'id'>>,
+    INameValue
   >({
     mutationFn: async (props) => {
-      const data = await CreateHumanResource(props);
+      const data = await UpdateHumanResource(props);
       return data;
     },
     onError: onError,

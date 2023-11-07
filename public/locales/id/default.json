@@ -187,9 +187,11 @@
   },
   "humanResources": {
     "createHumanResources": "$t(commonTypography.create) $t(commonTypography.humanResources)",
+    "updateHumanResources": "$t(commonTypography.edit) $t(commonTypography.humanResources)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) dan $t(commonTypography.identityNumber)",
     "successDeleteMessage": "$t(commonTypography.humanResources) berhasil dihapus",
     "successCreateMessage": "$t(commonTypography.humanResources) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.humanResources) berhasil diedit",
     "formHumanResources": "$t(commonTypography.form) $t(commonTypography.humanResources)",
     "humanResourcesProfile": "$t(commonTypography.profile) $t(commonTypography.humanResources)",
     "humanResourcesIdentity": "Identitas $t(commonTypography.humanResources)"
