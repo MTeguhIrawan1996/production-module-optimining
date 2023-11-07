@@ -38,3 +38,17 @@ export const useCombineFilterItems = <T extends IIdAndName>({
     uncombinedItem,
   };
 };
+export const useFilterItems = <T extends IIdAndName>({ data }: IProps<T>) => {
+  const renderItems = React.useCallback((value: T) => {
+    return {
+      label: value.name,
+      value: value.id,
+    };
+  }, []);
+
+  const uncombinedItem = data.map(renderItems);
+
+  return {
+    uncombinedItem,
+  };
+};

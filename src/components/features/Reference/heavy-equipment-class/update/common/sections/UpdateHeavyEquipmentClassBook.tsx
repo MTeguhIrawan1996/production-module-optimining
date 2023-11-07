@@ -177,7 +177,7 @@ const UpdateHeavyEquipmentClassBook = () => {
         label: 'type',
         value: id,
         withAsterisk: true,
-        placeholder: t('heavyEquipment.chooseType'),
+        placeholder: 'chooseType',
         handleSetValue: (value, name) => {
           handleUpdateId(key, value, name ?? '');
           methods.trigger('heavyEquipmentTypeIds');

@@ -21,14 +21,21 @@ import NextImageFill from '@/components/elements/global/NextImageFill';
 import SearchBar from '@/components/elements/global/SearchBar';
 import CheckboxGroupAccess from '@/components/elements/input/CheckboxGroupAccess';
 import DateInputRhf from '@/components/elements/input/DateInputRhf';
+import IdentityRadioInputRhf from '@/components/elements/input/IdentityRadioInputRhf';
 import ImageInputDropzoneRhf from '@/components/elements/input/ImageInputDropzoneRhf';
+import MarriageSelectInputRhf from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import NumberInputRhf from '@/components/elements/input/NumberInputRhf';
 import PasswordInputRhf from '@/components/elements/input/PasswordInputRhf';
 import PdfInputDropzoneRhf from '@/components/elements/input/PdfInputDropzoneRhf';
+import ProvinceSelectInputRhf from '@/components/elements/input/ProvinceSelectInputRhf';
 import RadioInputRhf from '@/components/elements/input/RadioInputRhf';
+import RegencySelectInputRhf from '@/components/elements/input/RegencySelectInputRhf';
+import RelegionSelectInputRhf from '@/components/elements/input/RelegionSelectInputRhf';
 import SelectHeavyEquipmentTypesInput from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
+import SubDistrictSelectInputRhf from '@/components/elements/input/SubDistrictSelectInputRhf';
 import TextInputRhf from '@/components/elements/input/TextInputRhf';
+import VillageSelectInputRhf from '@/components/elements/input/VillageSelectInputRhf';
 import PrimaryLink from '@/components/elements/link/PrimaryLink';
 import LogoutConfirmModal from '@/components/elements/modal/LogoutConfirmModal';
 import ModalConfirmation from '@/components/elements/modal/ModalConfirmation';
@@ -58,11 +65,13 @@ export {
   GlobalHeaderDetail,
   GlobalKebabButton,
   GlobalPagination,
+  IdentityRadioInputRhf,
   ImageInputDropzoneRhf,
   InnerWrapper,
   KeyValueList,
   LogoutConfirmModal,
   MantineDataTable,
+  MarriageSelectInputRhf,
   ModalConfirmation,
   MultipleFilter,
   NavbarCollapseLinksGroup,
@@ -74,14 +83,19 @@ export {
   PdfInputDropzoneRhf,
   PrimaryButton,
   PrimaryLink,
+  ProvinceSelectInputRhf,
   RadioInputRhf,
+  RegencySelectInputRhf,
+  RelegionSelectInputRhf,
   RootWrapper,
   SearchBar,
   SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
   SelectionButtonModal,
+  SubDistrictSelectInputRhf,
   TextButton,
   TextInputRhf,
   UpdatePasswordModal,
   UserProfileForm,
+  VillageSelectInputRhf,
 };

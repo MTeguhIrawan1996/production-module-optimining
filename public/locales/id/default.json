@@ -9,6 +9,7 @@
     "next": "Selanjutnya",
     "address": "Alamat",
     "director": "Direktur",
+    "profile": "Profil",
     "action": "Aksi",
     "create": "Tambah",
     "read": "Lihat",
@@ -62,7 +63,22 @@
     "humanResources": "SDM",
     "phoneNumber": "Nomor Telepon",
     "identityNumber": "NIK",
-    "email": "Email"
+    "email": "Email",
+    "domicile": "Domisili",
+    "checkboxAddressDomicile": "Alamat Domisili sesuai dengan Kartu Identitas (KTP/KTA/Paspor)",
+    "bloodType": "Golongan Darah",
+    "resus": "Resus Darah",
+    "chooseRelegion": "Pilih / Ketikan Agama",
+    "chooseMarriageStatus": "Pilih / Ketikan Status Pernikahan",
+    "chooseProvince": "Pilih / Ketikan Provinsi",
+    "chooseRegency": "Pilih / Ketikan Kabupaten/Kota",
+    "chooseSubDistrict": "Pilih / Ketikan Kecamatan",
+    "chooseVillage": "Pilih / Ketikan Desa",
+    "chooseResus": "Pilih Resus Darah",
+    "chooseBloodType": "Pilih Golongan Darah",
+    "chooseType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.type)",
+    "chooseBrand": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.brand)",
+    "chooseModel": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.model)"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -134,7 +150,7 @@
     "createCompany": "$t(commonTypography.create) $t(commonTypography.company)",
     "chooseCompanyType": "$t(commonTypography.choose) $t(commonTypography.companyType)",
     "formCompany": "$t(commonTypography.form) $t(commonTypography.company)",
-    "profileCompany": "Profil $t(commonTypography.company)",
+    "profileCompany": "$t(commonTypography.profile) $t(commonTypography.company)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.companyName)",
     "successDeleteMessage": "$t(commonTypography.company) berhasil dihapus"
   },
@@ -145,9 +161,6 @@
     "readHeavyEquipment": "$t(commonTypography.detail) $t(commonTypography.heavyEquipment)",
     "informationHeavyEquipment": "$t(commonTypography.information) $t(heavyEquipment.heavyEquipmentTitle)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type), $t(commonTypography.brand), $t(commonTypography.model), dan $t(commonTypography.year)",
-    "chooseType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.type)",
-    "chooseBrand": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.brand)",
-    "chooseModel": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.model)",
     "formHeavyEquipment": "$t(commonTypography.form) $t(heavyEquipment.heavyEquipmentTitle)",
     "detailReference": "$t(commonTypography.detail) $t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
     "successCreateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dibuat",
@@ -164,7 +177,6 @@
     "readHeavyEquipmentClass": "$t(commonTypography.detail) $t(commonTypography.heavyEquipmentClass)",
     "informationHeavyEquipmentClass": "$t(commonTypography.information) $t(heavyEquipmentClass.heavyEquipmentClassTitle)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.class) dan $t(commonTypography.type)",
-    "chooseType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.type)",
     "formHeavyEquipmentClass": "$t(commonTypography.form) $t(heavyEquipmentClass.heavyEquipmentClassTitle)",
     "detailReference": "$t(commonTypography.detail) $t(commonTypography.reference) $t(commonTypography.heavyEquipmentClass)",
     "successCreateMessage": "$t(heavyEquipmentClass.heavyEquipmentClassTitle) berhasil dibuat",
@@ -176,6 +188,10 @@
   "humanResources": {
     "createHumanResources": "$t(commonTypography.create) $t(commonTypography.humanResources)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) dan $t(commonTypography.identityNumber)",
-    "successDeleteMessage": "$t(commonTypography.humanResources) berhasil dihapus"
+    "successDeleteMessage": "$t(commonTypography.humanResources) berhasil dihapus",
+    "successCreateMessage": "$t(commonTypography.humanResources) berhasil dibuat",
+    "formHumanResources": "$t(commonTypography.form) $t(commonTypography.humanResources)",
+    "humanResourcesProfile": "$t(commonTypography.profile) $t(commonTypography.humanResources)",
+    "humanResourcesIdentity": "Identitas $t(commonTypography.humanResources)"
   }
 }

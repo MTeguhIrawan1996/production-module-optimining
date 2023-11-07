@@ -5,32 +5,46 @@ import { GraphQLErrorExtensions } from 'graphql';
 import { IPrimaryButtonProps } from '@/components/elements/button/PrimaryButton';
 import { ICheckboxGroupAccessProps } from '@/components/elements/input/CheckboxGroupAccess';
 import { IDateInputProps } from '@/components/elements/input/DateInputRhf';
+import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
 import { IImageInputDropzoneRhfProps } from '@/components/elements/input/ImageInputDropzoneRhf';
+import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { IPasswordInputProps } from '@/components/elements/input/PasswordInputRhf';
 import { IPdfInputDropzoneRhfProps } from '@/components/elements/input/PdfInputDropzoneRhf';
+import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
 import { IRadioInputProps } from '@/components/elements/input/RadioInputRhf';
+import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
+import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
 import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
+import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
+import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 
 // import { TablerIconsProps } from '@tabler/icons-react';
 
-type CommonProps = {
+export type CommonProps = {
   colSpan?: number;
 };
 
 // Controller Field
 export type ControllerProps =
-  | (ITextInputProps & CommonProps)
-  | (ISelectInputRhfProps & CommonProps)
-  | (IPasswordInputProps & CommonProps)
-  | (IImageInputDropzoneRhfProps & CommonProps)
-  | (IPdfInputDropzoneRhfProps & CommonProps)
-  | (INumberInputProps & CommonProps)
-  | (IRadioInputProps & CommonProps)
-  | (ISelectHeavyEquipmentTypesInputProps & CommonProps)
-  | (IDateInputProps & CommonProps);
+  | ITextInputProps
+  | ISelectInputRhfProps
+  | IPasswordInputProps
+  | IImageInputDropzoneRhfProps
+  | IPdfInputDropzoneRhfProps
+  | INumberInputProps
+  | IRadioInputProps
+  | ISelectHeavyEquipmentTypesInputProps
+  | IRelegionSelectInputRhfProps
+  | IMarriagaSelectInputRhfProps
+  | IProvinceSelectInputRhfProps
+  | IRegencySelectInputRhfProps
+  | ISubDistrictSelectInputRhfProps
+  | IVillageInputRhfProps
+  | IIdentityTypesRadioInputProps
+  | IDateInputProps;
 
 export type ControllerGroup = {
   group: string;

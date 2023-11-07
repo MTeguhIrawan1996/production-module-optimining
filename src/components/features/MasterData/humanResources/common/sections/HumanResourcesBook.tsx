@@ -74,7 +74,7 @@ const HumanResourcesBook = () => {
     return (
       <MantineDataTable
         tableProps={{
-          records: [],
+          records: humanResourcesData,
           fetching: humanResourcesDataLoading,
           highlightOnHover: true,
           columns: [

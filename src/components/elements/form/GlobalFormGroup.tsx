@@ -85,7 +85,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                         {enableGroupLabel && (
                           <Text
                             component="span"
-                            fw={400}
+                            fw={500}
                             fz={16}
                             sx={{ alignSelf: 'center' }}
                           >

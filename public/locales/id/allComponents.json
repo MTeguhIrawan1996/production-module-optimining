@@ -17,6 +17,7 @@
       "photo": "Foto",
       "companyName": "Nama Perusahaan",
       "companyAlias": "Nama Alias Perusahaan",
+      "nameAlias": "Nama Alias",
       "province": "Provinsi",
       "regency": "Kabupaten/Kota",
       "subdistrict": "Kecamatan",
@@ -46,10 +47,24 @@
       "specHeavyEquipment": "Spesifikasi Alat Berat",
       "productionYear": "Tahun Pembuatan",
       "photoOrDocument": "Foto/Dokumen",
-      "heavyEquipmentClass": "Kelas Alat Berat"
+      "heavyEquipmentClass": "Kelas Alat Berat",
+      "isWni": "Kewarganegaraan",
+      "identityType": "Jenis Identitas",
+      "identityNumber": "Nomor Identitas",
+      "pob": "Tempat Lahir",
+      "dob": "Tanggal Lahir",
+      "gender": "Jenis Kelamin",
+      "religion": "Agama",
+      "educationDegree": "Gelar Pendidikan",
+      "marriageStatus": "Status Pernikahan",
+      "contact": "Nomor Kontak",
+      "bloodType": "Golongan Darah",
+      "resus": "Resus",
+      "identityPhoto": "Foto Identitas"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",
+      "photoDescription": "Maksimal 10MB dengan extention .JPEG .JPG .PNG atau .WEBP",
       "photoDescription3": "Jumlah file maksimal 3 dengan ukuran 10MB extention .JPEG .JPG .PNG atau .WEBP",
       "photoDescription5": "Jumlah file maksimal 5 dengan ukuran 10MB extention .JPEG .JPG .PNG atau .WEBP",
       "uploadPdfDescription": "Unggah Dokumen Maksimal 10Mb dengan extention PDF"

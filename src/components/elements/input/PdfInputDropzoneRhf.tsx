@@ -13,13 +13,16 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
+import { CommonProps } from '@/types/global';
+
 export type IPdfInputDropzoneRhfProps = {
   control: 'pdf-dropzone';
   name: string;
   label?: string;
   description?: string;
   withAsterisk?: boolean;
-} & Omit<DropzoneProps, 'name' | 'children'>;
+} & Omit<DropzoneProps, 'name' | 'children'> &
+  CommonProps;
 
 const PdfInputDropzoneRhf: React.FC<IPdfInputDropzoneRhfProps> = ({
   name,

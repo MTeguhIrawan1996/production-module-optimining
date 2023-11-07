@@ -96,8 +96,8 @@ const CreateHeavyEquipmentBook = () => {
         message: t('heavyEquipment.successCreateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/reference/heavy-equipment');
-      methods.reset();
+      // router.push('/reference/heavy-equipment');
+      // methods.reset();
     },
   });
   /* #endregion  /**======== Query =========== */
@@ -160,7 +160,7 @@ const CreateHeavyEquipmentBook = () => {
             data: brandItems ?? [],
             name: 'brandId',
             label: 'brandHeavyEquipment',
-            placeholder: t('heavyEquipment.chooseBrand'),
+            placeholder: 'chooseBrand',
             colSpan: 6,
             withAsterisk: true,
             searchable: true,
@@ -179,7 +179,7 @@ const CreateHeavyEquipmentBook = () => {
             data: typeItems ?? [],
             name: 'typeId',
             label: 'typeHeavyEquipment',
-            placeholder: t('heavyEquipment.chooseType'),
+            placeholder: 'chooseType',
             colSpan: 6,
             withAsterisk: true,
             onChange: (value) => {
@@ -201,7 +201,7 @@ const CreateHeavyEquipmentBook = () => {
             name: 'modelId',
             data: modelItems ?? [],
             label: 'modelHeavyEquipment',
-            placeholder: t('heavyEquipment.chooseModel'),
+            placeholder: 'chooseModel',
             colSpan: 6,
             withAsterisk: true,
             searchable: true,

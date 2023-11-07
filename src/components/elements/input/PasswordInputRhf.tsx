@@ -8,10 +8,13 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-export interface IPasswordInputProps extends Omit<TextInputProps, 'name'> {
+import { CommonProps } from '@/types/global';
+
+export type IPasswordInputProps = {
   control: 'password-input';
   name: string;
-}
+} & Omit<TextInputProps, 'name'> &
+  CommonProps;
 
 const PasswordInputRhf: React.FC<IPasswordInputProps> = (props) => {
   const { control, name, label, ...rest } = props;

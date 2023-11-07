@@ -1,30 +1,25 @@
-import {
-  Flex,
-  FlexProps,
-  Radio,
-  RadioGroupProps,
-  RadioProps,
-} from '@mantine/core';
+import { Flex, FlexProps, Radio, RadioGroupProps } from '@mantine/core';
 import * as React from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
+import { useReadAllIdentityType } from '@/services/graphql/query/global-select/useReadAllIdentitiyType';
+import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+
 import { CommonProps } from '@/types/global';
 
-export type IRadioInputProps = {
-  control: 'radio-input';
+export type IIdentityTypesRadioInputProps = {
+  control: 'identity-radio-input';
   name: string;
-  radioComponent: RadioProps[];
   radioComponentWrapper?: FlexProps;
 } & Omit<RadioGroupProps, 'name' | 'children'> &
   CommonProps;
 
-const RadioInputRhf: React.FC<IRadioInputProps> = ({
+const IdentityRadioInputRhf: React.FC<IIdentityTypesRadioInputProps> = ({
   name,
   control,
-  radioComponent,
   radioComponentWrapper,
   label,
   ...rest
@@ -37,6 +32,16 @@ const RadioInputRhf: React.FC<IRadioInputProps> = ({
     mb = 4,
     ...restRadioComponentWrapper
   } = radioComponentWrapper || {};
+
+  const { identityTypesData } = useReadAllIdentityType({
+    variables: {
+      limit: 15,
+    },
+  });
+
+  const { uncombinedItem } = useFilterItems({
+    data: identityTypesData ?? [],
+  });
 
   return (
     <Radio.Group
@@ -59,7 +64,7 @@ const RadioInputRhf: React.FC<IRadioInputProps> = ({
         mb={mb}
         {...restRadioComponentWrapper}
       >
-        {radioComponent?.map((value, i) => (
+        {uncombinedItem?.map((value, i) => (
           <Radio
             key={i}
             size="xs"
@@ -79,4 +84,4 @@ const RadioInputRhf: React.FC<IRadioInputProps> = ({
   );
 };
 
-export default RadioInputRhf;
+export default IdentityRadioInputRhf;

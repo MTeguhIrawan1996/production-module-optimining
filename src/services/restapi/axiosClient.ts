@@ -1,5 +1,6 @@
 import { notifications } from '@mantine/notifications';
 import axios, { AxiosRequestConfig } from 'axios';
+import Cookies from 'js-cookie';
 import { getSession, signOut } from 'next-auth/react';
 
 import { AxiosRestErrorResponse } from '@/types/global';
@@ -18,13 +19,15 @@ const axiosClient = () => {
 
   instance.interceptors.request.use(
     async (request: AxiosRequestConfig<any>) => {
+      const storedLanguage = Cookies.get('language');
+      const initialLanguage = storedLanguage || 'id';
       const session = await getSession();
       if (session) {
         (request.headers as any)[
           'authorization'
         ] = `Bearer ${session?.user.login.accessToken.token}`;
       }
-      (request.headers as any)['Accept-Language'] = `id`;
+      (request.headers as any)['Accept-Language'] = initialLanguage;
       return request;
     }
   );

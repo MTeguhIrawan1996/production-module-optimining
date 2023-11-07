@@ -8,6 +8,7 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { notifications } from '@mantine/notifications';
+import Cookies from 'js-cookie';
 import { getSession, signOut } from 'next-auth/react';
 
 interface ISessionServer {
@@ -47,8 +48,9 @@ const getClient = (tokenServer?: ISessionServer | null) => {
   });
 
   const authLink = setContext(async (operation, { headers }) => {
+    const storedLanguage = Cookies.get('language');
+    const initialLanguage = storedLanguage || 'id';
     const token = await returnTokenDependingOnOperation(operation);
-
     const authorization = token ? `Bearer ${token}` : null;
 
     if (server) {
@@ -56,7 +58,7 @@ const getClient = (tokenServer?: ISessionServer | null) => {
         headers: {
           ...headers,
           authorization: authorization,
-          'Accept-Language': 'id',
+          'Accept-Language': initialLanguage,
         },
       };
     }
@@ -64,7 +66,7 @@ const getClient = (tokenServer?: ISessionServer | null) => {
       headers: {
         ...headers,
         authorization: authorization,
-        'Accept-Language': 'id',
+        'Accept-Language': initialLanguage,
       },
     };
   });
@@ -74,6 +76,11 @@ const getClient = (tokenServer?: ISessionServer | null) => {
       'ReadAllBrand',
       'ReadAllHeavyEquipmentType',
       'ReadAllHeavyEquipmentModel',
+      'ReadAllRelegion',
+      'ReadAllMarriage',
+      'ReadAllProvince',
+      'ReadAllSubDistrict',
+      'ReadAllIdentityType',
     ];
 
     if (blackList.includes(operation.operationName)) {

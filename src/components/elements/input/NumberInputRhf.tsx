@@ -8,10 +8,13 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
+import { CommonProps } from '@/types/global';
+
 export type INumberInputProps = {
   control: 'number-input';
   name: string;
-} & Omit<NumberInputProps, 'name'>;
+} & Omit<NumberInputProps, 'name'> &
+  CommonProps;
 
 const NumberInputRhf: React.FC<INumberInputProps> = ({
   name,

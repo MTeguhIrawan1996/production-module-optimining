@@ -3,14 +3,21 @@ import 'dayjs/locale/id';
 
 import {
   DateInputRhf,
+  IdentityRadioInputRhf,
   ImageInputDropzoneRhf,
+  MarriageSelectInputRhf,
   NumberInputRhf,
   PasswordInputRhf,
   PdfInputDropzoneRhf,
+  ProvinceSelectInputRhf,
   RadioInputRhf,
+  RegencySelectInputRhf,
+  RelegionSelectInputRhf,
   SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
+  SubDistrictSelectInputRhf,
   TextInputRhf,
+  VillageSelectInputRhf,
 } from '@/components/elements';
 
 import { ControllerProps } from '@/types/global';
@@ -37,6 +44,20 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <DateInputRhf {...props} />;
     case 'select-heavy-equipment-types-input':
       return <SelectHeavyEquipmentTypesInput {...props} />;
+    case 'relegion-select-input':
+      return <RelegionSelectInputRhf {...props} />;
+    case 'marriage-select-input':
+      return <MarriageSelectInputRhf {...props} />;
+    case 'province-select-input':
+      return <ProvinceSelectInputRhf {...props} />;
+    case 'regency-select-input':
+      return <RegencySelectInputRhf {...props} />;
+    case 'subdistrict-select-input':
+      return <SubDistrictSelectInputRhf {...props} />;
+    case 'village-select-input':
+      return <VillageSelectInputRhf {...props} />;
+    case 'identity-radio-input':
+      return <IdentityRadioInputRhf {...props} />;
     default:
       return null;
   }

@@ -12,6 +12,8 @@ import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
 import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
+import { CommonProps } from '@/types/global';
+
 export interface ISelectTypesHeavyEquipment {
   id: string;
   key: number;
@@ -37,7 +39,8 @@ export type ISelectHeavyEquipmentTypesInputProps = {
   | 'onSearchChange'
   | 'searchValue'
   | 'error'
->;
+> &
+  CommonProps;
 
 const SelectHeavyEquipmentTypesInput: React.FC<
   ISelectHeavyEquipmentTypesInputProps
