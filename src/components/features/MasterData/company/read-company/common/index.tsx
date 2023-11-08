@@ -4,7 +4,7 @@ import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
 import ReadCompanyBook from '@/components/features/MasterData/company/read-company/common/sections/ReadCompanyBook';
-import ReadCompanySdmBook from '@/components/features/MasterData/company/read-company/common/sections/ReadCompanySdmBook';
+import ReadCompanyHumanResourceBook from '@/components/features/MasterData/company/read-company/common/sections/ReadCompanyHumanResourceBook';
 import ReadHeavyEquipmentBook from '@/components/features/MasterData/company/read-company/common/sections/ReadHeavyEquipmentBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
@@ -39,7 +39,7 @@ const ReadCompanyPage = () => {
         <ReadCompanyBook />
       </InnerWrapper>
       <InnerWrapper containerProps={{ pb: 0, pt: 0 }}>
-        <ReadCompanySdmBook />
+        <ReadCompanyHumanResourceBook />
       </InnerWrapper>
       <InnerWrapper containerProps={{ pb: 0, pt: 0 }}>
         <ReadHeavyEquipmentBook />

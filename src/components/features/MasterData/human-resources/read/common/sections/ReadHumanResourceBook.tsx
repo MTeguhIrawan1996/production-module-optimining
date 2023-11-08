@@ -10,68 +10,7 @@ import {
 } from '@/components/elements';
 
 import { useReadOneHumanResource } from '@/services/graphql/query/master-data-human-resources/useReadOneHumanResource';
-
-// const exp = {
-//   data: {
-//     humanResource: {
-//       id: 'ea3b476a-aa32-4a2c-8d39-69625f45876d',
-//       name: 'Roni',
-//       alias: 'roni',
-//       isWni: true,
-//       identityTypeId: '112c56a4-fce3-4a9f-b00a-dc3f67dfd770',
-//       identityType: {
-//         id: '112c56a4-fce3-4a9f-b00a-dc3f67dfd770',
-//         name: 'KTP/KTA',
-//       },
-//       pob: 'bekasi',
-//       dob: '2000-01-01',
-//       gender: 'male',
-//       religion: null,
-//       educationDegree: null,
-//       marriageStatus: null,
-//       province: {
-//         name: 'BANTEN',
-//       },
-//       regency: {
-//         name: 'KOTA TANGERANG SELATAN',
-//       },
-//       district: {
-//         name: 'PAMULANG',
-//       },
-//       village: {
-//         name: 'PAMULANG BARAT',
-//       },
-//       address: 'test address',
-//       isAddressSameWithDomicile: false,
-//       domicileProvince: {
-//         name: 'BANTEN',
-//       },
-//       domicileRegency: {
-//         name: 'KOTA TANGERANG SELATAN',
-//       },
-//       domicileDistrict: {
-//         name: 'PAMULANG',
-//       },
-//       domicileVillage: {
-//         name: 'BENDA BARU',
-//       },
-//       domicileAddress: 'test domicile address',
-//       phoneNumber: '0888000111222',
-//       email: 'roni@email.com',
-//       bloodType: 'A',
-//       resus: '+',
-//       photo: {
-//         originalFileName:
-//           '_mantine-contextmenu__next_static_media_1.637fffdd.webp',
-//         url: '/uploads/169935065466454628470.webp',
-//       },
-//       identityPhoto: {
-//         originalFileName: 'milad-fakurian-GJKx5lhwU3M-unsplash.jpg',
-//         url: '/uploads/169935065507741665132.webp',
-//       },
-//     },
-//   },
-// };
+import { dateFromat } from '@/utils/helper/dateFormat';
 
 const ReadHumanResourceBook = () => {
   const { t } = useTranslation('default');
@@ -186,7 +125,7 @@ const ReadHumanResourceBook = () => {
                 },
                 {
                   dataKey: t('commonTypography.dop'),
-                  value: humanResourceData?.dob,
+                  value: dateFromat(humanResourceData?.dob ?? ''),
                 },
                 {
                   dataKey: t('commonTypography.gender'),
