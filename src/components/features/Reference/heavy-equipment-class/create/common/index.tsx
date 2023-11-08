@@ -36,7 +36,7 @@ const CreateHeavyEquipmentClassPage = () => {
       <InnerWrapper
         titleProps={{
           title: t('heavyEquipmentClass.formHeavyEquipmentClass'),
-          mb: 'xl',
+          mb: 'md',
         }}
       >
         <Tabs

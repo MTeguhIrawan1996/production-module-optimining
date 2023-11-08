@@ -78,7 +78,7 @@ const CreateHumanResourcesBook = () => {
       photo: [],
       identityPhoto: [],
     },
-    mode: 'onSubmit',
+    mode: 'onBlur',
   });
   const isAddressSameWithDomicile = methods.watch('isAddressSameWithDomicile');
   const provinceId = methods.watch('provinceId');

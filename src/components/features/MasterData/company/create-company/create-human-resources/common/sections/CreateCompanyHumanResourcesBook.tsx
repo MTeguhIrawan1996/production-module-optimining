@@ -8,12 +8,10 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import { useReadOneHumanResource } from '@/services/graphql/query/master-data-human-resources/useReadOneHumanResource';
-import { ICreateHumanResourceValues } from '@/services/restapi/human-resource/useCreateHumanResource';
 import {
-  IUpdateHumanResourceValues,
-  useUpdateHumanResource,
-} from '@/services/restapi/human-resource/useUpdateHumanResource';
+  ICreateCompanyHumanResource,
+  useCreateCompanyHumanResource,
+} from '@/services/restapi/company/useCreateCompanyHumanResource';
 import {
   address,
   domicileAddress,
@@ -40,27 +38,15 @@ import {
   villageSelect,
 } from '@/utils/constants/Field/global-field';
 import { createHumanResourcesSchema } from '@/utils/form-validation/human-resources/human-resources-validation';
-import { stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 
-import { ControllerGroup, ControllerProps, IFile } from '@/types/global';
+import { ControllerGroup, ControllerProps } from '@/types/global';
 
-const UpdateHumanResourcesBook = () => {
+const CreateCompanyHumanResourcesBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const id = router.query.id as string;
-  const [serverPhotos, setServerPhotos] = React.useState<
-    Omit<IFile, 'mime' | 'path'>[] | null
-  >([]);
-  const [deletedPhotoIds, setDeletedPhotoIds] = React.useState<string[]>([]);
-  const [serverPhotosIdentity, setServerPhotosIdentity] = React.useState<
-    Omit<IFile, 'mime' | 'path'>[] | null
-  >([]);
-  const [deletedPhotoIdentityIds, setDeletedPhotoIdentityIds] = React.useState<
-    string[]
-  >([]);
-  const methods = useForm<Omit<IUpdateHumanResourceValues, 'id'>>({
+  const methods = useForm<Omit<ICreateCompanyHumanResource, 'id'>>({
     resolver: zodResolver(createHumanResourcesSchema),
     defaultValues: {
       name: '',
@@ -103,79 +89,7 @@ const UpdateHumanResourcesBook = () => {
   const domicileSubdistrictId = methods.watch('domicileSubdistrictId');
 
   /* #   /**=========== Query =========== */
-  const { humanResourceData, humanResourceDataLoading } =
-    useReadOneHumanResource({
-      variables: {
-        id,
-      },
-      skip: !router.isReady,
-      onCompleted: (data) => {
-        const date = stringToDate(data.humanResource.dob ?? '');
-        methods.setValue('name', data.humanResource.name);
-        methods.setValue('alias', data.humanResource.alias ?? '');
-        methods.setValue('isWni', `${data.humanResource.isWni}`);
-        methods.setValue(
-          'identityTypeId',
-          data.humanResource.identityType?.id ?? ''
-        );
-        methods.setValue('identityNumber', data.humanResource.identityNumber);
-        methods.setValue('pob', data.humanResource.pob ?? '');
-        methods.setValue('dob', date);
-        methods.setValue('gender', data.humanResource.gender);
-        methods.setValue('religionId', data.humanResource.religion?.id ?? '');
-        methods.setValue(
-          'educationDegree',
-          data.humanResource.educationDegree ?? ''
-        );
-        methods.setValue(
-          'marriageStatusId',
-          data.humanResource.marriageStatus?.id ?? ''
-        );
-        methods.setValue('provinceId', data.humanResource.province?.id ?? '');
-        methods.setValue('regencyId', data.humanResource.regency?.id ?? '');
-        methods.setValue(
-          'subdistrictId',
-          data.humanResource.district?.id ?? ''
-        );
-        methods.setValue('villageId', data.humanResource.village?.id ?? '');
-        methods.setValue('address', data.humanResource.address);
-        methods.setValue(
-          'isAddressSameWithDomicile',
-          `${data.humanResource.isAddressSameWithDomicile}`
-        );
-        methods.setValue(
-          'domicileProvinceId',
-          data.humanResource.domicileProvince?.id ?? ''
-        );
-        methods.setValue(
-          'domicileRegencyId',
-          data.humanResource.domicileRegency?.id ?? ''
-        );
-        methods.setValue(
-          'domicileSubdistrictId',
-          data.humanResource.domicileDistrict?.id ?? ''
-        );
-        methods.setValue(
-          'domicileVillageId',
-          data.humanResource.domicileVillage?.id ?? ''
-        );
-        methods.setValue(
-          'domicileAddress',
-          data.humanResource.domicileAddress ?? ''
-        );
-        methods.setValue('phoneNumber', data.humanResource.phoneNumber);
-        methods.setValue('email', data.humanResource.email);
-        methods.setValue('bloodType', data.humanResource.bloodType ?? '');
-        methods.setValue('resus', data.humanResource.resus ?? '');
-        if (data.humanResource.photo) {
-          setServerPhotos([data.humanResource.photo]);
-        }
-        if (data.humanResource.identityPhoto) {
-          setServerPhotosIdentity([data.humanResource.identityPhoto]);
-        }
-      },
-    });
-  const { mutate, isLoading } = useUpdateHumanResource({
+  const { mutate, isLoading } = useCreateCompanyHumanResource({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -193,15 +107,16 @@ const UpdateHumanResourcesBook = () => {
         });
       }
     },
-    onSuccess: () => {
+    onSuccess: ({ data }) => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('humanResources.successUpdateMessage'),
+        message: t('humanResources.successCreateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/master-data/human-resources');
-      methods.reset();
+      const companyId = router.query?.id?.[0];
+      const url = `/master-data/company/create/human-resources/${companyId}/${data.id}/?tabs=employe-data`;
+      router.push(url, undefined, { shallow: true });
     },
   });
   /* #endregion  /**======== Query =========== */
@@ -211,8 +126,6 @@ const UpdateHumanResourcesBook = () => {
     const marriageStatusItem = marriageStatusSelect({});
     const relegionItem = relegionSelect({});
     const provinceItem = provinceSelect({
-      defaultValue: humanResourceData?.province?.id,
-      labelValue: humanResourceData?.province?.name,
       onChange: (value) => {
         methods.setValue('provinceId', value ?? '');
         methods.setValue('regencyId', '');
@@ -223,8 +136,6 @@ const UpdateHumanResourcesBook = () => {
     });
     const regencyItem = regencySelect({
       provinceId,
-      defaultValue: humanResourceData?.regency?.id,
-      labelValue: humanResourceData?.regency?.name,
       onChange: (value) => {
         methods.setValue('regencyId', value ?? '');
         methods.setValue('subdistrictId', '');
@@ -235,8 +146,6 @@ const UpdateHumanResourcesBook = () => {
     const subdistrictItem = subdistrictSelect({
       provinceId,
       regencyId,
-      defaultValue: humanResourceData?.district?.id,
-      labelValue: humanResourceData?.district?.name,
       onChange: (value) => {
         methods.setValue('subdistrictId', value ?? '');
         methods.setValue('villageId', '');
@@ -244,8 +153,6 @@ const UpdateHumanResourcesBook = () => {
       },
     });
     const villageItem = villageSelect({
-      defaultValue: humanResourceData?.village?.id,
-      labelValue: humanResourceData?.village?.name,
       provinceId,
       regencyId,
       subdistrictId,
@@ -253,8 +160,6 @@ const UpdateHumanResourcesBook = () => {
     const identityItem = identityRadio({});
 
     const domicileProvinceItem = provinceSelect({
-      defaultValue: humanResourceData?.domicileProvince?.id,
-      labelValue: humanResourceData?.domicileProvince?.name,
       name: 'domicileProvinceId',
       onChange: (value) => {
         methods.setValue('domicileProvinceId', value ?? '');
@@ -267,8 +172,6 @@ const UpdateHumanResourcesBook = () => {
     const domicileRegencyItem = regencySelect({
       name: 'domicileRegencyId',
       provinceId: domicileProvinceId,
-      defaultValue: humanResourceData?.domicileRegency?.id,
-      labelValue: humanResourceData?.domicileRegency?.name,
       onChange: (value) => {
         methods.setValue('domicileRegencyId', value ?? '');
         methods.setValue('domicileSubdistrictId', '');
@@ -278,8 +181,6 @@ const UpdateHumanResourcesBook = () => {
     });
     const domicileSubdistrictItem = subdistrictSelect({
       name: 'domicileSubdistrictId',
-      defaultValue: humanResourceData?.domicileDistrict?.id,
-      labelValue: humanResourceData?.domicileDistrict?.name,
       provinceId: domicileProvinceId,
       regencyId: domicileRegencyId,
       onChange: (value) => {
@@ -290,8 +191,6 @@ const UpdateHumanResourcesBook = () => {
     });
     const domicileVillageItem = villageSelect({
       name: 'domicileVillageId',
-      defaultValue: humanResourceData?.domicileVillage?.id,
-      labelValue: humanResourceData?.domicileVillage?.name,
       provinceId: domicileProvinceId,
       regencyId: domicileRegencyId,
       subdistrictId: domicileSubdistrictId,
@@ -305,19 +204,12 @@ const UpdateHumanResourcesBook = () => {
       maxSize: 10 * 1024 ** 2 /* 10MB */,
       multiple: false,
       enableDeletePhoto: true,
-      serverPhotos: serverPhotos,
       onDrop: (value) => {
         methods.setValue('photo', value);
-        setServerPhotos([]);
         methods.clearErrors('photo');
       },
-      deletedPhotoIds: deletedPhotoIds,
-      handleDeleteServerPhotos: (id) => {
-        setServerPhotos([]);
-        setDeletedPhotoIds((prev) => [...prev, id]);
-      },
       onReject: (files) => {
-        handleRejectFile<IUpdateHumanResourceValues>({
+        handleRejectFile<Omit<ICreateCompanyHumanResource, 'id'>>({
           methods,
           files,
           field: 'photo',
@@ -332,19 +224,12 @@ const UpdateHumanResourcesBook = () => {
       maxSize: 10 * 1024 ** 2 /* 10MB */,
       multiple: false,
       enableDeletePhoto: true,
-      serverPhotos: serverPhotosIdentity,
-      deletedPhotoIds: deletedPhotoIdentityIds,
-      handleDeleteServerPhotos: (id) => {
-        setServerPhotosIdentity([]);
-        setDeletedPhotoIdentityIds((prev) => [...prev, id]);
-      },
       onDrop: (value) => {
-        setServerPhotosIdentity([]);
         methods.setValue('identityPhoto', value);
         methods.clearErrors('identityPhoto');
       },
       onReject: (files) => {
-        handleRejectFile<ICreateHumanResourceValues>({
+        handleRejectFile<Omit<ICreateCompanyHumanResource, 'id'>>({
           methods,
           files,
           field: 'identityPhoto',
@@ -385,8 +270,6 @@ const UpdateHumanResourcesBook = () => {
         group: t('commonTypography.address'),
         enableGroupLabel: true,
         groupCheckbox: {
-          // checked: ,
-          defaultChecked: Boolean(isAddressSameWithDomicile),
           onChange: () => {
             isAddressSameWithDomicile === 'true'
               ? methods.setValue('isAddressSameWithDomicile', 'false')
@@ -432,33 +315,23 @@ const UpdateHumanResourcesBook = () => {
     domicileProvinceId,
     domicileRegencyId,
     domicileSubdistrictId,
-    humanResourceData,
-    serverPhotos,
-    deletedPhotoIds,
-    serverPhotosIdentity,
-    deletedPhotoIdentityIds,
   ]);
   /* #endregion  /**======== Field =========== */
 
-  const handleSubmitForm: SubmitHandler<ICreateHumanResourceValues> = (
-    data
-  ) => {
+  const handleSubmitForm: SubmitHandler<
+    Omit<ICreateCompanyHumanResource, 'id'>
+  > = (data) => {
     const outputArray = Object.keys(data).map((key) => ({
       name: key,
       value: data[key],
     }));
-    const deletedPhoto = serverPhotos && serverPhotos?.length === 0;
-    const deletedIdentityPhoto =
-      serverPhotosIdentity && serverPhotosIdentity.length === 0;
     mutate({
-      id,
+      companyId: router.query?.id?.[0] as string,
       data: outputArray,
-      deletedPhoto: deletedPhoto,
-      deletedIdentityPhoto: deletedIdentityPhoto,
     });
   };
   return (
-    <DashboardCard p={0} isLoading={humanResourceDataLoading}>
+    <DashboardCard p={0}>
       <GlobalFormGroup
         field={fieldHumanResources}
         methods={methods}
@@ -475,4 +348,4 @@ const UpdateHumanResourcesBook = () => {
   );
 };
 
-export default UpdateHumanResourcesBook;
+export default CreateCompanyHumanResourcesBook;

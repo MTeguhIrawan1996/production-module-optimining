@@ -3,6 +3,7 @@ import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/Marria
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
+import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 
@@ -353,6 +354,91 @@ export const identityRadio = ({
     label,
     colSpan,
     withAsterisk,
+    ...rest,
+  };
+  return field;
+};
+
+export const divisionSelect = ({
+  name = 'divisionId',
+  label = 'division',
+  searchable = true,
+  clearable = true,
+  data = [],
+  nothingFound = null,
+
+  ...rest
+}: Partial<ISelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    data,
+    nothingFound,
+    ...rest,
+  };
+  return field;
+};
+
+export const positionSelect = ({
+  name = 'positionId',
+  label = 'position',
+  searchable = true,
+  clearable = true,
+  data = [],
+  nothingFound = null,
+
+  ...rest
+}: Partial<ISelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    data,
+    nothingFound,
+    ...rest,
+  };
+  return field;
+};
+
+export const employeStatusSelect = ({
+  name = 'statusId',
+  label = 'employeStatus',
+  searchable = false,
+  clearable = true,
+  data = [],
+  ...rest
+}: Partial<ISelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    data,
+    ...rest,
+  };
+  return field;
+};
+export const formStatusSelect = ({
+  name = 'formStatusId',
+  label = 'formStatus',
+  searchable = false,
+  clearable = true,
+  data = [],
+  ...rest
+}: Partial<ISelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    data,
     ...rest,
   };
   return field;

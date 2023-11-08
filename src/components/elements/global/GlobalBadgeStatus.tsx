@@ -1,4 +1,4 @@
-import { Badge, BadgeProps } from '@mantine/core';
+import { Badge, BadgeProps, Paper } from '@mantine/core';
 import * as React from 'react';
 
 interface IGlobalBadgeStatusProps extends BadgeProps {
@@ -11,8 +11,22 @@ const GlobalBadgeStatus: React.FC<IGlobalBadgeStatusProps> = ({
   radius = 'xs',
   ...rest
 }) => {
+  const Circle = ({ color }: { color: string }) => (
+    <Paper
+      component="span"
+      bg={color}
+      h={6}
+      w={6}
+      sx={{ borderRadius: '100%' }}
+    />
+  );
   return (
-    <Badge radius={radius} color={color} {...rest}>
+    <Badge
+      radius={radius}
+      color={color}
+      leftSection={<Circle color={`${color}`} />}
+      {...rest}
+    >
       {label}
     </Badge>
   );

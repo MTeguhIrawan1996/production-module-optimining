@@ -48,7 +48,7 @@ const AuthBook = () => {
       const newError: IErrorResponseExtensionNextAuth = JSON.parse(
         err.error as string
       );
-      if (newError.code === 'UNAUTHENTICATED') {
+      if (newError.originalError) {
         notifications.show({
           color: 'red',
           title: 'Login gagal',
@@ -57,6 +57,15 @@ const AuthBook = () => {
         });
         return;
       }
+      // if (newError.originalError.statusCode === 401) {
+      //   notifications.show({
+      //     color: 'red',
+      //     title: 'Login gagal',
+      //     message: newError.originalError.message,
+      //     icon: <IconX />,
+      //   });
+      //   return;
+      // }
     },
   });
 
