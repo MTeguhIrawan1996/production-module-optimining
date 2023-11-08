@@ -34,7 +34,7 @@ const UpdateManagementRolePage = () => {
   return (
     <RootWrapper>
       <InnerWrapper
-        titleProps={{ title: t('managementRole.formManagementRole'), mb: 'xl' }}
+        titleProps={{ title: t('managementRole.formManagementRole'), mb: 'md' }}
       >
         <Tabs
           defaultValue="information"

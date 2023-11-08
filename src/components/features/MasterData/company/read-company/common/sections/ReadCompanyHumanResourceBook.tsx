@@ -12,6 +12,7 @@ import {
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
+  SelectionButtonModal,
 } from '@/components/elements';
 
 import { useDeleteCompanyHumanResource } from '@/services/graphql/mutation/master-data-company/useDeleteCompanyHumanResource';
@@ -32,6 +33,8 @@ const ReadCompanyHumanResourceBook = () => {
   const { t } = useTranslation('default');
   const id = router.query.id as string;
   const [idEmploye, setIdEmploye] = React.useState<string>('');
+  const [isOpenSelectionModal, setIsOpenSelectionModal] =
+    React.useState<boolean>(false);
   const [page, setPage] = React.useState<number>(1);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -283,8 +286,7 @@ const ReadCompanyHumanResourceBook = () => {
           title: t('commonTypography.dataNotfound'),
           actionButton: {
             label: t('humanResources.createHumanResources'),
-            onClick: () =>
-              router.push('/master-data/company/create/human-resource'),
+            onClick: () => setIsOpenSelectionModal((prev) => !prev),
           },
         }}
         paginationProps={{
@@ -306,6 +308,7 @@ const ReadCompanyHumanResourceBook = () => {
       py={0}
       addButton={{
         label: t('humanResources.createHumanResources'),
+        onClick: () => setIsOpenSelectionModal((prev) => !prev),
       }}
       searchBar={{
         onChange: (e) => {
@@ -342,6 +345,18 @@ const ReadCompanyHumanResourceBook = () => {
           description: t('commonTypography.alertDescConfirmDeleteMasterData'),
         }}
         withDivider
+      />
+      <SelectionButtonModal
+        isOpenSelectionModal={isOpenSelectionModal}
+        actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
+        firstButton={{
+          label: t('humanResources.createNewHumanResources'),
+          onClick: () =>
+            router.push(`/master-data/company/create/human-resources/${id}`),
+        }}
+        secondButton={{
+          label: t('humanResources.selectExistingHR'),
+        }}
       />
       <Divider my="md" />
     </DashboardCard>

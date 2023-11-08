@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
@@ -11,6 +12,7 @@ import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
 const ReadCompanyPage = () => {
   const router = useRouter();
+  const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
     shallow
@@ -18,7 +20,10 @@ const ReadCompanyPage = () => {
 
   React.useEffect(() => {
     setBreadcrumbs([
-      { label: 'Perusahaan', path: '/master-data/company' },
+      {
+        label: t('commonTypography.company'),
+        path: '/master-data/company',
+      },
       {
         label: 'Overview',
         path: router.asPath,

@@ -36,7 +36,7 @@ const UpdateHeavyEquipmentPage = () => {
       <InnerWrapper
         titleProps={{
           title: t('heavyEquipment.formHeavyEquipment'),
-          mb: 'xl',
+          mb: 'md',
         }}
       >
         <Tabs

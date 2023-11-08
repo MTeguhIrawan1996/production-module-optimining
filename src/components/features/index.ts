@@ -5,6 +5,7 @@ import DataTablePage from '@/components/features/Example/datatable/common';
 import FormExamplePage from '@/components/features/Example/form-example/common';
 import CompanyPage from '@/components/features/MasterData/company/common';
 import CreateCompanyPage from '@/components/features/MasterData/company/create-company/common';
+import CreateCompanyHumanResourcesPage from '@/components/features/MasterData/company/create-company/create-human-resources/common';
 import ReadCompanyPage from '@/components/features/MasterData/company/read-company/common';
 import HeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/common';
 import HumanResourcesPage from '@/components/features/MasterData/human-resources/common';
@@ -34,6 +35,7 @@ export {
   CompanyPage,
   CompanyTypePage,
   ComponentsPage,
+  CreateCompanyHumanResourcesPage,
   CreateCompanyPage,
   CreateHeavyEquipmentClassPage,
   CreateHeavyEquipmentPage,
