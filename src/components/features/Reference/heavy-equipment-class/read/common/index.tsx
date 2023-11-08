@@ -1,0 +1,42 @@
+import { useRouter } from 'next/router';
+import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
+
+import { InnerWrapper, RootWrapper } from '@/components/elements';
+import ReadHEavyEquipmentClassBook from '@/components/features/Reference/heavy-equipment-class/read/common/sections/ReadHeavyEquipmentBook';
+
+import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
+
+const ReadHeavyEquipmentClassPage = () => {
+  const router = useRouter();
+  const { t } = useTranslation('default');
+  const [setBreadcrumbs] = useBreadcrumbs(
+    (state) => [state.setBreadcrumbs],
+    shallow
+  );
+
+  React.useEffect(() => {
+    setBreadcrumbs([
+      {
+        label: t('heavyEquipmentClass.heavyEquipmentClassTitle'),
+        path: '/setting/management-role',
+      },
+      {
+        label: t('heavyEquipmentClass.readHeavyEquipmentClass'),
+        path: router.asPath,
+      },
+    ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
+
+  return (
+    <RootWrapper>
+      <InnerWrapper>
+        <ReadHEavyEquipmentClassBook />
+      </InnerWrapper>
+    </RootWrapper>
+  );
+};
+
+export default ReadHeavyEquipmentClassPage;
