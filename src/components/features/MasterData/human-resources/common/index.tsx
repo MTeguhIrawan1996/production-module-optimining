@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import HumanResourcesBook from '@/components/features/MasterData/humanResources/common/sections/HumanResourcesBook';
+import HumanResourcesBook from '@/components/features/MasterData/human-resources/common/sections/HumanResourcesBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
@@ -29,7 +29,7 @@ const HumanResourcesPage = () => {
   return (
     <RootWrapper>
       <InnerWrapper
-        titleProps={{ title: t('commonTypography.humanResources'), mb: 'md' }}
+        titleProps={{ title: t('commonTypography.humanResources2'), mb: 'md' }}
       >
         <HumanResourcesBook />
       </InnerWrapper>

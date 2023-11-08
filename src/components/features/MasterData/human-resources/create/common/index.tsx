@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import UpdateHumanResourcesBook from '@/components/features/MasterData/humanResources/update/common/sections/UpdateHumanResourcesBook';
+import CreateHumanResourcesBook from '@/components/features/MasterData/human-resources/create/common/sections/CreateHumanResourcesBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const UpdateHumanResourcesPage = () => {
+const CreateHumanResourcesPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -24,7 +24,7 @@ const UpdateHumanResourcesPage = () => {
         path: '/master-data/human-resources',
       },
       {
-        label: t('humanResources.updateHumanResources'),
+        label: t('humanResources.createHumanResources'),
         path: router.asPath,
       },
     ]);
@@ -43,7 +43,7 @@ const UpdateHumanResourcesPage = () => {
             </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="human-resources-profil">
-            <UpdateHumanResourcesBook />
+            <CreateHumanResourcesBook />
           </Tabs.Panel>
         </Tabs>
       </InnerWrapper>
@@ -51,4 +51,4 @@ const UpdateHumanResourcesPage = () => {
   );
 };
 
-export default UpdateHumanResourcesPage;
+export default CreateHumanResourcesPage;

@@ -9,18 +9,18 @@ export async function middleware(request: NextRequest) {
     secret: process.env.NEXTAUTH_JWT_SECRET,
   });
 
-  // const accessToken = token?.login?.accessToken?.token;
+  const accessToken = token?.login?.accessToken?.token;
 
   // // JIKA BELUM LOGIN DAN INGIN AKSES HALAMAN YANG DIPROTECT(MATCH CONFIG) LOGIN MAKA AKAN DILEMPAR KE HALAMAN LOGIN
-  // if (pathname !== '/' && !accessToken) {
-  //   const url = new URL(`/`, request.url);
-  //   return NextResponse.redirect(url);
-  // }
+  if (pathname !== '/' && !accessToken) {
+    const url = new URL(`/`, request.url);
+    return NextResponse.redirect(url);
+  }
 
   // // JIKA SUDAH LOGIN DAN INGIN AKSES AUTH TANPA LOGOUT MAKAN AKAN DIKEMBALIKAN KE HALAMAN DASHBOARD
-  // if (pathname === '/' && accessToken) {
-  //   return NextResponse.redirect(new URL('/dashboard', request.url));
-  // }
+  if (pathname === '/' && accessToken) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
 
   const protectedPaths = [
     {
