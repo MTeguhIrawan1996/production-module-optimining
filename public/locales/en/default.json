@@ -212,7 +212,7 @@
     "successDeleteMessage": "$t(commonTypography.humanResources) berhasil dihapus",
     "successCreateMessage": "$t(commonTypography.humanResources) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.humanResources) berhasil diedit",
-    "formHumanResources": "$t(commonTypography.form) $t(commonTypography.humanResources)",
+    "formHumanResources": "$t(commonTypography.form) $t(commonTypography.create) $t(commonTypography.humanResources)",
     "humanResourcesProfile": "$t(commonTypography.profile) $t(commonTypography.humanResources)",
     "humanResourcesIdentity": "Identitas $t(commonTypography.humanResources)"
   }
