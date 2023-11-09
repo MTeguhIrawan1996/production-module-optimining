@@ -45,6 +45,8 @@
       "siujpDate": "Tanggal SIUJP",
       "ippNumber": "Nomor IPP",
       "ippDate": "Tanggal IPP",
+      "model": "Model",
+      "modelYear": "Tahun Model",
       "brandHeavyEquipment": "Merk Alat Berat",
       "modelHeavyEquipment": "Model Alat Berat",
       "typeHeavyEquipment": "Jenis Alat Berat",

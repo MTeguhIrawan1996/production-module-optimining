@@ -9,9 +9,9 @@ export interface IUpdateHeavyEquipmentValuesQuery {
   id: string;
   brandId: string;
   typeId: string;
-  modelId: string;
+  modelName: string;
   spec: string;
-  createdYear: string;
+  modelYear: string;
   photos: FileWithPath[] | null;
   deletedPhotoIds: string[];
 }
@@ -22,13 +22,14 @@ export interface IUpdateHeavyEquipmentResponse {
 }
 
 const UpdateHeavyEquipment = async ({
-  modelId,
-  createdYear,
+  modelName,
+  modelYear,
   photos,
   spec,
   deletedPhotoIds,
   id,
-}: Omit<IUpdateHeavyEquipmentValuesQuery, 'brandId' | 'typeId'>) => {
+  typeId,
+}: Omit<IUpdateHeavyEquipmentValuesQuery, 'brandId'>) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
   bodyFormData.append('id', id);
@@ -42,8 +43,9 @@ const UpdateHeavyEquipment = async ({
       bodyFormData.append('deletedPhotoIds[]', deltedId);
     });
   }
-  bodyFormData.append('modelId', modelId);
-  bodyFormData.append('createdYear', createdYear);
+  bodyFormData.append('modelName', modelName);
+  bodyFormData.append('modelYear', modelYear);
+  bodyFormData.append('typeId', typeId);
   bodyFormData.append('spec', spec);
 
   const response = await axiosAuth.patch(
@@ -62,7 +64,7 @@ export const useUpdateHeavyEquipment = ({
     error: AxiosRestErrorResponse<
       Omit<
         IUpdateHeavyEquipmentValuesQuery,
-        'brandId' | 'typeId' | 'id' | 'deletedPhotoIds'
+        'brandId' | 'id' | 'deletedPhotoIds'
       >
     >
   ) => unknown;
@@ -72,22 +74,24 @@ export const useUpdateHeavyEquipment = ({
     AxiosRestErrorResponse<
       Omit<
         IUpdateHeavyEquipmentValuesQuery,
-        'brandId' | 'typeId' | 'id' | 'deletedPhotoIds'
+        'brandId' | 'id' | 'deletedPhotoIds'
       >
     >,
-    Omit<IUpdateHeavyEquipmentValuesQuery, 'brandId' | 'typeId'>
+    Omit<IUpdateHeavyEquipmentValuesQuery, 'brandId'>
   >({
     mutationFn: async ({
-      modelId,
-      createdYear,
+      modelName,
+      modelYear,
       photos,
       deletedPhotoIds,
       id,
       spec,
+      typeId,
     }) => {
       const data = await UpdateHeavyEquipment({
-        modelId,
-        createdYear,
+        modelName,
+        typeId,
+        modelYear,
         photos,
         spec,
         deletedPhotoIds,

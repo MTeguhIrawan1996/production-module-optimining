@@ -26,7 +26,8 @@ const ReadHEavyEquipmentBook = () => {
       },
       skip: !router.isReady,
     });
-  const { model, createdYear, spec } = heavyEquipmentReferenceData || {};
+  const { modelYear, modelName, spec, type } =
+    heavyEquipmentReferenceData || {};
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== PhotosData =========== */
@@ -95,16 +96,16 @@ const ReadHEavyEquipmentBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.brand'),
-                  value: model?.type.brand.name ?? '-',
+                  value: type?.brand.name ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.type'),
-                  value: model?.type.name ?? '-',
+                  value: type?.name ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.model'),
 
-                  value: model?.name ?? '-',
+                  value: modelName ?? '-',
                 },
                 {
                   dataKey: t('heavyEquipment.specHeavyEquipment'),
@@ -112,7 +113,7 @@ const ReadHEavyEquipmentBook = () => {
                 },
                 {
                   dataKey: t('heavyEquipment.productionYear'),
-                  value: createdYear ?? '-',
+                  value: modelYear ?? '-',
                 },
               ]}
               type="grid"

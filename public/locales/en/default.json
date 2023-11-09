@@ -87,6 +87,7 @@
     "brand": "Merk",
     "model": "Model",
     "year": "Tahun",
+    "yearModel": "Tahun Model",
     "type": "Jenis",
     "heavyEquipmentType": "Jenis Alat Berat",
     "document": "Dokumen",

@@ -14,10 +14,6 @@ import {
   useReadAllBrand,
 } from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
 import {
-  IHeavyEquipmentModelData,
-  useReadAllHeavyEquipmentModel,
-} from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentModel';
-import {
   IHeavyEquipmentTypeData,
   useReadAllHeavyEquipmentType,
 } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
@@ -38,24 +34,21 @@ const CreateHeavyEquipmentBook = () => {
   const [brandSearchQuery] = useDebouncedValue<string>(brandSearchTerm, 400);
   const [typeSearchTerm, settypeSearchTerm] = React.useState<string>('');
   const [typeSearchQuery] = useDebouncedValue<string>(typeSearchTerm, 400);
-  const [modelSearchTerm, setModelSearchTerm] = React.useState<string>('');
-  const [modelSearchQuery] = useDebouncedValue<string>(modelSearchTerm, 400);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateHeavyEquipmentValues>({
     resolver: zodResolver(createHeavyEquipmentSchema),
     defaultValues: {
       photos: [],
-      modelId: '',
       brandId: '',
+      modelYear: '',
       typeId: '',
       spec: '',
-      createdYear: '',
+      modelName: '',
     },
     mode: 'onBlur',
   });
   const brandId = methods.watch('brandId');
-  const typeId = methods.watch('typeId');
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
@@ -70,14 +63,6 @@ const CreateHeavyEquipmentBook = () => {
       limit: 15,
       search: typeSearchQuery === '' ? null : typeSearchQuery,
       brandId,
-    },
-  });
-  const { modelsData } = useReadAllHeavyEquipmentModel({
-    variables: {
-      limit: 15,
-      search: modelSearchQuery === '' ? null : modelSearchQuery,
-      brandId,
-      typeId,
     },
   });
   const { mutate, isLoading } = useCreateHeavyEquipment({
@@ -96,8 +81,8 @@ const CreateHeavyEquipmentBook = () => {
         message: t('heavyEquipment.successCreateMessage'),
         icon: <IconCheck />,
       });
-      // router.push('/reference/heavy-equipment');
-      // methods.reset();
+      router.push('/reference/heavy-equipment');
+      methods.reset();
     },
   });
   /* #endregion  /**======== Query =========== */
@@ -119,13 +104,6 @@ const CreateHeavyEquipmentBook = () => {
   }, []);
   const typeItems = typesData?.map(renderTypes);
 
-  const renderModel = React.useCallback((value: IHeavyEquipmentModelData) => {
-    return {
-      label: value.name,
-      value: value.id,
-    };
-  }, []);
-  const modelItems = modelsData?.map(renderModel);
   /* #endregion  /**======== FilterData =========== */
 
   /* #   /**=========== Field =========== */
@@ -171,7 +149,6 @@ const CreateHeavyEquipmentBook = () => {
             onChange: (value) => {
               methods.setValue('brandId', value ?? '');
               methods.setValue('typeId', '');
-              methods.setValue('modelId', '');
               methods.trigger('brandId');
             },
           },
@@ -186,7 +163,6 @@ const CreateHeavyEquipmentBook = () => {
             withAsterisk: true,
             onChange: (value) => {
               methods.setValue('typeId', value ?? '');
-              methods.setValue('modelId', '');
               methods.trigger('typeId');
             },
             searchable: true,
@@ -195,22 +171,11 @@ const CreateHeavyEquipmentBook = () => {
             searchValue: typeSearchTerm,
           },
           {
-            control: 'select-input',
-            onChange: (value) => {
-              methods.setValue('modelId', value ?? '');
-              methods.trigger('modelId');
-            },
-            name: 'modelId',
-            data: modelItems ?? [],
-            label: 'modelHeavyEquipment',
-            placeholder: 'chooseModel',
+            control: 'text-input',
+            name: 'modelName',
+            label: 'model',
             colSpan: 6,
             withAsterisk: true,
-            searchable: true,
-            clearable: true,
-            nothingFound: null,
-            onSearchChange: setModelSearchTerm,
-            searchValue: modelSearchTerm,
           },
           {
             control: 'text-input',
@@ -220,8 +185,8 @@ const CreateHeavyEquipmentBook = () => {
           },
           {
             control: 'text-input',
-            name: 'createdYear',
-            label: 'productionYear',
+            name: 'modelYear',
+            label: 'modelYear',
             colSpan: 6,
             withAsterisk: true,
           },
@@ -236,26 +201,20 @@ const CreateHeavyEquipmentBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    brandItems,
-    brandSearchTerm,
-    modelItems,
-    modelSearchTerm,
-    typeItems,
-    typeSearchTerm,
-  ]);
+  }, [brandItems, brandSearchTerm, typeItems, typeSearchTerm]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<ICreateHeavyEquipmentValues> = (
     data
   ) => {
-    const { modelId, createdYear, photos, spec } = data;
+    const { modelName, modelYear, photos, spec, typeId } = data;
     mutate({
-      modelId,
-      createdYear,
+      modelName,
+      modelYear,
       photos,
       spec,
+      typeId,
     });
   };
   /* #endregion  /**======== HandleSubmitFc =========== */
