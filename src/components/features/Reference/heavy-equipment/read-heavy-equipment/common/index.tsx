@@ -20,7 +20,7 @@ const ReadHeavyEquipmentPage = () => {
     setBreadcrumbs([
       {
         label: t('heavyEquipment.heavyEquipmentTitle'),
-        path: '/setting/management-role',
+        path: '/reference/heavy-equipment',
       },
       {
         label: t('heavyEquipment.readHeavyEquipment'),

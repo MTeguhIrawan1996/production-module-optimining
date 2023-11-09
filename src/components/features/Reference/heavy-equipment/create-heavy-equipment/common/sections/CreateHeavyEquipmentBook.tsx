@@ -163,6 +163,7 @@ const CreateHeavyEquipmentBook = () => {
             placeholder: 'chooseBrand',
             colSpan: 6,
             withAsterisk: true,
+            clearable: true,
             searchable: true,
             nothingFound: null,
             onSearchChange: setBrandSearchTerm,
@@ -181,6 +182,7 @@ const CreateHeavyEquipmentBook = () => {
             label: 'typeHeavyEquipment',
             placeholder: 'chooseType',
             colSpan: 6,
+            clearable: true,
             withAsterisk: true,
             onChange: (value) => {
               methods.setValue('typeId', value ?? '');
@@ -205,6 +207,7 @@ const CreateHeavyEquipmentBook = () => {
             colSpan: 6,
             withAsterisk: true,
             searchable: true,
+            clearable: true,
             nothingFound: null,
             onSearchChange: setModelSearchTerm,
             searchValue: modelSearchTerm,

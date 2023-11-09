@@ -1,5 +1,8 @@
+import { IDateInputProps } from '@/components/elements/input/DateInputRhf';
+import { IDivisionSelectInputRhfProps } from '@/components/elements/input/DivisionSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
+import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
@@ -13,6 +16,13 @@ export const name: ControllerProps = {
   control: 'text-input',
   name: 'name',
   label: 'name',
+  withAsterisk: true,
+};
+export const nip: ControllerProps = {
+  control: 'text-input',
+  name: 'nip',
+  label: 'nip',
+  colSpan: 6,
   withAsterisk: true,
 };
 export const fullname: ControllerProps = {
@@ -366,7 +376,6 @@ export const divisionSelect = ({
   clearable = true,
   data = [],
   nothingFound = null,
-
   ...rest
 }: Partial<ISelectInputRhfProps>) => {
   const field: ControllerProps = {
@@ -389,7 +398,6 @@ export const positionSelect = ({
   clearable = true,
   data = [],
   nothingFound = null,
-
   ...rest
 }: Partial<ISelectInputRhfProps>) => {
   const field: ControllerProps = {
@@ -399,6 +407,46 @@ export const positionSelect = ({
     searchable,
     clearable,
     data,
+    nothingFound,
+    ...rest,
+  };
+  return field;
+};
+
+export const positionSelectRhf = ({
+  name = 'positionId',
+  label = 'position',
+  searchable = true,
+  clearable = true,
+  nothingFound = null,
+  ...rest
+}: Partial<IPositionSelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'position-select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    nothingFound,
+    ...rest,
+  };
+  return field;
+};
+
+export const divisionSelectRhf = ({
+  name = 'divisionId',
+  label = 'division',
+  searchable = true,
+  clearable = true,
+  nothingFound = null,
+  ...rest
+}: Partial<IDivisionSelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'division-select-input',
+    name,
+    label,
+    searchable,
+    clearable,
     nothingFound,
     ...rest,
   };
@@ -439,6 +487,24 @@ export const formStatusSelect = ({
     searchable,
     clearable,
     data,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalDate = ({
+  name = 'globalDate',
+  label = 'globalDate',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IDateInputProps>) => {
+  const field: ControllerProps = {
+    control: 'date-input',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
     ...rest,
   };
   return field;
