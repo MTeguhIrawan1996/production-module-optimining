@@ -24,7 +24,6 @@ const CreateCompanyPositionHistoryBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const employeId = router.query?.id?.[1] as string;
-  const [isStill, setIsStill] = React.useState<boolean>(false);
   const methods = useForm<
     Pick<IUpdateEmployeePositionsRequest, 'positionHistories'>
   >({
@@ -33,6 +32,7 @@ const CreateCompanyPositionHistoryBook = () => {
         {
           positionId: '',
           divisionId: '',
+          isStill: false,
           startDate: null,
           endDate: null,
         },
@@ -40,6 +40,7 @@ const CreateCompanyPositionHistoryBook = () => {
     },
     mode: 'onBlur',
   });
+  const positionHistories = methods.watch('positionHistories');
 
   const { fields, append, remove } = useFieldArray({
     name: 'positionHistories',
@@ -81,7 +82,7 @@ const CreateCompanyPositionHistoryBook = () => {
   });
 
   const fieldEmployeData = React.useMemo(() => {
-    const arrayField = fields.map((field, index) => {
+    const arrayField = fields.map((_, index) => {
       const positionItem = positionSelectRhf({
         name: `positionHistories.${index}.positionId`,
         colSpan: 6,
@@ -116,7 +117,10 @@ const CreateCompanyPositionHistoryBook = () => {
         },
         groupCheckbox: {
           onChange: () => {
-            setIsStill((prev) => !prev);
+            methods.setValue(
+              `positionHistories.${index}.isStill`,
+              !positionHistories[index].isStill
+            );
           },
           label: t('commonTypography.isStillOffice'),
         },
@@ -132,7 +136,7 @@ const CreateCompanyPositionHistoryBook = () => {
 
     return arrayField;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fields, isStill]);
+  }, [fields, positionHistories]);
 
   const handleSubmitForm: SubmitHandler<
     Pick<IUpdateEmployeePositionsRequest, 'positionHistories'>
@@ -142,11 +146,12 @@ const CreateCompanyPositionHistoryBook = () => {
         positionId: val.positionId,
         divisionId: val.divisionId,
         startDate: val.startDate ?? '',
-        isStill: isStill,
+        isStill: val.isStill,
         endDate: val.endDate ?? '',
       };
       return data;
     });
+
     await executeUpdate({
       variables: {
         id: employeId,
