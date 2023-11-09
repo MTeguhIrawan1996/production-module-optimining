@@ -7,26 +7,32 @@ import { dateToString } from '@/utils/helper/dateToString';
 
 import { AxiosRestErrorResponse } from '@/types/global';
 
-export interface IUpdateHumanResourceValues extends ICreateHumanResourceValues {
+export interface ICreateCompanyHumanResource
+  extends ICreateHumanResourceValues {
   id: string;
 }
 
-type INameValue = {
+interface ICreateCompanyHumanResourceData {
   id: string;
+  humanResource: ICreateCompanyHumanResource;
+}
+
+type IRequestCompanyHumanResources = {
+  companyId: string;
   data: {
     name: string;
     value: string | null | undefined | FileWithPath[];
   }[];
-  deletedPhoto: boolean | null;
-  deletedIdentityPhoto: boolean | null;
 };
 
-export interface IUpdateHumanResourceResponse {
-  data: IUpdateHumanResourceValues;
+export interface ICreateCompanyHumanResourceResponse {
+  data: ICreateCompanyHumanResourceData;
   message: string;
 }
 
-const UpdateHumanResource = async (props: INameValue) => {
+const CreateCompanyHumanResource = async (
+  props: IRequestCompanyHumanResources
+) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
   const exclude = [
@@ -37,13 +43,7 @@ const UpdateHumanResource = async (props: INameValue) => {
     'regencyId',
     'subdistrictId',
   ];
-  bodyFormData.append('id', props.id);
-  if (props.deletedPhoto) {
-    bodyFormData.append('deletePhoto', 'true');
-  }
-  if (props.deletedIdentityPhoto) {
-    bodyFormData.append('deleteIdentityPhoto', 'true');
-  }
+
   props.data.forEach(({ name, value }) => {
     if (!exclude.includes(name) && value) {
       if (name === 'photo' && typeof value !== 'string') {
@@ -70,29 +70,29 @@ const UpdateHumanResource = async (props: INameValue) => {
     }
   });
 
-  const response = await axiosAuth.patch(
-    `/human-resources/${props.id}`,
+  const response = await axiosAuth.post(
+    `/companies/${props.companyId}/employees`,
     bodyFormData
   );
   return response?.data;
 };
 
-export const useUpdateHumanResource = ({
+export const useCreateCompanyHumanResource = ({
   onError,
   onSuccess,
 }: {
-  onSuccess?: (success: IUpdateHumanResourceResponse) => void;
+  onSuccess?: (success: ICreateCompanyHumanResourceResponse) => void;
   onError?: (
-    error: AxiosRestErrorResponse<Omit<IUpdateHumanResourceValues, 'id'>>
+    error: AxiosRestErrorResponse<Omit<ICreateCompanyHumanResource, 'id'>>
   ) => unknown;
 }) => {
   return useMutation<
-    IUpdateHumanResourceResponse,
-    AxiosRestErrorResponse<Omit<IUpdateHumanResourceValues, 'id'>>,
-    INameValue
+    ICreateCompanyHumanResourceResponse,
+    AxiosRestErrorResponse<Omit<ICreateCompanyHumanResource, 'id'>>,
+    IRequestCompanyHumanResources
   >({
     mutationFn: async (props) => {
-      const data = await UpdateHumanResource(props);
+      const data = await CreateCompanyHumanResource(props);
       return data;
     },
     onError: onError,

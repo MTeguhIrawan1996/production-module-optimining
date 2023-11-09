@@ -34,7 +34,7 @@ const UpdateHumanResourcesPage = () => {
   return (
     <RootWrapper>
       <InnerWrapper
-        titleProps={{ title: t('humanResources.formHumanResources'), mb: 'xl' }}
+        titleProps={{ title: t('humanResources.formHumanResources'), mb: 'md' }}
       >
         <Tabs defaultValue="human-resources-profil" radius={4}>
           <Tabs.List>

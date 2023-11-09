@@ -11,6 +11,9 @@
     "director": "Direktur",
     "fullName": "Nama Lengkap",
     "aliasName": "Nama Alias",
+    "new": "Baru",
+    "select": "Pilih",
+    "existing": "yang sudah ada",
     "country": "Kewarganegaraan",
     "identityType": "Jenis Identitas",
     "identityNumber2": "Nomor Identitas",
@@ -26,6 +29,13 @@
     "village": "Desa/Keluarahan",
     "detailAddress": "Detail Alamat",
     "profile": "Profil",
+    "nip": "NIP",
+    "division": "Divisi",
+    "employeStatus": "Status Pegawai",
+    "employeData": "Data Pegawai",
+    "formStatus": "Status Form",
+    "position": "Jabatan",
+    "status": "status",
     "action": "Aksi",
     "create": "Tambah",
     "read": "Lihat",
@@ -87,6 +97,10 @@
     "checkboxAddressDomicile": "Alamat Domisili sesuai dengan Kartu Identitas (KTP/KTA/Paspor)",
     "bloodType": "Golongan Darah",
     "resus": "Resus Darah",
+    "chooseDivision": "Pilih / Ketikan Divisi",
+    "choosePosition": "Pilih / Ketikan Posisi",
+    "chooseEmployeStatus": "Pilih Status Pegawai",
+    "chooseFormStatus": "Pilih Status Form",
     "chooseRelegion": "Pilih / Ketikan Agama",
     "chooseMarriageStatus": "Pilih / Ketikan Status Pernikahan",
     "chooseProvince": "Pilih / Ketikan Provinsi",
@@ -97,7 +111,9 @@
     "chooseBloodType": "Pilih Golongan Darah",
     "chooseType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.type)",
     "chooseBrand": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.brand)",
-    "chooseModel": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.model)"
+    "chooseModel": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.model)",
+    "complete": "Lengkap",
+    "inComplete": "Tidak Lengkap"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -116,7 +132,7 @@
     "button": {
       "login": "$t(commonTypography.login)"
     },
-    "title": "$t(commonTypography.login) to Optimining"
+    "title": "$t(commonTypography.login) ke Optimining"
   },
   "managementRole": {
     "managementRoleTitle": "Manajemen $t(commonTypography.role)",
@@ -206,6 +222,8 @@
   },
   "humanResources": {
     "createHumanResources": "$t(commonTypography.create) $t(commonTypography.humanResources)",
+    "createNewHumanResources": "$t(commonTypography.create) $t(commonTypography.humanResources) $t(commonTypography.new)",
+    "selectExistingHR": "$t(commonTypography.select) $t(commonTypography.humanResources) $t(commonTypography.existing)",
     "updateHumanResources": "$t(commonTypography.edit) $t(commonTypography.humanResources)",
     "readHumanResources": "$t(commonTypography.detail) $t(commonTypography.humanResources)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) dan $t(commonTypography.identityNumber)",

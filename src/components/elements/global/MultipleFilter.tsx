@@ -13,13 +13,14 @@ const MultipleFilter: React.FC<IMultipleFilterProps> = ({
 }) => {
   const { t } = useTranslation('default');
   const renderSelectItem = React.useCallback(
-    ({ placeholder, ...value }: SelectProps, index: number) => {
+    ({ placeholder, label, ...value }: SelectProps, index: number) => {
       return (
         <Select
           key={index}
           labelProps={{
             style: { fontWeight: 500, fontSize: 14, marginBottom: 8 },
           }}
+          label={label ? t(`commonTypography.${label}`) : null}
           placeholder={
             placeholder
               ? t(`commonTypography.${placeholder}`, { ns: 'default' })

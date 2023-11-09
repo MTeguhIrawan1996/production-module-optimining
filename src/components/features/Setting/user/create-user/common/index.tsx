@@ -30,7 +30,7 @@ const CreateUserPage = () => {
 
   return (
     <RootWrapper>
-      <InnerWrapper titleProps={{ title: t('user.formUser'), mb: 'xl' }}>
+      <InnerWrapper titleProps={{ title: t('user.formUser'), mb: 'md' }}>
         <Tabs
           defaultValue="information"
           radius={4}
