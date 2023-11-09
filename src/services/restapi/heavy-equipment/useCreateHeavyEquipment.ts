@@ -8,9 +8,9 @@ import { AxiosRestErrorResponse } from '@/types/global';
 export interface ICreateHeavyEquipmentValues {
   brandId: string;
   typeId: string;
-  modelId: string;
+  modelName: string;
   spec: string;
-  createdYear: string;
+  modelYear: string;
   photos: FileWithPath[] | string | null;
 }
 
@@ -20,11 +20,12 @@ export interface ICreateHeavyEquipmentResponse {
 }
 
 const CreateHeavyEquipment = async ({
-  modelId,
-  createdYear,
+  modelName,
+  modelYear,
   photos,
   spec,
-}: Omit<ICreateHeavyEquipmentValues, 'brandId' | 'typeId'>) => {
+  typeId,
+}: Omit<ICreateHeavyEquipmentValues, 'brandId'>) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
   if (photos && typeof photos !== 'string') {
@@ -32,8 +33,9 @@ const CreateHeavyEquipment = async ({
       bodyFormData.append('photos[]', image);
     });
   }
-  bodyFormData.append('modelId', modelId);
-  bodyFormData.append('createdYear', createdYear);
+  bodyFormData.append('modelName', modelName);
+  bodyFormData.append('modelYear', modelYear);
+  bodyFormData.append('typeId', typeId);
   bodyFormData.append('spec', spec);
 
   const response = await axiosAuth.post(
@@ -49,24 +51,21 @@ export const useCreateHeavyEquipment = ({
 }: {
   onSuccess?: (success: ICreateHeavyEquipmentResponse) => void;
   onError?: (
-    error: AxiosRestErrorResponse<
-      Omit<ICreateHeavyEquipmentValues, 'brandId' | 'typeId'>
-    >
+    error: AxiosRestErrorResponse<Omit<ICreateHeavyEquipmentValues, 'brandId'>>
   ) => unknown;
 }) => {
   return useMutation<
     ICreateHeavyEquipmentResponse,
-    AxiosRestErrorResponse<
-      Omit<ICreateHeavyEquipmentValues, 'brandId' | 'typeId'>
-    >,
-    Omit<ICreateHeavyEquipmentValues, 'brandId' | 'typeId'>
+    AxiosRestErrorResponse<Omit<ICreateHeavyEquipmentValues, 'brandId'>>,
+    Omit<ICreateHeavyEquipmentValues, 'brandId'>
   >({
-    mutationFn: async ({ modelId, createdYear, photos, spec }) => {
+    mutationFn: async ({ modelName, modelYear, photos, spec, typeId }) => {
       const data = await CreateHeavyEquipment({
-        modelId,
-        createdYear,
+        modelName,
+        modelYear,
         photos,
         spec,
+        typeId,
       });
       return data;
     },
