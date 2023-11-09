@@ -5,7 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
+import CreateCompanyEmployeDataBook from '@/components/features/MasterData/company/create-company/create-human-resources/common/sections/CreateCompanyEmployeDataBook';
 import CreateCompanyHumanResourcesBook from '@/components/features/MasterData/company/create-company/create-human-resources/common/sections/CreateCompanyHumanResourcesBook';
+import CreateCompanyPositionHistoryBook from '@/components/features/MasterData/company/create-company/create-human-resources/common/sections/CreateCompanyPositionHistoryBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
@@ -68,12 +70,23 @@ const CreateCompanyHumanResourcesPage = () => {
             >
               {t('commonTypography.employeData')}
             </Tabs.Tab>
+            <Tabs.Tab
+              value="position-history"
+              fz={14}
+              fw={500}
+              disabled={!router.query?.id?.[1]}
+            >
+              {t('commonTypography.positionHistory')}
+            </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="human-resources-profil">
             <CreateCompanyHumanResourcesBook />
           </Tabs.Panel>
           <Tabs.Panel value="employe-data">
-            <div className="">Test</div>
+            <CreateCompanyEmployeDataBook />
+          </Tabs.Panel>
+          <Tabs.Panel value="position-history">
+            <CreateCompanyPositionHistoryBook />
           </Tabs.Panel>
         </Tabs>
       </InnerWrapper>

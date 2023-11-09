@@ -28,9 +28,13 @@
       "emailOne": "Email 1",
       "emailTwo": "Email 2",
       "faxNumber": "Fax Number",
+      "employeStatus": "Status Pegawai",
+      "entryDate": "Tanggal Masuk Bekerja",
+      "quitDate": "Tanggal Berhanti Bekerja",
       "code": "Code",
       "type": "Jenis",
       "nib": "NIB (Nomor Izin Berusaha)",
+      "nip": "NIP (Nomor Induk Pegawai)",
       "companyType": "Jenis Perusahaan",
       "businessPermit": "Izin Usaha",
       "companyLogo": "Logo Perusahaan",
@@ -60,7 +64,11 @@
       "contact": "Nomor Kontak",
       "bloodType": "Golongan Darah",
       "resus": "Resus",
-      "identityPhoto": "Foto Identitas"
+      "identityPhoto": "Foto Identitas",
+      "position": "Jabatan",
+      "division": "Divisi",
+      "dateOfOffice": "Tanggal Menjabat",
+      "dateComplateOffice": "Tanggal Selesai Menjabat"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",

@@ -33,8 +33,14 @@
     "division": "Divisi",
     "employeStatus": "Status Pegawai",
     "employeData": "Data Pegawai",
+    "employeDetail": "Detail Pegawai",
+    "isStillWorking": "Masih bekerja sampai saat ini",
+    "isStillOffice": "Masih menjabat sampai saat ini",
     "formStatus": "Status Form",
     "position": "Jabatan",
+    "positionHistory": "Riwayat Jabatan",
+    "positionDetail": "Detail Jabatan",
+    "createHistory": "Tambah Riwayat",
     "status": "status",
     "action": "Aksi",
     "create": "Tambah",
@@ -187,7 +193,9 @@
     "formCompany": "$t(commonTypography.form) $t(commonTypography.company)",
     "profileCompany": "$t(commonTypography.profile) $t(commonTypography.company)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.companyName)",
-    "successDeleteMessage": "$t(commonTypography.company) berhasil dihapus"
+    "successDeleteMessage": "$t(commonTypography.company) berhasil dihapus",
+    "successCreateEmployeDataMessage": "$t(commonTypography.employeDetail) berhasil dibuat",
+    "successCreatePositionHistoryMessage": "$t(commonTypography.positionHistory) berhasil dibuat"
   },
   "heavyEquipment": {
     "heavyEquipmentTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipment)",

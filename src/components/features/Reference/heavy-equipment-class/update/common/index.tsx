@@ -21,7 +21,7 @@ const UpdateHeavyEquipmentClassPage = () => {
     setBreadcrumbs([
       {
         label: t('heavyEquipmentClass.heavyEquipmentClassTitle'),
-        path: '/setting/management-role',
+        path: '/reference/heavy-equipment-class',
       },
       {
         label: t('heavyEquipmentClass.editHeavyEquipmentClass'),

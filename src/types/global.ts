@@ -5,12 +5,14 @@ import { GraphQLErrorExtensions } from 'graphql';
 import { IPrimaryButtonProps } from '@/components/elements/button/PrimaryButton';
 import { ICheckboxGroupAccessProps } from '@/components/elements/input/CheckboxGroupAccess';
 import { IDateInputProps } from '@/components/elements/input/DateInputRhf';
+import { IDivisionSelectInputRhfProps } from '@/components/elements/input/DivisionSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
 import { IImageInputDropzoneRhfProps } from '@/components/elements/input/ImageInputDropzoneRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { IPasswordInputProps } from '@/components/elements/input/PasswordInputRhf';
 import { IPdfInputDropzoneRhfProps } from '@/components/elements/input/PdfInputDropzoneRhf';
+import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
 import { IRadioInputProps } from '@/components/elements/input/RadioInputRhf';
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
@@ -26,6 +28,8 @@ import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelect
 export type CommonProps = {
   colSpan?: number;
 };
+
+export type IDate = Date | undefined | string | null;
 
 // Controller Field
 export type ControllerProps =
@@ -44,6 +48,8 @@ export type ControllerProps =
   | ISubDistrictSelectInputRhfProps
   | IVillageInputRhfProps
   | IIdentityTypesRadioInputProps
+  | IPositionSelectInputRhfProps
+  | IDivisionSelectInputRhfProps
   | IDateInputProps;
 
 export type ControllerGroup = {
@@ -105,11 +111,20 @@ export interface IGlobalMetaRequest {
   orderDir: string | null;
 }
 
+type IChildren<T> = {
+  property: keyof T;
+  children: IChildren<T>[];
+  constraints: {
+    [type: string]: string;
+  };
+};
+
 export interface IExtensionKey<T> extends GraphQLErrorExtensions {
   code: string;
   originalError: {
     errors: {
       property: keyof T;
+      children: IChildren<T>[];
       constraints: {
         [type: string]: string;
       };
@@ -117,7 +132,8 @@ export interface IExtensionKey<T> extends GraphQLErrorExtensions {
   };
 }
 
-export type IErrorResponseExtensionGql<T> = IExtensionKey<T>;
+export type IErrorResponseExtensionGql<T extends React.ReactNode> =
+  IExtensionKey<T>;
 // END RESPONSE REQUEST GRAPHQL
 
 // REST API
