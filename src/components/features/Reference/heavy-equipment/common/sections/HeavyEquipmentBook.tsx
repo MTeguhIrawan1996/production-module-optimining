@@ -16,7 +16,6 @@ import {
 import { useDeleteHeavyEquipmentReference } from '@/services/graphql/mutation/reference-heavy-equipment/useDeleteRefrenceHeavyEquipment';
 import { useReadAllBrand } from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
 import { useReadAllHeavyEquipment } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipment';
-import { useReadAllHeavyEquipmentModel } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentModel';
 import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
 import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
@@ -34,9 +33,6 @@ const HeavyEquipmentBook = () => {
   const [typeSearchTerm, settypeSearchTerm] = React.useState<string>('');
   const [typeSearchQuery] = useDebouncedValue<string>(typeSearchTerm, 400);
   const [typeId, setTypeId] = React.useState<string | null>(null);
-  const [modelSearchTerm, setModelSearchTerm] = React.useState<string>('');
-  const [modelSearchQuery] = useDebouncedValue<string>(modelSearchTerm, 400);
-  const [modelId, setModelId] = React.useState<string | null>(null);
 
   /* #   /**=========== Query =========== */
   const { brandsData } = useReadAllBrand({
@@ -52,14 +48,6 @@ const HeavyEquipmentBook = () => {
       brandId,
     },
   });
-  const { modelsData } = useReadAllHeavyEquipmentModel({
-    variables: {
-      limit: 15,
-      search: modelSearchQuery === '' ? null : modelSearchQuery,
-      brandId,
-      typeId,
-    },
-  });
   const {
     heavyEquipmentsData,
     heavyEquipmentDataLoading,
@@ -72,7 +60,6 @@ const HeavyEquipmentBook = () => {
       search: searchQuery === '' ? null : searchQuery,
       brandId,
       typeId,
-      modelId,
     },
   });
   const [executeDelete, { loading }] = useDeleteHeavyEquipmentReference({
@@ -106,9 +93,6 @@ const HeavyEquipmentBook = () => {
   const { uncombinedItem: typeItems } = useCombineFilterItems({
     data: typesData ?? [],
   });
-  const { uncombinedItem: modelItems } = useCombineFilterItems({
-    data: modelsData ?? [],
-  });
   /* #endregion  /**======== FilterData =========== */
 
   /* #   /**=========== FilterRender =========== */
@@ -119,7 +103,6 @@ const HeavyEquipmentBook = () => {
           setPage(1);
           setBrandId(value);
           setTypeId(null);
-          setModelId(null);
         },
         data: brandItems ?? [],
         label: 'brand',
@@ -134,7 +117,6 @@ const HeavyEquipmentBook = () => {
         onChange: (value) => {
           setPage(1);
           setTypeId(value);
-          setModelId(null);
         },
         value: typeId,
         data: typeItems ?? [],
@@ -146,32 +128,10 @@ const HeavyEquipmentBook = () => {
         onSearchChange: settypeSearchTerm,
         searchValue: typeSearchTerm,
       },
-      {
-        onChange: (value) => {
-          setPage(1);
-          setModelId(value);
-        },
-        data: modelItems ?? [],
-        value: modelId,
-        label: 'model',
-        placeholder: 'chooseModel',
-        searchable: true,
-        clearable: true,
-        nothingFound: null,
-        onSearchChange: setModelSearchTerm,
-        searchValue: modelSearchTerm,
-      },
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    brandSearchTerm,
-    brandsData,
-    typeSearchTerm,
-    typeItems,
-    modelSearchTerm,
-    modelItems,
-  ]);
+  }, [brandSearchTerm, brandsData, typeSearchTerm, typeItems]);
   /* #endregion  /**======== FilterRender =========== */
 
   /* #   /**=========== HandleClickFc =========== */
@@ -193,21 +153,20 @@ const HeavyEquipmentBook = () => {
             {
               accessor: 'type',
               title: t('commonTypography.type'),
-              render: ({ model }) => model?.type.name,
+              render: ({ type }) => type.name,
             },
             {
               accessor: 'brand',
               title: t('commonTypography.brand'),
-              render: ({ model }) => model?.type.brand.name,
+              render: ({ type }) => type.brand.name,
             },
             {
-              accessor: 'model.name',
+              accessor: 'modelName',
               title: t('commonTypography.model'),
-              render: ({ model }) => model?.name,
             },
             {
-              accessor: 'createdYear',
-              title: t('commonTypography.year'),
+              accessor: 'modelYear',
+              title: t('commonTypography.yearModel'),
             },
             {
               accessor: 'action',
@@ -278,6 +237,7 @@ const HeavyEquipmentBook = () => {
       }}
       MultipleFilter={{
         MultipleFilterData: filter,
+        colSpan: 2,
       }}
     >
       {renderTable}

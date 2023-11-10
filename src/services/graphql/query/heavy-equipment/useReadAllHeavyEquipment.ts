@@ -9,7 +9,6 @@ export const READ_ALL_HEAVY_EQUIPMENT = gql`
     $search: String
     $orderBy: String
     $orderDir: String
-    $modelId: String
     $typeId: String
     $brandId: String
   ) {
@@ -20,7 +19,6 @@ export const READ_ALL_HEAVY_EQUIPMENT = gql`
         search: $search
         orderBy: $orderBy
         orderDir: $orderDir
-        modelId: $modelId
         typeId: $typeId
         brandId: $brandId
       }
@@ -33,20 +31,18 @@ export const READ_ALL_HEAVY_EQUIPMENT = gql`
       }
       data {
         id
-        model {
+        modelName
+        type {
           id
           name
-
-          type {
+          brand {
             id
             name
-            brand {
-              name
-            }
           }
         }
+
         spec
-        createdYear
+        modelYear
       }
     }
   }
@@ -54,19 +50,18 @@ export const READ_ALL_HEAVY_EQUIPMENT = gql`
 
 export interface IHeavyEquipmentData {
   id: string;
-  model: {
+  modelName: string;
+  type: {
     id: string;
     name: string;
-    type: {
+    brand: {
       id: string;
       name: string;
-      brand: {
-        name: string;
-      };
     };
-  } | null;
+  };
+
   spec: string | null;
-  createdYear: string;
+  modelYear: string;
 }
 
 interface IHeavyEquipmentResponse {
@@ -74,7 +69,6 @@ interface IHeavyEquipmentResponse {
 }
 
 interface IHeavyEquipmentRequest extends Partial<IGlobalMetaRequest> {
-  modelId?: string | null;
   typeId?: string | null;
   brandId?: string | null;
 }

@@ -8,9 +8,9 @@ import {
 
 export const createHeavyEquipmentSchema = z.object({
   photos: zImageArrayOptional,
-  modelId: zRequiredString,
+  modelName: zRequiredString,
   brandId: zRequiredString,
   typeId: zRequiredString,
   spec: zRequiredString.optional().or(z.literal('')),
-  createdYear: zRequiredNumberOfString,
+  modelYear: zRequiredNumberOfString,
 });

@@ -19,6 +19,8 @@ import {
   TextInputRhf,
   VillageSelectInputRhf,
 } from '@/components/elements';
+import DivisionSelectInputRhf from '@/components/elements/input/DivisionSelectInputRhf';
+import PositionSelectInputRhf from '@/components/elements/input/PositionSelectInputRhf';
 
 import { ControllerProps } from '@/types/global';
 
@@ -58,6 +60,10 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <VillageSelectInputRhf {...props} />;
     case 'identity-radio-input':
       return <IdentityRadioInputRhf {...props} />;
+    case 'position-select-input':
+      return <PositionSelectInputRhf {...props} />;
+    case 'division-select-input':
+      return <DivisionSelectInputRhf {...props} />;
     default:
       return null;
   }

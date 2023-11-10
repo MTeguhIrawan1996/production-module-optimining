@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { useReadAllBrand } from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
-import { useReadAllHeavyEquipmentModel } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentModel';
 import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
 import { useReadOneHeavyEquipmentReference } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipment';
 import {
@@ -41,25 +40,22 @@ const UpdateHeavyEquipmentBook = () => {
   const [brandSearchQuery] = useDebouncedValue<string>(brandSearchTerm, 400);
   const [typeSearchTerm, settypeSearchTerm] = React.useState<string>('');
   const [typeSearchQuery] = useDebouncedValue<string>(typeSearchTerm, 400);
-  const [modelSearchTerm, setModelSearchTerm] = React.useState<string>('');
-  const [modelSearchQuery] = useDebouncedValue<string>(modelSearchTerm, 400);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IUpdateHeavyEquipmentValues>({
     resolver: zodResolver(createHeavyEquipmentSchema),
     defaultValues: {
       photos: [],
-      modelId: '',
+      modelName: '',
       brandId: '',
       typeId: '',
       spec: '',
-      createdYear: '',
+      modelYear: '',
     },
     mode: 'onBlur',
   });
   const brandId = methods.watch('brandId');
   const typeId = methods.watch('typeId');
-  const modelId = methods.watch('modelId');
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
@@ -70,16 +66,13 @@ const UpdateHeavyEquipmentBook = () => {
       },
       skip: !router.isReady,
       onCompleted: (data) => {
+        methods.setValue('brandId', data.heavyEquipmentReference.type.brand.id);
+        methods.setValue('typeId', data.heavyEquipmentReference.type.id);
+        methods.setValue('modelName', data.heavyEquipmentReference.modelName);
+        methods.setValue('spec', data.heavyEquipmentReference.spec ?? '');
         methods.setValue(
-          'brandId',
-          data.heavyEquipmentReference.model.type.brand.id
-        );
-        methods.setValue('typeId', data.heavyEquipmentReference.model.type.id);
-        methods.setValue('modelId', data.heavyEquipmentReference.model.id);
-        methods.setValue('spec', data.heavyEquipmentReference.spec);
-        methods.setValue(
-          'createdYear',
-          `${data.heavyEquipmentReference.createdYear}`
+          'modelYear',
+          `${data.heavyEquipmentReference.modelYear}`
         );
         setServerPhotos(data.heavyEquipmentReference.photos);
       },
@@ -96,15 +89,6 @@ const UpdateHeavyEquipmentBook = () => {
       limit: 15,
       search: typeSearchQuery === '' ? null : typeSearchQuery,
       brandId: brandId === '' ? null : brandId,
-    },
-    skip: !heavyEquipmentReferenceData,
-  });
-  const { modelsData } = useReadAllHeavyEquipmentModel({
-    variables: {
-      limit: 15,
-      search: modelSearchQuery === '' ? null : modelSearchQuery,
-      brandId: brandId === '' ? null : brandId,
-      typeId: typeId === '' ? null : typeId,
     },
     skip: !heavyEquipmentReferenceData,
   });
@@ -133,24 +117,16 @@ const UpdateHeavyEquipmentBook = () => {
   /* #   /**=========== FilterData =========== */
   const { combinedItems, uncombinedItem } = useCombineFilterItems({
     data: brandsData ?? [],
-    combinedId: heavyEquipmentReferenceData?.model.type.brand.id ?? '',
-    combinedName: heavyEquipmentReferenceData?.model.type.brand.name ?? '',
+    combinedId: heavyEquipmentReferenceData?.type.brand.id ?? '',
+    combinedName: heavyEquipmentReferenceData?.type.brand.name ?? '',
   });
   const {
     combinedItems: combinedTypeItems,
     uncombinedItem: uncombinedTypeItems,
   } = useCombineFilterItems({
     data: typesData ?? [],
-    combinedId: heavyEquipmentReferenceData?.model.type.id ?? '',
-    combinedName: heavyEquipmentReferenceData?.model.type.name ?? '',
-  });
-  const {
-    combinedItems: combinedModelItems,
-    uncombinedItem: uncombinedModelItems,
-  } = useCombineFilterItems({
-    data: modelsData ?? [],
-    combinedId: heavyEquipmentReferenceData?.model.id ?? '',
-    combinedName: heavyEquipmentReferenceData?.model.name ?? '',
+    combinedId: heavyEquipmentReferenceData?.type.id ?? '',
+    combinedName: heavyEquipmentReferenceData?.type.name ?? '',
   });
   /* #endregion  /**======== FilterData =========== */
 
@@ -201,7 +177,6 @@ const UpdateHeavyEquipmentBook = () => {
             onChange: (value) => {
               methods.setValue('brandId', value ?? '');
               methods.setValue('typeId', '');
-              methods.setValue('modelId', '');
               methods.trigger('brandId');
             },
           },
@@ -216,7 +191,6 @@ const UpdateHeavyEquipmentBook = () => {
             clearable: true,
             onChange: (value) => {
               methods.setValue('typeId', value ?? '');
-              methods.setValue('modelId', '');
               methods.trigger('typeId');
             },
             searchable: true,
@@ -225,22 +199,11 @@ const UpdateHeavyEquipmentBook = () => {
             searchValue: typeSearchTerm,
           },
           {
-            control: 'select-input',
-            onChange: (value) => {
-              methods.setValue('modelId', value ?? '');
-              methods.trigger('modelId');
-            },
-            name: 'modelId',
-            data: modelId === '' ? uncombinedModelItems : combinedModelItems,
-            label: 'modelHeavyEquipment',
-            placeholder: 'chooseModel',
+            control: 'text-input',
+            name: 'modelName',
+            label: 'model',
             colSpan: 6,
             withAsterisk: true,
-            clearable: true,
-            searchable: true,
-            nothingFound: null,
-            onSearchChange: setModelSearchTerm,
-            searchValue: modelSearchTerm,
           },
           {
             control: 'text-input',
@@ -250,8 +213,8 @@ const UpdateHeavyEquipmentBook = () => {
           },
           {
             control: 'text-input',
-            name: 'createdYear',
-            label: 'productionYear',
+            name: 'modelYear',
+            label: 'modelYear',
             colSpan: 6,
             withAsterisk: true,
           },
@@ -267,15 +230,11 @@ const UpdateHeavyEquipmentBook = () => {
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    modelId,
     brandId,
     typeId,
     combinedItems,
     uncombinedItem,
     brandSearchTerm,
-    combinedModelItems,
-    modelSearchTerm,
-    uncombinedModelItems,
     combinedTypeItems,
     typeSearchTerm,
     uncombinedTypeItems,
@@ -286,10 +245,11 @@ const UpdateHeavyEquipmentBook = () => {
   const handleSubmitForm: SubmitHandler<IUpdateHeavyEquipmentValues> = (
     data
   ) => {
-    const { modelId, createdYear, photos, spec } = data;
+    const { modelName, modelYear, typeId, photos, spec } = data;
     mutate({
-      modelId,
-      createdYear,
+      modelName,
+      modelYear,
+      typeId,
       photos,
       spec,
       deletedPhotoIds,

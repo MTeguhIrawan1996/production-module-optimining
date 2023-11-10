@@ -6,16 +6,13 @@ export const READ_ONE_HEAVY_EQUIPMENT = gql`
   query ReadHeavyEquipmentReference($id: String!) {
     heavyEquipmentReference(id: $id) {
       id
-      model {
+      modelName
+      type {
         id
         name
-        type {
+        brand {
           id
           name
-          brand {
-            id
-            name
-          }
         }
       }
       photos {
@@ -25,28 +22,25 @@ export const READ_ONE_HEAVY_EQUIPMENT = gql`
         fileName
       }
       spec
-      createdYear
+      modelYear
     }
   }
 `;
 
 export interface IHeavyEquipmentReferenceData {
   id: string;
-  model: {
+  modelName: string;
+  type: {
     id: string;
     name: string;
-    type: {
+    brand: {
       id: string;
       name: string;
-      brand: {
-        id: string;
-        name: string;
-      };
     };
   };
+  spec: string | null;
+  modelYear: string;
   photos: Omit<IFile, 'mime' | 'path'>[] | null;
-  spec: string;
-  createdYear: string;
 }
 
 export interface IHeavyEquipmentReferenceResponse {

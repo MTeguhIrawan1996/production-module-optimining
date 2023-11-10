@@ -11,6 +11,9 @@
     "director": "Direktur",
     "fullName": "Nama Lengkap",
     "aliasName": "Nama Alias",
+    "new": "Baru",
+    "select": "Pilih",
+    "existing": "yang sudah ada",
     "country": "Kewarganegaraan",
     "identityType": "Jenis Identitas",
     "identityNumber2": "Nomor Identitas",
@@ -29,8 +32,15 @@
     "nip": "NIP",
     "division": "Divisi",
     "employeStatus": "Status Pegawai",
+    "employeData": "Data Pegawai",
+    "employeDetail": "Detail Pegawai",
+    "isStillWorking": "Masih bekerja sampai saat ini",
+    "isStillOffice": "Masih menjabat sampai saat ini",
     "formStatus": "Status Form",
     "position": "Jabatan",
+    "positionHistory": "Riwayat Jabatan",
+    "positionDetail": "Detail Jabatan",
+    "createHistory": "Tambah Riwayat",
     "status": "status",
     "action": "Aksi",
     "create": "Tambah",
@@ -77,6 +87,7 @@
     "brand": "Merk",
     "model": "Model",
     "year": "Tahun",
+    "yearModel": "Tahun Model",
     "type": "Jenis",
     "heavyEquipmentType": "Jenis Alat Berat",
     "document": "Dokumen",
@@ -128,7 +139,7 @@
     "button": {
       "login": "$t(commonTypography.login)"
     },
-    "title": "$t(commonTypography.login) to Optimining"
+    "title": "$t(commonTypography.login) ke Optimining"
   },
   "managementRole": {
     "managementRoleTitle": "Manajemen $t(commonTypography.role)",
@@ -183,7 +194,9 @@
     "formCompany": "$t(commonTypography.form) $t(commonTypography.company)",
     "profileCompany": "$t(commonTypography.profile) $t(commonTypography.company)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.companyName)",
-    "successDeleteMessage": "$t(commonTypography.company) berhasil dihapus"
+    "successDeleteMessage": "$t(commonTypography.company) berhasil dihapus",
+    "successCreateEmployeDataMessage": "$t(commonTypography.employeDetail) berhasil dibuat",
+    "successCreatePositionHistoryMessage": "$t(commonTypography.positionHistory) berhasil dibuat"
   },
   "heavyEquipment": {
     "heavyEquipmentTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
@@ -218,6 +231,8 @@
   },
   "humanResources": {
     "createHumanResources": "$t(commonTypography.create) $t(commonTypography.humanResources)",
+    "createNewHumanResources": "$t(commonTypography.create) $t(commonTypography.humanResources) $t(commonTypography.new)",
+    "selectExistingHR": "$t(commonTypography.select) $t(commonTypography.humanResources) $t(commonTypography.existing)",
     "updateHumanResources": "$t(commonTypography.edit) $t(commonTypography.humanResources)",
     "readHumanResources": "$t(commonTypography.detail) $t(commonTypography.humanResources)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) dan $t(commonTypography.identityNumber)",

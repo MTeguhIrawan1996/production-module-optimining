@@ -16,7 +16,31 @@ export const errorBadRequestField = <T>(err: ApolloError) => {
     const newExtensions = extensions as IErrorResponseExtensionGql<T>;
     if (newExtensions.code === 'BAD_REQUEST') {
       newExtensions.originalError.errors?.forEach(
-        ({ property, constraints }) => {
+        ({ property, children, constraints }) => {
+          if (children.length > 0) {
+            children.forEach(({ property: indexRes, children: children1 }) => {
+              children1.forEach(
+                ({ constraints: constraints2, property: property2 }) => {
+                  for (const key in constraints2) {
+                    if (
+                      Object.prototype.hasOwnProperty.call(constraints2, key)
+                    ) {
+                      const message = constraints2[key];
+                      const name = `${property as string}.${
+                        indexRes as string
+                      }.${property2 as string}`;
+                      acc.push({
+                        type: 'manual',
+                        name: name as any,
+                        message,
+                      });
+                    }
+                  }
+                }
+              );
+            });
+            return;
+          }
           for (const key in constraints) {
             if (Object.prototype.hasOwnProperty.call(constraints, key)) {
               const message = constraints[key];

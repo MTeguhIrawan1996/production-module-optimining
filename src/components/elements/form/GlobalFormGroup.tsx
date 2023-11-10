@@ -1,5 +1,6 @@
 import {
   Checkbox,
+  Flex,
   Grid,
   Group,
   Paper,
@@ -26,6 +27,7 @@ interface IGlobalFormGroupProps {
   submitForm: SubmitHandler<any>;
   field: ControllerGroup[];
   submitButton?: Partial<IPrimaryButtonProps>;
+  outerButton?: Partial<IPrimaryButtonProps>;
   nextButton?: Partial<IPrimaryButtonProps>;
   validationButton?: Partial<IPrimaryButtonProps>;
   backButton?: Partial<IPrimaryButtonProps>;
@@ -37,6 +39,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
   field,
   submitForm,
   submitButton,
+  outerButton,
   nextButton,
   validationButton,
   backButton,
@@ -60,11 +63,22 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
     label: nextButtonLabel = t('commonTypography.next'),
     ...restNextButton
   } = nextButton || {};
+  const {
+    label: outerButtonLabel = t('commonTypography.create'),
+    ...restOuterButtonLabel
+  } = outerButton || {};
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(submitForm)}>
-        <Stack spacing={32} p={32}>
+        <Flex gap={32} direction="column" align="flex-end" p={32}>
+          {outerButton ? (
+            <PrimaryButton
+              label={outerButtonLabel}
+              leftIcon={<IconPlus size="20px" />}
+              {...restOuterButtonLabel}
+            />
+          ) : null}
           {field.map(
             (
               {
@@ -78,7 +92,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
             ) => {
               const { addButton, deleteButton } = actionGroup || {};
               return (
-                <Paper p={24} key={i} withBorder>
+                <Paper p={24} key={i} withBorder w="100%">
                   <Stack spacing={8}>
                     {enableGroupLabel || actionGroup ? (
                       <SimpleGrid cols={2} mb="sm">
@@ -153,7 +167,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
             </Paper>
           )}
           {/* Submit Button */}
-          <Group position={backButton ? 'apart' : 'right'}>
+          <Group w="100%" position={backButton ? 'apart' : 'right'}>
             {backButton ? (
               <PrimaryButton
                 label={backButtonLabel}
@@ -186,7 +200,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
               ) : null}
             </Group>
           </Group>
-        </Stack>
+        </Flex>
       </form>
     </FormProvider>
   );
