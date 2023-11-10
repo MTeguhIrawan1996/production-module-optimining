@@ -11,6 +11,8 @@ import { useTranslation } from 'react-i18next';
 
 import { KeyValueList, PrimaryButton } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
+
 interface IHeaderlayoutProps {
   isExpand: boolean;
   onHandleExpand: () => void;
@@ -22,6 +24,7 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({
 }) => {
   const router = useRouter();
   const { t } = useTranslation('default');
+  const { userAuthData } = useReadAuthUser({});
   return (
     <Box top={0} p={0} pos="sticky" w="100%" sx={{ zIndex: 10 }}>
       <Group position="apart" h={64} px={26} bg="#FFFFFF" className="shadow">
@@ -52,15 +55,15 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({
                 data={[
                   {
                     dataKey: 'Nama',
-                    value: 'Muhammad Teguh Irawan ',
+                    value: userAuthData?.name,
                   },
                   {
                     dataKey: 'Email',
-                    value: 'loremloremloremlorem@gmail.com',
+                    value: userAuthData?.email,
                   },
                   {
                     dataKey: 'Role',
-                    value: 'admin',
+                    value: userAuthData?.role.name,
                   },
                 ]}
                 type="flex"
