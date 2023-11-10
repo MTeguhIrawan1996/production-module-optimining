@@ -358,6 +358,10 @@ const ReadCompanyHumanResourceBook = () => {
         }}
         secondButton={{
           label: t('humanResources.selectExistingHR'),
+          onClick: () =>
+            router.push(
+              `/master-data/company/create/human-resources-available/${id}`
+            ),
         }}
       />
       <Divider my="md" />

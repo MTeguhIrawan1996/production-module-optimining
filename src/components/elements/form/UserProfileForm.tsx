@@ -180,7 +180,6 @@ const UserProfileForm: React.FC<IUserProfileFormProps> = ({
                 variant="outline"
                 leftIcon={<IconChevronLeft size="1rem" />}
                 label={t('commonTypography.back')}
-                mt="lg"
                 onClick={() => router.back()}
               />
             ) : null}
