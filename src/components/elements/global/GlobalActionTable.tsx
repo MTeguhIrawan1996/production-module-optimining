@@ -9,15 +9,31 @@ interface IGlobalActionTableProps {
   actionRead?: Omit<IPrimaryButtonProps, 'label'>;
   actionUpdate?: Omit<IPrimaryButtonProps, 'label'>;
   actionDelete?: Omit<IPrimaryButtonProps, 'label'>;
+  actionChoose?: Omit<IPrimaryButtonProps, 'label'>;
 }
 
 const GlobalActionTable: React.FC<IGlobalActionTableProps> = ({
   actionDelete,
   actionRead,
   actionUpdate,
+  actionChoose,
 }) => {
   return (
     <Group spacing={4} align="center" position="center">
+      {actionChoose ? (
+        <PrimaryButton
+          label="Pilih"
+          compact
+          variant="light"
+          color="red.3"
+          styles={(theme) => ({
+            root: {
+              border: `1px solid ${theme.colors.red[2]}`,
+            },
+          })}
+          {...actionChoose}
+        />
+      ) : null}
       {actionRead ? (
         <PrimaryButton
           label="Lihat"

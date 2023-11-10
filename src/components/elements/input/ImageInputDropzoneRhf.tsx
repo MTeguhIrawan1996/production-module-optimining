@@ -218,7 +218,7 @@ const ImageInputDropzoneRhf: React.FC<IImageInputDropzoneRhfProps> = ({
           { maxWidth: 'sm', cols: 1 },
           { maxWidth: 'md', cols: 2 },
         ]}
-        mt={ImageMemoLocal?.length > 0 ? 'sm' : 0}
+        mt={ImageMemoLocal?.length > 0 || ImageMemoServer ? 'sm' : 0}
       >
         {ImageMemoServer}
         {ImageMemoLocal}
