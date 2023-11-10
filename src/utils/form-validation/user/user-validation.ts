@@ -2,10 +2,10 @@ import { z } from 'zod';
 
 import {
   zEmailValidation,
-  zImageArrayRequired,
-  zImageRequired,
+  zImageArrayOptional,
   zPasswordValidation,
   zRequiredNumberOfString,
+  zRequiredRole,
   zRequiredString,
 } from '../global';
 
@@ -23,14 +23,14 @@ export const createUserSchema = z
   .object({
     name: zRequiredString,
     photo: z.union([
-      zImageArrayRequired,
+      zImageArrayOptional,
       z.string(),
       z.undefined().or(z.literal(null)),
     ]),
     email: zEmailValidation,
     phoneNumber: zRequiredNumberOfString.or(z.literal('')),
     username: zRequiredString,
-    roleId: zRequiredString,
+    roleId: zRequiredRole,
     password: zPasswordValidation,
     confirmPassword: zRequiredString,
   })
@@ -42,12 +42,12 @@ export const createUserSchema = z
 export const updateUserSchema = z.object({
   name: zRequiredString,
   photo: z.union([
-    zImageRequired,
+    zImageArrayOptional,
     z.string(),
     z.undefined().or(z.literal(null)),
   ]),
   email: zEmailValidation,
   phoneNumber: zRequiredNumberOfString.or(z.literal('')),
   username: zRequiredString,
-  roleId: zRequiredString,
+  roleId: zRequiredRole,
 });

@@ -3,6 +3,9 @@ import { z } from 'zod';
 export const zRequiredString = z
   .string()
   .min(1, { message: 'Kolom tidak boleh kosong' });
+export const zRequiredRole = z
+  .string()
+  .min(1, { message: 'Pilih salah satu role yang sesuai' });
 export const zOptionalString = z.string().optional();
 export const zRequiredSelectInput = zRequiredString
   .nullable()
