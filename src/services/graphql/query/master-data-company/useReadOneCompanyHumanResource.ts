@@ -6,6 +6,9 @@ export const READ_ONE_COMPANY_HUMAN_RESOURCE = gql`
   query ReadOneCompanyHumanResource($id: String!) {
     employee(id: $id) {
       id
+      entryDate
+      quitDate
+      nip
       humanResource {
         id
         name
@@ -111,9 +114,7 @@ export const READ_ONE_COMPANY_HUMAN_RESOURCE = gql`
   }
 `;
 
-export interface IEmployeeData {
-  id: string;
-  humanResource: IHumanResourceData;
+export interface IEmployee {
   nip: string;
   entryDate: string;
   quitDate: string;
@@ -145,12 +146,16 @@ export interface IEmployeeData {
   }[];
 }
 
+export interface IEmployeeData extends IEmployee {
+  humanResource: IHumanResourceData;
+}
+
 export interface IEmployeeResponse {
   employee: IEmployeeData;
 }
 
 export interface IEmployeeRequest {
-  idEmployee: string;
+  id: string;
 }
 
 export const useReadOneEmployee = ({

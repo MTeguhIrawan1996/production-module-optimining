@@ -249,14 +249,15 @@ const ReadCompanyHumanResourceBook = () => {
             {
               accessor: 'action',
               title: 'Aksi',
-              render: ({ id }) => {
+              render: ({ id: idEmployee }) => {
                 return (
                   <GlobalKebabButton
                     actionRead={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        // eslint-disable-next-line no-console
-                        console.log('red', id);
+                        router.push(
+                          `/master-data/company/read/human-resources/${id}/${idEmployee}`
+                        );
                       },
                     }}
                     actionUpdate={{
