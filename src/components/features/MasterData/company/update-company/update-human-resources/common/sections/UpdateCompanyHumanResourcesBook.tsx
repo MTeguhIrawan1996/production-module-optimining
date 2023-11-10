@@ -8,12 +8,11 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import { useReadOneHumanResource } from '@/services/graphql/query/master-data-human-resources/useReadOneHumanResource';
-import { ICreateHumanResourceValues } from '@/services/restapi/human-resource/useCreateHumanResource';
+import { useReadOneEmployee } from '@/services/graphql/query/master-data-company/useReadOneCompanyHumanResource';
 import {
-  IUpdateHumanResourceValues,
-  useUpdateHumanResource,
-} from '@/services/restapi/human-resource/useUpdateHumanResource';
+  IUpdateCompanyHumanResourceValues,
+  useUpdateCompanyHumanResource,
+} from '@/services/restapi/company/useUpdateCompanyHumanResources';
 import {
   address,
   domicileAddress,
@@ -46,10 +45,11 @@ import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 
 import { ControllerGroup, ControllerProps, IFile } from '@/types/global';
 
-const UpdateHumanResourcesBook = () => {
+const UpdateCompanyHumanResourcesBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const id = router.query.id as string;
+  const employeId = router.query?.id?.[1] as string;
+  const companyId = router.query?.id?.[0] as string;
   const [serverPhotos, setServerPhotos] = React.useState<
     Omit<IFile, 'mime' | 'path'>[] | null
   >([]);
@@ -60,7 +60,7 @@ const UpdateHumanResourcesBook = () => {
   const [deletedPhotoIdentityIds, setDeletedPhotoIdentityIds] = React.useState<
     string[]
   >([]);
-  const methods = useForm<Omit<IUpdateHumanResourceValues, 'id'>>({
+  const methods = useForm<Omit<IUpdateCompanyHumanResourceValues, 'id'>>({
     resolver: zodResolver(createHumanResourcesSchema),
     defaultValues: {
       name: '',
@@ -103,79 +103,96 @@ const UpdateHumanResourcesBook = () => {
   const domicileSubdistrictId = methods.watch('domicileSubdistrictId');
 
   /* #   /**=========== Query =========== */
-  const { humanResourceData, humanResourceDataLoading } =
-    useReadOneHumanResource({
-      variables: {
-        id,
-      },
-      skip: !router.isReady,
-      onCompleted: (data) => {
-        const date = stringToDate(data.humanResource.dob ?? undefined);
-        methods.setValue('name', data.humanResource.name);
-        methods.setValue('alias', data.humanResource.alias ?? '');
-        methods.setValue('isWni', `${data.humanResource.isWni}`);
-        methods.setValue(
-          'identityTypeId',
-          data.humanResource.identityType?.id ?? ''
-        );
-        methods.setValue('identityNumber', data.humanResource.identityNumber);
-        methods.setValue('pob', data.humanResource.pob ?? '');
-        methods.setValue('dob', date);
-        methods.setValue('gender', data.humanResource.gender);
-        methods.setValue('religionId', data.humanResource.religion?.id ?? '');
-        methods.setValue(
-          'educationDegree',
-          data.humanResource.educationDegree ?? ''
-        );
-        methods.setValue(
-          'marriageStatusId',
-          data.humanResource.marriageStatus?.id ?? ''
-        );
-        methods.setValue('provinceId', data.humanResource.province?.id ?? '');
-        methods.setValue('regencyId', data.humanResource.regency?.id ?? '');
-        methods.setValue(
-          'subdistrictId',
-          data.humanResource.district?.id ?? ''
-        );
-        methods.setValue('villageId', data.humanResource.village?.id ?? '');
-        methods.setValue('address', data.humanResource.address);
-        methods.setValue(
-          'isAddressSameWithDomicile',
-          `${data.humanResource.isAddressSameWithDomicile}`
-        );
-        methods.setValue(
-          'domicileProvinceId',
-          data.humanResource.domicileProvince?.id ?? ''
-        );
-        methods.setValue(
-          'domicileRegencyId',
-          data.humanResource.domicileRegency?.id ?? ''
-        );
-        methods.setValue(
-          'domicileSubdistrictId',
-          data.humanResource.domicileDistrict?.id ?? ''
-        );
-        methods.setValue(
-          'domicileVillageId',
-          data.humanResource.domicileVillage?.id ?? ''
-        );
-        methods.setValue(
-          'domicileAddress',
-          data.humanResource.domicileAddress ?? ''
-        );
-        methods.setValue('phoneNumber', data.humanResource.phoneNumber);
-        methods.setValue('email', data.humanResource.email);
-        methods.setValue('bloodType', data.humanResource.bloodType ?? '');
-        methods.setValue('resus', data.humanResource.resus ?? '');
-        if (data.humanResource.photo) {
-          setServerPhotos([data.humanResource.photo]);
-        }
-        if (data.humanResource.identityPhoto) {
-          setServerPhotosIdentity([data.humanResource.identityPhoto]);
-        }
-      },
-    });
-  const { mutate, isLoading } = useUpdateHumanResource({
+  const { employeeData, employeeDataLoading } = useReadOneEmployee({
+    variables: {
+      id: employeId ?? '',
+    },
+    skip: !router.isReady,
+    onCompleted: (data) => {
+      const date = stringToDate(data.employee.humanResource.dob ?? undefined);
+      methods.setValue('name', data.employee.humanResource.name);
+      methods.setValue('alias', data.employee.humanResource.alias ?? '');
+      methods.setValue('isWni', `${data.employee.humanResource.isWni}`);
+      methods.setValue(
+        'identityTypeId',
+        data.employee.humanResource.identityType?.id ?? ''
+      );
+      methods.setValue(
+        'identityNumber',
+        data.employee.humanResource.identityNumber
+      );
+      methods.setValue('pob', data.employee.humanResource.pob ?? '');
+      methods.setValue('dob', date);
+      methods.setValue('gender', data.employee.humanResource.gender);
+      methods.setValue(
+        'religionId',
+        data.employee.humanResource.religion?.id ?? ''
+      );
+      methods.setValue(
+        'educationDegree',
+        data.employee.humanResource.educationDegree ?? ''
+      );
+      methods.setValue(
+        'marriageStatusId',
+        data.employee.humanResource.marriageStatus?.id ?? ''
+      );
+      methods.setValue(
+        'provinceId',
+        data.employee.humanResource.province?.id ?? ''
+      );
+      methods.setValue(
+        'regencyId',
+        data.employee.humanResource.regency?.id ?? ''
+      );
+      methods.setValue(
+        'subdistrictId',
+        data.employee.humanResource.district?.id ?? ''
+      );
+      methods.setValue(
+        'villageId',
+        data.employee.humanResource.village?.id ?? ''
+      );
+      methods.setValue('address', data.employee.humanResource.address);
+      methods.setValue(
+        'isAddressSameWithDomicile',
+        `${data.employee.humanResource.isAddressSameWithDomicile}`
+      );
+      methods.setValue(
+        'domicileProvinceId',
+        data.employee.humanResource.domicileProvince?.id ?? ''
+      );
+      methods.setValue(
+        'domicileRegencyId',
+        data.employee.humanResource.domicileRegency?.id ?? ''
+      );
+      methods.setValue(
+        'domicileSubdistrictId',
+        data.employee.humanResource.domicileDistrict?.id ?? ''
+      );
+      methods.setValue(
+        'domicileVillageId',
+        data.employee.humanResource.domicileVillage?.id ?? ''
+      );
+      methods.setValue(
+        'domicileAddress',
+        data.employee.humanResource.domicileAddress ?? ''
+      );
+      methods.setValue('phoneNumber', data.employee.humanResource.phoneNumber);
+      methods.setValue('email', data.employee.humanResource.email);
+      methods.setValue(
+        'bloodType',
+        data.employee.humanResource.bloodType ?? ''
+      );
+      methods.setValue('resus', data.employee.humanResource.resus ?? '');
+      if (data.employee.humanResource.photo) {
+        setServerPhotos([data.employee.humanResource.photo]);
+      }
+      if (data.employee.humanResource.identityPhoto) {
+        setServerPhotosIdentity([data.employee.humanResource.identityPhoto]);
+      }
+    },
+  });
+  const { mutate, isLoading } = useUpdateCompanyHumanResource({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -200,8 +217,8 @@ const UpdateHumanResourcesBook = () => {
         message: t('humanResources.successUpdateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/master-data/human-resources');
-      methods.reset();
+      const url = `/master-data/company/update/human-resources/${companyId}/${employeId}/?tabs=employe-data`;
+      router.push(url, undefined, { shallow: true });
     },
   });
   /* #endregion  /**======== Query =========== */
@@ -211,8 +228,8 @@ const UpdateHumanResourcesBook = () => {
     const marriageStatusItem = marriageStatusSelect({});
     const relegionItem = relegionSelect({});
     const provinceItem = provinceSelect({
-      defaultValue: humanResourceData?.province?.id,
-      labelValue: humanResourceData?.province?.name,
+      defaultValue: employeeData?.humanResource?.province?.id,
+      labelValue: employeeData?.humanResource?.province?.name,
       onChange: (value) => {
         methods.setValue('provinceId', value ?? '');
         methods.setValue('regencyId', '');
@@ -223,8 +240,8 @@ const UpdateHumanResourcesBook = () => {
     });
     const regencyItem = regencySelect({
       provinceId,
-      defaultValue: humanResourceData?.regency?.id,
-      labelValue: humanResourceData?.regency?.name,
+      defaultValue: employeeData?.humanResource?.regency?.id,
+      labelValue: employeeData?.humanResource?.regency?.name,
       onChange: (value) => {
         methods.setValue('regencyId', value ?? '');
         methods.setValue('subdistrictId', '');
@@ -235,8 +252,8 @@ const UpdateHumanResourcesBook = () => {
     const subdistrictItem = subdistrictSelect({
       provinceId,
       regencyId,
-      defaultValue: humanResourceData?.district?.id,
-      labelValue: humanResourceData?.district?.name,
+      defaultValue: employeeData?.humanResource?.district?.id,
+      labelValue: employeeData?.humanResource?.district?.name,
       onChange: (value) => {
         methods.setValue('subdistrictId', value ?? '');
         methods.setValue('villageId', '');
@@ -244,8 +261,8 @@ const UpdateHumanResourcesBook = () => {
       },
     });
     const villageItem = villageSelect({
-      defaultValue: humanResourceData?.village?.id,
-      labelValue: humanResourceData?.village?.name,
+      defaultValue: employeeData?.humanResource?.village?.id,
+      labelValue: employeeData?.humanResource?.village?.name,
       provinceId,
       regencyId,
       subdistrictId,
@@ -253,8 +270,8 @@ const UpdateHumanResourcesBook = () => {
     const identityItem = identityRadio({});
 
     const domicileProvinceItem = provinceSelect({
-      defaultValue: humanResourceData?.domicileProvince?.id,
-      labelValue: humanResourceData?.domicileProvince?.name,
+      defaultValue: employeeData?.humanResource?.domicileProvince?.id,
+      labelValue: employeeData?.humanResource?.domicileProvince?.name,
       name: 'domicileProvinceId',
       onChange: (value) => {
         methods.setValue('domicileProvinceId', value ?? '');
@@ -267,8 +284,8 @@ const UpdateHumanResourcesBook = () => {
     const domicileRegencyItem = regencySelect({
       name: 'domicileRegencyId',
       provinceId: domicileProvinceId,
-      defaultValue: humanResourceData?.domicileRegency?.id,
-      labelValue: humanResourceData?.domicileRegency?.name,
+      defaultValue: employeeData?.humanResource?.domicileRegency?.id,
+      labelValue: employeeData?.humanResource?.domicileRegency?.name,
       onChange: (value) => {
         methods.setValue('domicileRegencyId', value ?? '');
         methods.setValue('domicileSubdistrictId', '');
@@ -278,8 +295,8 @@ const UpdateHumanResourcesBook = () => {
     });
     const domicileSubdistrictItem = subdistrictSelect({
       name: 'domicileSubdistrictId',
-      defaultValue: humanResourceData?.domicileDistrict?.id,
-      labelValue: humanResourceData?.domicileDistrict?.name,
+      defaultValue: employeeData?.humanResource?.domicileDistrict?.id,
+      labelValue: employeeData?.humanResource?.domicileDistrict?.name,
       provinceId: domicileProvinceId,
       regencyId: domicileRegencyId,
       onChange: (value) => {
@@ -290,8 +307,8 @@ const UpdateHumanResourcesBook = () => {
     });
     const domicileVillageItem = villageSelect({
       name: 'domicileVillageId',
-      defaultValue: humanResourceData?.domicileVillage?.id,
-      labelValue: humanResourceData?.domicileVillage?.name,
+      defaultValue: employeeData?.humanResource?.domicileVillage?.id,
+      labelValue: employeeData?.humanResource?.domicileVillage?.name,
       provinceId: domicileProvinceId,
       regencyId: domicileRegencyId,
       subdistrictId: domicileSubdistrictId,
@@ -317,7 +334,7 @@ const UpdateHumanResourcesBook = () => {
         setDeletedPhotoIds((prev) => [...prev, id]);
       },
       onReject: (files) => {
-        handleRejectFile<IUpdateHumanResourceValues>({
+        handleRejectFile<Omit<IUpdateCompanyHumanResourceValues, 'id'>>({
           methods,
           files,
           field: 'photo',
@@ -344,7 +361,7 @@ const UpdateHumanResourcesBook = () => {
         methods.clearErrors('identityPhoto');
       },
       onReject: (files) => {
-        handleRejectFile<ICreateHumanResourceValues>({
+        handleRejectFile<Omit<IUpdateCompanyHumanResourceValues, 'id'>>({
           methods,
           files,
           field: 'identityPhoto',
@@ -431,7 +448,7 @@ const UpdateHumanResourcesBook = () => {
     domicileProvinceId,
     domicileRegencyId,
     domicileSubdistrictId,
-    humanResourceData,
+    employeeData,
     serverPhotos,
     deletedPhotoIds,
     serverPhotosIdentity,
@@ -439,9 +456,9 @@ const UpdateHumanResourcesBook = () => {
   ]);
   /* #endregion  /**======== Field =========== */
 
-  const handleSubmitForm: SubmitHandler<ICreateHumanResourceValues> = (
-    data
-  ) => {
+  const handleSubmitForm: SubmitHandler<
+    Omit<IUpdateCompanyHumanResourceValues, 'id'>
+  > = (data) => {
     const outputArray = Object.keys(data).map((key) => ({
       name: key,
       value: data[key],
@@ -450,14 +467,15 @@ const UpdateHumanResourcesBook = () => {
     const deletedIdentityPhoto =
       serverPhotosIdentity && serverPhotosIdentity.length === 0;
     mutate({
-      id,
+      companyId: companyId,
+      employeId: employeId,
+      deletedIdentityPhoto,
+      deletedPhoto,
       data: outputArray,
-      deletedPhoto: deletedPhoto,
-      deletedIdentityPhoto: deletedIdentityPhoto,
     });
   };
   return (
-    <DashboardCard p={0} isLoading={humanResourceDataLoading}>
+    <DashboardCard p={0} isLoading={employeeDataLoading}>
       <GlobalFormGroup
         field={fieldHumanResources}
         methods={methods}
@@ -474,4 +492,4 @@ const UpdateHumanResourcesBook = () => {
   );
 };
 
-export default UpdateHumanResourcesBook;
+export default UpdateCompanyHumanResourcesBook;

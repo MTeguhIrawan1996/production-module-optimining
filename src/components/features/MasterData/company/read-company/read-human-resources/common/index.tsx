@@ -78,7 +78,9 @@ const ReadCompanyHumanResourcesPage = () => {
           updateButton={{
             label: 'Edit',
             onClick: () =>
-              router.push(`/master-data/human-resources/update/${companyId}`),
+              router.push(
+                `/master-data/company/update/human-resources/${companyId}/${employeId}`
+              ),
           }}
           titleStyle={{
             fw: 700,

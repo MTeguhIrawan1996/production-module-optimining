@@ -203,7 +203,9 @@
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.companyName)",
     "successDeleteMessage": "$t(commonTypography.company) berhasil dihapus",
     "successCreateEmployeDataMessage": "$t(commonTypography.employeDetail) berhasil dibuat",
-    "successCreatePositionHistoryMessage": "$t(commonTypography.positionHistory) berhasil dibuat"
+    "successCreatePositionHistoryMessage": "$t(commonTypography.positionHistory) berhasil dibuat",
+    "successUpdateEmployeDataMessage": "$t(commonTypography.employeDetail) berhasil diedit",
+    "successUpdatePositionHistoryMessage": "$t(commonTypography.positionHistory) berhasil diedit"
   },
   "heavyEquipment": {
     "heavyEquipmentTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
@@ -248,6 +250,7 @@
     "successCreateMessage": "$t(commonTypography.humanResources) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.humanResources) berhasil diedit",
     "formHumanResources": "$t(commonTypography.form) $t(commonTypography.create) $t(commonTypography.humanResources)",
+    "formUpdateHumanResources": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.humanResources)",
     "humanResourcesProfile": "$t(commonTypography.profile) $t(commonTypography.humanResources)",
     "humanResourcesIdentity": "Identitas $t(commonTypography.humanResources)"
   }

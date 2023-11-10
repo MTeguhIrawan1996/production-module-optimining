@@ -12,20 +12,23 @@ import {
   useUpdateCompanyEmployeeData,
 } from '@/services/graphql/mutation/master-data-company/useUpdateCompanyEmployeData';
 import { useReadAllEmployeStatus } from '@/services/graphql/query/global-select/useReadAllEmployeStatus';
+import { useReadOneEmployee } from '@/services/graphql/query/master-data-company/useReadOneCompanyHumanResource';
 import {
   employeStatusSelect,
   globalDate,
   nip,
 } from '@/utils/constants/Field/global-field';
+import { stringToDate } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { ControllerGroup } from '@/types/global';
 
-const CreateCompanyEmployeDataBook = () => {
+const UpdateCompanyEmployeDataBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const employeId = router.query?.id?.[1] as string;
+  const companyId = router.query?.id?.[0] as string;
 
   const methods = useForm<Omit<IUpdateEmployeeDataRequest, 'id'>>({
     defaultValues: {
@@ -37,9 +40,24 @@ const CreateCompanyEmployeDataBook = () => {
     },
     mode: 'onBlur',
   });
-
   const isStillWorking = methods.watch('isStillWorking');
-  const quitDate = methods.watch('quitDate');
+
+  const { employeeDataLoading } = useReadOneEmployee({
+    variables: {
+      id: employeId ?? '',
+    },
+    skip: !router.isReady,
+    onCompleted: (data) => {
+      const entryDate = stringToDate(data.employee.entryDate ?? undefined);
+      const quitDate = stringToDate(data.employee.quitDate ?? undefined);
+
+      methods.setValue('nip', data.employee.nip);
+      methods.setValue('statusId', data.employee.status.id);
+      methods.setValue('entryDate', entryDate);
+      methods.setValue('quitDate', quitDate);
+      methods.setValue('isStillWorking', data.employee.isStillWorking);
+    },
+  });
 
   const { employeeStatusesData } = useReadAllEmployeStatus({
     variables: {
@@ -55,11 +73,10 @@ const CreateCompanyEmployeDataBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('company.successCreateEmployeDataMessage'),
+        message: t('company.successUpdateEmployeDataMessage'),
         icon: <IconCheck />,
       });
-      const companyId = router.query?.id?.[0];
-      const url = `/master-data/company/create/human-resources/${companyId}/${employeId}/?tabs=position-history`;
+      const url = `/master-data/company/update/human-resources/${companyId}/${employeId}/?tabs=position-history`;
       router.push(url, undefined, { shallow: true });
     },
     onError: (error) => {
@@ -81,7 +98,6 @@ const CreateCompanyEmployeDataBook = () => {
       }
     },
   });
-
   const fieldEmployeData = React.useMemo(() => {
     const employeStatusItem = employeStatusSelect({
       data: employeStatusFilter,
@@ -98,16 +114,17 @@ const CreateCompanyEmployeDataBook = () => {
       disabled: isStillWorking,
       withAsterisk: false,
     });
+
     const field: ControllerGroup[] = [
       {
         group: t('commonTypography.employeDetail'),
         enableGroupLabel: true,
         groupCheckbox: {
           onChange: () => {
-            methods.setValue('quitDate', null);
-            isStillWorking
+            isStillWorking === true
               ? methods.setValue('isStillWorking', false)
               : methods.setValue('isStillWorking', true);
+            methods.setValue('quitDate', undefined);
           },
           checked: isStillWorking,
           label: t('commonTypography.isStillWorking'),
@@ -118,7 +135,7 @@ const CreateCompanyEmployeDataBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [employeStatusFilter, isStillWorking, quitDate]);
+  }, [employeStatusFilter, isStillWorking]);
 
   const handleSubmitForm: SubmitHandler<
     Omit<IUpdateEmployeeDataRequest, 'id'>
@@ -128,7 +145,7 @@ const CreateCompanyEmployeDataBook = () => {
     });
   };
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={employeeDataLoading}>
       <GlobalFormGroup
         field={fieldEmployeData}
         methods={methods}
@@ -145,4 +162,4 @@ const CreateCompanyEmployeDataBook = () => {
   );
 };
 
-export default CreateCompanyEmployeDataBook;
+export default UpdateCompanyEmployeDataBook;

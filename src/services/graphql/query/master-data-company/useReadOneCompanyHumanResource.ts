@@ -9,6 +9,7 @@ export const READ_ONE_COMPANY_HUMAN_RESOURCE = gql`
       entryDate
       quitDate
       nip
+      isStillWorking
       humanResource {
         id
         name
@@ -101,9 +102,11 @@ export const READ_ONE_COMPANY_HUMAN_RESOURCE = gql`
       positionHistories {
         id
         position {
+          id
           name
         }
         division {
+          id
           name
         }
         startDate
@@ -115,7 +118,9 @@ export const READ_ONE_COMPANY_HUMAN_RESOURCE = gql`
 `;
 
 export interface IEmployee {
+  id: string;
   nip: string;
+  isStillWorking: boolean;
   entryDate: string;
   quitDate: string;
   position: {
@@ -141,7 +146,7 @@ export interface IEmployee {
       name: string;
     };
     startDate: string;
-    isStill: string;
+    isStill: boolean;
     endDate: string;
   }[];
 }
