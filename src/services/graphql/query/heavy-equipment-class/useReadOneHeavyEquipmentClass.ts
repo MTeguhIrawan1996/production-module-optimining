@@ -5,23 +5,37 @@ export const READ_ONE_HEAVY_EQUIPMENT_CLASS = gql`
     heavyEquipmentClass(id: $id) {
       id
       name
-      heavyEquipmentTypes {
+      heavyEquipmentReferences {
         id
-        name
+        modelName
+        type {
+          name
+          brand {
+            name
+          }
+        }
       }
     }
   }
 `;
 
-export interface IHeavyEquipmentClassType {
+export interface IHeavyEquipmentClassModel {
   id: string;
-  name: string;
+  modelName: string;
+  type: {
+    id: string;
+    name: string;
+    brand: {
+      id: string;
+      name: string;
+    };
+  };
 }
 
 export interface IHeavyEquipmentClassData {
   id: string;
   name: string;
-  heavyEquipmentTypes: IHeavyEquipmentClassType[];
+  heavyEquipmentReferences: IHeavyEquipmentClassModel[];
 }
 
 export interface IHeavyEquipmentClassResponse {

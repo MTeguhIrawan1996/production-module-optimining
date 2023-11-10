@@ -28,6 +28,7 @@ interface IDashboardCardProps extends PaperProps {
   updateButton?: IPrimaryButtonProps;
   enebleBack?: boolean;
   enebleBackBottom?: boolean;
+  enebleBackBottomInner?: boolean;
   isLoading?: boolean;
   searchBar?: ISerachBar;
   MultipleFilter?: IMultipleFilterProps;
@@ -42,6 +43,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
   MultipleFilter: MultiFilter,
   enebleBack,
   enebleBackBottom,
+  enebleBackBottomInner,
   addButton,
   updateButton,
   searchBar,
@@ -131,6 +133,16 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
           overlayBlur={2}
           zIndex={5}
         />
+        {enebleBackBottomInner ? (
+          <PrimaryButton
+            type="button"
+            variant="outline"
+            leftIcon={<IconChevronLeft size="1rem" />}
+            label={t('commonTypography.back')}
+            mt="lg"
+            onClick={() => router.back()}
+          />
+        ) : null}
       </Paper>
       {enebleBackBottom ? (
         <PrimaryButton

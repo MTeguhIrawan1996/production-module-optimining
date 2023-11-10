@@ -3,12 +3,12 @@ import { ApolloError, gql, useMutation } from '@apollo/client';
 export const CREATE_HEAVY_EQUIPMENT_CALSS = gql`
   mutation CreateHeavyEquipmentClass(
     $name: String!
-    $heavyEquipmentTypeIds: [String!]!
+    $heavyEquipmentReferenceIds: [String!]!
   ) {
     createHeavyEquipmentClass(
       createHeavyEquipmentClassInput: {
         name: $name
-        heavyEquipmentTypeIds: $heavyEquipmentTypeIds
+        heavyEquipmentReferenceIds: $heavyEquipmentReferenceIds
       }
     ) {
       id
@@ -18,7 +18,7 @@ export const CREATE_HEAVY_EQUIPMENT_CALSS = gql`
 
 export interface ICreateHeavyEquipmentClassRequest {
   name: string;
-  heavyEquipmentTypeIds: string[];
+  heavyEquipmentReferenceIds: string[];
 }
 
 interface ICreateHeavyEquipmentClassResponse {

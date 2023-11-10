@@ -39,7 +39,7 @@ const SelectionButtonModal: React.FC<ISelectionButtonModalProps> = ({
       onClose={actionSelectionModal}
       centered
       radius="xs"
-      size={900}
+      size="auto"
     >
       <Modal.Overlay />
       <Modal.Content>
@@ -47,7 +47,7 @@ const SelectionButtonModal: React.FC<ISelectionButtonModalProps> = ({
           <Modal.CloseButton />
         </Modal.Header>
         <Modal.Body p={0}>
-          <ScrollArea h="calc(100vh - 300px)">
+          <ScrollArea>
             <Group
               spacing="lg"
               align="center"

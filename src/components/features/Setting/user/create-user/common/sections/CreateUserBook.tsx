@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Grid, Paper, RadioProps, Stack, Text } from '@mantine/core';
+import { Grid, Group, Paper, RadioProps, Stack, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
+import { IconChevronLeft } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
@@ -195,14 +196,20 @@ const CreateUserBook = () => {
               }}
               radioComponent={roleItem ?? []}
             />
-            <PrimaryButton
-              label={t('commonTypography.save')}
-              type="submit"
-              loading={isLoading}
-              sx={{
-                alignSelf: 'flex-end',
-              }}
-            />
+            <Group w="100%" position="apart">
+              <PrimaryButton
+                label={t('commonTypography.back')}
+                type="button"
+                variant="outline"
+                leftIcon={<IconChevronLeft size="1rem" />}
+                onClick={() => router.back()}
+              />
+              <PrimaryButton
+                label={t('commonTypography.save')}
+                type="submit"
+                loading={isLoading}
+              />
+            </Group>
           </Stack>
         </form>
       </FormProvider>

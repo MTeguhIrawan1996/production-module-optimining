@@ -24,7 +24,24 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({
 }) => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const { userAuthData } = useReadAuthUser({});
+  const [name, setName] = React.useState<string>('');
+  const { userAuthData } = useReadAuthUser({
+    onCompleted: (data) => {
+      setName(data.authUser.name);
+    },
+    skip: name !== '',
+  });
+  const renderName = React.useMemo(() => {
+    return (
+      <Group spacing="xs">
+        <Text component="span">{name}</Text>
+        <ActionIcon color="brand.5" variant="filled" radius={4} size="lg">
+          <IconUser size="1.625rem" />
+        </ActionIcon>
+      </Group>
+    );
+  }, [name]);
+
   return (
     <Box top={0} p={0} pos="sticky" w="100%" sx={{ zIndex: 10 }}>
       <Group position="apart" h={64} px={26} bg="#FFFFFF" className="shadow">
@@ -41,14 +58,7 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({
           )}
         </ActionIcon>
         <Menu shadow="md" width={350} position="bottom-end">
-          <Menu.Target>
-            <Group spacing="xs">
-              <Text component="span">{userAuthData?.name}</Text>
-              <ActionIcon color="brand.5" variant="filled" radius={4} size="lg">
-                <IconUser size="1.625rem" />
-              </ActionIcon>
-            </Group>
-          </Menu.Target>
+          <Menu.Target>{renderName}</Menu.Target>
           <Menu.Dropdown>
             <Stack p="xs" spacing="xs">
               <KeyValueList

@@ -90,6 +90,7 @@
     "yearModel": "Tahun Model",
     "type": "Jenis",
     "heavyEquipmentType": "Jenis Alat Berat",
+    "heavyEquipmentModel": "Model Alat Berat",
     "document": "Dokumen",
     "yesDelete": "Ya Hapus",
     "photo": "Foto",
@@ -227,7 +228,8 @@
     "successUpdateMessage": "$t(heavyEquipmentClass.heavyEquipmentClassTitle) berhasil diubah",
     "successDeleteMessage": "$t(heavyEquipmentClass.heavyEquipmentClassTitle) berhasil dihapus",
     "alertDescConfirmDelete": "Data kemungkinan berelasi dengan data lain",
-    "createHeavyEquipmentClassType": "$t(commonTypography.create) $t(commonTypography.type)"
+    "createHeavyEquipmentClassType": "$t(commonTypography.create) $t(commonTypography.type)",
+    "createHeavyEquipmentClassModel": "$t(commonTypography.create) $t(commonTypography.model)"
   },
   "humanResources": {
     "createHumanResources": "$t(commonTypography.create) $t(commonTypography.humanResources)",

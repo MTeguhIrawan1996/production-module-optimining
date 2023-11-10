@@ -37,12 +37,12 @@ const CreateHeavyEquipmentClassBook = () => {
     resolver: zodResolver(createHeavyEquipmentClassSchema),
     defaultValues: {
       name: '',
-      heavyEquipmentTypeIds: [],
+      heavyEquipmentReferenceIds: [],
     },
     mode: 'onBlur',
   });
-  const errorsHeavyEquipmentTypeIds =
-    methods.formState.errors.heavyEquipmentTypeIds;
+  const errorsHeavyEquipmentReferenceIds =
+    methods.formState.errors.heavyEquipmentReferenceIds;
 
   /* #endregion  /**======== Methods =========== */
 
@@ -84,11 +84,11 @@ const CreateHeavyEquipmentClassBook = () => {
   const handleSubmitForm: SubmitHandler<ICreateHeavyEquipmentClassRequest> = (
     data
   ) => {
-    const { name, heavyEquipmentTypeIds } = data;
+    const { name, heavyEquipmentReferenceIds } = data;
     executeCreate({
       variables: {
         name,
-        heavyEquipmentTypeIds,
+        heavyEquipmentReferenceIds,
       },
     });
   };
@@ -109,7 +109,7 @@ const CreateHeavyEquipmentClassBook = () => {
       const newArray = otherTypesField
         .map((item) => (item.key === key ? '' : item.id))
         .filter((id) => id !== '');
-      methods.setValue('heavyEquipmentTypeIds', newArray);
+      methods.setValue('heavyEquipmentReferenceIds', newArray);
     }
   };
 
@@ -122,7 +122,7 @@ const CreateHeavyEquipmentClassBook = () => {
     const newArray = otherTypesField
       .map((item) => (item.key === key ? newId : item.id))
       .filter((id) => id !== '');
-    methods.setValue('heavyEquipmentTypeIds', newArray);
+    methods.setValue('heavyEquipmentReferenceIds', newArray);
   };
 
   const handleClearId = (key: number) => {
@@ -134,7 +134,7 @@ const CreateHeavyEquipmentClassBook = () => {
     const newArray = otherTypesField
       .map((item) => (item.key === key ? '' : item.id))
       .filter((id) => id !== '');
-    methods.setValue('heavyEquipmentTypeIds', newArray);
+    methods.setValue('heavyEquipmentReferenceIds', newArray);
   };
   /* #endregion  /**======== Fc =========== */
 
@@ -142,20 +142,20 @@ const CreateHeavyEquipmentClassBook = () => {
   const fieldCreateHeavyEquipmentClass = React.useMemo(() => {
     const selectedTypes: ControllerProps[] = otherTypesField.map(
       ({ id, key }) => ({
-        control: 'select-heavy-equipment-types-input',
+        control: 'select-heavy-equipment-reference-input',
         fields: otherTypesField,
-        name: 'type',
-        label: 'type',
+        name: 'model',
+        label: 'model',
         value: id,
         withAsterisk: true,
-        placeholder: 'chooseType',
+        placeholder: t('commonTypography.chooseModel'),
         handleSetValue: (value, name) => {
           handleUpdateId(key, value, name ?? '');
-          methods.trigger('heavyEquipmentTypeIds');
+          methods.trigger('heavyEquipmentReferenceIds');
         },
         handleClearValue: () => {
           handleClearId(key);
-          methods.trigger('heavyEquipmentTypeIds');
+          methods.trigger('heavyEquipmentReferenceIds');
         },
         deleteFieldButton: {
           onDeletedField: () => {
@@ -163,7 +163,8 @@ const CreateHeavyEquipmentClassBook = () => {
           },
         },
         error:
-          errorsHeavyEquipmentTypeIds && errorsHeavyEquipmentTypeIds.message,
+          errorsHeavyEquipmentReferenceIds &&
+          errorsHeavyEquipmentReferenceIds.message,
         nothingFound: null,
       })
     );
@@ -181,11 +182,11 @@ const CreateHeavyEquipmentClassBook = () => {
         ],
       },
       {
-        group: t('commonTypography.heavyEquipmentType'),
+        group: t('commonTypography.heavyEquipmentModel'),
         enableGroupLabel: true,
         actionGroup: {
           addButton: {
-            label: t('heavyEquipmentClass.createHeavyEquipmentClassType'),
+            label: t('heavyEquipmentClass.createHeavyEquipmentClassModel'),
             onClick: handleAddOtherTypesField,
           },
         },
@@ -195,7 +196,7 @@ const CreateHeavyEquipmentClassBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [otherTypesField, errorsHeavyEquipmentTypeIds]);
+  }, [otherTypesField, errorsHeavyEquipmentReferenceIds]);
   /* #endregion  /**======== Field =========== */
 
   return (

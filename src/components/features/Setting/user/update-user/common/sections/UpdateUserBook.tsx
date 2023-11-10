@@ -277,7 +277,6 @@ const UpdateUserBook = () => {
       withBorder
       shadow="sm"
       isLoading={userDataLoading}
-      enebleBack
       paperStackProps={{
         spacing: 'sm',
       }}
@@ -289,6 +288,7 @@ const UpdateUserBook = () => {
         name={userData?.name}
         role={userData?.role.name}
         submitForm={handleSubmitForm}
+        enebleBackBottomInner
         loadingSubmitButton={isLoading}
         isDirtyPhoto={() => setIsDirtyPhoto(true)}
         isDirty={isDirty || isDirtyPhoto}
