@@ -115,9 +115,9 @@ const UserBook = () => {
           fetching: usersLoading,
         }}
         emptyStateProps={{
-          title: 'Belum ada data',
+          title: t('commonTypography.dataNotfound'),
           actionButton: {
-            label: 'Tambah Role',
+            label: t('user.createUser'),
           },
         }}
         paginationProps={{
