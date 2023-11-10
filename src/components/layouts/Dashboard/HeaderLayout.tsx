@@ -43,7 +43,7 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({
         <Menu shadow="md" width={350} position="bottom-end">
           <Menu.Target>
             <Group spacing="xs">
-              <Text component="span">Admin</Text>
+              <Text component="span">{userAuthData?.name}</Text>
               <ActionIcon color="brand.5" variant="filled" radius={4} size="lg">
                 <IconUser size="1.625rem" />
               </ActionIcon>
