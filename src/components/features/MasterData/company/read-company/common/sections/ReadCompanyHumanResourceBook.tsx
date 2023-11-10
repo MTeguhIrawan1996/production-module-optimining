@@ -272,7 +272,7 @@ const ReadCompanyHumanResourceBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         setIsOpenDeleteConfirmation((prev) => !prev);
-                        setIdEmploye(id);
+                        setIdEmploye(employeId);
                       },
                     }}
                   />
