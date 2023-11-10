@@ -32,7 +32,7 @@ const ReadCompanyHumanResourceBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const id = router.query.id as string;
-  const [idEmploye, setIdEmploye] = React.useState<string>('');
+  const [employeId, setIdEmploye] = React.useState<string>('');
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
   const [page, setPage] = React.useState<number>(1);
@@ -194,7 +194,7 @@ const ReadCompanyHumanResourceBook = () => {
   const handleDelete = async () => {
     await executeDelete({
       variables: {
-        id: idEmploye,
+        id: employeId,
       },
     });
   };
@@ -249,28 +249,30 @@ const ReadCompanyHumanResourceBook = () => {
             {
               accessor: 'action',
               title: 'Aksi',
-              render: ({ id }) => {
+              render: ({ id: employeId }) => {
                 return (
                   <GlobalKebabButton
                     actionRead={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        // eslint-disable-next-line no-console
-                        console.log('red', id);
+                        router.push(
+                          `/master-data/company/read/human-resources/${id}/${employeId}`
+                        );
                       },
                     }}
                     actionUpdate={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        // eslint-disable-next-line no-console
-                        console.log('up');
+                        router.push(
+                          `/master-data/company/update/human-resources/${id}/${employeId}`
+                        );
                       },
                     }}
                     actionDelete={{
                       onClick: (e) => {
                         e.stopPropagation();
                         setIsOpenDeleteConfirmation((prev) => !prev);
-                        setIdEmploye(id);
+                        setIdEmploye(employeId);
                       },
                     }}
                   />

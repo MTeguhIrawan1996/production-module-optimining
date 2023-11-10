@@ -41,6 +41,7 @@ const ReadManagementRoleBook = () => {
   return (
     <DashboardCard
       withBorder
+      enebleBackBottomInner
       shadow="xs"
       title={t('managementRole.managementRoleTitle')}
       titleStyle={{

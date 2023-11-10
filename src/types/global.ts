@@ -17,6 +17,7 @@ import { IProvinceSelectInputRhfProps } from '@/components/elements/input/Provin
 import { IRadioInputProps } from '@/components/elements/input/RadioInputRhf';
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
+import { ISelectHeavyEquipmentReferenceInputProps } from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
 import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
@@ -50,6 +51,7 @@ export type ControllerProps =
   | IIdentityTypesRadioInputProps
   | IPositionSelectInputRhfProps
   | IDivisionSelectInputRhfProps
+  | ISelectHeavyEquipmentReferenceInputProps
   | IDateInputProps;
 
 export type ControllerGroup = {

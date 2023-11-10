@@ -24,7 +24,7 @@ const UpdateHeavyEquipmentClassBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const [otherTypesField, setOtherTypesField] = React.useState<
+  const [otherModelField, setOtherModelField] = React.useState<
     ISelectTypesHeavyEquipment[]
   >([
     {
@@ -39,12 +39,12 @@ const UpdateHeavyEquipmentClassBook = () => {
     resolver: zodResolver(createHeavyEquipmentClassSchema),
     defaultValues: {
       name: '',
-      heavyEquipmentTypeIds: [],
+      heavyEquipmentReferenceIds: [],
     },
     mode: 'onBlur',
   });
-  const errorsHeavyEquipmentTypeIds =
-    methods.formState.errors.heavyEquipmentTypeIds;
+  const errorsHeavyEquipmentReferenceIds =
+    methods.formState.errors.heavyEquipmentReferenceIds;
 
   /* #endregion  /**======== Methods =========== */
 
@@ -55,21 +55,21 @@ const UpdateHeavyEquipmentClassBook = () => {
     },
     skip: !router.isReady,
     onCompleted: ({ heavyEquipmentClass }) => {
-      const newOtherTypes = heavyEquipmentClass.heavyEquipmentTypes.map(
+      const newOtherModel = heavyEquipmentClass.heavyEquipmentReferences.map(
         (val, i) => {
           return {
             key: i + 1,
             id: val.id,
-            name: val.name,
+            name: val.modelName,
           };
         }
       );
-      const idsArray = heavyEquipmentClass.heavyEquipmentTypes.map(
+      const idsArray = heavyEquipmentClass.heavyEquipmentReferences.map(
         (item) => item.id
       );
       methods.setValue('name', heavyEquipmentClass.name);
-      methods.setValue('heavyEquipmentTypeIds', idsArray);
-      setOtherTypesField(newOtherTypes);
+      methods.setValue('heavyEquipmentReferenceIds', idsArray);
+      setOtherModelField(newOtherModel);
     },
   });
 
@@ -112,87 +112,88 @@ const UpdateHeavyEquipmentClassBook = () => {
   const handleSubmitForm: SubmitHandler<IUpdateHeavyEquipmentClassRequest> = (
     data
   ) => {
-    const { name, heavyEquipmentTypeIds } = data;
+    const { name, heavyEquipmentReferenceIds } = data;
     executeUpdate({
       variables: {
         id,
         name,
-        heavyEquipmentTypeIds,
+        heavyEquipmentReferenceIds,
       },
     });
   };
 
-  const handleAddOtherTypesField = () => {
-    const lastIndex = otherTypesField.length - 1;
-    const newOtherTypesField = {
-      key: otherTypesField[lastIndex].key + 1,
+  const handleAddOtherModelField = () => {
+    const lastIndex = otherModelField.length - 1;
+    const newOtherModelField = {
+      key: otherModelField[lastIndex].key + 1,
       id: '',
       name: '',
     };
-    setOtherTypesField([...otherTypesField, newOtherTypesField]);
+    setOtherModelField([...otherModelField, newOtherModelField]);
   };
 
-  const handleRemoveFieldTypes = (key: number) => {
-    if (otherTypesField.length > 1) {
-      setOtherTypesField((prev) => prev.filter((val) => val.key !== key));
-      const newArray = otherTypesField
+  const handleRemoveFieldModels = (key: number) => {
+    if (otherModelField.length > 1) {
+      setOtherModelField((prev) => prev.filter((val) => val.key !== key));
+      const newArray = otherModelField
         .map((item) => (item.key === key ? '' : item.id))
         .filter((id) => id !== '');
-      methods.setValue('heavyEquipmentTypeIds', newArray);
+      methods.setValue('heavyEquipmentReferenceIds', newArray);
     }
   };
 
   const handleUpdateId = (key: number, newId: string, name: string) => {
-    setOtherTypesField((prevData) =>
+    setOtherModelField((prevData) =>
       prevData.map((item) =>
         item.key === key ? { ...item, id: newId, name } : item
       )
     );
-    const newArray = otherTypesField
+    const newArray = otherModelField
       .map((item) => (item.key === key ? newId : item.id))
       .filter((id) => id !== '');
-    methods.setValue('heavyEquipmentTypeIds', newArray);
+    methods.setValue('heavyEquipmentReferenceIds', newArray);
   };
 
   const handleClearId = (key: number) => {
-    setOtherTypesField((prevData) =>
+    setOtherModelField((prevData) =>
       prevData.map((item) =>
         item.key === key ? { ...item, id: '', name: '' } : item
       )
     );
-    const newArray = otherTypesField
+    const newArray = otherModelField
       .map((item) => (item.key === key ? '' : item.id))
       .filter((id) => id !== '');
-    methods.setValue('heavyEquipmentTypeIds', newArray);
+    methods.setValue('heavyEquipmentReferenceIds', newArray);
   };
   /* #endregion  /**======== Fc =========== */
 
   /* #   /**=========== Field =========== */
   const fieldHeavyEquipmentClass = React.useMemo(() => {
-    const selectedTypes: ControllerProps[] = otherTypesField.map(
+    const selectedModels: ControllerProps[] = otherModelField.map(
       ({ id, key }) => ({
-        control: 'select-heavy-equipment-types-input',
-        fields: otherTypesField,
-        name: 'type',
-        label: 'type',
+        control: 'select-heavy-equipment-reference-input',
+        fields: otherModelField,
+        name: 'model',
+        label: 'model',
         value: id,
         withAsterisk: true,
-        placeholder: 'chooseType',
+        placeholder: t('commonTypography.chooseModel'),
         handleSetValue: (value, name) => {
           handleUpdateId(key, value, name ?? '');
-          methods.trigger('heavyEquipmentTypeIds');
+          methods.trigger('heavyEquipmentReferenceIds');
         },
         handleClearValue: () => {
           handleClearId(key);
-          methods.trigger('heavyEquipmentTypeIds');
+          methods.trigger('heavyEquipmentReferenceIds');
         },
         deleteFieldButton: {
           onDeletedField: () => {
-            handleRemoveFieldTypes(key);
+            handleRemoveFieldModels(key);
           },
         },
         error:
-          errorsHeavyEquipmentTypeIds && errorsHeavyEquipmentTypeIds.message,
+          errorsHeavyEquipmentReferenceIds &&
+          errorsHeavyEquipmentReferenceIds.message,
         nothingFound: null,
       })
     );
@@ -210,21 +211,21 @@ const UpdateHeavyEquipmentClassBook = () => {
         ],
       },
       {
-        group: t('commonTypography.heavyEquipmentType'),
+        group: t('commonTypography.heavyEquipmentModel'),
         enableGroupLabel: true,
         actionGroup: {
           addButton: {
-            label: t('heavyEquipmentClass.createHeavyEquipmentClassType'),
-            onClick: handleAddOtherTypesField,
+            label: t('heavyEquipmentClass.createHeavyEquipmentClassModel'),
+            onClick: handleAddOtherModelField,
           },
         },
-        formControllers: selectedTypes,
+        formControllers: selectedModels,
       },
     ];
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [otherTypesField, errorsHeavyEquipmentTypeIds]);
+  }, [otherModelField, errorsHeavyEquipmentReferenceIds]);
   /* #endregion  /**======== Field =========== */
 
   return (

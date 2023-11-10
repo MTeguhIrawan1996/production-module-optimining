@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Grid, Paper, Stack } from '@mantine/core';
+import { Grid, Group, Paper, Stack } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
+import { IconChevronLeft } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
@@ -151,13 +152,20 @@ const CreateManagementRoleBook = () => {
               dataComponents={moduleData}
               handleCheckedAll={handleCheckedAll}
             />
-            <Box sx={{ alignSelf: 'flex-end' }}>
+            <Group w="100%" position="apart">
+              <PrimaryButton
+                label={t('commonTypography.back')}
+                type="button"
+                variant="outline"
+                leftIcon={<IconChevronLeft size="1rem" />}
+                onClick={() => router.back()}
+              />
               <PrimaryButton
                 label={t('commonTypography.save')}
                 type="submit"
                 loading={loading}
               />
-            </Box>
+            </Group>
           </Stack>
         </form>
       </FormProvider>

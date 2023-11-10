@@ -84,11 +84,13 @@ const HeavyEquipmentClassBook = () => {
             },
             {
               accessor: 'type',
-              title: t('commonTypography.type'),
+              title: t('commonTypography.model'),
               noWrap: false,
               width: 450,
-              render: ({ heavyEquipmentTypes }) => {
-                const type = heavyEquipmentTypes.map((val) => val.name);
+              render: ({ heavyEquipmentReferences }) => {
+                const type = heavyEquipmentReferences.map(
+                  (val) => val.modelName
+                );
                 return type?.join(', ');
               },
             },

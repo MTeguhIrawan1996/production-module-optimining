@@ -69,15 +69,6 @@ const ManagementRoleBook = () => {
         tableProps={{
           withColumnBorders: false,
           highlightOnHover: true,
-          defaultColumnProps: {
-            textAlignment: 'center',
-            titleSx: (theme) => ({
-              '&&': {
-                paddingTop: theme.spacing.md,
-                paddingBottom: theme.spacing.md,
-              },
-            }),
-          },
           columns: [
             { accessor: 'name', title: t('commonTypography.role'), width: 400 },
             {

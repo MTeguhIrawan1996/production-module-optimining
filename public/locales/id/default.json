@@ -30,6 +30,7 @@
     "detailAddress": "Detail Alamat",
     "profile": "Profil",
     "nip": "NIP",
+    "nip2": "NIP (Nomor Induk Pegawai)",
     "division": "Divisi",
     "employeStatus": "Status Pegawai",
     "employeData": "Data Pegawai",
@@ -60,6 +61,8 @@
     "information": "Informasi",
     "choose": "Pilih",
     "chooseAll": "Pilih Semua",
+    "entryDate": "Tanggal Masuk Bekerja",
+    "quitDate": "Tanggal Berhanti Bekerja",
     "setting": "Pengaturan",
     "contact": "Kontak",
     "dataNotfound": "Belum ada data",
@@ -90,6 +93,7 @@
     "yearModel": "Tahun Model",
     "type": "Jenis",
     "heavyEquipmentType": "Jenis Alat Berat",
+    "heavyEquipmentModel": "Model Alat Berat",
     "document": "Dokumen",
     "yesDelete": "Ya Hapus",
     "photo": "Foto",
@@ -101,6 +105,9 @@
     "identityNumber": "NIK",
     "email": "Email",
     "domicile": "Domisili",
+    "domicileAddress": "Domisili",
+    "dateOfOffice": "Tanggal Menjabat",
+    "dateComplateOffice": "Tanggal Selesai Menjabat",
     "checkboxAddressDomicile": "Alamat Domisili sesuai dengan Kartu Identitas (KTP/KTA/Paspor)",
     "bloodType": "Golongan Darah",
     "resus": "Resus Darah",
@@ -196,7 +203,9 @@
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.companyName)",
     "successDeleteMessage": "$t(commonTypography.company) berhasil dihapus",
     "successCreateEmployeDataMessage": "$t(commonTypography.employeDetail) berhasil dibuat",
-    "successCreatePositionHistoryMessage": "$t(commonTypography.positionHistory) berhasil dibuat"
+    "successCreatePositionHistoryMessage": "$t(commonTypography.positionHistory) berhasil dibuat",
+    "successUpdateEmployeDataMessage": "$t(commonTypography.employeDetail) berhasil diedit",
+    "successUpdatePositionHistoryMessage": "$t(commonTypography.positionHistory) berhasil diedit"
   },
   "heavyEquipment": {
     "heavyEquipmentTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
@@ -227,7 +236,8 @@
     "successUpdateMessage": "$t(heavyEquipmentClass.heavyEquipmentClassTitle) berhasil diubah",
     "successDeleteMessage": "$t(heavyEquipmentClass.heavyEquipmentClassTitle) berhasil dihapus",
     "alertDescConfirmDelete": "Data kemungkinan berelasi dengan data lain",
-    "createHeavyEquipmentClassType": "$t(commonTypography.create) $t(commonTypography.type)"
+    "createHeavyEquipmentClassType": "$t(commonTypography.create) $t(commonTypography.type)",
+    "createHeavyEquipmentClassModel": "$t(commonTypography.create) $t(commonTypography.model)"
   },
   "humanResources": {
     "createHumanResources": "$t(commonTypography.create) $t(commonTypography.humanResources)",
@@ -240,6 +250,7 @@
     "successCreateMessage": "$t(commonTypography.humanResources) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.humanResources) berhasil diedit",
     "formHumanResources": "$t(commonTypography.form) $t(commonTypography.create) $t(commonTypography.humanResources)",
+    "formUpdateHumanResources": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.humanResources)",
     "humanResourcesProfile": "$t(commonTypography.profile) $t(commonTypography.humanResources)",
     "humanResourcesIdentity": "Identitas $t(commonTypography.humanResources)"
   }

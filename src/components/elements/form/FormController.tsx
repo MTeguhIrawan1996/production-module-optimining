@@ -21,6 +21,7 @@ import {
 } from '@/components/elements';
 import DivisionSelectInputRhf from '@/components/elements/input/DivisionSelectInputRhf';
 import PositionSelectInputRhf from '@/components/elements/input/PositionSelectInputRhf';
+import SelectHeavyEquipmentReferenceInput from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
 
 import { ControllerProps } from '@/types/global';
 
@@ -64,6 +65,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <PositionSelectInputRhf {...props} />;
     case 'division-select-input':
       return <DivisionSelectInputRhf {...props} />;
+    case 'select-heavy-equipment-reference-input':
+      return <SelectHeavyEquipmentReferenceInput {...props} />;
     default:
       return null;
   }

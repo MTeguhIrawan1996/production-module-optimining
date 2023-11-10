@@ -62,7 +62,7 @@ const ReadHEavyEquipmentBook = () => {
       withBorder
       shadow="xs"
       isLoading={heavyEquipmentReferenceDataLoading}
-      enebleBack
+      enebleBackBottomInner
       paperStackProps={{
         spacing: 'sm',
       }}
