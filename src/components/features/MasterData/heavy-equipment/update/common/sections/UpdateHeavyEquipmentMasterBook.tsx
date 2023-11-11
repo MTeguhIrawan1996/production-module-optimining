@@ -59,38 +59,44 @@ const UpdateHeavyEquipmentMasterBook = () => {
   });
   const brandId = methods.watch('brandId');
   const typeId = methods.watch('typeId');
+  const referenceId = methods.watch('referenceId');
 
   /* #   /**=========== Query =========== */
 
-  const { heavyEquipmentMasterDataLoading } = useReadOneHeavyEquipmentMaster({
-    variables: {
-      id,
-    },
-    skip: !router.isReady,
-    onCompleted: ({ heavyEquipment }) => {
-      methods.setValue(
-        'brandId',
-        heavyEquipment.reference.type?.brand?.id ?? ''
-      );
-      methods.setValue('chassisNumber', heavyEquipment.chassisNumber ?? '');
-      methods.setValue('referenceId', heavyEquipment.reference.id ?? '');
-      methods.setValue('specification', heavyEquipment.specification ?? '');
-      methods.setValue('typeId', heavyEquipment.reference.type?.id ?? '');
-      methods.setValue('classId', heavyEquipment.class?.id ?? '');
-      methods.setValue('createdYear', `${heavyEquipment.createdYear}` ?? '');
-      methods.setValue('vehicleNumber', heavyEquipment.vehicleNumber ?? '');
-      methods.setValue(
-        'eligibilityStatusId',
-        heavyEquipment.eligibilityStatus?.id ?? ''
-      );
-      methods.setValue('engineNumber', heavyEquipment.engineNumber ?? '');
+  const { heavyEquipmentMasterData, heavyEquipmentMasterDataLoading } =
+    useReadOneHeavyEquipmentMaster({
+      variables: {
+        id,
+      },
+      skip: !router.isReady,
+      onCompleted: ({ heavyEquipment }) => {
+        methods.setValue(
+          'brandId',
+          heavyEquipment.reference.type?.brand?.id ?? ''
+        );
+        methods.setValue('chassisNumber', heavyEquipment.chassisNumber ?? '');
+        methods.setValue('referenceId', heavyEquipment.reference.id ?? '');
+        methods.setValue('specification', heavyEquipment.specification ?? '');
+        methods.setValue('typeId', heavyEquipment.reference.type?.id ?? '');
+        methods.setValue('classId', heavyEquipment.class?.id ?? '');
+        methods.setValue(
+          'brandId',
+          heavyEquipment.reference.type?.brand?.id ?? ''
+        );
+        methods.setValue('createdYear', `${heavyEquipment.createdYear}` ?? '');
+        methods.setValue('vehicleNumber', heavyEquipment.vehicleNumber ?? '');
+        methods.setValue(
+          'eligibilityStatusId',
+          heavyEquipment.eligibilityStatus?.id ?? ''
+        );
+        methods.setValue('engineNumber', heavyEquipment.engineNumber ?? '');
 
-      setServerPhotos(heavyEquipment.photos ?? []);
-      if (heavyEquipment.vehicleNumberPhoto) {
-        setServerVehicleNumberPhoto([heavyEquipment.vehicleNumberPhoto]);
-      }
-    },
-  });
+        setServerPhotos(heavyEquipment.photos ?? []);
+        if (heavyEquipment.vehicleNumberPhoto) {
+          setServerVehicleNumberPhoto([heavyEquipment.vehicleNumberPhoto]);
+        }
+      },
+    });
 
   const { mutate, isLoading } = useUpdateHeavyEquipmentMaster({
     onError: (err) => {
@@ -144,6 +150,8 @@ const UpdateHeavyEquipmentMasterBook = () => {
     });
     const brandItem = brandSelect({
       label: 'brandHeavyEquipment',
+      defaultValue: brandId,
+      labelValue: heavyEquipmentMasterData?.reference.type?.brand?.name,
       onChange: (value) => {
         methods.setValue('brandId', value ?? '');
         methods.setValue('typeId', '');
@@ -154,6 +162,8 @@ const UpdateHeavyEquipmentMasterBook = () => {
     const typeItem = typeSelect({
       label: 'typeHeavyEquipment',
       brandId,
+      defaultValue: typeId,
+      labelValue: heavyEquipmentMasterData?.reference.type?.name,
       onChange: (value) => {
         methods.setValue('typeId', value ?? '');
         methods.setValue('referenceId', '');
@@ -163,6 +173,8 @@ const UpdateHeavyEquipmentMasterBook = () => {
     const modelItem = modelSelect({
       label: 'modelHeavyEquipment',
       name: 'referenceId',
+      defaultValue: referenceId,
+      labelValue: heavyEquipmentMasterData?.reference.modelName,
       brandId,
       typeId,
       onChange: (value) => {
@@ -260,11 +272,13 @@ const UpdateHeavyEquipmentMasterBook = () => {
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    heavyEquipmentMasterData,
     brandId,
     typeId,
     serverPhotos,
     deletedPhotoIds,
     serverVehicleNumberPhoto,
+    referenceId,
   ]);
   /* #endregion  /**======== Field =========== */
 
