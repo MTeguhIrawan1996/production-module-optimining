@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -18,6 +19,7 @@ import {
   globalDate,
   nip,
 } from '@/utils/constants/Field/global-field';
+import { createCompanyEmployeSchema } from '@/utils/form-validation/company/company-employe-validation';
 import { stringToDate } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
@@ -31,6 +33,7 @@ const UpdateCompanyEmployeDataBook = () => {
   const companyId = router.query?.id?.[0] as string;
 
   const methods = useForm<Omit<IUpdateEmployeeDataRequest, 'id'>>({
+    resolver: zodResolver(createCompanyEmployeSchema),
     defaultValues: {
       nip: '',
       statusId: '',
@@ -107,12 +110,15 @@ const UpdateCompanyEmployeDataBook = () => {
     const entryDateItem = globalDate({
       name: 'entryDate',
       label: 'entryDate',
+      withAsterisk: false,
+      clearable: true,
     });
     const quitDateItem = globalDate({
       name: 'quitDate',
       label: 'quitDate',
       disabled: isStillWorking,
       withAsterisk: false,
+      clearable: true,
     });
 
     const field: ControllerGroup[] = [
