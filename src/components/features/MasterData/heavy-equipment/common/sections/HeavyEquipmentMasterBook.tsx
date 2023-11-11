@@ -250,7 +250,7 @@ const HeavyEquipmentMasterBook = () => {
                     actionRead={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        router.push(`/reference/heavy-equipment/read/${id}`);
+                        router.push(`/master-data/heavy-equipment/read/${id}`);
                       },
                     }}
                     actionUpdate={{

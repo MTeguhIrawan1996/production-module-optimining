@@ -133,7 +133,8 @@
     "inComplete": "Tidak Lengkap",
     "engineNumber": "Nomor Mesin",
     "frameNumber": "Nomor Rangka",
-    "masterData": "Master Data"
+    "masterData": "Master Data",
+    "vehicleDocument": "Surat Kendaraan"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -229,7 +230,11 @@
     "successDeleteMasterMessage": "$t(commonTypography.masterData) $t(commonTypography.heavyEquipment) berhasil dihapus",
     "alertDescConfirmDelete": "Data kemungkinan berelasi dengan data lain",
     "specHeavyEquipment": "$t(commonTypography.specification) $t(commonTypography.heavyEquipment)",
-    "productionYear": "$t(commonTypography.year) Pembuatan"
+    "productionYear": "$t(commonTypography.year) Pembuatan",
+    "heavyEquipmentIdentity": "Identitas $t(commonTypography.heavyEquipment)",
+    "brandHeavyEquipment": "$t(commonTypography.brand) $t(commonTypography.heavyEquipment)",
+    "typeHeavyEquipment": "$t(commonTypography.type) $t(commonTypography.heavyEquipment)",
+    "eligibilityStatus": "Status Kelayakan"
   },
   "heavyEquipmentClass": {
     "heavyEquipmentClassTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipmentClass)",

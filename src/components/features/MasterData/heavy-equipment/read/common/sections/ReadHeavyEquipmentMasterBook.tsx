@@ -9,25 +9,23 @@ import {
   KeyValueList,
 } from '@/components/elements';
 
-import { useReadOneHeavyEquipmentReference } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipment';
+import { useReadOneHeavyEquipmentMaster } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentMaster';
 
 import { IFile } from '@/types/global';
 
-const ReadHeavyEquipmentBook = () => {
+const ReadHeavyEquipmentMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
 
   /* #   /**=========== Query =========== */
-  const { heavyEquipmentReferenceData, heavyEquipmentReferenceDataLoading } =
-    useReadOneHeavyEquipmentReference({
+  const { heavyEquipmentMasterData, heavyEquipmentMasterDataLoading } =
+    useReadOneHeavyEquipmentMaster({
       variables: {
         id,
       },
       skip: !router.isReady,
     });
-  const { modelYear, modelName, spec, type } =
-    heavyEquipmentReferenceData || {};
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== PhotosData =========== */
@@ -45,7 +43,8 @@ const ReadHeavyEquipmentBook = () => {
     },
     []
   );
-  const photosItem = heavyEquipmentReferenceData?.photos?.map(photosCallback);
+  const photosItem = heavyEquipmentMasterData?.photos?.map(photosCallback);
+
   /* #endregion  /**======== PhotosData =========== */
 
   return (
@@ -61,7 +60,7 @@ const ReadHeavyEquipmentBook = () => {
       }}
       withBorder
       shadow="xs"
-      isLoading={heavyEquipmentReferenceDataLoading}
+      isLoading={heavyEquipmentMasterDataLoading}
       enebleBackBottomInner
       paperStackProps={{
         spacing: 'sm',
@@ -82,38 +81,72 @@ const ReadHeavyEquipmentBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          {!heavyEquipmentReferenceDataLoading && photosItem ? (
+          {!heavyEquipmentMasterDataLoading && photosItem ? (
             <>
-              <GlobalHeaderDetail data={photosItem} title="document" />
+              <GlobalHeaderDetail
+                data={
+                  [
+                    {
+                      type: 'vehicleDocument',
+                      alt: heavyEquipmentMasterData?.vehicleNumberPhoto
+                        ?.fileName,
+                      fileName:
+                        heavyEquipmentMasterData?.vehicleNumberPhoto
+                          ?.originalFileName,
+                      src: heavyEquipmentMasterData?.vehicleNumberPhoto?.url,
+                    },
+                    ...photosItem,
+                  ] ?? []
+                }
+                title="document"
+              />
               <Divider my="md" />
             </>
           ) : null}
           <Stack spacing="sm">
             <Text fz={24} fw={600} color="brand">
-              {t('heavyEquipment.informationHeavyEquipment')}
+              {t('heavyEquipment.heavyEquipmentIdentity')}
             </Text>
             <KeyValueList
               data={[
                 {
-                  dataKey: t('commonTypography.brand'),
-                  value: type?.brand.name ?? '-',
+                  dataKey: t('commonTypography.engineNumber'),
+                  value: heavyEquipmentMasterData?.engineNumber ?? '-',
                 },
                 {
-                  dataKey: t('commonTypography.type'),
-                  value: type?.name ?? '-',
+                  dataKey: t('commonTypography.frameNumber'),
+                  value: heavyEquipmentMasterData?.chassisNumber ?? '-',
+                },
+                {
+                  dataKey: t('heavyEquipment.brandHeavyEquipment'),
+                  value:
+                    heavyEquipmentMasterData?.reference.type?.brand?.name ??
+                    '-',
+                },
+                {
+                  dataKey: t('heavyEquipment.typeHeavyEquipment'),
+                  value: heavyEquipmentMasterData?.reference.type?.name ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.model'),
-
-                  value: modelName ?? '-',
+                  value: heavyEquipmentMasterData?.reference.modelName ?? '-',
                 },
                 {
-                  dataKey: t('heavyEquipment.specHeavyEquipment'),
-                  value: spec ?? '-',
+                  dataKey: t('commonTypography.specification'),
+                  value: heavyEquipmentMasterData?.specification ?? '-',
+                },
+                {
+                  dataKey: t('commonTypography.class'),
+                  value: heavyEquipmentMasterData?.specification ?? '-',
                 },
                 {
                   dataKey: t('heavyEquipment.productionYear'),
-                  value: modelYear ?? '-',
+                  value: heavyEquipmentMasterData?.createdYear ?? '-',
+                },
+                {
+                  dataKey: t('heavyEquipment.eligibilityStatus'),
+                  value:
+                    heavyEquipmentMasterData?.eligibilityStatus?.name ?? '-',
                 },
               ]}
               type="grid"
@@ -133,4 +166,4 @@ const ReadHeavyEquipmentBook = () => {
   );
 };
 
-export default ReadHeavyEquipmentBook;
+export default ReadHeavyEquipmentMasterBook;
