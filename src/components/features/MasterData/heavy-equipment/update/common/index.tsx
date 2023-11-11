@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import CreateHeavyEquipmentMasterBook from '@/components/features/MasterData/heavy-equipment/create/common/sections/CreateHeavyEquipmentBook';
+import UpdateHeavyEquipmentMasterBook from '@/components/features/MasterData/heavy-equipment/update/common/sections/UpdateHeavyEquipmentMasterBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const CreateHeavyEquipmentMasterPage = () => {
+const UpdateHeavyEquipmentMasterPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -21,10 +21,10 @@ const CreateHeavyEquipmentMasterPage = () => {
     setBreadcrumbs([
       {
         label: t('heavyEquipment.heavyEquipmentMaster'),
-        path: '/master-data/heavy-equipment',
+        path: '/master-date/heavy-equipment',
       },
       {
-        label: t('heavyEquipment.createHeavyEquipment'),
+        label: t('heavyEquipment.editHeavyEquipment'),
         path: router.asPath,
       },
     ]);
@@ -36,7 +36,7 @@ const CreateHeavyEquipmentMasterPage = () => {
       <InnerWrapper
         titleProps={{
           title: t('heavyEquipment.formHeavyEquipmentMaster'),
-          mb: 'xl',
+          mb: 'md',
         }}
       >
         <Tabs
@@ -56,7 +56,7 @@ const CreateHeavyEquipmentMasterPage = () => {
             </Tabs.List>
           </ScrollArea>
           <Tabs.Panel value="information">
-            <CreateHeavyEquipmentMasterBook />
+            <UpdateHeavyEquipmentMasterBook />
           </Tabs.Panel>
         </Tabs>
       </InnerWrapper>
@@ -64,4 +64,4 @@ const CreateHeavyEquipmentMasterPage = () => {
   );
 };
 
-export default CreateHeavyEquipmentMasterPage;
+export default UpdateHeavyEquipmentMasterPage;

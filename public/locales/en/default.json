@@ -217,6 +217,7 @@
   },
   "heavyEquipment": {
     "heavyEquipmentTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
+    "heavyEquipmentMaster": "$t(commonTypography.masterData) $t(commonTypography.heavyEquipment)",
     "createHeavyEquipment": "$t(commonTypography.create) $t(commonTypography.heavyEquipment)",
     "editHeavyEquipment": "$t(commonTypography.edit) $t(commonTypography.heavyEquipment)",
     "readHeavyEquipment": "$t(commonTypography.detail) $t(commonTypography.heavyEquipment)",
@@ -230,6 +231,7 @@
     "successCreateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dibuat",
     "successCreateMasterMessage": "$t(commonTypography.masterData) $t(commonTypography.heavyEquipment) berhasil dibuat",
     "successUpdateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil diubah",
+    "successUpdateMasterMessage": "$t(commonTypography.masterData) $t(commonTypography.heavyEquipment) berhasil diubah",
     "successDeleteMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dihapus",
     "successDeleteMasterMessage": "$t(commonTypography.masterData) $t(commonTypography.heavyEquipment) berhasil dihapus",
     "alertDescConfirmDelete": "Data kemungkinan berelasi dengan data lain",

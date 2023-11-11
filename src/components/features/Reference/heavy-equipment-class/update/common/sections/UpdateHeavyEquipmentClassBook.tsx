@@ -81,7 +81,6 @@ const UpdateHeavyEquipmentClassBook = () => {
         message: t('heavyEquipmentClass.successUpdateMessage'),
         icon: <IconCheck />,
       });
-      methods.reset();
       router.push('/reference/heavy-equipment-class');
     },
     onError: (error) => {

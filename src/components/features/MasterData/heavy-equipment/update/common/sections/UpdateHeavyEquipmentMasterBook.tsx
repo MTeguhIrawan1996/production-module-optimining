@@ -8,10 +8,11 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadOneHeavyEquipmentMaster } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentMaster';
 import {
-  ICreateHeavyEquipmentMasterValues,
-  useCreateHeavyEquipmentMaster,
-} from '@/services/restapi/heavy-equipment/useCreateHeavyEquipmentMaster';
+  IUpdateHeavyEquipmentMasterValues,
+  useUpdateHeavyEquipmentMaster,
+} from '@/services/restapi/heavy-equipment/useUpdateHeavyEquipmentMaster';
 import {
   brandSelect,
   classSelect,
@@ -25,14 +26,20 @@ import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
-import { ControllerGroup, ControllerProps } from '@/types/global';
+import { ControllerGroup, ControllerProps, IFile } from '@/types/global';
 
-const CreateHeavyEquipmentMasterBook = () => {
+const UpdateHeavyEquipmentMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
+  const [serverPhotos, setServerPhotos] = React.useState<
+    Omit<IFile, 'mime' | 'path'>[] | null
+  >([]);
+  const [deletedPhotoIds, setDeletedPhotoIds] = React.useState<string[]>([]);
+  const [serverVehicleNumberPhoto, setServerVehicleNumberPhoto] =
+    React.useState<Omit<IFile, 'mime' | 'path'>[] | null>([]);
 
-  /* #   /**=========== Methods =========== */
-  const methods = useForm<ICreateHeavyEquipmentMasterValues>({
+  const methods = useForm<Omit<IUpdateHeavyEquipmentMasterValues, 'id'>>({
     resolver: zodResolver(createHeavyEquipmentMasterSchema),
     defaultValues: {
       photos: [],
@@ -52,11 +59,40 @@ const CreateHeavyEquipmentMasterBook = () => {
   });
   const brandId = methods.watch('brandId');
   const typeId = methods.watch('typeId');
-  /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
 
-  const { mutate, isLoading } = useCreateHeavyEquipmentMaster({
+  const { heavyEquipmentMasterDataLoading } = useReadOneHeavyEquipmentMaster({
+    variables: {
+      id,
+    },
+    skip: !router.isReady,
+    onCompleted: ({ heavyEquipment }) => {
+      methods.setValue(
+        'brandId',
+        heavyEquipment.reference.type?.brand?.id ?? ''
+      );
+      methods.setValue('chassisNumber', heavyEquipment.chassisNumber ?? '');
+      methods.setValue('referenceId', heavyEquipment.reference.id ?? '');
+      methods.setValue('specification', heavyEquipment.specification ?? '');
+      methods.setValue('typeId', heavyEquipment.reference.type?.id ?? '');
+      methods.setValue('classId', heavyEquipment.class?.id ?? '');
+      methods.setValue('createdYear', `${heavyEquipment.createdYear}` ?? '');
+      methods.setValue('vehicleNumber', heavyEquipment.vehicleNumber ?? '');
+      methods.setValue(
+        'eligibilityStatusId',
+        heavyEquipment.eligibilityStatus?.id ?? ''
+      );
+      methods.setValue('engineNumber', heavyEquipment.engineNumber ?? '');
+
+      setServerPhotos(heavyEquipment.photos ?? []);
+      if (heavyEquipment.vehicleNumberPhoto) {
+        setServerVehicleNumberPhoto([heavyEquipment.vehicleNumberPhoto]);
+      }
+    },
+  });
+
+  const { mutate, isLoading } = useUpdateHeavyEquipmentMaster({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -69,17 +105,16 @@ const CreateHeavyEquipmentMasterBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('heavyEquipment.successCreateMasterMessage'),
+        message: t('heavyEquipment.successUpdateMasterMessage'),
         icon: <IconCheck />,
       });
       router.push('/master-data/heavy-equipment');
-      methods.reset();
     },
   });
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
-  const fieldCreateHeavyEquipment = React.useMemo(() => {
+  const field = React.useMemo(() => {
     const engineNumber = globalText({
       name: `engineNumber`,
       label: 'engineNumber',
@@ -148,12 +183,17 @@ const CreateHeavyEquipmentMasterBook = () => {
       maxSize: 10 * 1024 ** 2 /* 10MB */,
       multiple: false,
       enableDeletePhoto: true,
+      serverPhotos: serverVehicleNumberPhoto,
+      handleDeleteServerPhotos: () => {
+        setServerVehicleNumberPhoto([]);
+      },
       onDrop: (value) => {
+        setServerVehicleNumberPhoto([]);
         methods.setValue('vehicleNumberPhoto', value);
         methods.clearErrors('vehicleNumberPhoto');
       },
       onReject: (files) =>
-        handleRejectFile<ICreateHeavyEquipmentMasterValues>({
+        handleRejectFile<Omit<IUpdateHeavyEquipmentMasterValues, 'id'>>({
           methods,
           files,
           field: 'vehicleNumberPhoto',
@@ -168,12 +208,26 @@ const CreateHeavyEquipmentMasterBook = () => {
       multiple: true,
       maxFiles: 5,
       enableDeletePhoto: true,
+      serverPhotos: serverPhotos,
       onDrop: (value) => {
+        if (
+          serverPhotos &&
+          value.length + (serverPhotos?.length - deletedPhotoIds.length) > 5
+        ) {
+          methods.setError('photos', {
+            type: 'manual',
+            message: 'Jumlah foto melebihi batas maksimal',
+          });
+          return;
+        }
         methods.setValue('photos', value);
         methods.clearErrors('photos');
       },
+      deletedPhotoIds: deletedPhotoIds,
+      handleDeleteServerPhotos: (id) =>
+        setDeletedPhotoIds((prev) => [...prev, id]),
       onReject: (files) =>
-        handleRejectFile<ICreateHeavyEquipmentMasterValues>({
+        handleRejectFile<Omit<IUpdateHeavyEquipmentMasterValues, 'id'>>({
           methods,
           files,
           field: 'photos',
@@ -205,24 +259,32 @@ const CreateHeavyEquipmentMasterBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brandId, typeId]);
+  }, [
+    brandId,
+    typeId,
+    serverPhotos,
+    deletedPhotoIds,
+    serverVehicleNumberPhoto,
+  ]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
-  const handleSubmitForm: SubmitHandler<ICreateHeavyEquipmentMasterValues> = (
-    data
-  ) => {
+  const handleSubmitForm: SubmitHandler<
+    Omit<IUpdateHeavyEquipmentMasterValues, 'id'>
+  > = (data) => {
     const values = objectToArrayValue(data);
     mutate({
+      id,
+      deletedPhotoIds,
       data: values,
     });
   };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={heavyEquipmentMasterDataLoading}>
       <GlobalFormGroup
-        field={fieldCreateHeavyEquipment}
+        field={field}
         methods={methods}
         submitForm={handleSubmitForm}
         submitButton={{
@@ -237,4 +299,4 @@ const CreateHeavyEquipmentMasterBook = () => {
   );
 };
 
-export default CreateHeavyEquipmentMasterBook;
+export default UpdateHeavyEquipmentMasterBook;

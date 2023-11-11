@@ -34,6 +34,8 @@ const ReadHeavyEquipmentMasterBook = () => {
       { fileName, originalFileName, url }: Omit<IFile, 'mime' | 'path'>,
       i: number
     ) => {
+      i;
+
       return {
         type: i > 0 ? '' : 'photo',
         fileName: originalFileName,
@@ -52,7 +54,7 @@ const ReadHeavyEquipmentMasterBook = () => {
       title={t('heavyEquipment.heavyEquipmentTitle')}
       updateButton={{
         label: 'Edit',
-        onClick: () => router.push(`/reference/heavy-equipment/update/${id}`),
+        onClick: () => router.push(`/master-data/heavy-equipment/update/${id}`),
       }}
       titleStyle={{
         fw: 700,
@@ -81,22 +83,25 @@ const ReadHeavyEquipmentMasterBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          {!heavyEquipmentMasterDataLoading && photosItem ? (
+          {!heavyEquipmentMasterDataLoading && heavyEquipmentMasterData ? (
             <>
               <GlobalHeaderDetail
                 data={
-                  [
-                    {
-                      type: 'vehicleDocument',
-                      alt: heavyEquipmentMasterData?.vehicleNumberPhoto
-                        ?.fileName,
-                      fileName:
-                        heavyEquipmentMasterData?.vehicleNumberPhoto
-                          ?.originalFileName,
-                      src: heavyEquipmentMasterData?.vehicleNumberPhoto?.url,
-                    },
-                    ...photosItem,
-                  ] ?? []
+                  photosItem
+                    ? [
+                        {
+                          type: 'vehicleDocument',
+                          alt: heavyEquipmentMasterData?.vehicleNumberPhoto
+                            ?.fileName,
+                          fileName:
+                            heavyEquipmentMasterData?.vehicleNumberPhoto
+                              ?.originalFileName,
+                          src: heavyEquipmentMasterData?.vehicleNumberPhoto
+                            ?.url,
+                        },
+                        ...photosItem,
+                      ]
+                    : []
                 }
                 title="document"
               />
@@ -137,7 +142,7 @@ const ReadHeavyEquipmentMasterBook = () => {
                 },
                 {
                   dataKey: t('commonTypography.class'),
-                  value: heavyEquipmentMasterData?.specification ?? '-',
+                  value: heavyEquipmentMasterData?.class?.name ?? '-',
                 },
                 {
                   dataKey: t('heavyEquipment.productionYear'),

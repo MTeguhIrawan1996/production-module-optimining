@@ -257,7 +257,9 @@ const HeavyEquipmentMasterBook = () => {
                     actionUpdate={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        router.push(`/reference/heavy-equipment/update/${id}`);
+                        router.push(
+                          `/master-data/heavy-equipment/update/${id}`
+                        );
                       },
                     }}
                     actionDelete={{

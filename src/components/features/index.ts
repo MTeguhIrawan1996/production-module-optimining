@@ -13,6 +13,7 @@ import UpdateCompanyHumanResourcesPage from '@/components/features/MasterData/co
 import HeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/common';
 import CreateHeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/create/common';
 import ReadHeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/read/common';
+import UpdateHeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/update/common';
 import HumanResourcesPage from '@/components/features/MasterData/human-resources/common';
 import CreateHumanResourcesPage from '@/components/features/MasterData/human-resources/create/common';
 import ReadHumanResourcesPage from '@/components/features/MasterData/human-resources/read/common';
@@ -67,6 +68,7 @@ export {
   ReadManagementRolePage,
   UpdateCompanyHumanResourcesPage,
   UpdateHeavyEquipmentClassPage,
+  UpdateHeavyEquipmentMasterPage,
   UpdateHeavyEquipmentPage,
   UpdateHumanResourcesPage,
   UpdateManagementRolePage,
