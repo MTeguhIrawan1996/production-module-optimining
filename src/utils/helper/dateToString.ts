@@ -4,7 +4,7 @@ export const dateToString = (date: Date | string | null) => {
   const dateString = dayjs(date).format();
   return dateString;
 };
-export const stringToDate = (date: string | undefined) => {
+export const stringToDate = (date: string | null) => {
   if (date) {
     const stringDate = dayjs(date).toDate();
     return stringDate;

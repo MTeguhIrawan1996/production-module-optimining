@@ -30,7 +30,7 @@ const ReadHEavyEquipmentClassBook = () => {
   const renderModel = React.useCallback((value: IHeavyEquipmentClassModel) => {
     return {
       dataKey: t('commonTypography.model'),
-      value: value.modelName,
+      value: `${value.modelName} (${value.type.name})`,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

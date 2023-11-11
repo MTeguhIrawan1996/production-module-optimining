@@ -13,7 +13,7 @@ import { useReadOneHeavyEquipmentReference } from '@/services/graphql/query/heav
 
 import { IFile } from '@/types/global';
 
-const ReadHEavyEquipmentBook = () => {
+const ReadHeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
@@ -133,4 +133,4 @@ const ReadHEavyEquipmentBook = () => {
   );
 };
 
-export default ReadHEavyEquipmentBook;
+export default ReadHeavyEquipmentBook;

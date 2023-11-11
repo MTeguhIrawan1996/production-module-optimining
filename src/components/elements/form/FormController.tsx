@@ -2,26 +2,31 @@ import * as React from 'react';
 import 'dayjs/locale/id';
 
 import {
+  BrandSelectInputRhf,
+  ClassSelectInputRhf,
   DateInputRhf,
+  DivisionSelectInputRhf,
+  EligibilityStatusSelectInputRhf,
   IdentityRadioInputRhf,
   ImageInputDropzoneRhf,
   MarriageSelectInputRhf,
+  ModelSelectInputRhf,
   NumberInputRhf,
   PasswordInputRhf,
   PdfInputDropzoneRhf,
+  PositionSelectInputRhf,
   ProvinceSelectInputRhf,
   RadioInputRhf,
   RegencySelectInputRhf,
   RelegionSelectInputRhf,
+  SelectHeavyEquipmentReferenceInput,
   SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
   SubDistrictSelectInputRhf,
   TextInputRhf,
+  TypeSelectInputRhf,
   VillageSelectInputRhf,
 } from '@/components/elements';
-import DivisionSelectInputRhf from '@/components/elements/input/DivisionSelectInputRhf';
-import PositionSelectInputRhf from '@/components/elements/input/PositionSelectInputRhf';
-import SelectHeavyEquipmentReferenceInput from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
 
 import { ControllerProps } from '@/types/global';
 
@@ -67,6 +72,16 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <DivisionSelectInputRhf {...props} />;
     case 'select-heavy-equipment-reference-input':
       return <SelectHeavyEquipmentReferenceInput {...props} />;
+    case 'brand-select-input':
+      return <BrandSelectInputRhf {...props} />;
+    case 'type-select-input':
+      return <TypeSelectInputRhf {...props} />;
+    case 'model-select-input':
+      return <ModelSelectInputRhf {...props} />;
+    case 'class-select-input':
+      return <ClassSelectInputRhf {...props} />;
+    case 'eligibilityStatus-select-input':
+      return <EligibilityStatusSelectInputRhf {...props} />;
     default:
       return null;
   }

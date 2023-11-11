@@ -109,7 +109,6 @@ const UpdateHeavyEquipmentBook = () => {
         icon: <IconCheck />,
       });
       router.push('/reference/heavy-equipment');
-      methods.reset();
     },
   });
   /* #endregion  /**======== Query =========== */

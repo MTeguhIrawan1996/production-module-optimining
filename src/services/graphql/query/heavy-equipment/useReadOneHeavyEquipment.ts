@@ -3,7 +3,7 @@ import { ApolloError, gql, useQuery } from '@apollo/client';
 import { IFile } from '@/types/global';
 
 export const READ_ONE_HEAVY_EQUIPMENT = gql`
-  query ReadHeavyEquipmentReference($id: String!) {
+  query ReadOneHeavyEquipmentReference($id: String!) {
     heavyEquipmentReference(id: $id) {
       id
       modelName

@@ -319,7 +319,7 @@ const ReadCompanyHumanResourceBook = () => {
         onSearch: () => {
           setPage(1);
         },
-        placeholder: 'Cari berdasarkan Nama Pegawai, NIP, Divisi dan Jabatan',
+        placeholder: 'Cari berdasarkan Nama dan NIP',
       }}
       MultipleFilter={{
         colSpan: 4,

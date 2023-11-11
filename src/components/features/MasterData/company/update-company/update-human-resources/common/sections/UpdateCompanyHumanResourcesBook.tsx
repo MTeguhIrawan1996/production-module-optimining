@@ -69,7 +69,7 @@ const UpdateCompanyHumanResourcesBook = () => {
       identityTypeId: '',
       identityNumber: '',
       pob: '',
-      dob: undefined,
+      dob: null,
       gender: '',
       religionId: '',
       educationDegree: '',
@@ -109,7 +109,7 @@ const UpdateCompanyHumanResourcesBook = () => {
     },
     skip: !router.isReady,
     onCompleted: (data) => {
-      const date = stringToDate(data.employee.humanResource.dob ?? undefined);
+      const date = stringToDate(data.employee.humanResource.dob ?? null);
       methods.setValue('name', data.employee.humanResource.name);
       methods.setValue('alias', data.employee.humanResource.alias ?? '');
       methods.setValue('isWni', `${data.employee.humanResource.isWni}`);
@@ -466,12 +466,14 @@ const UpdateCompanyHumanResourcesBook = () => {
     const deletedPhoto = serverPhotos && serverPhotos?.length === 0;
     const deletedIdentityPhoto =
       serverPhotosIdentity && serverPhotosIdentity.length === 0;
+
     mutate({
       companyId: companyId,
       employeId: employeId,
       deletedIdentityPhoto,
       deletedPhoto,
       data: outputArray,
+      humanResourceId: employeeData?.humanResource.id ?? '',
     });
   };
   return (

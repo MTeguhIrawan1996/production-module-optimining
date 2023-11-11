@@ -110,7 +110,7 @@ const UpdateHumanResourcesBook = () => {
       },
       skip: !router.isReady,
       onCompleted: (data) => {
-        const date = stringToDate(data.humanResource.dob ?? undefined);
+        const date = stringToDate(data.humanResource.dob ?? null);
         methods.setValue('name', data.humanResource.name);
         methods.setValue('alias', data.humanResource.alias ?? '');
         methods.setValue('isWni', `${data.humanResource.isWni}`);

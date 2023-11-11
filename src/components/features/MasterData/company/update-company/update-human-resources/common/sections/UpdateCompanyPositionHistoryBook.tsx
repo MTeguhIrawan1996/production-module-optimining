@@ -1,3 +1,4 @@
+import { Paper } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -44,7 +45,7 @@ const UpdateCompanyPositionHistoryBook = () => {
     mode: 'onBlur',
   });
 
-  const { fields, append, remove, replace } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     name: 'positionHistories',
     control: methods.control,
   });
@@ -56,19 +57,20 @@ const UpdateCompanyPositionHistoryBook = () => {
     },
     skip: !router.isReady,
     onCompleted: (data) => {
-      const setPosition = data.employee.positionHistories.map((val) => {
-        const startDate = stringToDate(val.startDate ?? undefined);
-        const endDate = stringToDate(val.endDate ?? undefined);
-        const value = {
-          positionId: val.position.id,
-          divisionId: val.division.id,
-          isStill: val.isStill,
-          startDate: startDate,
-          endDate: endDate,
-        };
-        return value;
-      });
-      replace(setPosition);
+      if (data && data.employee.positionHistories.length > 0) {
+        data.employee.positionHistories.map((val, index) => {
+          const startDate = stringToDate(val.startDate ?? null);
+          const endDate = stringToDate(val.endDate ?? null);
+          const value = {
+            positionId: val.position.id,
+            divisionId: val.division.id,
+            isStill: val.isStill,
+            startDate: startDate,
+            endDate: endDate,
+          };
+          update(index, value);
+        });
+      }
     },
   });
 
@@ -179,31 +181,36 @@ const UpdateCompanyPositionHistoryBook = () => {
       },
     });
   };
+
   return (
     <DashboardCard p={0} isLoading={employeeDataLoading}>
-      <GlobalFormGroup
-        field={employeeDataLoading ? [] : arrayField}
-        methods={methods}
-        submitForm={handleSubmitForm}
-        submitButton={{
-          label: t('commonTypography.save'),
-          loading: loading,
-        }}
-        outerButton={{
-          label: t('commonTypography.createHistory'),
-          onClick: () =>
-            append({
-              positionId: '',
-              divisionId: '',
-              startDate: undefined,
-              isStill: false,
-              endDate: undefined,
-            }),
-        }}
-        backButton={{
-          onClick: () => router.back(),
-        }}
-      />
+      {!employeeDataLoading ? (
+        <GlobalFormGroup
+          field={arrayField}
+          methods={methods}
+          submitForm={handleSubmitForm}
+          submitButton={{
+            label: t('commonTypography.save'),
+            loading: loading,
+          }}
+          outerButton={{
+            label: t('commonTypography.createHistory'),
+            onClick: () =>
+              append({
+                positionId: '',
+                divisionId: '',
+                startDate: undefined,
+                isStill: false,
+                endDate: undefined,
+              }),
+          }}
+          backButton={{
+            onClick: () => router.back(),
+          }}
+        />
+      ) : (
+        <Paper h={400} w="100%" mt="md" />
+      )}
     </DashboardCard>
   );
 };

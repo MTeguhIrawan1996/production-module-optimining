@@ -3,12 +3,16 @@ import { AxiosError } from 'axios';
 import { GraphQLErrorExtensions } from 'graphql';
 
 import { IPrimaryButtonProps } from '@/components/elements/button/PrimaryButton';
+import { IBrandSelectInputRhfProps } from '@/components/elements/input/BrandSelectInputRhf';
 import { ICheckboxGroupAccessProps } from '@/components/elements/input/CheckboxGroupAccess';
+import { IClassSelectInputRhfProps } from '@/components/elements/input/ClassSelectInputRhf';
 import { IDateInputProps } from '@/components/elements/input/DateInputRhf';
 import { IDivisionSelectInputRhfProps } from '@/components/elements/input/DivisionSelectInputRhf';
+import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/input/EligibilityStatusSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
 import { IImageInputDropzoneRhfProps } from '@/components/elements/input/ImageInputDropzoneRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
+import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { IPasswordInputProps } from '@/components/elements/input/PasswordInputRhf';
 import { IPdfInputDropzoneRhfProps } from '@/components/elements/input/PdfInputDropzoneRhf';
@@ -22,6 +26,7 @@ import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/inpu
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
+import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelectInputRhf';
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 
 // import { TablerIconsProps } from '@tabler/icons-react';
@@ -52,6 +57,11 @@ export type ControllerProps =
   | IPositionSelectInputRhfProps
   | IDivisionSelectInputRhfProps
   | ISelectHeavyEquipmentReferenceInputProps
+  | IBrandSelectInputRhfProps
+  | ITypeSelectInputRhfProps
+  | IModelSelectInputRhfProps
+  | IClassSelectInputRhfProps
+  | IEligibilityStatusSelectInputRhfProps
   | IDateInputProps;
 
 export type ControllerGroup = {

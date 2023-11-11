@@ -46,11 +46,18 @@
       "ippNumber": "Nomor IPP",
       "ippDate": "Tanggal IPP",
       "model": "Model",
+      "class": "Kelas",
+      "eligibilityStatus": "Status Kelayakan",
+      "brand": "Merk",
       "modelYear": "Tahun Model",
       "brandHeavyEquipment": "Merk Alat Berat",
       "modelHeavyEquipment": "Model Alat Berat",
       "typeHeavyEquipment": "Jenis Alat Berat",
       "specHeavyEquipment": "Spesifikasi Alat Berat",
+      "vehicleNumber": "Nomor Kendaraan",
+      "vehicleNumberOrRegirstrationNumber": "Nomor Kendaraan/Nomor Registrasi",
+      "engineNumber": "Nomor Mesin",
+      "frameNumber": "Nomor Rangka",
       "productionYear": "Tahun Pembuatan",
       "photoOrDocument": "Foto/Dokumen",
       "heavyEquipmentClass": "Kelas Alat Berat",
@@ -70,7 +77,8 @@
       "position": "Jabatan",
       "division": "Divisi",
       "dateOfOffice": "Tanggal Menjabat",
-      "dateComplateOffice": "Tanggal Selesai Menjabat"
+      "dateComplateOffice": "Tanggal Selesai Menjabat",
+      "vehicleDocument": "Surat Kendaraan"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",

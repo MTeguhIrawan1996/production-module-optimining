@@ -15,7 +15,7 @@ import {
 
 import { useDeleteHeavyEquipmentReference } from '@/services/graphql/mutation/reference-heavy-equipment/useDeleteRefrenceHeavyEquipment';
 import { useReadAllBrand } from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
-import { useReadAllHeavyEquipment } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipment';
+import { useReadAllHeavyEquipmentRefrence } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipment';
 import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
 import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
@@ -53,7 +53,7 @@ const HeavyEquipmentBook = () => {
     heavyEquipmentDataLoading,
     heavyEquipmentsDataMeta,
     refetchHeavyEquipments,
-  } = useReadAllHeavyEquipment({
+  } = useReadAllHeavyEquipmentRefrence({
     variables: {
       limit: 10,
       page: page,
