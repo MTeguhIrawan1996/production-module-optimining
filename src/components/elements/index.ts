@@ -19,22 +19,30 @@ import NavbarCollapseLinksGroup from '@/components/elements/global/NavbarCollaps
 import NavbarLinksGroup from '@/components/elements/global/NavbarLinksGroup';
 import NextImageFill from '@/components/elements/global/NextImageFill';
 import SearchBar from '@/components/elements/global/SearchBar';
+import BrandSelectInputRhf from '@/components/elements/input/BrandSelectInputRhf';
 import CheckboxGroupAccess from '@/components/elements/input/CheckboxGroupAccess';
+import ClassSelectInputRhf from '@/components/elements/input/ClassSelectInputRhf';
 import DateInputRhf from '@/components/elements/input/DateInputRhf';
+import DivisionSelectInputRhf from '@/components/elements/input/DivisionSelectInputRhf';
+import EligibilityStatusSelectInputRhf from '@/components/elements/input/EligibilityStatusSelectInputRhf';
 import IdentityRadioInputRhf from '@/components/elements/input/IdentityRadioInputRhf';
 import ImageInputDropzoneRhf from '@/components/elements/input/ImageInputDropzoneRhf';
 import MarriageSelectInputRhf from '@/components/elements/input/MarriageStatusesSelectInputRhf';
+import ModelSelectInputRhf from '@/components/elements/input/ModelSelectInputRhf';
 import NumberInputRhf from '@/components/elements/input/NumberInputRhf';
 import PasswordInputRhf from '@/components/elements/input/PasswordInputRhf';
 import PdfInputDropzoneRhf from '@/components/elements/input/PdfInputDropzoneRhf';
+import PositionSelectInputRhf from '@/components/elements/input/PositionSelectInputRhf';
 import ProvinceSelectInputRhf from '@/components/elements/input/ProvinceSelectInputRhf';
 import RadioInputRhf from '@/components/elements/input/RadioInputRhf';
 import RegencySelectInputRhf from '@/components/elements/input/RegencySelectInputRhf';
 import RelegionSelectInputRhf from '@/components/elements/input/RelegionSelectInputRhf';
+import SelectHeavyEquipmentReferenceInput from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
 import SelectHeavyEquipmentTypesInput from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
 import SubDistrictSelectInputRhf from '@/components/elements/input/SubDistrictSelectInputRhf';
 import TextInputRhf from '@/components/elements/input/TextInputRhf';
+import TypeSelectInputRhf from '@/components/elements/input/TypeSelectInputRhf';
 import VillageSelectInputRhf from '@/components/elements/input/VillageSelectInputRhf';
 import PrimaryLink from '@/components/elements/link/PrimaryLink';
 import LogoutConfirmModal from '@/components/elements/modal/LogoutConfirmModal';
@@ -52,11 +60,15 @@ export {
   AuthCard,
   AuthGlobalForm,
   AuthWrapper,
+  BrandSelectInputRhf,
   Breadcrumb,
   CheckboxGroupAccess,
   CheckboxGroupRoleAccess,
+  ClassSelectInputRhf,
   DashboardCard,
   DateInputRhf,
+  DivisionSelectInputRhf,
+  EligibilityStatusSelectInputRhf,
   FieldErrorMessage,
   FormController,
   GlobalActionTable,
@@ -73,6 +85,7 @@ export {
   MantineDataTable,
   MarriageSelectInputRhf,
   ModalConfirmation,
+  ModelSelectInputRhf,
   MultipleFilter,
   NavbarCollapseLinksGroup,
   NavbarLinksGroup,
@@ -81,6 +94,7 @@ export {
   PaginationSkeleton,
   PasswordInputRhf,
   PdfInputDropzoneRhf,
+  PositionSelectInputRhf,
   PrimaryButton,
   PrimaryLink,
   ProvinceSelectInputRhf,
@@ -89,12 +103,14 @@ export {
   RelegionSelectInputRhf,
   RootWrapper,
   SearchBar,
+  SelectHeavyEquipmentReferenceInput,
   SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
   SelectionButtonModal,
   SubDistrictSelectInputRhf,
   TextButton,
   TextInputRhf,
+  TypeSelectInputRhf,
   UpdatePasswordModal,
   UserProfileForm,
   VillageSelectInputRhf,

@@ -51,6 +51,7 @@ const HeavyEquipmentMasterBook = () => {
     variables: {
       limit: 10,
       page: page,
+      orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
       brandId,
       typeId,
@@ -297,7 +298,7 @@ const HeavyEquipmentMasterBook = () => {
     <DashboardCard
       addButton={{
         label: t('heavyEquipment.createHeavyEquipment'),
-        onClick: () => router.push('/master-data/human-resources/create'),
+        onClick: () => router.push('/master-data/heavy-equipment/create'),
       }}
       searchBar={{
         placeholder: t('heavyEquipment.searchPlaceholderMaster'),
