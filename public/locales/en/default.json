@@ -103,6 +103,7 @@
     "humanResources2": "Sumber Daya Manusia",
     "phoneNumber": "Nomor Telepon",
     "identityNumber": "NIK",
+    "identityNumberOrPassport": "NIK/No Paspor",
     "email": "Email",
     "domicile": "Domisili",
     "domicileAddress": "Domisili",
@@ -213,7 +214,7 @@
     "editHeavyEquipment": "$t(commonTypography.edit) $t(commonTypography.heavyEquipment)",
     "readHeavyEquipment": "$t(commonTypography.detail) $t(commonTypography.heavyEquipment)",
     "informationHeavyEquipment": "$t(commonTypography.information) $t(heavyEquipment.heavyEquipmentTitle)",
-    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type), $t(commonTypography.brand), $t(commonTypography.model), dan $t(commonTypography.year)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type), $t(commonTypography.brand) dan $t(commonTypography.model)",
     "formHeavyEquipment": "$t(commonTypography.form) $t(heavyEquipment.heavyEquipmentTitle)",
     "detailReference": "$t(commonTypography.detail) $t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
     "successCreateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dibuat",
@@ -229,7 +230,7 @@
     "editHeavyEquipmentClass": "$t(commonTypography.edit) $t(commonTypography.heavyEquipmentClass)",
     "readHeavyEquipmentClass": "$t(commonTypography.detail) $t(commonTypography.heavyEquipmentClass)",
     "informationHeavyEquipmentClass": "$t(commonTypography.information) $t(heavyEquipmentClass.heavyEquipmentClassTitle)",
-    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.class) dan $t(commonTypography.type)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.class) dan $t(commonTypography.model)",
     "formHeavyEquipmentClass": "$t(commonTypography.form) $t(heavyEquipmentClass.heavyEquipmentClassTitle)",
     "detailReference": "$t(commonTypography.detail) $t(commonTypography.reference) $t(commonTypography.heavyEquipmentClass)",
     "successCreateMessage": "$t(heavyEquipmentClass.heavyEquipmentClassTitle) berhasil dibuat",
@@ -252,6 +253,9 @@
     "formHumanResources": "$t(commonTypography.form) $t(commonTypography.create) $t(commonTypography.humanResources)",
     "formUpdateHumanResources": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.humanResources)",
     "humanResourcesProfile": "$t(commonTypography.profile) $t(commonTypography.humanResources)",
-    "humanResourcesIdentity": "Identitas $t(commonTypography.humanResources)"
+    "humanResourcesIdentity": "Identitas $t(commonTypography.humanResources)",
+    "chooseSDM": "$t(commonTypography.choose) $t(commonTypography.humanResources)",
+    "chooseAvailableSDM": "Memilih Sumber Daya Manusia yang sudah Ada",
+    "masterSDM": "Master SDM"
   }
 }
