@@ -9,7 +9,7 @@ import PrimaryButton, {
 } from '@/components/elements/button/PrimaryButton';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllHeavyEquipment } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipment';
+import { useReadAllHeavyEquipmentRefrence } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipment';
 import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
@@ -69,7 +69,7 @@ const SelectHeavyEquipmentReferenceInput: React.FC<
 
   const currentValues = fields.find((val) => val.id === value);
 
-  const { heavyEquipmentsData } = useReadAllHeavyEquipment({
+  const { heavyEquipmentsData } = useReadAllHeavyEquipmentRefrence({
     variables: {
       limit: 15,
       search: searchQuery === '' ? null : searchQuery,

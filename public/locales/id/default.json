@@ -66,6 +66,7 @@
     "setting": "Pengaturan",
     "contact": "Kontak",
     "dataNotfound": "Belum ada data",
+    "specification": "Spesifikasi",
     "documentNotFound": "Dokumen tidak ditemukan...",
     "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG atau .PNG",
     "modalNonActiveTitle": "Kamu yakin ingin nonaktifkan pengguna?",
@@ -87,6 +88,7 @@
     "search": "Cari",
     "successUpdatePasswordMessage": "Password berhasil diubah",
     "class": "Kelas",
+    "chooseClass": "Pilih / Ketikan Kelas",
     "brand": "Merk",
     "model": "Model",
     "year": "Tahun",
@@ -128,7 +130,10 @@
     "chooseBrand": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.brand)",
     "chooseModel": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.model)",
     "complete": "Lengkap",
-    "inComplete": "Tidak Lengkap"
+    "inComplete": "Tidak Lengkap",
+    "engineNumber": "Nomor Mesin",
+    "frameNumber": "Nomor Rangka",
+    "masterData": "Master Data"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -215,13 +220,15 @@
     "readHeavyEquipment": "$t(commonTypography.detail) $t(commonTypography.heavyEquipment)",
     "informationHeavyEquipment": "$t(commonTypography.information) $t(heavyEquipment.heavyEquipmentTitle)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type), $t(commonTypography.brand) dan $t(commonTypography.model)",
+    "searchPlaceholderMaster": "$t(commonTypography.search) berdasarkan $t(commonTypography.engineNumber) dan $t(commonTypography.frameNumber)",
     "formHeavyEquipment": "$t(commonTypography.form) $t(heavyEquipment.heavyEquipmentTitle)",
     "detailReference": "$t(commonTypography.detail) $t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
     "successCreateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dibuat",
     "successUpdateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil diubah",
     "successDeleteMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dihapus",
+    "successDeleteMasterMessage": "$t(commonTypography.masterData) $t(commonTypography.heavyEquipment) berhasil dihapus",
     "alertDescConfirmDelete": "Data kemungkinan berelasi dengan data lain",
-    "specHeavyEquipment": "Spesifikasi $t(commonTypography.heavyEquipment)",
+    "specHeavyEquipment": "$t(commonTypography.specification) $t(commonTypography.heavyEquipment)",
     "productionYear": "$t(commonTypography.year) Pembuatan"
   },
   "heavyEquipmentClass": {
