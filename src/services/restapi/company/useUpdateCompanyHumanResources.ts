@@ -16,6 +16,7 @@ export interface IUpdateCompanyHumanResourceValues
 type INameValue = {
   companyId: string;
   employeId: string;
+  humanResourceId: string;
   data: {
     name: string;
     value: string | null | undefined | FileWithPath[];
@@ -44,7 +45,7 @@ const UpdateCompanyHumanResource = async (props: INameValue) => {
     'regencyId',
     'subdistrictId',
   ];
-  bodyFormData.append('humanResourceId', props.employeId);
+  bodyFormData.append('humanResourceId', props.humanResourceId);
   if (props.deletedPhoto) {
     bodyFormData.append('deletePhoto', 'true');
   }

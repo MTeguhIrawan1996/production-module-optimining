@@ -48,14 +48,14 @@ const UpdateCompanyEmployeDataBook = () => {
     },
     skip: !router.isReady,
     onCompleted: (data) => {
-      const entryDate = stringToDate(data.employee.entryDate ?? undefined);
-      const quitDate = stringToDate(data.employee.quitDate ?? undefined);
+      const entryDate = stringToDate(data.employee.entryDate ?? null);
+      const quitDate = stringToDate(data.employee.quitDate ?? null);
 
-      methods.setValue('nip', data.employee.nip);
-      methods.setValue('statusId', data.employee.status.id);
+      methods.setValue('nip', data.employee.nip ?? '');
+      methods.setValue('statusId', data.employee.status?.id ?? '');
       methods.setValue('entryDate', entryDate);
       methods.setValue('quitDate', quitDate);
-      methods.setValue('isStillWorking', data.employee.isStillWorking);
+      methods.setValue('isStillWorking', data.employee.isStillWorking ?? false);
     },
   });
 
@@ -124,7 +124,7 @@ const UpdateCompanyEmployeDataBook = () => {
             isStillWorking === true
               ? methods.setValue('isStillWorking', false)
               : methods.setValue('isStillWorking', true);
-            methods.setValue('quitDate', undefined);
+            methods.setValue('quitDate', null);
           },
           checked: isStillWorking,
           label: t('commonTypography.isStillWorking'),

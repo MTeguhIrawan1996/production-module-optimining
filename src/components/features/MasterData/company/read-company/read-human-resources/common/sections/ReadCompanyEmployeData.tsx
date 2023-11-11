@@ -27,7 +27,7 @@ const ReadCompanyEmployeBook: React.FC<IProps> = ({ employe }) => {
           },
           {
             dataKey: t('commonTypography.employeStatus'),
-            value: employe?.status.name,
+            value: employe?.status?.name,
           },
           {
             dataKey: t('commonTypography.entryDate'),

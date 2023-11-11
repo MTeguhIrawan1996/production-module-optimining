@@ -119,22 +119,22 @@ export const READ_ONE_COMPANY_HUMAN_RESOURCE = gql`
 
 export interface IEmployee {
   id: string;
-  nip: string;
-  isStillWorking: boolean;
+  nip: string | null;
+  isStillWorking: boolean | null;
   entryDate: string;
   quitDate: string;
   position: {
     id: string;
     name: string;
-  };
+  } | null;
   division: {
     id: string;
     name: string;
-  };
+  } | null;
   status: {
     id: string;
     name: string;
-  };
+  } | null;
   positionHistories: {
     id: string;
     position: {
