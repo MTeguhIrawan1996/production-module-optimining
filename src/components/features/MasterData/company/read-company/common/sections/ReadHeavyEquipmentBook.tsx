@@ -99,12 +99,12 @@ const ReadHeavyEquipmentBook = () => {
       addButton={{
         label: 'Tambah Alat Berat',
       }}
-      searchBar={{
-        // eslint-disable-next-line no-console
-        onChange: () => console.log('onChnge'),
-        placeholder:
-          'Cari berdasarkan Nama Perusahaan, Nama Pegawai, NIP, Divisi dan Jabatan',
-      }}
+      // searchBar={{
+      //   // eslint-disable-next-line no-console
+      //   onChange: () => console.log('onChnge'),
+      //   placeholder:
+      //     'Cari berdasarkan Nama Perusahaan, Nama Pegawai, NIP, Divisi dan Jabatan',
+      // }}
       MultipleFilter={{
         colSpan: 4,
         MultipleFilterData: [

@@ -97,12 +97,12 @@ const DataTableBook = () => {
       addButton={{
         label: 'ExampleAdd',
       }}
-      searchBar={{
-        // eslint-disable-next-line no-console
-        onChange: () => console.log('onChnge'),
-        placeholder:
-          'Cari berdasarkan Nama Perusahaan, Nama Pegawai, NIP, Divisi dan Jabatan',
-      }}
+      // searchBar={{
+      //   // eslint-disable-next-line no-console
+      //   onChange: () => console.log('onChnge'),
+      //   placeholder:
+      //     'Cari berdasarkan Nama Perusahaan, Nama Pegawai, NIP, Divisi dan Jabatan',
+      // }}
       MultipleFilter={{
         MultipleFilterData: [
           {

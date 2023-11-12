@@ -1,22 +1,29 @@
 import { Icon } from '@iconify/react';
 import { Center, TextInput, TextInputProps } from '@mantine/core';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 
 export interface ISerachBar extends TextInputProps {
-  onSearch?: () => void;
-  searchQuery?: string | string[] | null;
+  searchQuery: string | string[] | null;
 }
 
 const SearchBar: React.FC<ISerachBar> = ({
   placeholder,
   value,
   onChange,
-  onSearch,
   searchQuery,
   ...rest
 }) => {
+  const router = useRouter();
   React.useEffect(() => {
-    if (searchQuery) onSearch?.();
+    if (searchQuery) {
+      router.push({
+        href: router.asPath,
+        query: {
+          page: 1,
+        },
+      });
+    }
     // } else {
     //   router.push({
     //     href: router.pathname,

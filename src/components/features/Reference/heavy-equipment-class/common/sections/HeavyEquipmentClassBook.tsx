@@ -1,6 +1,7 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +19,8 @@ import { useReadAllHeavyEquipmentClass } from '@/services/graphql/query/heavy-eq
 const HeavyEquipmentClassBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const [page, setPage] = React.useState<number>(1);
+  const pageParams = useSearchParams();
+  const page = Number(pageParams.get('page')) || 1;
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -41,7 +43,12 @@ const HeavyEquipmentClassBook = () => {
     onCompleted: () => {
       refetchHeavyEquipmentClasses();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      router.push({
+        href: router.asPath,
+        query: {
+          page: 1,
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -65,6 +72,15 @@ const HeavyEquipmentClassBook = () => {
     await executeDelete({
       variables: {
         id,
+      },
+    });
+  };
+
+  const handleSetPage = (page: number) => {
+    router.push({
+      href: router.asPath,
+      query: {
+        page: page,
       },
     });
   };
@@ -140,7 +156,7 @@ const HeavyEquipmentClassBook = () => {
           },
         }}
         paginationProps={{
-          setPage: setPage,
+          setPage: handleSetPage,
           currentPage: page,
           totalAllData: heavyEquipmentClassesDataMeta?.totalAllData ?? 0,
           totalData: heavyEquipmentClassesDataMeta?.totalData ?? 0,
@@ -161,9 +177,7 @@ const HeavyEquipmentClassBook = () => {
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
-        onSearch: () => {
-          setPage(1);
-        },
+        searchQuery,
         placeholder: t('heavyEquipmentClass.searchPlaceholder'),
       }}
     >

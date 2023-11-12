@@ -2,6 +2,7 @@ import { Divider, SelectProps } from '@mantine/core';
 import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -32,10 +33,12 @@ const ReadCompanyHumanResourceBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const id = router.query.id as string;
+  const pageParams = useSearchParams();
+  const page = Number(pageParams.get('page')) || 1;
   const [employeId, setIdEmploye] = React.useState<string>('');
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
-  const [page, setPage] = React.useState<number>(1);
+
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -110,7 +113,12 @@ const ReadCompanyHumanResourceBook = () => {
     onCompleted: () => {
       refetchEmployees();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      router.push({
+        href: router.asPath,
+        query: {
+          page: 1,
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -136,7 +144,12 @@ const ReadCompanyHumanResourceBook = () => {
       searchValue: divisionSearchTerm,
       placeholder: 'chooseDivision',
       onChange: (value) => {
-        setPage(1);
+        router.push({
+          href: router.asPath,
+          query: {
+            page: page,
+          },
+        });
         setDivisionId(value);
       },
     });
@@ -146,7 +159,12 @@ const ReadCompanyHumanResourceBook = () => {
       searchValue: positionSearchTerm,
       placeholder: 'choosePosition',
       onChange: (value) => {
-        setPage(1);
+        router.push({
+          href: router.asPath,
+          query: {
+            page: page,
+          },
+        });
         setPositionId(value);
       },
     });
@@ -154,7 +172,12 @@ const ReadCompanyHumanResourceBook = () => {
       data: employeStatusFilter,
       placeholder: 'chooseEmployeStatus',
       onChange: (value) => {
-        setPage(1);
+        router.push({
+          href: router.asPath,
+          query: {
+            page: page,
+          },
+        });
         setEmployeStatusId(value);
       },
     });
@@ -171,7 +194,12 @@ const ReadCompanyHumanResourceBook = () => {
         },
       ],
       onChange: (value) => {
-        setPage(1);
+        router.push({
+          href: router.asPath,
+          query: {
+            page: page,
+          },
+        });
         setFormStatus(value ? (value === 'true' ? true : false) : null);
       },
     });
@@ -195,6 +223,15 @@ const ReadCompanyHumanResourceBook = () => {
     await executeDelete({
       variables: {
         id: employeId,
+      },
+    });
+  };
+
+  const handleSetPage = (page: number) => {
+    router.push({
+      href: router.asPath,
+      query: {
+        page: page,
       },
     });
   };
@@ -292,7 +329,7 @@ const ReadCompanyHumanResourceBook = () => {
           },
         }}
         paginationProps={{
-          setPage: setPage,
+          setPage: handleSetPage,
           currentPage: page,
           totalAllData: employeesDataMeta?.totalAllData ?? 0,
           totalData: employeesDataMeta?.totalData ?? 0,
@@ -316,9 +353,7 @@ const ReadCompanyHumanResourceBook = () => {
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
-        onSearch: () => {
-          setPage(1);
-        },
+        searchQuery,
         placeholder: 'Cari berdasarkan Nama dan NIP',
       }}
       MultipleFilter={{

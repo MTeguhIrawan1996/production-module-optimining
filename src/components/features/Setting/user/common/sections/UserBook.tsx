@@ -1,4 +1,5 @@
 import { useDebouncedState } from '@mantine/hooks';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,11 +16,9 @@ import { useReadAllUser } from '@/services/graphql/query/user/useReadAllUser';
 const UserBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const [page, setPage] = React.useState<number>(1);
+  const pageParams = useSearchParams();
+  const page = Number(pageParams.get('page')) || 1;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
-  // const [id, setId] = React.useState<string>('');
-  // const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
-  //   React.useState<boolean>(false);
 
   const { usersData, usersLoading, usersMeta } = useReadAllUser({
     variables: {
@@ -29,35 +28,14 @@ const UserBook = () => {
     },
   });
 
-  // const [executeDelete, { loading }] = useDeleteUser({
-  //   onCompleted: () => {
-  //     refetch();
-  //     setIsOpenDeleteConfirmation((prev) => !prev);
-  //     setPage(1);
-  //     notifications.show({
-  //       color: 'green',
-  //       title: 'Selamat',
-  //       message: t('user.successDeleteMessage'),
-  //       icon: <IconCheck />,
-  //     });
-  //   },
-  //   onError: ({ message }) => {
-  //     notifications.show({
-  //       color: 'red',
-  //       title: 'Gagal',
-  //       message: message,
-  //       icon: <IconX />,
-  //     });
-  //   },
-  // });
-
-  // const handleDelete = async () => {
-  //   await executeDelete({
-  //     variables: {
-  //       id,
-  //     },
-  //   });
-  // };
+  const handleSetPage = (page: number) => {
+    router.push({
+      href: router.asPath,
+      query: {
+        page: page,
+      },
+    });
+  };
 
   const renderTable = React.useMemo(() => {
     return (
@@ -111,7 +89,7 @@ const UserBook = () => {
           },
         }}
         paginationProps={{
-          setPage: setPage,
+          setPage: handleSetPage,
           currentPage: page,
           totalAllData: usersMeta?.totalAllData ?? 0,
           totalData: usersMeta?.totalData ?? 0,
@@ -132,35 +110,11 @@ const UserBook = () => {
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
-        onSearch: () => {
-          setPage(1);
-        },
         searchQuery: searchQuery,
         placeholder: t('user.searchPlaceholder'),
       }}
     >
       {renderTable}
-      {/* <ModalConfirmation
-        isOpenModalConfirmation={isOpenDeleteConfirmation}
-        actionModalConfirmation={() =>
-          setIsOpenDeleteConfirmation((prev) => !prev)
-        }
-        actionButton={{
-          label: 'Ya Hapus',
-          color: 'red',
-          onClick: handleDelete,
-          loading: loading,
-        }}
-        backButton={{
-          label: 'Batal',
-        }}
-        modalType={{
-          type: 'default',
-          title: t('commonTypography.alertTitleConfirmDelete'),
-          description: t('commonTypography.alertDescConfirmDelete'),
-        }}
-        withDivider
-      /> */}
     </DashboardCard>
   );
 };
