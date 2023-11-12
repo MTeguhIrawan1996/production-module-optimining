@@ -2,6 +2,7 @@ import { Divider, Group } from '@mantine/core';
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconChevronLeft, IconX } from '@tabler/icons-react';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +22,8 @@ const CreateHumanResourcesAvailableBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const companyId = router.query?.id as string;
-  const [page, setPage] = React.useState<number>(1);
+  const pageParams = useSearchParams();
+  const page = Number(pageParams.get('page')) || 1;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [choosesHumanResources, setChooseHumanResources] = React.useState<
     IHumanResourcesData[]
@@ -76,6 +78,15 @@ const CreateHumanResourcesAvailableBook = () => {
       variables: {
         companyId,
         humanResourceIds,
+      },
+    });
+  };
+
+  const handleSetPage = (page: number) => {
+    router.push({
+      href: router.asPath,
+      query: {
+        page: page,
       },
     });
   };
@@ -139,7 +150,7 @@ const CreateHumanResourcesAvailableBook = () => {
           },
         }}
         paginationProps={{
-          setPage: setPage,
+          setPage: handleSetPage,
           currentPage: page,
           totalAllData: nonEmployeedHumanResourcesDataMeta?.totalAllData ?? 0,
           totalData: nonEmployeedHumanResourcesDataMeta?.totalData ?? 0,
@@ -215,26 +226,13 @@ const CreateHumanResourcesAvailableBook = () => {
           onChange: (e) => {
             setSearchQuery(e.currentTarget.value);
           },
-          onSearch: () => {
-            setPage(1);
-          },
+          searchQuery,
         }}
       >
         {renderTable}
       </DashboardCard>
       <Divider my="md" />
-      <DashboardCard
-        title={t('humanResources.masterSDM')}
-        searchBar={{
-          placeholder: t('humanResources.searchPlaceholder'),
-          onChange: (e) => {
-            setSearchQuery(e.currentTarget.value);
-          },
-          onSearch: () => {
-            setPage(1);
-          },
-        }}
-      >
+      <DashboardCard title={t('commonTypography.humanResourcesSelected')}>
         {choosetable}
         <Group w="100%" position="apart">
           <PrimaryButton

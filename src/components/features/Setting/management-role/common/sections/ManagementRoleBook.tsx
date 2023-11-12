@@ -1,6 +1,7 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +19,8 @@ import { useReadAllManagementRole } from '@/services/graphql/query/management-ro
 const ManagementRoleBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const [page, setPage] = React.useState<number>(1);
+  const pageParams = useSearchParams();
+  const page = Number(pageParams.get('page')) || 1;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -37,7 +39,12 @@ const ManagementRoleBook = () => {
     onCompleted: () => {
       refetch();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      router.push({
+        href: router.asPath,
+        query: {
+          page: 1,
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -59,6 +66,15 @@ const ManagementRoleBook = () => {
     await executeDelete({
       variables: {
         id,
+      },
+    });
+  };
+
+  const handleSetPage = (page: number) => {
+    router.push({
+      href: router.asPath,
+      query: {
+        page: page,
       },
     });
   };
@@ -116,7 +132,7 @@ const ManagementRoleBook = () => {
           },
         }}
         paginationProps={{
-          setPage: setPage,
+          setPage: handleSetPage,
           currentPage: page,
           totalAllData: rolesMeta?.totalAllData ?? 0,
           totalData: rolesMeta?.totalData ?? 0,
@@ -136,9 +152,6 @@ const ManagementRoleBook = () => {
       searchBar={{
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
-        },
-        onSearch: () => {
-          setPage(1);
         },
         searchQuery: searchQuery,
         placeholder: t('managementRole.searchPlaceholder'),

@@ -1,6 +1,7 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,8 +18,9 @@ import { useReadAllHumanResourcesMasterData } from '@/services/graphql/query/mas
 
 const HumanResourcesBook = () => {
   const router = useRouter();
+  const pageParams = useSearchParams();
+  const page = Number(pageParams.get('page')) || 1;
   const { t } = useTranslation('default');
-  const [page, setPage] = React.useState<number>(1);
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -42,7 +44,12 @@ const HumanResourcesBook = () => {
     onCompleted: () => {
       refetchHumanResources();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      router.push({
+        href: router.asPath,
+        query: {
+          page: 1,
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -65,6 +72,15 @@ const HumanResourcesBook = () => {
     await executeDelete({
       variables: {
         id,
+      },
+    });
+  };
+
+  const handleSetPage = (page: number) => {
+    router.push({
+      href: router.asPath,
+      query: {
+        page: page,
       },
     });
   };
@@ -142,7 +158,7 @@ const HumanResourcesBook = () => {
           },
         }}
         paginationProps={{
-          setPage: setPage,
+          setPage: handleSetPage,
           currentPage: page,
           totalAllData: humanResourcesDataMeta?.totalAllData ?? 0,
           totalData: humanResourcesDataMeta?.totalData ?? 0,
@@ -165,9 +181,7 @@ const HumanResourcesBook = () => {
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
-        onSearch: () => {
-          setPage(1);
-        },
+        searchQuery: searchQuery,
       }}
     >
       {renderTable}
