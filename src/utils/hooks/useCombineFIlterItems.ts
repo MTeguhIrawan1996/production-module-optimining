@@ -38,7 +38,9 @@ export const useCombineFilterItems = <T extends IIdAndName>({
     uncombinedItem,
   };
 };
-export const useFilterItems = <T extends IIdAndName>({ data }: IProps<T>) => {
+export const useFilterItems = <T extends IIdAndName>({
+  data,
+}: Pick<IProps<T>, 'data'>) => {
   const renderItems = React.useCallback((value: T) => {
     return {
       label: value.name,

@@ -1,219 +1,305 @@
-import { Text } from '@mantine/core';
+import { SelectProps } from '@mantine/core';
+import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   DashboardCard,
+  GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
+  ModalConfirmation,
 } from '@/components/elements';
 
-const tableExp = [
-  {
-    id: '9d7b6df5-aa1e-4203-bfa8-7d9464e331cb',
-    name: 'Sipes Inc',
-    streetAddress: '280 Rigoberto Divide',
-    city: 'Twin Falls',
-    state: 'MT',
-    missionStatement:
-      'Strategize magnetic vortals. Strategize magnetic vortals. Strategize magnetic vortals.',
-  },
-  {
-    id: '3c147f0b-c63f-4830-8ced-f378aad9efc6',
-    name: 'Runolfsdottir - Cummerata',
-    streetAddress: '102 Konopelski Greens',
-    city: 'Missouri City',
-    state: 'KY',
-    missionStatement: 'Leverage one-to-one methodologies.',
-  },
-  {
-    id: '331992e8-7144-49c4-a8fd-fae9a6921b13',
-    name: 'Johnston LLC',
-    streetAddress: '230 Julie Lake',
-    city: 'Hartford',
-    state: 'KY',
-    missionStatement: 'Transition wireless initiatives.',
-  },
-  {
-    id: 'eb089974-a0ed-4ec2-84a3-4d7bd3935b63',
-    name: 'Crist and Sons',
-    streetAddress: '3387 Blick Turnpike',
-    city: 'Attleboro',
-    state: 'WV',
-    missionStatement: 'Revolutionize out-of-the-box infomediaries.',
-  },
-  {
-    id: 'fc257801-7b32-41ca-a31b-57ae6739415b',
-    name: 'Schmidt and Sons',
-    streetAddress: '286 Leif Lock',
-    city: 'Collierville',
-    state: 'AL',
-    missionStatement: 'Optimize bricks-and-clicks eyeballs.',
-  },
-  {
-    id: 'c942ac73-2c51-4bf1-b4a7-04419acf58c0',
-    name: 'Nicolas Group',
-    streetAddress: '09622 Marcel Place',
-    city: 'Highland',
-    state: 'OR',
-    missionStatement: 'Transition vertical interfaces.',
-  },
-  {
-    id: 'ad36f2d0-b186-4f1e-9a04-57e59715dc8f',
-    name: 'Kub and Sons',
-    streetAddress: '8699 Upton Fords',
-    city: 'East Providence',
-    state: 'IN',
-    missionStatement: 'Drive proactive models.',
-  },
-  {
-    id: 'e4a64ab6-4a9f-4f53-8f9e-dbf761fe9a69',
-    name: 'Jakubowski - Rolfson',
-    streetAddress: "191 O'Connell Greens",
-    city: 'San Rafael',
-    state: 'MA',
-    missionStatement: 'Streamline cutting-edge architectures.',
-  },
-  {
-    id: '996fdd92-a399-4bef-9188-b0458ecee682',
-    name: 'Welch - Tremblay',
-    streetAddress: '31622 Isobel Fall',
-    city: 'Olathe',
-    state: 'AR',
-    missionStatement: 'Deploy wireless solutions.',
-  },
-  {
-    id: 'd0d0f9b1-7bb9-4b1e-967d-3ea81de7dd59',
-    name: 'Mueller, Hodkiewicz and Beahan',
-    streetAddress: '21751 Elisa Village',
-    city: 'Grand Prairie',
-    state: 'WA',
-    missionStatement: 'Facilitate bleeding-edge web-readiness.',
-  },
-];
+import { useDeleteMasterHeavyEquipment } from '@/services/graphql/mutation/master-data-heavy-equipment/useDeleteRefrenceHeavyEquipment';
+import { useReadAllBrand } from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
+import { useReadAllHeavyEquipmentRefrence } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipment';
+import { useReadAllHeavyEquipmentMasterData } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentMasterData';
+import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
+import { useReadAllHeavyEquipmentClass } from '@/services/graphql/query/heavy-equipment-class/useReadAllHeavyEquipmentClass';
+import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 const ReadHeavyEquipmentBook = () => {
-  return (
-    <DashboardCard
-      title="Alat Berat"
-      pt={0}
-      addButton={{
-        label: 'Tambah Alat Berat',
-      }}
-      // searchBar={{
-      //   // eslint-disable-next-line no-console
-      //   onChange: () => console.log('onChnge'),
-      //   placeholder:
-      //     'Cari berdasarkan Nama Perusahaan, Nama Pegawai, NIP, Divisi dan Jabatan',
-      // }}
-      MultipleFilter={{
-        colSpan: 4,
-        MultipleFilterData: [
-          {
-            data: [
-              {
-                label: 'react',
-                value: 'react',
-              },
-              {
-                label: 'mantine',
-                value: 'mantine',
-              },
-            ],
-            label: 'Jenis Alat Berat',
-            placeholder: 'Pilih jenis alat berat',
-            searchable: true,
-            clearable: true,
-          },
-          {
-            data: [
-              {
-                label: 'react',
-                value: 'react',
-              },
-              {
-                label: 'mantine',
-                value: 'mantine',
-              },
-            ],
-            label: 'brand',
-            placeholder: 'Pilih brand',
-          },
-          {
-            data: [
-              {
-                label: 'react',
-                value: 'react',
-              },
-              {
-                label: 'mantine',
-                value: 'mantine',
-              },
-            ],
-            label: 'Tipe',
-            placeholder: 'Pilih tipe',
-          },
-          {
-            data: [
-              {
-                label: 'react',
-                value: 'react',
-              },
-              {
-                label: 'mantine',
-                value: 'mantine',
-              },
-            ],
-            label: 'Kelas',
-            placeholder: 'Pilih kelas',
-          },
-        ],
-      }}
-    >
+  const { t } = useTranslation('default');
+  const router = useRouter();
+  const id = router.query.id as string;
+  const pageParams = useSearchParams();
+  const page = Number(pageParams.get('hp')) || 1;
+  const companyPage = Number(pageParams.get('cp')) || 1;
+  const url = `/master-data/company/read/${id}?cp=${companyPage}&hp=1`;
+  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
+    React.useState<boolean>(false);
+  // const [id, setId] = React.useState<string>('');
+  const [brandSearchTerm, setBrandSearchTerm] = React.useState<string>('');
+  const [brandSearchQuery] = useDebouncedValue<string>(brandSearchTerm, 400);
+  const [brandId, setBrandId] = React.useState<string | null>(null);
+  const [typeSearchTerm, setTypeSearchTerm] = React.useState<string>('');
+  const [typeSearchQuery] = useDebouncedValue<string>(typeSearchTerm, 400);
+  const [typeId, setTypeId] = React.useState<string | null>(null);
+  const [modelSearchTerm, setModelSearchTerm] = React.useState<string>('');
+  const [modelSearchQuery] = useDebouncedValue<string>(modelSearchTerm, 400);
+  const [modelId, setModelId] = React.useState<string | null>(null);
+  const [classSearchTerm, setClassSearchTerm] = React.useState<string>('');
+  const [classSearchQuery] = useDebouncedValue<string>(classSearchTerm, 400);
+  const [classId, setClasslId] = React.useState<string | null>(null);
+
+  const {
+    heavyEquipmentsMasterData,
+    heavyEquipmentMasterDataLoading,
+    heavyEquipmentsMasterDataMeta,
+    refetchHeavyEquipmentMasterData,
+  } = useReadAllHeavyEquipmentMasterData({
+    variables: {
+      limit: 10,
+      page: page,
+      orderDir: 'desc',
+      search: searchQuery === '' ? null : searchQuery,
+      brandId,
+      typeId,
+      referenceId: modelId,
+      classId,
+    },
+  });
+  const { brandsData } = useReadAllBrand({
+    variables: {
+      limit: 15,
+      search: brandSearchQuery === '' ? null : brandSearchQuery,
+    },
+  });
+  const { typesData } = useReadAllHeavyEquipmentType({
+    variables: {
+      limit: 15,
+      search: typeSearchQuery === '' ? null : typeSearchQuery,
+      brandId,
+    },
+  });
+  const { heavyEquipmentsData: modelRefrence } =
+    useReadAllHeavyEquipmentRefrence({
+      variables: {
+        limit: 15,
+        search: modelSearchQuery === '' ? null : modelSearchQuery,
+        brandId,
+        typeId,
+      },
+    });
+  const { heavyEquipmentClassesData } = useReadAllHeavyEquipmentClass({
+    variables: {
+      limit: 15,
+      search: classSearchQuery === '' ? null : classSearchQuery,
+    },
+  });
+
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  const [executeDelete, { loading }] = useDeleteMasterHeavyEquipment({
+    onCompleted: () => {
+      refetchHeavyEquipmentMasterData();
+      setIsOpenDeleteConfirmation((prev) => !prev);
+      router.push(url, undefined, { shallow: true });
+      notifications.show({
+        color: 'green',
+        title: 'Selamat',
+        message: t('heavyEquipment.successDeleteMasterMessage'),
+        icon: <IconCheck />,
+      });
+    },
+    onError: ({ message }) => {
+      notifications.show({
+        color: 'red',
+        title: 'Gagal',
+        message: message,
+        icon: <IconX />,
+      });
+    },
+  });
+
+  const heavyEquipmentItem = modelRefrence?.map((val) => {
+    return {
+      name: val.modelName,
+      id: val.id,
+    };
+  });
+
+  const { uncombinedItem: modelItems } = useFilterItems({
+    data: heavyEquipmentItem ?? [],
+  });
+
+  const { uncombinedItem: brandItems } = useFilterItems({
+    data: brandsData ?? [],
+  });
+  const { uncombinedItem: typeItems } = useFilterItems({
+    data: typesData ?? [],
+  });
+  const { uncombinedItem: classItems } = useFilterItems({
+    data: heavyEquipmentClassesData ?? [],
+  });
+
+  const handleDelete = async () => {
+    // await executeDelete({
+    //   variables: {
+    //     id,
+    //   },
+    // });
+  };
+
+  const handleSetPage = (page: number) => {
+    const urlSet = `/master-data/company/read/${id}?cp=${companyPage}&hp=${page}`;
+    router.push(urlSet, undefined, { shallow: true });
+  };
+
+  const filter = React.useMemo(() => {
+    const item: SelectProps[] = [
+      {
+        onChange: (value) => {
+          router.push(url, undefined, { shallow: true });
+          setBrandId(value);
+          setTypeId(null);
+          setModelId(null);
+        },
+        data: brandItems ?? [],
+        label: 'brand',
+        placeholder: 'chooseBrand',
+        searchable: true,
+        nothingFound: null,
+        clearable: true,
+        onSearchChange: setBrandSearchTerm,
+        searchValue: brandSearchTerm,
+      },
+      {
+        onChange: (value) => {
+          router.push(url, undefined, { shallow: true });
+          setTypeId(value);
+          setModelId(null);
+        },
+        value: typeId,
+        data: typeItems ?? [],
+        label: 'type',
+        placeholder: 'chooseType',
+        searchable: true,
+        nothingFound: null,
+        clearable: true,
+        onSearchChange: setTypeSearchTerm,
+        searchValue: typeSearchTerm,
+      },
+      {
+        onChange: (value) => {
+          router.push(url, undefined, { shallow: true });
+          setModelId(value);
+        },
+        value: modelId,
+        data: modelItems ?? [],
+        label: 'model',
+        placeholder: 'chooseModel',
+        searchable: true,
+        nothingFound: null,
+        clearable: true,
+        onSearchChange: setModelSearchTerm,
+        searchValue: modelSearchTerm,
+      },
+      {
+        onChange: (value) => {
+          router.push(url, undefined, { shallow: true });
+          setClasslId(value);
+        },
+        value: classId,
+        data: classItems ?? [],
+        label: 'class',
+        placeholder: 'chooseClass',
+        searchable: true,
+        nothingFound: null,
+        clearable: true,
+        onSearchChange: setClassSearchTerm,
+        searchValue: classSearchTerm,
+      },
+    ];
+    return item;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    brandSearchTerm,
+    typeSearchTerm,
+    classSearchTerm,
+    modelSearchTerm,
+    typeItems,
+    classItems,
+    modelItems,
+    brandItems,
+  ]);
+
+  const renderTable = React.useMemo(() => {
+    return (
       <MantineDataTable
         tableProps={{
-          onRowClick: ({ id }) => {
-            // eslint-disable-next-line no-console
-            console.log(id);
-          },
           highlightOnHover: true,
-          shadow: 'none',
           columns: [
-            { accessor: 'name', textAlignment: 'center' },
             {
-              accessor: 'missionStatement',
-              title: <Text>MissionStatement</Text>,
-              width: 300,
-              visibleMediaQuery: (theme) =>
-                `(min-width: ${theme.breakpoints.md})`,
+              accessor: 'hullNumber',
+              title: t('commonTypography.heavyEquipmentCode'),
             },
-            { accessor: 'streetAddress' },
-            { accessor: 'city' },
-            { accessor: 'state' },
+            {
+              accessor: 'chassisNumber',
+              title: t('commonTypography.brand'),
+            },
+            {
+              accessor: 'type',
+              title: t('commonTypography.heavyEquipmentType'),
+              render: ({ reference }) => reference.modelName,
+            },
+            {
+              accessor: 'brand',
+              title: t('commonTypography.model'),
+              render: ({ reference }) => reference.type.brand.name,
+            },
+            {
+              accessor: 'specification',
+              title: t('commonTypography.specification'),
+            },
+            {
+              accessor: 'class',
+              title: t('commonTypography.class'),
+            },
+            {
+              accessor: 'formStatus',
+              title: t('commonTypography.formStatus'),
+              render: () => (
+                <GlobalBadgeStatus
+                  color="blue.6"
+                  label={
+                    // isComplete
+                    // ? t('commonTypography.complete')
+                    t('commonTypography.inComplete')
+                  }
+                />
+              ),
+            },
             {
               accessor: 'action',
-              title: 'Aksi',
+              title: t('commonTypography.action'),
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
                     actionRead={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        // eslint-disable-next-line no-console
-                        console.log('red', id);
+                        router.push(`/master-data/heavy-equipment/read/${id}`);
                       },
                     }}
                     actionUpdate={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        // eslint-disable-next-line no-console
-                        console.log('up');
+                        router.push(
+                          `/master-data/heavy-equipment/update/${id}`
+                        );
                       },
                     }}
                     actionDelete={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        // eslint-disable-next-line no-console
-                        console.log('del');
+                        setIsOpenDeleteConfirmation((prev) => !prev);
+                        // setId(id);
                       },
                     }}
                   />
@@ -221,23 +307,71 @@ const ReadHeavyEquipmentBook = () => {
               },
             },
           ],
-          defaultColumnProps: {
-            textAlignment: 'left',
-            // noWrap: false,
-            // ellipsis: true,
+          fetching: heavyEquipmentMasterDataLoading,
+          records: heavyEquipmentsMasterData,
+        }}
+        emptyStateProps={{
+          title: t('commonTypography.dataNotfound'),
+          actionButton: {
+            label: t('heavyEquipment.createHeavyEquipment'),
+            onClick: () => router.push('/reference/heavy-equipment/create'),
           },
-
-          // fetching: true,
-          records: tableExp,
         }}
         paginationProps={{
-          setPage: () => {},
-          currentPage: 1,
-          totalAllData: 100,
-          totalData: 10,
-          totalPage: 20,
-          // isFetching: true,
+          setPage: handleSetPage,
+          currentPage: page,
+          totalAllData: heavyEquipmentsMasterDataMeta?.totalAllData ?? 0,
+          totalData: heavyEquipmentsMasterDataMeta?.totalData ?? 0,
+          totalPage: heavyEquipmentsMasterDataMeta?.totalPage ?? 0,
         }}
+      />
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [heavyEquipmentsMasterData, heavyEquipmentMasterDataLoading]);
+
+  return (
+    <DashboardCard
+      title={t('commonTypography.heavyEquipment')}
+      addButton={{
+        label: t('heavyEquipment.createHeavyEquipment'),
+        onClick: () => router.push('/master-data/heavy-equipment/create'),
+      }}
+      searchBar={{
+        placeholder: t('heavyEquipment.searchPlaceholderOverview'),
+        onChange: (e) => {
+          setSearchQuery(e.currentTarget.value);
+        },
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
+        },
+        searchQuery: searchQuery,
+      }}
+      MultipleFilter={{
+        MultipleFilterData: filter,
+        colSpan: 4,
+      }}
+    >
+      {renderTable}
+      <ModalConfirmation
+        isOpenModalConfirmation={isOpenDeleteConfirmation}
+        actionModalConfirmation={() =>
+          setIsOpenDeleteConfirmation((prev) => !prev)
+        }
+        actionButton={{
+          label: t('commonTypography.yesDelete'),
+          color: 'red',
+          onClick: handleDelete,
+          loading: loading,
+        }}
+        backButton={{
+          label: 'Batal',
+        }}
+        modalType={{
+          type: 'default',
+          title: t('commonTypography.alertTitleConfirmDelete'),
+          description: t('commonTypography.alertDescConfirmDeleteMasterData'),
+        }}
+        withDivider
       />
     </DashboardCard>
   );

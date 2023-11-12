@@ -5,6 +5,7 @@ import * as React from 'react';
 
 export interface ISerachBar extends TextInputProps {
   searchQuery: string | string[] | null;
+  onSearch?: () => void;
 }
 
 const SearchBar: React.FC<ISerachBar> = ({
@@ -12,23 +13,21 @@ const SearchBar: React.FC<ISerachBar> = ({
   value,
   onChange,
   searchQuery,
+  onSearch,
   ...rest
 }) => {
   const router = useRouter();
   React.useEffect(() => {
     if (searchQuery) {
-      router.push({
-        href: router.asPath,
-        query: {
-          page: 1,
-        },
-      });
+      onSearch
+        ? onSearch()
+        : router.push({
+            href: router.asPath,
+            query: {
+              page: 1,
+            },
+          });
     }
-    // } else {
-    //   router.push({
-    //     href: router.pathname,
-    //   });
-    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
   return (

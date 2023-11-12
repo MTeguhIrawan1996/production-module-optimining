@@ -123,12 +123,6 @@ const HeavyEquipmentMasterBook = () => {
       id: val.id,
     };
   });
-  const heavyEquipmentClassItem = heavyEquipmentClassesData?.map((val) => {
-    return {
-      name: val.name,
-      id: val.id,
-    };
-  });
 
   const { uncombinedItem: modelItems } = useFilterItems({
     data: heavyEquipmentItem ?? [],
@@ -140,8 +134,8 @@ const HeavyEquipmentMasterBook = () => {
   const { uncombinedItem: typeItems } = useFilterItems({
     data: typesData ?? [],
   });
-  const { uncombinedItem: classItem } = useFilterItems({
-    data: heavyEquipmentClassItem ?? [],
+  const { uncombinedItem: classItems } = useFilterItems({
+    data: heavyEquipmentClassesData ?? [],
   });
 
   const handleDelete = async () => {
@@ -236,7 +230,7 @@ const HeavyEquipmentMasterBook = () => {
           setClasslId(value);
         },
         value: classId,
-        data: classItem ?? [],
+        data: classItems ?? [],
         label: 'class',
         placeholder: 'chooseClass',
         searchable: true,
@@ -248,7 +242,16 @@ const HeavyEquipmentMasterBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brandSearchTerm, brandsData, typeSearchTerm, typeItems]);
+  }, [
+    brandSearchTerm,
+    typeSearchTerm,
+    classSearchTerm,
+    modelSearchTerm,
+    typeItems,
+    classItems,
+    modelItems,
+    brandItems,
+  ]);
 
   const renderTable = React.useMemo(() => {
     return (
