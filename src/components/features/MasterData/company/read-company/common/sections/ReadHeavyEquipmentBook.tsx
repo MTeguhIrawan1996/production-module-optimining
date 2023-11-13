@@ -15,10 +15,10 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteMasterHeavyEquipment } from '@/services/graphql/mutation/master-data-heavy-equipment/useDeleteRefrenceHeavyEquipment';
+import { useDeleteCompanyHeavyEquipment } from '@/services/graphql/mutation/heavy-equipment/useDeleteCompanyHeavyEquipment';
 import { useReadAllBrand } from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
 import { useReadAllHeavyEquipmentRefrence } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipment';
-import { useReadAllHeavyEquipmentMasterData } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentMasterData';
+import { useReadAllHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
 import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
 import { useReadAllHeavyEquipmentClass } from '@/services/graphql/query/heavy-equipment-class/useReadAllHeavyEquipmentClass';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
@@ -34,7 +34,7 @@ const ReadHeavyEquipmentBook = () => {
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
-  // const [id, setId] = React.useState<string>('');
+  const [heavyEquipmentId, setHeavyEquipmentId] = React.useState<string>('');
   const [brandSearchTerm, setBrandSearchTerm] = React.useState<string>('');
   const [brandSearchQuery] = useDebouncedValue<string>(brandSearchTerm, 400);
   const [brandId, setBrandId] = React.useState<string | null>(null);
@@ -49,11 +49,11 @@ const ReadHeavyEquipmentBook = () => {
   const [classId, setClasslId] = React.useState<string | null>(null);
 
   const {
-    heavyEquipmentsMasterData,
-    heavyEquipmentMasterDataLoading,
-    heavyEquipmentsMasterDataMeta,
-    refetchHeavyEquipmentMasterData,
-  } = useReadAllHeavyEquipmentMasterData({
+    heavyEquipmentsCompany,
+    heavyEquipmentsCompanyMeta,
+    heavyEquipmentCompanyLoading,
+    refetchHeavyEquipmentCompany,
+  } = useReadAllHeavyEquipmentCompany({
     variables: {
       limit: 10,
       page: page,
@@ -63,6 +63,7 @@ const ReadHeavyEquipmentBook = () => {
       typeId,
       referenceId: modelId,
       classId,
+      companyId: id,
     },
   });
   const { brandsData } = useReadAllBrand({
@@ -95,15 +96,15 @@ const ReadHeavyEquipmentBook = () => {
   });
 
   // eslint-disable-next-line unused-imports/no-unused-vars
-  const [executeDelete, { loading }] = useDeleteMasterHeavyEquipment({
+  const [executeDelete, { loading }] = useDeleteCompanyHeavyEquipment({
     onCompleted: () => {
-      refetchHeavyEquipmentMasterData();
+      refetchHeavyEquipmentCompany();
       setIsOpenDeleteConfirmation((prev) => !prev);
       router.push(url, undefined, { shallow: true });
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('heavyEquipment.successDeleteMasterMessage'),
+        message: t('heavyEquipment.successDeleteCompanyMessage'),
         icon: <IconCheck />,
       });
     },
@@ -139,11 +140,11 @@ const ReadHeavyEquipmentBook = () => {
   });
 
   const handleDelete = async () => {
-    // await executeDelete({
-    //   variables: {
-    //     id,
-    //   },
-    // });
+    await executeDelete({
+      variables: {
+        id: heavyEquipmentId,
+      },
+    });
   };
 
   const handleSetPage = (page: number) => {
@@ -240,37 +241,43 @@ const ReadHeavyEquipmentBook = () => {
               title: t('commonTypography.heavyEquipmentCode'),
             },
             {
-              accessor: 'chassisNumber',
+              accessor: 'brand',
               title: t('commonTypography.brand'),
+              render: ({ heavyEquipment }) =>
+                heavyEquipment?.reference?.type?.brand?.name,
             },
             {
               accessor: 'type',
               title: t('commonTypography.heavyEquipmentType'),
-              render: ({ reference }) => reference.modelName,
+              render: ({ heavyEquipment }) =>
+                heavyEquipment?.reference?.type?.name,
             },
             {
-              accessor: 'brand',
+              accessor: 'model',
               title: t('commonTypography.model'),
-              render: ({ reference }) => reference.type.brand.name,
+              render: ({ heavyEquipment }) =>
+                heavyEquipment?.reference?.modelName,
             },
             {
               accessor: 'specification',
               title: t('commonTypography.specification'),
+              render: ({ heavyEquipment }) => heavyEquipment?.specification,
             },
             {
               accessor: 'class',
               title: t('commonTypography.class'),
+              render: ({ heavyEquipment }) => heavyEquipment?.class?.name,
             },
             {
               accessor: 'formStatus',
               title: t('commonTypography.formStatus'),
-              render: () => (
+              render: ({ isComplete }) => (
                 <GlobalBadgeStatus
-                  color="blue.6"
+                  color={isComplete ? 'blue.6' : 'gray.6'}
                   label={
-                    // isComplete
-                    // ? t('commonTypography.complete')
-                    t('commonTypography.inComplete')
+                    isComplete
+                      ? t('commonTypography.complete')
+                      : t('commonTypography.inComplete')
                   }
                 />
               ),
@@ -299,7 +306,7 @@ const ReadHeavyEquipmentBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         setIsOpenDeleteConfirmation((prev) => !prev);
-                        // setId(id);
+                        setHeavyEquipmentId(id);
                       },
                     }}
                   />
@@ -307,8 +314,8 @@ const ReadHeavyEquipmentBook = () => {
               },
             },
           ],
-          fetching: heavyEquipmentMasterDataLoading,
-          records: heavyEquipmentsMasterData,
+          fetching: heavyEquipmentCompanyLoading,
+          records: heavyEquipmentsCompany,
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
@@ -320,14 +327,14 @@ const ReadHeavyEquipmentBook = () => {
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: heavyEquipmentsMasterDataMeta?.totalAllData ?? 0,
-          totalData: heavyEquipmentsMasterDataMeta?.totalData ?? 0,
-          totalPage: heavyEquipmentsMasterDataMeta?.totalPage ?? 0,
+          totalAllData: heavyEquipmentsCompanyMeta?.totalAllData ?? 0,
+          totalData: heavyEquipmentsCompanyMeta?.totalData ?? 0,
+          totalPage: heavyEquipmentsCompanyMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [heavyEquipmentsMasterData, heavyEquipmentMasterDataLoading]);
+  }, [heavyEquipmentsCompany, heavyEquipmentCompanyLoading]);
 
   return (
     <DashboardCard

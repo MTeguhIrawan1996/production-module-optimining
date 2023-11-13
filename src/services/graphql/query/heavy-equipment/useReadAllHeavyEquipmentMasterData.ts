@@ -69,9 +69,9 @@ export interface IHeavyEquipmentMasterData {
       brand: {
         id: string;
         name: string;
-      };
-    };
-  };
+      } | null;
+    } | null;
+  } | null;
   specification: string | null;
   createdYear: string | null;
 }
