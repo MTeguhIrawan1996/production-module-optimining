@@ -86,6 +86,7 @@ const UserBook = () => {
           title: t('commonTypography.dataNotfound'),
           actionButton: {
             label: t('user.createUser'),
+            onClick: () => router.push('/setting/user/create'),
           },
         }}
         paginationProps={{

@@ -237,6 +237,7 @@
     "successUpdateMasterMessage": "$t(commonTypography.masterData) $t(commonTypography.heavyEquipment) berhasil diubah",
     "successDeleteMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dihapus",
     "successDeleteMasterMessage": "$t(commonTypography.masterData) $t(commonTypography.heavyEquipment) berhasil dihapus",
+    "successDeleteCompanyMessage": "$t(commonTypography.heavyEquipment) berhasil dihapus",
     "alertDescConfirmDelete": "Data kemungkinan berelasi dengan data lain",
     "specHeavyEquipment": "$t(commonTypography.specification) $t(commonTypography.heavyEquipment)",
     "productionYear": "$t(commonTypography.year) Pembuatan",

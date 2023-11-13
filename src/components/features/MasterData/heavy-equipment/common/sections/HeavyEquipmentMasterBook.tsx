@@ -14,7 +14,7 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteMasterHeavyEquipment } from '@/services/graphql/mutation/master-data-heavy-equipment/useDeleteRefrenceHeavyEquipment';
+import { useDeleteMasterHeavyEquipment } from '@/services/graphql/mutation/master-data-heavy-equipment/useDeleteMasterHeavyEquipment';
 import { useReadAllBrand } from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
 import { useReadAllHeavyEquipmentRefrence } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipment';
 import { useReadAllHeavyEquipmentMasterData } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentMasterData';
@@ -270,12 +270,12 @@ const HeavyEquipmentMasterBook = () => {
             {
               accessor: 'type',
               title: t('commonTypography.model'),
-              render: ({ reference }) => reference.modelName,
+              render: ({ reference }) => reference?.modelName,
             },
             {
               accessor: 'brand',
               title: t('commonTypography.brand'),
-              render: ({ reference }) => reference.type.brand.name,
+              render: ({ reference }) => reference?.type?.brand?.name,
             },
             {
               accessor: 'specification',
@@ -320,7 +320,7 @@ const HeavyEquipmentMasterBook = () => {
           title: t('commonTypography.dataNotfound'),
           actionButton: {
             label: t('heavyEquipment.createHeavyEquipment'),
-            onClick: () => router.push('/reference/heavy-equipment/create'),
+            onClick: () => router.push('/master-data/heavy-equipment/create'),
           },
         }}
         paginationProps={{

@@ -47,7 +47,7 @@ export const READ_ONE_HEAVY_EQUIPMENT_MASTER = gql`
   }
 `;
 
-export interface IHeavyEquipmentMasterData {
+export interface IReadOneHeavyEquipmentMasterData {
   id: string;
   engineNumber: string;
   chassisNumber: string;
@@ -78,11 +78,11 @@ export interface IHeavyEquipmentMasterData {
   photos: Omit<IFile, 'mime' | 'path'>[] | null;
 }
 
-export interface IHeavyEquipmentMasterResponse {
-  heavyEquipment: IHeavyEquipmentMasterData;
+export interface IReadOneHeavyEquipmentMasterResponse {
+  heavyEquipment: IReadOneHeavyEquipmentMasterData;
 }
 
-export interface IHeavyEquipmentMasterRequest {
+export interface IReadOneHeavyEquipmentMasterRequest {
   id: string;
 }
 
@@ -91,25 +91,25 @@ export const useReadOneHeavyEquipmentMaster = ({
   skip,
   onCompleted,
 }: {
-  variables: IHeavyEquipmentMasterRequest;
+  variables: IReadOneHeavyEquipmentMasterRequest;
   skip?: boolean;
-  onCompleted?: (data: IHeavyEquipmentMasterResponse) => void;
+  onCompleted?: (data: IReadOneHeavyEquipmentMasterResponse) => void;
 }) => {
   const {
     data: heavyEquipmentMasterData,
     loading: heavyEquipmentMasterDataLoading,
-  } = useQuery<IHeavyEquipmentMasterResponse, IHeavyEquipmentMasterRequest>(
-    READ_ONE_HEAVY_EQUIPMENT_MASTER,
-    {
-      variables,
-      onError: (err: ApolloError) => {
-        return err;
-      },
-      onCompleted: onCompleted,
-      skip,
-      fetchPolicy: 'cache-and-network',
-    }
-  );
+  } = useQuery<
+    IReadOneHeavyEquipmentMasterResponse,
+    IReadOneHeavyEquipmentMasterRequest
+  >(READ_ONE_HEAVY_EQUIPMENT_MASTER, {
+    variables,
+    onError: (err: ApolloError) => {
+      return err;
+    },
+    onCompleted: onCompleted,
+    skip,
+    fetchPolicy: 'cache-and-network',
+  });
 
   return {
     heavyEquipmentMasterData: heavyEquipmentMasterData?.heavyEquipment,

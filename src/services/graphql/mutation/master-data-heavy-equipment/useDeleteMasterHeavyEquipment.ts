@@ -6,7 +6,7 @@ export const DELETE_MASTER_HEAVY_EQUIPMENT = gql`
   }
 `;
 
-export interface IDeleteMasterHERequest {
+interface IDeleteMasterHERequest {
   id: string;
 }
 
