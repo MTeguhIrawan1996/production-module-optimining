@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import {
+  zDateValidation,
   zImageArrayOptional,
   zOptionalString,
   zRequiredNumberOfString,
@@ -20,4 +21,23 @@ export const createHeavyEquipmentMasterSchema = z.object({
   engineNumber: zRequiredString,
   vehicleNumber: zOptionalString,
   vehicleNumberPhoto: zImageArrayOptional,
+});
+
+export const createHeavyEquipmentCompanySchema = z.object({
+  hullNumber: zRequiredString,
+  engineNumber: zRequiredString,
+  chassisNumber: zRequiredString,
+  brandId: zRequiredString,
+  typeId: zRequiredString,
+  referenceId: zRequiredString,
+  specification: zOptionalString,
+  vehicleNumber: zRequiredString,
+  classId: zRequiredString,
+  eligibilityStatusId: zRequiredString,
+  createdYear: zRequiredNumberOfString,
+  startDate: zDateValidation,
+  endDate: zDateValidation.optional().nullable(),
+  isStill: z.boolean(),
+  vehicleNumberPhoto: zImageArrayOptional,
+  photos: zImageArrayOptional,
 });

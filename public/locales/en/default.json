@@ -63,6 +63,8 @@
     "choose": "Pilih",
     "chooseAll": "Pilih Semua",
     "entryDate": "Tanggal Masuk Bekerja",
+    "startDate": "Tanggal Mulai",
+    "endDate": "Tanggal Selesai",
     "quitDate": "Tanggal Berhanti Bekerja",
     "setting": "Pengaturan",
     "contact": "Kontak",
@@ -137,7 +139,8 @@
     "engineNumber": "Nomor Mesin",
     "frameNumber": "Nomor Rangka",
     "masterData": "Master Data",
-    "vehicleDocument": "Surat Kendaraan"
+    "vehicleDocument": "Surat Kendaraan",
+    "stillInUse": "Masih digunakan"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -220,6 +223,8 @@
   "heavyEquipment": {
     "heavyEquipmentTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
     "heavyEquipmentMaster": "$t(commonTypography.masterData) $t(commonTypography.heavyEquipment)",
+    "createNewHeavyEquipment": "$t(commonTypography.create) $t(commonTypography.heavyEquipment) $t(commonTypography.new)",
+    "selectExistingHeavyEquipment": "$t(commonTypography.select) $t(commonTypography.heavyEquipment) $t(commonTypography.existing)",
     "createHeavyEquipment": "$t(commonTypography.create) $t(commonTypography.heavyEquipment)",
     "editHeavyEquipment": "$t(commonTypography.edit) $t(commonTypography.heavyEquipment)",
     "readHeavyEquipment": "$t(commonTypography.detail) $t(commonTypography.heavyEquipment)",
@@ -233,6 +238,7 @@
     "detailReference": "$t(commonTypography.detail) $t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
     "successCreateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dibuat",
     "successCreateMasterMessage": "$t(commonTypography.masterData) $t(commonTypography.heavyEquipment) berhasil dibuat",
+    "successCreateCompanyMessage": "$t(commonTypography.heavyEquipment) berhasil dibuat",
     "successUpdateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil diubah",
     "successUpdateMasterMessage": "$t(commonTypography.masterData) $t(commonTypography.heavyEquipment) berhasil diubah",
     "successDeleteMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dihapus",

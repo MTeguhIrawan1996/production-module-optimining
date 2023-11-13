@@ -13,6 +13,7 @@ import {
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
+  SelectionButtonModal,
 } from '@/components/elements';
 
 import { useDeleteCompanyHeavyEquipment } from '@/services/graphql/mutation/heavy-equipment/useDeleteCompanyHeavyEquipment';
@@ -33,6 +34,8 @@ const ReadHeavyEquipmentBook = () => {
   const url = `/master-data/company/read/${id}?cp=${companyPage}&hp=1`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
+    React.useState<boolean>(false);
+  const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
   const [heavyEquipmentId, setHeavyEquipmentId] = React.useState<string>('');
   const [brandSearchTerm, setBrandSearchTerm] = React.useState<string>('');
@@ -321,7 +324,7 @@ const ReadHeavyEquipmentBook = () => {
           title: t('commonTypography.dataNotfound'),
           actionButton: {
             label: t('heavyEquipment.createHeavyEquipment'),
-            onClick: () => router.push('/reference/heavy-equipment/create'),
+            onClick: () => setIsOpenSelectionModal((prev) => !prev),
           },
         }}
         paginationProps={{
@@ -341,7 +344,7 @@ const ReadHeavyEquipmentBook = () => {
       title={t('commonTypography.heavyEquipment')}
       addButton={{
         label: t('heavyEquipment.createHeavyEquipment'),
-        onClick: () => router.push('/master-data/heavy-equipment/create'),
+        onClick: () => setIsOpenSelectionModal((prev) => !prev),
       }}
       searchBar={{
         placeholder: t('heavyEquipment.searchPlaceholderOverview'),
@@ -379,6 +382,22 @@ const ReadHeavyEquipmentBook = () => {
           description: t('commonTypography.alertDescConfirmDeleteMasterData'),
         }}
         withDivider
+      />
+      <SelectionButtonModal
+        isOpenSelectionModal={isOpenSelectionModal}
+        actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
+        firstButton={{
+          label: t('heavyEquipment.createNewHeavyEquipment'),
+          onClick: () =>
+            router.push(`/master-data/company/create/heavy-equipment/${id}`),
+        }}
+        secondButton={{
+          label: t('heavyEquipment.selectExistingHeavyEquipment'),
+          onClick: () =>
+            router.push(
+              `/master-data/company/create/human-resources-available/${id}`
+            ),
+        }}
       />
     </DashboardCard>
   );

@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { notifications } from '@mantine/notifications';
-import { IconCheck, IconX } from '@tabler/icons-react';
+import { IconCheck } from '@tabler/icons-react';
+import { IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -9,54 +10,62 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import {
-  ICreateHeavyEquipmentMasterValues,
-  useCreateHeavyEquipmentMaster,
-} from '@/services/restapi/heavy-equipment/useCreateHeavyEquipmentMaster';
+  ICreateHeavyEquipmentCompanyValues,
+  useCreateHeavyEquipmentCompany,
+} from '@/services/restapi/heavy-equipment/useCreateHeavyEquipmentCompany';
 import {
   brandSelect,
   classSelect,
   eligibilityStatusSelect,
+  globalDate,
   globalText,
   modelSelect,
   typeSelect,
 } from '@/utils/constants/Field/global-field';
-import { createHeavyEquipmentMasterSchema } from '@/utils/form-validation/master-heavy-equipment/heavy-equipment-validation';
+import { createHeavyEquipmentCompanySchema } from '@/utils/form-validation/master-heavy-equipment/heavy-equipment-validation';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
 import { ControllerGroup, ControllerProps } from '@/types/global';
 
-const CreateHeavyEquipmentMasterBook = () => {
+const CreateCompanyHeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
 
   /* #   /**=========== Methods =========== */
-  const methods = useForm<ICreateHeavyEquipmentMasterValues>({
-    resolver: zodResolver(createHeavyEquipmentMasterSchema),
+  const methods = useForm<ICreateHeavyEquipmentCompanyValues>({
+    resolver: zodResolver(createHeavyEquipmentCompanySchema),
     defaultValues: {
-      photos: [],
-      brandId: '',
+      hullNumber: '',
+      engineNumber: '',
       chassisNumber: '',
+      brandId: '',
       referenceId: '',
       typeId: '',
       specification: '',
-      classId: '',
-      createdYear: '',
-      eligibilityStatusId: '',
-      engineNumber: '',
       vehicleNumber: '',
+      classId: '',
+      eligibilityStatusId: '',
+      createdYear: '',
+      startDate: undefined,
+      endDate: undefined,
+      isStill: false,
       vehicleNumberPhoto: [],
+      photos: [],
     },
     mode: 'onBlur',
   });
   const brandId = methods.watch('brandId');
   const typeId = methods.watch('typeId');
+  const isStill = methods.watch('isStill');
+  const photos = methods.watch('photos');
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
 
-  const { mutate, isLoading } = useCreateHeavyEquipmentMaster({
+  const { mutate, isLoading } = useCreateHeavyEquipmentCompany({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -78,10 +87,11 @@ const CreateHeavyEquipmentMasterBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('heavyEquipment.successCreateMasterMessage'),
+        message: t('heavyEquipment.successCreateCompanyMessage'),
         icon: <IconCheck />,
       });
-      router.push('/master-data/heavy-equipment');
+      const url = `/master-data/company/read/${id}`;
+      router.push(url);
       methods.reset();
     },
   });
@@ -89,6 +99,11 @@ const CreateHeavyEquipmentMasterBook = () => {
 
   /* #   /**=========== Field =========== */
   const fieldCreateHeavyEquipment = React.useMemo(() => {
+    const hullNumber = globalText({
+      name: `hullNumber`,
+      label: 'heavyEquipmentCode',
+      colSpan: 6,
+    });
     const engineNumber = globalText({
       name: `engineNumber`,
       label: 'engineNumber',
@@ -105,16 +120,16 @@ const CreateHeavyEquipmentMasterBook = () => {
       colSpan: 6,
       withAsterisk: false,
     });
-    const createdYear = globalText({
-      name: 'createdYear',
-      label: 'productionYear',
-      colSpan: 6,
-    });
     const vehicleNumber = globalText({
       name: 'vehicleNumber',
       label: 'vehicleNumberOrRegirstrationNumber',
       colSpan: 6,
-      withAsterisk: false,
+      withAsterisk: true,
+    });
+    const createdYear = globalText({
+      name: 'createdYear',
+      label: 'productionYear',
+      colSpan: 6,
     });
     const brandItem = brandSelect({
       label: 'brandHeavyEquipment',
@@ -149,6 +164,19 @@ const CreateHeavyEquipmentMasterBook = () => {
     });
     const eligibilityStatusItem = eligibilityStatusSelect({});
 
+    const startDateItem = globalDate({
+      name: 'startDate',
+      label: 'startDate',
+      colSpan: 6,
+    });
+    const endDateItem = globalDate({
+      name: 'endDate',
+      label: 'endDate',
+      withAsterisk: false,
+      colSpan: 6,
+      disabled: isStill,
+    });
+
     const vehicleNumberPhoto: ControllerProps = {
       control: 'image-dropzone',
       name: 'vehicleNumberPhoto',
@@ -162,7 +190,7 @@ const CreateHeavyEquipmentMasterBook = () => {
         methods.clearErrors('vehicleNumberPhoto');
       },
       onReject: (files) =>
-        handleRejectFile<ICreateHeavyEquipmentMasterValues>({
+        handleRejectFile<ICreateHeavyEquipmentCompanyValues>({
           methods,
           files,
           field: 'vehicleNumberPhoto',
@@ -178,11 +206,23 @@ const CreateHeavyEquipmentMasterBook = () => {
       maxFiles: 5,
       enableDeletePhoto: true,
       onDrop: (value) => {
+        if (photos) {
+          if (value.length + photos.length > 5) {
+            methods.setError('photos', {
+              type: 'manual',
+              message: 'Jumlah foto melebihi batas maksimal',
+            });
+            return;
+          }
+          methods.setValue('photos', [...photos, ...value]);
+          methods.clearErrors('photos');
+          return;
+        }
         methods.setValue('photos', value);
         methods.clearErrors('photos');
       },
       onReject: (files) =>
-        handleRejectFile<ICreateHeavyEquipmentMasterValues>({
+        handleRejectFile<ICreateHeavyEquipmentCompanyValues>({
           methods,
           files,
           field: 'photos',
@@ -192,17 +232,29 @@ const CreateHeavyEquipmentMasterBook = () => {
       {
         group: t('heavyEquipment.informationHeavyEquipmentMaster'),
         enableGroupLabel: true,
+        groupCheckbox: {
+          onChange: () => {
+            isStill === true
+              ? methods.setValue('isStill', false)
+              : methods.setValue('isStill', true);
+            methods.setValue('endDate', null);
+          },
+          label: t('commonTypography.stillInUse'),
+        },
         formControllers: [
+          hullNumber,
           engineNumber,
           frameNumber,
           brandItem,
           typeItem,
           modelItem,
           specification,
-          createdYear,
+          vehicleNumber,
           classItem,
           eligibilityStatusItem,
-          vehicleNumber,
+          createdYear,
+          startDateItem,
+          endDateItem,
         ],
       },
       {
@@ -214,15 +266,16 @@ const CreateHeavyEquipmentMasterBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brandId, typeId]);
+  }, [brandId, typeId, isStill, photos]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
-  const handleSubmitForm: SubmitHandler<ICreateHeavyEquipmentMasterValues> = (
+  const handleSubmitForm: SubmitHandler<ICreateHeavyEquipmentCompanyValues> = (
     data
   ) => {
     const values = objectToArrayValue(data);
     mutate({
+      companyId: id,
       data: values,
     });
   };
@@ -246,4 +299,4 @@ const CreateHeavyEquipmentMasterBook = () => {
   );
 };
 
-export default CreateHeavyEquipmentMasterBook;
+export default CreateCompanyHeavyEquipmentBook;

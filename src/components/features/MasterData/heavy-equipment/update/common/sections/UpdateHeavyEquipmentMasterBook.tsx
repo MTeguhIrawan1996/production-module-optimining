@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { notifications } from '@mantine/notifications';
-import { IconCheck } from '@tabler/icons-react';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -102,8 +102,17 @@ const UpdateHeavyEquipmentMasterBook = () => {
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
-        errorArry?.forEach(({ name, type, message }) => {
-          methods.setError(name, { type, message });
+        if (errorArry?.length) {
+          errorArry?.forEach(({ name, type, message }) => {
+            methods.setError(name, { type, message });
+          });
+          return;
+        }
+        notifications.show({
+          color: 'red',
+          title: 'Gagal',
+          message: err.message,
+          icon: <IconX />,
         });
       }
     },
