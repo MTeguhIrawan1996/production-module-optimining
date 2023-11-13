@@ -11,7 +11,10 @@ import { useTranslation } from 'react-i18next';
 
 import { KeyValueList, PrimaryButton } from '@/components/elements';
 
-import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
+import {
+  IAuthUserData,
+  useReadAuthUser,
+} from '@/services/graphql/query/auth/useReadAuthUser';
 
 interface IHeaderlayoutProps {
   isExpand: boolean;
@@ -24,23 +27,24 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({
 }) => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const [name, setName] = React.useState<string>('');
-  const { userAuthData } = useReadAuthUser({
+  const [authUser, setAUthUser] = React.useState<IAuthUserData | null>(null);
+  useReadAuthUser({
+    skip: authUser !== null,
     onCompleted: (data) => {
-      setName(data.authUser.name);
+      setAUthUser(data.authUser);
     },
-    skip: name !== '',
   });
+
   const renderName = React.useMemo(() => {
     return (
       <Group spacing="xs">
-        <Text component="span">{name}</Text>
+        <Text component="span">{authUser?.name}</Text>
         <ActionIcon color="brand.5" variant="filled" radius={4} size="lg">
           <IconUser size="1.625rem" />
         </ActionIcon>
       </Group>
     );
-  }, [name]);
+  }, [authUser?.name]);
 
   return (
     <Box top={0} p={0} pos="sticky" w="100%" sx={{ zIndex: 10 }}>
@@ -65,15 +69,15 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({
                 data={[
                   {
                     dataKey: 'Nama',
-                    value: userAuthData?.name,
+                    value: authUser?.name,
                   },
                   {
                     dataKey: 'Email',
-                    value: userAuthData?.email,
+                    value: authUser?.email,
                   },
                   {
                     dataKey: 'Role',
-                    value: userAuthData?.role.name,
+                    value: authUser?.role.name,
                   },
                 ]}
                 type="flex"

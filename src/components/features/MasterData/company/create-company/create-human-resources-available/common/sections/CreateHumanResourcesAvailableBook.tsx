@@ -20,10 +20,11 @@ import { useReadAllNonEmployeedHumanResourcesMasterData } from '@/services/graph
 
 const CreateHumanResourcesAvailableBook = () => {
   const router = useRouter();
-  const { t } = useTranslation('default');
-  const companyId = router.query?.id as string;
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
+  const { t } = useTranslation('default');
+  const companyId = router.query?.id as string;
+  const url = `/master-data/company/create/human-resources-available/${companyId}?page=1`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [choosesHumanResources, setChooseHumanResources] = React.useState<
     IHumanResourcesData[]
@@ -50,8 +51,8 @@ const CreateHumanResourcesAvailableBook = () => {
         message: t('humanResources.successCreateMessage'),
         icon: <IconCheck />,
       });
-      const url = `/master-data/company/read/${companyId}`;
-      router.push(url);
+      const urlCreate = `/master-data/company/read/${companyId}`;
+      router.push(urlCreate);
     },
     onError: (error) => {
       if (error.graphQLErrors) {
@@ -83,12 +84,8 @@ const CreateHumanResourcesAvailableBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    router.push({
-      href: router.asPath,
-      query: {
-        page: page,
-      },
-    });
+    const urlSet = `/master-data/company/create/human-resources-available/${companyId}?page=${page}`;
+    router.push(urlSet, undefined, { shallow: true });
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -227,6 +224,9 @@ const CreateHumanResourcesAvailableBook = () => {
             setSearchQuery(e.currentTarget.value);
           },
           searchQuery,
+          onSearch: () => {
+            router.push(url, undefined, { shallow: true });
+          },
         }}
       >
         {renderTable}
