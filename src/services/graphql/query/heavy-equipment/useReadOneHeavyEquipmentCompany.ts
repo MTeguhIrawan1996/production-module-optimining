@@ -11,6 +11,7 @@ export const READ_ONE_HEAVY_EQUIPMENT_COMPANY = gql`
       hullNumber
       startDate
       endDate
+      isStill
       heavyEquipment {
         id
         engineNumber
@@ -61,6 +62,7 @@ export interface IReadOneHeavyEquipmentCompanyData {
   isComplete: boolean;
   startDate: string;
   endDate: string | null;
+  isStill: boolean;
   heavyEquipment:
     | ({
         class: {

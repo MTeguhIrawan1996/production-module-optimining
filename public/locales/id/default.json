@@ -241,6 +241,7 @@
     "successCreateCompanyMessage": "$t(commonTypography.heavyEquipment) berhasil dibuat",
     "successUpdateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil diubah",
     "successUpdateMasterMessage": "$t(commonTypography.masterData) $t(commonTypography.heavyEquipment) berhasil diubah",
+    "successUpdateCompanyMessage": "$t(commonTypography.heavyEquipment) berhasil diubah",
     "successDeleteMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dihapus",
     "successDeleteMasterMessage": "$t(commonTypography.masterData) $t(commonTypography.heavyEquipment) berhasil dihapus",
     "successDeleteCompanyMessage": "$t(commonTypography.heavyEquipment) berhasil dihapus",
