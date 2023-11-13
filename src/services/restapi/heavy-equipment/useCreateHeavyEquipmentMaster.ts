@@ -40,12 +40,12 @@ const CreateHeavyEquipmentMaster = async ({ data }: IPropsRequest) => {
     if (value) {
       if (name === 'photos' && typeof value !== 'string') {
         value.forEach((image) => {
-          bodyFormData.append('photo', image);
+          bodyFormData.append('photos[]', image);
         });
       }
       if (name === 'vehicleNumberPhoto' && typeof value !== 'string') {
         value.forEach((image) => {
-          bodyFormData.append('identityPhoto', image);
+          bodyFormData.append('vehicleNumberPhoto', image);
         });
       }
       if (!exclude.includes(name) && typeof value === 'string') {

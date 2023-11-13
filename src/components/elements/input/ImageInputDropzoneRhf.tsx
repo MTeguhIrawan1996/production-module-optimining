@@ -64,9 +64,11 @@ const ImageInputDropzoneRhf: React.FC<IImageInputDropzoneRhfProps> = ({
   });
   const { replace } = useFieldArray({ name });
 
-  const handleRemoveImage = (key: string) => {
-    const newFilterFile = field.value?.filter((val: File) => val.name !== key);
-    if (newFilterFile) replace(newFilterFile);
+  const handleRemoveImage = (index: number) => {
+    const newFilter = field.value?.filter(
+      (_: FileWithPath, i: number) => i !== index
+    );
+    if (newFilter) replace(newFilter);
   };
 
   const handleDeleteServerPhotosId = (id: string) => {
@@ -93,7 +95,7 @@ const ImageInputDropzoneRhf: React.FC<IImageInputDropzoneRhfProps> = ({
                 label={t('commonTypography.delete', { ns: 'default' })}
                 color="red"
                 buttonProps={{
-                  onClick: () => handleRemoveImage(file.name),
+                  onClick: () => handleRemoveImage(index),
                 }}
               />
             ) : null}

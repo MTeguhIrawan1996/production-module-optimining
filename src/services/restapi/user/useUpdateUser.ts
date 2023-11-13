@@ -41,9 +41,7 @@ const UpdateUser = async ({
   bodyFormData.append('name', name);
   bodyFormData.append('email', email);
   bodyFormData.append('username', username);
-  if (phoneNumber) {
-    bodyFormData.append('phoneNumber', phoneNumber);
-  }
+  bodyFormData.append('phoneNumber', phoneNumber ?? '');
   bodyFormData.append('roleId', roleId);
   bodyFormData.append('id', id);
 

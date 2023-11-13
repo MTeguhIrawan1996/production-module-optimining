@@ -9,20 +9,22 @@ import {
   KeyValueList,
 } from '@/components/elements';
 
-import { useReadOneHeavyEquipmentMaster } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentMaster';
+import { useReadOneHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentCompany';
+import { dateFromat } from '@/utils/helper/dateFormat';
 
 import { IFile } from '@/types/global';
 
-const ReadHeavyEquipmentMasterBook = () => {
+const ReadCompanyHeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const id = router.query.id as string;
+  const companyId = router.query?.id?.[0] as string;
+  const heavyEquipmentId = router.query?.id?.[1] as string;
 
   /* #   /**=========== Query =========== */
-  const { heavyEquipmentMasterData, heavyEquipmentMasterDataLoading } =
-    useReadOneHeavyEquipmentMaster({
+  const { heavyEquipmentCompanyData, heavyEquipmentCompanyDataLoading } =
+    useReadOneHeavyEquipmentCompany({
       variables: {
-        id,
+        id: heavyEquipmentId,
       },
       skip: !router.isReady,
     });
@@ -45,16 +47,20 @@ const ReadHeavyEquipmentMasterBook = () => {
     },
     []
   );
-  const photosItem = heavyEquipmentMasterData?.photos?.map(photosCallback);
+  const photosItem =
+    heavyEquipmentCompanyData?.heavyEquipment?.photos?.map(photosCallback);
 
   /* #endregion  /**======== PhotosData =========== */
 
   return (
     <DashboardCard
-      title={t('heavyEquipment.heavyEquipmentTitle')}
+      title={t('commonTypography.heavyEquipment')}
       updateButton={{
         label: 'Edit',
-        onClick: () => router.push(`/master-data/heavy-equipment/update/${id}`),
+        onClick: () =>
+          router.push(
+            `/master-data/company/update/heavy-equipment/${companyId}/${heavyEquipmentId}`
+          ),
       }}
       titleStyle={{
         fw: 700,
@@ -62,7 +68,7 @@ const ReadHeavyEquipmentMasterBook = () => {
       }}
       withBorder
       shadow="xs"
-      isLoading={heavyEquipmentMasterDataLoading}
+      isLoading={heavyEquipmentCompanyDataLoading}
       enebleBackBottomInner
       paperStackProps={{
         spacing: 'sm',
@@ -83,21 +89,21 @@ const ReadHeavyEquipmentMasterBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          {!heavyEquipmentMasterDataLoading && heavyEquipmentMasterData ? (
+          {!heavyEquipmentCompanyDataLoading && heavyEquipmentCompanyData ? (
             <>
               <GlobalHeaderDetail
                 data={
-                  heavyEquipmentMasterData?.vehicleNumberPhoto
+                  heavyEquipmentCompanyData.heavyEquipment?.vehicleNumberPhoto
                     ? [
                         {
                           type: 'vehicleDocument',
-                          alt: heavyEquipmentMasterData?.vehicleNumberPhoto
-                            ?.fileName,
+                          alt: heavyEquipmentCompanyData.heavyEquipment
+                            ?.vehicleNumberPhoto?.fileName,
                           fileName:
-                            heavyEquipmentMasterData?.vehicleNumberPhoto
-                              ?.originalFileName,
-                          src: heavyEquipmentMasterData?.vehicleNumberPhoto
-                            ?.url,
+                            heavyEquipmentCompanyData.heavyEquipment
+                              ?.vehicleNumberPhoto?.originalFileName,
+                          src: heavyEquipmentCompanyData.heavyEquipment
+                            ?.vehicleNumberPhoto?.url,
                         },
                         ...(photosItem ?? []),
                       ]
@@ -115,43 +121,79 @@ const ReadHeavyEquipmentMasterBook = () => {
             <KeyValueList
               data={[
                 {
+                  dataKey: t('commonTypography.heavyEquipmentCode'),
+                  value: heavyEquipmentCompanyData?.hullNumber,
+                },
+                {
                   dataKey: t('commonTypography.engineNumber'),
-                  value: heavyEquipmentMasterData?.engineNumber ?? '-',
+                  value:
+                    heavyEquipmentCompanyData?.heavyEquipment?.engineNumber ??
+                    '-',
                 },
                 {
                   dataKey: t('commonTypography.frameNumber'),
-                  value: heavyEquipmentMasterData?.chassisNumber ?? '-',
+                  value:
+                    heavyEquipmentCompanyData?.heavyEquipment?.chassisNumber ??
+                    '-',
                 },
                 {
                   dataKey: t('heavyEquipment.brandHeavyEquipment'),
                   value:
-                    heavyEquipmentMasterData?.reference.type?.brand?.name ??
-                    '-',
+                    heavyEquipmentCompanyData?.heavyEquipment?.reference?.type
+                      ?.brand?.name,
                 },
                 {
                   dataKey: t('heavyEquipment.typeHeavyEquipment'),
-                  value: heavyEquipmentMasterData?.reference.type?.name ?? '-',
+                  value:
+                    heavyEquipmentCompanyData?.heavyEquipment?.reference?.type
+                      ?.name ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.model'),
-                  value: heavyEquipmentMasterData?.reference.modelName ?? '-',
+                  value:
+                    heavyEquipmentCompanyData?.heavyEquipment?.reference
+                      ?.modelName ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.specification'),
-                  value: heavyEquipmentMasterData?.specification ?? '-',
+                  value:
+                    heavyEquipmentCompanyData?.heavyEquipment?.reference
+                      ?.spec ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.class'),
-                  value: heavyEquipmentMasterData?.class?.name ?? '-',
-                },
-                {
-                  dataKey: t('heavyEquipment.productionYear'),
-                  value: heavyEquipmentMasterData?.createdYear ?? '-',
+                  value:
+                    heavyEquipmentCompanyData?.heavyEquipment?.class?.name ??
+                    '-',
                 },
                 {
                   dataKey: t('heavyEquipment.eligibilityStatus'),
                   value:
-                    heavyEquipmentMasterData?.eligibilityStatus?.name ?? '-',
+                    heavyEquipmentCompanyData?.heavyEquipment?.eligibilityStatus
+                      ?.name ?? '-',
+                },
+                {
+                  dataKey: t('heavyEquipment.productionYear'),
+                  value:
+                    heavyEquipmentCompanyData?.heavyEquipment?.createdYear ??
+                    '-',
+                },
+                {
+                  dataKey: t('heavyEquipment.productionYear'),
+                  value:
+                    heavyEquipmentCompanyData?.heavyEquipment?.createdYear ??
+                    '-',
+                },
+                {
+                  dataKey: t('commonTypography.startDate'),
+                  value:
+                    dateFromat(heavyEquipmentCompanyData?.startDate ?? '') ??
+                    '-',
+                },
+                {
+                  dataKey: t('commonTypography.endDate'),
+                  value:
+                    dateFromat(heavyEquipmentCompanyData?.endDate ?? '') ?? '-',
                 },
               ]}
               type="grid"
@@ -171,4 +213,4 @@ const ReadHeavyEquipmentMasterBook = () => {
   );
 };
 
-export default ReadHeavyEquipmentMasterBook;
+export default ReadCompanyHeavyEquipmentBook;
