@@ -320,7 +320,7 @@ const HeavyEquipmentMasterBook = () => {
           title: t('commonTypography.dataNotfound'),
           actionButton: {
             label: t('heavyEquipment.createHeavyEquipment'),
-            onClick: () => router.push('/reference/heavy-equipment/create'),
+            onClick: () => router.push('/master-data/heavy-equipment/create'),
           },
         }}
         paginationProps={{
