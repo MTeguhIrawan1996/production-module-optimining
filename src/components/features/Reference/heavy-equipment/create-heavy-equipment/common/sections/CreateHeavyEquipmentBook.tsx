@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -10,17 +9,10 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import {
-  IBrandData,
-  useReadAllBrand,
-} from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
-import {
-  IHeavyEquipmentTypeData,
-  useReadAllHeavyEquipmentType,
-} from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
-import {
   ICreateHeavyEquipmentValues,
   useCreateHeavyEquipment,
 } from '@/services/restapi/heavy-equipment/useCreateHeavyEquipment';
+import { brandSelect, typeSelect } from '@/utils/constants/Field/global-field';
 import { createHeavyEquipmentSchema } from '@/utils/form-validation/reference-heavy-equipment/heavy-equipment-validation';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -30,10 +22,6 @@ import { ControllerGroup, ControllerProps } from '@/types/global';
 const CreateHeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const [brandSearchTerm, setBrandSearchTerm] = React.useState<string>('');
-  const [brandSearchQuery] = useDebouncedValue<string>(brandSearchTerm, 400);
-  const [typeSearchTerm, settypeSearchTerm] = React.useState<string>('');
-  const [typeSearchQuery] = useDebouncedValue<string>(typeSearchTerm, 400);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateHeavyEquipmentValues>({
@@ -52,19 +40,6 @@ const CreateHeavyEquipmentBook = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  const { brandsData } = useReadAllBrand({
-    variables: {
-      limit: 15,
-      search: brandSearchQuery === '' ? null : brandSearchQuery,
-    },
-  });
-  const { typesData } = useReadAllHeavyEquipmentType({
-    variables: {
-      limit: 15,
-      search: typeSearchQuery === '' ? null : typeSearchQuery,
-      brandId,
-    },
-  });
   const { mutate, isLoading } = useCreateHeavyEquipment({
     onError: (err) => {
       if (err.response) {
@@ -87,27 +62,26 @@ const CreateHeavyEquipmentBook = () => {
   });
   /* #endregion  /**======== Query =========== */
 
-  /* #   /**=========== FilterData =========== */
-  const renderBrands = React.useCallback((value: IBrandData) => {
-    return {
-      label: value.name,
-      value: value.id,
-    };
-  }, []);
-  const brandItems = brandsData?.map(renderBrands);
-
-  const renderTypes = React.useCallback((value: IHeavyEquipmentTypeData) => {
-    return {
-      label: value.name,
-      value: value.id,
-    };
-  }, []);
-  const typeItems = typesData?.map(renderTypes);
-
   /* #endregion  /**======== FilterData =========== */
 
   /* #   /**=========== Field =========== */
   const fieldCreateHeavyEquipment = React.useMemo(() => {
+    const brandItem = brandSelect({
+      label: 'brandHeavyEquipment',
+      onChange: (value) => {
+        methods.setValue('brandId', value ?? '');
+        methods.setValue('typeId', '');
+        methods.trigger('brandId');
+      },
+    });
+    const typeItem = typeSelect({
+      label: 'typeHeavyEquipment',
+      brandId,
+      onChange: (value) => {
+        methods.setValue('typeId', value ?? '');
+        methods.trigger('typeId');
+      },
+    });
     const imageInput: ControllerProps = {
       control: 'image-dropzone',
       name: 'photos',
@@ -133,43 +107,8 @@ const CreateHeavyEquipmentBook = () => {
         group: t('heavyEquipment.detailReference'),
         enableGroupLabel: true,
         formControllers: [
-          {
-            control: 'select-input',
-            data: brandItems ?? [],
-            name: 'brandId',
-            label: 'brandHeavyEquipment',
-            placeholder: 'chooseBrand',
-            colSpan: 6,
-            withAsterisk: true,
-            clearable: true,
-            searchable: true,
-            nothingFound: null,
-            onSearchChange: setBrandSearchTerm,
-            searchValue: brandSearchTerm,
-            onChange: (value) => {
-              methods.setValue('brandId', value ?? '');
-              methods.setValue('typeId', '');
-              methods.trigger('brandId');
-            },
-          },
-          {
-            control: 'select-input',
-            data: typeItems ?? [],
-            name: 'typeId',
-            label: 'typeHeavyEquipment',
-            placeholder: 'chooseType',
-            colSpan: 6,
-            clearable: true,
-            withAsterisk: true,
-            onChange: (value) => {
-              methods.setValue('typeId', value ?? '');
-              methods.trigger('typeId');
-            },
-            searchable: true,
-            nothingFound: null,
-            onSearchChange: settypeSearchTerm,
-            searchValue: typeSearchTerm,
-          },
+          brandItem,
+          typeItem,
           {
             control: 'text-input',
             name: 'modelName',
@@ -201,7 +140,7 @@ const CreateHeavyEquipmentBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brandItems, brandSearchTerm, typeItems, typeSearchTerm]);
+  }, [brandId]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */

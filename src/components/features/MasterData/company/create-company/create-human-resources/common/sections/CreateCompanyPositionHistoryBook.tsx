@@ -33,8 +33,8 @@ const CreateCompanyPositionHistoryBook = () => {
           positionId: '',
           divisionId: '',
           isStill: false,
-          startDate: null,
-          endDate: null,
+          startDate: undefined,
+          endDate: undefined,
         },
       ],
     },
@@ -81,62 +81,55 @@ const CreateCompanyPositionHistoryBook = () => {
     },
   });
 
-  const fieldEmployeData = React.useMemo(() => {
-    const arrayField = fields.map((_, index) => {
-      const positionItem = positionSelectRhf({
-        name: `positionHistories.${index}.positionId`,
-        colSpan: 6,
-        dropdownPosition: 'bottom',
-      });
-      const divisionItem = divisionSelectRhf({
-        name: `positionHistories.${index}.divisionId`,
-        colSpan: 6,
-        dropdownPosition: 'bottom',
-      });
-      const startDateItem = globalDate({
-        name: `positionHistories.${index}.startDate`,
-        label: 'dateOfOffice',
-        colSpan: 6,
-      });
-      const endDateItem = globalDate({
-        name: `positionHistories.${index}.endDate`,
-        label: 'dateComplateOffice',
-        withAsterisk: false,
-        colSpan: 6,
-      });
-      const group: ControllerGroup = {
-        group: t('commonTypography.positionDetail'),
-        enableGroupLabel: true,
-        actionGroup: {
-          deleteButton: {
-            label: t('commonTypography.delete'),
-            onClick: () => {
-              fields.length > 1 ? remove(index) : null;
-            },
-          },
-        },
-        groupCheckbox: {
-          onChange: () => {
-            methods.setValue(
-              `positionHistories.${index}.isStill`,
-              !positionHistories[index].isStill
-            );
-          },
-          label: t('commonTypography.isStillOffice'),
-        },
-        formControllers: [
-          positionItem,
-          divisionItem,
-          startDateItem,
-          endDateItem,
-        ],
-      };
-      return group;
+  const arrayField = fields.map((_, index) => {
+    const positionItem = positionSelectRhf({
+      name: `positionHistories.${index}.positionId`,
+      colSpan: 6,
+      dropdownPosition: 'bottom',
+      withAsterisk: true,
     });
-
-    return arrayField;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fields, positionHistories]);
+    const divisionItem = divisionSelectRhf({
+      name: `positionHistories.${index}.divisionId`,
+      colSpan: 6,
+      dropdownPosition: 'bottom',
+      withAsterisk: true,
+    });
+    const startDateItem = globalDate({
+      name: `positionHistories.${index}.startDate`,
+      label: 'dateOfOffice',
+      colSpan: 6,
+    });
+    const endDateItem = globalDate({
+      name: `positionHistories.${index}.endDate`,
+      label: 'dateComplateOffice',
+      withAsterisk: false,
+      colSpan: 6,
+      disabled: positionHistories[index].isStill,
+    });
+    const group: ControllerGroup = {
+      group: t('commonTypography.positionDetail'),
+      enableGroupLabel: true,
+      actionGroup: {
+        deleteButton: {
+          label: t('commonTypography.delete'),
+          onClick: () => {
+            fields.length > 1 ? remove(index) : null;
+          },
+        },
+      },
+      groupCheckbox: {
+        onChange: () => {
+          positionHistories[index].isStill === true
+            ? methods.setValue(`positionHistories.${index}.isStill`, false)
+            : methods.setValue(`positionHistories.${index}.isStill`, true);
+          methods.setValue(`positionHistories.${index}.endDate`, null);
+        },
+        label: t('commonTypography.isStillOffice'),
+      },
+      formControllers: [positionItem, divisionItem, startDateItem, endDateItem],
+    };
+    return group;
+  });
 
   const handleSubmitForm: SubmitHandler<
     Pick<IUpdateEmployeePositionsRequest, 'positionHistories'>
@@ -162,7 +155,7 @@ const CreateCompanyPositionHistoryBook = () => {
   return (
     <DashboardCard p={0}>
       <GlobalFormGroup
-        field={fieldEmployeData}
+        field={arrayField}
         methods={methods}
         submitForm={handleSubmitForm}
         submitButton={{

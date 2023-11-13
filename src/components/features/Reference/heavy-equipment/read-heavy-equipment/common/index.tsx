@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import ReadHEavyEquipmentBook from '@/components/features/Reference/heavy-equipment/read-heavy-equipment/common/sections/ReadHeavyEquipmentBook';
+import ReadHeavyEquipmentBook from '@/components/features/Reference/heavy-equipment/read-heavy-equipment/common/sections/ReadHeavyEquipmentBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
@@ -33,7 +33,7 @@ const ReadHeavyEquipmentPage = () => {
   return (
     <RootWrapper>
       <InnerWrapper>
-        <ReadHEavyEquipmentBook />
+        <ReadHeavyEquipmentBook />
       </InnerWrapper>
     </RootWrapper>
   );

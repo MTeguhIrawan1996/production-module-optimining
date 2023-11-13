@@ -72,7 +72,7 @@ const UpdateHeavyEquipmentBook = () => {
         methods.setValue('spec', data.heavyEquipmentReference.spec ?? '');
         methods.setValue(
           'modelYear',
-          `${data.heavyEquipmentReference.modelYear}`
+          `${data.heavyEquipmentReference.modelYear ?? ''}`
         );
         setServerPhotos(data.heavyEquipmentReference.photos);
       },
@@ -109,7 +109,6 @@ const UpdateHeavyEquipmentBook = () => {
         icon: <IconCheck />,
       });
       router.push('/reference/heavy-equipment');
-      methods.reset();
     },
   });
   /* #endregion  /**======== Query =========== */
@@ -139,10 +138,20 @@ const UpdateHeavyEquipmentBook = () => {
       description: 'photoDescription5',
       maxSize: 10 * 1024 ** 2 /* 10MB */,
       multiple: true,
-      maxFiles: serverPhotos ? 5 - serverPhotos.length : 5,
+      maxFiles: 5,
       enableDeletePhoto: true,
       serverPhotos: serverPhotos,
       onDrop: (value) => {
+        if (
+          serverPhotos &&
+          value.length + (serverPhotos?.length - deletedPhotoIds.length) > 5
+        ) {
+          methods.setError('photos', {
+            type: 'manual',
+            message: 'Jumlah foto melebihi batas maksimal',
+          });
+          return;
+        }
         methods.setValue('photos', value);
         methods.clearErrors('photos');
       },
@@ -238,6 +247,8 @@ const UpdateHeavyEquipmentBook = () => {
     combinedTypeItems,
     typeSearchTerm,
     uncombinedTypeItems,
+    serverPhotos,
+    deletedPhotoIds,
   ]);
   /* #endregion  /**======== Field =========== */
 

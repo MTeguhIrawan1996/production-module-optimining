@@ -1,6 +1,7 @@
 import { FileWithPath } from '@mantine/dropzone';
 import { useMutation } from '@tanstack/react-query';
 
+import { IEmployee } from '@/services/graphql/query/master-data-company/useReadOneCompanyHumanResource';
 import axiosClient from '@/services/restapi/axiosClient';
 import { ICreateHumanResourceValues } from '@/services/restapi/human-resource/useCreateHumanResource';
 import { dateToString } from '@/utils/helper/dateToString';
@@ -12,8 +13,7 @@ export interface ICreateCompanyHumanResource
   id: string;
 }
 
-interface ICreateCompanyHumanResourceData {
-  id: string;
+interface ICreateCompanyHumanResourceData extends IEmployee {
   humanResource: ICreateCompanyHumanResource;
 }
 

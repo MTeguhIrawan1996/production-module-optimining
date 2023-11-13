@@ -1,5 +1,6 @@
 import { FileButton, Grid, Group, Stack, Text } from '@mantine/core';
-import { IconPencil } from '@tabler/icons-react';
+import { IconChevronLeft, IconPencil } from '@tabler/icons-react';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -25,6 +26,7 @@ interface IUserProfileFormProps {
   photo: File | string | null;
   field: ControllerProps[];
   isDirtyPhoto?: () => void;
+  enebleBackBottomInner?: boolean;
   isDirty?: boolean;
   buttonUpdatePassword: Omit<IPrimaryButtonProps, 'label'>;
   buttonAktifOrNonaktifUser?: IButtonAktifOrNonaktifUser;
@@ -40,6 +42,7 @@ const UserProfileForm: React.FC<IUserProfileFormProps> = ({
   field,
   buttonUpdatePassword,
   buttonAktifOrNonaktifUser,
+  enebleBackBottomInner,
   isDirtyPhoto,
   isDirty = false,
   loadingSubmitButton,
@@ -50,7 +53,7 @@ const UserProfileForm: React.FC<IUserProfileFormProps> = ({
     buttonAktifOrNonaktifUser || {};
   const { t } = useTranslation('default');
   const resetRef = React.useRef<() => void>(null);
-
+  const router = useRouter();
   const clearFile = () => {
     isDirtyPhoto?.();
     methods.setValue('photo', null);
@@ -170,13 +173,24 @@ const UserProfileForm: React.FC<IUserProfileFormProps> = ({
               {...buttonUpdatePassword}
             />
           </Stack>
-          <PrimaryButton
-            label={t('commonTypography.save')}
-            type="submit"
-            sx={{ alignSelf: 'flex-end' }}
-            disabled={!isDirty}
-            loading={loadingSubmitButton}
-          />
+          <Group w="100%" position={enebleBackBottomInner ? 'apart' : 'right'}>
+            {enebleBackBottomInner ? (
+              <PrimaryButton
+                type="button"
+                variant="outline"
+                leftIcon={<IconChevronLeft size="1rem" />}
+                label={t('commonTypography.back')}
+                onClick={() => router.back()}
+              />
+            ) : null}
+            <PrimaryButton
+              label={t('commonTypography.save')}
+              type="submit"
+              sx={{ alignSelf: 'flex-end' }}
+              disabled={!isDirty}
+              loading={loadingSubmitButton}
+            />
+          </Group>
         </Stack>
       </form>
     </FormProvider>

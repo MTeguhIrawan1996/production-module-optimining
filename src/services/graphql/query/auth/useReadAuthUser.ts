@@ -42,8 +42,10 @@ export interface IAuthUserData {
 
 export const useReadAuthUser = ({
   onCompleted,
+  skip,
 }: {
   onCompleted?: (data: IUserAuthResponse) => void;
+  skip?: boolean;
 }) => {
   const {
     data: userAuthData,
@@ -54,6 +56,7 @@ export const useReadAuthUser = ({
       return err;
     },
     onCompleted,
+    skip,
     fetchPolicy: 'cache-and-network',
   });
 

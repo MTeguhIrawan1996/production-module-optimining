@@ -7,7 +7,7 @@ export const UPDATE_COMPANY_EMPLOYE_DATA = gql`
     $id: String!
     $nip: String!
     $statusId: String
-    $entryDate: DateTime!
+    $entryDate: DateTime
     $isStillWorking: Boolean!
     $quitDate: DateTime
   ) {

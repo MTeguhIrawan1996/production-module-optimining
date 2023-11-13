@@ -6,8 +6,14 @@ import FormExamplePage from '@/components/features/Example/form-example/common';
 import CompanyPage from '@/components/features/MasterData/company/common';
 import CreateCompanyPage from '@/components/features/MasterData/company/create-company/common';
 import CreateCompanyHumanResourcesPage from '@/components/features/MasterData/company/create-company/create-human-resources/common';
+import CreateHumanResourcesAvailablePage from '@/components/features/MasterData/company/create-company/create-human-resources-available/common';
 import ReadCompanyPage from '@/components/features/MasterData/company/read-company/common';
+import ReadCompanyHumanResourcesPage from '@/components/features/MasterData/company/read-company/read-human-resources/common';
+import UpdateCompanyHumanResourcesPage from '@/components/features/MasterData/company/update-company/update-human-resources/common';
 import HeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/common';
+import CreateHeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/create/common';
+import ReadHeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/read/common';
+import UpdateHeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/update/common';
 import HumanResourcesPage from '@/components/features/MasterData/human-resources/common';
 import CreateHumanResourcesPage from '@/components/features/MasterData/human-resources/create/common';
 import ReadHumanResourcesPage from '@/components/features/MasterData/human-resources/read/common';
@@ -38,7 +44,9 @@ export {
   CreateCompanyHumanResourcesPage,
   CreateCompanyPage,
   CreateHeavyEquipmentClassPage,
+  CreateHeavyEquipmentMasterPage,
   CreateHeavyEquipmentPage,
+  CreateHumanResourcesAvailablePage,
   CreateHumanResourcesPage,
   CreateManagementRolePage,
   CreateUserPage,
@@ -51,12 +59,16 @@ export {
   HumanResourcesPage,
   ManagementRolePage,
   ProfilePage,
+  ReadCompanyHumanResourcesPage,
   ReadCompanyPage,
   ReadHeavyEquipmentClassPage,
+  ReadHeavyEquipmentMasterPage,
   ReadHeavyEquipmentPage,
   ReadHumanResourcesPage,
   ReadManagementRolePage,
+  UpdateCompanyHumanResourcesPage,
   UpdateHeavyEquipmentClassPage,
+  UpdateHeavyEquipmentMasterPage,
   UpdateHeavyEquipmentPage,
   UpdateHumanResourcesPage,
   UpdateManagementRolePage,

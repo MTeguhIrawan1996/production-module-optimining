@@ -29,9 +29,17 @@ export const READ_ALL_HEAVY_EQUIPMENT_CLASS = gql`
       data {
         id
         name
-        heavyEquipmentTypes {
+        heavyEquipmentReferences {
           id
-          name
+          modelName
+          type {
+            id
+            name
+            brand {
+              id
+              name
+            }
+          }
         }
       }
     }
@@ -41,9 +49,17 @@ export const READ_ALL_HEAVY_EQUIPMENT_CLASS = gql`
 export interface IHeavyEquipmentClassData {
   id: string;
   name: string;
-  heavyEquipmentTypes: {
+  heavyEquipmentReferences: {
     id: string;
-    name: string;
+    modelName: string;
+    type: {
+      id: string;
+      name: string;
+      brand: {
+        id: string;
+        name: string;
+      };
+    };
   }[];
 }
 

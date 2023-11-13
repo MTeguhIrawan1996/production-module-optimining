@@ -73,7 +73,7 @@ interface IHeavyEquipmentRequest extends Partial<IGlobalMetaRequest> {
   brandId?: string | null;
 }
 
-export const useReadAllHeavyEquipment = ({
+export const useReadAllHeavyEquipmentRefrence = ({
   variables,
   onCompleted,
   skip,

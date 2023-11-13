@@ -4,13 +4,13 @@ export const UPDATE_HEAVY_EQUIPMENT_CALSS = gql`
   mutation UpdateHeavyEquipmentClass(
     $id: String!
     $name: String!
-    $heavyEquipmentTypeIds: [String!]!
+    $heavyEquipmentReferenceIds: [String!]!
   ) {
     updateHeavyEquipmentClass(
       updateHeavyEquipmentClassInput: {
         id: $id
         name: $name
-        heavyEquipmentTypeIds: $heavyEquipmentTypeIds
+        heavyEquipmentReferenceIds: $heavyEquipmentReferenceIds
       }
     ) {
       id
@@ -21,7 +21,7 @@ export const UPDATE_HEAVY_EQUIPMENT_CALSS = gql`
 export interface IUpdateHeavyEquipmentClassRequest {
   id: string;
   name: string;
-  heavyEquipmentTypeIds: string[];
+  heavyEquipmentReferenceIds: string[];
 }
 
 interface IUpdateHeavyEquipmentClassResponse {

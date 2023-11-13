@@ -1,13 +1,19 @@
+import { IBrandSelectInputRhfProps } from '@/components/elements/input/BrandSelectInputRhf';
+import { IClassSelectInputRhfProps } from '@/components/elements/input/ClassSelectInputRhf';
 import { IDateInputProps } from '@/components/elements/input/DateInputRhf';
 import { IDivisionSelectInputRhfProps } from '@/components/elements/input/DivisionSelectInputRhf';
+import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/input/EligibilityStatusSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
+import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
+import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
+import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelectInputRhf';
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 
 import { ControllerProps } from '@/types/global';
@@ -503,6 +509,127 @@ export const globalDate = ({
     control: 'date-input',
     name,
     label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const globalText = ({
+  name = 'globalTextinput',
+  label = 'globalTextinput',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ITextInputProps>) => {
+  const field: ControllerProps = {
+    control: 'text-input',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const brandSelect = ({
+  name = 'brandId',
+  label = 'brand',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IBrandSelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'brand-select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const typeSelect = ({
+  name = 'typeId',
+  label = 'type',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ITypeSelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'type-select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const modelSelect = ({
+  name = 'modelId',
+  label = 'model',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IModelSelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'model-select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const classSelect = ({
+  name = 'classId',
+  label = 'class',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IClassSelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'class-select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const eligibilityStatusSelect = ({
+  name = 'eligibilityStatusId',
+  label = 'eligibilityStatus',
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IEligibilityStatusSelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'eligibilityStatus-select-input',
+    name,
+    label,
+    clearable,
     withAsterisk,
     colSpan,
     ...rest,

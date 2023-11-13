@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, KeyValueList } from '@/components/elements';
 
 import {
-  IHeavyEquipmentClassType,
+  IHeavyEquipmentClassModel,
   useReadOneHeavyEquipmentClass,
 } from '@/services/graphql/query/heavy-equipment-class/useReadOneHeavyEquipmentClass';
 
@@ -23,22 +23,22 @@ const ReadHEavyEquipmentClassBook = () => {
       },
       skip: !router.isReady,
     });
-  const { heavyEquipmentTypes, name } = heavyEquipmentClassData || {};
+  const { heavyEquipmentReferences, name } = heavyEquipmentClassData || {};
 
   /* #endregion  /**======== Query =========== */
 
-  const renderType = React.useCallback((value: IHeavyEquipmentClassType) => {
+  const renderModel = React.useCallback((value: IHeavyEquipmentClassModel) => {
     return {
-      dataKey: t('commonTypography.type'),
-      value: value.name,
+      dataKey: t('commonTypography.model'),
+      value: `${value.modelName} (${value.type.name})`,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const typeItems = heavyEquipmentTypes?.map(renderType);
+  const modelItems = heavyEquipmentReferences?.map(renderModel);
 
   return (
     <DashboardCard
-      title={t('heavyEquipment.heavyEquipmentTitle')}
+      title={t('heavyEquipmentClass.heavyEquipmentClassTitle')}
       updateButton={{
         label: 'Edit',
         onClick: () =>
@@ -51,7 +51,7 @@ const ReadHEavyEquipmentClassBook = () => {
       withBorder
       shadow="xs"
       isLoading={heavyEquipmentClassDataLoading}
-      enebleBack
+      enebleBackBottomInner
       paperStackProps={{
         spacing: 'sm',
       }}
@@ -90,14 +90,14 @@ const ReadHEavyEquipmentClassBook = () => {
               }}
             />
             <Stack spacing="sm">
-              {typeItems ? (
+              {modelItems ? (
                 <>
                   <Text fz={24} fw={600} color="brand">
-                    {t('commonTypography.heavyEquipmentType')}
+                    {t('commonTypography.heavyEquipmentModel')}
                   </Text>
                   <Stack spacing="sm">
                     <KeyValueList
-                      data={typeItems}
+                      data={modelItems}
                       type="grid"
                       keyStyleText={{
                         fw: 400,

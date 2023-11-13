@@ -110,7 +110,7 @@ const UpdateHumanResourcesBook = () => {
       },
       skip: !router.isReady,
       onCompleted: (data) => {
-        const date = stringToDate(data.humanResource.dob ?? '');
+        const date = stringToDate(data.humanResource.dob ?? null);
         methods.setValue('name', data.humanResource.name);
         methods.setValue('alias', data.humanResource.alias ?? '');
         methods.setValue('isWni', `${data.humanResource.isWni}`);
@@ -385,8 +385,7 @@ const UpdateHumanResourcesBook = () => {
         group: t('commonTypography.address'),
         enableGroupLabel: true,
         groupCheckbox: {
-          // checked: ,
-          defaultChecked: Boolean(isAddressSameWithDomicile),
+          defaultChecked: isAddressSameWithDomicile === 'true' ? true : false,
           onChange: () => {
             isAddressSameWithDomicile === 'true'
               ? methods.setValue('isAddressSameWithDomicile', 'false')
