@@ -37,10 +37,7 @@ const UpdateAuthUser = async ({
   bodyFormData.append('name', name);
   bodyFormData.append('email', email);
   bodyFormData.append('username', username);
-  if (phoneNumber) {
-    bodyFormData.append('phoneNumber', phoneNumber);
-  }
-
+  bodyFormData.append('phoneNumber', phoneNumber ?? '');
   const response = await axiosAuth.patch(`/auth/profile`, bodyFormData);
   return response?.data;
 };
