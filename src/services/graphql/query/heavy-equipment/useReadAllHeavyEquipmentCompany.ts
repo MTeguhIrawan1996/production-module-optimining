@@ -64,6 +64,7 @@ export const READ_ALL_HEAVY_EQUIPMENT_COMPANY = gql`
             name
           }
           eligibilityStatus {
+            id
             name
           }
         }
@@ -72,10 +73,7 @@ export const READ_ALL_HEAVY_EQUIPMENT_COMPANY = gql`
   }
 `;
 
-export interface IHeavyEquipmentCompany {
-  id: string;
-  hullNumber: string | null;
-  isComplete: boolean;
+interface IHeavyEquipmentCompanyData {
   heavyEquipment:
     | ({
         class: {
@@ -83,10 +81,17 @@ export interface IHeavyEquipmentCompany {
           name: string;
         } | null;
         eligibilityStatus: {
+          id: string;
           name: string | null;
         } | null;
       } & IHeavyEquipmentMasterData)
     | null;
+}
+
+export interface IHeavyEquipmentCompany extends IHeavyEquipmentCompanyData {
+  id: string;
+  hullNumber: string | null;
+  isComplete: boolean;
 }
 
 interface IHeavyEquipmentCompanyResponse {

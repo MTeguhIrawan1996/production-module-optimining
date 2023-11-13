@@ -288,20 +288,22 @@ const ReadHeavyEquipmentBook = () => {
             {
               accessor: 'action',
               title: t('commonTypography.action'),
-              render: ({ id }) => {
+              render: ({ id: heavyEquipmentId }) => {
                 return (
                   <GlobalKebabButton
                     actionRead={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        router.push(`/master-data/heavy-equipment/read/${id}`);
+                        router.push(
+                          `/master-data/company/read/heavy-equipment/${id}/${heavyEquipmentId}`
+                        );
                       },
                     }}
                     actionUpdate={{
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/master-data/heavy-equipment/update/${id}`
+                          `/master-data/company/update/heavy-equipment/${id}/${heavyEquipmentId}`
                         );
                       },
                     }}

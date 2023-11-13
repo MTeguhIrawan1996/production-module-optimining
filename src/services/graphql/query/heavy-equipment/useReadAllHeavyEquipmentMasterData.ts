@@ -40,6 +40,7 @@ export const READ_ALL_HEAVY_EQUIPMENT_MASTER_DATA = gql`
         reference {
           id
           modelName
+          spec
           type {
             id
             name
@@ -63,6 +64,7 @@ export interface IHeavyEquipmentMasterData {
   reference: {
     id: string;
     modelName: string;
+    spec: string | null;
     type: {
       id: string;
       name: string;
