@@ -11,6 +11,5 @@ export const createCompanyEmployeSchema = z.object({
   statusId: zOptionalString.nullable(),
   entryDate: zDateValidation.optional().nullable(),
   isStillWorking: z.boolean(),
-
   quitDate: zDateValidation.optional().nullable(),
 });

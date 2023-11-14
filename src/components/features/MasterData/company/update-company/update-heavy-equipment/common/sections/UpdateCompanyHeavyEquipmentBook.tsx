@@ -8,30 +8,32 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import { useReadOneHeavyEquipmentMaster } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentMaster';
-import {
-  IUpdateHeavyEquipmentMasterValues,
-  useUpdateHeavyEquipmentMaster,
-} from '@/services/restapi/heavy-equipment/useUpdateHeavyEquipmentMaster';
+import { useReadOneHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentCompany';
+import { ICreateHeavyEquipmentCompanyValues } from '@/services/restapi/heavy-equipment/useCreateHeavyEquipmentCompany';
+import { useUpdateHeavyEquipmentCompany } from '@/services/restapi/heavy-equipment/useUpdateHeavyEquipmentCompany';
 import {
   brandSelect,
   classSelect,
   eligibilityStatusSelect,
+  globalDate,
   globalText,
   modelSelect,
   typeSelect,
 } from '@/utils/constants/Field/global-field';
-import { createHeavyEquipmentMasterSchema } from '@/utils/form-validation/master-heavy-equipment/heavy-equipment-validation';
+import { createHeavyEquipmentCompanySchema } from '@/utils/form-validation/master-heavy-equipment/heavy-equipment-validation';
+import { stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
 import { ControllerGroup, ControllerProps, IFile } from '@/types/global';
 
-const UpdateHeavyEquipmentMasterBook = () => {
+const UpdateCompanyHeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const id = router.query.id as string;
+  const companyId = router.query?.id?.[0] as string;
+  const companyHeavyEquipmentId = router.query?.id?.[1] as string;
+  const [heavyEquipmentId, setHeavyEquipmentId] = React.useState<string>('');
   const [serverPhotos, setServerPhotos] = React.useState<
     Omit<IFile, 'mime' | 'path'>[] | null
   >([]);
@@ -39,21 +41,26 @@ const UpdateHeavyEquipmentMasterBook = () => {
   const [serverVehicleNumberPhoto, setServerVehicleNumberPhoto] =
     React.useState<Omit<IFile, 'mime' | 'path'>[] | null>([]);
 
-  const methods = useForm<Omit<IUpdateHeavyEquipmentMasterValues, 'id'>>({
-    resolver: zodResolver(createHeavyEquipmentMasterSchema),
+  /* #   /**=========== Methods =========== */
+  const methods = useForm<ICreateHeavyEquipmentCompanyValues>({
+    resolver: zodResolver(createHeavyEquipmentCompanySchema),
     defaultValues: {
-      photos: [],
-      brandId: '',
+      hullNumber: '',
+      engineNumber: '',
       chassisNumber: '',
+      brandId: '',
       referenceId: '',
       typeId: '',
       specification: '',
-      classId: '',
-      createdYear: '',
-      eligibilityStatusId: '',
-      engineNumber: '',
       vehicleNumber: '',
+      classId: '',
+      eligibilityStatusId: '',
+      createdYear: '',
+      startDate: undefined,
+      endDate: undefined,
+      isStill: false,
       vehicleNumberPhoto: [],
+      photos: [],
     },
     mode: 'onBlur',
   });
@@ -61,45 +68,72 @@ const UpdateHeavyEquipmentMasterBook = () => {
   const typeId = methods.watch('typeId');
   const referenceId = methods.watch('referenceId');
   const classId = methods.watch('classId');
+  const isStill = methods.watch('isStill');
+  const photos = methods.watch('photos');
+  /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
 
-  const { heavyEquipmentMasterData, heavyEquipmentMasterDataLoading } =
-    useReadOneHeavyEquipmentMaster({
+  const { heavyEquipmentCompanyData, heavyEquipmentCompanyDataLoading } =
+    useReadOneHeavyEquipmentCompany({
       variables: {
-        id,
+        id: companyHeavyEquipmentId,
       },
       skip: !router.isReady,
-      onCompleted: ({ heavyEquipment }) => {
+      onCompleted: ({ companyHeavyEquipment }) => {
+        setHeavyEquipmentId(companyHeavyEquipment.heavyEquipment?.id ?? '');
+        methods.setValue('hullNumber', companyHeavyEquipment.hullNumber ?? '');
+        methods.setValue(
+          'engineNumber',
+          companyHeavyEquipment.heavyEquipment?.engineNumber ?? ''
+        );
+        methods.setValue(
+          'chassisNumber',
+          companyHeavyEquipment.heavyEquipment?.chassisNumber ?? ''
+        );
         methods.setValue(
           'brandId',
-          heavyEquipment.reference.type?.brand?.id ?? ''
+          companyHeavyEquipment.heavyEquipment?.reference?.type?.brand?.id ?? ''
         );
-        methods.setValue('chassisNumber', heavyEquipment.chassisNumber ?? '');
-        methods.setValue('referenceId', heavyEquipment.reference.id ?? '');
-        methods.setValue('specification', heavyEquipment.specification ?? '');
-        methods.setValue('typeId', heavyEquipment.reference.type?.id ?? '');
-        methods.setValue('classId', heavyEquipment.class?.id ?? '');
         methods.setValue(
-          'brandId',
-          heavyEquipment.reference.type?.brand?.id ?? ''
+          'typeId',
+          companyHeavyEquipment.heavyEquipment?.reference?.type?.id ?? ''
         );
-        methods.setValue('createdYear', `${heavyEquipment.createdYear}` ?? '');
-        methods.setValue('vehicleNumber', heavyEquipment.vehicleNumber ?? '');
+        methods.setValue(
+          'referenceId',
+          companyHeavyEquipment.heavyEquipment?.reference?.id ?? ''
+        );
+        methods.setValue(
+          'vehicleNumber',
+          companyHeavyEquipment.heavyEquipment?.vehicleNumber ?? ''
+        );
+        methods.setValue(
+          'classId',
+          companyHeavyEquipment.heavyEquipment?.class?.id ?? ''
+        );
         methods.setValue(
           'eligibilityStatusId',
-          heavyEquipment.eligibilityStatus?.id ?? ''
+          companyHeavyEquipment.heavyEquipment?.eligibilityStatus?.id ?? ''
         );
-        methods.setValue('engineNumber', heavyEquipment.engineNumber ?? '');
-
-        setServerPhotos(heavyEquipment.photos ?? []);
-        if (heavyEquipment.vehicleNumberPhoto) {
-          setServerVehicleNumberPhoto([heavyEquipment.vehicleNumberPhoto]);
+        methods.setValue(
+          'createdYear',
+          `${companyHeavyEquipment.heavyEquipment?.createdYear ?? ''}`
+        );
+        methods.setValue('isStill', companyHeavyEquipment.isStill ?? false);
+        const date = stringToDate(companyHeavyEquipment.startDate ?? null);
+        const endDate = stringToDate(companyHeavyEquipment.endDate ?? null);
+        methods.setValue('startDate', date);
+        methods.setValue('endDate', endDate);
+        setServerPhotos(companyHeavyEquipment.heavyEquipment?.photos ?? []);
+        if (companyHeavyEquipment.heavyEquipment?.vehicleNumberPhoto) {
+          setServerVehicleNumberPhoto([
+            companyHeavyEquipment.heavyEquipment.vehicleNumberPhoto,
+          ]);
         }
       },
     });
 
-  const { mutate, isLoading } = useUpdateHeavyEquipmentMaster({
+  const { mutate, isLoading } = useUpdateHeavyEquipmentCompany({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -121,16 +155,23 @@ const UpdateHeavyEquipmentMasterBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('heavyEquipment.successUpdateMasterMessage'),
+        message: t('heavyEquipment.successUpdateCompanyMessage'),
         icon: <IconCheck />,
       });
-      router.push('/master-data/heavy-equipment');
+      const url = `/master-data/company/read/${companyId}`;
+      router.push(url);
+      methods.reset();
     },
   });
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
-  const field = React.useMemo(() => {
+  const fieldCreateHeavyEquipment = React.useMemo(() => {
+    const hullNumber = globalText({
+      name: `hullNumber`,
+      label: 'heavyEquipmentCode',
+      colSpan: 6,
+    });
     const engineNumber = globalText({
       name: `engineNumber`,
       label: 'engineNumber',
@@ -147,21 +188,22 @@ const UpdateHeavyEquipmentMasterBook = () => {
       colSpan: 6,
       withAsterisk: false,
     });
+    const vehicleNumber = globalText({
+      name: 'vehicleNumber',
+      label: 'vehicleNumberOrRegirstrationNumber',
+      colSpan: 6,
+      withAsterisk: true,
+    });
     const createdYear = globalText({
       name: 'createdYear',
       label: 'productionYear',
       colSpan: 6,
     });
-    const vehicleNumber = globalText({
-      name: 'vehicleNumber',
-      label: 'vehicleNumberOrRegirstrationNumber',
-      colSpan: 6,
-      withAsterisk: false,
-    });
     const brandItem = brandSelect({
       label: 'brandHeavyEquipment',
       defaultValue: brandId,
-      labelValue: heavyEquipmentMasterData?.reference.type?.brand?.name,
+      labelValue:
+        heavyEquipmentCompanyData?.heavyEquipment?.reference?.type?.brand?.name,
       onChange: (value) => {
         methods.setValue('brandId', value ?? '');
         methods.setValue('typeId', '');
@@ -171,9 +213,10 @@ const UpdateHeavyEquipmentMasterBook = () => {
     });
     const typeItem = typeSelect({
       label: 'typeHeavyEquipment',
-      brandId,
       defaultValue: typeId,
-      labelValue: heavyEquipmentMasterData?.reference.type?.name,
+      labelValue:
+        heavyEquipmentCompanyData?.heavyEquipment?.reference?.type?.name,
+      brandId,
       onChange: (value) => {
         methods.setValue('typeId', value ?? '');
         methods.setValue('referenceId', '');
@@ -184,7 +227,8 @@ const UpdateHeavyEquipmentMasterBook = () => {
       label: 'modelHeavyEquipment',
       name: 'referenceId',
       defaultValue: referenceId,
-      labelValue: heavyEquipmentMasterData?.reference.modelName,
+      labelValue:
+        heavyEquipmentCompanyData?.heavyEquipment?.reference?.modelName,
       brandId,
       typeId,
       onChange: (value) => {
@@ -195,9 +239,22 @@ const UpdateHeavyEquipmentMasterBook = () => {
     const classItem = classSelect({
       label: 'class',
       defaultValue: classId,
-      labelValue: heavyEquipmentMasterData?.class?.name,
+      labelValue: heavyEquipmentCompanyData?.heavyEquipment?.class?.name,
     });
     const eligibilityStatusItem = eligibilityStatusSelect({});
+
+    const startDateItem = globalDate({
+      name: 'startDate',
+      label: 'startDate',
+      colSpan: 6,
+    });
+    const endDateItem = globalDate({
+      name: 'endDate',
+      label: 'endDate',
+      withAsterisk: false,
+      colSpan: 6,
+      disabled: isStill,
+    });
 
     const vehicleNumberPhoto: ControllerProps = {
       control: 'image-dropzone',
@@ -217,7 +274,7 @@ const UpdateHeavyEquipmentMasterBook = () => {
         methods.clearErrors('vehicleNumberPhoto');
       },
       onReject: (files) =>
-        handleRejectFile<Omit<IUpdateHeavyEquipmentMasterValues, 'id'>>({
+        handleRejectFile<ICreateHeavyEquipmentCompanyValues>({
           methods,
           files,
           field: 'vehicleNumberPhoto',
@@ -234,14 +291,21 @@ const UpdateHeavyEquipmentMasterBook = () => {
       enableDeletePhoto: true,
       serverPhotos: serverPhotos,
       onDrop: (value) => {
-        if (
-          serverPhotos &&
-          value.length + (serverPhotos?.length - deletedPhotoIds.length) > 5
-        ) {
-          methods.setError('photos', {
-            type: 'manual',
-            message: 'Jumlah foto melebihi batas maksimal',
-          });
+        if (photos) {
+          const totalPhotos = photos.length + value.length;
+          const totalServerPhotos =
+            serverPhotos &&
+            totalPhotos + (serverPhotos.length - deletedPhotoIds.length) > 5;
+          if (totalPhotos > 5 || totalServerPhotos) {
+            methods.setError('photos', {
+              type: 'manual',
+              message: 'Jumlah foto melebihi batas maksimal',
+            });
+            return;
+          }
+
+          methods.setValue('photos', [...photos, ...value]);
+          methods.clearErrors('photos');
           return;
         }
         methods.setValue('photos', value);
@@ -251,7 +315,7 @@ const UpdateHeavyEquipmentMasterBook = () => {
       handleDeleteServerPhotos: (id) =>
         setDeletedPhotoIds((prev) => [...prev, id]),
       onReject: (files) =>
-        handleRejectFile<Omit<IUpdateHeavyEquipmentMasterValues, 'id'>>({
+        handleRejectFile<ICreateHeavyEquipmentCompanyValues>({
           methods,
           files,
           field: 'photos',
@@ -261,17 +325,30 @@ const UpdateHeavyEquipmentMasterBook = () => {
       {
         group: t('heavyEquipment.informationHeavyEquipmentMaster'),
         enableGroupLabel: true,
+        groupCheckbox: {
+          onChange: () => {
+            isStill === true
+              ? methods.setValue('isStill', false)
+              : methods.setValue('isStill', true);
+            methods.setValue('endDate', null);
+          },
+          checked: isStill,
+          label: t('commonTypography.stillInUse'),
+        },
         formControllers: [
+          hullNumber,
           engineNumber,
           frameNumber,
           brandItem,
           typeItem,
           modelItem,
           specification,
-          createdYear,
+          vehicleNumber,
           classItem,
           eligibilityStatusItem,
-          vehicleNumber,
+          createdYear,
+          startDateItem,
+          endDateItem,
         ],
       },
       {
@@ -284,34 +361,35 @@ const UpdateHeavyEquipmentMasterBook = () => {
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    heavyEquipmentMasterData,
     brandId,
     typeId,
-    serverPhotos,
-    deletedPhotoIds,
+    isStill,
+    photos,
     serverVehicleNumberPhoto,
-    referenceId,
-    classId,
+    deletedPhotoIds,
+    serverPhotos,
   ]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
-  const handleSubmitForm: SubmitHandler<
-    Omit<IUpdateHeavyEquipmentMasterValues, 'id'>
-  > = (data) => {
+  const handleSubmitForm: SubmitHandler<ICreateHeavyEquipmentCompanyValues> = (
+    data
+  ) => {
     const values = objectToArrayValue(data);
     mutate({
-      id,
+      companyId: companyId,
       deletedPhotoIds,
+      heavyEquipmentId,
+      companyHeavyEquipmentId,
       data: values,
     });
   };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0} isLoading={heavyEquipmentMasterDataLoading}>
+    <DashboardCard p={0} isLoading={heavyEquipmentCompanyDataLoading}>
       <GlobalFormGroup
-        field={field}
+        field={fieldCreateHeavyEquipment}
         methods={methods}
         submitForm={handleSubmitForm}
         submitButton={{
@@ -326,4 +404,4 @@ const UpdateHeavyEquipmentMasterBook = () => {
   );
 };
 
-export default UpdateHeavyEquipmentMasterBook;
+export default UpdateCompanyHeavyEquipmentBook;
