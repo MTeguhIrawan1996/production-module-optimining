@@ -269,6 +269,11 @@ const HeavyEquipmentMasterBook = () => {
             },
             {
               accessor: 'type',
+              title: t('heavyEquipment.typeHeavyEquipment'),
+              render: ({ reference }) => reference?.type?.name,
+            },
+            {
+              accessor: 'model',
               title: t('commonTypography.model'),
               render: ({ reference }) => reference?.modelName,
             },

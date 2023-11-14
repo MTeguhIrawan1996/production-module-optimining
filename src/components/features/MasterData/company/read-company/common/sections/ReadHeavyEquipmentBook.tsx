@@ -397,7 +397,7 @@ const ReadHeavyEquipmentBook = () => {
           label: t('heavyEquipment.selectExistingHeavyEquipment'),
           onClick: () =>
             router.push(
-              `/master-data/company/create/human-resources-available/${id}`
+              `/master-data/company/create/heavy-equipment-available/${id}`
             ),
         }}
       />

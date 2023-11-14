@@ -124,7 +124,7 @@ const ReadHumanResourceBook = () => {
                   value: humanResourceData?.pob,
                 },
                 {
-                  dataKey: t('commonTypography.dop'),
+                  dataKey: t('commonTypography.dob'),
                   value: dateFromat(humanResourceData?.dob ?? ''),
                 },
                 {

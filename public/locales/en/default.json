@@ -19,7 +19,7 @@
     "identityType": "Jenis Identitas",
     "identityNumber2": "Nomor Identitas",
     "pob": "Tempat Lahir",
-    "dop": "Tempat Lahir",
+    "dob": "Tanggal Lahir",
     "gender": "Jenis Kelamin",
     "religion": "Agama",
     "educationDegree": "Gelar Pendidikan",
@@ -107,6 +107,7 @@
     "yourPhoto": "Foto Diri",
     "humanResources": "SDM",
     "humanResourcesSelected": "SDM Terpilih",
+    "heavyEquipmentSelected": "Alat Berat Terpilih",
     "humanResources2": "Sumber Daya Manusia",
     "phoneNumber": "Nomor Telepon",
     "identityNumber": "NIK",
@@ -251,7 +252,9 @@
     "heavyEquipmentIdentity": "Identitas $t(commonTypography.heavyEquipment)",
     "brandHeavyEquipment": "$t(commonTypography.brand) $t(commonTypography.heavyEquipment)",
     "typeHeavyEquipment": "$t(commonTypography.type) $t(commonTypography.heavyEquipment)",
-    "eligibilityStatus": "Status Kelayakan"
+    "eligibilityStatus": "Status Kelayakan",
+    "chooseHeavyEquipment": "$t(commonTypography.choose) $t(commonTypography.heavyEquipment)",
+    "chooseAvailableHeavyEquipment": "Memilih Alat Berat yang sudah Ada"
   },
   "heavyEquipmentClass": {
     "heavyEquipmentClassTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipmentClass)",
