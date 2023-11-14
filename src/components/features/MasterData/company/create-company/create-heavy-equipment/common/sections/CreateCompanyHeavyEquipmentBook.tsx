@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadOneHeavyEquipmentReference } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipment';
 import {
   ICreateHeavyEquipmentCompanyValues,
   useCreateHeavyEquipmentCompany,
@@ -61,6 +62,8 @@ const CreateCompanyHeavyEquipmentBook = () => {
   const typeId = methods.watch('typeId');
   const isStill = methods.watch('isStill');
   const photos = methods.watch('photos');
+  const referenceId = methods.watch('referenceId');
+
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
@@ -95,6 +98,19 @@ const CreateCompanyHeavyEquipmentBook = () => {
       methods.reset();
     },
   });
+
+  useReadOneHeavyEquipmentReference({
+    variables: {
+      id: referenceId,
+    },
+    skip: referenceId === '',
+    onCompleted: (data) => {
+      methods.setValue(
+        'specification',
+        data.heavyEquipmentReference.spec ?? ''
+      );
+    },
+  });
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
@@ -119,6 +135,7 @@ const CreateCompanyHeavyEquipmentBook = () => {
       label: 'specHeavyEquipment',
       colSpan: 6,
       withAsterisk: false,
+      disabled: true,
     });
     const vehicleNumber = globalText({
       name: 'vehicleNumber',

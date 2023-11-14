@@ -264,7 +264,7 @@ const ReadHeavyEquipmentBook = () => {
             {
               accessor: 'specification',
               title: t('commonTypography.specification'),
-              render: ({ heavyEquipment }) => heavyEquipment?.specification,
+              render: ({ heavyEquipment }) => heavyEquipment?.reference?.spec,
             },
             {
               accessor: 'class',

@@ -35,7 +35,13 @@ type IPropsRequest = {
 const CreateHeavyEquipmentMaster = async ({ data }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
-  const exclude = ['brandId', 'typeId', 'photos', 'vehicleNumberPhoto'];
+  const exclude = [
+    'brandId',
+    'typeId',
+    'photos',
+    'vehicleNumberPhoto',
+    'specification',
+  ];
   data.forEach(({ name, value }) => {
     if (value) {
       if (name === 'photos' && typeof value !== 'string') {

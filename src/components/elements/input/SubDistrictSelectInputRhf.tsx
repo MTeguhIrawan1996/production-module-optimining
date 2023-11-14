@@ -38,6 +38,7 @@ const SubDistrictSelectInputRhf: React.FC<ISubDistrictSelectInputRhfProps> = ({
   const { field, fieldState } = useController({ name });
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [searchQuery] = useDebouncedValue<string>(searchTerm, 400);
+  const currentValue = field.value;
 
   const { districtsData } = useReadAllSubDistrict({
     variables: {
@@ -58,7 +59,9 @@ const SubDistrictSelectInputRhf: React.FC<ISubDistrictSelectInputRhfProps> = ({
     <Select
       {...field}
       radius={8}
-      data={defaultValue ? combinedItems : uncombinedItem}
+      data={
+        currentValue === '' || !defaultValue ? uncombinedItem : combinedItems
+      }
       defaultValue={defaultValue}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}

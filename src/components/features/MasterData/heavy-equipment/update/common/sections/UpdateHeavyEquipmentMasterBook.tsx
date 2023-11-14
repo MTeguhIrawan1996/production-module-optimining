@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadOneHeavyEquipmentReference } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipment';
 import { useReadOneHeavyEquipmentMaster } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentMaster';
 import {
   IUpdateHeavyEquipmentMasterValues,
@@ -64,6 +65,19 @@ const UpdateHeavyEquipmentMasterBook = () => {
 
   /* #   /**=========== Query =========== */
 
+  useReadOneHeavyEquipmentReference({
+    variables: {
+      id: referenceId,
+    },
+    skip: referenceId === '',
+    onCompleted: (data) => {
+      methods.setValue(
+        'specification',
+        data.heavyEquipmentReference.spec ?? ''
+      );
+    },
+  });
+
   const { heavyEquipmentMasterData, heavyEquipmentMasterDataLoading } =
     useReadOneHeavyEquipmentMaster({
       variables: {
@@ -73,16 +87,19 @@ const UpdateHeavyEquipmentMasterBook = () => {
       onCompleted: ({ heavyEquipment }) => {
         methods.setValue(
           'brandId',
-          heavyEquipment.reference.type?.brand?.id ?? ''
+          heavyEquipment?.reference?.type?.brand?.id ?? ''
         );
-        methods.setValue('chassisNumber', heavyEquipment.chassisNumber ?? '');
-        methods.setValue('referenceId', heavyEquipment.reference.id ?? '');
-        methods.setValue('specification', heavyEquipment.specification ?? '');
-        methods.setValue('typeId', heavyEquipment.reference.type?.id ?? '');
+        methods.setValue('chassisNumber', heavyEquipment?.chassisNumber ?? '');
+        methods.setValue('referenceId', heavyEquipment?.reference?.id ?? '');
+        methods.setValue(
+          'specification',
+          heavyEquipment?.reference?.spec ?? ''
+        );
+        methods.setValue('typeId', heavyEquipment?.reference?.type?.id ?? '');
         methods.setValue('classId', heavyEquipment.class?.id ?? '');
         methods.setValue(
           'brandId',
-          heavyEquipment.reference.type?.brand?.id ?? ''
+          heavyEquipment?.reference?.type?.brand?.id ?? ''
         );
         methods.setValue('createdYear', `${heavyEquipment.createdYear}` ?? '');
         methods.setValue('vehicleNumber', heavyEquipment.vehicleNumber ?? '');
@@ -146,6 +163,7 @@ const UpdateHeavyEquipmentMasterBook = () => {
       label: 'specHeavyEquipment',
       colSpan: 6,
       withAsterisk: false,
+      disabled: true,
     });
     const createdYear = globalText({
       name: 'createdYear',
@@ -160,35 +178,38 @@ const UpdateHeavyEquipmentMasterBook = () => {
     });
     const brandItem = brandSelect({
       label: 'brandHeavyEquipment',
-      defaultValue: brandId,
-      labelValue: heavyEquipmentMasterData?.reference.type?.brand?.name,
+      defaultValue: heavyEquipmentMasterData?.reference?.type?.brand?.id,
+      labelValue: heavyEquipmentMasterData?.reference?.type?.brand?.name,
       onChange: (value) => {
         methods.setValue('brandId', value ?? '');
         methods.setValue('typeId', '');
         methods.setValue('referenceId', '');
+        methods.setValue('specification', '');
         methods.trigger('brandId');
       },
     });
     const typeItem = typeSelect({
       label: 'typeHeavyEquipment',
       brandId,
-      defaultValue: typeId,
-      labelValue: heavyEquipmentMasterData?.reference.type?.name,
+      defaultValue: heavyEquipmentMasterData?.reference?.type?.id,
+      labelValue: heavyEquipmentMasterData?.reference?.type?.name,
       onChange: (value) => {
         methods.setValue('typeId', value ?? '');
         methods.setValue('referenceId', '');
+        methods.setValue('specification', '');
         methods.trigger('typeId');
       },
     });
     const modelItem = modelSelect({
       label: 'modelHeavyEquipment',
       name: 'referenceId',
-      defaultValue: referenceId,
-      labelValue: heavyEquipmentMasterData?.reference.modelName,
+      defaultValue: heavyEquipmentMasterData?.reference?.id,
+      labelValue: heavyEquipmentMasterData?.reference?.modelName,
       brandId,
       typeId,
       onChange: (value) => {
         methods.setValue('referenceId', value ?? '');
+        methods.setValue('specification', '');
         methods.trigger('referenceId');
       },
     });
@@ -284,14 +305,14 @@ const UpdateHeavyEquipmentMasterBook = () => {
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    heavyEquipmentMasterData,
     brandId,
     typeId,
+    referenceId,
+    classId,
+    heavyEquipmentMasterData,
     serverPhotos,
     deletedPhotoIds,
     serverVehicleNumberPhoto,
-    referenceId,
-    classId,
   ]);
   /* #endregion  /**======== Field =========== */
 

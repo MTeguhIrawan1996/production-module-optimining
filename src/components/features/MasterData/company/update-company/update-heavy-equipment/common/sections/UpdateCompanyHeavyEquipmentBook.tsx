@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadOneHeavyEquipmentReference } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipment';
 import { useReadOneHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentCompany';
 import { ICreateHeavyEquipmentCompanyValues } from '@/services/restapi/heavy-equipment/useCreateHeavyEquipmentCompany';
 import { useUpdateHeavyEquipmentCompany } from '@/services/restapi/heavy-equipment/useUpdateHeavyEquipmentCompany';
@@ -67,7 +68,6 @@ const UpdateCompanyHeavyEquipmentBook = () => {
   const brandId = methods.watch('brandId');
   const typeId = methods.watch('typeId');
   const referenceId = methods.watch('referenceId');
-  const classId = methods.watch('classId');
   const isStill = methods.watch('isStill');
   const photos = methods.watch('photos');
   /* #endregion  /**======== Methods =========== */
@@ -116,6 +116,10 @@ const UpdateCompanyHeavyEquipmentBook = () => {
           companyHeavyEquipment.heavyEquipment?.eligibilityStatus?.id ?? ''
         );
         methods.setValue(
+          'specification',
+          companyHeavyEquipment.heavyEquipment?.reference?.spec ?? ''
+        );
+        methods.setValue(
           'createdYear',
           `${companyHeavyEquipment.heavyEquipment?.createdYear ?? ''}`
         );
@@ -132,6 +136,19 @@ const UpdateCompanyHeavyEquipmentBook = () => {
         }
       },
     });
+
+  useReadOneHeavyEquipmentReference({
+    variables: {
+      id: referenceId,
+    },
+    skip: referenceId === '',
+    onCompleted: (data) => {
+      methods.setValue(
+        'specification',
+        data.heavyEquipmentReference.spec ?? ''
+      );
+    },
+  });
 
   const { mutate, isLoading } = useUpdateHeavyEquipmentCompany({
     onError: (err) => {
@@ -187,6 +204,7 @@ const UpdateCompanyHeavyEquipmentBook = () => {
       label: 'specHeavyEquipment',
       colSpan: 6,
       withAsterisk: false,
+      disabled: true,
     });
     const vehicleNumber = globalText({
       name: 'vehicleNumber',
@@ -201,7 +219,8 @@ const UpdateCompanyHeavyEquipmentBook = () => {
     });
     const brandItem = brandSelect({
       label: 'brandHeavyEquipment',
-      defaultValue: brandId,
+      defaultValue:
+        heavyEquipmentCompanyData?.heavyEquipment?.reference?.type?.brand?.id,
       labelValue:
         heavyEquipmentCompanyData?.heavyEquipment?.reference?.type?.brand?.name,
       onChange: (value) => {
@@ -213,7 +232,8 @@ const UpdateCompanyHeavyEquipmentBook = () => {
     });
     const typeItem = typeSelect({
       label: 'typeHeavyEquipment',
-      defaultValue: typeId,
+      defaultValue:
+        heavyEquipmentCompanyData?.heavyEquipment?.reference?.type?.id,
       labelValue:
         heavyEquipmentCompanyData?.heavyEquipment?.reference?.type?.name,
       brandId,
@@ -226,7 +246,7 @@ const UpdateCompanyHeavyEquipmentBook = () => {
     const modelItem = modelSelect({
       label: 'modelHeavyEquipment',
       name: 'referenceId',
-      defaultValue: referenceId,
+      defaultValue: heavyEquipmentCompanyData?.heavyEquipment?.reference?.id,
       labelValue:
         heavyEquipmentCompanyData?.heavyEquipment?.reference?.modelName,
       brandId,
@@ -238,7 +258,7 @@ const UpdateCompanyHeavyEquipmentBook = () => {
     });
     const classItem = classSelect({
       label: 'class',
-      defaultValue: classId,
+      defaultValue: heavyEquipmentCompanyData?.heavyEquipment?.class?.id,
       labelValue: heavyEquipmentCompanyData?.heavyEquipment?.class?.name,
     });
     const eligibilityStatusItem = eligibilityStatusSelect({});
