@@ -227,6 +227,7 @@ const UpdateCompanyHeavyEquipmentBook = () => {
         methods.setValue('brandId', value ?? '');
         methods.setValue('typeId', '');
         methods.setValue('referenceId', '');
+        methods.setValue('specification', '');
         methods.trigger('brandId');
       },
     });
@@ -240,6 +241,7 @@ const UpdateCompanyHeavyEquipmentBook = () => {
       onChange: (value) => {
         methods.setValue('typeId', value ?? '');
         methods.setValue('referenceId', '');
+        methods.setValue('specification', '');
         methods.trigger('typeId');
       },
     });
@@ -253,6 +255,7 @@ const UpdateCompanyHeavyEquipmentBook = () => {
       typeId,
       onChange: (value) => {
         methods.setValue('referenceId', value ?? '');
+        methods.setValue('specification', '');
         methods.trigger('referenceId');
       },
     });

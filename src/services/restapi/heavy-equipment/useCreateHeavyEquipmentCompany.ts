@@ -51,6 +51,7 @@ const CreateHeavyEquipmentCompany = async ({
     'startDate',
     'endDate',
     'isStill',
+    'specification',
   ];
   data.forEach(({ name, value }) => {
     if (name === 'isStill') {

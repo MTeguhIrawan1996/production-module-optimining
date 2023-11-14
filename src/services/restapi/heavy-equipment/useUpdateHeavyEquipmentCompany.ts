@@ -39,6 +39,7 @@ const UpdateHeavyEquipmentCompany = async ({
     'startDate',
     'endDate',
     'isStill',
+    'specification',
   ];
   bodyFormData.append('id', companyHeavyEquipmentId);
   bodyFormData.append('heavyEquipmentId', heavyEquipmentId);
