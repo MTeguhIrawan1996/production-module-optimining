@@ -198,6 +198,46 @@ const ReadHumanResourceBook = () => {
           <Divider my="md" />
           <Stack spacing="sm">
             <Text fz={24} fw={600} color="brand">
+              {t('commonTypography.domicileAddress')}
+            </Text>
+            <KeyValueList
+              data={[
+                {
+                  dataKey: t('commonTypography.province'),
+                  value: humanResourceData?.domicileProvince?.name,
+                },
+                {
+                  dataKey: t('commonTypography.regency'),
+                  value: humanResourceData?.domicileRegency?.name,
+                },
+                {
+                  dataKey: t('commonTypography.subdistrict'),
+
+                  value: humanResourceData?.domicileDistrict?.name,
+                },
+                {
+                  dataKey: t('commonTypography.village'),
+                  value: humanResourceData?.domicileVillage?.name,
+                },
+                {
+                  dataKey: t('commonTypography.detailAddress'),
+                  value: humanResourceData?.domicileAddress,
+                },
+              ]}
+              type="grid"
+              keyStyleText={{
+                fw: 400,
+                fz: 20,
+              }}
+              valueStyleText={{
+                fw: 600,
+                fz: 20,
+              }}
+            />
+          </Stack>
+          <Divider my="md" />
+          <Stack spacing="sm">
+            <Text fz={24} fw={600} color="brand">
               {t('commonTypography.contact')}
             </Text>
             <KeyValueList
