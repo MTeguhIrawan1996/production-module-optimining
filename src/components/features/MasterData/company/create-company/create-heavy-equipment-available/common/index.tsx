@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import HeavyEquipmentMasterBook from '@/components/features/MasterData/heavy-equipment/common/sections/HeavyEquipmentMasterBook';
+import CreateHeavyEquipmentAvailableBook from '@/components/features/MasterData/company/create-company/create-heavy-equipment-available/common/sections/CreateHeavyEquipmentAvailableBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const HeavyEquipmentMasterPage = () => {
+const CreateHeavyEquipmentAvailablePage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -19,7 +19,15 @@ const HeavyEquipmentMasterPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.heavyEquipment'),
+        label: t('commonTypography.company'),
+        path: '/master-data/company',
+      },
+      {
+        label: 'Overview',
+        path: `/master-data/company/read/${router.query?.id}`,
+      },
+      {
+        label: t('heavyEquipment.chooseHeavyEquipment'),
         path: router.asPath,
       },
     ]);
@@ -30,14 +38,14 @@ const HeavyEquipmentMasterPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('heavyEquipment.heavyEquipmentMaster'),
+          title: t('heavyEquipment.chooseAvailableHeavyEquipment'),
           mb: 'md',
         }}
       >
-        <HeavyEquipmentMasterBook />
+        <CreateHeavyEquipmentAvailableBook />
       </InnerWrapper>
     </RootWrapper>
   );
 };
 
-export default HeavyEquipmentMasterPage;
+export default CreateHeavyEquipmentAvailablePage;

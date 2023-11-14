@@ -42,7 +42,13 @@ const UpdateHeavyEquipmentMaster = async ({
 }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
-  const exclude = ['brandId', 'typeId', 'photos', 'vehicleNumberPhoto'];
+  const exclude = [
+    'brandId',
+    'typeId',
+    'photos',
+    'vehicleNumberPhoto',
+    'specification',
+  ];
 
   bodyFormData.append('id', id);
   if (deletedPhotoIds) {

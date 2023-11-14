@@ -48,6 +48,7 @@ export const READ_ALL_HEAVY_EQUIPMENT_COMPANY = gql`
           reference {
             id
             modelName
+            spec
             type {
               id
               name
@@ -57,7 +58,6 @@ export const READ_ALL_HEAVY_EQUIPMENT_COMPANY = gql`
               }
             }
           }
-          specification
           createdYear
           class {
             id

@@ -11,6 +11,7 @@ export const READ_ONE_HEAVY_EQUIPMENT_MASTER = gql`
       reference {
         id
         modelName
+        spec
         type {
           id
           name
@@ -20,7 +21,6 @@ export const READ_ONE_HEAVY_EQUIPMENT_MASTER = gql`
           }
         }
       }
-      specification
       createdYear
       class {
         id
@@ -54,6 +54,7 @@ export interface IReadOneHeavyEquipmentMasterData {
   reference: {
     id: string;
     modelName: string;
+    spec: string | null;
     type: {
       id: string;
       name: string;
@@ -62,8 +63,7 @@ export interface IReadOneHeavyEquipmentMasterData {
         name: string;
       } | null;
     } | null;
-  };
-  specification: string | null;
+  } | null;
   createdYear: string;
   class: {
     id: string;
