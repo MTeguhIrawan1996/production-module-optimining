@@ -201,7 +201,7 @@ export const bloodTypeSelect: ControllerProps = {
 export const resusSelect: ControllerProps = {
   control: 'select-input',
   name: 'resus',
-  withAsterisk: true,
+  withAsterisk: false,
   label: 'resus',
   placeholder: 'chooseResus',
   colSpan: 6,
