@@ -75,7 +75,7 @@ const CreateHumanResource = async (props: INameValue[]) => {
       }
       if (name === 'dob') {
         const date = dateToString(value as string);
-        bodyFormData.append('dob', date);
+        if (date) bodyFormData.append('dob', date);
         return;
       }
       if (

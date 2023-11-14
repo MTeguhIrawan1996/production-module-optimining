@@ -69,10 +69,12 @@ const CreateHeavyEquipmentCompany = async ({
         });
       }
       if (name === 'startDate') {
-        bodyFormData.append('startDate', dateToString(`${value}`));
+        const startDate = dateToString(value as string);
+        if (startDate) bodyFormData.append('startDate', startDate);
       }
       if (name === 'endDate') {
-        bodyFormData.append('endDate', dateToString(`${value}`));
+        const endDate = dateToString(value as string);
+        if (endDate) bodyFormData.append('endDate', endDate);
       }
       if (!exclude.includes(name) && typeof value === 'string') {
         bodyFormData.append(name, value);

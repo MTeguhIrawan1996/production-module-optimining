@@ -35,7 +35,9 @@ export const READ_ALL_MASTER_DATA_COMPANY = gql`
         alias
         code
         presidentDirector {
+          id
           humanResource {
+            id
             name
           }
         }
@@ -49,12 +51,14 @@ export const READ_ALL_MASTER_DATA_COMPANY = gql`
 `;
 
 type IHumanResource = {
+  is: string;
   humanResource: {
+    id: string;
     name: string;
   } | null;
 };
 
-export interface ICompaniesData {
+interface ICompaniesData {
   id: string;
   name: string;
   alias: string | null;

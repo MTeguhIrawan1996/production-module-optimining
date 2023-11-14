@@ -20,7 +20,7 @@ import {
   nip,
 } from '@/utils/constants/Field/global-field';
 import { createCompanyEmployeSchema } from '@/utils/form-validation/company/company-employe-validation';
-import { stringToDate } from '@/utils/helper/dateToString';
+import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
@@ -146,12 +146,18 @@ const UpdateCompanyEmployeDataBook = () => {
   const handleSubmitForm: SubmitHandler<
     Omit<IUpdateEmployeeDataRequest, 'id'>
   > = async (data) => {
+    const entryDate = dateToString(data.entryDate ?? null);
+    const quitDate = dateToString(data.quitDate ?? null);
     await executeUpdate({
-      variables: { ...data, id: employeId },
+      variables: { ...data, id: employeId, entryDate, quitDate },
     });
   };
   return (
-    <DashboardCard p={0} isLoading={employeeDataLoading}>
+    <DashboardCard
+      p={0}
+      isLoading={employeeDataLoading}
+      sx={{ overflow: 'unset' }}
+    >
       <GlobalFormGroup
         field={fieldEmployeData}
         methods={methods}

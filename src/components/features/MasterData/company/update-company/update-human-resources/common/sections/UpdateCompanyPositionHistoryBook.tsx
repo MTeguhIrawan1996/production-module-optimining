@@ -18,7 +18,7 @@ import {
   globalDate,
   positionSelectRhf,
 } from '@/utils/constants/Field/global-field';
-import { stringToDate } from '@/utils/helper/dateToString';
+import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -167,9 +167,9 @@ const UpdateCompanyPositionHistoryBook = () => {
       const data = {
         positionId: val.positionId,
         divisionId: val.divisionId,
-        startDate: val.startDate ?? '',
+        startDate: dateToString(val.startDate ?? null),
         isStill: val.isStill,
-        endDate: val.endDate ?? '',
+        endDate: dateToString(val.endDate ?? null),
       };
       return data;
     });
@@ -183,7 +183,11 @@ const UpdateCompanyPositionHistoryBook = () => {
   };
 
   return (
-    <DashboardCard p={0} isLoading={employeeDataLoading}>
+    <DashboardCard
+      p={0}
+      isLoading={employeeDataLoading}
+      sx={{ overflow: 'unset' }}
+    >
       {!employeeDataLoading ? (
         <GlobalFormGroup
           field={arrayField}
