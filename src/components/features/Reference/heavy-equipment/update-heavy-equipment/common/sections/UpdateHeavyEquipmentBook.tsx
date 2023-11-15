@@ -57,6 +57,8 @@ const UpdateHeavyEquipmentBook = () => {
   });
   const brandId = methods.watch('brandId');
   const typeId = methods.watch('typeId');
+  const photos = methods.watch('photos');
+
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
@@ -152,14 +154,21 @@ const UpdateHeavyEquipmentBook = () => {
       enableDeletePhoto: true,
       serverPhotos: serverPhotos,
       onDrop: (value) => {
-        if (
-          serverPhotos &&
-          value.length + (serverPhotos?.length - deletedPhotoIds.length) > 5
-        ) {
-          methods.setError('photos', {
-            type: 'manual',
-            message: 'Jumlah foto melebihi batas maksimal',
-          });
+        if (photos) {
+          const totalPhotos = photos.length + value.length;
+          const totalServerPhotos =
+            serverPhotos &&
+            totalPhotos + (serverPhotos.length - deletedPhotoIds.length) > 5;
+          if (totalPhotos > 5 || totalServerPhotos) {
+            methods.setError('photos', {
+              type: 'manual',
+              message: 'Jumlah foto melebihi batas maksimal',
+            });
+            return;
+          }
+
+          methods.setValue('photos', [...photos, ...value]);
+          methods.clearErrors('photos');
           return;
         }
         methods.setValue('photos', value);
@@ -235,7 +244,7 @@ const UpdateHeavyEquipmentBook = () => {
             name: 'modelYear',
             label: 'modelYear',
             colSpan: 6,
-            withAsterisk: true,
+            withAsterisk: false,
           },
         ],
       },
@@ -259,6 +268,7 @@ const UpdateHeavyEquipmentBook = () => {
     uncombinedTypeItems,
     serverPhotos,
     deletedPhotoIds,
+    photos,
   ]);
   /* #endregion  /**======== Field =========== */
 

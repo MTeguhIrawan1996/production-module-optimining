@@ -11,7 +11,7 @@ export interface ICreateHeavyEquipmentValues {
   modelName: string;
   spec: string;
   modelYear: string;
-  photos: FileWithPath[] | string | null;
+  photos: FileWithPath[] | null;
 }
 
 export interface ICreateHeavyEquipmentResponse {

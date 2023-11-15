@@ -16,8 +16,8 @@ export interface ICreateHeavyEquipmentMasterValues {
   specification: string;
   vehicleNumber: string;
   createdYear: string;
-  photos: FileWithPath[] | string | null;
-  vehicleNumberPhoto: FileWithPath[] | string | null;
+  photos: FileWithPath[] | null;
+  vehicleNumberPhoto: FileWithPath[] | null;
 }
 
 export interface ICreateHeavyEquipmentMasterResponse {
