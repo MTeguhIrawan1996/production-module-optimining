@@ -87,6 +87,10 @@ const getClient = (tokenServer?: ISessionServer | null) => {
       'ReadAllEmployePosition',
       'ReadAllDivision',
       'ReadAllEligibilityStatus',
+      'ReadAllBussinessType',
+      'ReadAllCompanyPermissionType',
+      'ReadAllLoactionCategory',
+      'ReadAllHeavyEquipmentClass',
     ];
 
     if (blackList.includes(operation.operationName)) {

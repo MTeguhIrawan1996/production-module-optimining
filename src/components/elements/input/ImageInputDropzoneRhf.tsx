@@ -20,7 +20,9 @@ import { useTranslation } from 'react-i18next';
 
 import TextButton from '@/components/elements/button/TextButton';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
-import NextImageFill from '@/components/elements/global/NextImageFill';
+import NextImageFill, {
+  INextImageFillProps,
+} from '@/components/elements/global/NextImageFill';
 
 import { CommonProps, IFile } from '@/types/global';
 
@@ -34,6 +36,10 @@ export type IImageInputDropzoneRhfProps = {
   serverPhotos?: Partial<IFile>[] | null;
   deletedPhotoIds?: string[];
   handleDeleteServerPhotos?: (id: string) => void;
+  imageProps?: Pick<
+    INextImageFillProps,
+    'figureClassName' | 'figureProps' | 'imageClassName'
+  >;
 } & Omit<DropzoneProps, 'name' | 'children'> &
   CommonProps;
 
@@ -53,6 +59,7 @@ const ImageInputDropzoneRhf: React.FC<IImageInputDropzoneRhfProps> = ({
   serverPhotos,
   deletedPhotoIds,
   handleDeleteServerPhotos,
+  imageProps,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -63,6 +70,12 @@ const ImageInputDropzoneRhf: React.FC<IImageInputDropzoneRhfProps> = ({
     name,
   });
   const { replace } = useFieldArray({ name });
+
+  const {
+    imageClassName = classes.image,
+    figureProps = { w: '100%', h: 160, radius: 'sm' },
+    ...restImage
+  } = imageProps || {};
 
   const handleRemoveImage = (index: number) => {
     const newFilter = field.value?.filter(
@@ -83,12 +96,9 @@ const ImageInputDropzoneRhf: React.FC<IImageInputDropzoneRhfProps> = ({
             <NextImageFill
               alt={file.name}
               src={URL.createObjectURL(file)}
-              figureProps={{
-                w: '100%',
-                h: 160,
-                radius: 'sm',
-              }}
-              imageClassName={classes.image}
+              figureProps={figureProps}
+              imageClassName={imageClassName}
+              {...restImage}
             />
             {enableDeletePhoto ? (
               <TextButton
@@ -120,12 +130,9 @@ const ImageInputDropzoneRhf: React.FC<IImageInputDropzoneRhfProps> = ({
               <NextImageFill
                 alt={file.fileName ?? ''}
                 src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${file.url}`}
-                figureProps={{
-                  w: '100%',
-                  h: 160,
-                  radius: 'sm',
-                }}
-                imageClassName={classes.image}
+                figureProps={figureProps}
+                imageClassName={imageClassName}
+                {...restImage}
               />
               {enableDeletePhoto ? (
                 <TextButton

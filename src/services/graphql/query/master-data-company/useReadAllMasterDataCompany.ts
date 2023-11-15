@@ -51,7 +51,7 @@ export const READ_ALL_MASTER_DATA_COMPANY = gql`
 `;
 
 type IHumanResource = {
-  is: string;
+  id: string;
   humanResource: {
     id: string;
     name: string;

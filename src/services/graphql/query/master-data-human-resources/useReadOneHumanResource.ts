@@ -1,6 +1,10 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
-import { IFile } from '@/types/global';
+import {
+  IDomicileProvinceDetail,
+  IFile,
+  IProvinceDetail,
+} from '@/types/global';
 
 export const READ_ONE_HUMAN_RESOURCE = gql`
   query ReadOneHumanResource($id: String!) {
@@ -81,7 +85,7 @@ export const READ_ONE_HUMAN_RESOURCE = gql`
   }
 `;
 
-export interface IHumanResourceData {
+export type IHumanResourceData = {
   id: string;
   name: string;
   alias: string | null;
@@ -103,48 +107,15 @@ export interface IHumanResourceData {
     id: string;
     name: string;
   } | null;
-  province: {
-    id: string;
-    name: string;
-  } | null;
-  regency: {
-    id: string;
-    name: string;
-  } | null;
-  district: {
-    id: string;
-    name: string;
-  } | null;
-  village: {
-    id: string;
-    name: string;
-  } | null;
-  address: string;
   isAddressSameWithDomicile: boolean;
-  domicileProvince: {
-    id: string;
-    name: string;
-  } | null;
-  domicileRegency: {
-    id: string;
-    name: string;
-  } | null;
-  domicileDistrict: {
-    id: string;
-    name: string;
-  } | null;
-  domicileVillage: {
-    id: string;
-    name: string;
-  } | null;
-  domicileAddress: string | null;
   phoneNumber: string;
   email: string;
   bloodType: string | null;
   resus: string | null;
   photo: Omit<IFile, 'mime' | 'path'> | null;
   identityPhoto: Omit<IFile, 'mime' | 'path'> | null;
-}
+} & IProvinceDetail &
+  IDomicileProvinceDetail;
 
 export interface IHumanResourceResponse {
   humanResource: IHumanResourceData;

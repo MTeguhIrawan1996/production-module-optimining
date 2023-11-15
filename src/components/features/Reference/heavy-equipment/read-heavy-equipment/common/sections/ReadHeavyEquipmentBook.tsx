@@ -84,7 +84,7 @@ const ReadHeavyEquipmentBook = () => {
         <Tabs.Panel value="information">
           {!heavyEquipmentReferenceDataLoading && photosItem ? (
             <>
-              <GlobalHeaderDetail data={photosItem} title="document" />
+              <GlobalHeaderDetail data={photosItem ?? []} title="document" />
               <Divider my="md" />
             </>
           ) : null}

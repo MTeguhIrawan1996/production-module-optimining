@@ -22,7 +22,7 @@ const FormExamplePage = () => {
 
   return (
     <RootWrapper>
-      <InnerWrapper titleProps={{ title: 'Example Form', mb: 'xl' }}>
+      <InnerWrapper titleProps={{ title: 'Example Form', mb: 'md' }}>
         <Divider my="xs" />
         <Tabs defaultValue="profil-perusahaan" radius={4}>
           <Tabs.List>

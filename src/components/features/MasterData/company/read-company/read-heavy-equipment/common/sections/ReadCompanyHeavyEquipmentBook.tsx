@@ -50,6 +50,22 @@ const ReadCompanyHeavyEquipmentBook = () => {
   const photosItem =
     heavyEquipmentCompanyData?.heavyEquipment?.photos?.map(photosCallback);
 
+  const vehicleDocument = heavyEquipmentCompanyData?.heavyEquipment
+    ?.vehicleNumberPhoto
+    ? [
+        {
+          type: 'vehicleDocument',
+          alt: heavyEquipmentCompanyData.heavyEquipment?.vehicleNumberPhoto
+            ?.fileName,
+          fileName:
+            heavyEquipmentCompanyData.heavyEquipment?.vehicleNumberPhoto
+              ?.originalFileName,
+          src: heavyEquipmentCompanyData.heavyEquipment?.vehicleNumberPhoto
+            ?.url,
+        },
+      ]
+    : [];
+
   /* #endregion  /**======== PhotosData =========== */
 
   return (
@@ -92,23 +108,7 @@ const ReadCompanyHeavyEquipmentBook = () => {
           {!heavyEquipmentCompanyDataLoading && heavyEquipmentCompanyData ? (
             <>
               <GlobalHeaderDetail
-                data={
-                  heavyEquipmentCompanyData.heavyEquipment?.vehicleNumberPhoto
-                    ? [
-                        {
-                          type: 'vehicleDocument',
-                          alt: heavyEquipmentCompanyData.heavyEquipment
-                            ?.vehicleNumberPhoto?.fileName,
-                          fileName:
-                            heavyEquipmentCompanyData.heavyEquipment
-                              ?.vehicleNumberPhoto?.originalFileName,
-                          src: heavyEquipmentCompanyData.heavyEquipment
-                            ?.vehicleNumberPhoto?.url,
-                        },
-                        ...(photosItem ?? []),
-                      ]
-                    : []
-                }
+                data={[...vehicleDocument, ...(photosItem ?? [])]}
                 title="document"
               />
               <Divider my="md" />

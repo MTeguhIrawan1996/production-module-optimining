@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import {
-  zDateValidation,
+  zDateOptionalValidation,
   zEmailValidation,
   zImageArrayOptional,
   zOptionalString,
@@ -17,8 +17,8 @@ export const createHumanResourcesSchema = z
     isWni: zRequiredString,
     identityTypeId: zRequiredString,
     identityNumber: zRequiredNumberOfString,
-    pob: zRequiredString,
-    dob: zDateValidation,
+    pob: zOptionalString,
+    dob: zDateOptionalValidation,
     gender: zRequiredString,
     religionId: zOptionalString.nullable(),
     educationDegree: zOptionalString,

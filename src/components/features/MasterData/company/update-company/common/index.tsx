@@ -5,12 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import CreateCompanyBook from '@/components/features/MasterData/company/create-company/common/sections/CreateCompanyBook';
+import UpdateCompanyBook from '@/components/features/MasterData/company/update-company/common/sections/UpdateCompanyBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const CreateCompanyPage = () => {
+const UpdateCompanyPage = () => {
   const router = useRouter();
+  const companyId = router.query?.id as string;
+
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
@@ -21,7 +23,11 @@ const CreateCompanyPage = () => {
     setBreadcrumbs([
       { label: t('commonTypography.company'), path: '/master-data/company' },
       {
-        label: t('company.createCompany'),
+        label: 'Overview',
+        path: `/master-data/company/read/${companyId}`,
+      },
+      {
+        label: t('company.updateCompany'),
         path: router.asPath,
       },
     ]);
@@ -30,7 +36,9 @@ const CreateCompanyPage = () => {
 
   return (
     <RootWrapper>
-      <InnerWrapper titleProps={{ title: t('company.formCompany'), mb: 'md' }}>
+      <InnerWrapper
+        titleProps={{ title: t('company.formUpdateCompany'), mb: 'md' }}
+      >
         <Tabs defaultValue="company-profil" radius={4}>
           <Tabs.List>
             <Tabs.Tab value="company-profil" fz={14} fw={500}>
@@ -38,7 +46,7 @@ const CreateCompanyPage = () => {
             </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="company-profil">
-            <CreateCompanyBook />
+            <UpdateCompanyBook />
           </Tabs.Panel>
         </Tabs>
       </InnerWrapper>
@@ -46,4 +54,4 @@ const CreateCompanyPage = () => {
   );
 };
 
-export default CreateCompanyPage;
+export default UpdateCompanyPage;

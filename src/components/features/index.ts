@@ -12,6 +12,7 @@ import CreateHumanResourcesAvailablePage from '@/components/features/MasterData/
 import ReadCompanyPage from '@/components/features/MasterData/company/read-company/common';
 import ReadCompanyHeavyEquipmentPage from '@/components/features/MasterData/company/read-company/read-heavy-equipment/common';
 import ReadCompanyHumanResourcesPage from '@/components/features/MasterData/company/read-company/read-human-resources/common';
+import UpdateCompanyPage from '@/components/features/MasterData/company/update-company/common';
 import UpdateCompanyHeavyEquipmentPage from '@/components/features/MasterData/company/update-company/update-heavy-equipment/common';
 import UpdateCompanyHumanResourcesPage from '@/components/features/MasterData/company/update-company/update-human-resources/common';
 import HeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/common';
@@ -22,6 +23,7 @@ import HumanResourcesPage from '@/components/features/MasterData/human-resources
 import CreateHumanResourcesPage from '@/components/features/MasterData/human-resources/create/common';
 import ReadHumanResourcesPage from '@/components/features/MasterData/human-resources/read/common';
 import UpdateHumanResourcesPage from '@/components/features/MasterData/human-resources/update/common';
+import LocationPage from '@/components/features/MasterData/location/common';
 import ProfilePage from '@/components/features/Profile/common';
 import CompanyTypePage from '@/components/features/Reference/company-type/common';
 import HeavyEquipmentPage from '@/components/features/Reference/heavy-equipment/common';
@@ -63,6 +65,7 @@ export {
   HeavyEquipmentMasterPage,
   HeavyEquipmentPage,
   HumanResourcesPage,
+  LocationPage,
   ManagementRolePage,
   ProfilePage,
   ReadCompanyHeavyEquipmentPage,
@@ -75,6 +78,7 @@ export {
   ReadManagementRolePage,
   UpdateCompanyHeavyEquipmentPage,
   UpdateCompanyHumanResourcesPage,
+  UpdateCompanyPage,
   UpdateHeavyEquipmentClassPage,
   UpdateHeavyEquipmentMasterPage,
   UpdateHeavyEquipmentPage,

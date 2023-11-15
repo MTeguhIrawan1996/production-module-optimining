@@ -26,6 +26,11 @@ export const linksDashboard: IMenuItem[] = [
         href: '/master-data/heavy-equipment',
         access: ['all'],
       },
+      {
+        label: 'location',
+        href: '/master-data/location',
+        access: ['all'],
+      },
     ],
   },
   {

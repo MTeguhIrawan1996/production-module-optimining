@@ -3,7 +3,10 @@ import 'dayjs/locale/id';
 
 import {
   BrandSelectInputRhf,
+  BussinessTypeSelectInputRhf,
   ClassSelectInputRhf,
+  CompanyPermissionTypeSelectInputRhf,
+  CompanyTypeSelectInputRhf,
   DateInputRhf,
   DivisionSelectInputRhf,
   EligibilityStatusSelectInputRhf,
@@ -82,6 +85,12 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <ClassSelectInputRhf {...props} />;
     case 'eligibilityStatus-select-input':
       return <EligibilityStatusSelectInputRhf {...props} />;
+    case 'company-types-select-input':
+      return <CompanyTypeSelectInputRhf {...props} />;
+    case 'bussiness-types-select-input':
+      return <BussinessTypeSelectInputRhf {...props} />;
+    case 'company-permission-types-select-input':
+      return <CompanyPermissionTypeSelectInputRhf {...props} />;
     default:
       return null;
   }

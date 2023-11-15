@@ -130,7 +130,6 @@ const CreateHeavyEquipmentMasterBook = () => {
       name: 'vehicleNumber',
       label: 'vehicleNumberOrRegirstrationNumber',
       colSpan: 6,
-      withAsterisk: false,
     });
     const brandItem = brandSelect({
       label: 'brandHeavyEquipment',

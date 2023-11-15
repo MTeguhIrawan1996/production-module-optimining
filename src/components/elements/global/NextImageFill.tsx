@@ -2,7 +2,7 @@ import { createStyles, Paper, PaperProps } from '@mantine/core';
 import Image, { ImageProps } from 'next/image';
 import * as React from 'react';
 
-interface INextImageFillProps extends ImageProps {
+export interface INextImageFillProps extends ImageProps {
   figureClassName?: string;
   figureProps?: PaperProps;
   imageClassName?: string;

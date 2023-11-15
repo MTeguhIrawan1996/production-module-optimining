@@ -10,10 +10,9 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import {
-  ICompanyMutationValues,
-  useCreateCompany,
-} from '@/services/restapi/company/useCreateCompanyMasterData';
+import { useReadOneCompany } from '@/services/graphql/query/master-data-company/useReadOneCompany';
+import { ICompanyMutationValues } from '@/services/restapi/company/useCreateCompanyMasterData';
+import { useUpdateCompany } from '@/services/restapi/company/useUpdateCompanyMasterData';
 import {
   businessTypesSelact,
   companyPermissionTypesSelact,
@@ -28,11 +27,12 @@ import {
   villageSelect,
 } from '@/utils/constants/Field/global-field';
 import { companyMutationValidation } from '@/utils/form-validation/company/company-mutation-validation';
+import { stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
-import { ControllerGroup, ControllerProps } from '@/types/global';
+import { ControllerGroup, ControllerProps, IFile } from '@/types/global';
 
 const useStyles = createStyles(() => ({
   image: {
@@ -41,12 +41,19 @@ const useStyles = createStyles(() => ({
   },
 }));
 
-const CreateCompanyBook = () => {
+const UpdateCompanyBook = () => {
   const { classes } = useStyles();
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
   const [companyPermissionType, setCompanyPermissionType] =
     React.useState<string>('');
+  const [serverLogo, setServerLogo] = React.useState<
+    Omit<IFile, 'mime' | 'path'>[] | null
+  >([]);
+  const [serverDocument, setServerDocument] = React.useState<
+    Omit<IFile, 'mime' | 'path'>[] | null
+  >([]);
 
   const methods = useForm<ICompanyMutationValues>({
     resolver: zodResolver(companyMutationValidation),
@@ -80,7 +87,45 @@ const CreateCompanyBook = () => {
   const regencyId = methods.watch('regencyId');
   const subdistrictId = methods.watch('subdistrictId');
 
-  const { mutate, isLoading } = useCreateCompany({
+  const { companyData, companyDataLoading } = useReadOneCompany({
+    variables: {
+      id: id,
+    },
+    skip: !router.isReady,
+    onCompleted: ({ company }) => {
+      methods.setValue('name', company.name ?? '');
+      methods.setValue('alias', company.alias ?? '');
+      methods.setValue('typeId', company.type?.id ?? '');
+      methods.setValue('businessTypeId', company.businessType?.id ?? '');
+      methods.setValue('provinceId', company.province?.id ?? '');
+      methods.setValue('regencyId', company.regency?.id ?? '');
+      methods.setValue('subdistrictId', company.district?.id ?? '');
+      methods.setValue('villageId', company.village?.id ?? '');
+      methods.setValue('address', company.address);
+      methods.setValue('phoneNumber1', company.phoneNumber1);
+      methods.setValue('phoneNumber2', company.phoneNumber2 ?? '');
+      methods.setValue('email1', company.email1);
+      methods.setValue('email2', company.email2 ?? '');
+      methods.setValue('faxNumber', company.faxNumber ?? '');
+      methods.setValue('code', company.code ?? '');
+      methods.setValue('nib', company.nib ?? '');
+      methods.setValue('permissionTypeId', company.permissionType?.id ?? '');
+      methods.setValue(
+        'permissionTypeNumber',
+        company.permissionTypeNumber ?? ''
+      );
+      const permissionDate = stringToDate(company.permissionTypeDate ?? null);
+      methods.setValue('permissionTypeDate', permissionDate);
+      if (company.logo) {
+        setServerLogo([company.logo]);
+      }
+      if (company.permissionTypeDocument) {
+        setServerDocument([company.permissionTypeDocument]);
+      }
+    },
+  });
+
+  const { mutate, isLoading } = useUpdateCompany({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -102,10 +147,10 @@ const CreateCompanyBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('company.successCreateMessage'),
+        message: t('company.successUpdateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/master-data/company');
+      router.push(`/master-data/company/read/${id}`);
       methods.reset();
     },
   });
@@ -191,6 +236,8 @@ const CreateCompanyBook = () => {
       colSpan: 6,
     });
     const provinceItem = provinceSelect({
+      defaultValue: companyData?.province?.id,
+      labelValue: companyData?.province?.name,
       onChange: (value) => {
         methods.setValue('provinceId', value ?? '');
         methods.setValue('regencyId', '');
@@ -200,6 +247,8 @@ const CreateCompanyBook = () => {
       },
     });
     const regencyItem = regencySelect({
+      defaultValue: companyData?.regency?.id,
+      labelValue: companyData?.regency?.name,
       provinceId,
       onChange: (value) => {
         methods.setValue('regencyId', value ?? '');
@@ -209,6 +258,8 @@ const CreateCompanyBook = () => {
       },
     });
     const subdistrictItem = subdistrictSelect({
+      defaultValue: companyData?.district?.id,
+      labelValue: companyData?.district?.name,
       provinceId,
       regencyId,
       onChange: (value) => {
@@ -218,6 +269,8 @@ const CreateCompanyBook = () => {
       },
     });
     const villageItem = villageSelect({
+      defaultValue: companyData?.village?.id,
+      labelValue: companyData?.village?.name,
       provinceId,
       regencyId,
       subdistrictId,
@@ -233,7 +286,12 @@ const CreateCompanyBook = () => {
       imageProps: {
         imageClassName: classes.image,
       },
+      serverPhotos: serverLogo,
+      handleDeleteServerPhotos: () => {
+        setServerLogo([]);
+      },
       onDrop: (value) => {
+        setServerLogo([]);
         methods.setValue('logo', value);
         methods.clearErrors('logo');
       },
@@ -253,7 +311,9 @@ const CreateCompanyBook = () => {
       description: 'uploadPdfDescription',
       maxSize: 10 * 1024 ** 2,
       multiple: false,
+      serverDocument: serverDocument,
       onDrop: (value) => {
+        setServerDocument([]);
         methods.setValue('permissionTypeDocument', value);
         methods.clearErrors('permissionTypeDocument');
       },
@@ -319,16 +379,19 @@ const CreateCompanyBook = () => {
     provinceId,
     regencyId,
     subdistrictId,
+    serverLogo,
+    serverDocument,
   ]);
 
   const handleSubmitForm: SubmitHandler<ICompanyMutationValues> = (data) => {
     const values = objectToArrayValue(data);
     mutate({
+      companyId: id,
       data: values,
     });
   };
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={companyDataLoading}>
       <GlobalFormGroup
         field={createCompanyField}
         methods={methods}
@@ -345,4 +408,4 @@ const CreateCompanyBook = () => {
   );
 };
 
-export default CreateCompanyBook;
+export default UpdateCompanyBook;

@@ -2,8 +2,13 @@
   "halloworld": "Hallo Dunia",
   "commonTypography": {
     "company": "Perusahaan",
+    "location": "Lokasi",
+    "idLocation": "ID Lokasi",
+    "locationCategory": "Kategori Lokasi",
+    "locationName": "Nama Lokasi",
     "number": "Nomor",
     "date": "Tanggal",
+    "identity": "Identitas",
     "companyType": "Jenis Perusahaan",
     "companyName": "Nama Perusahaan",
     "companyCode": "Kode Perusahaan",
@@ -17,7 +22,7 @@
     "aliasName": "Nama Alias",
     "nib": "NIB (Nomor Izin Berusaha)",
     "nib2": "NIB",
-    "businessPermit": "Izin Usaha",
+    "companyPermissionType": "Izin Usaha",
     "new": "Baru",
     "select": "Pilih",
     "existing": "yang sudah ada",
@@ -110,6 +115,7 @@
     "yesDelete": "Ya Hapus",
     "photo": "Foto",
     "identityPhoto": "Foto Identitas",
+    "businessType": "Jenis Badan Usaha",
     "yourPhoto": "Foto Diri",
     "humanResources": "SDM",
     "humanResourcesSelected": "SDM Terpilih",
@@ -139,6 +145,10 @@
     "chooseType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.type)",
     "chooseBrand": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.brand)",
     "chooseModel": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.model)",
+    "chooseBusinessType": "$t(commonTypography.choose) $t(commonTypography.businessType)",
+    "chooseCompanyType": "$t(commonTypography.choose) $t(commonTypography.companyType)",
+    "chooseCompanyPermissionType": "$t(commonTypography.choose) $t(commonTypography.companyPermissionType)",
+    "chooseLocationCategory": "$t(commonTypography.choose) $t(commonTypography.locationCategory)",
     "complete": "Lengkap",
     "inComplete": "Tidak Lengkap",
     "engineNumber": "Nomor Mesin",
@@ -147,7 +157,9 @@
     "vehicleDocument": "Surat Kendaraan",
     "stillInUse": "Masih digunakan",
     "dateOfOffice": "Tanggal Mulai Menjabat",
-    "dateComplateOffice": "Tanggal Selesai Menjabat"
+    "dateComplateOffice": "Tanggal Selesai Menjabat",
+    "male": "Laki-Laki",
+    "female": "Perempuan"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -160,7 +172,8 @@
     "user": "$t(commonTypography.user)",
     "heavyEquipmentClass": "$t(commonTypography.class) $t(commonTypography.heavyEquipment)",
     "heavyEquipment": "$t(commonTypography.heavyEquipment)",
-    "humanResources": "$t(commonTypography.humanResources)"
+    "humanResources": "$t(commonTypography.humanResources)",
+    "location": "$t(commonTypography.location)"
   },
   "auth": {
     "button": {
@@ -217,11 +230,16 @@
   },
   "company": {
     "createCompany": "$t(commonTypography.create) $t(commonTypography.company)",
+    "updateCompany": "$t(commonTypography.edit) $t(commonTypography.company)",
+    "identityCompany": "$t(commonTypography.identity) $t(commonTypography.company)",
     "chooseCompanyType": "$t(commonTypography.choose) $t(commonTypography.companyType)",
     "formCompany": "$t(commonTypography.form) $t(commonTypography.company)",
+    "formUpdateCompany": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.company)",
     "profileCompany": "$t(commonTypography.profile) $t(commonTypography.company)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.companyName)",
     "companyAlias": "$t(commonTypography.aliasName) $t(commonTypography.company)",
+    "successCreateMessage": "$t(commonTypography.company) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.company) berhasil diubah",
     "successDeleteMessage": "$t(commonTypography.company) berhasil dihapus",
     "successCreateEmployeDataMessage": "$t(commonTypography.employeDetail) berhasil dibuat",
     "successCreatePositionHistoryMessage": "$t(commonTypography.positionHistory) berhasil dibuat",
@@ -243,6 +261,7 @@
     "searchPlaceholderOverview": "$t(commonTypography.search) berdasarkan $t(commonTypography.heavyEquipmentCode)",
     "formHeavyEquipment": "$t(commonTypography.form) $t(heavyEquipment.heavyEquipmentTitle)",
     "formHeavyEquipmentMaster": "$t(commonTypography.form) $t(commonTypography.heavyEquipment)",
+    "formUpdateHeavyEquipmentMaster": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.heavyEquipment)",
     "detailReference": "$t(commonTypography.detail) $t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
     "successCreateMessage": "$t(heavyEquipment.heavyEquipmentTitle) berhasil dibuat",
     "successCreateMasterMessage": "$t(commonTypography.masterData) $t(commonTypography.heavyEquipment) berhasil dibuat",
@@ -296,5 +315,9 @@
     "chooseSDM": "$t(commonTypography.choose) $t(commonTypography.humanResources)",
     "chooseAvailableSDM": "Memilih Sumber Daya Manusia yang sudah Ada",
     "masterSDM": "Master SDM"
+  },
+  "location": {
+    "createLocation": "$t(commonTypography.create) $t(commonTypography.location)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.location) dan $t(commonTypography.idLocation)"
   }
 }
