@@ -39,8 +39,8 @@ const PdfInputDropzoneRhf: React.FC<IPdfInputDropzoneRhfProps> = ({
     name,
   });
 
-  const previewsCallback = React.useCallback(
-    (file: FileWithPath, index: number) => {
+  const previewsMemo: JSX.Element[] = React.useMemo(() => {
+    const item = field.value?.map((file: FileWithPath, index: number) => {
       const fileUrl = URL.createObjectURL(file);
       return (
         <iframe
@@ -52,13 +52,14 @@ const PdfInputDropzoneRhf: React.FC<IPdfInputDropzoneRhfProps> = ({
           }}
           src={fileUrl}
           key={index}
+          loading="lazy"
         />
       );
-    },
-    []
-  );
+    });
+    return item;
+  }, [field.value]);
 
-  const previews: JSX.Element[] = field.value?.map(previewsCallback);
+  // const previews: JSX.Element[] = (previewsCallback);
 
   return (
     <Stack spacing={8}>
@@ -129,8 +130,8 @@ const PdfInputDropzoneRhf: React.FC<IPdfInputDropzoneRhfProps> = ({
           </FieldErrorMessage>
         )}
       </Stack>
-      <SimpleGrid cols={1} mt={previews?.length > 0 ? 'sm' : 0}>
-        {previews}
+      <SimpleGrid cols={1} mt={previewsMemo?.length > 0 ? 'sm' : 0}>
+        {previewsMemo}
       </SimpleGrid>
     </Stack>
   );

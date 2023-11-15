@@ -6,12 +6,10 @@ export const zRequiredString = z
 export const zRequiredRole = z
   .string()
   .min(1, { message: 'Pilih salah satu role yang sesuai' });
-export const zOptionalString = z.string().optional();
-export const zRequiredSelectInput = zRequiredString
-  .nullable()
-  .refine((val) => val, {
-    message: 'Kolom tidak boleh kosong',
-  });
+export const zOptionalString = z.string();
+export const zRequiredSelectInput = zRequiredString.refine((val) => val, {
+  message: 'Kolom tidak boleh kosong',
+});
 export const zArrayOfString = z.string().array();
 export const zRequiredNumber = z.number({
   required_error: 'Kolom tidak boleh kosong',
@@ -23,27 +21,41 @@ export const zRequiredNumberOfString = z
   .refine((value) => /^[0-9]+$/.test(value), {
     message: 'Input hanya boleh berisi angka',
   });
+export const zOptionalNumberOfString = z
+  .string()
+  .refine((value) => /^[0-9]+$/.test(value), {
+    message: 'Input hanya boleh berisi angka',
+  })
+  .or(z.literal(''));
 
 export const zPasswordValidation = z
   .string()
   .min(8, { message: 'Kata sandi minimal 8 karakter' })
-  // .regex(/^(?=.*[A-Z])(?=.*[!@#$%^&_*])(?=.*[0-9])[a-zA-Z0-9!@#$%^&_*]*$/, {
-  //   message: 'Format kata sandi salah',
-  // })
   .regex(/^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]*$/, {
     message: 'Format kata sandi salah',
-  })
-  .nonempty({ message: 'Kolom tidak boleh kosong ' });
+  });
 
 export const zEmailValidation = z
   .string()
   .min(1, { message: 'Kolom tidak boleh kosong' })
   .email({ message: 'Format email salah' });
 
+export const zEmailOptional = z
+  .string()
+  .email({ message: 'Format email salah' })
+  .or(z.literal(''));
+
 export const zDateValidation = z.date({
   required_error: 'Kolom tidak boleh kosong',
   invalid_type_error: 'Kolom tidak boleh kosong / Format tanggal salah',
 });
+export const zDateOptionalValidation = z
+  .date({
+    required_error: 'Kolom tidak boleh kosong',
+    invalid_type_error: 'Kolom tidak boleh kosong / Format tanggal salah',
+  })
+  .optional()
+  .nullable();
 
 export const forgotPasswordValidate = z.object({
   email: z
@@ -115,4 +127,11 @@ export const zImageArrayOptional = z
       message: 'File harus Foto',
     }
   )
+  .array();
+
+export const zPdfArrayOptional = z
+  .custom<File>()
+  .refine((file) => file && ['application/pdf'].includes(file.type), {
+    message: 'File harus pdf',
+  })
   .array();

@@ -14,8 +14,8 @@ import { dateFromat } from '@/utils/helper/dateFormat';
 
 const useStyles = createStyles(() => ({
   image: {
+    objectFit: 'contain',
     backgroundPosition: 'center',
-    objectFit: 'cover',
   },
 }));
 
@@ -75,7 +75,7 @@ const ReadCompanyBook = () => {
                   value: companyData?.address,
                 },
                 {
-                  dataKey: t('commonTypography.businessPermit'),
+                  dataKey: t('commonTypography.companyPermissionType'),
                   value: companyData?.permissionType?.name,
                 },
                 {
@@ -161,7 +161,6 @@ const ReadCompanyBook = () => {
                   w: 280,
                   radius: 'xs',
                 }}
-                imageClassName={classes.image}
               />
             ) : null}
           </Box>

@@ -14,10 +14,6 @@ import {
   useUpdateCompanyHumanResource,
 } from '@/services/restapi/company/useUpdateCompanyHumanResources';
 import {
-  address,
-  domicileAddress,
-} from '@/utils/constants/Field/company-field';
-import {
   bloodTypeSelect,
   contact,
   dob,
@@ -25,6 +21,7 @@ import {
   email,
   fullname,
   ganderRadio,
+  globalText,
   identityNumber,
   identityRadio,
   isWniRadio,
@@ -227,6 +224,18 @@ const UpdateCompanyHumanResourcesBook = () => {
   const fieldHumanResources = React.useMemo(() => {
     const marriageStatusItem = marriageStatusSelect({});
     const relegionItem = relegionSelect({});
+    const address = globalText({
+      name: 'address',
+      label: 'address',
+      withAsterisk: true,
+      colSpan: 12,
+    });
+    const domicileAddress = globalText({
+      name: 'domicileAddress',
+      label: 'address',
+      withAsterisk: true,
+      colSpan: 12,
+    });
     const provinceItem = provinceSelect({
       defaultValue: employeeData?.humanResource?.province?.id,
       labelValue: employeeData?.humanResource?.province?.name,
