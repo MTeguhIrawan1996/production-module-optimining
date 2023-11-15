@@ -2,6 +2,10 @@
   "halloworld": "Hallo Dunia",
   "commonTypography": {
     "company": "Perusahaan",
+    "location": "Lokasi",
+    "idLocation": "ID Lokasi",
+    "locationCategory": "Kategori Lokasi",
+    "locationName": "Nama Lokasi",
     "number": "Nomor",
     "date": "Tanggal",
     "identity": "Identitas",
@@ -144,6 +148,7 @@
     "chooseBusinessType": "$t(commonTypography.choose) $t(commonTypography.businessType)",
     "chooseCompanyType": "$t(commonTypography.choose) $t(commonTypography.companyType)",
     "chooseCompanyPermissionType": "$t(commonTypography.choose) $t(commonTypography.companyPermissionType)",
+    "chooseLocationCategory": "$t(commonTypography.choose) $t(commonTypography.locationCategory)",
     "complete": "Lengkap",
     "inComplete": "Tidak Lengkap",
     "engineNumber": "Nomor Mesin",
@@ -165,7 +170,8 @@
     "user": "$t(commonTypography.user)",
     "heavyEquipmentClass": "$t(commonTypography.class) $t(commonTypography.heavyEquipment)",
     "heavyEquipment": "$t(commonTypography.heavyEquipment)",
-    "humanResources": "$t(commonTypography.humanResources)"
+    "humanResources": "$t(commonTypography.humanResources)",
+    "location": "$t(commonTypography.location)"
   },
   "auth": {
     "button": {
@@ -307,5 +313,9 @@
     "chooseSDM": "$t(commonTypography.choose) $t(commonTypography.humanResources)",
     "chooseAvailableSDM": "Memilih Sumber Daya Manusia yang sudah Ada",
     "masterSDM": "Master SDM"
+  },
+  "location": {
+    "createLocation": "$t(commonTypography.create) $t(commonTypography.location)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.location) dan $t(commonTypography.idLocation)"
   }
 }
