@@ -4,8 +4,11 @@ import { GraphQLErrorExtensions } from 'graphql';
 
 import { IPrimaryButtonProps } from '@/components/elements/button/PrimaryButton';
 import { IBrandSelectInputRhfProps } from '@/components/elements/input/BrandSelectInputRhf';
+import { IBussinessTypesSelectInputRhfProps } from '@/components/elements/input/BussinessTypeSelectInputRhf';
 import { ICheckboxGroupAccessProps } from '@/components/elements/input/CheckboxGroupAccess';
 import { IClassSelectInputRhfProps } from '@/components/elements/input/ClassSelectInputRhf';
+import { ICompanyPermissionTypesSelectInputRhfProps } from '@/components/elements/input/CompanyPermissionTypeSelectInputRhf';
+import { ICompanyTypesSelectInputRhfProps } from '@/components/elements/input/CompanyTypeSelectInputRhf';
 import { IDateInputProps } from '@/components/elements/input/DateInputRhf';
 import { IDivisionSelectInputRhfProps } from '@/components/elements/input/DivisionSelectInputRhf';
 import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/input/EligibilityStatusSelectInputRhf';
@@ -62,6 +65,9 @@ export type ControllerProps =
   | IModelSelectInputRhfProps
   | IClassSelectInputRhfProps
   | IEligibilityStatusSelectInputRhfProps
+  | ICompanyTypesSelectInputRhfProps
+  | IBussinessTypesSelectInputRhfProps
+  | ICompanyPermissionTypesSelectInputRhfProps
   | IDateInputProps;
 
 export type ControllerGroup = {
@@ -163,3 +169,42 @@ export interface RestErrorResponse<T> {
 }
 
 export type AxiosRestErrorResponse<T> = AxiosError<RestErrorResponse<T>>;
+
+export type IProvinceDetail = {
+  province: {
+    id: string;
+    name: string;
+  } | null;
+  regency: {
+    id: string;
+    name: string;
+  } | null;
+  district: {
+    id: string;
+    name: string;
+  } | null;
+  village: {
+    id: string;
+    name: string;
+  } | null;
+  address: string;
+};
+export type IDomicileProvinceDetail = {
+  domicileProvince: {
+    id: string;
+    name: string;
+  } | null;
+  domicileRegency: {
+    id: string;
+    name: string;
+  } | null;
+  domicileDistrict: {
+    id: string;
+    name: string;
+  } | null;
+  domicileVillage: {
+    id: string;
+    name: string;
+  } | null;
+  domicileAddress: string | null;
+};

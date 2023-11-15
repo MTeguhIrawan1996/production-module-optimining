@@ -61,7 +61,6 @@ const UpdateHeavyEquipmentMasterBook = () => {
   const brandId = methods.watch('brandId');
   const typeId = methods.watch('typeId');
   const referenceId = methods.watch('referenceId');
-  const classId = methods.watch('classId');
 
   /* #   /**=========== Query =========== */
 
@@ -174,7 +173,6 @@ const UpdateHeavyEquipmentMasterBook = () => {
       name: 'vehicleNumber',
       label: 'vehicleNumberOrRegirstrationNumber',
       colSpan: 6,
-      withAsterisk: false,
     });
     const brandItem = brandSelect({
       label: 'brandHeavyEquipment',
@@ -215,7 +213,7 @@ const UpdateHeavyEquipmentMasterBook = () => {
     });
     const classItem = classSelect({
       label: 'class',
-      defaultValue: classId,
+      defaultValue: heavyEquipmentMasterData?.class?.id,
       labelValue: heavyEquipmentMasterData?.class?.name,
     });
     const eligibilityStatusItem = eligibilityStatusSelect({});
@@ -308,7 +306,6 @@ const UpdateHeavyEquipmentMasterBook = () => {
     brandId,
     typeId,
     referenceId,
-    classId,
     heavyEquipmentMasterData,
     serverPhotos,
     deletedPhotoIds,

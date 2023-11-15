@@ -362,6 +362,7 @@ const ReadHeavyEquipmentBook = () => {
         MultipleFilterData: filter,
         colSpan: 4,
       }}
+      enebleBackBottomInner
     >
       {renderTable}
       <ModalConfirmation

@@ -35,7 +35,7 @@ const UpdateHeavyEquipmentMasterPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('heavyEquipment.formHeavyEquipmentMaster'),
+          title: t('heavyEquipment.formUpdateHeavyEquipmentMaster'),
           mb: 'md',
         }}
       >

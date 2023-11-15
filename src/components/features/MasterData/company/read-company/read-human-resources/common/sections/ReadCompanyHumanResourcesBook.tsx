@@ -18,29 +18,34 @@ const ReadCompanyHumanResourceBook: React.FC<IProps> = ({
 }) => {
   const { t } = useTranslation('default');
 
+  const identityPhoto = humanResource?.identityPhoto
+    ? [
+        {
+          type: 'identityPhoto',
+          alt: humanResource.identityPhoto?.fileName,
+          fileName: humanResource.identityPhoto?.originalFileName,
+          src: humanResource.identityPhoto?.url,
+        },
+      ]
+    : [];
+
+  const yourPhoto = humanResource?.photo
+    ? [
+        {
+          type: 'yourPhoto',
+          alt: humanResource.photo?.fileName,
+          fileName: humanResource.photo?.originalFileName,
+          src: humanResource.photo?.url,
+        },
+      ]
+    : [];
+
   return (
     <>
       {!isLoading && humanResource ? (
         <>
           <GlobalHeaderDetail
-            data={
-              humanResource.photo || humanResource.identityPhoto
-                ? [
-                    {
-                      type: 'identityPhoto',
-                      alt: humanResource.identityPhoto?.fileName,
-                      fileName: humanResource.identityPhoto?.originalFileName,
-                      src: humanResource.identityPhoto?.url,
-                    },
-                    {
-                      type: 'yourPhoto',
-                      alt: humanResource.photo?.fileName,
-                      fileName: humanResource.photo?.originalFileName,
-                      src: humanResource.photo?.url,
-                    },
-                  ]
-                : []
-            }
+            data={[...identityPhoto, ...yourPhoto]}
             title="document"
           />
           <Divider my="md" />
@@ -87,7 +92,7 @@ const ReadCompanyHumanResourceBook: React.FC<IProps> = ({
             },
             {
               dataKey: t('commonTypography.gender'),
-              value: humanResource?.gender,
+              value: t(`commonTypography.${humanResource?.gender}`),
             },
             {
               dataKey: t('commonTypography.religion'),

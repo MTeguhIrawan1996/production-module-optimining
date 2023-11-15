@@ -36,7 +36,7 @@ const CreateHeavyEquipmentMasterPage = () => {
       <InnerWrapper
         titleProps={{
           title: t('heavyEquipment.formHeavyEquipmentMaster'),
-          mb: 'xl',
+          mb: 'md',
         }}
       >
         <Tabs

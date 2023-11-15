@@ -19,7 +19,7 @@ export const createHeavyEquipmentMasterSchema = z.object({
   createdYear: zRequiredNumberOfString,
   eligibilityStatusId: zRequiredString,
   engineNumber: zRequiredString,
-  vehicleNumber: zOptionalString,
+  vehicleNumber: zRequiredString,
   vehicleNumberPhoto: zImageArrayOptional,
 });
 

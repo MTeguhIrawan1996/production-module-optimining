@@ -1,4 +1,5 @@
-import { useDebouncedState } from '@mantine/hooks';
+import { SelectProps } from '@mantine/core';
+import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useSearchParams } from 'next/navigation';
@@ -14,9 +15,11 @@ import {
 } from '@/components/elements';
 
 import { useDeleteMasterDataCompany } from '@/services/graphql/mutation/master-data-company/useDeleteMasterDataCompany';
-import { useReadAllCompaniesMasterData } from '@/services/graphql/query/master-data-company/useReadAllMasterDataCompany';
+import { useReadAllLocationCategory } from '@/services/graphql/query/global-select/useReadAllLocationCategory ';
+import { useReadAllLocationsMaster } from '@/services/graphql/query/location/useReadAllLocationMaster';
+import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
-const CompanyBook = () => {
+const LocationBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
@@ -25,26 +28,40 @@ const CompanyBook = () => {
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+  const [catgeorySearchTerm, setCatgeorySearchTerm] =
+    React.useState<string>('');
+  const [categorySearchQuery] = useDebouncedValue<string>(
+    catgeorySearchTerm,
+    400
+  );
+  const [categoryId, setCategoryId] = React.useState<string | null>(null);
 
   /* #   /**=========== Query =========== */
   const {
-    companiesData,
-    companiesDataLoading,
-    companiesDataMeta,
-    refetchCompanies,
-  } = useReadAllCompaniesMasterData({
+    locationsData,
+    locationsDataLoading,
+    locationsDataMeta,
+    refetchLocations,
+  } = useReadAllLocationsMaster({
     variables: {
       limit: 10,
       page: page,
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
+      categoryId,
+    },
+  });
+  const { locationCategoriesdata } = useReadAllLocationCategory({
+    variables: {
+      limit: 15,
+      search: categorySearchQuery === '' ? null : categorySearchQuery,
     },
   });
 
   const [executeDelete, { loading }] = useDeleteMasterDataCompany({
     onCompleted: () => {
-      refetchCompanies();
+      refetchLocations();
       setIsOpenDeleteConfirmation((prev) => !prev);
       router.push({
         href: router.asPath,
@@ -87,40 +104,64 @@ const CompanyBook = () => {
     });
   };
 
+  const { uncombinedItem: locationCategoryItems } = useFilterItems({
+    data: locationCategoriesdata ?? [],
+  });
+
+  const filter = React.useMemo(() => {
+    const item: SelectProps[] = [
+      {
+        onChange: (value) => {
+          router.push({
+            href: router.asPath,
+            query: {
+              page: 1,
+            },
+          });
+          setCategoryId(value);
+        },
+        data: locationCategoryItems ?? [],
+        label: 'locationCategory',
+        placeholder: 'chooseLocationCategory',
+        searchable: true,
+        nothingFound: null,
+        clearable: true,
+        onSearchChange: setCatgeorySearchTerm,
+        searchValue: catgeorySearchTerm,
+      },
+    ];
+    return item;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [catgeorySearchTerm, locationCategoryItems]);
+
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
     return (
       <MantineDataTable
         tableProps={{
-          records: companiesData,
-          fetching: companiesDataLoading,
+          records: locationsData,
+          fetching: locationsDataLoading,
           highlightOnHover: true,
           columns: [
             {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                companiesData && companiesData.indexOf(record) + 1,
+                locationsData && locationsData.indexOf(record) + 1,
               width: 60,
             },
             {
-              accessor: 'name',
-              title: t('commonTypography.companyName'),
+              accessor: 'handBookId',
+              title: t('commonTypography.idLocation'),
             },
             {
-              accessor: 'code',
-              title: t('commonTypography.companyCode'),
+              accessor: 'name',
+              title: t('commonTypography.locationName'),
             },
             {
               accessor: 'type',
-              title: t('commonTypography.companyType'),
-              render: ({ type }) => type?.name ?? '-',
-            },
-            {
-              accessor: 'director',
-              title: t('commonTypography.director'),
-              render: ({ presidentDirector }) =>
-                presidentDirector?.humanResource?.name,
+              title: t('commonTypography.locationCategory'),
+              render: ({ category }) => category?.name ?? '-',
             },
             {
               accessor: 'action',
@@ -157,28 +198,32 @@ const CompanyBook = () => {
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: companiesDataMeta?.totalAllData ?? 0,
-          totalData: companiesDataMeta?.totalData ?? 0,
-          totalPage: companiesDataMeta?.totalPage ?? 0,
+          totalAllData: locationsDataMeta?.totalAllData ?? 0,
+          totalData: locationsDataMeta?.totalData ?? 0,
+          totalPage: locationsDataMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [companiesData, companiesDataLoading]);
+  }, [locationsData, locationsDataLoading]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
       addButton={{
-        label: t('company.createCompany'),
-        onClick: () => router.push('/master-data/company/create'),
+        label: t('location.createLocation'),
+        onClick: () => router.push('/master-data/location/create'),
       }}
       searchBar={{
-        placeholder: t('company.searchPlaceholder'),
+        placeholder: t('location.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
         searchQuery: searchQuery,
+      }}
+      MultipleFilter={{
+        MultipleFilterData: filter,
+        colSpan: 4,
       }}
     >
       {renderTable}
@@ -207,4 +252,4 @@ const CompanyBook = () => {
   );
 };
 
-export default CompanyBook;
+export default LocationBook;

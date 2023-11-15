@@ -1,6 +1,6 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
-import { IFile } from '@/types/global';
+import { IFile, IProvinceDetail } from '@/types/global';
 
 export const READ_ONE_COMPANY = gql`
   query ReadOneCompany($id: String!) {
@@ -11,7 +11,36 @@ export const READ_ONE_COMPANY = gql`
       nib
       phoneNumber1
       email1
+      phoneNumber2
+      email2
       address
+      faxNumber
+      code
+      type {
+        id
+        name
+      }
+      province {
+        id
+        name
+      }
+      regency {
+        id
+        name
+      }
+      district {
+        id
+        name
+      }
+      village {
+        id
+        name
+      }
+      address
+      businessType {
+        id
+        name
+      }
       logo {
         id
         originalFileName
@@ -24,6 +53,12 @@ export const READ_ONE_COMPANY = gql`
       }
       permissionTypeNumber
       permissionTypeDate
+      permissionTypeDocument {
+        id
+        originalFileName
+        url
+        fileName
+      }
       presidentDirector {
         id
         nip
@@ -44,14 +79,25 @@ export const READ_ONE_COMPANY = gql`
   }
 `;
 
-interface ICompanyData {
+interface ICompanyData extends IProvinceDetail {
   id: string;
   name: string;
   alias: string | null;
   nib: string;
   phoneNumber1: string;
   email1: string;
-  address: string;
+  phoneNumber2: string;
+  email2: string | null;
+  faxNumber: string | null;
+  code: string | null;
+  type: {
+    id: string;
+    name: string;
+  } | null;
+  businessType: {
+    id: string;
+    name: string;
+  } | null;
   logo: Omit<IFile, 'mime' | 'path'> | null;
   permissionType: {
     id: string;
@@ -59,6 +105,7 @@ interface ICompanyData {
   } | null;
   permissionTypeNumber: string;
   permissionTypeDate: string;
+  permissionTypeDocument: Omit<IFile, 'mime' | 'path'> | null;
   presidentDirector: {
     id: string;
     nip: string | null;
