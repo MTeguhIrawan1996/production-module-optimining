@@ -37,7 +37,7 @@ export const createHumanResourcesSchema = z
     phoneNumber: zRequiredNumberOfString,
     email: zEmailValidation,
     bloodType: zRequiredSelectInput,
-    resus: zRequiredSelectInput,
+    resus: zOptionalString.nullable(),
     photo: zImageArrayOptional,
     identityPhoto: zImageArrayOptional,
   })

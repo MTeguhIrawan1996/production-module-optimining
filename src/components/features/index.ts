@@ -6,6 +6,7 @@ import FormExamplePage from '@/components/features/Example/form-example/common';
 import CompanyPage from '@/components/features/MasterData/company/common';
 import CreateCompanyPage from '@/components/features/MasterData/company/create-company/common';
 import CreateCompanyHeavyEquipmentPage from '@/components/features/MasterData/company/create-company/create-heavy-equipment/common';
+import CreateHeavyEquipmentAvailablePage from '@/components/features/MasterData/company/create-company/create-heavy-equipment-available/common';
 import CreateCompanyHumanResourcesPage from '@/components/features/MasterData/company/create-company/create-human-resources/common';
 import CreateHumanResourcesAvailablePage from '@/components/features/MasterData/company/create-company/create-human-resources-available/common';
 import ReadCompanyPage from '@/components/features/MasterData/company/read-company/common';
@@ -47,6 +48,7 @@ export {
   CreateCompanyHeavyEquipmentPage,
   CreateCompanyHumanResourcesPage,
   CreateCompanyPage,
+  CreateHeavyEquipmentAvailablePage,
   CreateHeavyEquipmentClassPage,
   CreateHeavyEquipmentMasterPage,
   CreateHeavyEquipmentPage,

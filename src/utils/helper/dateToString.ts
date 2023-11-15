@@ -1,8 +1,10 @@
 import dayjs from 'dayjs';
 
 export const dateToString = (date: Date | string | null) => {
-  const dateString = dayjs(date).format();
-  return dateString;
+  if (date) {
+    const dateString = dayjs(date).format();
+    return dateString;
+  }
 };
 export const stringToDate = (date: string | null) => {
   if (date) {

@@ -26,6 +26,7 @@ const EligibilityStatusSelectInputRhf: React.FC<
 > = ({ name, control, label, labelValue, defaultValue, ...rest }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
+  const currentValue = field.value;
 
   const { eligibilityStatusData } = useReadAllEligibilityStatus({});
 
@@ -39,7 +40,9 @@ const EligibilityStatusSelectInputRhf: React.FC<
     <Select
       {...field}
       radius={8}
-      data={defaultValue ? combinedItems : uncombinedItem}
+      data={
+        currentValue === '' || !defaultValue ? uncombinedItem : combinedItems
+      }
       defaultValue={defaultValue}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}

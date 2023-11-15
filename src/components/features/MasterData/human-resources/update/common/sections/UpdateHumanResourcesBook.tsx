@@ -385,7 +385,7 @@ const UpdateHumanResourcesBook = () => {
         group: t('commonTypography.address'),
         enableGroupLabel: true,
         groupCheckbox: {
-          defaultChecked: isAddressSameWithDomicile === 'true' ? true : false,
+          checked: isAddressSameWithDomicile === 'true' ? true : false,
           onChange: () => {
             isAddressSameWithDomicile === 'true'
               ? methods.setValue('isAddressSameWithDomicile', 'false')

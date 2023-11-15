@@ -1,65 +1,75 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
-import { IEmployeesResponse } from '@/services/graphql/query/master-data-company/useReadAllEmploye';
+import { IFile } from '@/types/global';
 
 export const READ_ONE_COMPANY = gql`
-  query ReadOneCompany(
-    $id: String!
-    $page: Int
-    $limit: Int
-    $search: String
-    $orderBy: String
-    $orderDir: String
-    $positionId: String
-    $divisionId: String
-    $statusId: String
-    $isComplete: Boolean
-  ) {
+  query ReadOneCompany($id: String!) {
     company(id: $id) {
       id
       name
-      employees(
-        findAllEmployeeInput: {
-          page: $page
-          limit: $limit
-          search: $search
-          orderBy: $orderBy
-          orderDir: $orderDir
-          positionId: $positionId
-          divisionId: $divisionId
-          statusId: $statusId
-          isComplete: $isComplete
-        }
-      ) {
-        data {
+      alias
+      nib
+      phoneNumber1
+      email1
+      address
+      logo {
+        id
+        originalFileName
+        url
+        fileName
+      }
+      permissionType {
+        id
+        name
+      }
+      permissionTypeNumber
+      permissionTypeDate
+      presidentDirector {
+        id
+        nip
+        startDate
+        humanResource {
           id
-          humanResource {
+          name
+          identityNumber
+          photo {
             id
-            name
+            originalFileName
+            url
+            fileName
           }
-          nip
-          position {
-            id
-            name
-          }
-          division {
-            id
-            name
-          }
-          status {
-            id
-            name
-          }
-          isComplete
         }
       }
     }
   }
 `;
 
-export interface ICompanyData extends IEmployeesResponse {
+interface ICompanyData {
   id: string;
   name: string;
+  alias: string | null;
+  nib: string;
+  phoneNumber1: string;
+  email1: string;
+  address: string;
+  logo: Omit<IFile, 'mime' | 'path'> | null;
+  permissionType: {
+    id: string;
+    name: string;
+  } | null;
+  permissionTypeNumber: string;
+  permissionTypeDate: string;
+  presidentDirector: {
+    id: string;
+    nip: string | null;
+    startDate: string;
+    humanResource: {
+      id: string;
+      name: string;
+      identityNumber: string;
+      photo: Omit<IFile, 'mime' | 'path'> | null;
+    } | null;
+  } | null;
 }
 
 export interface ICompanyResponse {

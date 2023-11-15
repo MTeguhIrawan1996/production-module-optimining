@@ -50,7 +50,6 @@ export const READ_ALL_HEAVY_EQUIPMENT_MASTER_DATA = gql`
             }
           }
         }
-        specification
         createdYear
       }
     }
@@ -74,7 +73,6 @@ export interface IHeavyEquipmentMasterData {
       } | null;
     } | null;
   } | null;
-  specification: string | null;
   createdYear: string | null;
 }
 

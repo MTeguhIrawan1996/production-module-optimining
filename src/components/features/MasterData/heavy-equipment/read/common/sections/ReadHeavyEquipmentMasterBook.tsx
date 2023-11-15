@@ -125,20 +125,20 @@ const ReadHeavyEquipmentMasterBook = () => {
                 {
                   dataKey: t('heavyEquipment.brandHeavyEquipment'),
                   value:
-                    heavyEquipmentMasterData?.reference.type?.brand?.name ??
+                    heavyEquipmentMasterData?.reference?.type?.brand?.name ??
                     '-',
                 },
                 {
                   dataKey: t('heavyEquipment.typeHeavyEquipment'),
-                  value: heavyEquipmentMasterData?.reference.type?.name ?? '-',
+                  value: heavyEquipmentMasterData?.reference?.type?.name ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.model'),
-                  value: heavyEquipmentMasterData?.reference.modelName ?? '-',
+                  value: heavyEquipmentMasterData?.reference?.modelName ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.specification'),
-                  value: heavyEquipmentMasterData?.specification ?? '-',
+                  value: heavyEquipmentMasterData?.reference?.spec ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.class'),

@@ -14,41 +14,41 @@ import {
   PrimaryButton,
 } from '@/components/elements';
 
-import { useCreateEmployeeBulk } from '@/services/graphql/mutation/master-data-company/useCreateCompanySDMAvailable';
-import { IHumanResourcesData } from '@/services/graphql/query/master-data-human-resources/useReadAllMasterDataHumanResources';
-import { useReadAllNonEmployeedHumanResourcesMasterData } from '@/services/graphql/query/master-data-human-resources/useReadAllNonEmployeHumanResources';
+import { useCreateCompanyHeavyEquipmentBulk } from '@/services/graphql/mutation/heavy-equipment/useCreateCompanyHeavyEquipmentAvailable';
+import { IHeavyEquipmentMasterData } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentMasterData';
+import { useReadAllNonCompanyHeavyEquipment } from '@/services/graphql/query/heavy-equipment/useReadAllNonCompanyHeavyEquipment';
 
-const CreateHumanResourcesAvailableBook = () => {
+const CreateHeavyEquipmentAvailableBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
   const { t } = useTranslation('default');
   const companyId = router.query?.id as string;
-  const url = `/master-data/company/create/human-resources-available/${companyId}?page=1`;
+  const url = `/master-data/company/create/heavy-equipment-available/${companyId}?page=1`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
-  const [choosesHumanResources, setChooseHumanResources] = React.useState<
-    IHumanResourcesData[]
+  const [choosesHeavyEquipment, setChooseHeavyEquipment] = React.useState<
+    IHeavyEquipmentMasterData[]
   >([]);
 
   const {
-    nonEmployeedHumanResourcesData,
-    nonEmployeedHumanResourcesDataLoading,
-    nonEmployeedHumanResourcesDataMeta,
-  } = useReadAllNonEmployeedHumanResourcesMasterData({
+    nonOwnedByCompanyHeavyEquipmentsData,
+    nonOwnedByCompanyHeavyEquipmentsDataLoading,
+    nonOwnedByCompanyHeavyEquipmentsDataMeta,
+  } = useReadAllNonCompanyHeavyEquipment({
     variables: {
       limit: 10,
       page: page,
       search: searchQuery === '' ? null : searchQuery,
-      excludeIds: choosesHumanResources.map((val) => val.id) ?? null,
+      excludeIds: choosesHeavyEquipment.map((val) => val.id) ?? null,
     },
   });
 
-  const [executeCreate, { loading }] = useCreateEmployeeBulk({
+  const [executeCreate, { loading }] = useCreateCompanyHeavyEquipmentBulk({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('humanResources.successCreateMessage'),
+        message: t('heavyEquipment.successCreateCompanyMessage'),
         icon: <IconCheck />,
       });
       const urlCreate = `/master-data/company/read/${companyId}`;
@@ -66,25 +66,25 @@ const CreateHumanResourcesAvailableBook = () => {
     },
   });
 
-  const handleChoose = (data: IHumanResourcesData) => {
-    setChooseHumanResources((prev) => [...prev, data]);
+  const handleChoose = (data: IHeavyEquipmentMasterData) => {
+    setChooseHeavyEquipment((prev) => [...prev, data]);
   };
   const handleDeleteSdm = (id: string) => {
-    setChooseHumanResources((prev) => prev.filter((val) => val.id !== id));
+    setChooseHeavyEquipment((prev) => prev.filter((val) => val.id !== id));
   };
 
   const handleCreate = async () => {
-    const humanResourceIds = choosesHumanResources.map((val) => val.id);
+    const heavyEquipmentIds = choosesHeavyEquipment.map((val) => val.id);
     await executeCreate({
       variables: {
         companyId,
-        humanResourceIds,
+        heavyEquipmentIds,
       },
     });
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/master-data/company/create/human-resources-available/${companyId}?page=${page}`;
+    const urlSet = `/master-data/company/create/heavy-equipment-available/${companyId}?page=${page}`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
@@ -93,33 +93,45 @@ const CreateHumanResourcesAvailableBook = () => {
     return (
       <MantineDataTable
         tableProps={{
-          records: nonEmployeedHumanResourcesData,
-          fetching: nonEmployeedHumanResourcesDataLoading,
+          records: nonOwnedByCompanyHeavyEquipmentsData,
+          fetching: nonOwnedByCompanyHeavyEquipmentsDataLoading,
           highlightOnHover: true,
           columns: [
             {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                nonEmployeedHumanResourcesData &&
-                nonEmployeedHumanResourcesData.indexOf(record) + 1,
+                nonOwnedByCompanyHeavyEquipmentsData &&
+                nonOwnedByCompanyHeavyEquipmentsData.indexOf(record) + 1,
               width: 60,
             },
             {
-              accessor: 'name',
-              title: t('commonTypography.name'),
+              accessor: 'engineNumber',
+              title: t('commonTypography.engineNumber'),
             },
             {
-              accessor: 'phoneNumber',
-              title: t('commonTypography.phoneNumber'),
+              accessor: 'chassisNumber',
+              title: t('commonTypography.frameNumber'),
             },
             {
-              accessor: 'email',
-              title: t('commonTypography.email'),
+              accessor: 'type',
+              title: t('heavyEquipment.typeHeavyEquipment'),
+              render: ({ reference }) => reference?.type?.name,
             },
             {
-              accessor: 'identityNumber',
-              title: t('commonTypography.identityNumberOrPassport'),
+              accessor: 'model',
+              title: t('commonTypography.model'),
+              render: ({ reference }) => reference?.modelName,
+            },
+            {
+              accessor: 'brand',
+              title: t('commonTypography.brand'),
+              render: ({ reference }) => reference?.type?.brand?.name,
+            },
+            {
+              accessor: 'specification',
+              title: t('commonTypography.specification'),
+              render: ({ reference }) => reference?.spec,
             },
             {
               accessor: 'action',
@@ -142,27 +154,28 @@ const CreateHumanResourcesAvailableBook = () => {
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
           actionButton: {
-            label: t('humanResources.createHumanResources'),
-            onClick: () => router.push('/master-data/human-resources/create'),
+            label: t('heavyEquipment.createHeavyEquipment'),
+            onClick: () => router.push('/master-data/heavy-equipment/create'),
           },
         }}
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: nonEmployeedHumanResourcesDataMeta?.totalAllData ?? 0,
-          totalData: nonEmployeedHumanResourcesDataMeta?.totalData ?? 0,
-          totalPage: nonEmployeedHumanResourcesDataMeta?.totalPage ?? 0,
+          totalAllData:
+            nonOwnedByCompanyHeavyEquipmentsDataMeta?.totalAllData ?? 0,
+          totalData: nonOwnedByCompanyHeavyEquipmentsDataMeta?.totalData ?? 0,
+          totalPage: nonOwnedByCompanyHeavyEquipmentsDataMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nonEmployeedHumanResourcesData]);
+  }, [nonOwnedByCompanyHeavyEquipmentsDataMeta]);
 
   const choosetable = React.useMemo(() => {
     return (
       <MantineDataTable
         tableProps={{
-          records: choosesHumanResources,
+          records: choosesHeavyEquipment,
           highlightOnHover: true,
           minHeight: 200,
           emptyState: undefined,
@@ -171,25 +184,37 @@ const CreateHumanResourcesAvailableBook = () => {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                choosesHumanResources &&
-                choosesHumanResources.indexOf(record) + 1,
+                choosesHeavyEquipment &&
+                choosesHeavyEquipment.indexOf(record) + 1,
               width: 60,
             },
             {
-              accessor: 'name',
-              title: t('commonTypography.name'),
+              accessor: 'engineNumber',
+              title: t('commonTypography.engineNumber'),
             },
             {
-              accessor: 'phoneNumber',
-              title: t('commonTypography.phoneNumber'),
+              accessor: 'chassisNumber',
+              title: t('commonTypography.frameNumber'),
             },
             {
-              accessor: 'email',
-              title: t('commonTypography.email'),
+              accessor: 'type',
+              title: t('heavyEquipment.typeHeavyEquipment'),
+              render: ({ reference }) => reference?.type?.name,
             },
             {
-              accessor: 'identityNumber',
-              title: t('commonTypography.identityNumberOrPassport'),
+              accessor: 'model',
+              title: t('commonTypography.model'),
+              render: ({ reference }) => reference?.modelName,
+            },
+            {
+              accessor: 'brand',
+              title: t('commonTypography.brand'),
+              render: ({ reference }) => reference?.type?.brand?.name,
+            },
+            {
+              accessor: 'specification',
+              title: t('commonTypography.specification'),
+              render: ({ reference }) => reference?.spec,
             },
             {
               accessor: 'action',
@@ -212,14 +237,14 @@ const CreateHumanResourcesAvailableBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [choosesHumanResources]);
+  }, [choosesHeavyEquipment]);
   /* #endregion  /**======== RenderTable =========== */
   return (
     <>
       <DashboardCard
-        title={t('humanResources.masterSDM')}
+        title={t('heavyEquipment.heavyEquipmentMaster')}
         searchBar={{
-          placeholder: t('humanResources.searchPlaceholder'),
+          placeholder: t('heavyEquipment.searchPlaceholderMaster'),
           onChange: (e) => {
             setSearchQuery(e.currentTarget.value);
           },
@@ -232,7 +257,7 @@ const CreateHumanResourcesAvailableBook = () => {
         {renderTable}
       </DashboardCard>
       <Divider my="md" />
-      <DashboardCard title={t('commonTypography.humanResourcesSelected')}>
+      <DashboardCard title={t('commonTypography.heavyEquipmentSelected')}>
         {choosetable}
         <Group w="100%" position="apart">
           <PrimaryButton
@@ -255,4 +280,4 @@ const CreateHumanResourcesAvailableBook = () => {
   );
 };
 
-export default CreateHumanResourcesAvailableBook;
+export default CreateHeavyEquipmentAvailableBook;

@@ -16,6 +16,7 @@ import {
   globalDate,
   positionSelectRhf,
 } from '@/utils/constants/Field/global-field';
+import { dateToString } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -138,9 +139,9 @@ const CreateCompanyPositionHistoryBook = () => {
       const data = {
         positionId: val.positionId,
         divisionId: val.divisionId,
-        startDate: val.startDate ?? '',
+        startDate: dateToString(val.startDate ?? null),
         isStill: val.isStill,
-        endDate: val.endDate ?? '',
+        endDate: dateToString(val.endDate ?? null),
       };
       return data;
     });

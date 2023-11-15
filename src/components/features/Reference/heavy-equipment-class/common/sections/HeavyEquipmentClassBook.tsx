@@ -151,8 +151,9 @@ const HeavyEquipmentClassBook = () => {
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
           actionButton: {
-            label: t('heavyEquipment.createHeavyEquipment'),
-            onClick: () => router.push('/reference/heavy-equipment/create'),
+            label: t('heavyEquipmentClass.createHeavyEquipmentClass'),
+            onClick: () =>
+              router.push('/reference/heavy-equipment-class/create'),
           },
         }}
         paginationProps={{

@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadOneHeavyEquipmentReference } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipment';
 import {
   ICreateHeavyEquipmentMasterValues,
   useCreateHeavyEquipmentMaster,
@@ -52,9 +53,23 @@ const CreateHeavyEquipmentMasterBook = () => {
   });
   const brandId = methods.watch('brandId');
   const typeId = methods.watch('typeId');
+  const referenceId = methods.watch('referenceId');
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
+
+  useReadOneHeavyEquipmentReference({
+    variables: {
+      id: referenceId,
+    },
+    skip: referenceId === '',
+    onCompleted: (data) => {
+      methods.setValue(
+        'specification',
+        data.heavyEquipmentReference.spec ?? ''
+      );
+    },
+  });
 
   const { mutate, isLoading } = useCreateHeavyEquipmentMaster({
     onError: (err) => {
@@ -104,6 +119,7 @@ const CreateHeavyEquipmentMasterBook = () => {
       label: 'specHeavyEquipment',
       colSpan: 6,
       withAsterisk: false,
+      disabled: true,
     });
     const createdYear = globalText({
       name: 'createdYear',
@@ -122,6 +138,7 @@ const CreateHeavyEquipmentMasterBook = () => {
         methods.setValue('brandId', value ?? '');
         methods.setValue('typeId', '');
         methods.setValue('referenceId', '');
+        methods.setValue('specification', '');
         methods.trigger('brandId');
       },
     });
@@ -131,6 +148,7 @@ const CreateHeavyEquipmentMasterBook = () => {
       onChange: (value) => {
         methods.setValue('typeId', value ?? '');
         methods.setValue('referenceId', '');
+        methods.setValue('specification', '');
         methods.trigger('typeId');
       },
     });
@@ -141,6 +159,7 @@ const CreateHeavyEquipmentMasterBook = () => {
       typeId,
       onChange: (value) => {
         methods.setValue('referenceId', value ?? '');
+        methods.setValue('specification', '');
         methods.trigger('referenceId');
       },
     });

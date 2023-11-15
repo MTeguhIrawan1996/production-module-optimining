@@ -82,7 +82,7 @@ const ReadCompanyHumanResourceBook: React.FC<IProps> = ({
               value: humanResource?.pob,
             },
             {
-              dataKey: t('commonTypography.dop'),
+              dataKey: t('commonTypography.dob'),
               value: dateFromat(humanResource?.dob ?? ''),
             },
             {

@@ -2,6 +2,8 @@
   "halloworld": "Hallo Dunia",
   "commonTypography": {
     "company": "Perusahaan",
+    "number": "Nomor",
+    "date": "Tanggal",
     "companyType": "Jenis Perusahaan",
     "companyName": "Nama Perusahaan",
     "companyCode": "Kode Perusahaan",
@@ -10,8 +12,12 @@
     "next": "Selanjutnya",
     "address": "Alamat",
     "director": "Direktur",
+    "directorName": "Name Direktur",
     "fullName": "Nama Lengkap",
     "aliasName": "Nama Alias",
+    "nib": "NIB (Nomor Izin Berusaha)",
+    "nib2": "NIB",
+    "businessPermit": "Izin Usaha",
     "new": "Baru",
     "select": "Pilih",
     "existing": "yang sudah ada",
@@ -19,7 +25,7 @@
     "identityType": "Jenis Identitas",
     "identityNumber2": "Nomor Identitas",
     "pob": "Tempat Lahir",
-    "dop": "Tempat Lahir",
+    "dob": "Tanggal Lahir",
     "gender": "Jenis Kelamin",
     "religion": "Agama",
     "educationDegree": "Gelar Pendidikan",
@@ -107,6 +113,7 @@
     "yourPhoto": "Foto Diri",
     "humanResources": "SDM",
     "humanResourcesSelected": "SDM Terpilih",
+    "heavyEquipmentSelected": "Alat Berat Terpilih",
     "humanResources2": "Sumber Daya Manusia",
     "phoneNumber": "Nomor Telepon",
     "identityNumber": "NIK",
@@ -114,8 +121,6 @@
     "email": "Email",
     "domicile": "Domisili",
     "domicileAddress": "Domisili",
-    "dateOfOffice": "Tanggal Menjabat",
-    "dateComplateOffice": "Tanggal Selesai Menjabat",
     "checkboxAddressDomicile": "Alamat Domisili sesuai dengan Kartu Identitas (KTP/KTA/Paspor)",
     "bloodType": "Golongan Darah",
     "resus": "Resus Darah",
@@ -140,7 +145,9 @@
     "frameNumber": "Nomor Rangka",
     "masterData": "Master Data",
     "vehicleDocument": "Surat Kendaraan",
-    "stillInUse": "Masih digunakan"
+    "stillInUse": "Masih digunakan",
+    "dateOfOffice": "Tanggal Mulai Menjabat",
+    "dateComplateOffice": "Tanggal Selesai Menjabat"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -214,6 +221,7 @@
     "formCompany": "$t(commonTypography.form) $t(commonTypography.company)",
     "profileCompany": "$t(commonTypography.profile) $t(commonTypography.company)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.companyName)",
+    "companyAlias": "$t(commonTypography.aliasName) $t(commonTypography.company)",
     "successDeleteMessage": "$t(commonTypography.company) berhasil dihapus",
     "successCreateEmployeDataMessage": "$t(commonTypography.employeDetail) berhasil dibuat",
     "successCreatePositionHistoryMessage": "$t(commonTypography.positionHistory) berhasil dibuat",
@@ -251,7 +259,9 @@
     "heavyEquipmentIdentity": "Identitas $t(commonTypography.heavyEquipment)",
     "brandHeavyEquipment": "$t(commonTypography.brand) $t(commonTypography.heavyEquipment)",
     "typeHeavyEquipment": "$t(commonTypography.type) $t(commonTypography.heavyEquipment)",
-    "eligibilityStatus": "Status Kelayakan"
+    "eligibilityStatus": "Status Kelayakan",
+    "chooseHeavyEquipment": "$t(commonTypography.choose) $t(commonTypography.heavyEquipment)",
+    "chooseAvailableHeavyEquipment": "Memilih Alat Berat yang sudah Ada"
   },
   "heavyEquipmentClass": {
     "heavyEquipmentClassTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipmentClass)",
