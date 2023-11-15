@@ -87,7 +87,7 @@ const ReadCompanyHumanResourceBook: React.FC<IProps> = ({
             },
             {
               dataKey: t('commonTypography.gender'),
-              value: humanResource?.gender,
+              value: t(`commonTypography.${humanResource?.gender}`),
             },
             {
               dataKey: t('commonTypography.religion'),

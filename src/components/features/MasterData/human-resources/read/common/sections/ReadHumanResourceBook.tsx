@@ -129,7 +129,7 @@ const ReadHumanResourceBook = () => {
                 },
                 {
                   dataKey: t('commonTypography.gender'),
-                  value: humanResourceData?.gender,
+                  value: t(`commonTypography.${humanResourceData?.gender}`),
                 },
                 {
                   dataKey: t('commonTypography.religion'),

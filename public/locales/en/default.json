@@ -157,7 +157,9 @@
     "vehicleDocument": "Surat Kendaraan",
     "stillInUse": "Masih digunakan",
     "dateOfOffice": "Tanggal Mulai Menjabat",
-    "dateComplateOffice": "Tanggal Selesai Menjabat"
+    "dateComplateOffice": "Tanggal Selesai Menjabat",
+    "male": "Laki-Laki",
+    "female": "Perempuan"
   },
   "sideBar": {
     "dashboard": "Dashboard",
