@@ -14,7 +14,7 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteMasterDataCompany } from '@/services/graphql/mutation/master-data-company/useDeleteMasterDataCompany';
+import { useDeleteLocationMaster } from '@/services/graphql/mutation/location/useDeleteLocationMaster';
 import { useReadAllLocationCategory } from '@/services/graphql/query/global-select/useReadAllLocationCategory ';
 import { useReadAllLocationsMaster } from '@/services/graphql/query/location/useReadAllLocationMaster';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
@@ -59,7 +59,7 @@ const LocationBook = () => {
     },
   });
 
-  const [executeDelete, { loading }] = useDeleteMasterDataCompany({
+  const [executeDelete, { loading }] = useDeleteLocationMaster({
     onCompleted: () => {
       refetchLocations();
       setIsOpenDeleteConfirmation((prev) => !prev);
@@ -72,7 +72,7 @@ const LocationBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('company.successDeleteMessage'),
+        message: t('location.successDeleteMessage'),
         icon: <IconCheck />,
       });
     },
@@ -191,8 +191,8 @@ const LocationBook = () => {
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
           actionButton: {
-            label: t('company.createCompany'),
-            onClick: () => router.push('/master-data/company/create'),
+            label: t('location.createLocation'),
+            onClick: () => router.push('/master-data/location/create'),
           },
         }}
         paginationProps={{
