@@ -27,6 +27,28 @@ const ReadHumanResourceBook = () => {
     });
   /* #endregion  /**======== Query =========== */
 
+  const yourPhoto = humanResourceData?.photo
+    ? [
+        {
+          type: 'yourPhoto',
+          alt: humanResourceData?.photo?.fileName,
+          fileName: humanResourceData?.photo?.originalFileName,
+          src: humanResourceData?.photo?.url,
+        },
+      ]
+    : [];
+
+  const identityPhoto = humanResourceData?.identityNumber
+    ? [
+        {
+          type: 'identityPhoto',
+          alt: humanResourceData?.identityPhoto?.fileName,
+          fileName: humanResourceData?.identityPhoto?.originalFileName,
+          src: humanResourceData?.identityPhoto?.url,
+        },
+      ]
+    : [];
+
   return (
     <DashboardCard
       title={t('commonTypography.humanResources2')}
@@ -64,25 +86,7 @@ const ReadHumanResourceBook = () => {
           {!humanResourceDataLoading && humanResourceData ? (
             <>
               <GlobalHeaderDetail
-                data={
-                  humanResourceData.photo || humanResourceData.identityPhoto
-                    ? [
-                        {
-                          type: 'yourPhoto',
-                          alt: humanResourceData.photo?.fileName,
-                          fileName: humanResourceData.photo?.originalFileName,
-                          src: humanResourceData.photo?.url,
-                        },
-                        {
-                          type: 'identityPhoto',
-                          alt: humanResourceData.identityPhoto?.fileName,
-                          fileName:
-                            humanResourceData.identityPhoto?.originalFileName,
-                          src: humanResourceData.identityPhoto?.url,
-                        },
-                      ]
-                    : []
-                }
+                data={[...yourPhoto, ...identityPhoto]}
                 title="document"
               />
               <Divider my="md" />
