@@ -42,6 +42,9 @@ const ReadCompanyBook = () => {
         childrenStackProps={{ spacing: 0 }}
         updateButton={{
           label: 'Edit',
+          onClick: () => {
+            router.push(`/master-data/company/update/${id}`);
+          },
         }}
         isLoading={companyDataLoading}
       >

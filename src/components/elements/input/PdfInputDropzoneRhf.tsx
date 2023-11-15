@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { CommonProps } from '@/types/global';
+import { CommonProps, IFile } from '@/types/global';
 
 export type IPdfInputDropzoneRhfProps = {
   control: 'pdf-dropzone';
@@ -21,6 +21,7 @@ export type IPdfInputDropzoneRhfProps = {
   label?: string;
   description?: string;
   withAsterisk?: boolean;
+  serverDocument?: Partial<IFile>[] | null;
 } & Omit<DropzoneProps, 'name' | 'children'> &
   CommonProps;
 
@@ -30,6 +31,7 @@ const PdfInputDropzoneRhf: React.FC<IPdfInputDropzoneRhfProps> = ({
   description,
   label,
   withAsterisk,
+  serverDocument,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -59,7 +61,30 @@ const PdfInputDropzoneRhf: React.FC<IPdfInputDropzoneRhfProps> = ({
     return item;
   }, [field.value]);
 
-  // const previews: JSX.Element[] = (previewsCallback);
+  const previewServer = React.useMemo(() => {
+    if (serverDocument) {
+      const previewsServer: JSX.Element[] = serverDocument.map(
+        (file, index: number) => {
+          return (
+            <iframe
+              style={{
+                width: '100%',
+                height: 400,
+                borderRadius: 8,
+                borderWidth: 4,
+              }}
+              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${file.url}`}
+              key={index}
+              loading="lazy"
+            />
+          );
+        }
+      );
+      return previewsServer;
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serverDocument]);
 
   return (
     <Stack spacing={8}>
@@ -130,7 +155,11 @@ const PdfInputDropzoneRhf: React.FC<IPdfInputDropzoneRhfProps> = ({
           </FieldErrorMessage>
         )}
       </Stack>
-      <SimpleGrid cols={1} mt={previewsMemo?.length > 0 ? 'sm' : 0}>
+      <SimpleGrid
+        cols={1}
+        mt={previewsMemo?.length > 0 || previewServer ? 'sm' : 0}
+      >
+        {previewServer}
         {previewsMemo}
       </SimpleGrid>
     </Stack>

@@ -7,23 +7,21 @@ import { useTranslation } from 'react-i18next';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
 import { useReadAllCompanyPermissionTypes } from '@/services/graphql/query/global-select/useReadAllCompanyPermissionTypes';
-import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
 export type ICompanyPermissionTypesSelectInputRhfProps = {
   control: 'company-permission-types-select-input';
   name: string;
-  labelValue?: string;
 } & Omit<SelectProps, 'name' | 'data' | 'searchValue' | 'placeholder'> &
   CommonProps;
 
 const CompanyPermissionTypeSelectInputRhf: React.FC<
   ICompanyPermissionTypesSelectInputRhfProps
-> = ({ name, control, label, labelValue, defaultValue, ...rest }) => {
+> = ({ name, control, label, defaultValue, ...rest }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
-  const currentValue = field.value;
 
   const { companyPermissionTypesdata } = useReadAllCompanyPermissionTypes({
     variables: {
@@ -32,19 +30,15 @@ const CompanyPermissionTypeSelectInputRhf: React.FC<
     },
   });
 
-  const { combinedItems, uncombinedItem } = useCombineFilterItems({
+  const { uncombinedItem } = useFilterItems({
     data: companyPermissionTypesdata ?? [],
-    combinedId: defaultValue ?? '',
-    combinedName: labelValue,
   });
 
   return (
     <Select
       {...field}
       radius={8}
-      data={
-        currentValue === '' || !defaultValue ? uncombinedItem : combinedItems
-      }
+      data={uncombinedItem}
       defaultValue={defaultValue}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}

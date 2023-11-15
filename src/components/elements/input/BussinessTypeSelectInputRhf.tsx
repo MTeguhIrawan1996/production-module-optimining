@@ -7,14 +7,13 @@ import { useTranslation } from 'react-i18next';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
 import { useReadAllBussinessTypes } from '@/services/graphql/query/global-select/useReadAllBussinessTypes';
-import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
 export type IBussinessTypesSelectInputRhfProps = {
   control: 'bussiness-types-select-input';
   name: string;
-  labelValue?: string;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
@@ -23,7 +22,7 @@ export type IBussinessTypesSelectInputRhfProps = {
 
 const BussinessTypeSelectInputRhf: React.FC<
   IBussinessTypesSelectInputRhfProps
-> = ({ name, control, label, labelValue, defaultValue, ...rest }) => {
+> = ({ name, control, label, defaultValue, ...rest }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
   const currentValue = field.value;
@@ -35,19 +34,15 @@ const BussinessTypeSelectInputRhf: React.FC<
     },
   });
 
-  const { combinedItems, uncombinedItem } = useCombineFilterItems({
+  const { uncombinedItem } = useFilterItems({
     data: companyBusinessTypesdata ?? [],
-    combinedId: defaultValue ?? '',
-    combinedName: labelValue,
   });
 
   return (
     <Select
       {...field}
       radius={8}
-      data={
-        currentValue === '' || !defaultValue ? uncombinedItem : combinedItems
-      }
+      data={uncombinedItem}
       defaultValue={defaultValue}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}

@@ -169,3 +169,42 @@ export interface RestErrorResponse<T> {
 }
 
 export type AxiosRestErrorResponse<T> = AxiosError<RestErrorResponse<T>>;
+
+export type IProvinceDetail = {
+  province: {
+    id: string;
+    name: string;
+  } | null;
+  regency: {
+    id: string;
+    name: string;
+  } | null;
+  district: {
+    id: string;
+    name: string;
+  } | null;
+  village: {
+    id: string;
+    name: string;
+  } | null;
+  address: string;
+};
+export type IDomicileProvinceDetail = {
+  domicileProvince: {
+    id: string;
+    name: string;
+  } | null;
+  domicileRegency: {
+    id: string;
+    name: string;
+  } | null;
+  domicileDistrict: {
+    id: string;
+    name: string;
+  } | null;
+  domicileVillage: {
+    id: string;
+    name: string;
+  } | null;
+  domicileAddress: string | null;
+};

@@ -7,14 +7,13 @@ import { useTranslation } from 'react-i18next';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
 import { useReadAllCompanyTypes } from '@/services/graphql/query/company-type/useReadAllCompanyType';
-import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
 export type ICompanyTypesSelectInputRhfProps = {
   control: 'company-types-select-input';
   name: string;
-  labelValue?: string;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
@@ -25,7 +24,6 @@ const CompanyTypeSelectInputRhf: React.FC<ICompanyTypesSelectInputRhfProps> = ({
   name,
   control,
   label,
-  labelValue,
   defaultValue,
   ...rest
 }) => {
@@ -39,19 +37,15 @@ const CompanyTypeSelectInputRhf: React.FC<ICompanyTypesSelectInputRhfProps> = ({
     },
   });
 
-  const { combinedItems, uncombinedItem } = useCombineFilterItems({
+  const { uncombinedItem } = useFilterItems({
     data: companyTypesdata ?? [],
-    combinedId: defaultValue ?? '',
-    combinedName: labelValue,
   });
 
   return (
     <Select
       {...field}
       radius={8}
-      data={
-        currentValue === '' || !defaultValue ? uncombinedItem : combinedItems
-      }
+      data={uncombinedItem}
       defaultValue={defaultValue}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
