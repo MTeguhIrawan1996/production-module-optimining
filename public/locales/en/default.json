@@ -6,6 +6,9 @@
     "locationId": "ID Lokasi",
     "locationCategory": "Kategori Lokasi",
     "locationName": "Nama Lokasi",
+    "material": "Material",
+    "materialType": "Jenis Material",
+    "materialSub": "Sub Jenis Material",
     "number": "Nomor",
     "date": "Tanggal",
     "identity": "Identitas",
@@ -149,6 +152,7 @@
     "chooseCompanyType": "$t(commonTypography.choose) $t(commonTypography.companyType)",
     "chooseCompanyPermissionType": "$t(commonTypography.choose) $t(commonTypography.companyPermissionType)",
     "chooseLocationCategory": "$t(commonTypography.choose) $t(commonTypography.locationCategory)",
+    "chooseMaterialSub": "$t(commonTypography.choose) $t(commonTypography.materialSub)",
     "complete": "Lengkap",
     "inComplete": "Tidak Lengkap",
     "engineNumber": "Nomor Mesin",
@@ -173,7 +177,8 @@
     "heavyEquipmentClass": "$t(commonTypography.class) $t(commonTypography.heavyEquipment)",
     "heavyEquipment": "$t(commonTypography.heavyEquipment)",
     "humanResources": "$t(commonTypography.humanResources)",
-    "location": "$t(commonTypography.location)"
+    "location": "$t(commonTypography.location)",
+    "material": "$t(commonTypography.material)"
   },
   "auth": {
     "button": {
@@ -326,5 +331,16 @@
     "formUpdateLocation": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.location)",
     "successCreateMessage": "$t(commonTypography.location) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.location) berhasil diubah"
+  },
+  "material": {
+    "createMaterial": "$t(commonTypography.create) $t(commonTypography.material)",
+    "readMaterial": "$t(commonTypography.detail) $t(commonTypography.material)",
+    "updateMaterial": "$t(commonTypography.edit) $t(commonTypography.material)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type) $t(commonTypography.material)",
+    "successDeleteMessage": "$t(commonTypography.material) berhasil dihapus",
+    "formMaterial": "$t(commonTypography.form) $t(commonTypography.material)",
+    "formUpdateMaterial": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.material)",
+    "successCreateMessage": "$t(commonTypography.material) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.material) berhasil diubah"
   }
 }

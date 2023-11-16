@@ -658,3 +658,23 @@ export const locationCategorySelect = ({
   };
   return field;
 };
+
+export const globalSelect = ({
+  name = 'globalSelect',
+  label = 'globalSelect',
+  searchable = false,
+  clearable = true,
+  data = [],
+  ...rest
+}: Partial<ISelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    data,
+    ...rest,
+  };
+  return field;
+};

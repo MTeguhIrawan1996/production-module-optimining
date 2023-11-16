@@ -183,11 +183,7 @@ const UpdateCompanyPositionHistoryBook = () => {
   };
 
   return (
-    <DashboardCard
-      p={0}
-      isLoading={employeeDataLoading}
-      sx={{ overflow: 'unset' }}
-    >
+    <DashboardCard p={0} isLoading={employeeDataLoading}>
       {!employeeDataLoading ? (
         <GlobalFormGroup
           field={arrayField}

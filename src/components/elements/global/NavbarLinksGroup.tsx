@@ -34,6 +34,13 @@ const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
   const [opened, setOpened] = React.useState(initiallyOpened || false);
   const [openedSubLinks, setOpenedSubLinks] = React.useState<string>('');
   const cleanedPath = router.pathname.split('/').slice(0, 3).join('/');
+  const initialOpen = subMenu?.some((val) => val.href === cleanedPath);
+
+  React.useEffect(() => {
+    if (!initialOpen) {
+      setOpened(false);
+    }
+  }, [initialOpen]);
 
   const renderItems = subMenu?.map((item, i) => {
     return item.subMenu ? (

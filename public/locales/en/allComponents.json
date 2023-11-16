@@ -88,7 +88,9 @@
       "companyCode": "Kode Perusahaan",
       "locationId": "ID Lokasi",
       "locationCategory": "Kategori Lokasi",
-      "locationName": "Nama Lokasi"
+      "locationName": "Nama Lokasi",
+      "materialType": "Jenis Material",
+      "materialSub": "Sub Jenis Material"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",
