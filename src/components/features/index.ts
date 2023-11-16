@@ -27,6 +27,10 @@ import LocationPage from '@/components/features/MasterData/location/common';
 import CreateLocationMasterPage from '@/components/features/MasterData/location/create/common';
 import ReadLocationMasterPage from '@/components/features/MasterData/location/read/common';
 import UpdateLocationMasterPage from '@/components/features/MasterData/location/update/common';
+import MaterialMasterPage from '@/components/features/MasterData/material/common';
+import CreateMaterialMasterPage from '@/components/features/MasterData/material/create/common';
+import ReadMaterialMasterPage from '@/components/features/MasterData/material/read/common';
+import UpdateMaterialMasterPage from '@/components/features/MasterData/material/update/common';
 import ProfilePage from '@/components/features/Profile/common';
 import CompanyTypePage from '@/components/features/Reference/company-type/common';
 import HeavyEquipmentPage from '@/components/features/Reference/heavy-equipment/common';
@@ -61,6 +65,7 @@ export {
   CreateHumanResourcesPage,
   CreateLocationMasterPage,
   CreateManagementRolePage,
+  CreateMaterialMasterPage,
   CreateUserPage,
   DashboardPage,
   DataTablePage,
@@ -71,6 +76,7 @@ export {
   HumanResourcesPage,
   LocationPage,
   ManagementRolePage,
+  MaterialMasterPage,
   ProfilePage,
   ReadCompanyHeavyEquipmentPage,
   ReadCompanyHumanResourcesPage,
@@ -81,6 +87,7 @@ export {
   ReadHumanResourcesPage,
   ReadLocationMasterPage,
   ReadManagementRolePage,
+  ReadMaterialMasterPage,
   UpdateCompanyHeavyEquipmentPage,
   UpdateCompanyHumanResourcesPage,
   UpdateCompanyPage,
@@ -90,6 +97,7 @@ export {
   UpdateHumanResourcesPage,
   UpdateLocationMasterPage,
   UpdateManagementRolePage,
+  UpdateMaterialMasterPage,
   UpdateUserPage,
   UserPage,
 };
