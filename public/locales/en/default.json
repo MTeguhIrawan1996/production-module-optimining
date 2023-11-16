@@ -318,6 +318,7 @@
   },
   "location": {
     "createLocation": "$t(commonTypography.create) $t(commonTypography.location)",
+    "readLocation": "$t(commonTypography.detail) $t(commonTypography.location)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.location) dan $t(commonTypography.idLocation)",
     "successDeleteMessage": "$t(commonTypography.location) berhasil dihapus"
   }
