@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import ReadLocationMasterBook from '@/components/features/MasterData/location/read/common/sections/ReadLocationMasterBook';
+import ReadMaterialMasterBook from '@/components/features/MasterData/material/read/common/sections/ReadMaterialMasterBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
@@ -19,11 +19,11 @@ const ReadMaterialMasterPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.location'),
-        path: '/master-data/location',
+        label: t('commonTypography.material'),
+        path: '/master-data/material',
       },
       {
-        label: t('location.readLocation'),
+        label: t('material.readMaterial'),
         path: router.asPath,
       },
     ]);
@@ -33,7 +33,7 @@ const ReadMaterialMasterPage = () => {
   return (
     <RootWrapper>
       <InnerWrapper>
-        <ReadLocationMasterBook />
+        <ReadMaterialMasterBook />
       </InnerWrapper>
     </RootWrapper>
   );

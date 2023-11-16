@@ -1,8 +1,8 @@
-import { ReadLocationMasterPage } from '@/components/features';
+import { ReadMaterialMasterPage } from '@/components/features';
 import { DashboardLayout } from '@/components/layouts';
 
 const ReadLocationMaster = () => {
-  return <ReadLocationMasterPage />;
+  return <ReadMaterialMasterPage />;
 };
 
 export default ReadLocationMaster;

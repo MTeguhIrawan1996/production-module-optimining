@@ -57,7 +57,7 @@ const ReadLocationMasterBook = () => {
         <Tabs.Panel value="information">
           <Stack spacing="sm" mt="lg">
             <Text fz={24} fw={600} color="brand">
-              {t('heavyEquipment.heavyEquipmentIdentity')}
+              {t('location.readLocation')}
             </Text>
             <KeyValueList
               data={[

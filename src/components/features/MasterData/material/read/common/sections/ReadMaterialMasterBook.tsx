@@ -5,15 +5,15 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, KeyValueList } from '@/components/elements';
 
-import { useReadOneLocationMaster } from '@/services/graphql/query/location/useReadOneLocationMaster';
+import { useReadOneMaterialMaster } from '@/services/graphql/query/material/useReadOneMaterialMaster';
 
-const ReadLocationMasterBook = () => {
+const ReadMaterialMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
 
   /* #   /**=========== Query =========== */
-  const { locationMaster, locationMasterLoading } = useReadOneLocationMaster({
+  const { materialMaster, materialMasterLoading } = useReadOneMaterialMaster({
     variables: {
       id,
     },
@@ -23,10 +23,10 @@ const ReadLocationMasterBook = () => {
 
   return (
     <DashboardCard
-      title={t('commonTypography.location')}
+      title={t('commonTypography.material')}
       updateButton={{
         label: 'Edit',
-        onClick: () => router.push(`/master-data/location/update/${id}`),
+        onClick: () => router.push(`/master-data/material/update/${id}`),
       }}
       titleStyle={{
         fw: 700,
@@ -34,7 +34,7 @@ const ReadLocationMasterBook = () => {
       }}
       withBorder
       shadow="xs"
-      isLoading={locationMasterLoading}
+      isLoading={materialMasterLoading}
       enebleBackBottomInner
       paperStackProps={{
         spacing: 'sm',
@@ -57,21 +57,17 @@ const ReadLocationMasterBook = () => {
         <Tabs.Panel value="information">
           <Stack spacing="sm" mt="lg">
             <Text fz={24} fw={600} color="brand">
-              {t('heavyEquipment.heavyEquipmentIdentity')}
+              {t('material.readMaterial')}
             </Text>
             <KeyValueList
               data={[
                 {
-                  dataKey: t('commonTypography.locationId'),
-                  value: locationMaster?.handBookId ?? '-',
+                  dataKey: t('commonTypography.materialType'),
+                  value: materialMaster?.name ?? '-',
                 },
                 {
-                  dataKey: t('commonTypography.locationCategory'),
-                  value: locationMaster?.category?.name ?? '-',
-                },
-                {
-                  dataKey: t('commonTypography.locationName'),
-                  value: locationMaster?.name ?? '-',
+                  dataKey: t('commonTypography.materialSub'),
+                  value: materialMaster?.parent?.name ?? '-',
                 },
               ]}
               type="grid"
@@ -91,4 +87,4 @@ const ReadLocationMasterBook = () => {
   );
 };
 
-export default ReadLocationMasterBook;
+export default ReadMaterialMasterBook;
