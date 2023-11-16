@@ -1,12 +1,12 @@
-import { CreateLocationMasterPage } from '@/components/features';
+import { CreateMaterialMasterPage } from '@/components/features';
 import { DashboardLayout } from '@/components/layouts';
 
-const CreateLocationMaster = () => {
-  return <CreateLocationMasterPage />;
+const CreateMaterialMaster = () => {
+  return <CreateMaterialMasterPage />;
 };
 
-export default CreateLocationMaster;
+export default CreateMaterialMaster;
 
-CreateLocationMaster.getLayout = function getLayout(page: React.ReactElement) {
+CreateMaterialMaster.getLayout = function getLayout(page: React.ReactElement) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };

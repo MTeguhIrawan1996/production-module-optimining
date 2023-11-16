@@ -9,29 +9,27 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import {
-  IMutationLocationValues,
-  useCreateLocationMaster,
-} from '@/services/graphql/mutation/location/useCreateLocationMaster';
-import {
-  globalText,
-  locationCategorySelect,
-} from '@/utils/constants/Field/global-field';
-import { locationMutationValidation } from '@/utils/form-validation/location/location-mutation-validation';
+  IMutationMaterialValues,
+  useCreateMaterialMaster,
+} from '@/services/graphql/mutation/material/useCreateMaterialMaster';
+import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
+import { globalSelect, globalText } from '@/utils/constants/Field/global-field';
+import { materialMutationValidation } from '@/utils/form-validation/material/material-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
+import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { ControllerGroup } from '@/types/global';
 
-const CreateLocationMasterBook = () => {
+const CreateMaterialMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
 
   /* #   /**=========== Methods =========== */
-  const methods = useForm<IMutationLocationValues>({
-    resolver: zodResolver(locationMutationValidation),
+  const methods = useForm<IMutationMaterialValues>({
+    resolver: zodResolver(materialMutationValidation),
     defaultValues: {
       name: '',
-      handBookId: '',
-      categoryId: '',
+      parentId: '',
     },
     mode: 'onBlur',
   });
@@ -39,20 +37,28 @@ const CreateLocationMasterBook = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  const [executeCreate, { loading }] = useCreateLocationMaster({
+  const { materialsData } = useReadAllMaterialsMaster({
+    variables: {
+      limit: 10,
+      orderDir: 'desc',
+      orderBy: 'createdAt',
+    },
+  });
+
+  const [executeCreate, { loading }] = useCreateMaterialMaster({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('location.successCreateMessage'),
+        message: t('material.successCreateMessage'),
         icon: <IconCheck />,
       });
       methods.reset();
-      router.push('/master-data/location');
+      router.push('/master-data/material');
     },
     onError: (error) => {
       if (error.graphQLErrors) {
-        const errorArry = errorBadRequestField<IMutationLocationValues>(error);
+        const errorArry = errorBadRequestField<IMutationMaterialValues>(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
             methods.setError(name, { type, message });
@@ -71,51 +77,53 @@ const CreateLocationMasterBook = () => {
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
+  const { uncombinedItem } = useFilterItems({
+    data: materialsData ?? [],
+  });
   const fieldItem = React.useMemo(() => {
-    const locationId = globalText({
-      name: 'handBookId',
-      label: 'locationId',
-      colSpan: 6,
-    });
-    const locationName = globalText({
+    const materialTypeItem = globalText({
       name: 'name',
-      label: 'locationName',
+      label: 'materialType',
       colSpan: 6,
     });
-    const locationCategoryItem = locationCategorySelect({
-      clearable: true,
+    const materialSubItem = globalSelect({
+      colSpan: 6,
+      name: 'parentId',
+      label: 'materialSub',
+      withAsterisk: true,
+      data: uncombinedItem,
+      placeholder: 'chooseMaterialSub',
     });
 
     const field: ControllerGroup[] = [
       {
-        group: t('commonTypography.location'),
+        group: t('commonTypography.material'),
         enableGroupLabel: true,
-        formControllers: [locationId, locationCategoryItem, locationName],
+        formControllers: [materialTypeItem, materialSubItem],
       },
     ];
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [uncombinedItem]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
-  const handleSubmitForm: SubmitHandler<IMutationLocationValues> = async (
+  const handleSubmitForm: SubmitHandler<IMutationMaterialValues> = async (
     data
   ) => {
-    const { name, handBookId, categoryId } = data;
+    const { name, parentId } = data;
     await executeCreate({
       variables: {
         name,
-        categoryId,
-        handBookId,
+        parentId,
       },
     });
   };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} sx={{ overflow: 'unset' }}>
       <GlobalFormGroup
         field={fieldItem}
         methods={methods}
@@ -132,4 +140,4 @@ const CreateLocationMasterBook = () => {
   );
 };
 
-export default CreateLocationMasterBook;
+export default CreateMaterialMasterBook;
