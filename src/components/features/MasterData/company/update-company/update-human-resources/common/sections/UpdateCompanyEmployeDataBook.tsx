@@ -153,11 +153,7 @@ const UpdateCompanyEmployeDataBook = () => {
     });
   };
   return (
-    <DashboardCard
-      p={0}
-      isLoading={employeeDataLoading}
-      sx={{ overflow: 'unset' }}
-    >
+    <DashboardCard p={0} isLoading={employeeDataLoading}>
       <GlobalFormGroup
         field={fieldEmployeData}
         methods={methods}

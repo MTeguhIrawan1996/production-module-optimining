@@ -1,12 +1,12 @@
-import { UpdateLocationMasterPage } from '@/components/features';
+import { UpdateMaterialMasterPage } from '@/components/features';
 import { DashboardLayout } from '@/components/layouts';
 
-const UpdateLocationMaster = () => {
-  return <UpdateLocationMasterPage />;
+const UpdateMaterialMaster = () => {
+  return <UpdateMaterialMasterPage />;
 };
 
-export default UpdateLocationMaster;
+export default UpdateMaterialMaster;
 
-UpdateLocationMaster.getLayout = function getLayout(page: React.ReactElement) {
+UpdateMaterialMaster.getLayout = function getLayout(page: React.ReactElement) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };

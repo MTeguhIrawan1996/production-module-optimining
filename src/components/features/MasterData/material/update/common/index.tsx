@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import UpdateLocationMasterBook from '@/components/features/MasterData/location/update/common/sections/UpdateLocationMasterBook';
+import UpdateMaterialMasterBook from '@/components/features/MasterData/material/update/common/sections/UpdateMaterialMasterBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
@@ -19,9 +19,9 @@ const UpdateMaterialMasterPage = () => {
 
   React.useEffect(() => {
     setBreadcrumbs([
-      { label: t('commonTypography.location'), path: '/master-data/location' },
+      { label: t('commonTypography.material'), path: '/master-data/material' },
       {
-        label: t('location.updateLocation'),
+        label: t('material.updateMaterial'),
         path: router.asPath,
       },
     ]);
@@ -31,7 +31,7 @@ const UpdateMaterialMasterPage = () => {
   return (
     <RootWrapper>
       <InnerWrapper
-        titleProps={{ title: t('location.formUpdateLocation'), mb: 'md' }}
+        titleProps={{ title: t('material.formUpdateMaterial'), mb: 'md' }}
       >
         <Tabs defaultValue="information" radius={4}>
           <Tabs.List>
@@ -40,7 +40,7 @@ const UpdateMaterialMasterPage = () => {
             </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="information">
-            <UpdateLocationMasterBook />
+            <UpdateMaterialMasterBook />
           </Tabs.Panel>
         </Tabs>
       </InnerWrapper>

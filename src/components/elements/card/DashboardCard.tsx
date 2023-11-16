@@ -70,7 +70,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
         shadow={shadow}
         p={p}
         bg={bg}
-        sx={{ position: 'relative', overflow: 'hidden' }}
+        // sx={{ position: 'relative', overflow: 'hidden' }}
         withBorder={withBorder}
         {...restPaper}
       >

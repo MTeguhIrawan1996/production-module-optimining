@@ -8,11 +8,10 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import {
-  IMutationMaterialValues,
-  useCreateMaterialMaster,
-} from '@/services/graphql/mutation/material/useCreateMaterialMaster';
+import { IMutationMaterialValues } from '@/services/graphql/mutation/material/useCreateMaterialMaster';
+import { useUpdateMaterialMaster } from '@/services/graphql/mutation/material/useUpdateMaterialMaster';
 import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
+import { useReadOneMaterialMaster } from '@/services/graphql/query/material/useReadOneMaterialMaster';
 import { globalSelect, globalText } from '@/utils/constants/Field/global-field';
 import { materialMutationValidation } from '@/utils/form-validation/material/material-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
@@ -20,11 +19,10 @@ import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { ControllerGroup } from '@/types/global';
 
-const CreateMaterialMasterBook = () => {
+const UpdateMaterialMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-
-  /* #   /**=========== Methods =========== */
+  const id = router.query.id as string;
   const methods = useForm<IMutationMaterialValues>({
     resolver: zodResolver(materialMutationValidation),
     defaultValues: {
@@ -34,9 +32,17 @@ const CreateMaterialMasterBook = () => {
     mode: 'onBlur',
   });
 
-  /* #endregion  /**======== Methods =========== */
+  const { materialMasterLoading } = useReadOneMaterialMaster({
+    variables: {
+      id,
+    },
+    skip: !router.isReady,
+    onCompleted: ({ material }) => {
+      methods.setValue('name', material.name);
+      methods.setValue('parentId', material.parent?.id ?? null);
+    },
+  });
 
-  /* #   /**=========== Query =========== */
   const { materialsData } = useReadAllMaterialsMaster({
     variables: {
       limit: 10,
@@ -45,15 +51,14 @@ const CreateMaterialMasterBook = () => {
     },
   });
 
-  const [executeCreate, { loading }] = useCreateMaterialMaster({
+  const [executeUpdate, { loading }] = useUpdateMaterialMaster({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('material.successCreateMessage'),
+        message: t('material.successUpdateMessage'),
         icon: <IconCheck />,
       });
-      methods.reset();
       router.push('/master-data/material');
     },
     onError: (error) => {
@@ -74,9 +79,7 @@ const CreateMaterialMasterBook = () => {
       }
     },
   });
-  /* #endregion  /**======== Query =========== */
 
-  /* #   /**=========== Field =========== */
   const { uncombinedItem } = useFilterItems({
     data: materialsData ?? [],
   });
@@ -105,25 +108,21 @@ const CreateMaterialMasterBook = () => {
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uncombinedItem]);
-  /* #endregion  /**======== Field =========== */
 
-  /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<IMutationMaterialValues> = async (
     data
   ) => {
     const { name, parentId } = data;
-
-    await executeCreate({
+    await executeUpdate({
       variables: {
+        id,
         name,
         parentId,
       },
     });
   };
-  /* #endregion  /**======== HandleSubmitFc =========== */
-
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={materialMasterLoading}>
       <GlobalFormGroup
         field={fieldItem}
         methods={methods}
@@ -140,4 +139,4 @@ const CreateMaterialMasterBook = () => {
   );
 };
 
-export default CreateMaterialMasterBook;
+export default UpdateMaterialMasterBook;

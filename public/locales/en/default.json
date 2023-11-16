@@ -336,7 +336,7 @@
     "createMaterial": "$t(commonTypography.create) $t(commonTypography.material)",
     "readMaterial": "$t(commonTypography.detail) $t(commonTypography.material)",
     "updateMaterial": "$t(commonTypography.edit) $t(commonTypography.material)",
-    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type) $t(commonTypography.material) dan Sub $t(commonTypography.material)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type) $t(commonTypography.material)",
     "successDeleteMessage": "$t(commonTypography.material) berhasil dihapus",
     "formMaterial": "$t(commonTypography.form) $t(commonTypography.material)",
     "formUpdateMaterial": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.material)",
