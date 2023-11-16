@@ -4,7 +4,7 @@ export const CREATE_LOCATION_MASTER = gql`
   mutation CreateLocationMaster(
     $name: String!
     $handBookId: String!
-    $categoryId: String
+    $categoryId: String!
   ) {
     createLocation(
       createLocationInput: {
