@@ -3,7 +3,7 @@
   "commonTypography": {
     "company": "Perusahaan",
     "location": "Lokasi",
-    "idLocation": "ID Lokasi",
+    "locationId": "ID Lokasi",
     "locationCategory": "Kategori Lokasi",
     "locationName": "Nama Lokasi",
     "number": "Nomor",
@@ -319,7 +319,9 @@
   "location": {
     "createLocation": "$t(commonTypography.create) $t(commonTypography.location)",
     "readLocation": "$t(commonTypography.detail) $t(commonTypography.location)",
-    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.location) dan $t(commonTypography.idLocation)",
-    "successDeleteMessage": "$t(commonTypography.location) berhasil dihapus"
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.location) dan $t(commonTypography.locationId)",
+    "successDeleteMessage": "$t(commonTypography.location) berhasil dihapus",
+    "formLocation": "$t(commonTypography.form) $t(commonTypography.location)",
+    "successCreateMessage": "$t(commonTypography.location) berhasil dibuat"
   }
 }

@@ -248,7 +248,7 @@ const UpdateCompanyHumanResourcesBook = () => {
       },
     });
     const regencyItem = regencySelect({
-      provinceId,
+      provinceId: provinceId ?? '',
       defaultValue: employeeData?.humanResource?.regency?.id,
       labelValue: employeeData?.humanResource?.regency?.name,
       onChange: (value) => {
@@ -259,8 +259,8 @@ const UpdateCompanyHumanResourcesBook = () => {
       },
     });
     const subdistrictItem = subdistrictSelect({
-      provinceId,
-      regencyId,
+      provinceId: provinceId ?? '',
+      regencyId: regencyId ?? '',
       defaultValue: employeeData?.humanResource?.district?.id,
       labelValue: employeeData?.humanResource?.district?.name,
       onChange: (value) => {
@@ -272,9 +272,9 @@ const UpdateCompanyHumanResourcesBook = () => {
     const villageItem = villageSelect({
       defaultValue: employeeData?.humanResource?.village?.id,
       labelValue: employeeData?.humanResource?.village?.name,
-      provinceId,
-      regencyId,
-      subdistrictId,
+      provinceId: provinceId ?? '',
+      regencyId: regencyId ?? '',
+      subdistrictId: subdistrictId ?? '',
     });
     const identityItem = identityRadio({});
 

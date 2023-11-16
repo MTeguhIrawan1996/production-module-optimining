@@ -200,7 +200,7 @@ const CreateCompanyBook = () => {
       },
     });
     const regencyItem = regencySelect({
-      provinceId,
+      provinceId: provinceId ?? '',
       onChange: (value) => {
         methods.setValue('regencyId', value ?? '');
         methods.setValue('subdistrictId', '');
@@ -209,8 +209,8 @@ const CreateCompanyBook = () => {
       },
     });
     const subdistrictItem = subdistrictSelect({
-      provinceId,
-      regencyId,
+      provinceId: provinceId ?? '',
+      regencyId: regencyId ?? '',
       onChange: (value) => {
         methods.setValue('subdistrictId', value ?? '');
         methods.setValue('villageId', '');
@@ -218,9 +218,9 @@ const CreateCompanyBook = () => {
       },
     });
     const villageItem = villageSelect({
-      provinceId,
-      regencyId,
-      subdistrictId,
+      provinceId: provinceId ?? '',
+      regencyId: regencyId ?? '',
+      subdistrictId: subdistrictId ?? '',
     });
     const companyLogo: ControllerProps = {
       control: 'image-dropzone',

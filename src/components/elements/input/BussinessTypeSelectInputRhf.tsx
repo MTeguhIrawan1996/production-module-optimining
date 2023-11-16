@@ -25,7 +25,6 @@ const BussinessTypeSelectInputRhf: React.FC<
 > = ({ name, control, label, defaultValue, ...rest }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
-  const currentValue = field.value;
 
   const { companyBusinessTypesdata } = useReadAllBussinessTypes({
     variables: {

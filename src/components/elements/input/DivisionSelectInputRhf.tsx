@@ -8,14 +8,13 @@ import { useTranslation } from 'react-i18next';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
 import { useReadAllDivision } from '@/services/graphql/query/global-select/useReadAllDivision';
-import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
 export type IDivisionSelectInputRhfProps = {
   control: 'division-select-input';
   name: string;
-  labelValue?: string;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
@@ -26,7 +25,6 @@ const DivisionSelectInputRhf: React.FC<IDivisionSelectInputRhfProps> = ({
   name,
   control,
   label,
-  labelValue,
   defaultValue,
   ...rest
 }) => {
@@ -34,7 +32,6 @@ const DivisionSelectInputRhf: React.FC<IDivisionSelectInputRhfProps> = ({
   const { field, fieldState } = useController({ name });
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [searchQuery] = useDebouncedValue<string>(searchTerm, 400);
-  const currentValue = field.value;
 
   const { employeeDivisionsData } = useReadAllDivision({
     variables: {
@@ -43,19 +40,15 @@ const DivisionSelectInputRhf: React.FC<IDivisionSelectInputRhfProps> = ({
     },
   });
 
-  const { combinedItems, uncombinedItem } = useCombineFilterItems({
+  const { uncombinedItem } = useFilterItems({
     data: employeeDivisionsData ?? [],
-    combinedId: defaultValue ?? '',
-    combinedName: labelValue,
   });
 
   return (
     <Select
       {...field}
       radius={8}
-      data={
-        currentValue === '' || !defaultValue ? uncombinedItem : combinedItems
-      }
+      data={uncombinedItem}
       defaultValue={defaultValue}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}

@@ -143,7 +143,7 @@ const CreateHumanResourcesBook = () => {
       },
     });
     const regencyItem = regencySelect({
-      provinceId,
+      provinceId: provinceId ?? '',
       onChange: (value) => {
         methods.setValue('regencyId', value ?? '');
         methods.setValue('subdistrictId', '');
@@ -152,8 +152,8 @@ const CreateHumanResourcesBook = () => {
       },
     });
     const subdistrictItem = subdistrictSelect({
-      provinceId,
-      regencyId,
+      provinceId: provinceId ?? '',
+      regencyId: regencyId ?? '',
       onChange: (value) => {
         methods.setValue('subdistrictId', value ?? '');
         methods.setValue('villageId', '');
@@ -161,9 +161,9 @@ const CreateHumanResourcesBook = () => {
       },
     });
     const villageItem = villageSelect({
-      provinceId,
-      regencyId,
-      subdistrictId,
+      provinceId: provinceId ?? '',
+      regencyId: regencyId ?? '',
+      subdistrictId: subdistrictId ?? '',
     });
     const identityItem = identityRadio({});
 

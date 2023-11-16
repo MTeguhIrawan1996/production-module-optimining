@@ -62,7 +62,7 @@ const ReadLocationMasterBook = () => {
             <KeyValueList
               data={[
                 {
-                  dataKey: t('commonTypography.idLocation'),
+                  dataKey: t('commonTypography.locationId'),
                   value: locationMaster?.handBookId ?? '-',
                 },
                 {

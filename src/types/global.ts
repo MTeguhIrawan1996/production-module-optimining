@@ -14,6 +14,7 @@ import { IDivisionSelectInputRhfProps } from '@/components/elements/input/Divisi
 import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/input/EligibilityStatusSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
 import { IImageInputDropzoneRhfProps } from '@/components/elements/input/ImageInputDropzoneRhf';
+import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
@@ -68,6 +69,7 @@ export type ControllerProps =
   | ICompanyTypesSelectInputRhfProps
   | IBussinessTypesSelectInputRhfProps
   | ICompanyPermissionTypesSelectInputRhfProps
+  | ILocationCategorySelectInputRhfProps
   | IDateInputProps;
 
 export type ControllerGroup = {

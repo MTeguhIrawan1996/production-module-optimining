@@ -18,9 +18,9 @@ export interface ICreateHumanResourceValues {
   religionId: string;
   educationDegree: string;
   marriageStatusId: string;
-  provinceId: string;
-  regencyId: string;
-  subdistrictId: string;
+  provinceId: string | null;
+  regencyId: string | null;
+  subdistrictId: string | null;
   villageId: string | null;
   address: string;
   isAddressSameWithDomicile: string;

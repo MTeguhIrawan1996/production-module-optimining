@@ -144,7 +144,7 @@ const CreateCompanyHumanResourcesBook = () => {
       },
     });
     const regencyItem = regencySelect({
-      provinceId,
+      provinceId: provinceId ?? '',
       onChange: (value) => {
         methods.setValue('regencyId', value ?? '');
         methods.setValue('subdistrictId', '');
@@ -153,8 +153,8 @@ const CreateCompanyHumanResourcesBook = () => {
       },
     });
     const subdistrictItem = subdistrictSelect({
-      provinceId,
-      regencyId,
+      provinceId: provinceId ?? '',
+      regencyId: regencyId ?? '',
       onChange: (value) => {
         methods.setValue('subdistrictId', value ?? '');
         methods.setValue('villageId', '');
@@ -162,9 +162,9 @@ const CreateCompanyHumanResourcesBook = () => {
       },
     });
     const villageItem = villageSelect({
-      provinceId,
-      regencyId,
-      subdistrictId,
+      provinceId: provinceId ?? '',
+      regencyId: regencyId ?? '',
+      subdistrictId: subdistrictId ?? '',
     });
     const identityItem = identityRadio({});
 

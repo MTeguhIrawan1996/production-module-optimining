@@ -7,9 +7,11 @@ export const zRequiredRole = z
   .string()
   .min(1, { message: 'Pilih salah satu role yang sesuai' });
 export const zOptionalString = z.string();
-export const zRequiredSelectInput = zRequiredString.refine((val) => val, {
-  message: 'Kolom tidak boleh kosong',
-});
+export const zRequiredSelectInput = zRequiredString
+  .nullable()
+  .refine((val) => val, {
+    message: 'Kolom tidak boleh kosong',
+  });
 export const zArrayOfString = z.string().array();
 export const zRequiredNumber = z.number({
   required_error: 'Kolom tidak boleh kosong',

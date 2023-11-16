@@ -85,7 +85,10 @@
       "startDate": "Tanggal Mulai",
       "endDate": "Tanggal Selesai",
       "businessType": "Jenis Badan Usaha",
-      "companyCode": "Kode Perusahaan"
+      "companyCode": "Kode Perusahaan",
+      "locationId": "ID Lokasi",
+      "locationCategory": "Kategori Lokasi",
+      "locationName": "Nama Lokasi"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",

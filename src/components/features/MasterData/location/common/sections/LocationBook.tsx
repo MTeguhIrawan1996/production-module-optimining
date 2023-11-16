@@ -152,7 +152,7 @@ const LocationBook = () => {
             },
             {
               accessor: 'handBookId',
-              title: t('commonTypography.idLocation'),
+              title: t('commonTypography.locationId'),
             },
             {
               accessor: 'name',
