@@ -152,7 +152,7 @@ const LocationBook = () => {
             },
             {
               accessor: 'handBookId',
-              title: t('commonTypography.idLocation'),
+              title: t('commonTypography.locationId'),
             },
             {
               accessor: 'name',
@@ -172,7 +172,13 @@ const LocationBook = () => {
                     actionRead={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        router.push(`/master-data/company/read/${id}`);
+                        router.push(`/master-data/location/read/${id}`);
+                      },
+                    }}
+                    actionUpdate={{
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        router.push(`/master-data/location/update/${id}`);
                       },
                     }}
                     actionDelete={{

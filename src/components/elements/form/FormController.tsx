@@ -12,6 +12,7 @@ import {
   EligibilityStatusSelectInputRhf,
   IdentityRadioInputRhf,
   ImageInputDropzoneRhf,
+  LocationCategorySelectInputRhf,
   MarriageSelectInputRhf,
   ModelSelectInputRhf,
   NumberInputRhf,
@@ -91,6 +92,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <BussinessTypeSelectInputRhf {...props} />;
     case 'company-permission-types-select-input':
       return <CompanyPermissionTypeSelectInputRhf {...props} />;
+    case 'location-category-select-input':
+      return <LocationCategorySelectInputRhf {...props} />;
     default:
       return null;
   }

@@ -29,7 +29,6 @@ const CompanyTypeSelectInputRhf: React.FC<ICompanyTypesSelectInputRhfProps> = ({
 }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
-  const currentValue = field.value;
 
   const { companyTypesdata } = useReadAllCompanyTypes({
     variables: {

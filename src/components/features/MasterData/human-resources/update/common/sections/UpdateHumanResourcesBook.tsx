@@ -231,7 +231,7 @@ const UpdateHumanResourcesBook = () => {
       },
     });
     const regencyItem = regencySelect({
-      provinceId,
+      provinceId: provinceId ?? '',
       defaultValue: humanResourceData?.regency?.id,
       labelValue: humanResourceData?.regency?.name,
       onChange: (value) => {
@@ -242,8 +242,8 @@ const UpdateHumanResourcesBook = () => {
       },
     });
     const subdistrictItem = subdistrictSelect({
-      provinceId,
-      regencyId,
+      provinceId: provinceId ?? '',
+      regencyId: regencyId ?? '',
       defaultValue: humanResourceData?.district?.id,
       labelValue: humanResourceData?.district?.name,
       onChange: (value) => {
@@ -255,9 +255,9 @@ const UpdateHumanResourcesBook = () => {
     const villageItem = villageSelect({
       defaultValue: humanResourceData?.village?.id,
       labelValue: humanResourceData?.village?.name,
-      provinceId,
-      regencyId,
-      subdistrictId,
+      provinceId: provinceId ?? '',
+      regencyId: regencyId ?? '',
+      subdistrictId: subdistrictId ?? '',
     });
     const identityItem = identityRadio({});
 
