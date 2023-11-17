@@ -1,14 +1,12 @@
-import { ReadWorkingHoursPlanMasterPage } from '@/components/features';
+import { ReadActivityPlanPage } from '@/components/features';
 import { DashboardLayout } from '@/components/layouts';
 
-const ReadWorkingHoursPlanMaster = () => {
-  return <ReadWorkingHoursPlanMasterPage />;
+const ReadActivityPlan = () => {
+  return <ReadActivityPlanPage />;
 };
 
-export default ReadWorkingHoursPlanMaster;
+export default ReadActivityPlan;
 
-ReadWorkingHoursPlanMaster.getLayout = function getLayout(
-  page: React.ReactElement
-) {
+ReadActivityPlan.getLayout = function getLayout(page: React.ReactElement) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };

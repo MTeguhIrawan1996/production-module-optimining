@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import UpdateWorkingHoursPlanBook from '@/components/features/MasterData/working-hours-plan/update/common/sections/UpdateWorkingHoursPlanBook';
+import UpdateActivityPlanBook from '@/components/features/MasterData/activity-plan/update/common/sections/UpdateActivityPlanBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const UpdateWorkingHoursPlanMasterPage = () => {
+const UpdateActivityPlanMasterPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -20,11 +20,11 @@ const UpdateWorkingHoursPlanMasterPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.workingHoursPlan'),
+        label: t('commonTypography.activityPlan'),
         path: '/master-data/working-hours-plan',
       },
       {
-        label: t('workingHoursPlan.updateWorkingHoursPlan'),
+        label: t('activityPlan.updateActivityPlan'),
         path: router.asPath,
       },
     ]);
@@ -35,7 +35,7 @@ const UpdateWorkingHoursPlanMasterPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('workingHoursPlan.formUpdateWorkingHoursPlan'),
+          title: t('activityPlan.formUpdateActivityPlan'),
           mb: 'md',
         }}
       >
@@ -46,7 +46,7 @@ const UpdateWorkingHoursPlanMasterPage = () => {
             </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="information">
-            <UpdateWorkingHoursPlanBook />
+            <UpdateActivityPlanBook />
           </Tabs.Panel>
         </Tabs>
       </InnerWrapper>
@@ -54,4 +54,4 @@ const UpdateWorkingHoursPlanMasterPage = () => {
   );
 };
 
-export default UpdateWorkingHoursPlanMasterPage;
+export default UpdateActivityPlanMasterPage;

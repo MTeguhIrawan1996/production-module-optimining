@@ -4,6 +4,8 @@ import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
 import FormExamplePage from '@/components/features/Example/form-example/common';
 import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
+import ReadActivityPlanPage from '@/components/features/MasterData/activity-plan/read/common';
+import UpdateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/update/common';
 import CompanyPage from '@/components/features/MasterData/company/common';
 import CreateCompanyPage from '@/components/features/MasterData/company/create-company/common';
 import CreateCompanyHeavyEquipmentPage from '@/components/features/MasterData/company/create-company/create-heavy-equipment/common';
@@ -85,6 +87,7 @@ export {
   ManagementRolePage,
   MaterialMasterPage,
   ProfilePage,
+  ReadActivityPlanPage,
   ReadCompanyHeavyEquipmentPage,
   ReadCompanyHumanResourcesPage,
   ReadCompanyPage,
@@ -96,6 +99,7 @@ export {
   ReadManagementRolePage,
   ReadMaterialMasterPage,
   ReadWorkingHoursPlanMasterPage,
+  UpdateActivityPlanMasterPage,
   UpdateCompanyHeavyEquipmentPage,
   UpdateCompanyHumanResourcesPage,
   UpdateCompanyPage,

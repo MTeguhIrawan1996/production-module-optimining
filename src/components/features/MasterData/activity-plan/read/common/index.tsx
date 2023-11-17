@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import ReadWorkingHoursPlanBook from '@/components/features/MasterData/working-hours-plan/read/common/sections/ReadWorkingHoursPlanBook';
+import ReadActivityPlanBook from '@/components/features/MasterData/activity-plan/read/common/sections/ReadActivityPlanBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const ReadWorkingHoursPlanMasterPage = () => {
+const ReadActivityPlanPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -19,11 +19,11 @@ const ReadWorkingHoursPlanMasterPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.workingHoursPlan'),
-        path: '/master-data/working-hours-plan',
+        label: t('commonTypography.activityPlan'),
+        path: '/master-data/activity-plan',
       },
       {
-        label: t('workingHoursPlan.readWorkingHoursPlan'),
+        label: t('activityPlan.readActivityPlan'),
         path: router.asPath,
       },
     ]);
@@ -33,10 +33,10 @@ const ReadWorkingHoursPlanMasterPage = () => {
   return (
     <RootWrapper>
       <InnerWrapper>
-        <ReadWorkingHoursPlanBook />
+        <ReadActivityPlanBook />
       </InnerWrapper>
     </RootWrapper>
   );
 };
 
-export default ReadWorkingHoursPlanMasterPage;
+export default ReadActivityPlanPage;

@@ -9,51 +9,52 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import {
-  IUpdateMutationWHPValues,
-  useUpdateWHPMaster,
-} from '@/services/graphql/mutation/working-hours-plan/useUpdateWHPMaster';
-import { useReadOneWHPMaster } from '@/services/graphql/query/working-hours-plan/useReadOneWHPMaster';
+  IMutationActivityPlanValues,
+  useUpdateActivityPlanMaster,
+} from '@/services/graphql/mutation/activity-plan/useUpdateActivityPlanMaster';
+import { useReadOneActivityPlanMaster } from '@/services/graphql/query/activity-plan/useReadOneActivityPlanMaster';
 import { globalText } from '@/utils/constants/Field/global-field';
-import { whpMutationUpdateValidation } from '@/utils/form-validation/working-hours-plan/whp-mutation-validation';
+import { activityPlanMutationValidation } from '@/utils/form-validation/activity-plan/activity-plan-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
-const UpdateWorkingHoursPlanBook = () => {
+const UpdateActivityPlanBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const methods = useForm<IUpdateMutationWHPValues>({
-    resolver: zodResolver(whpMutationUpdateValidation),
+  const methods = useForm<IMutationActivityPlanValues>({
+    resolver: zodResolver(activityPlanMutationValidation),
     defaultValues: {
-      activityName: '',
+      name: '',
     },
     mode: 'onBlur',
   });
 
-  const { workingHourPlanMasterLoading } = useReadOneWHPMaster({
+  const { activityPlanMasterLoading } = useReadOneActivityPlanMaster({
     variables: {
       id,
     },
     skip: !router.isReady,
     onCompleted: (data) => {
-      methods.setValue('activityName', data.workingHourPlan.activityName);
+      methods.setValue('name', data.activityPlan.name);
     },
   });
 
-  const [executeUpdate, { loading }] = useUpdateWHPMaster({
+  const [executeUpdate, { loading }] = useUpdateActivityPlanMaster({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('workingHoursPlan.successUpdateMessage'),
+        message: t('activityPlan.successUpdateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/master-data/working-hours-plan');
+      router.push('/master-data/activity-plan');
     },
     onError: (error) => {
       if (error.graphQLErrors) {
-        const errorArry = errorBadRequestField<IUpdateMutationWHPValues>(error);
+        const errorArry =
+          errorBadRequestField<IMutationActivityPlanValues>(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
             methods.setError(name, { type, message });
@@ -71,17 +72,17 @@ const UpdateWorkingHoursPlanBook = () => {
   });
 
   const fieldItem = React.useMemo(() => {
-    const activityItem = globalText({
-      name: 'activityName',
-      label: 'activity',
+    const activityPlanItem = globalText({
+      name: 'name',
+      label: 'activityPlan',
       colSpan: 12,
       withAsterisk: true,
     });
 
     const field: ControllerGroup[] = [
       {
-        group: t('commonTypography.activity'),
-        formControllers: [activityItem],
+        group: t('commonTypography.activityPlan'),
+        formControllers: [activityPlanItem],
       },
     ];
 
@@ -89,19 +90,19 @@ const UpdateWorkingHoursPlanBook = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubmitForm: SubmitHandler<IUpdateMutationWHPValues> = async (
+  const handleSubmitForm: SubmitHandler<IMutationActivityPlanValues> = async (
     data
   ) => {
-    const { activityName } = data;
+    const { name } = data;
     await executeUpdate({
       variables: {
         id,
-        activityName,
+        name,
       },
     });
   };
   return (
-    <DashboardCard p={0} isLoading={workingHourPlanMasterLoading}>
+    <DashboardCard p={0} isLoading={activityPlanMasterLoading}>
       <GlobalFormGroup
         field={fieldItem}
         methods={methods}
@@ -118,4 +119,4 @@ const UpdateWorkingHoursPlanBook = () => {
   );
 };
 
-export default UpdateWorkingHoursPlanBook;
+export default UpdateActivityPlanBook;

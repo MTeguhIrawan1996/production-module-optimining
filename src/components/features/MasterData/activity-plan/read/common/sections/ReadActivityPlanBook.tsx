@@ -5,16 +5,16 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, KeyValueList } from '@/components/elements';
 
-import { useReadOneWHPMaster } from '@/services/graphql/query/working-hours-plan/useReadOneWHPMaster';
+import { useReadOneActivityPlanMaster } from '@/services/graphql/query/activity-plan/useReadOneActivityPlanMaster';
 
-const ReadWorkingHoursPlanBook = () => {
+const ReadActivityPlanBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
 
   /* #   /**=========== Query =========== */
-  const { workingHourPlanMaster, workingHourPlanMasterLoading } =
-    useReadOneWHPMaster({
+  const { activityPlanMaster, activityPlanMasterLoading } =
+    useReadOneActivityPlanMaster({
       variables: {
         id,
       },
@@ -24,11 +24,10 @@ const ReadWorkingHoursPlanBook = () => {
 
   return (
     <DashboardCard
-      title={t('commonTypography.workingHoursPlan')}
+      title={t('commonTypography.activityPlan')}
       updateButton={{
         label: 'Edit',
-        onClick: () =>
-          router.push(`/master-data/working-hours-plan/update/${id}`),
+        onClick: () => router.push(`/master-data/activity-plan/update/${id}`),
       }}
       titleStyle={{
         fw: 700,
@@ -36,7 +35,7 @@ const ReadWorkingHoursPlanBook = () => {
       }}
       withBorder
       shadow="xs"
-      isLoading={workingHourPlanMasterLoading}
+      isLoading={activityPlanMasterLoading}
       enebleBackBottomInner
       paperStackProps={{
         spacing: 'sm',
@@ -61,8 +60,8 @@ const ReadWorkingHoursPlanBook = () => {
             <KeyValueList
               data={[
                 {
-                  dataKey: t('commonTypography.activity'),
-                  value: workingHourPlanMaster?.activityName ?? '-',
+                  dataKey: t('commonTypography.activityPlan'),
+                  value: activityPlanMaster?.name ?? '-',
                 },
               ]}
               type="grid"
@@ -82,4 +81,4 @@ const ReadWorkingHoursPlanBook = () => {
   );
 };
 
-export default ReadWorkingHoursPlanBook;
+export default ReadActivityPlanBook;
