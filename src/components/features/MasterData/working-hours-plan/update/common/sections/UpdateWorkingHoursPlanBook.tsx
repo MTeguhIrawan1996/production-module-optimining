@@ -8,14 +8,14 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import { IMutationMaterialValues } from '@/services/graphql/mutation/material/useCreateMaterialMaster';
-import { useUpdateMaterialMaster } from '@/services/graphql/mutation/material/useUpdateMaterialMaster';
-import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
-import { useReadOneMaterialMaster } from '@/services/graphql/query/material/useReadOneMaterialMaster';
-import { globalSelect, globalText } from '@/utils/constants/Field/global-field';
-import { materialMutationValidation } from '@/utils/form-validation/material/material-mutation-validation';
+import {
+  IUpdateMutationWHPValues,
+  useUpdateWHPMaster,
+} from '@/services/graphql/mutation/working-hours-plan/useUpdateWHPMaster';
+import { useReadOneWHPMaster } from '@/services/graphql/query/working-hours-plan/useReadOneWHPMaster';
+import { globalText } from '@/utils/constants/Field/global-field';
+import { whpMutationUpdateValidation } from '@/utils/form-validation/working-hours-plan/whp-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
-import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -23,47 +23,37 @@ const UpdateWorkingHoursPlanBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const methods = useForm<IMutationMaterialValues>({
-    resolver: zodResolver(materialMutationValidation),
+  const methods = useForm<IUpdateMutationWHPValues>({
+    resolver: zodResolver(whpMutationUpdateValidation),
     defaultValues: {
-      name: '',
-      parentId: null,
+      activityName: '',
     },
     mode: 'onBlur',
   });
 
-  const { materialMasterLoading } = useReadOneMaterialMaster({
+  const { workingHourPlanMasterLoading } = useReadOneWHPMaster({
     variables: {
       id,
     },
     skip: !router.isReady,
-    onCompleted: ({ material }) => {
-      methods.setValue('name', material.name);
-      methods.setValue('parentId', material.parent?.id ?? null);
+    onCompleted: (data) => {
+      methods.setValue('activityName', data.workingHourPlan.activityName);
     },
   });
 
-  const { materialsData } = useReadAllMaterialsMaster({
-    variables: {
-      limit: 10,
-      orderDir: 'desc',
-      orderBy: 'createdAt',
-    },
-  });
-
-  const [executeUpdate, { loading }] = useUpdateMaterialMaster({
+  const [executeUpdate, { loading }] = useUpdateWHPMaster({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('material.successUpdateMessage'),
+        message: t('workingHoursPlan.successUpdateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/master-data/material');
+      router.push('/master-data/working-hours-plan');
     },
     onError: (error) => {
       if (error.graphQLErrors) {
-        const errorArry = errorBadRequestField<IMutationMaterialValues>(error);
+        const errorArry = errorBadRequestField<IUpdateMutationWHPValues>(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
             methods.setError(name, { type, message });
@@ -80,49 +70,38 @@ const UpdateWorkingHoursPlanBook = () => {
     },
   });
 
-  const { uncombinedItem } = useFilterItems({
-    data: materialsData ?? [],
-  });
   const fieldItem = React.useMemo(() => {
-    const materialTypeItem = globalText({
-      name: 'name',
-      label: 'materialType',
-      colSpan: 6,
-    });
-    const materialSubItem = globalSelect({
-      colSpan: 6,
-      name: 'parentId',
-      label: 'materialSub',
-      data: uncombinedItem,
-      placeholder: 'chooseMaterialSub',
+    const activityItem = globalText({
+      name: 'activityName',
+      label: 'activity',
+      colSpan: 12,
+      withAsterisk: true,
     });
 
     const field: ControllerGroup[] = [
       {
-        group: t('commonTypography.material'),
-        enableGroupLabel: true,
-        formControllers: [materialTypeItem, materialSubItem],
+        group: t('commonTypography.activity'),
+        formControllers: [activityItem],
       },
     ];
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uncombinedItem]);
+  }, []);
 
-  const handleSubmitForm: SubmitHandler<IMutationMaterialValues> = async (
+  const handleSubmitForm: SubmitHandler<IUpdateMutationWHPValues> = async (
     data
   ) => {
-    const { name, parentId } = data;
+    const { activityName } = data;
     await executeUpdate({
       variables: {
         id,
-        name,
-        parentId,
+        activityName,
       },
     });
   };
   return (
-    <DashboardCard p={0} isLoading={materialMasterLoading}>
+    <DashboardCard p={0} isLoading={workingHourPlanMasterLoading}>
       <GlobalFormGroup
         field={fieldItem}
         methods={methods}

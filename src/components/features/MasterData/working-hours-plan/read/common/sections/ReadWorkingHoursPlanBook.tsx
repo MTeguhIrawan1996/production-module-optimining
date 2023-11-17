@@ -1,11 +1,11 @@
-import { Stack, Tabs, Text } from '@mantine/core';
+import { Stack, Tabs } from '@mantine/core';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, KeyValueList } from '@/components/elements';
 
-import { useReadOneMaterialMaster } from '@/services/graphql/query/material/useReadOneMaterialMaster';
+import { useReadOneWHPMaster } from '@/services/graphql/query/working-hours-plan/useReadOneWHPMaster';
 
 const ReadWorkingHoursPlanBook = () => {
   const { t } = useTranslation('default');
@@ -13,20 +13,22 @@ const ReadWorkingHoursPlanBook = () => {
   const id = router.query.id as string;
 
   /* #   /**=========== Query =========== */
-  const { materialMaster, materialMasterLoading } = useReadOneMaterialMaster({
-    variables: {
-      id,
-    },
-    skip: !router.isReady,
-  });
+  const { workingHourPlanMaster, workingHourPlanMasterLoading } =
+    useReadOneWHPMaster({
+      variables: {
+        id,
+      },
+      skip: !router.isReady,
+    });
   /* #endregion  /**======== Query =========== */
 
   return (
     <DashboardCard
-      title={t('commonTypography.material')}
+      title={t('commonTypography.workingHoursPlan')}
       updateButton={{
         label: 'Edit',
-        onClick: () => router.push(`/master-data/material/update/${id}`),
+        onClick: () =>
+          router.push(`/master-data/working-hours-plan/update/${id}`),
       }}
       titleStyle={{
         fw: 700,
@@ -34,7 +36,7 @@ const ReadWorkingHoursPlanBook = () => {
       }}
       withBorder
       shadow="xs"
-      isLoading={materialMasterLoading}
+      isLoading={workingHourPlanMasterLoading}
       enebleBackBottomInner
       paperStackProps={{
         spacing: 'sm',
@@ -56,18 +58,11 @@ const ReadWorkingHoursPlanBook = () => {
         </Tabs.List>
         <Tabs.Panel value="information">
           <Stack spacing="sm" mt="lg">
-            <Text fz={24} fw={600} color="brand">
-              {t('material.readMaterial')}
-            </Text>
             <KeyValueList
               data={[
                 {
-                  dataKey: t('commonTypography.materialType'),
-                  value: materialMaster?.name ?? '-',
-                },
-                {
-                  dataKey: t('commonTypography.materialSub'),
-                  value: materialMaster?.parent?.name ?? '-',
+                  dataKey: t('commonTypography.activity'),
+                  value: workingHourPlanMaster?.activityName ?? '-',
                 },
               ]}
               type="grid"

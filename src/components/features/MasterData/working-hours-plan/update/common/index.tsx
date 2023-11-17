@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import UpdateWorkingHoursPlanBook from '@/components/features/MasterData/working-hours-plan/create/common/sections/CreateWorkingHoursPlanBook';
+import UpdateWorkingHoursPlanBook from '@/components/features/MasterData/working-hours-plan/update/common/sections/UpdateWorkingHoursPlanBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
@@ -19,9 +19,12 @@ const UpdateWorkingHoursPlanMasterPage = () => {
 
   React.useEffect(() => {
     setBreadcrumbs([
-      { label: t('commonTypography.material'), path: '/master-data/material' },
       {
-        label: t('material.updateMaterial'),
+        label: t('commonTypography.workingHoursPlan'),
+        path: '/master-data/working-hours-plan',
+      },
+      {
+        label: t('workingHoursPlan.updateWorkingHoursPlan'),
         path: router.asPath,
       },
     ]);
@@ -31,7 +34,10 @@ const UpdateWorkingHoursPlanMasterPage = () => {
   return (
     <RootWrapper>
       <InnerWrapper
-        titleProps={{ title: t('material.formUpdateMaterial'), mb: 'md' }}
+        titleProps={{
+          title: t('workingHoursPlan.formUpdateWorkingHoursPlan'),
+          mb: 'md',
+        }}
       >
         <Tabs defaultValue="information" radius={4}>
           <Tabs.List>

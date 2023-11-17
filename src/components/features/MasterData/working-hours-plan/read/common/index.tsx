@@ -19,11 +19,11 @@ const ReadWorkingHoursPlanMasterPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.material'),
-        path: '/master-data/material',
+        label: t('commonTypography.workingHoursPlan'),
+        path: '/master-data/working-hours-plan',
       },
       {
-        label: t('material.readMaterial'),
+        label: t('workingHoursPlan.readWorkingHoursPlan'),
         path: router.asPath,
       },
     ]);
