@@ -11,6 +11,7 @@
     "materialSub": "Sub Jenis Material",
     "workingHoursPlan": "Rencana Jam Kerja",
     "activity": "Kegiatan",
+    "createActivity": "Tambah Kegiatan",
     "number": "Nomor",
     "date": "Tanggal",
     "identity": "Identitas",
@@ -355,6 +356,7 @@
     "formWorkingHoursPlan": "$t(commonTypography.form) $t(commonTypography.workingHoursPlan)",
     "formUpdateWorkingHoursPlan": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.workingHoursPlan)",
     "successCreateMessage": "$t(commonTypography.workingHoursPlan) berhasil dibuat",
-    "successUpdateMessage": "$t(commonTypography.workingHoursPlan) berhasil diubah"
+    "successUpdateMessage": "$t(commonTypography.workingHoursPlan) berhasil diubah",
+    "workingHoursPlanDescription": "Anda bisa menambahkan lebih dari satu deskripsi. Karena data deskripsi ini akan berpengaruh kedalam rencana mingguan dan bulanan"
   }
 }

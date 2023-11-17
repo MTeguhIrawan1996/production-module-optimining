@@ -20,11 +20,11 @@ const CreateWorkingHoursPlanMasterPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.material'),
-        path: '/master-data/material',
+        label: t('commonTypography.workingHoursPlan'),
+        path: '/master-data/working-hours-plan',
       },
       {
-        label: t('material.createMaterial'),
+        label: t('workingHoursPlan.createWorkingHoursPlan'),
         path: router.asPath,
       },
     ]);
@@ -35,8 +35,14 @@ const CreateWorkingHoursPlanMasterPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('material.formMaterial'),
+          title: t('workingHoursPlan.formWorkingHoursPlan'),
+          mb: 'sm',
+        }}
+        alertProps={{
           mb: 'md',
+          fz: 14,
+          fw: 400,
+          description: t('workingHoursPlan.workingHoursPlanDescription'),
         }}
       >
         <Tabs

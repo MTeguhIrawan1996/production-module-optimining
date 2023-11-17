@@ -3,20 +3,18 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import {
-  IMutationMaterialValues,
-  useCreateMaterialMaster,
-} from '@/services/graphql/mutation/material/useCreateMaterialMaster';
-import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
-import { globalSelect, globalText } from '@/utils/constants/Field/global-field';
-import { materialMutationValidation } from '@/utils/form-validation/material/material-mutation-validation';
+  IMutationWHPValues,
+  useCreateWHPMaster,
+} from '@/services/graphql/mutation/working-hours-plan/useCreateWHPMaster';
+import { globalText } from '@/utils/constants/Field/global-field';
+import { whpMutationValidation } from '@/utils/form-validation/working-hours-plan/whp-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
-import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -25,40 +23,40 @@ const CreateWorkingHoursPlanBook = () => {
   const router = useRouter();
 
   /* #   /**=========== Methods =========== */
-  const methods = useForm<IMutationMaterialValues>({
-    resolver: zodResolver(materialMutationValidation),
+  const methods = useForm<IMutationWHPValues>({
+    resolver: zodResolver(whpMutationValidation),
     defaultValues: {
-      name: '',
-      parentId: null,
+      createWorkingHourPlans: [
+        {
+          activityName: '',
+        },
+      ],
     },
     mode: 'onBlur',
+  });
+  const { fields, append, remove } = useFieldArray({
+    name: 'createWorkingHourPlans',
+    control: methods.control,
   });
 
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  const { materialsData } = useReadAllMaterialsMaster({
-    variables: {
-      limit: 10,
-      orderDir: 'desc',
-      orderBy: 'createdAt',
-    },
-  });
 
-  const [executeCreate, { loading }] = useCreateMaterialMaster({
+  const [executeCreate, { loading }] = useCreateWHPMaster({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('material.successCreateMessage'),
+        message: t('workingHoursPlan.successCreateMessage'),
         icon: <IconCheck />,
       });
       methods.reset();
-      router.push('/master-data/material');
+      router.push('/master-data/working-hours-plan');
     },
     onError: (error) => {
       if (error.graphQLErrors) {
-        const errorArry = errorBadRequestField<IMutationMaterialValues>(error);
+        const errorArry = errorBadRequestField<IMutationWHPValues>(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
             methods.setError(name, { type, message });
@@ -77,46 +75,39 @@ const CreateWorkingHoursPlanBook = () => {
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
-  const { uncombinedItem } = useFilterItems({
-    data: materialsData ?? [],
-  });
-  const fieldItem = React.useMemo(() => {
-    const materialTypeItem = globalText({
-      name: 'name',
-      label: 'materialType',
-      colSpan: 6,
-    });
-    const materialSubItem = globalSelect({
-      colSpan: 6,
-      name: 'parentId',
-      label: 'materialSub',
-      data: uncombinedItem,
-      placeholder: 'chooseMaterialSub',
-    });
+  const fieldItem = React.useCallback(
+    (_, index: number) => {
+      const activityItem = globalText({
+        name: `createWorkingHourPlans.${index}.activityName`,
+        label: 'activity',
+        colSpan: 12,
+        withAsterisk: true,
+        deleteButtonField: {
+          onClick: () => {
+            fields.length > 1 ? remove(index) : null;
+          },
+        },
+      });
 
-    const field: ControllerGroup[] = [
-      {
-        group: t('commonTypography.material'),
-        enableGroupLabel: true,
-        formControllers: [materialTypeItem, materialSubItem],
-      },
-    ];
-
-    return field;
+      const field: ControllerGroup = {
+        group: t('commonTypography.activity'),
+        formControllers: [activityItem],
+      };
+      return field;
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uncombinedItem]);
+    [fields]
+  );
+
+  const arrayField = fields.map(fieldItem);
+
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
-  const handleSubmitForm: SubmitHandler<IMutationMaterialValues> = async (
-    data
-  ) => {
-    const { name, parentId } = data;
-
+  const handleSubmitForm: SubmitHandler<IMutationWHPValues> = async (data) => {
     await executeCreate({
       variables: {
-        name,
-        parentId,
+        createWorkingHourPlans: data.createWorkingHourPlans,
       },
     });
   };
@@ -125,12 +116,19 @@ const CreateWorkingHoursPlanBook = () => {
   return (
     <DashboardCard p={0}>
       <GlobalFormGroup
-        field={fieldItem}
+        field={arrayField}
         methods={methods}
         submitForm={handleSubmitForm}
         submitButton={{
           label: t('commonTypography.save'),
           loading: loading,
+        }}
+        outerButton={{
+          label: t('commonTypography.createActivity'),
+          onClick: () =>
+            append({
+              activityName: '',
+            }),
         }}
         backButton={{
           onClick: () => router.back(),

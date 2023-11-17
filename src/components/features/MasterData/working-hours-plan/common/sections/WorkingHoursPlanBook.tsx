@@ -13,7 +13,7 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteWHPMaster } from '@/services/graphql/mutation/working-hours-plan/useDeleteMaterialMaster';
+import { useDeleteWHPMaster } from '@/services/graphql/mutation/working-hours-plan/useDeleteWHPMaster';
 import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
 
 const WorkingHoursPlanBook = () => {
