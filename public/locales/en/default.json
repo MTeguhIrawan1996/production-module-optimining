@@ -9,6 +9,8 @@
     "material": "Material",
     "materialType": "Jenis Material",
     "materialSub": "Sub Jenis Material",
+    "workingHoursPlan": "Rencana Jam Kerja",
+    "activity": "Kegiatan",
     "number": "Nomor",
     "date": "Tanggal",
     "identity": "Identitas",
@@ -178,7 +180,8 @@
     "heavyEquipment": "$t(commonTypography.heavyEquipment)",
     "humanResources": "$t(commonTypography.humanResources)",
     "location": "$t(commonTypography.location)",
-    "material": "$t(commonTypography.material)"
+    "material": "$t(commonTypography.material)",
+    "workingHoursPlan": "$t(commonTypography.workingHoursPlan)"
   },
   "auth": {
     "button": {
@@ -342,5 +345,16 @@
     "formUpdateMaterial": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.material)",
     "successCreateMessage": "$t(commonTypography.material) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.material) berhasil diubah"
+  },
+  "workingHoursPlan": {
+    "createWorkingHoursPlan": "$t(commonTypography.create) $t(commonTypography.workingHoursPlan)",
+    "readWorkingHoursPlan": "$t(commonTypography.detail) $t(commonTypography.workingHoursPlan)",
+    "updateWorkingHoursPlan": "$t(commonTypography.edit) $t(commonTypography.workingHoursPlan)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.activity)",
+    "successDeleteMessage": "$t(commonTypography.workingHoursPlan) berhasil dihapus",
+    "formWorkingHoursPlan": "$t(commonTypography.form) $t(commonTypography.workingHoursPlan)",
+    "formUpdateWorkingHoursPlan": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.workingHoursPlan)",
+    "successCreateMessage": "$t(commonTypography.workingHoursPlan) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.workingHoursPlan) berhasil diubah"
   }
 }
