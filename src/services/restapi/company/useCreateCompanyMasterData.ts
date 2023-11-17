@@ -11,10 +11,10 @@ export interface ICompanyMutationValues {
   alias: string;
   typeId: string;
   businessTypeId: string;
-  provinceId: string;
-  regencyId: string;
-  subdistrictId: string;
-  villageId: string;
+  provinceId: string | null;
+  regencyId: string | null;
+  subdistrictId: string | null;
+  villageId: string | null;
   address: string;
   email1: string;
   phoneNumber1: string;

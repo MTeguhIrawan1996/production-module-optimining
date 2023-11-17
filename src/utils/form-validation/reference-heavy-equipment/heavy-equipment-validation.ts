@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import {
   zImageArrayOptional,
-  zRequiredNumberOfString,
+  zOptionalNumberOfString,
   zRequiredString,
 } from '../global';
 
@@ -12,5 +12,5 @@ export const createHeavyEquipmentSchema = z.object({
   brandId: zRequiredString,
   typeId: zRequiredString,
   spec: zRequiredString.optional().or(z.literal('')),
-  modelYear: zRequiredNumberOfString,
+  modelYear: zOptionalNumberOfString,
 });

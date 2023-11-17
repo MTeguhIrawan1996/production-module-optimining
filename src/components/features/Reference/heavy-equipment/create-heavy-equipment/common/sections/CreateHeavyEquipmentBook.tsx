@@ -37,6 +37,7 @@ const CreateHeavyEquipmentBook = () => {
     mode: 'onBlur',
   });
   const brandId = methods.watch('brandId');
+  const photos = methods.watch('photos');
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
@@ -101,6 +102,18 @@ const CreateHeavyEquipmentBook = () => {
       maxFiles: 5,
       enableDeletePhoto: true,
       onDrop: (value) => {
+        if (photos) {
+          if (value.length + photos.length > 5) {
+            methods.setError('photos', {
+              type: 'manual',
+              message: 'Jumlah foto melebihi batas maksimal',
+            });
+            return;
+          }
+          methods.setValue('photos', [...photos, ...value]);
+          methods.clearErrors('photos');
+          return;
+        }
         methods.setValue('photos', value);
         methods.clearErrors('photos');
       },
@@ -136,7 +149,7 @@ const CreateHeavyEquipmentBook = () => {
             name: 'modelYear',
             label: 'modelYear',
             colSpan: 6,
-            withAsterisk: true,
+            withAsterisk: false,
           },
         ],
       },
@@ -149,7 +162,7 @@ const CreateHeavyEquipmentBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brandId]);
+  }, [brandId, photos]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */

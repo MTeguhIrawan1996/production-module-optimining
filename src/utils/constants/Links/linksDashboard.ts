@@ -31,6 +31,11 @@ export const linksDashboard: IMenuItem[] = [
         href: '/master-data/location',
         access: ['all'],
       },
+      {
+        label: 'material',
+        href: '/master-data/material',
+        access: ['all'],
+      },
     ],
   },
   {

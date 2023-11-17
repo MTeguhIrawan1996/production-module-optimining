@@ -4,6 +4,7 @@ import { IDateInputProps } from '@/components/elements/input/DateInputRhf';
 import { IDivisionSelectInputRhfProps } from '@/components/elements/input/DivisionSelectInputRhf';
 import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/input/EligibilityStatusSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
+import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
@@ -632,6 +633,47 @@ export const eligibilityStatusSelect = ({
     clearable,
     withAsterisk,
     colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const locationCategorySelect = ({
+  name = 'categoryId',
+  label = 'locationCategory',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ILocationCategorySelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'location-category-select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelect = ({
+  name = 'globalSelect',
+  label = 'globalSelect',
+  searchable = false,
+  clearable = true,
+  data = [],
+  ...rest
+}: Partial<ISelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    data,
     ...rest,
   };
   return field;

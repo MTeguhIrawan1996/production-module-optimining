@@ -7,14 +7,13 @@ import { useTranslation } from 'react-i18next';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
 import { useReadAllEligibilityStatus } from '@/services/graphql/query/heavy-equipment/useReadAllEligibilityStatus';
-import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
 export type IEligibilityStatusSelectInputRhfProps = {
   control: 'eligibilityStatus-select-input';
   name: string;
-  labelValue?: string;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
@@ -23,26 +22,21 @@ export type IEligibilityStatusSelectInputRhfProps = {
 
 const EligibilityStatusSelectInputRhf: React.FC<
   IEligibilityStatusSelectInputRhfProps
-> = ({ name, control, label, labelValue, defaultValue, ...rest }) => {
+> = ({ name, control, label, defaultValue, ...rest }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
-  const currentValue = field.value;
 
   const { eligibilityStatusData } = useReadAllEligibilityStatus({});
 
-  const { combinedItems, uncombinedItem } = useCombineFilterItems({
+  const { uncombinedItem } = useFilterItems({
     data: eligibilityStatusData ?? [],
-    combinedId: defaultValue ?? '',
-    combinedName: labelValue,
   });
 
   return (
     <Select
       {...field}
       radius={8}
-      data={
-        currentValue === '' || !defaultValue ? uncombinedItem : combinedItems
-      }
+      data={uncombinedItem}
       defaultValue={defaultValue}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}

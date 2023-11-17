@@ -249,7 +249,7 @@ const UpdateCompanyBook = () => {
     const regencyItem = regencySelect({
       defaultValue: companyData?.regency?.id,
       labelValue: companyData?.regency?.name,
-      provinceId,
+      provinceId: provinceId ?? '',
       onChange: (value) => {
         methods.setValue('regencyId', value ?? '');
         methods.setValue('subdistrictId', '');
@@ -260,8 +260,8 @@ const UpdateCompanyBook = () => {
     const subdistrictItem = subdistrictSelect({
       defaultValue: companyData?.district?.id,
       labelValue: companyData?.district?.name,
-      provinceId,
-      regencyId,
+      provinceId: provinceId ?? '',
+      regencyId: regencyId ?? '',
       onChange: (value) => {
         methods.setValue('subdistrictId', value ?? '');
         methods.setValue('villageId', '');
@@ -271,9 +271,9 @@ const UpdateCompanyBook = () => {
     const villageItem = villageSelect({
       defaultValue: companyData?.village?.id,
       labelValue: companyData?.village?.name,
-      provinceId,
-      regencyId,
-      subdistrictId,
+      provinceId: provinceId ?? '',
+      regencyId: regencyId ?? '',
+      subdistrictId: subdistrictId ?? '',
     });
     const companyLogo: ControllerProps = {
       control: 'image-dropzone',

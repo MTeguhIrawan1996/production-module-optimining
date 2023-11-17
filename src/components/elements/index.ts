@@ -30,6 +30,7 @@ import DivisionSelectInputRhf from '@/components/elements/input/DivisionSelectIn
 import EligibilityStatusSelectInputRhf from '@/components/elements/input/EligibilityStatusSelectInputRhf';
 import IdentityRadioInputRhf from '@/components/elements/input/IdentityRadioInputRhf';
 import ImageInputDropzoneRhf from '@/components/elements/input/ImageInputDropzoneRhf';
+import LocationCategorySelectInputRhf from '@/components/elements/input/LocationCategorySelectInputRhf';
 import MarriageSelectInputRhf from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import ModelSelectInputRhf from '@/components/elements/input/ModelSelectInputRhf';
 import NumberInputRhf from '@/components/elements/input/NumberInputRhf';
@@ -87,6 +88,7 @@ export {
   ImageInputDropzoneRhf,
   InnerWrapper,
   KeyValueList,
+  LocationCategorySelectInputRhf,
   LogoutConfirmModal,
   MantineDataTable,
   MarriageSelectInputRhf,

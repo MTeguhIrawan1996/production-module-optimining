@@ -3,9 +3,12 @@
   "commonTypography": {
     "company": "Perusahaan",
     "location": "Lokasi",
-    "idLocation": "ID Lokasi",
+    "locationId": "ID Lokasi",
     "locationCategory": "Kategori Lokasi",
     "locationName": "Nama Lokasi",
+    "material": "Material",
+    "materialType": "Jenis Material",
+    "materialSub": "Sub Jenis Material",
     "number": "Nomor",
     "date": "Tanggal",
     "identity": "Identitas",
@@ -149,6 +152,7 @@
     "chooseCompanyType": "$t(commonTypography.choose) $t(commonTypography.companyType)",
     "chooseCompanyPermissionType": "$t(commonTypography.choose) $t(commonTypography.companyPermissionType)",
     "chooseLocationCategory": "$t(commonTypography.choose) $t(commonTypography.locationCategory)",
+    "chooseMaterialSub": "$t(commonTypography.choose) $t(commonTypography.materialSub)",
     "complete": "Lengkap",
     "inComplete": "Tidak Lengkap",
     "engineNumber": "Nomor Mesin",
@@ -173,7 +177,8 @@
     "heavyEquipmentClass": "$t(commonTypography.class) $t(commonTypography.heavyEquipment)",
     "heavyEquipment": "$t(commonTypography.heavyEquipment)",
     "humanResources": "$t(commonTypography.humanResources)",
-    "location": "$t(commonTypography.location)"
+    "location": "$t(commonTypography.location)",
+    "material": "$t(commonTypography.material)"
   },
   "auth": {
     "button": {
@@ -243,8 +248,8 @@
     "successDeleteMessage": "$t(commonTypography.company) berhasil dihapus",
     "successCreateEmployeDataMessage": "$t(commonTypography.employeDetail) berhasil dibuat",
     "successCreatePositionHistoryMessage": "$t(commonTypography.positionHistory) berhasil dibuat",
-    "successUpdateEmployeDataMessage": "$t(commonTypography.employeDetail) berhasil diedit",
-    "successUpdatePositionHistoryMessage": "$t(commonTypography.positionHistory) berhasil diedit"
+    "successUpdateEmployeDataMessage": "$t(commonTypography.employeDetail) berhasil diubah",
+    "successUpdatePositionHistoryMessage": "$t(commonTypography.positionHistory) berhasil diubah"
   },
   "heavyEquipment": {
     "heavyEquipmentTitle": "$t(commonTypography.reference) $t(commonTypography.heavyEquipment)",
@@ -307,7 +312,7 @@
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) dan $t(commonTypography.identityNumber)",
     "successDeleteMessage": "$t(commonTypography.humanResources) berhasil dihapus",
     "successCreateMessage": "$t(commonTypography.humanResources) berhasil dibuat",
-    "successUpdateMessage": "$t(commonTypography.humanResources) berhasil diedit",
+    "successUpdateMessage": "$t(commonTypography.humanResources) berhasil diubah",
     "formHumanResources": "$t(commonTypography.form) $t(commonTypography.create) $t(commonTypography.humanResources)",
     "formUpdateHumanResources": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.humanResources)",
     "humanResourcesProfile": "$t(commonTypography.profile) $t(commonTypography.humanResources)",
@@ -318,6 +323,24 @@
   },
   "location": {
     "createLocation": "$t(commonTypography.create) $t(commonTypography.location)",
-    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.location) dan $t(commonTypography.idLocation)"
+    "readLocation": "$t(commonTypography.detail) $t(commonTypography.location)",
+    "updateLocation": "$t(commonTypography.edit) $t(commonTypography.location)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.location) dan $t(commonTypography.locationId)",
+    "successDeleteMessage": "$t(commonTypography.location) berhasil dihapus",
+    "formLocation": "$t(commonTypography.form) $t(commonTypography.location)",
+    "formUpdateLocation": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.location)",
+    "successCreateMessage": "$t(commonTypography.location) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.location) berhasil diubah"
+  },
+  "material": {
+    "createMaterial": "$t(commonTypography.create) $t(commonTypography.material)",
+    "readMaterial": "$t(commonTypography.detail) $t(commonTypography.material)",
+    "updateMaterial": "$t(commonTypography.edit) $t(commonTypography.material)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type) $t(commonTypography.material)",
+    "successDeleteMessage": "$t(commonTypography.material) berhasil dihapus",
+    "formMaterial": "$t(commonTypography.form) $t(commonTypography.material)",
+    "formUpdateMaterial": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.material)",
+    "successCreateMessage": "$t(commonTypography.material) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.material) berhasil diubah"
   }
 }
