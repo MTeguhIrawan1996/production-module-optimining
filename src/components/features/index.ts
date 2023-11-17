@@ -4,6 +4,7 @@ import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
 import FormExamplePage from '@/components/features/Example/form-example/common';
 import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
+import CreateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/create/common';
 import ReadActivityPlanPage from '@/components/features/MasterData/activity-plan/read/common';
 import UpdateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/update/common';
 import CompanyPage from '@/components/features/MasterData/company/common';
@@ -62,6 +63,7 @@ export {
   CompanyPage,
   CompanyTypePage,
   ComponentsPage,
+  CreateActivityPlanMasterPage,
   CreateCompanyHeavyEquipmentPage,
   CreateCompanyHumanResourcesPage,
   CreateCompanyPage,

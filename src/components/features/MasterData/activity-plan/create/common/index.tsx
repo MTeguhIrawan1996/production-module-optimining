@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import CreateWorkingHoursPlanBook from '@/components/features/MasterData/working-hours-plan/create/common/sections/CreateWorkingHoursPlanBook';
+import CreateActivityPlanBook from '@/components/features/MasterData/activity-plan/create/common/sections/CreateActivityPlanBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const CreateWorkingHoursPlanMasterPage = () => {
+const CreateActivityPlanMasterPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -20,11 +20,11 @@ const CreateWorkingHoursPlanMasterPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.workingHoursPlan'),
-        path: '/master-data/working-hours-plan',
+        label: t('commonTypography.activityPlan'),
+        path: '/master-data/activity-plan',
       },
       {
-        label: t('workingHoursPlan.createWorkingHoursPlan'),
+        label: t('activityPlan.createActivityPlan'),
         path: router.asPath,
       },
     ]);
@@ -35,14 +35,8 @@ const CreateWorkingHoursPlanMasterPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('workingHoursPlan.formWorkingHoursPlan'),
-          mb: 'sm',
-        }}
-        alertProps={{
+          title: t('activityPlan.formActivityPlan'),
           mb: 'md',
-          fz: 14,
-          fw: 400,
-          description: t('workingHoursPlan.workingHoursPlanDescription'),
         }}
       >
         <Tabs
@@ -62,7 +56,7 @@ const CreateWorkingHoursPlanMasterPage = () => {
             </Tabs.List>
           </ScrollArea>
           <Tabs.Panel value="information">
-            <CreateWorkingHoursPlanBook />
+            <CreateActivityPlanBook />
           </Tabs.Panel>
         </Tabs>
       </InnerWrapper>
@@ -70,4 +64,4 @@ const CreateWorkingHoursPlanMasterPage = () => {
   );
 };
 
-export default CreateWorkingHoursPlanMasterPage;
+export default CreateActivityPlanMasterPage;

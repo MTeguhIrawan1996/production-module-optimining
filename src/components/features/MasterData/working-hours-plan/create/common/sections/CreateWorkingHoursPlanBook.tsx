@@ -21,7 +21,7 @@ import { ControllerGroup } from '@/types/global';
 const CreateWorkingHoursPlanBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
+  const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
 
   /* #   /**=========== Methods =========== */
@@ -53,12 +53,12 @@ const CreateWorkingHoursPlanBook = () => {
         message: t('workingHoursPlan.successCreateMessage'),
         icon: <IconCheck />,
       });
-      setIsOpenDeleteConfirmation((prev) => !prev);
+      setIsOpenConfirmation((prev) => !prev);
       methods.reset();
       router.push('/master-data/working-hours-plan');
     },
     onError: (error) => {
-      setIsOpenDeleteConfirmation((prev) => !prev);
+      setIsOpenConfirmation((prev) => !prev);
       if (error.graphQLErrors) {
         const errorArry = errorBadRequestField<IMutationWHPValues>(error);
         if (errorArry.length) {
@@ -130,7 +130,7 @@ const CreateWorkingHoursPlanBook = () => {
         submitButton={{
           label: t('commonTypography.save'),
           type: 'button',
-          onClick: () => setIsOpenDeleteConfirmation((prev) => !prev),
+          onClick: () => setIsOpenConfirmation((prev) => !prev),
         }}
         outerButton={{
           label: t('commonTypography.createActivity'),
@@ -143,9 +143,8 @@ const CreateWorkingHoursPlanBook = () => {
           onClick: () => router.back(),
         }}
         modalConfirmation={{
-          isOpenModalConfirmation: isOpenDeleteConfirmation,
-          actionModalConfirmation: () =>
-            setIsOpenDeleteConfirmation((prev) => !prev),
+          isOpenModalConfirmation: isOpenConfirmation,
+          actionModalConfirmation: () => setIsOpenConfirmation((prev) => !prev),
           actionButton: {
             label: t('commonTypography.yesSave'),
             type: 'button',

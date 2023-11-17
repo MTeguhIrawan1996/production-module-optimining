@@ -1,13 +1,13 @@
-import { CreateWorkingHoursPlanMasterPage } from '@/components/features';
+import { CreateActivityPlanMasterPage } from '@/components/features';
 import { DashboardLayout } from '@/components/layouts';
 
-const CreateWorkingHoursPlanMaster = () => {
-  return <CreateWorkingHoursPlanMasterPage />;
+const CreateActivityPlanMaster = () => {
+  return <CreateActivityPlanMasterPage />;
 };
 
-export default CreateWorkingHoursPlanMaster;
+export default CreateActivityPlanMaster;
 
-CreateWorkingHoursPlanMaster.getLayout = function getLayout(
+CreateActivityPlanMaster.getLayout = function getLayout(
   page: React.ReactElement
 ) {
   return <DashboardLayout>{page}</DashboardLayout>;
