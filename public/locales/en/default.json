@@ -9,6 +9,10 @@
     "material": "Material",
     "materialType": "Jenis Material",
     "materialSub": "Sub Jenis Material",
+    "workingHoursPlan": "Rencana Jam Kerja",
+    "activity": "Kegiatan",
+    "activityPlan": "Rencana Aktivitas",
+    "createActivity": "Tambah Kegiatan",
     "number": "Nomor",
     "date": "Tanggal",
     "identity": "Identitas",
@@ -91,8 +95,10 @@
     "modalNonActiveDescription": "Pengguna yang dinonaktifkan suatu saat bisa diaktifkan kembali",
     "modalActiveDescription": "Pengguna yang diaktifkan suatu saat bisa dinonaktifkan kembali",
     "alertTitleConfirmDelete": "Apakah Anda yakin ingin menghapus?",
+    "alertTitleConfirmSave": "Apakah Anda sudah yakin dengan data yang ditambahkan?",
     "alertDescConfirmDelete": "Setelah Anda menyetujui, data akan terhapus",
     "alertDescConfirmDeleteMasterData": "Data yang ada di master data akan berelasi dengan data yang lain",
+    "alertDescConfirmSaveWHP": "Data ini akan berpengaruh terhadapan data pada menu rencana mingguan dan bulanan",
     "activeLabel": "Aktif",
     "nonActiveLabel": "Nonaktif",
     "activate": "Aktfikan",
@@ -116,6 +122,7 @@
     "heavyEquipmentModel": "Model Alat Berat",
     "document": "Dokumen",
     "yesDelete": "Ya Hapus",
+    "yesSave": "Ya Simpan",
     "photo": "Foto",
     "identityPhoto": "Foto Identitas",
     "businessType": "Jenis Badan Usaha",
@@ -178,7 +185,9 @@
     "heavyEquipment": "$t(commonTypography.heavyEquipment)",
     "humanResources": "$t(commonTypography.humanResources)",
     "location": "$t(commonTypography.location)",
-    "material": "$t(commonTypography.material)"
+    "material": "$t(commonTypography.material)",
+    "workingHoursPlan": "$t(commonTypography.workingHoursPlan)",
+    "activityPlan": "$t(commonTypography.activityPlan)"
   },
   "auth": {
     "button": {
@@ -342,5 +351,29 @@
     "formUpdateMaterial": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.material)",
     "successCreateMessage": "$t(commonTypography.material) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.material) berhasil diubah"
+  },
+  "workingHoursPlan": {
+    "createWorkingHoursPlan": "$t(commonTypography.create) $t(commonTypography.workingHoursPlan)",
+    "readWorkingHoursPlan": "$t(commonTypography.detail) $t(commonTypography.workingHoursPlan)",
+    "updateWorkingHoursPlan": "$t(commonTypography.edit) $t(commonTypography.workingHoursPlan)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.activity)",
+    "successDeleteMessage": "$t(commonTypography.workingHoursPlan) berhasil dihapus",
+    "formWorkingHoursPlan": "$t(commonTypography.form) $t(commonTypography.workingHoursPlan)",
+    "formUpdateWorkingHoursPlan": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.workingHoursPlan)",
+    "successCreateMessage": "$t(commonTypography.workingHoursPlan) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.workingHoursPlan) berhasil diubah",
+    "workingHoursPlanDescription": "Anda bisa menambahkan lebih dari satu deskripsi. Karena data deskripsi ini akan berpengaruh kedalam rencana mingguan dan bulanan"
+  },
+  "activityPlan": {
+    "createActivityPlan": "$t(commonTypography.create) $t(commonTypography.activityPlan)",
+    "readActivityPlan": "$t(commonTypography.detail) $t(commonTypography.activityPlan)",
+    "updateActivityPlan": "$t(commonTypography.edit) $t(commonTypography.activityPlan)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.activityPlan)",
+    "successDeleteMessage": "$t(commonTypography.activityPlan) berhasil dihapus",
+    "formActivityPlan": "$t(commonTypography.form) $t(commonTypography.activityPlan)",
+    "formUpdateActivityPlan": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.activityPlan)",
+    "successCreateMessage": "$t(commonTypography.activityPlan) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.activityPlan) berhasil diubah",
+    "activityPlanDescription": "Anda bisa menambahkan lebih dari satu deskripsi. Karena data deskripsi ini akan berpengaruh kedalam rencana mingguan dan bulanan"
   }
 }

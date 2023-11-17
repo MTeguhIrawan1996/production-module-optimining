@@ -25,7 +25,7 @@ interface IDefaultType {
   description?: React.ReactNode;
 }
 
-interface IModalConfirmationProps {
+export interface IModalConfirmationProps {
   isOpenModalConfirmation: boolean;
   actionModalConfirmation: () => void;
   size?: MantineNumberSize;

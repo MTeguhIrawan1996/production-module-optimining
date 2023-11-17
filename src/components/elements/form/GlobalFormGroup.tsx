@@ -17,8 +17,13 @@ import * as React from 'react';
 import { FormProvider, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { FormController, PrimaryButton } from '@/components/elements';
+import {
+  FormController,
+  ModalConfirmation,
+  PrimaryButton,
+} from '@/components/elements';
 import { IPrimaryButtonProps } from '@/components/elements/button/PrimaryButton';
+import { IModalConfirmationProps } from '@/components/elements/modal/ModalConfirmation';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -31,6 +36,7 @@ interface IGlobalFormGroupProps {
   nextButton?: Partial<IPrimaryButtonProps>;
   validationButton?: Partial<IPrimaryButtonProps>;
   backButton?: Partial<IPrimaryButtonProps>;
+  modalConfirmation?: IModalConfirmationProps;
   children?: React.ReactNode;
 }
 
@@ -43,6 +49,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
   nextButton,
   validationButton,
   backButton,
+  modalConfirmation,
   children,
 }) => {
   const { t } = useTranslation('default');
@@ -201,6 +208,9 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
             </Group>
           </Group>
         </Flex>
+        {modalConfirmation ? (
+          <ModalConfirmation {...modalConfirmation} />
+        ) : null}
       </form>
     </FormProvider>
   );
