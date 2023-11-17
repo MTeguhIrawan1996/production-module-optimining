@@ -11,6 +11,7 @@
     "materialSub": "Sub Jenis Material",
     "workingHoursPlan": "Rencana Jam Kerja",
     "activity": "Kegiatan",
+    "activityPlan": "Rencana Aktivitas",
     "createActivity": "Tambah Kegiatan",
     "number": "Nomor",
     "date": "Tanggal",
@@ -185,7 +186,8 @@
     "humanResources": "$t(commonTypography.humanResources)",
     "location": "$t(commonTypography.location)",
     "material": "$t(commonTypography.material)",
-    "workingHoursPlan": "$t(commonTypography.workingHoursPlan)"
+    "workingHoursPlan": "$t(commonTypography.workingHoursPlan)",
+    "activityPlan": "$t(commonTypography.activityPlan)"
   },
   "auth": {
     "button": {
@@ -361,5 +363,17 @@
     "successCreateMessage": "$t(commonTypography.workingHoursPlan) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.workingHoursPlan) berhasil diubah",
     "workingHoursPlanDescription": "Anda bisa menambahkan lebih dari satu deskripsi. Karena data deskripsi ini akan berpengaruh kedalam rencana mingguan dan bulanan"
+  },
+  "activityPlan": {
+    "createActivityPlan": "$t(commonTypography.create) $t(commonTypography.activityPlan)",
+    "readActivityPlan": "$t(commonTypography.detail) $t(commonTypography.activityPlan)",
+    "updateActivityPlan": "$t(commonTypography.edit) $t(commonTypography.activityPlan)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.activityPlan)",
+    "successDeleteMessage": "$t(commonTypography.activityPlan) berhasil dihapus",
+    "formActivityPlan": "$t(commonTypography.form) $t(commonTypography.activityPlan)",
+    "formUpdateActivityPlan": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.activityPlan)",
+    "successCreateMessage": "$t(commonTypography.activityPlan) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.activityPlan) berhasil diubah",
+    "activityPlanDescription": "Anda bisa menambahkan lebih dari satu deskripsi. Karena data deskripsi ini akan berpengaruh kedalam rencana mingguan dan bulanan"
   }
 }

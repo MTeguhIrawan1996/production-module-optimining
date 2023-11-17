@@ -3,6 +3,7 @@ import DashboardPage from '@/components/features/Dashboard/common';
 import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
 import FormExamplePage from '@/components/features/Example/form-example/common';
+import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
 import CompanyPage from '@/components/features/MasterData/company/common';
 import CreateCompanyPage from '@/components/features/MasterData/company/create-company/common';
 import CreateCompanyHeavyEquipmentPage from '@/components/features/MasterData/company/create-company/create-heavy-equipment/common';
@@ -54,6 +55,7 @@ import CreateUserPage from '@/components/features/Setting/user/create-user/commo
 import UpdateUserPage from '@/components/features/Setting/user/update-user/common';
 
 export {
+  ActivityPlanMasterPage,
   AuthPage,
   CompanyPage,
   CompanyTypePage,
