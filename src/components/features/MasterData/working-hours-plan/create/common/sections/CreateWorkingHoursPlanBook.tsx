@@ -21,6 +21,8 @@ import { ControllerGroup } from '@/types/global';
 const CreateWorkingHoursPlanBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
+    React.useState<boolean>(false);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationWHPValues>({
@@ -51,10 +53,12 @@ const CreateWorkingHoursPlanBook = () => {
         message: t('workingHoursPlan.successCreateMessage'),
         icon: <IconCheck />,
       });
+      setIsOpenDeleteConfirmation((prev) => !prev);
       methods.reset();
       router.push('/master-data/working-hours-plan');
     },
     onError: (error) => {
+      setIsOpenDeleteConfirmation((prev) => !prev);
       if (error.graphQLErrors) {
         const errorArry = errorBadRequestField<IMutationWHPValues>(error);
         if (errorArry.length) {
@@ -111,6 +115,10 @@ const CreateWorkingHoursPlanBook = () => {
       },
     });
   };
+
+  const handleConfirmation = () => {
+    methods.handleSubmit(handleSubmitForm)();
+  };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
@@ -121,7 +129,8 @@ const CreateWorkingHoursPlanBook = () => {
         submitForm={handleSubmitForm}
         submitButton={{
           label: t('commonTypography.save'),
-          loading: loading,
+          type: 'button',
+          onClick: () => setIsOpenDeleteConfirmation((prev) => !prev),
         }}
         outerButton={{
           label: t('commonTypography.createActivity'),
@@ -132,6 +141,26 @@ const CreateWorkingHoursPlanBook = () => {
         }}
         backButton={{
           onClick: () => router.back(),
+        }}
+        modalConfirmation={{
+          isOpenModalConfirmation: isOpenDeleteConfirmation,
+          actionModalConfirmation: () =>
+            setIsOpenDeleteConfirmation((prev) => !prev),
+          actionButton: {
+            label: t('commonTypography.yesSave'),
+            type: 'button',
+            onClick: handleConfirmation,
+            loading: loading,
+          },
+          backButton: {
+            label: 'Batal',
+          },
+          modalType: {
+            type: 'default',
+            title: t('commonTypography.alertTitleConfirmSave'),
+            description: t('commonTypography.alertDescConfirmSaveWHP'),
+          },
+          withDivider: true,
         }}
       />
     </DashboardCard>
