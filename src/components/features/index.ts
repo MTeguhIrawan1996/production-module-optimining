@@ -19,6 +19,10 @@ import ReadCompanyHumanResourcesPage from '@/components/features/MasterData/comp
 import UpdateCompanyPage from '@/components/features/MasterData/company/update-company/common';
 import UpdateCompanyHeavyEquipmentPage from '@/components/features/MasterData/company/update-company/update-heavy-equipment/common';
 import UpdateCompanyHumanResourcesPage from '@/components/features/MasterData/company/update-company/update-human-resources/common';
+import ElementMasterPage from '@/components/features/MasterData/element/common';
+import CreateElementMasterPage from '@/components/features/MasterData/element/create/common';
+import ReadElementMasterPage from '@/components/features/MasterData/element/read/common';
+import UpdateElementMasterPage from '@/components/features/MasterData/element/update/common';
 import HeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/common';
 import CreateHeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/create/common';
 import ReadHeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/read/common';
@@ -67,6 +71,7 @@ export {
   CreateCompanyHeavyEquipmentPage,
   CreateCompanyHumanResourcesPage,
   CreateCompanyPage,
+  CreateElementMasterPage,
   CreateHeavyEquipmentAvailablePage,
   CreateHeavyEquipmentClassPage,
   CreateHeavyEquipmentMasterPage,
@@ -80,6 +85,7 @@ export {
   CreateWorkingHoursPlanMasterPage,
   DashboardPage,
   DataTablePage,
+  ElementMasterPage,
   FormExamplePage,
   HeavyEquipmentClassPage,
   HeavyEquipmentMasterPage,
@@ -93,6 +99,7 @@ export {
   ReadCompanyHeavyEquipmentPage,
   ReadCompanyHumanResourcesPage,
   ReadCompanyPage,
+  ReadElementMasterPage,
   ReadHeavyEquipmentClassPage,
   ReadHeavyEquipmentMasterPage,
   ReadHeavyEquipmentPage,
@@ -105,6 +112,7 @@ export {
   UpdateCompanyHeavyEquipmentPage,
   UpdateCompanyHumanResourcesPage,
   UpdateCompanyPage,
+  UpdateElementMasterPage,
   UpdateHeavyEquipmentClassPage,
   UpdateHeavyEquipmentMasterPage,
   UpdateHeavyEquipmentPage,

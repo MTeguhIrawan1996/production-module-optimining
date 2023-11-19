@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import UpdateActivityPlanBook from '@/components/features/MasterData/activity-plan/update/common/sections/UpdateActivityPlanBook';
+import UpdateElementBook from '@/components/features/MasterData/element/update/common/sections/UpdateElementBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const UpdateActivityPlanMasterPage = () => {
+const UpdateElementMasterPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -20,11 +20,11 @@ const UpdateActivityPlanMasterPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.activityPlan'),
-        path: '/master-data/activity-plan',
+        label: t('commonTypography.element'),
+        path: '/master-data/element',
       },
       {
-        label: t('activityPlan.updateActivityPlan'),
+        label: t('element.updateElement'),
         path: router.asPath,
       },
     ]);
@@ -35,7 +35,7 @@ const UpdateActivityPlanMasterPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('activityPlan.formUpdateActivityPlan'),
+          title: t('element.formUpdateElement'),
           mb: 'md',
         }}
       >
@@ -46,7 +46,7 @@ const UpdateActivityPlanMasterPage = () => {
             </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="information">
-            <UpdateActivityPlanBook />
+            <UpdateElementBook />
           </Tabs.Panel>
         </Tabs>
       </InnerWrapper>
@@ -54,4 +54,4 @@ const UpdateActivityPlanMasterPage = () => {
   );
 };
 
-export default UpdateActivityPlanMasterPage;
+export default UpdateElementMasterPage;

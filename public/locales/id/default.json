@@ -12,6 +12,7 @@
     "workingHoursPlan": "Rencana Jam Kerja",
     "activity": "Kegiatan",
     "activityPlan": "Rencana Aktivitas",
+    "element": "Unsur Kandungan",
     "createActivity": "Tambah Kegiatan",
     "number": "Nomor",
     "date": "Tanggal",
@@ -187,7 +188,8 @@
     "location": "$t(commonTypography.location)",
     "material": "$t(commonTypography.material)",
     "workingHoursPlan": "$t(commonTypography.workingHoursPlan)",
-    "activityPlan": "$t(commonTypography.activityPlan)"
+    "activityPlan": "$t(commonTypography.activityPlan)",
+    "element": "$t(commonTypography.element)"
   },
   "auth": {
     "button": {
@@ -375,5 +377,17 @@
     "successCreateMessage": "$t(commonTypography.activityPlan) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.activityPlan) berhasil diubah",
     "activityPlanDescription": "Anda bisa menambahkan lebih dari satu deskripsi. Karena data deskripsi ini akan berpengaruh kedalam rencana mingguan dan bulanan"
+  },
+  "element": {
+    "createElement": "$t(commonTypography.create) $t(commonTypography.element)",
+    "readElement": "$t(commonTypography.detail) $t(commonTypography.element)",
+    "updateElement": "$t(commonTypography.edit) $t(commonTypography.element)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.element)",
+    "successDeleteMessage": "$t(commonTypography.element) berhasil dihapus",
+    "formElement": "$t(commonTypography.form) $t(commonTypography.element)",
+    "formUpdateElement": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.element)",
+    "successCreateMessage": "$t(commonTypography.element) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.element) berhasil diubah",
+    "elementDescription": "Anda bisa menambahkan lebih dari satu deskripsi. Karena data deskripsi ini akan berpengaruh kedalam rencana mingguan dan bulanan"
   }
 }

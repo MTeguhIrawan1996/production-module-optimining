@@ -1,15 +1,15 @@
-import { Tabs } from '@mantine/core';
+import { ScrollArea, Tabs } from '@mantine/core';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import UpdateActivityPlanBook from '@/components/features/MasterData/activity-plan/update/common/sections/UpdateActivityPlanBook';
+import CreateElementBook from '@/components/features/MasterData/element/create/common/sections/CreateElementBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const UpdateActivityPlanMasterPage = () => {
+const CreateElementMasterPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -20,11 +20,11 @@ const UpdateActivityPlanMasterPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.activityPlan'),
-        path: '/master-data/activity-plan',
+        label: t('commonTypography.element'),
+        path: '/master-data/element',
       },
       {
-        label: t('activityPlan.updateActivityPlan'),
+        label: t('element.createElement'),
         path: router.asPath,
       },
     ]);
@@ -35,18 +35,28 @@ const UpdateActivityPlanMasterPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('activityPlan.formUpdateActivityPlan'),
+          title: t('element.formElement'),
           mb: 'md',
         }}
       >
-        <Tabs defaultValue="information" radius={4}>
-          <Tabs.List>
-            <Tabs.Tab value="information" fz={14} fw={500}>
-              {t('commonTypography.information')}
-            </Tabs.Tab>
-          </Tabs.List>
+        <Tabs
+          defaultValue="information"
+          radius={4}
+          styles={{
+            tabsList: {
+              flexWrap: 'nowrap',
+            },
+          }}
+        >
+          <ScrollArea w="100%" px={0} h={55}>
+            <Tabs.List>
+              <Tabs.Tab value="information" fz={14} fw={500}>
+                {t('commonTypography.information')}
+              </Tabs.Tab>
+            </Tabs.List>
+          </ScrollArea>
           <Tabs.Panel value="information">
-            <UpdateActivityPlanBook />
+            <CreateElementBook />
           </Tabs.Panel>
         </Tabs>
       </InnerWrapper>
@@ -54,4 +64,4 @@ const UpdateActivityPlanMasterPage = () => {
   );
 };
 
-export default UpdateActivityPlanMasterPage;
+export default CreateElementMasterPage;

@@ -46,6 +46,11 @@ export const linksDashboard: IMenuItem[] = [
         href: '/master-data/activity-plan',
         access: ['all'],
       },
+      {
+        label: 'element',
+        href: '/master-data/element',
+        access: ['all'],
+      },
     ],
   },
   {
