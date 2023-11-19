@@ -51,6 +51,16 @@ export const linksDashboard: IMenuItem[] = [
         href: '/master-data/element',
         access: ['all'],
       },
+      {
+        label: 'shift',
+        href: '/master-data/shift',
+        access: ['all'],
+      },
+      {
+        label: 'factory',
+        href: '/master-data/factory',
+        access: ['all'],
+      },
     ],
   },
   {

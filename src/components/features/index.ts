@@ -23,6 +23,10 @@ import ElementMasterPage from '@/components/features/MasterData/element/common';
 import CreateElementMasterPage from '@/components/features/MasterData/element/create/common';
 import ReadElementMasterPage from '@/components/features/MasterData/element/read/common';
 import UpdateElementMasterPage from '@/components/features/MasterData/element/update/common';
+import FactoryMasterPage from '@/components/features/MasterData/factory/common';
+import CreateFactoryMasterPage from '@/components/features/MasterData/factory/create/common';
+import ReadFactoryMasterPage from '@/components/features/MasterData/factory/read/common';
+import UpdateFactoryMasterPage from '@/components/features/MasterData/factory/update/common';
 import HeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/common';
 import CreateHeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/create/common';
 import ReadHeavyEquipmentMasterPage from '@/components/features/MasterData/heavy-equipment/read/common';
@@ -39,6 +43,10 @@ import MaterialMasterPage from '@/components/features/MasterData/material/common
 import CreateMaterialMasterPage from '@/components/features/MasterData/material/create/common';
 import ReadMaterialMasterPage from '@/components/features/MasterData/material/read/common';
 import UpdateMaterialMasterPage from '@/components/features/MasterData/material/update/common';
+import ShiftMasterPage from '@/components/features/MasterData/shift/common';
+import CreateShiftMasterPage from '@/components/features/MasterData/shift/create/common';
+import ReadShiftMasterPage from '@/components/features/MasterData/shift/read/common';
+import UpdateShiftMasterPage from '@/components/features/MasterData/shift/update/common';
 import WorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/common';
 import CreateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/create/common';
 import ReadWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/read/common';
@@ -72,6 +80,7 @@ export {
   CreateCompanyHumanResourcesPage,
   CreateCompanyPage,
   CreateElementMasterPage,
+  CreateFactoryMasterPage,
   CreateHeavyEquipmentAvailablePage,
   CreateHeavyEquipmentClassPage,
   CreateHeavyEquipmentMasterPage,
@@ -81,11 +90,13 @@ export {
   CreateLocationMasterPage,
   CreateManagementRolePage,
   CreateMaterialMasterPage,
+  CreateShiftMasterPage,
   CreateUserPage,
   CreateWorkingHoursPlanMasterPage,
   DashboardPage,
   DataTablePage,
   ElementMasterPage,
+  FactoryMasterPage,
   FormExamplePage,
   HeavyEquipmentClassPage,
   HeavyEquipmentMasterPage,
@@ -100,6 +111,7 @@ export {
   ReadCompanyHumanResourcesPage,
   ReadCompanyPage,
   ReadElementMasterPage,
+  ReadFactoryMasterPage,
   ReadHeavyEquipmentClassPage,
   ReadHeavyEquipmentMasterPage,
   ReadHeavyEquipmentPage,
@@ -107,12 +119,15 @@ export {
   ReadLocationMasterPage,
   ReadManagementRolePage,
   ReadMaterialMasterPage,
+  ReadShiftMasterPage,
   ReadWorkingHoursPlanMasterPage,
+  ShiftMasterPage,
   UpdateActivityPlanMasterPage,
   UpdateCompanyHeavyEquipmentPage,
   UpdateCompanyHumanResourcesPage,
   UpdateCompanyPage,
   UpdateElementMasterPage,
+  UpdateFactoryMasterPage,
   UpdateHeavyEquipmentClassPage,
   UpdateHeavyEquipmentMasterPage,
   UpdateHeavyEquipmentPage,
@@ -120,6 +135,7 @@ export {
   UpdateLocationMasterPage,
   UpdateManagementRolePage,
   UpdateMaterialMasterPage,
+  UpdateShiftMasterPage,
   UpdateUserPage,
   UpdateWorkingHoursPlanMasterPage,
   UserPage,

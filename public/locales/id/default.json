@@ -13,6 +13,11 @@
     "activity": "Kegiatan",
     "activityPlan": "Rencana Aktivitas",
     "element": "Unsur Kandungan",
+    "shift": "Shift",
+    "startHour": "Jam Mulai",
+    "endHour": "Jam Selesai",
+    "factory": "Pabrik",
+    "factoryName": "Nama Pabrik",
     "createActivity": "Tambah Kegiatan",
     "number": "Nomor",
     "date": "Tanggal",
@@ -189,7 +194,9 @@
     "material": "$t(commonTypography.material)",
     "workingHoursPlan": "$t(commonTypography.workingHoursPlan)",
     "activityPlan": "$t(commonTypography.activityPlan)",
-    "element": "$t(commonTypography.element)"
+    "element": "$t(commonTypography.element)",
+    "shift": "$t(commonTypography.shift)",
+    "factory": "$t(commonTypography.factory)"
   },
   "auth": {
     "button": {
@@ -210,17 +217,7 @@
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.role)",
     "successCreateMessage": "$t(commonTypography.role) berhasil dibuat",
     "successDeleteMessage": "$t(commonTypography.role) berhasil dihapus",
-    "successUpdateMessage": "$t(commonTypography.role) berhasil diubah",
-    "field": {
-      "accessMasterDataCompany": "Master Data - Perusahaan",
-      "accessMasterDataSDM": "Master Data - SDM",
-      "accessMasterDataHeavyEquipment": "Master Data - Alat Berat",
-      "accessMasterDataPlan": "Master Data - Rencana",
-      "accessMasterDataLocation": "Master Data - Lokasi",
-      "accessMasterDataMaterial": "Master Data - Material",
-      "accessMasterDataWorkingHoursePlan": "Master Data - Working Hourse Plan",
-      "accessMasterDataSpatial": "Master Data - Data Spasial"
-    }
+    "successUpdateMessage": "$t(commonTypography.role) berhasil diubah"
   },
   "user": {
     "userTitle": "$t(commonTypography.user)",
@@ -375,8 +372,7 @@
     "formActivityPlan": "$t(commonTypography.form) $t(commonTypography.activityPlan)",
     "formUpdateActivityPlan": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.activityPlan)",
     "successCreateMessage": "$t(commonTypography.activityPlan) berhasil dibuat",
-    "successUpdateMessage": "$t(commonTypography.activityPlan) berhasil diubah",
-    "activityPlanDescription": "Anda bisa menambahkan lebih dari satu deskripsi. Karena data deskripsi ini akan berpengaruh kedalam rencana mingguan dan bulanan"
+    "successUpdateMessage": "$t(commonTypography.activityPlan) berhasil diubah"
   },
   "element": {
     "createElement": "$t(commonTypography.create) $t(commonTypography.element)",
@@ -387,7 +383,28 @@
     "formElement": "$t(commonTypography.form) $t(commonTypography.element)",
     "formUpdateElement": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.element)",
     "successCreateMessage": "$t(commonTypography.element) berhasil dibuat",
-    "successUpdateMessage": "$t(commonTypography.element) berhasil diubah",
-    "elementDescription": "Anda bisa menambahkan lebih dari satu deskripsi. Karena data deskripsi ini akan berpengaruh kedalam rencana mingguan dan bulanan"
+    "successUpdateMessage": "$t(commonTypography.element) berhasil diubah"
+  },
+  "shift": {
+    "createShift": "$t(commonTypography.create) $t(commonTypography.shift)",
+    "readShift": "$t(commonTypography.detail) $t(commonTypography.shift)",
+    "updateShift": "$t(commonTypography.edit) $t(commonTypography.shift)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.shift)",
+    "successDeleteMessage": "$t(commonTypography.shift) berhasil dihapus",
+    "formShift": "$t(commonTypography.form) $t(commonTypography.shift)",
+    "formUpdateShift": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.shift)",
+    "successCreateMessage": "$t(commonTypography.shift) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.shift) berhasil diubah"
+  },
+  "factory": {
+    "createFactory": "$t(commonTypography.create) $t(commonTypography.factory)",
+    "readFactory": "$t(commonTypography.detail) $t(commonTypography.factory)",
+    "updateFactory": "$t(commonTypography.edit) $t(commonTypography.factory)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.factory)",
+    "successDeleteMessage": "$t(commonTypography.factory) berhasil dihapus",
+    "formFactory": "$t(commonTypography.form) $t(commonTypography.factory)",
+    "formUpdateFactory": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.factory)",
+    "successCreateMessage": "$t(commonTypography.factory) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.factory) berhasil diubah"
   }
 }
