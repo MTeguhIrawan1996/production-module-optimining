@@ -1,14 +1,14 @@
 import { Icon } from '@iconify/react';
 import {
   ActionIcon,
+  Center,
   Group,
   Navbar as MantineNavbar,
   ScrollArea,
   Stack,
   Text,
 } from '@mantine/core';
-import { IconAB, IconArrowNarrowLeft } from '@tabler/icons-react';
-import { IconArrowNarrowRight } from '@tabler/icons-react';
+import { IconAB, IconMenu2 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -30,18 +30,23 @@ interface IProps {
 const NavbarExpand: React.FC<IProps> = ({
   styles,
   menuItems,
-  isExpand,
   onHandleExpand,
 }) => {
   const router = useRouter();
   const { t } = useTranslation('default');
-
   const { classes, cx } = useDashboardLayoutStyle();
   const cleanedPath = router.pathname.split('/').slice(0, 3).join('/');
+  const itemLabel = React.useMemo(() => {
+    const pathname = router.pathname.split('/');
+    return pathname;
+  }, [router]);
 
   const linksItem = React.useCallback(
     (item: IMenuItem) => {
-      const initialOpen = item.subMenu?.some((val) => val.href === cleanedPath);
+      const initialOpen = itemLabel.some(
+        (items) =>
+          items.toLowerCase().replace(/-/g, '') === item.label.toLowerCase()
+      );
       return item.subMenu ? (
         <NavbarLinksGroup
           {...item}
@@ -76,7 +81,7 @@ const NavbarExpand: React.FC<IProps> = ({
       height="100%"
       pt="sm"
       px="sm"
-      width={{ base: '100%', sm: 310 }}
+      width={{ base: '100%', sm: 360 }}
       bg="white"
       style={styles}
       className="shadow-xl"
@@ -94,11 +99,9 @@ const NavbarExpand: React.FC<IProps> = ({
             onClick={onHandleExpand}
             display={{ base: 'block', sm: 'none' }}
           >
-            {isExpand ? (
-              <IconArrowNarrowLeft size="2.125rem" />
-            ) : (
-              <IconArrowNarrowRight size="2.125rem" />
-            )}
+            <Center>
+              <IconMenu2 size="1.5rem" />
+            </Center>
           </ActionIcon>
         </Group>
       </MantineNavbar.Section>

@@ -1,19 +1,15 @@
-import { Icon } from '@iconify/react';
-import { ActionIcon, Menu, Text, Tooltip } from '@mantine/core';
+import { Menu, Text, UnstyledButton } from '@mantine/core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import NavbarCollapseLinksGroupLevel2 from '@/components/elements/global/NavbarCollapseLinksGroupLevel2';
-
 import useDashboardLayoutStyle from '@/styles/Layout/dashboard';
 
 import { IMenuItem } from '@/types/layout';
 
-const NavbarCollapseLinksGroup: React.FC<IMenuItem> = ({
+const NavbarCollapseLinksGroupLevel2: React.FC<IMenuItem> = ({
   label,
-  icon,
   subMenu,
 }) => {
   const router = useRouter();
@@ -23,18 +19,13 @@ const NavbarCollapseLinksGroup: React.FC<IMenuItem> = ({
     const pathname = router.pathname.split('/');
     return pathname;
   }, [router]);
-  const isActive = itemLabel.some(
-    (items) => items.toLowerCase().replace(/-/g, '') === label.toLowerCase()
-  );
 
   const renderItems = subMenu?.map((item, i) => {
     const isActiveSubMenu = itemLabel.some(
       (items) =>
         items.toLowerCase().replace(/-/g, '') === item.label.toLowerCase()
     );
-    return item.subMenu ? (
-      <NavbarCollapseLinksGroupLevel2 {...item} key={i} />
-    ) : (
+    return (
       <Link href={item.href ?? ''} key={`${item.label} + ${i}`}>
         <Menu.Item
           className={cx(classes.item, {
@@ -48,21 +39,28 @@ const NavbarCollapseLinksGroup: React.FC<IMenuItem> = ({
   });
 
   return (
-    <Menu shadow="md" width={250} position="right-start">
-      <Tooltip.Floating label={t(`sideBar.${label}`)} position="right">
-        <Menu.Target>
-          <ActionIcon
-            radius="md"
-            w={50}
-            h={50}
-            className={cx(classes.link, {
-              [classes.linkActive]: isActive,
-            })}
-          >
-            <Icon icon={icon ?? ''} style={{ fontSize: '20px' }} />
-          </ActionIcon>
-        </Menu.Target>
-      </Tooltip.Floating>
+    <Menu shadow="md" width={250} position="right-start" offset={-20}>
+      <Menu.Target>
+        <UnstyledButton
+          sx={(theme) => ({
+            display: 'flex',
+            justifyContent: 'start',
+            alignItems: 'center',
+            width: '100%',
+            borderRadius: '16px',
+            color: theme.colors.dark[6],
+            '&:hover': {
+              color: theme.colors.brand[4],
+            },
+          })}
+          py={12}
+          px={16}
+          fz={14}
+          fw={500}
+        >
+          <Text component="span">{t(`sideBar.${label}`)}</Text>
+        </UnstyledButton>
+      </Menu.Target>
       <Menu.Dropdown>
         <Menu.Label>{t(`sideBar.${label}`)}</Menu.Label>
         {renderItems}
@@ -71,4 +69,4 @@ const NavbarCollapseLinksGroup: React.FC<IMenuItem> = ({
   );
 };
 
-export default NavbarCollapseLinksGroup;
+export default NavbarCollapseLinksGroupLevel2;

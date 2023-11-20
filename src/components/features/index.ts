@@ -3,6 +3,7 @@ import DashboardPage from '@/components/features/Dashboard/common';
 import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
 import FormExamplePage from '@/components/features/Example/form-example/common';
+import StockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/common';
 import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
 import CreateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/create/common';
 import ReadActivityPlanPage from '@/components/features/MasterData/activity-plan/read/common';
@@ -122,6 +123,7 @@ export {
   ReadShiftMasterPage,
   ReadWorkingHoursPlanMasterPage,
   ShiftMasterPage,
+  StockpilePage,
   UpdateActivityPlanMasterPage,
   UpdateCompanyHeavyEquipmentPage,
   UpdateCompanyHumanResourcesPage,

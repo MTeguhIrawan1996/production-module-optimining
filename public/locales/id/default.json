@@ -196,7 +196,10 @@
     "activityPlan": "$t(commonTypography.activityPlan)",
     "element": "$t(commonTypography.element)",
     "shift": "$t(commonTypography.shift)",
-    "factory": "$t(commonTypography.factory)"
+    "factory": "$t(commonTypography.factory)",
+    "inputData": "Input Data",
+    "qualityControlManagement": "Manajement Kontrol Kualitas",
+    "stockpileMonitoring": "Monitoring Stokpile"
   },
   "auth": {
     "button": {
