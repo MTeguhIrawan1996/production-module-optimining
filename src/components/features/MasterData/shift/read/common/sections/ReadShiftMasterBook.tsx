@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, KeyValueList } from '@/components/elements';
 
-import { useReadOneElementMaster } from '@/services/graphql/query/element/useReadOneElementMaster';
+import { useReadOneShiftMaster } from '@/services/graphql/query/shift/useReadOneElementMaster';
+import { hourFromat } from '@/utils/helper/hourFromat';
 
 const ReadShiftMasterBook = () => {
   const { t } = useTranslation('default');
@@ -13,7 +14,7 @@ const ReadShiftMasterBook = () => {
   const id = router.query.id as string;
 
   /* #   /**=========== Query =========== */
-  const { elementMaster, elementMasterLoading } = useReadOneElementMaster({
+  const { shiftMaster, shiftMasterLoading } = useReadOneShiftMaster({
     variables: {
       id,
     },
@@ -23,10 +24,10 @@ const ReadShiftMasterBook = () => {
 
   return (
     <DashboardCard
-      title={t('commonTypography.element')}
+      title={t('commonTypography.shift')}
       updateButton={{
         label: 'Edit',
-        onClick: () => router.push(`/master-data/element/update/${id}`),
+        onClick: () => router.push(`/master-data/shift/update/${id}`),
       }}
       titleStyle={{
         fw: 700,
@@ -34,7 +35,7 @@ const ReadShiftMasterBook = () => {
       }}
       withBorder
       shadow="xs"
-      isLoading={elementMasterLoading}
+      isLoading={shiftMasterLoading}
       enebleBackBottomInner
       paperStackProps={{
         spacing: 'sm',
@@ -59,8 +60,16 @@ const ReadShiftMasterBook = () => {
             <KeyValueList
               data={[
                 {
-                  dataKey: t('commonTypography.element'),
-                  value: elementMaster?.name ?? '-',
+                  dataKey: t('commonTypography.shift'),
+                  value: shiftMaster?.name ?? '-',
+                },
+                {
+                  dataKey: t('commonTypography.startHour'),
+                  value: hourFromat(shiftMaster?.startHour),
+                },
+                {
+                  dataKey: t('commonTypography.endHour'),
+                  value: hourFromat(shiftMaster?.endHour),
                 },
               ]}
               type="grid"

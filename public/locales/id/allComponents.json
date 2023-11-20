@@ -94,7 +94,10 @@
       "activity": "Kegiatan",
       "activityPlan": "Rencana Aktivitas",
       "element": "Unsur Kandungan",
-      "factoryName": "Nama Pabrik"
+      "factoryName": "Nama Pabrik",
+      "shift": "Shift",
+      "startHour": "Jam Mulai",
+      "endHour": "Jam Selesai"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",

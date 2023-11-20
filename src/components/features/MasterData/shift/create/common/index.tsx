@@ -20,11 +20,11 @@ const CreateShiftMasterPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.element'),
-        path: '/master-data/element',
+        label: t('commonTypography.shift'),
+        path: '/master-data/shift',
       },
       {
-        label: t('element.createElement'),
+        label: t('shift.createShift'),
         path: router.asPath,
       },
     ]);
@@ -35,7 +35,7 @@ const CreateShiftMasterPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('element.formElement'),
+          title: t('element.formShift'),
           mb: 'md',
         }}
       >

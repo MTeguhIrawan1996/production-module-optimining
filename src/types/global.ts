@@ -30,6 +30,7 @@ import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/inpu
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
+import { ITimeInputRhfProps } from '@/components/elements/input/TimeInputRhf';
 import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelectInputRhf';
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 
@@ -70,6 +71,7 @@ export type ControllerProps =
   | IBussinessTypesSelectInputRhfProps
   | ICompanyPermissionTypesSelectInputRhfProps
   | ILocationCategorySelectInputRhfProps
+  | ITimeInputRhfProps
   | IDateInputProps;
 
 export type ControllerGroup = {

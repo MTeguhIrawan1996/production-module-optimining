@@ -8,11 +8,14 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import { IMutationElementValues } from '@/services/graphql/mutation/element/useCreateElementMaster';
-import { useUpdateElementMaster } from '@/services/graphql/mutation/element/useUpdateElementMaster';
-import { useReadOneElementMaster } from '@/services/graphql/query/element/useReadOneElementMaster';
-import { globalText } from '@/utils/constants/Field/global-field';
-import { elementMutationValidation } from '@/utils/form-validation/element/element-mutation-validation';
+import { IMutationShiftValues } from '@/services/graphql/mutation/shift/useCreateShiftMaster';
+import { useUpdateShiftMaster } from '@/services/graphql/mutation/shift/useUpdateShiftMaster';
+import { useReadOneShiftMaster } from '@/services/graphql/query/shift/useReadOneElementMaster';
+import {
+  globalText,
+  globalTimeInput,
+} from '@/utils/constants/Field/global-field';
+import { shiftMutationValidation } from '@/utils/form-validation/shift/shift-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -21,37 +24,41 @@ const UpdateShiftMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const methods = useForm<IMutationElementValues>({
-    resolver: zodResolver(elementMutationValidation),
+  const methods = useForm<IMutationShiftValues>({
+    resolver: zodResolver(shiftMutationValidation),
     defaultValues: {
       name: '',
+      startHour: '',
+      endHour: '',
     },
     mode: 'onBlur',
   });
 
-  const { elementMasterLoading } = useReadOneElementMaster({
+  const { shiftMasterLoading } = useReadOneShiftMaster({
     variables: {
       id,
     },
     skip: !router.isReady,
     onCompleted: (data) => {
-      methods.setValue('name', data.element.name);
+      methods.setValue('name', data.shift.name);
+      methods.setValue('startHour', data.shift.startHour);
+      methods.setValue('endHour', data.shift.endHour);
     },
   });
 
-  const [executeUpdate, { loading }] = useUpdateElementMaster({
+  const [executeUpdate, { loading }] = useUpdateShiftMaster({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('element.successUpdateMessage'),
+        message: t('shift.successUpdateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/master-data/element');
+      router.push('/master-data/shift');
     },
     onError: (error) => {
       if (error.graphQLErrors) {
-        const errorArry = errorBadRequestField<IMutationElementValues>(error);
+        const errorArry = errorBadRequestField<IMutationShiftValues>(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
             methods.setError(name, { type, message });
@@ -69,17 +76,29 @@ const UpdateShiftMasterBook = () => {
   });
 
   const fieldItem = React.useMemo(() => {
-    const elementItem = globalText({
+    const shiftItem = globalText({
       name: 'name',
-      label: 'element',
+      label: 'shift',
+      colSpan: 12,
+      withAsterisk: true,
+    });
+    const startHourItem = globalTimeInput({
+      name: 'startHour',
+      label: 'startHour',
+      colSpan: 12,
+      withAsterisk: true,
+    });
+    const endHourItem = globalTimeInput({
+      name: 'endHour',
+      label: 'endHour',
       colSpan: 12,
       withAsterisk: true,
     });
 
     const field: ControllerGroup[] = [
       {
-        group: t('commonTypography.element'),
-        formControllers: [elementItem],
+        group: t('commonTypography.shift'),
+        formControllers: [shiftItem, startHourItem, endHourItem],
       },
     ];
 
@@ -87,19 +106,21 @@ const UpdateShiftMasterBook = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubmitForm: SubmitHandler<IMutationElementValues> = async (
+  const handleSubmitForm: SubmitHandler<IMutationShiftValues> = async (
     data
   ) => {
-    const { name } = data;
+    const { name, endHour, startHour } = data;
     await executeUpdate({
       variables: {
         id,
         name,
+        startHour,
+        endHour,
       },
     });
   };
   return (
-    <DashboardCard p={0} isLoading={elementMasterLoading}>
+    <DashboardCard p={0} isLoading={shiftMasterLoading}>
       <GlobalFormGroup
         field={fieldItem}
         methods={methods}

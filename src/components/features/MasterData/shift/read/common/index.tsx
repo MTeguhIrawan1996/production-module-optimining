@@ -19,11 +19,11 @@ const ReadShiftMasterPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.element'),
-        path: '/master-data/element',
+        label: t('commonTypography.shift'),
+        path: '/master-data/shift',
       },
       {
-        label: t('element.readElement'),
+        label: t('shift.readShift'),
         path: router.asPath,
       },
     ]);
