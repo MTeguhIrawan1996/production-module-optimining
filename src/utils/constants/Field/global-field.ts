@@ -14,6 +14,7 @@ import { IRelegionSelectInputRhfProps } from '@/components/elements/input/Relegi
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
+import { ITimeInputRhfProps } from '@/components/elements/input/TimeInputRhf';
 import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelectInputRhf';
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 
@@ -674,6 +675,24 @@ export const globalSelect = ({
     searchable,
     clearable,
     data,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalTimeInput = ({
+  name = 'timeInput',
+  label = 'timeInput',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ITimeInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'time-input',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
     ...rest,
   };
   return field;

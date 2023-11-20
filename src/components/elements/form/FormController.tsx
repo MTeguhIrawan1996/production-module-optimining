@@ -28,6 +28,7 @@ import {
   SelectInputRhf,
   SubDistrictSelectInputRhf,
   TextInputRhf,
+  TimeInputRhf,
   TypeSelectInputRhf,
   VillageSelectInputRhf,
 } from '@/components/elements';
@@ -94,6 +95,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <CompanyPermissionTypeSelectInputRhf {...props} />;
     case 'location-category-select-input':
       return <LocationCategorySelectInputRhf {...props} />;
+    case 'time-input':
+      return <TimeInputRhf {...props} />;
     default:
       return null;
   }
