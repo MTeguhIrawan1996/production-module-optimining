@@ -147,5 +147,8 @@ export const theme: MantineProviderProps['theme'] = {
     '.mantine-ez3orv': {
       pointerEvents: 'unset',
     },
+    '.mantine-1u51dh1': {
+      pointerEvents: 'unset',
+    },
   }),
 };

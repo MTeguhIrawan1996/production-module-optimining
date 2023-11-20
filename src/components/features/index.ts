@@ -3,6 +3,10 @@ import DashboardPage from '@/components/features/Dashboard/common';
 import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
 import FormExamplePage from '@/components/features/Example/form-example/common';
+import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
+import CreateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/create/common';
+import ReadActivityPlanPage from '@/components/features/MasterData/activity-plan/read/common';
+import UpdateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/update/common';
 import CompanyPage from '@/components/features/MasterData/company/common';
 import CreateCompanyPage from '@/components/features/MasterData/company/create-company/common';
 import CreateCompanyHeavyEquipmentPage from '@/components/features/MasterData/company/create-company/create-heavy-equipment/common';
@@ -31,6 +35,10 @@ import MaterialMasterPage from '@/components/features/MasterData/material/common
 import CreateMaterialMasterPage from '@/components/features/MasterData/material/create/common';
 import ReadMaterialMasterPage from '@/components/features/MasterData/material/read/common';
 import UpdateMaterialMasterPage from '@/components/features/MasterData/material/update/common';
+import WorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/common';
+import CreateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/create/common';
+import ReadWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/read/common';
+import UpdateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/update/common';
 import ProfilePage from '@/components/features/Profile/common';
 import CompanyTypePage from '@/components/features/Reference/company-type/common';
 import HeavyEquipmentPage from '@/components/features/Reference/heavy-equipment/common';
@@ -50,10 +58,12 @@ import CreateUserPage from '@/components/features/Setting/user/create-user/commo
 import UpdateUserPage from '@/components/features/Setting/user/update-user/common';
 
 export {
+  ActivityPlanMasterPage,
   AuthPage,
   CompanyPage,
   CompanyTypePage,
   ComponentsPage,
+  CreateActivityPlanMasterPage,
   CreateCompanyHeavyEquipmentPage,
   CreateCompanyHumanResourcesPage,
   CreateCompanyPage,
@@ -67,6 +77,7 @@ export {
   CreateManagementRolePage,
   CreateMaterialMasterPage,
   CreateUserPage,
+  CreateWorkingHoursPlanMasterPage,
   DashboardPage,
   DataTablePage,
   FormExamplePage,
@@ -78,6 +89,7 @@ export {
   ManagementRolePage,
   MaterialMasterPage,
   ProfilePage,
+  ReadActivityPlanPage,
   ReadCompanyHeavyEquipmentPage,
   ReadCompanyHumanResourcesPage,
   ReadCompanyPage,
@@ -88,6 +100,8 @@ export {
   ReadLocationMasterPage,
   ReadManagementRolePage,
   ReadMaterialMasterPage,
+  ReadWorkingHoursPlanMasterPage,
+  UpdateActivityPlanMasterPage,
   UpdateCompanyHeavyEquipmentPage,
   UpdateCompanyHumanResourcesPage,
   UpdateCompanyPage,
@@ -99,5 +113,7 @@ export {
   UpdateManagementRolePage,
   UpdateMaterialMasterPage,
   UpdateUserPage,
+  UpdateWorkingHoursPlanMasterPage,
   UserPage,
+  WorkingHoursPlanMasterPage,
 };
