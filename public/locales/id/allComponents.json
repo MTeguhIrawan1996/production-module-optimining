@@ -92,7 +92,12 @@
       "materialType": "Jenis Material",
       "materialSub": "Sub Jenis Material",
       "activity": "Kegiatan",
-      "activityPlan": "Rencana Aktivitas"
+      "activityPlan": "Rencana Aktivitas",
+      "element": "Unsur Kandungan",
+      "factoryName": "Nama Pabrik",
+      "shift": "Shift",
+      "startHour": "Jam Mulai",
+      "endHour": "Jam Selesai"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",

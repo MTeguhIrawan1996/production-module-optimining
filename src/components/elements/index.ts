@@ -46,6 +46,7 @@ import SelectHeavyEquipmentTypesInput from '@/components/elements/input/SelectHe
 import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
 import SubDistrictSelectInputRhf from '@/components/elements/input/SubDistrictSelectInputRhf';
 import TextInputRhf from '@/components/elements/input/TextInputRhf';
+import TimeInputRhf from '@/components/elements/input/TimeInputRhf';
 import TypeSelectInputRhf from '@/components/elements/input/TypeSelectInputRhf';
 import VillageSelectInputRhf from '@/components/elements/input/VillageSelectInputRhf';
 import PrimaryLink from '@/components/elements/link/PrimaryLink';
@@ -118,6 +119,7 @@ export {
   SubDistrictSelectInputRhf,
   TextButton,
   TextInputRhf,
+  TimeInputRhf,
   TypeSelectInputRhf,
   UpdatePasswordModal,
   UserProfileForm,

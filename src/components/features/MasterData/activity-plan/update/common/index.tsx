@@ -21,7 +21,7 @@ const UpdateActivityPlanMasterPage = () => {
     setBreadcrumbs([
       {
         label: t('commonTypography.activityPlan'),
-        path: '/master-data/working-hours-plan',
+        path: '/master-data/activity-plan',
       },
       {
         label: t('activityPlan.updateActivityPlan'),
