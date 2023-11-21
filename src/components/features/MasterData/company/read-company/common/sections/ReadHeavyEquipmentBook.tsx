@@ -362,7 +362,9 @@ const ReadHeavyEquipmentBook = () => {
         MultipleFilterData: filter,
         colSpan: 4,
       }}
-      enebleBackBottomInner
+      enebleBackBottomInner={{
+        onClick: () => router.push('/master-data/company'),
+      }}
     >
       {renderTable}
       <ModalConfirmation
