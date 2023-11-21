@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import NavbarLinksGroupLevel2 from '@/components/elements/global/NavbarLinksGroupLevel2';
 import PrimaryLink from '@/components/elements/link/PrimaryLink';
 
 import useDashboardLayoutStyle from '@/styles/Layout/dashboard';
@@ -32,63 +33,49 @@ const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
   const { t } = useTranslation('default');
   const { classes, cx } = useDashboardLayoutStyle();
   const [opened, setOpened] = React.useState(initiallyOpened || false);
-  const [openedSubLinks, setOpenedSubLinks] = React.useState<string>('');
+  const itemLabel = React.useMemo(() => {
+    const pathname = router.pathname.split('/');
+    return pathname;
+  }, [router]);
   const cleanedPath = router.pathname.split('/').slice(0, 3).join('/');
-  const initialOpen = subMenu?.some((val) => val.href === cleanedPath);
+  // const someItem = itemLabel.some(
+  //   (items) => items.toLowerCase().replace(/-/g, '') === label.toLowerCase()
+  // );
 
-  React.useEffect(() => {
-    if (!initialOpen) {
-      setOpened(false);
-    }
-  }, [initialOpen]);
+  // React.useEffect(() => {
+  //   if (!someItem) {
+  //     setOpened(false);
+  //   }
+  // }, [someItem]);
 
-  const renderItems = subMenu?.map((item, i) => {
-    return item.subMenu ? (
-      <Box key={`${item.label} + ${i}`}>
-        <UnstyledButton
-          onClick={() =>
-            setOpenedSubLinks(openedSubLinks === item.label ? '' : item.label)
-          }
-          component="div"
-        >
-          <Group spacing="sm" className={classes.controlSubLinksGroup}>
-            <Text component="span">{t(`sideBar.${item.label}`)}</Text>
-            <IconChevronRight
-              className={classes.chevron}
-              size="1rem"
-              style={{
-                transform:
-                  openedSubLinks === item.label ? `rotate(90deg)` : 'none',
-              }}
-            />
-          </Group>
-        </UnstyledButton>
-        <Collapse in={openedSubLinks === item.label}>
-          <Stack spacing={0}>
-            {item.subMenu?.map((item, i) => (
-              <PrimaryLink
-                className={cx(classes.subLinksGroup, {
-                  [classes.linkActive]: item.href === cleanedPath,
-                })}
-                href={item.href ?? ''}
-                key={`${item.label} + ${i}`}
-                label={t(`sideBar.${item.label}`)}
-              />
-            ))}
-          </Stack>
-        </Collapse>
-      </Box>
-    ) : (
-      <PrimaryLink
-        className={cx(classes.linkGroup, {
-          [classes.linkActive]: item.href === cleanedPath,
-        })}
-        href={item.href ?? ''}
-        key={`${item.label} + ${i}`}
-        label={t(`sideBar.${item.label}`)}
-      />
-    );
-  });
+  const linksItem = React.useCallback(
+    (item: IMenuItem, i) => {
+      const initialOpen = itemLabel.some(
+        (items) =>
+          items.toLowerCase().replace(/-/g, '') === item.label.toLowerCase()
+      );
+      return item.subMenu ? (
+        <NavbarLinksGroupLevel2
+          key={i}
+          initiallyOpened={initialOpen}
+          {...item}
+        />
+      ) : (
+        <PrimaryLink
+          className={cx(classes.linkGroup, {
+            [classes.linkActive]: item.href === cleanedPath,
+          })}
+          href={item.href ?? ''}
+          key={`${item.label} + ${i}`}
+          label={t(`sideBar.${item.label}`)}
+        />
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [router]
+  );
+
+  const linkRender = subMenu?.map(linksItem);
 
   return (
     <Box>
@@ -112,7 +99,7 @@ const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
         </Group>
       </UnstyledButton>
       <Collapse in={opened}>
-        <Stack spacing={0}>{renderItems}</Stack>
+        <Stack spacing={0}>{linkRender}</Stack>
       </Collapse>
     </Box>
   );

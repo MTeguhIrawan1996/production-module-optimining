@@ -51,7 +51,9 @@ const ReadHEavyEquipmentClassBook = () => {
       withBorder
       shadow="xs"
       isLoading={heavyEquipmentClassDataLoading}
-      enebleBackBottomInner
+      enebleBackBottomInner={{
+        onClick: () => router.back(),
+      }}
       paperStackProps={{
         spacing: 'sm',
       }}

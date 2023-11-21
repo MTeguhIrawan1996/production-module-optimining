@@ -209,8 +209,12 @@ const UpdateCompanyBook = () => {
       withAsterisk: true,
       colSpan: 12,
     });
-    const companyTypeItem = companyTypesSelact({});
-    const businessTypeItem = businessTypesSelact({});
+    const companyTypeItem = companyTypesSelact({
+      withAsterisk: true,
+    });
+    const businessTypeItem = businessTypesSelact({
+      withAsterisk: true,
+    });
     const companyPermissionItem = companyPermissionTypesSelact({
       colSpan: 12,
       withAsterisk: true,

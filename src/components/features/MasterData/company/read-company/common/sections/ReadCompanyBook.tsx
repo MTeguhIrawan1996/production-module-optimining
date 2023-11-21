@@ -130,12 +130,6 @@ const ReadCompanyBook = () => {
                       ?.identityNumber,
                 },
                 {
-                  dataKey: t('commonTypography.identityNumber'),
-                  value:
-                    companyData?.presidentDirector?.humanResource
-                      ?.identityNumber,
-                },
-                {
                   dataKey: t('commonTypography.nip'),
                   value: companyData?.presidentDirector?.nip,
                 },

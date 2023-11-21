@@ -64,7 +64,7 @@ const useDashboardLayoutStyle = createStyles((theme) => ({
     display: 'block',
     textDecoration: 'none',
     padding: `${theme.spacing.xs} ${theme.spacing.md}`,
-    paddingLeft: rem(65),
+    paddingLeft: rem(55),
     borderRadius: theme.radius.md,
     color: theme.colors.dark[6],
     fontWeight: 500,

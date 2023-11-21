@@ -1,4 +1,4 @@
-interface ICommonMenu {
+export interface ICommonMenu {
   label: string;
   href?: string;
   access?: string[];

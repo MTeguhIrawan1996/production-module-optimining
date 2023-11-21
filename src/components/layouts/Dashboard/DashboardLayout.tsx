@@ -16,6 +16,8 @@ import NavbarExpand from './NavbarExpand';
 const useStyles = createStyles(() => ({
   root: {
     background: '#FFFFFF',
+    position: 'relative',
+    overflow: 'clip',
   },
   main: {
     display: 'flex',

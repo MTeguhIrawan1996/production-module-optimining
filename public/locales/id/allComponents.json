@@ -97,7 +97,8 @@
       "factoryName": "Nama Pabrik",
       "shift": "Shift",
       "startHour": "Jam Mulai",
-      "endHour": "Jam Selesai"
+      "endHour": "Jam Selesai",
+      "stockpileName": "Nama Stockpile"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",

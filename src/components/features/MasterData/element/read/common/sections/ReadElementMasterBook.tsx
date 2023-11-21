@@ -35,7 +35,9 @@ const ReadElementMasterBook = () => {
       withBorder
       shadow="xs"
       isLoading={elementMasterLoading}
-      enebleBackBottomInner
+      enebleBackBottomInner={{
+        onClick: () => router.back(),
+      }}
       paperStackProps={{
         spacing: 'sm',
       }}
