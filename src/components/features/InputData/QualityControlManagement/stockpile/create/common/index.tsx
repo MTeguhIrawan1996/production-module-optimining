@@ -4,12 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
+import CreateStockpileBook from '@/components/features/InputData/QualityControlManagement/stockpile/create/common/sections/CreateStockpileBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-import StockpileBook from './sections/StockpileBook';
-
-const StockpilePage = () => {
+const CreateStockpilePage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -21,6 +20,10 @@ const StockpilePage = () => {
     setBreadcrumbs([
       {
         label: t('commonTypography.stockpileMonitoring'),
+        path: '/input-data/quality-control-management/stockpile-monitoring',
+      },
+      {
+        label: t('stockpileMonitoring.createDome'),
         path: router.asPath,
       },
     ]);
@@ -31,14 +34,14 @@ const StockpilePage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('stockpileMonitoring.stockpileMonitoringTitle'),
-          mb: 'md',
+          title: t('stockpileMonitoring.formStockpileMonitoring'),
+          mb: 'xs',
         }}
       >
-        <StockpileBook />
+        <CreateStockpileBook />
       </InnerWrapper>
     </RootWrapper>
   );
 };
 
-export default StockpilePage;
+export default CreateStockpilePage;

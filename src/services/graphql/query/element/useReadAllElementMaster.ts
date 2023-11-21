@@ -33,7 +33,7 @@ export const READ_ALL_ELEMENT_MASTER = gql`
   }
 `;
 
-interface IElementsData {
+export interface IElementsData {
   id: string;
   name: string;
 }

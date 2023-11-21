@@ -4,6 +4,7 @@ import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
 import FormExamplePage from '@/components/features/Example/form-example/common';
 import StockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/common';
+import CreateStockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/create/common';
 import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
 import CreateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/create/common';
 import ReadActivityPlanPage from '@/components/features/MasterData/activity-plan/read/common';
@@ -92,6 +93,7 @@ export {
   CreateManagementRolePage,
   CreateMaterialMasterPage,
   CreateShiftMasterPage,
+  CreateStockpilePage,
   CreateUserPage,
   CreateWorkingHoursPlanMasterPage,
   DashboardPage,
