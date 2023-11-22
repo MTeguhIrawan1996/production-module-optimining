@@ -85,6 +85,22 @@ export const linksDashboard: IMenuItem[] = [
     ],
   },
   {
+    label: 'inputData',
+    icon: 'tabler:file-symlink',
+    subMenu: [
+      {
+        label: 'qualityControlManagement',
+        subMenu: [
+          {
+            label: 'stockpileMonitoring',
+            href: '/input-data/quality-control-management/stockpile-monitoring',
+            access: ['all'],
+          },
+        ],
+      },
+    ],
+  },
+  {
     label: 'setting',
     icon: 'bi:gear-fill',
     subMenu: [

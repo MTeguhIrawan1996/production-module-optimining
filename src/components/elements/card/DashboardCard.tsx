@@ -28,7 +28,7 @@ interface IDashboardCardProps extends PaperProps {
   updateButton?: IPrimaryButtonProps;
   enebleBack?: boolean;
   enebleBackBottom?: boolean;
-  enebleBackBottomInner?: boolean;
+  enebleBackBottomInner?: Partial<IPrimaryButtonProps>;
   isLoading?: boolean;
   searchBar?: ISerachBar;
   MultipleFilter?: IMultipleFilterProps;
@@ -140,7 +140,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
             leftIcon={<IconChevronLeft size="1rem" />}
             label={t('commonTypography.back')}
             mt="lg"
-            onClick={() => router.back()}
+            {...enebleBackBottomInner}
           />
         ) : null}
       </Paper>

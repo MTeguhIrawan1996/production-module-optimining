@@ -28,6 +28,7 @@ import { IRelegionSelectInputRhfProps } from '@/components/elements/input/Relegi
 import { ISelectHeavyEquipmentReferenceInputProps } from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
 import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
+import { IStockpileNameSelectInputRhfProps } from '@/components/elements/input/StockpileNameSelectInputRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
 import { ITimeInputRhfProps } from '@/components/elements/input/TimeInputRhf';
@@ -72,6 +73,7 @@ export type ControllerProps =
   | ICompanyPermissionTypesSelectInputRhfProps
   | ILocationCategorySelectInputRhfProps
   | ITimeInputRhfProps
+  | IStockpileNameSelectInputRhfProps
   | IDateInputProps;
 
 export type ControllerGroup = {

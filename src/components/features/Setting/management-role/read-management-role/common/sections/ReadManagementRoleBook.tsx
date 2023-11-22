@@ -41,7 +41,9 @@ const ReadManagementRoleBook = () => {
   return (
     <DashboardCard
       withBorder
-      enebleBackBottomInner
+      enebleBackBottomInner={{
+        onClick: () => router.back(),
+      }}
       shadow="xs"
       title={t('managementRole.managementRoleTitle')}
       titleStyle={{

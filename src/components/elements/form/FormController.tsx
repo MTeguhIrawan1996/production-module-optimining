@@ -26,6 +26,7 @@ import {
   SelectHeavyEquipmentReferenceInput,
   SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
+  StockpileNameSelectInputRhf,
   SubDistrictSelectInputRhf,
   TextInputRhf,
   TimeInputRhf,
@@ -97,6 +98,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <LocationCategorySelectInputRhf {...props} />;
     case 'time-input':
       return <TimeInputRhf {...props} />;
+    case 'stockpileName-select-input':
+      return <StockpileNameSelectInputRhf {...props} />;
     default:
       return null;
   }

@@ -11,7 +11,6 @@ import { IconAlertCircle } from '@tabler/icons-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IInnerWrapperProps {
   titleProps?: {
     title: string;

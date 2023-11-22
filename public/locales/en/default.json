@@ -28,6 +28,7 @@
     "heavyEquipmentCode": "Nomor Lambung",
     "companyLogo": "Logo Perusahaan",
     "next": "Selanjutnya",
+    "prev": "Sebelumnya",
     "address": "Alamat",
     "director": "Direktur",
     "directorName": "Name Direktur",
@@ -67,7 +68,7 @@
     "positionHistory": "Riwayat Jabatan",
     "positionDetail": "Detail Jabatan",
     "createHistory": "Tambah Riwayat",
-    "status": "status",
+    "status": "Status",
     "action": "Aksi",
     "create": "Tambah",
     "read": "Lihat",
@@ -159,13 +160,14 @@
     "chooseResus": "Pilih Resus Darah",
     "chooseBloodType": "Pilih Golongan Darah",
     "chooseType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.type)",
-    "chooseBrand": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.brand)",
-    "chooseModel": "$t(commonTypography.choose)/ Ketikan $t(commonTypography.model)",
+    "chooseBrand": "$t(commonTypography.choose) / Ketikan $t(commonTypography.brand)",
+    "chooseModel": "$t(commonTypography.choose) / Ketikan $t(commonTypography.model)",
     "chooseBusinessType": "$t(commonTypography.choose) $t(commonTypography.businessType)",
     "chooseCompanyType": "$t(commonTypography.choose) $t(commonTypography.companyType)",
     "chooseCompanyPermissionType": "$t(commonTypography.choose) $t(commonTypography.companyPermissionType)",
     "chooseLocationCategory": "$t(commonTypography.choose) $t(commonTypography.locationCategory)",
     "chooseMaterialSub": "$t(commonTypography.choose) $t(commonTypography.materialSub)",
+    "chooseStockpileName": "$t(commonTypography.choose) / Ketikan $t(commonTypography.stockpileName)",
     "complete": "Lengkap",
     "inComplete": "Tidak Lengkap",
     "engineNumber": "Nomor Mesin",
@@ -176,7 +178,17 @@
     "dateOfOffice": "Tanggal Mulai Menjabat",
     "dateComplateOffice": "Tanggal Selesai Menjabat",
     "male": "Laki-Laki",
-    "female": "Perempuan"
+    "female": "Perempuan",
+    "stockpileMonitoring": "Monitoring Stockpile",
+    "inputData": "Input Data",
+    "qualityControlManagement": "Manajement Kontrol Kualitas",
+    "dome": "Dome",
+    "domeName": "Nama Dome",
+    "domeId": "ID Dome",
+    "domeStatus": "Status Dome",
+    "stockpileName": "Nama Stockpile",
+    "tonByRitage": "Ton Berdasarkan Ritase",
+    "tonBySurvey": "Ton Berdasarkan Survei"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -196,7 +208,10 @@
     "activityPlan": "$t(commonTypography.activityPlan)",
     "element": "$t(commonTypography.element)",
     "shift": "$t(commonTypography.shift)",
-    "factory": "$t(commonTypography.factory)"
+    "factory": "$t(commonTypography.factory)",
+    "inputData": "$t(commonTypography.inputData)",
+    "qualityControlManagement": "$t(commonTypography.qualityControlManagement)",
+    "stockpileMonitoring": "$t(commonTypography.stockpileMonitoring)"
   },
   "auth": {
     "button": {
@@ -406,5 +421,17 @@
     "formUpdateFactory": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.factory)",
     "successCreateMessage": "$t(commonTypography.factory) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.factory) berhasil diubah"
+  },
+  "stockpileMonitoring": {
+    "stockpileMonitoringTitle": "$t(commonTypography.inputData) $t(commonTypography.stockpileMonitoring)",
+    "createDome": "$t(commonTypography.create) $t(commonTypography.dome)",
+    "readStockpileMonitoring": "$t(commonTypography.detail) $t(commonTypography.stockpileMonitoring)",
+    "updateStockpileMonitoring": "$t(commonTypography.edit) $t(commonTypography.stockpileMonitoring)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.domeId), $t(commonTypography.domeName) dan $t(commonTypography.tonByRitage)",
+    "successDeleteMessage": "$t(commonTypography.stockpileMonitoring) berhasil dihapus",
+    "formStockpileMonitoring": "$t(commonTypography.form) $t(commonTypography.stockpileMonitoring)",
+    "formUpdateStockpileMonitoring": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.stockpileMonitoring)",
+    "successCreateMessage": "$t(commonTypography.stockpileMonitoring) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.stockpileMonitoring) berhasil diubah"
   }
 }

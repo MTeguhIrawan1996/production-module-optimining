@@ -1,9 +1,5 @@
 import { ActionIcon, Box, Group, Menu, Stack, Text } from '@mantine/core';
-import {
-  IconArrowNarrowLeft,
-  IconArrowNarrowRight,
-  IconUser,
-} from '@tabler/icons-react';
+import { IconMenu2, IconUser } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import * as React from 'react';
@@ -21,10 +17,7 @@ interface IHeaderlayoutProps {
   onHandleExpand: () => void;
 }
 
-const HeaderLayout: React.FC<IHeaderlayoutProps> = ({
-  isExpand,
-  onHandleExpand,
-}) => {
+const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [authUser, setAUthUser] = React.useState<IAuthUserData | null>(null);
@@ -55,11 +48,7 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({
           className="primaryHover"
           onClick={onHandleExpand}
         >
-          {isExpand ? (
-            <IconArrowNarrowLeft size="2.125rem" />
-          ) : (
-            <IconArrowNarrowRight size="2.125rem" />
-          )}
+          <IconMenu2 size="1.5rem" />
         </ActionIcon>
         <Menu shadow="md" width={350} position="bottom-end">
           <Menu.Target>{renderName}</Menu.Target>
