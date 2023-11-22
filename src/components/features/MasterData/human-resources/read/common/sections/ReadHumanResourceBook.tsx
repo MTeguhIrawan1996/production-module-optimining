@@ -38,7 +38,7 @@ const ReadHumanResourceBook = () => {
       ]
     : [];
 
-  const identityPhoto = humanResourceData?.identityNumber
+  const identityPhoto = humanResourceData?.identityPhoto
     ? [
         {
           type: 'identityPhoto',
