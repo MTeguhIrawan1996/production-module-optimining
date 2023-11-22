@@ -191,7 +191,8 @@
     "stockpile": "Stockpile",
     "stockpileInformation": "$t(commonTypography.information) $t(commonTypography.stockpile)",
     "tonByRitage": "Ton Berdasarkan Ritase",
-    "tonBySurvey": "Ton Berdasarkan Survei"
+    "tonBySurvey": "Ton Berdasarkan Survei",
+    "sampleHouseLab": "Rumah Sample dan Lab"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -214,7 +215,8 @@
     "factory": "$t(commonTypography.factory)",
     "inputData": "$t(commonTypography.inputData)",
     "qualityControlManagement": "$t(commonTypography.qualityControlManagement)",
-    "stockpileMonitoring": "$t(commonTypography.stockpileMonitoring)"
+    "stockpileMonitoring": "$t(commonTypography.stockpileMonitoring)",
+    "sampleHouseLab": "$t(commonTypography.sampleHouseLab)"
   },
   "auth": {
     "button": {
@@ -436,5 +438,17 @@
     "formUpdateStockpileMonitoring": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.stockpileMonitoring)",
     "successCreateMessage": "$t(commonTypography.stockpileMonitoring) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.stockpileMonitoring) berhasil diubah"
+  },
+  "sampleHouseLab": {
+    "sampleHouseLabTitle": "$t(commonTypography.inputData) $t(commonTypography.sampleHouseLab)",
+    "createSampleHouseLab": "$t(commonTypography.create) $t(commonTypography.sampleHouseLab)",
+    "readSampleHouseLab": "$t(commonTypography.detail) $t(commonTypography.sampleHouseLab)",
+    "updateSampleHouseLab": "$t(commonTypography.edit) $t(commonTypography.sampleHouseLab)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan",
+    "successDeleteMessage": "$t(commonTypography.sampleHouseLab) berhasil dihapus",
+    "formSampleHouseLab": "$t(commonTypography.form) $t(commonTypography.sampleHouseLab)",
+    "formUpdateSampleHouseLab": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.sampleHouseLab)",
+    "successCreateMessage": "$t(commonTypography.sampleHouseLab) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.sampleHouseLab) berhasil diubah"
   }
 }
