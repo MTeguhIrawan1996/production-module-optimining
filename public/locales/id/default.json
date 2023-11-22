@@ -168,6 +168,7 @@
     "chooseLocationCategory": "$t(commonTypography.choose) $t(commonTypography.locationCategory)",
     "chooseMaterialSub": "$t(commonTypography.choose) $t(commonTypography.materialSub)",
     "chooseStockpileName": "$t(commonTypography.choose) / Ketikan $t(commonTypography.stockpileName)",
+    "chooseDomeName": "$t(commonTypography.choose) / Ketikan $t(commonTypography.domeName)",
     "complete": "Lengkap",
     "inComplete": "Tidak Lengkap",
     "engineNumber": "Nomor Mesin",
@@ -187,8 +188,37 @@
     "domeId": "ID Dome",
     "domeStatus": "Status Dome",
     "stockpileName": "Nama Stockpile",
+    "stockpile": "Stockpile",
+    "stockpileInformation": "$t(commonTypography.information) $t(commonTypography.stockpile)",
     "tonByRitage": "Ton Berdasarkan Ritase",
-    "tonBySurvey": "Ton Berdasarkan Survei"
+    "tonBySurvey": "Ton Berdasarkan Survei",
+    "sample": "Sampel",
+    "sampleHouseLab": "Rumah Sampel dan Lab",
+    "laboratoriumName": "Nama Laboratorium",
+    "sampleDate": "Tanggal Pengambilan Sampel",
+    "sampleNumber": "Nomor Sampel",
+    "sampleName": "Nama Sampel",
+    "sampleType": "Tipe Sampel",
+    "samplerName": "Nama Sampler",
+    "gcName": "Nama GC (Grade Control)",
+    "sampleEnterLabAt": "Tanggal Sampel Masuk ke Lab",
+    "sampleEnterLabHour": "Jam Sampel Masuk ke Lab",
+    "estimationGC": "Estimasi (dari GC)",
+    "percentageLab": "% (dari Lab)",
+    "bulkSamplingCategory": "Kategori Bulk Sampling",
+    "bulkSamplingCategorySub": "Sub Kategori Bulk Sampling",
+    "rate": "Kadar",
+    "density": "Masa Jenis",
+    "preparationTime": "Waktu Preparasi",
+    "preparationStartDate": "Tanggal Mulai Preparasi",
+    "preparationEndDate": "Tanggal Selesai Preparasi",
+    "preparationStartHour": "Jam Mulai Preparasi",
+    "preparationEndHour": "Jam Selesai Preparasi",
+    "analysisTime": "Waktu Analisa",
+    "analysisStartDate": "Tanggal Mulai Analisa",
+    "analysisEndDate": "Tanggal Selesai Analisa",
+    "analysisStartHour": "Jam Mulai Analisa",
+    "analysisEndHour": "Jam Selesai Analisa"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -211,7 +241,8 @@
     "factory": "$t(commonTypography.factory)",
     "inputData": "$t(commonTypography.inputData)",
     "qualityControlManagement": "$t(commonTypography.qualityControlManagement)",
-    "stockpileMonitoring": "$t(commonTypography.stockpileMonitoring)"
+    "stockpileMonitoring": "$t(commonTypography.stockpileMonitoring)",
+    "sampleHouseLab": "$t(commonTypography.sampleHouseLab)"
   },
   "auth": {
     "button": {
@@ -433,5 +464,18 @@
     "formUpdateStockpileMonitoring": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.stockpileMonitoring)",
     "successCreateMessage": "$t(commonTypography.stockpileMonitoring) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.stockpileMonitoring) berhasil diubah"
+  },
+  "sampleHouseLab": {
+    "sampleHouseLabTitle": "Data $t(commonTypography.sampleHouseLab)",
+    "createSample": "$t(commonTypography.create) $t(commonTypography.sample)",
+    "readSampleHouseLab": "$t(commonTypography.detail) $t(commonTypography.sampleHouseLab)",
+    "updateSampleHouseLab": "$t(commonTypography.edit) $t(commonTypography.sampleHouseLab)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.laboratoriumName), $t(commonTypography.sampleDate), $t(commonTypography.shift), $t(commonTypography.sampleNumber), $t(commonTypography.sampleName) dan $t(commonTypography.sampleType)",
+    "successDeleteMessage": "Data $t(commonTypography.sampleHouseLab) berhasil dihapus",
+    "formSampleHouseLab": "$t(commonTypography.form) $t(commonTypography.sampleHouseLab)",
+    "formUpdateSampleHouseLab": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.sampleHouseLab)",
+    "successCreateMessage": "$t(commonTypography.sampleHouseLab) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.sampleHouseLab) berhasil diubah",
+    "qualityMaterialInformation": "Informasi Quality Material"
   }
 }

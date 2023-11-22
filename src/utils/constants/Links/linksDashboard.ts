@@ -96,6 +96,11 @@ export const linksDashboard: IMenuItem[] = [
             href: '/input-data/quality-control-management/stockpile-monitoring',
             access: ['all'],
           },
+          {
+            label: 'sampleHouseLab',
+            href: '/input-data/quality-control-management/sample-house-lab',
+            access: ['all'],
+          },
         ],
       },
     ],

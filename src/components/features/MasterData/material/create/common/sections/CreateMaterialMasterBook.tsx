@@ -39,7 +39,7 @@ const CreateMaterialMasterBook = () => {
   /* #   /**=========== Query =========== */
   const { materialsData } = useReadAllMaterialsMaster({
     variables: {
-      limit: 10,
+      limit: null,
       orderDir: 'desc',
       orderBy: 'createdAt',
     },

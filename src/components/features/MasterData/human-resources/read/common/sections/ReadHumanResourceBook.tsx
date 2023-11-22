@@ -10,7 +10,7 @@ import {
 } from '@/components/elements';
 
 import { useReadOneHumanResource } from '@/services/graphql/query/master-data-human-resources/useReadOneHumanResource';
-import { dateFromat } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 
 const ReadHumanResourceBook = () => {
   const { t } = useTranslation('default');
@@ -38,7 +38,7 @@ const ReadHumanResourceBook = () => {
       ]
     : [];
 
-  const identityPhoto = humanResourceData?.identityNumber
+  const identityPhoto = humanResourceData?.identityPhoto
     ? [
         {
           type: 'identityPhoto',
@@ -129,7 +129,7 @@ const ReadHumanResourceBook = () => {
                 },
                 {
                   dataKey: t('commonTypography.dob'),
-                  value: dateFromat(humanResourceData?.dob ?? ''),
+                  value: formatDate(humanResourceData?.dob ?? ''),
                 },
                 {
                   dataKey: t('commonTypography.gender'),

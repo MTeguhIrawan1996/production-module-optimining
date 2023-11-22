@@ -11,6 +11,7 @@ import { ICompanyPermissionTypesSelectInputRhfProps } from '@/components/element
 import { ICompanyTypesSelectInputRhfProps } from '@/components/elements/input/CompanyTypeSelectInputRhf';
 import { IDateInputProps } from '@/components/elements/input/DateInputRhf';
 import { IDivisionSelectInputRhfProps } from '@/components/elements/input/DivisionSelectInputRhf';
+import { IDomeNameSelectInputRhfProps } from '@/components/elements/input/DomeNameSelectInputRhf';
 import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/input/EligibilityStatusSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
 import { IImageInputDropzoneRhfProps } from '@/components/elements/input/ImageInputDropzoneRhf';
@@ -74,6 +75,7 @@ export type ControllerProps =
   | ILocationCategorySelectInputRhfProps
   | ITimeInputRhfProps
   | IStockpileNameSelectInputRhfProps
+  | IDomeNameSelectInputRhfProps
   | IDateInputProps;
 
 export type ControllerGroup = {
@@ -214,3 +216,8 @@ export type IDomicileProvinceDetail = {
   } | null;
   domicileAddress: string | null;
 };
+
+export interface IElementsData {
+  id: string;
+  name: string;
+}

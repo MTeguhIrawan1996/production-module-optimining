@@ -57,7 +57,7 @@ export default function MantineDataTable<T>({
     loaderBackgroundBlur = 2,
     fontSize = 12,
     horizontalSpacing = 'xs',
-    verticalSpacing = 'sm',
+    verticalSpacing = 'xs',
     borderRadius = 6,
     shadow = 'xs',
     highlightOnHover = false,

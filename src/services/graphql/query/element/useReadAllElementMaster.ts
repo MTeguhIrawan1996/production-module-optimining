@@ -1,6 +1,6 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
-import { GResponse, IGlobalMetaRequest } from '@/types/global';
+import { GResponse, IElementsData, IGlobalMetaRequest } from '@/types/global';
 
 export const READ_ALL_ELEMENT_MASTER = gql`
   query ReadAllElement(
@@ -32,11 +32,6 @@ export const READ_ALL_ELEMENT_MASTER = gql`
     }
   }
 `;
-
-export interface IElementsData {
-  id: string;
-  name: string;
-}
 
 interface IElementsResponse {
   elements: GResponse<IElementsData>;
