@@ -17,10 +17,7 @@ import {
 } from '@/components/elements';
 
 import { useDeleteShiftMaster } from '@/services/graphql/mutation/shift/useDeleteShiftMaster';
-import {
-  IElementsData,
-  useReadAllElementMaster,
-} from '@/services/graphql/query/element/useReadAllElementMaster';
+import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import { useReadAllLocationsMaster } from '@/services/graphql/query/location/useReadAllLocationMaster';
 import {
   IMonitoringStockpilesData,
@@ -28,6 +25,8 @@ import {
 } from '@/services/graphql/query/stockpile-monitoring/useReadAllStockpileMonitoring';
 import { globalSelect } from '@/utils/constants/Field/global-field';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+
+import { IElementsData } from '@/types/global';
 
 const StockpileBook = () => {
   const router = useRouter();

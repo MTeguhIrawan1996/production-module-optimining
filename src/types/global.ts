@@ -216,3 +216,8 @@ export type IDomicileProvinceDetail = {
   } | null;
   domicileAddress: string | null;
 };
+
+export interface IElementsData {
+  id: string;
+  name: string;
+}

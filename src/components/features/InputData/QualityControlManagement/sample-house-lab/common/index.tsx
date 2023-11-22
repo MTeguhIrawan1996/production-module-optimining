@@ -19,7 +19,7 @@ const SampleHouseLabPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.stockpileMonitoring'),
+        label: t('commonTypography.sampleHouseLab'),
         path: router.asPath,
       },
     ]);
@@ -30,7 +30,7 @@ const SampleHouseLabPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('stockpileMonitoring.stockpileMonitoringTitle'),
+          title: t('sampleHouseLab.sampleHouseLabTitle'),
           mb: 'md',
         }}
       >
