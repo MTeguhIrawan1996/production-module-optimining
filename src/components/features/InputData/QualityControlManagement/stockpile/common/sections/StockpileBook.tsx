@@ -59,7 +59,7 @@ const StockpileBook = () => {
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: stockpileNameSearchQuery === '' ? null : stockpileNameSearchQuery,
-      categoryId: 'f7834c8f-398e-4404-b6aa-8af4d0867a44',
+      categoryId: `${process.env.NEXT_PUBLIC_STOCKPILE_ID}`,
     },
   });
 

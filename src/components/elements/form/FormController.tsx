@@ -9,6 +9,7 @@ import {
   CompanyTypeSelectInputRhf,
   DateInputRhf,
   DivisionSelectInputRhf,
+  DomeNameSelectInputRhf,
   EligibilityStatusSelectInputRhf,
   IdentityRadioInputRhf,
   ImageInputDropzoneRhf,
@@ -98,8 +99,10 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <LocationCategorySelectInputRhf {...props} />;
     case 'time-input':
       return <TimeInputRhf {...props} />;
-    case 'stockpileName-select-input':
+    case 'stockpilename-select-input':
       return <StockpileNameSelectInputRhf {...props} />;
+    case 'domename-select-input':
+      return <DomeNameSelectInputRhf {...props} />;
     default:
       return null;
   }

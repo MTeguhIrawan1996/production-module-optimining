@@ -5,8 +5,13 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, SteperFormGroup } from '@/components/elements';
 
+import { useReadOneLocationMaster } from '@/services/graphql/query/location/useReadOneLocationMaster';
 import { IMutationStockpile } from '@/services/restapi/stockpile-monitoring/useCreateStockpileMonitoring';
-import { stockpileNameSelect } from '@/utils/constants/Field/stockpile-field';
+import { globalText } from '@/utils/constants/Field/global-field';
+import {
+  domeNameSelect,
+  stockpileNameSelect,
+} from '@/utils/constants/Field/stockpile-field';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -19,8 +24,8 @@ const CreateStockpileBook = () => {
     // resolver: zodResolver(shiftMutationValidation),
     defaultValues: {
       stockpileId: '',
-      domeName: '',
       domeId: '',
+      handbookId: '',
       oreSubMaterialId: '',
       openDate: undefined,
       openTime: '',
@@ -66,10 +71,20 @@ const CreateStockpileBook = () => {
     },
     mode: 'onBlur',
   });
+
+  const domeId = methods.watch('domeId');
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-
+  useReadOneLocationMaster({
+    variables: {
+      id: domeId,
+    },
+    skip: domeId === '',
+    onCompleted: (data) => {
+      methods.setValue('handbookId', data.location.handBookId);
+    },
+  });
   // const [executeCreate, { loading }] = useCreateShiftMaster({
   //   onCompleted: () => {
   //     notifications.show({
@@ -106,13 +121,27 @@ const CreateStockpileBook = () => {
   const fieldItem = React.useMemo(() => {
     const stockpileNameItem = stockpileNameSelect({
       colSpan: 6,
-      withAsterisk: true,
+    });
+    const domeNameItem = domeNameSelect({
+      colSpan: 6,
+      onChange: (value) => {
+        methods.setValue('domeId', value ?? '');
+        methods.setValue('handbookId', '');
+      },
+    });
+    const domeIdItem = globalText({
+      name: 'handbookId',
+      label: 'domeId',
+      colSpan: 6,
+      disabled: true,
+      withAsterisk: false,
     });
 
     const field: ControllerGroup[] = [
       {
-        group: t('commonTypography.shift'),
-        formControllers: [stockpileNameItem],
+        group: t('commonTypography.stockpileInformation'),
+        enableGroupLabel: true,
+        formControllers: [stockpileNameItem, domeNameItem, domeIdItem],
       },
     ];
 

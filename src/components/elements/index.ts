@@ -28,6 +28,7 @@ import CompanyPermissionTypeSelectInputRhf from '@/components/elements/input/Com
 import CompanyTypeSelectInputRhf from '@/components/elements/input/CompanyTypeSelectInputRhf';
 import DateInputRhf from '@/components/elements/input/DateInputRhf';
 import DivisionSelectInputRhf from '@/components/elements/input/DivisionSelectInputRhf';
+import DomeNameSelectInputRhf from '@/components/elements/input/DomeNameSelectInputRhf';
 import EligibilityStatusSelectInputRhf from '@/components/elements/input/EligibilityStatusSelectInputRhf';
 import IdentityRadioInputRhf from '@/components/elements/input/IdentityRadioInputRhf';
 import ImageInputDropzoneRhf from '@/components/elements/input/ImageInputDropzoneRhf';
@@ -78,6 +79,7 @@ export {
   DashboardCard,
   DateInputRhf,
   DivisionSelectInputRhf,
+  DomeNameSelectInputRhf,
   EligibilityStatusSelectInputRhf,
   FieldErrorMessage,
   FormController,

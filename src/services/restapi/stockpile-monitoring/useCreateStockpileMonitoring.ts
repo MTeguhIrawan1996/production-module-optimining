@@ -7,8 +7,8 @@ import { AxiosRestErrorResponse } from '@/types/global';
 
 export interface IMutationStockpile {
   stockpileId: string;
-  domeName: string | null;
   domeId: string;
+  handbookId: string;
   oreSubMaterialId: string | null;
   openDate: Date | undefined | null;
   openTime: string;
@@ -60,7 +60,7 @@ type IPropsRequest = {
 const CreateStockpileMonitoring = async ({ data }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
-  const exclude = ['domeId'];
+  const exclude = ['domeID'];
   data.forEach(({ name, value }) => {
     if (value) {
       if (name === 'photo' && typeof value !== 'string') {

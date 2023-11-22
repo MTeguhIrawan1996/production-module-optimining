@@ -168,6 +168,7 @@
     "chooseLocationCategory": "$t(commonTypography.choose) $t(commonTypography.locationCategory)",
     "chooseMaterialSub": "$t(commonTypography.choose) $t(commonTypography.materialSub)",
     "chooseStockpileName": "$t(commonTypography.choose) / Ketikan $t(commonTypography.stockpileName)",
+    "chooseDomeName": "$t(commonTypography.choose) / Ketikan $t(commonTypography.domeName)",
     "complete": "Lengkap",
     "inComplete": "Tidak Lengkap",
     "engineNumber": "Nomor Mesin",
@@ -187,6 +188,8 @@
     "domeId": "ID Dome",
     "domeStatus": "Status Dome",
     "stockpileName": "Nama Stockpile",
+    "stockpile": "Stockpile",
+    "stockpileInformation": "$t(commonTypography.information) $t(commonTypography.stockpile)",
     "tonByRitage": "Ton Berdasarkan Ritase",
     "tonBySurvey": "Ton Berdasarkan Survei"
   },
