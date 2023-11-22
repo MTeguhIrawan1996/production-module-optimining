@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { GlobalHeaderDetail, KeyValueList } from '@/components/elements';
 
 import { IHumanResourceData } from '@/services/graphql/query/master-data-human-resources/useReadOneHumanResource';
-import { dateFromat } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 
 interface IProps {
   humanResource?: IHumanResourceData;
@@ -88,7 +88,7 @@ const ReadCompanyHumanResourceBook: React.FC<IProps> = ({
             },
             {
               dataKey: t('commonTypography.dob'),
-              value: dateFromat(humanResource?.dob ?? ''),
+              value: formatDate(humanResource?.dob ?? ''),
             },
             {
               dataKey: t('commonTypography.gender'),

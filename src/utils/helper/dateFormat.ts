@@ -5,7 +5,7 @@ import 'dayjs/locale/id';
 dayjs.locale('id');
 dayjs.extend(localizedFormat);
 
-export const dateFromat = (
+export const formatDate = (
   //  formatDate
   value: string | Date | undefined,
   format?:

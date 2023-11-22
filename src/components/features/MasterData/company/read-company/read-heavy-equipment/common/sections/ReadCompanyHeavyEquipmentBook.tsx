@@ -10,7 +10,7 @@ import {
 } from '@/components/elements';
 
 import { useReadOneHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentCompany';
-import { dateFromat } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 
 import { IFile } from '@/types/global';
 
@@ -189,13 +189,13 @@ const ReadCompanyHeavyEquipmentBook = () => {
                 {
                   dataKey: t('commonTypography.startDate'),
                   value:
-                    dateFromat(heavyEquipmentCompanyData?.startDate ?? '') ??
+                    formatDate(heavyEquipmentCompanyData?.startDate ?? '') ??
                     '-',
                 },
                 {
                   dataKey: t('commonTypography.endDate'),
                   value:
-                    dateFromat(heavyEquipmentCompanyData?.endDate ?? '') ?? '-',
+                    formatDate(heavyEquipmentCompanyData?.endDate ?? '') ?? '-',
                 },
               ]}
               type="grid"

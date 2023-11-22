@@ -22,7 +22,7 @@ import {
   IHouseSampleAndLabsData,
   useReadAllSampleHouseLab,
 } from '@/services/graphql/query/sample-house-lab/useReadAllSampleHouseLab';
-import { dateFromat } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 
 import { IElementsData } from '@/types/global';
 
@@ -169,7 +169,7 @@ const SampleHouseLabBook = () => {
             {
               accessor: 'sampleDate',
               title: t('commonTypography.sampleDate'),
-              render: ({ sampleDate }) => dateFromat(sampleDate),
+              render: ({ sampleDate }) => formatDate(sampleDate),
             },
             {
               accessor: 'shift',
@@ -198,7 +198,6 @@ const SampleHouseLabBook = () => {
             },
             {
               accessor: 'gcName',
-              width: 160,
               title: t('commonTypography.gcName'),
               render: ({ gradeControl }) => gradeControl?.humanResource?.name,
             },
@@ -210,7 +209,7 @@ const SampleHouseLabBook = () => {
             {
               accessor: 'sampleEnterLabAt',
               title: t('commonTypography.sampleEnterLabAt'),
-              render: ({ sampleEnterLabAt }) => dateFromat(sampleEnterLabAt),
+              render: ({ sampleEnterLabAt }) => formatDate(sampleEnterLabAt),
             },
             ...(renderOtherColumn ?? []),
             ...(renderOtherColumnPercentageLab ?? []),

@@ -4,6 +4,7 @@ import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
 import FormExamplePage from '@/components/features/Example/form-example/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
+import ReadSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/read/common';
 import StockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/common';
 import CreateStockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/create/common';
 import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
@@ -123,6 +124,7 @@ export {
   ReadLocationMasterPage,
   ReadManagementRolePage,
   ReadMaterialMasterPage,
+  ReadSampleHouseLabPage,
   ReadShiftMasterPage,
   ReadWorkingHoursPlanMasterPage,
   SampleHouseLabPage,

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { MantineDataTable } from '@/components/elements';
 
 import { IEmployeeData } from '@/services/graphql/query/master-data-company/useReadOneCompanyHumanResource';
-import { dateFromat } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 
 interface IProps {
   employe?: IEmployeeData;
@@ -49,13 +49,13 @@ const ReadCompanyPositionHistoryBook: React.FC<IProps> = ({ employe }) => {
             {
               accessor: 'startdate',
               title: t('commonTypography.dateOfOffice'),
-              render: ({ startDate }) => dateFromat(startDate),
+              render: ({ startDate }) => formatDate(startDate),
               width: '30%',
             },
             {
               accessor: 'endDate',
               title: t('commonTypography.dateComplateOffice'),
-              render: ({ endDate }) => dateFromat(endDate),
+              render: ({ endDate }) => formatDate(endDate),
               width: '30%',
             },
           ],

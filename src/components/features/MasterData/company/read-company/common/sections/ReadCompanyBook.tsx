@@ -10,7 +10,7 @@ import {
 } from '@/components/elements';
 
 import { useReadOneCompany } from '@/services/graphql/query/master-data-company/useReadOneCompany';
-import { dateFromat } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 
 const useStyles = createStyles(() => ({
   image: {
@@ -91,7 +91,7 @@ const ReadCompanyBook = () => {
                   dataKey: `${t('commonTypography.date')} ${
                     companyData?.permissionType?.name
                   }`,
-                  value: dateFromat(companyData?.permissionTypeDate) ?? '',
+                  value: formatDate(companyData?.permissionTypeDate) ?? '',
                 },
               ]}
               type="grid"
@@ -136,7 +136,7 @@ const ReadCompanyBook = () => {
                 {
                   dataKey: t('commonTypography.dateOfOffice'),
                   value:
-                    dateFromat(companyData?.presidentDirector?.startDate) ?? '',
+                    formatDate(companyData?.presidentDirector?.startDate) ?? '',
                 },
               ]}
               type="grid"

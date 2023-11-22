@@ -200,10 +200,25 @@
     "sampleName": "Nama Sampel",
     "sampleType": "Tipe Sampel",
     "samplerName": "Nama Sampler",
-    "gcName": "Nama GC",
+    "gcName": "Nama GC (Grade Control)",
     "sampleEnterLabAt": "Tanggal Sampel Masuk ke Lab",
+    "sampleEnterLabHour": "Jam Sampel Masuk ke Lab",
     "estimationGC": "Estimasi (dari GC)",
-    "percentageLab": "% (dari Lab)"
+    "percentageLab": "% (dari Lab)",
+    "bulkSamplingCategory": "Kategori Bulk Sampling",
+    "bulkSamplingCategorySub": "Sub Kategori Bulk Sampling",
+    "rate": "Kadar",
+    "density": "Masa Jenis",
+    "preparationTime": "Waktu Preparasi",
+    "preparationStartDate": "Tanggal Mulai Preparasi",
+    "preparationEndDate": "Tanggal Selesai Preparasi",
+    "preparationStartHour": "Jam Mulai Preparasi",
+    "preparationEndHour": "Jam Selesai Preparasi",
+    "analysisTime": "Waktu Analisa",
+    "analysisStartDate": "Tanggal Mulai Analisa",
+    "analysisEndDate": "Tanggal Selesai Analisa",
+    "analysisStartHour": "Jam Mulai Analisa",
+    "analysisEndHour": "Jam Selesai Analisa"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -451,7 +466,7 @@
     "successUpdateMessage": "$t(commonTypography.stockpileMonitoring) berhasil diubah"
   },
   "sampleHouseLab": {
-    "sampleHouseLabTitle": "$t(commonTypography.inputData) $t(commonTypography.sampleHouseLab)",
+    "sampleHouseLabTitle": "Data $t(commonTypography.sampleHouseLab)",
     "createSample": "$t(commonTypography.create) $t(commonTypography.sample)",
     "readSampleHouseLab": "$t(commonTypography.detail) $t(commonTypography.sampleHouseLab)",
     "updateSampleHouseLab": "$t(commonTypography.edit) $t(commonTypography.sampleHouseLab)",
@@ -460,6 +475,7 @@
     "formSampleHouseLab": "$t(commonTypography.form) $t(commonTypography.sampleHouseLab)",
     "formUpdateSampleHouseLab": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.sampleHouseLab)",
     "successCreateMessage": "$t(commonTypography.sampleHouseLab) berhasil dibuat",
-    "successUpdateMessage": "$t(commonTypography.sampleHouseLab) berhasil diubah"
+    "successUpdateMessage": "$t(commonTypography.sampleHouseLab) berhasil diubah",
+    "qualityMaterialInformation": "Informasi Quality Material"
   }
 }
