@@ -22,6 +22,9 @@ import NotValidButton, {
 import PrimaryButton, {
   IPrimaryButtonProps,
 } from '@/components/elements/button/PrimaryButton';
+import RejectButton, {
+  IRejectButtonProps,
+} from '@/components/elements/button/RejectButton';
 import ValidationButton, {
   IValidationButtonProps,
 } from '@/components/elements/button/ValidationButton';
@@ -41,6 +44,7 @@ interface IDashboardCardProps extends PaperProps {
   validationButton?: IValidationButtonProps;
   notValidButton?: INotValidButtonProps;
   determinedButton?: IDeterminedButtonProps;
+  rejectButton?: IRejectButtonProps;
   isLoading?: boolean;
   searchBar?: ISerachBar;
   MultipleFilter?: IMultipleFilterProps;
@@ -59,6 +63,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
   determinedButton,
   addButton,
   updateButton,
+  rejectButton,
   searchBar,
   isLoading,
   validationButton,
@@ -172,6 +177,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
           {notValidButton ? (
             <NotValidButton color="red" {...notValidButton} />
           ) : null}
+          {rejectButton ? <RejectButton color="red" {...rejectButton} /> : null}
           {validationButton ? <ValidationButton {...validationButton} /> : null}
           {determinedButton ? <DeterminedButton {...determinedButton} /> : null}
         </Group>

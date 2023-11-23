@@ -39,7 +39,7 @@ const ReadSampleHouseLabBook = () => {
     defaultValues: {
       statusMessage: '',
     },
-    mode: 'onBlur',
+    mode: 'onSubmit',
   });
 
   /* #   /**=========== Query =========== */
@@ -203,7 +203,7 @@ const ReadSampleHouseLabBook = () => {
     });
   };
 
-  const handleSubmitForm: SubmitHandler<
+  const handleInvalidForm: SubmitHandler<
     IUpdateIsValidateSampleHouseLabValues
   > = async (data) => {
     await executeUpdateStatus({
@@ -215,24 +215,35 @@ const ReadSampleHouseLabBook = () => {
     });
   };
 
-  const includesIdStatus = [
-    'e0d4c28c-7496-485f-bcf6-fec7ff3ea688',
-    'af06163a-2ba3-45ee-a724-ab3af0c97cc9',
-  ];
+  const handleRejectForm: SubmitHandler<
+    IUpdateIsValidateSampleHouseLabValues
+  > = async (data) => {
+    await executeUpdateStatusDetermiend({
+      variables: {
+        id,
+        status: false,
+        statusMessage: data.statusMessage,
+      },
+    });
+  };
 
-  const isShowButtonValidation = includesIdStatus.includes(
+  const includesWaiting = ['e0d4c28c-7496-485f-bcf6-fec7ff3ea688'];
+
+  const includesValid = ['4d4d646d-d0e5-4f94-ba6d-171be20032fc'];
+
+  const isShowButtonValidation = includesWaiting.includes(
     houseSampleAndLab?.status?.id ?? ''
   );
 
-  const includesInvalidation = ['e0d4c28c-7496-485f-bcf6-fec7ff3ea688'];
-
-  const isShowButtonInvalidation = includesInvalidation.includes(
+  const isShowButtonInvalidation = includesWaiting.includes(
     houseSampleAndLab?.status?.id ?? ''
   );
 
-  const includesDetermined = ['4d4d646d-d0e5-4f94-ba6d-171be20032fc'];
+  const isShowButtonDetermined = includesValid.includes(
+    houseSampleAndLab?.status?.id ?? ''
+  );
 
-  const isShowButtonDetermined = includesDetermined.includes(
+  const isShowButtonReject = includesValid.includes(
     houseSampleAndLab?.status?.id ?? ''
   );
 
@@ -263,10 +274,21 @@ const ReadSampleHouseLabBook = () => {
         isShowButtonInvalidation
           ? {
               methods: methods,
-              submitForm: handleSubmitForm,
+              submitForm: handleInvalidForm,
               textAreaName: 'statusMessage',
               textAreaLabel: 'invalidReason',
               loading: loading,
+            }
+          : undefined
+      }
+      rejectButton={
+        isShowButtonReject
+          ? {
+              methods: methods,
+              submitForm: handleRejectForm,
+              textAreaName: 'statusMessage',
+              textAreaLabel: 'rejectReason',
+              loading: determinedLoading,
             }
           : undefined
       }
@@ -302,6 +324,15 @@ const ReadSampleHouseLabBook = () => {
             <GlobalAlert
               description={houseSampleAndLab?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
+              color="red"
+              mt="md"
+            />
+          ) : null}
+          {houseSampleAndLab?.status?.id ===
+          '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
+            <GlobalAlert
+              description={houseSampleAndLab?.statusMessage ?? ''}
+              title={t('commonTypography.rejectedData')}
               color="red"
               mt="md"
             />

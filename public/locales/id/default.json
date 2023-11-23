@@ -83,7 +83,9 @@
     "validation": "Validasi",
     "determined": "Tetapkan",
     "notValid": "Tidak Valid",
+    "rejected": "ditolak",
     "invalidData": "Data $t(commonTypography.notValid)",
+    "rejectedData": "Data $t(commonTypography.rejected)",
     "reject": "Tolak",
     "edit": "Edit",
     "role": "Role",
@@ -487,6 +489,6 @@
     "successIsValidateMessage": "$t(sampleHouseLab.sampleHouseLabTitle) berhasil divalidasi",
     "successIsNotValidateMessage": "Status Data $t(commonTypography.sampleHouseLab) Tidak Valid",
     "successIsDeterminedMessage": "$t(sampleHouseLab.sampleHouseLabTitle) berhasil ditetapkan",
-    "successIsRejectMessage": "$t(sampleHouseLab.sampleHouseLabTitle) berhasil $t(sampleHouseLab.reject)"
+    "successIsRejectMessage": "$t(sampleHouseLab.sampleHouseLabTitle) berhasil $t(commonTypography.reject)"
   }
 }

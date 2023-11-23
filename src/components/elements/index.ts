@@ -1,6 +1,7 @@
 import DeterminedButton from '@/components/elements/button/DeterminedButton';
 import NotValidButton from '@/components/elements/button/NotValidButton';
 import PrimaryButton from '@/components/elements/button/PrimaryButton';
+import RejectButton from '@/components/elements/button/RejectButton';
 import TextButton from '@/components/elements/button/TextButton';
 import ValidationButton from '@/components/elements/button/ValidationButton';
 import AuthCard from '@/components/elements/card/AuthCard';
@@ -121,6 +122,7 @@ export {
   ProvinceSelectInputRhf,
   RadioInputRhf,
   RegencySelectInputRhf,
+  RejectButton,
   RelegionSelectInputRhf,
   RootWrapper,
   SearchBar,
