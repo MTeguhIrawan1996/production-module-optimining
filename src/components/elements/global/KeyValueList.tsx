@@ -16,7 +16,7 @@ interface IGridTypeProps extends Omit<GridProps, 'children'> {
 interface IFlexTypeProps extends Omit<FlexProps, 'children'> {
   type: 'flex';
 }
-interface IKeyValueItemProps {
+export interface IKeyValueItemProps {
   dataKey: string;
   value?: string | null;
   keyStyleText?: TextProps;

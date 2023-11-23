@@ -13,6 +13,11 @@ import {
   IRefreshToken,
   REFRESH_TOKEN,
 } from '@/services/graphql/mutation/auth/useRefreshToken';
+import {
+  IGetPermissionResponse,
+  PERMISSION_USER,
+} from '@/services/graphql/query/auth/useReadPermission';
+import { encodeFc } from '@/utils/helper/encodeDecode';
 
 const storedLanguage = Cookies.get('language');
 const initialLanguage = storedLanguage || 'id';
@@ -26,6 +31,20 @@ const client = new GraphQLClient(
   }
 );
 
+const graphQLClient = new GraphQLClient(
+  process.env.NEXT_PUBLIC_GRAPHQL_API_URL || '',
+  {
+    method: `GET`,
+    headers: {
+      'Accept-Language': initialLanguage,
+    },
+    jsonSerializer: {
+      parse: JSON.parse,
+      stringify: JSON.stringify,
+    },
+  }
+);
+
 async function refreshToken(token: JWT) {
   const authorization = token ? `Bearer ${token.login.refreshToken.token}` : '';
 
@@ -35,6 +54,18 @@ async function refreshToken(token: JWT) {
   const { refreshToken } = await client.request<IRefreshToken>(REFRESH_TOKEN);
 
   return refreshToken;
+}
+async function permission(token: JWT) {
+  const authorization = token ? `Bearer ${token.login.accessToken.token}` : '';
+
+  graphQLClient.setHeaders({
+    authorization,
+  });
+  const { authUser } = await graphQLClient.request<IGetPermissionResponse>(
+    PERMISSION_USER
+  );
+
+  return authUser;
 }
 
 export const authOptions: NextAuthOptions = {
@@ -92,7 +123,16 @@ export const authOptions: NextAuthOptions = {
         };
       }
 
-      if (currentTimestampSeconds < token.login?.accessToken?.exp) return token;
+      const permissionRes = await permission(token);
+      if (permissionRes) {
+        if (currentTimestampSeconds < token.login?.accessToken?.exp) {
+          const permission = encodeFc(permissionRes.role.permissions.data);
+          return {
+            ...token,
+            permission: permission,
+          };
+        }
+      }
 
       const res = await refreshToken(token);
       if (res) {

@@ -1,6 +1,10 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
-import { GResponse, IElementsData, IGlobalMetaRequest } from '@/types/global';
+import {
+  GResponse,
+  IElementWithValue,
+  IGlobalMetaRequest,
+} from '@/types/global';
 
 export const READ_ALL_SAMPLE_HOUSE_LAB = gql`
   query ReadAllSampleHouseLab(
@@ -82,7 +86,7 @@ export const READ_ALL_SAMPLE_HOUSE_LAB = gql`
 export interface IHouseSampleAndLabsData {
   id: string;
   laboratoriumName: string;
-  sampleDate: string;
+  sampleDate: string | null;
   shift: {
     id: string;
     name: string;
@@ -108,19 +112,9 @@ export interface IHouseSampleAndLabsData {
     } | null;
   } | null;
   location: string;
-  sampleEnterLabAt: string;
-  gradeControlElements:
-    | {
-        value: string | null;
-        element: IElementsData | null;
-      }[]
-    | null;
-  elements:
-    | {
-        value: string | null;
-        element: IElementsData | null;
-      }[]
-    | null;
+  sampleEnterLabAt: string | null;
+  gradeControlElements: IElementWithValue[] | null;
+  elements: IElementWithValue[] | null;
   status: {
     id: string;
     name: string;

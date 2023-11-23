@@ -221,3 +221,8 @@ export interface IElementsData {
   id: string;
   name: string;
 }
+
+export interface IElementWithValue {
+  value: string | null;
+  element: IElementsData | null;
+}

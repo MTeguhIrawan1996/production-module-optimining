@@ -9,12 +9,12 @@ dayjs.extend(customParseFormat);
 
 export const hourFromat = (
   //  formatDate
-  value: string | Date | undefined,
-  format?: 'h:mm:ss A'
+  value: string | Date | undefined | null,
+  format?: 'hh:mm:ss A' | 'hh:mm A'
 ) => {
   return value
     ? dayjs(value, 'HH:mm:ss')
         .locale('id')
-        .format(format ?? 'h:mm:ss A')
+        .format(format ?? 'hh:mm:ss A')
     : '-';
 };
