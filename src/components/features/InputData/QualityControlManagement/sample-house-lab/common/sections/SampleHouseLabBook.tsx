@@ -16,7 +16,7 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteSampleHouseLab } from '@/services/graphql/mutation/sample-house-lab/useDeleteShiftMaster';
+import { useDeleteSampleHouseLab } from '@/services/graphql/mutation/sample-house-lab/useDeleteSampleHouseLab';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import {
   IHouseSampleAndLabsData,

@@ -81,6 +81,9 @@
     "cancelled": "Batal",
     "back": "Kembali",
     "validation": "Validasi",
+    "notValid": "Tidak Valid",
+    "invalidData": "Data $t(commonTypography.notValid)",
+    "reject": "Tolak",
     "edit": "Edit",
     "role": "Role",
     "name": "Nama",
@@ -102,6 +105,7 @@
     "modalNonActiveDescription": "Pengguna yang dinonaktifkan suatu saat bisa diaktifkan kembali",
     "modalActiveDescription": "Pengguna yang diaktifkan suatu saat bisa dinonaktifkan kembali",
     "alertTitleConfirmDelete": "Apakah Anda yakin ingin menghapus?",
+    "alertTitleConfirmValid": "Apakah Anda yakin data ini valid?",
     "alertTitleConfirmSave": "Apakah Anda sudah yakin dengan data yang ditambahkan?",
     "alertDescConfirmDelete": "Setelah Anda menyetujui, data akan terhapus",
     "alertDescConfirmDeleteMasterData": "Data yang ada di master data akan berelasi dengan data yang lain",
@@ -129,6 +133,7 @@
     "heavyEquipmentModel": "Model Alat Berat",
     "document": "Dokumen",
     "yesDelete": "Ya Hapus",
+    "yes": "Ya",
     "yesSave": "Ya Simpan",
     "photo": "Foto",
     "identityPhoto": "Foto Identitas",
@@ -476,6 +481,8 @@
     "formUpdateSampleHouseLab": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.sampleHouseLab)",
     "successCreateMessage": "$t(commonTypography.sampleHouseLab) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.sampleHouseLab) berhasil diubah",
-    "qualityMaterialInformation": "Informasi Quality Material"
+    "qualityMaterialInformation": "Informasi Quality Material",
+    "successIsValidateMessage": "$t(sampleHouseLab.sampleHouseLabTitle) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status Data $t(commonTypography.sampleHouseLab) Tidak Valid"
   }
 }

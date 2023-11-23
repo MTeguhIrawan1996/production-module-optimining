@@ -13,9 +13,15 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import NotValidButton, {
+  INotValidButtonProps,
+} from '@/components/elements/button/NotValidButton';
 import PrimaryButton, {
   IPrimaryButtonProps,
 } from '@/components/elements/button/PrimaryButton';
+import ValidationButton, {
+  IValidationButtonProps,
+} from '@/components/elements/button/ValidationButton';
 import MultipleFilter, {
   IMultipleFilterProps,
 } from '@/components/elements/global/MultipleFilter';
@@ -29,6 +35,8 @@ interface IDashboardCardProps extends PaperProps {
   enebleBack?: boolean;
   enebleBackBottom?: boolean;
   enebleBackBottomInner?: Partial<IPrimaryButtonProps>;
+  validationButton?: IValidationButtonProps;
+  notValidButton?: INotValidButtonProps;
   isLoading?: boolean;
   searchBar?: ISerachBar;
   MultipleFilter?: IMultipleFilterProps;
@@ -48,6 +56,8 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
   updateButton,
   searchBar,
   isLoading,
+  validationButton,
+  notValidButton,
   paperStackProps,
   childrenStackProps,
   bg = 'none',
@@ -70,7 +80,6 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
         shadow={shadow}
         p={p}
         bg={bg}
-        // sx={{ position: 'relative', overflow: 'hidden' }}
         withBorder={withBorder}
         {...restPaper}
       >
@@ -144,16 +153,23 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
           />
         ) : null}
       </Paper>
-      {enebleBackBottom ? (
-        <PrimaryButton
-          type="button"
-          variant="outline"
-          leftIcon={<IconChevronLeft size="1rem" />}
-          label={t('commonTypography.back')}
-          mt="lg"
-          onClick={() => router.back()}
-        />
-      ) : null}
+      <Group w="100%" mt="lg" position={enebleBackBottom ? 'apart' : 'right'}>
+        {enebleBackBottom ? (
+          <PrimaryButton
+            type="button"
+            variant="outline"
+            leftIcon={<IconChevronLeft size="1rem" />}
+            label={t('commonTypography.back')}
+            onClick={() => router.back()}
+          />
+        ) : null}
+        <Group spacing="xs">
+          {notValidButton ? (
+            <NotValidButton color="red" {...notValidButton} />
+          ) : null}
+          {validationButton ? <ValidationButton {...validationButton} /> : null}
+        </Group>
+      </Group>
     </>
   );
 };

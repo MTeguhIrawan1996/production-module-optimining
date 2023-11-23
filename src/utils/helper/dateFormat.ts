@@ -7,7 +7,7 @@ dayjs.extend(localizedFormat);
 
 export const formatDate = (
   //  formatDate
-  value: string | Date | undefined,
+  value: string | Date | undefined | null,
   format?:
     | 'DD'
     | 'LL'
@@ -17,6 +17,7 @@ export const formatDate = (
     | 'DD, LL'
     | 'LL, hh:mm WIB'
     | 'DD, LL, hh:mm WIB'
+    | 'hh:mm A'
 ) => {
   return value
     ? dayjs(value)

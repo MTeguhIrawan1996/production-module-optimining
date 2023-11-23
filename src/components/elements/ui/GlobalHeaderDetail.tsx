@@ -1,4 +1,10 @@
-import { SimpleGrid, Stack, Text } from '@mantine/core';
+import {
+  SimpleGrid,
+  SpacingValue,
+  Stack,
+  SystemProp,
+  Text,
+} from '@mantine/core';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -14,16 +20,18 @@ type IImageProps = {
 interface IGlobalHeaderDetailProps {
   data: IImageProps[];
   title?: string;
+  pt?: SystemProp<SpacingValue>;
 }
 
 const GlobalHeaderDetail: React.FC<IGlobalHeaderDetailProps> = ({
   data,
   title,
+  pt = 32,
 }) => {
   const { t } = useTranslation('default');
 
   return (
-    <Stack pt={32} spacing="sm">
+    <Stack pt={pt} spacing="sm">
       <Text fz={24} fw={600} color="brand">
         {t(`commonTypography.${title}`)}
       </Text>
