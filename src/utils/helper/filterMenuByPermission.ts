@@ -8,11 +8,10 @@ export const filterMenuByPermission = (
     const { subMenu, ...menuWithoutSubMenu } = menuItem;
     if (
       !menuItem.access ||
-      menuItem?.access?.some((access) =>
-        userPermission?.some(
-          (permission) => access === permission || access === 'all'
-        )
-      )
+      menuItem?.access?.some((access) => {
+        const permissionWithAll = [...(userPermission ?? []), 'all'];
+        return permissionWithAll.some((permission) => access === permission);
+      })
     ) {
       const filteredSubMenu =
         subMenu && subMenu.length > 0

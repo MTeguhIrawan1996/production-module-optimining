@@ -42,10 +42,11 @@ export async function middleware(request: NextRequest) {
   );
 
   if (matchProtectedPath && token && token.permission) {
-    const permission = decodeFc<string[]>(token.permission);
-    const validAccess = matchProtectedPath?.allowedPermissions.some((allow) =>
-      permission.some((permission) => allow === permission || allow === 'all')
-    );
+    const permission = decodeFc<string[] | []>(token.permission);
+    const validAccess = matchProtectedPath?.allowedPermissions.some((allow) => {
+      const permissionWithAll = [...permission, 'all'];
+      return permissionWithAll.some((permission) => permission === allow);
+    });
     if (validAccess) {
       return NextResponse.next();
     } else {
