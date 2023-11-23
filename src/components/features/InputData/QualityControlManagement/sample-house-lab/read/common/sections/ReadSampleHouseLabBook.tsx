@@ -181,6 +181,15 @@ const ReadSampleHouseLabBook = () => {
     houseSampleAndLab?.status?.id ?? ''
   );
 
+  const includesInvalidation = [
+    'e0d4c28c-7496-485f-bcf6-fec7ff3ea688',
+    '4d4d646d-d0e5-4f94-ba6d-171be20032fc',
+  ];
+
+  const isShowButtonInvalidation = includesInvalidation.includes(
+    houseSampleAndLab?.status?.id ?? ''
+  );
+
   return (
     <DashboardCard
       title={t('sampleHouseLab.readSampleHouseLab')}
@@ -196,13 +205,17 @@ const ReadSampleHouseLabBook = () => {
             }
           : undefined
       }
-      notValidButton={{
-        methods: methods,
-        submitForm: handleSubmitForm,
-        textAreaName: 'statusMessage',
-        textAreaLabel: 'invalidReason',
-        loading: loading,
-      }}
+      notValidButton={
+        isShowButtonInvalidation
+          ? {
+              methods: methods,
+              submitForm: handleSubmitForm,
+              textAreaName: 'statusMessage',
+              textAreaLabel: 'invalidReason',
+              loading: loading,
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,

@@ -21,6 +21,11 @@ export interface IGetPermissionResponse {
   authUser: IGetPermissionData;
 }
 
+export interface IPermissionAuth {
+  name: string;
+  slug: string;
+}
+
 export interface IGetPermissionData {
   id: string;
   role: {
