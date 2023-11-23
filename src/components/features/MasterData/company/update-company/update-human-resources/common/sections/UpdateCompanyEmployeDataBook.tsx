@@ -163,7 +163,7 @@ const UpdateCompanyEmployeDataBook = () => {
           loading: loading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push(`/master-data/company/read/${companyId}`),
         }}
       />
     </DashboardCard>
