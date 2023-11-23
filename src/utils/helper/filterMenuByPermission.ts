@@ -1,9 +1,8 @@
-import { IPermission } from '@/types/global';
 import { IMenuItem } from '@/types/layout';
 
 export const filterMenuByPermission = (
   menuItems: IMenuItem[],
-  userPermission: IPermission[] | undefined
+  userPermission: string[] | undefined
 ) => {
   return menuItems.reduce<IMenuItem[]>((result, menuItem) => {
     const { subMenu, ...menuWithoutSubMenu } = menuItem;
@@ -11,7 +10,7 @@ export const filterMenuByPermission = (
       !menuItem.access ||
       menuItem?.access?.some((access) =>
         userPermission?.some(
-          (permission) => permission.slug === access || access === 'all'
+          (permission) => access === permission || access === 'all'
         )
       )
     ) {

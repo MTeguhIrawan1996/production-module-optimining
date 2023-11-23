@@ -126,7 +126,11 @@ export const authOptions: NextAuthOptions = {
       const permissionRes = await permission(token);
       if (permissionRes) {
         if (currentTimestampSeconds < token.login?.accessToken?.exp) {
-          const permission = encodeFc(permissionRes.role.permissions.data);
+          const arrayOfString = permissionRes.role.permissions.data.map(
+            (val) => val.slug
+          );
+
+          const permission = encodeFc(arrayOfString);
           return {
             ...token,
             permission: permission,

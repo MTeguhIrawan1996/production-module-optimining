@@ -2,7 +2,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
-import { IPermissionAuth } from '@/services/graphql/query/auth/useReadPermission';
 import { decodeFc } from '@/utils/helper/encodeDecode';
 
 export async function middleware(request: NextRequest) {
@@ -43,11 +42,9 @@ export async function middleware(request: NextRequest) {
   );
 
   if (matchProtectedPath && token && token.permission) {
-    const permission = decodeFc<IPermissionAuth[]>(token.permission);
+    const permission = decodeFc<string[]>(token.permission);
     const validAccess = matchProtectedPath?.allowedPermissions.some((allow) =>
-      permission.some(
-        (permission) => allow === permission.slug || allow === 'all'
-      )
+      permission.some((permission) => allow === permission || allow === 'all')
     );
     if (validAccess) {
       return NextResponse.next();
