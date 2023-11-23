@@ -81,6 +81,7 @@
     "cancelled": "Batal",
     "back": "Kembali",
     "validation": "Validasi",
+    "determined": "Tetapkan",
     "notValid": "Tidak Valid",
     "invalidData": "Data $t(commonTypography.notValid)",
     "reject": "Tolak",
@@ -106,6 +107,7 @@
     "modalActiveDescription": "Pengguna yang diaktifkan suatu saat bisa dinonaktifkan kembali",
     "alertTitleConfirmDelete": "Apakah Anda yakin ingin menghapus?",
     "alertTitleConfirmValid": "Apakah Anda yakin data ini valid?",
+    "alertTitleConfirmDetermined": "Apakah Anda yakin ingin menetapkan data ini",
     "alertTitleConfirmSave": "Apakah Anda sudah yakin dengan data yang ditambahkan?",
     "alertDescConfirmDelete": "Setelah Anda menyetujui, data akan terhapus",
     "alertDescConfirmDeleteMasterData": "Data yang ada di master data akan berelasi dengan data yang lain",
@@ -483,6 +485,8 @@
     "successUpdateMessage": "$t(commonTypography.sampleHouseLab) berhasil diubah",
     "qualityMaterialInformation": "Informasi Quality Material",
     "successIsValidateMessage": "$t(sampleHouseLab.sampleHouseLabTitle) berhasil divalidasi",
-    "successIsNotValidateMessage": "Status Data $t(commonTypography.sampleHouseLab) Tidak Valid"
+    "successIsNotValidateMessage": "Status Data $t(commonTypography.sampleHouseLab) Tidak Valid",
+    "successIsDeterminedMessage": "$t(sampleHouseLab.sampleHouseLabTitle) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(sampleHouseLab.sampleHouseLabTitle) berhasil $t(sampleHouseLab.reject)"
   }
 }

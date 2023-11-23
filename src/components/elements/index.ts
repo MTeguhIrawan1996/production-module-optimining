@@ -1,3 +1,4 @@
+import DeterminedButton from '@/components/elements/button/DeterminedButton';
 import NotValidButton from '@/components/elements/button/NotValidButton';
 import PrimaryButton from '@/components/elements/button/PrimaryButton';
 import TextButton from '@/components/elements/button/TextButton';
@@ -82,6 +83,7 @@ export {
   CompanyTypeSelectInputRhf,
   DashboardCard,
   DateInputRhf,
+  DeterminedButton,
   DivisionSelectInputRhf,
   DomeNameSelectInputRhf,
   EligibilityStatusSelectInputRhf,

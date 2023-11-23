@@ -13,6 +13,9 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import DeterminedButton, {
+  IDeterminedButtonProps,
+} from '@/components/elements/button/DeterminedButton';
 import NotValidButton, {
   INotValidButtonProps,
 } from '@/components/elements/button/NotValidButton';
@@ -37,6 +40,7 @@ interface IDashboardCardProps extends PaperProps {
   enebleBackBottomInner?: Partial<IPrimaryButtonProps>;
   validationButton?: IValidationButtonProps;
   notValidButton?: INotValidButtonProps;
+  determinedButton?: IDeterminedButtonProps;
   isLoading?: boolean;
   searchBar?: ISerachBar;
   MultipleFilter?: IMultipleFilterProps;
@@ -52,6 +56,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
   enebleBack,
   enebleBackBottom,
   enebleBackBottomInner,
+  determinedButton,
   addButton,
   updateButton,
   searchBar,
@@ -168,6 +173,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
             <NotValidButton color="red" {...notValidButton} />
           ) : null}
           {validationButton ? <ValidationButton {...validationButton} /> : null}
+          {determinedButton ? <DeterminedButton {...determinedButton} /> : null}
         </Group>
       </Group>
     </>

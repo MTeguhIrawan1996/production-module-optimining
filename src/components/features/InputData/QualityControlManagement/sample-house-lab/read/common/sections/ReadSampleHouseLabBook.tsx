@@ -15,6 +15,7 @@ import {
 } from '@/components/elements';
 import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
+import { useUpdateIsDeterminedSampleHouseLab } from '@/services/graphql/mutation/sample-house-lab/useIsDeterminedSampleHouseLab';
 import {
   IUpdateIsValidateSampleHouseLabValues,
   useUpdateIsValidateSampleHouseLab,
@@ -101,6 +102,38 @@ const ReadSampleHouseLabBook = () => {
       }
     },
   });
+
+  const [executeUpdateStatusDetermiend, { loading: determinedLoading }] =
+    useUpdateIsDeterminedSampleHouseLab({
+      onCompleted: (data) => {
+        const message = {
+          'f5f644d9-8810-44f7-8d42-36b5222b97d1': t(
+            'sampleHouseLab.successIsDeterminedMessage'
+          ),
+          '7848a063-ae40-4a80-af86-dfc532cbb688': t(
+            'sampleHouseLab.successIsRejectMessage'
+          ),
+          default: t('commonTypography.sampleHouseLab'),
+        };
+        notifications.show({
+          color: 'green',
+          title: 'Selamat',
+          message: message[data.determineHouseSampleAndLab.status.id],
+          icon: <IconCheck />,
+        });
+        router.push('/input-data/quality-control-management/sample-house-lab');
+      },
+      onError: (error) => {
+        if (error.graphQLErrors) {
+          notifications.show({
+            color: 'red',
+            title: 'Gagal',
+            message: error.message,
+            icon: <IconX />,
+          });
+        }
+      },
+    });
   /* #endregion  /**======== Query =========== */
 
   const yourPhoto = houseSampleAndLab?.photo
@@ -160,6 +193,16 @@ const ReadSampleHouseLabBook = () => {
     });
   };
 
+  const handleIsDetermined = async () => {
+    await executeUpdateStatusDetermiend({
+      variables: {
+        id,
+        status: true,
+        statusMessage: null,
+      },
+    });
+  };
+
   const handleSubmitForm: SubmitHandler<
     IUpdateIsValidateSampleHouseLabValues
   > = async (data) => {
@@ -181,12 +224,15 @@ const ReadSampleHouseLabBook = () => {
     houseSampleAndLab?.status?.id ?? ''
   );
 
-  const includesInvalidation = [
-    'e0d4c28c-7496-485f-bcf6-fec7ff3ea688',
-    '4d4d646d-d0e5-4f94-ba6d-171be20032fc',
-  ];
+  const includesInvalidation = ['e0d4c28c-7496-485f-bcf6-fec7ff3ea688'];
 
   const isShowButtonInvalidation = includesInvalidation.includes(
+    houseSampleAndLab?.status?.id ?? ''
+  );
+
+  const includesDetermined = ['4d4d646d-d0e5-4f94-ba6d-171be20032fc'];
+
+  const isShowButtonDetermined = includesDetermined.includes(
     houseSampleAndLab?.status?.id ?? ''
   );
 
@@ -202,6 +248,14 @@ const ReadSampleHouseLabBook = () => {
           ? {
               onClickValid: handleIsValid,
               loading: loading,
+            }
+          : undefined
+      }
+      determinedButton={
+        isShowButtonDetermined
+          ? {
+              onClickDetermined: handleIsDetermined,
+              loading: determinedLoading,
             }
           : undefined
       }
