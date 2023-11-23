@@ -7,6 +7,7 @@ import { Breadcrumb, LogoutConfirmModal } from '@/components/elements';
 import HeaderLayout from '@/components/layouts/Dashboard/HeaderLayout';
 
 import { linksDashboard } from '@/utils/constants/Links/linksDashboard';
+import { decodeFc } from '@/utils/helper/encodeDecode';
 import { filterMenuByPermission } from '@/utils/helper/filterMenuByPermission';
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
@@ -43,13 +44,14 @@ const DashboardLayout = ({ children }: LayoutProps) => {
   const { data: sessionData } = useSession();
 
   const filteredMenu = React.useMemo(() => {
-    // const permissionSession = sessionData?.user.permission;
+    if (sessionData) {
+      const permissionSession = decodeFc<string[]>(
+        sessionData?.user.permission
+      );
 
-    // if (sessionData)
-    // return filterMenuByPermission(linksDashboard, permissionSession);
-    // return [];
-    return filterMenuByPermission(linksDashboard, [{ slug: 'all' }]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      return filterMenuByPermission(linksDashboard, permissionSession);
+    }
+    return [];
   }, [sessionData]);
 
   const renderBreadcrumb = React.useMemo(() => {

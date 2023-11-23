@@ -43,7 +43,7 @@ const CreateUserBook = () => {
   const methods = useForm<ICreateUserValues>({
     resolver: zodResolver(createUserSchema),
     defaultValues: {
-      photo: null,
+      photo: [],
       roleId: '',
       name: '',
       username: '',
@@ -114,7 +114,6 @@ const CreateUserBook = () => {
             label: 'photo',
             maxSize: 10 * 1024 ** 2 /* 10MB */,
             multiple: false,
-            maxFiles: 1,
             onDrop: (value) => {
               methods.setValue('photo', value);
               methods.clearErrors('photo');

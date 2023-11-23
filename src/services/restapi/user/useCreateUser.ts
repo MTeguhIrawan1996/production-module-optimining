@@ -33,7 +33,8 @@ const CreateUser = async ({
 }: ICreateUserValues) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
-  if (photo) {
+
+  if (photo && photo?.length > 0) {
     bodyFormData.append('photo', photo[0]);
   }
   bodyFormData.append('name', name);
