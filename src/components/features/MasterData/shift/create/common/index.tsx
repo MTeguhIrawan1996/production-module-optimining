@@ -35,7 +35,7 @@ const CreateShiftMasterPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('element.formShift'),
+          title: t('shift.formShift'),
           mb: 'md',
         }}
       >
