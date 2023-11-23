@@ -12,8 +12,8 @@ import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
-export type IStockpileNameSelectInputRhfProps = {
-  control: 'stockpilename-select-input';
+export type IDomeNameSelectInputRhfProps = {
+  control: 'domename-select-input';
   name: string;
   labelValue?: string;
 } & Omit<
@@ -22,9 +22,14 @@ export type IStockpileNameSelectInputRhfProps = {
 > &
   CommonProps;
 
-const StockpileNameSelectInputRhf: React.FC<
-  IStockpileNameSelectInputRhfProps
-> = ({ name, control, label, labelValue, defaultValue, ...rest }) => {
+const DomeNameSelectInputRhf: React.FC<IDomeNameSelectInputRhfProps> = ({
+  name,
+  control,
+  label,
+  labelValue,
+  defaultValue,
+  ...rest
+}) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
   const [searchTerm, setSearchTerm] = React.useState<string>('');
@@ -37,7 +42,7 @@ const StockpileNameSelectInputRhf: React.FC<
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
-      categoryId: `${process.env.NEXT_PUBLIC_STOCKPILE_ID}`,
+      categoryId: `${process.env.NEXT_PUBLIC_DOME_ID}`,
     },
   });
 
@@ -68,7 +73,7 @@ const StockpileNameSelectInputRhf: React.FC<
       onSearchChange={setSearchTerm}
       searchValue={searchTerm}
       data-control={control}
-      placeholder={t('commonTypography.chooseStockpileName', {
+      placeholder={t('commonTypography.chooseDomeName', {
         ns: 'default',
       })}
       label={label ? t(`components.field.${label}`) : null}
@@ -83,4 +88,4 @@ const StockpileNameSelectInputRhf: React.FC<
   );
 };
 
-export default StockpileNameSelectInputRhf;
+export default DomeNameSelectInputRhf;

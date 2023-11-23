@@ -98,7 +98,9 @@
       "shift": "Shift",
       "startHour": "Jam Mulai",
       "endHour": "Jam Selesai",
-      "stockpileName": "Nama Stockpile"
+      "stockpileName": "Nama Stockpile",
+      "domeName": "Nama Dome",
+      "domeId": "ID Dome"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",

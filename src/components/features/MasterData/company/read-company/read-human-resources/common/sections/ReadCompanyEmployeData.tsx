@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { KeyValueList } from '@/components/elements';
 
 import { IEmployeeData } from '@/services/graphql/query/master-data-company/useReadOneCompanyHumanResource';
-import { dateFromat } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 
 interface IProps {
   employe?: IEmployeeData;
@@ -31,11 +31,11 @@ const ReadCompanyEmployeBook: React.FC<IProps> = ({ employe }) => {
           },
           {
             dataKey: t('commonTypography.entryDate'),
-            value: dateFromat(employe?.entryDate ?? ''),
+            value: formatDate(employe?.entryDate ?? ''),
           },
           {
             dataKey: t('commonTypography.quitDate'),
-            value: dateFromat(employe?.quitDate ?? ''),
+            value: formatDate(employe?.quitDate ?? ''),
           },
         ]}
         type="grid"
