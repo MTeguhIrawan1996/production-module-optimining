@@ -14,6 +14,8 @@ import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 import NavbarCollapse from './NavbarCollapse';
 import NavbarExpand from './NavbarExpand';
 
+import { IMenuItem } from '@/types/layout';
+
 const useStyles = createStyles(() => ({
   root: {
     background: '#FFFFFF',
@@ -43,15 +45,24 @@ const DashboardLayout = ({ children }: LayoutProps) => {
   const [breadcrumbs] = useBreadcrumbs((state) => [state.breadcrumbs], shallow);
   const { data: sessionData } = useSession();
 
-  const filteredMenu = React.useMemo(() => {
-    if (sessionData) {
-      const permissionSession = decodeFc<string[]>(
-        sessionData?.user.permission
-      );
+  const [filteredMenu, setFilteredMenu] = React.useState<IMenuItem[]>([]);
 
-      return filterMenuByPermission(linksDashboard, permissionSession);
-    }
-    return [];
+  React.useEffect(() => {
+    const fetchData = async () => {
+      if (sessionData) {
+        const permissionSession = await decodeFc<string[]>(
+          sessionData.user.permission
+        );
+
+        const filtered = filterMenuByPermission(
+          linksDashboard,
+          permissionSession
+        );
+        setFilteredMenu(filtered);
+      }
+    };
+
+    fetchData();
   }, [sessionData]);
 
   const renderBreadcrumb = React.useMemo(() => {

@@ -94,7 +94,8 @@ export type ControllerCheckBoxGroup<T> = {
 } & Omit<ICheckboxGroupAccessProps, 'name'>;
 
 // Auhtentication
-export interface IPermission {
+export interface IPermissionAuth {
+  id: string;
   slug: string;
 }
 
