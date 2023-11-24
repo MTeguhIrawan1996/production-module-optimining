@@ -1,4 +1,5 @@
-import { IPermission } from '@/types/global';
+// eslint-disable-next-line unused-imports/no-unused-imports
+import { JWT } from 'next-auth/jwt';
 
 declare module 'next-auth' {
   interface Session {
@@ -14,7 +15,7 @@ declare module 'next-auth' {
         };
       };
       role: string;
-      permission: IPermission[];
+      permission: string;
     };
   }
   interface User {
@@ -29,7 +30,7 @@ declare module 'next-auth' {
       };
     };
     role: string;
-    permission: IPermission[];
+    permission: string;
   }
 }
 
@@ -46,6 +47,6 @@ declare module 'next-auth/jwt' {
       };
     };
     role: string;
-    permission: IPermission[];
+    permission: string;
   }
 }

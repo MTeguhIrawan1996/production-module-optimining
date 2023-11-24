@@ -52,6 +52,11 @@ export const READ_ONE_SAMPLE_HOUSE_LAB = gql`
           name
         }
       }
+      density
+      preparationStartAt
+      preparationFinishAt
+      analysisStartAt
+      analysisFinishAt
       elements {
         value
         element {
@@ -64,6 +69,7 @@ export const READ_ONE_SAMPLE_HOUSE_LAB = gql`
         name
         color
       }
+      statusMessage
       photo {
         id
         originalFileName
@@ -77,6 +83,12 @@ export const READ_ONE_SAMPLE_HOUSE_LAB = gql`
 interface IReadOneSampleHouseLab extends IHouseSampleAndLabsData {
   photo: Omit<IFile, 'mime' | 'path'> | null;
   material: IReadOneMaterialMaster;
+  density: string;
+  preparationStartAt: string | null;
+  preparationFinishAt: string | null;
+  analysisStartAt: string | null;
+  analysisFinishAt: string | null;
+  statusMessage: string | null;
 }
 
 interface IReadOneSampleHouseLabResponse {
@@ -96,24 +108,22 @@ export const useReadOneSampleHouseLab = ({
   skip?: boolean;
   onCompleted?: (data: IReadOneSampleHouseLabResponse) => void;
 }) => {
-  const {
-    data: houseSampleAndLabMaster,
-    loading: houseSampleAndLabMasterLoading,
-  } = useQuery<IReadOneSampleHouseLabResponse, IReadOneSampleHouseLabRequest>(
-    READ_ONE_SAMPLE_HOUSE_LAB,
-    {
-      variables,
-      onError: (err: ApolloError) => {
-        return err;
-      },
-      onCompleted: onCompleted,
-      skip,
-      fetchPolicy: 'cache-and-network',
-    }
-  );
+  const { data: houseSampleAndLab, loading: houseSampleAndLabLoading } =
+    useQuery<IReadOneSampleHouseLabResponse, IReadOneSampleHouseLabRequest>(
+      READ_ONE_SAMPLE_HOUSE_LAB,
+      {
+        variables,
+        onError: (err: ApolloError) => {
+          return err;
+        },
+        onCompleted: onCompleted,
+        skip,
+        fetchPolicy: 'cache-and-network',
+      }
+    );
 
   return {
-    houseSampleAndLabMaster: houseSampleAndLabMaster?.houseSampleAndLab,
-    houseSampleAndLabMasterLoading,
+    houseSampleAndLab: houseSampleAndLab?.houseSampleAndLab,
+    houseSampleAndLabLoading,
   };
 };

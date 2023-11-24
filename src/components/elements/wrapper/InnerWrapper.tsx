@@ -43,7 +43,7 @@ const InnerWrapper: React.FC<IInnerWrapperProps> = ({
     ...restContainerProps
   } = containerProps || {};
   const {
-    title: titleALert = t('commonTypography.information'),
+    title: titleAlert = t('commonTypography.information'),
     color = 'blue.6',
     radius = 4,
     withCloseButton = false,
@@ -61,7 +61,7 @@ const InnerWrapper: React.FC<IInnerWrapperProps> = ({
         {alertProps ? (
           <Alert
             icon={<IconAlertCircle size="1rem" />}
-            title={titleALert}
+            title={titleAlert}
             color={color}
             radius={radius}
             withCloseButton={withCloseButton}

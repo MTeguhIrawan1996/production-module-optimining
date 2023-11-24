@@ -1,42 +1,251 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Divider, Stack, Tabs, Text } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import {
   DashboardCard,
+  GlobalAlert,
   GlobalHeaderDetail,
   KeyValueList,
 } from '@/components/elements';
+import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
+import { useUpdateIsDeterminedSampleHouseLab } from '@/services/graphql/mutation/sample-house-lab/useIsDeterminedSampleHouseLab';
+import {
+  IUpdateIsValidateSampleHouseLabValues,
+  useUpdateIsValidateSampleHouseLab,
+} from '@/services/graphql/mutation/sample-house-lab/useIsValidateSampleHouseLab';
 import { useReadOneSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadOneSampleHouseLab';
+import { sampleHouselabMutationValidation } from '@/utils/form-validation/sample-house-lab/sample-house-lab-mutation-validation';
 import { formatDate } from '@/utils/helper/dateFormat';
+
+import { IElementWithValue } from '@/types/global';
 
 const ReadSampleHouseLabBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const [bulkSamplingCategory, setBulkSamplingCategory] = React.useState<
+    Pick<IKeyValueItemProps, 'value' | 'dataKey'>[]
+  >([]);
+
+  const methods = useForm<IUpdateIsValidateSampleHouseLabValues>({
+    resolver: zodResolver(sampleHouselabMutationValidation),
+    defaultValues: {
+      statusMessage: '',
+    },
+    mode: 'onSubmit',
+  });
 
   /* #   /**=========== Query =========== */
-  const { houseSampleAndLabMaster, houseSampleAndLabMasterLoading } =
+  const { houseSampleAndLab, houseSampleAndLabLoading } =
     useReadOneSampleHouseLab({
       variables: {
         id,
       },
       skip: !router.isReady,
+      onCompleted: (data) => {
+        setBulkSamplingCategory(() =>
+          data.houseSampleAndLab.material.parent
+            ? [
+                {
+                  dataKey: t('commonTypography.bulkSamplingCategory'),
+                  value: data.houseSampleAndLab.material.parent.name,
+                },
+                {
+                  dataKey: t('commonTypography.bulkSamplingCategorySub'),
+                  value: data.houseSampleAndLab.material.name,
+                },
+              ]
+            : [
+                {
+                  dataKey: t('commonTypography.bulkSamplingCategory'),
+                  value: data.houseSampleAndLab.material.name,
+                },
+              ]
+        );
+      },
+    });
+
+  const [executeUpdateStatus, { loading }] = useUpdateIsValidateSampleHouseLab({
+    onCompleted: (data) => {
+      const message = {
+        '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
+          'sampleHouseLab.successIsValidateMessage'
+        ),
+        'af06163a-2ba3-45ee-a724-ab3af0c97cc9': t(
+          'sampleHouseLab.successIsNotValidateMessage'
+        ),
+        default: t('commonTypography.sampleHouseLab'),
+      };
+      notifications.show({
+        color: 'green',
+        title: 'Selamat',
+        message: message[data.validateHouseSampleAndLab.status.id],
+        icon: <IconCheck />,
+      });
+      router.push('/input-data/quality-control-management/sample-house-lab');
+    },
+    onError: (error) => {
+      if (error.graphQLErrors) {
+        notifications.show({
+          color: 'red',
+          title: 'Gagal',
+          message: error.message,
+          icon: <IconX />,
+        });
+      }
+    },
+  });
+
+  const [executeUpdateStatusDetermiend, { loading: determinedLoading }] =
+    useUpdateIsDeterminedSampleHouseLab({
+      onCompleted: (data) => {
+        const message = {
+          'f5f644d9-8810-44f7-8d42-36b5222b97d1': t(
+            'sampleHouseLab.successIsDeterminedMessage'
+          ),
+          '7848a063-ae40-4a80-af86-dfc532cbb688': t(
+            'sampleHouseLab.successIsRejectMessage'
+          ),
+          default: t('commonTypography.sampleHouseLab'),
+        };
+        notifications.show({
+          color: 'green',
+          title: 'Selamat',
+          message: message[data.determineHouseSampleAndLab.status.id],
+          icon: <IconCheck />,
+        });
+        router.push('/input-data/quality-control-management/sample-house-lab');
+      },
+      onError: (error) => {
+        if (error.graphQLErrors) {
+          notifications.show({
+            color: 'red',
+            title: 'Gagal',
+            message: error.message,
+            icon: <IconX />,
+          });
+        }
+      },
     });
   /* #endregion  /**======== Query =========== */
 
-  const yourPhoto = houseSampleAndLabMaster?.photo
+  const yourPhoto = houseSampleAndLab?.photo
     ? [
         {
           type: 'photo',
-          alt: houseSampleAndLabMaster?.photo?.fileName,
-          fileName: houseSampleAndLabMaster?.photo?.originalFileName,
-          src: houseSampleAndLabMaster?.photo?.url,
+          alt: houseSampleAndLab?.photo?.fileName,
+          fileName: houseSampleAndLab?.photo?.originalFileName,
+          src: houseSampleAndLab?.photo?.url,
         },
       ]
     : [];
+
+  const renderOtherGcElementCallback = React.useCallback(
+    (gcElement: IElementWithValue) => {
+      const column: Pick<IKeyValueItemProps, 'value' | 'dataKey'> = {
+        dataKey: `${gcElement.element?.name} ${t(
+          'commonTypography.estimationGC'
+        )}`,
+        value: gcElement.value,
+      };
+      return column;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  const renderOtherGcElement = houseSampleAndLab?.gradeControlElements?.map(
+    renderOtherGcElementCallback
+  );
+
+  const renderOtherLabElementCallback = React.useCallback(
+    (labElement: IElementWithValue) => {
+      const column: Pick<IKeyValueItemProps, 'value' | 'dataKey'> = {
+        dataKey: `${labElement.element?.name} ${t(
+          'commonTypography.percentageLab'
+        )}`,
+        value: labElement.value,
+      };
+      return column;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  const renderOtherLabElement = houseSampleAndLab?.elements?.map(
+    renderOtherLabElementCallback
+  );
+
+  const handleIsValid = async () => {
+    await executeUpdateStatus({
+      variables: {
+        id,
+        status: true,
+        statusMessage: null,
+      },
+    });
+  };
+
+  const handleIsDetermined = async () => {
+    await executeUpdateStatusDetermiend({
+      variables: {
+        id,
+        status: true,
+        statusMessage: null,
+      },
+    });
+  };
+
+  const handleInvalidForm: SubmitHandler<
+    IUpdateIsValidateSampleHouseLabValues
+  > = async (data) => {
+    await executeUpdateStatus({
+      variables: {
+        id,
+        status: false,
+        statusMessage: data.statusMessage,
+      },
+    });
+  };
+
+  const handleRejectForm: SubmitHandler<
+    IUpdateIsValidateSampleHouseLabValues
+  > = async (data) => {
+    await executeUpdateStatusDetermiend({
+      variables: {
+        id,
+        status: false,
+        statusMessage: data.statusMessage,
+      },
+    });
+  };
+
+  const includesWaiting = ['e0d4c28c-7496-485f-bcf6-fec7ff3ea688'];
+
+  const includesValid = ['4d4d646d-d0e5-4f94-ba6d-171be20032fc'];
+
+  const isShowButtonValidation = includesWaiting.includes(
+    houseSampleAndLab?.status?.id ?? ''
+  );
+
+  const isShowButtonInvalidation = includesWaiting.includes(
+    houseSampleAndLab?.status?.id ?? ''
+  );
+
+  const isShowButtonDetermined = includesValid.includes(
+    houseSampleAndLab?.status?.id ?? ''
+  );
+
+  const isShowButtonReject = includesValid.includes(
+    houseSampleAndLab?.status?.id ?? ''
+  );
 
   return (
     <DashboardCard
@@ -45,6 +254,44 @@ const ReadSampleHouseLabBook = () => {
         label: 'Edit',
         onClick: () => router.push(`/master-data/human-resources/update/${id}`),
       }}
+      validationButton={
+        isShowButtonValidation
+          ? {
+              onClickValid: handleIsValid,
+              loading: loading,
+            }
+          : undefined
+      }
+      determinedButton={
+        isShowButtonDetermined
+          ? {
+              onClickDetermined: handleIsDetermined,
+              loading: determinedLoading,
+            }
+          : undefined
+      }
+      notValidButton={
+        isShowButtonInvalidation
+          ? {
+              methods: methods,
+              submitForm: handleInvalidForm,
+              textAreaName: 'statusMessage',
+              textAreaLabel: 'invalidReason',
+              loading: loading,
+            }
+          : undefined
+      }
+      rejectButton={
+        isShowButtonReject
+          ? {
+              methods: methods,
+              submitForm: handleRejectForm,
+              textAreaName: 'statusMessage',
+              textAreaLabel: 'rejectReason',
+              loading: determinedLoading,
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,
@@ -52,7 +299,7 @@ const ReadSampleHouseLabBook = () => {
       withBorder
       enebleBackBottom
       shadow="xs"
-      isLoading={houseSampleAndLabMasterLoading}
+      isLoading={houseSampleAndLabLoading}
       paperStackProps={{
         spacing: 'sm',
       }}
@@ -72,9 +319,31 @@ const ReadSampleHouseLabBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          {!houseSampleAndLabMasterLoading && houseSampleAndLabMaster ? (
+          {houseSampleAndLab?.status?.id ===
+          'af06163a-2ba3-45ee-a724-ab3af0c97cc9' ? (
+            <GlobalAlert
+              description={houseSampleAndLab?.statusMessage ?? ''}
+              title={t('commonTypography.invalidData')}
+              color="red"
+              mt="md"
+            />
+          ) : null}
+          {houseSampleAndLab?.status?.id ===
+          '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
+            <GlobalAlert
+              description={houseSampleAndLab?.statusMessage ?? ''}
+              title={t('commonTypography.rejectedData')}
+              color="red"
+              mt="md"
+            />
+          ) : null}
+          {!houseSampleAndLabLoading && houseSampleAndLab ? (
             <>
-              <GlobalHeaderDetail data={[...yourPhoto]} title="document" />
+              <GlobalHeaderDetail
+                data={[...yourPhoto]}
+                title="document"
+                pt="md"
+              />
               <Divider my="md" />
             </>
           ) : null}
@@ -86,51 +355,47 @@ const ReadSampleHouseLabBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.laboratoriumName'),
-                  value: houseSampleAndLabMaster?.laboratoriumName,
+                  value: houseSampleAndLab?.laboratoriumName,
                 },
                 {
                   dataKey: t('commonTypography.sampleDate'),
-                  value: formatDate(houseSampleAndLabMaster?.sampleDate),
+                  value: formatDate(houseSampleAndLab?.sampleDate),
                 },
                 {
                   dataKey: t('commonTypography.shift'),
-                  value: houseSampleAndLabMaster?.shift?.name,
+                  value: houseSampleAndLab?.shift?.name,
                 },
                 {
                   dataKey: t('commonTypography.sampleNumber'),
-                  value: houseSampleAndLabMaster?.sampleNumber,
+                  value: houseSampleAndLab?.sampleNumber,
                 },
                 {
                   dataKey: t('commonTypography.sampleName'),
-                  value: houseSampleAndLabMaster?.sampleName,
+                  value: houseSampleAndLab?.sampleName,
                 },
                 {
                   dataKey: t('commonTypography.sampleType'),
-                  value: houseSampleAndLabMaster?.sampleType?.name,
+                  value: houseSampleAndLab?.sampleType?.name,
                 },
-                {
-                  dataKey: t('commonTypography.bulkSamplingCategory'),
-                  value: '-',
-                },
-                {
-                  dataKey: t('commonTypography.bulkSamplingCategorySub'),
-                  value: '-',
-                },
+                ...bulkSamplingCategory,
                 {
                   dataKey: t('commonTypography.samplerName'),
-                  value: houseSampleAndLabMaster?.sampler?.humanResource?.name,
+                  value: houseSampleAndLab?.sampler?.humanResource?.name,
                 },
                 {
                   dataKey: t('commonTypography.location'),
-                  value: houseSampleAndLabMaster?.location,
+                  value: houseSampleAndLab?.location,
                 },
                 {
                   dataKey: t('commonTypography.sampleEnterLabAt'),
-                  value: formatDate(houseSampleAndLabMaster?.sampleEnterLabAt),
+                  value: formatDate(houseSampleAndLab?.sampleEnterLabAt),
                 },
                 {
                   dataKey: t('commonTypography.sampleEnterLabHour'),
-                  value: '-',
+                  value: formatDate(
+                    houseSampleAndLab?.sampleEnterLabAt,
+                    'hh:mm A'
+                  ),
                 },
               ]}
               type="grid"
@@ -150,29 +415,7 @@ const ReadSampleHouseLabBook = () => {
               {t('commonTypography.rate')}
             </Text>
             <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.province'),
-                  value: '-',
-                },
-                {
-                  dataKey: t('commonTypography.regency'),
-                  value: '-',
-                },
-                {
-                  dataKey: t('commonTypography.subdistrict'),
-
-                  value: '-',
-                },
-                {
-                  dataKey: t('commonTypography.village'),
-                  value: '-',
-                },
-                {
-                  dataKey: t('commonTypography.detailAddress'),
-                  value: '-',
-                },
-              ]}
+              data={[...(renderOtherGcElement ?? [])]}
               type="grid"
               keyStyleText={{
                 fw: 400,
@@ -190,7 +433,7 @@ const ReadSampleHouseLabBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.density'),
-                  value: '-',
+                  value: houseSampleAndLab?.density,
                 },
               ]}
               type="grid"
@@ -213,19 +456,25 @@ const ReadSampleHouseLabBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.preparationStartDate'),
-                  value: '-',
-                },
-                {
-                  dataKey: t('commonTypography.preparationEndDate'),
-                  value: '-',
+                  value: formatDate(houseSampleAndLab?.preparationStartAt),
                 },
                 {
                   dataKey: t('commonTypography.preparationStartHour'),
-                  value: '-',
+                  value: formatDate(
+                    houseSampleAndLab?.preparationStartAt,
+                    'hh:mm A'
+                  ),
+                },
+                {
+                  dataKey: t('commonTypography.preparationEndDate'),
+                  value: formatDate(houseSampleAndLab?.preparationFinishAt),
                 },
                 {
                   dataKey: t('commonTypography.preparationEndHour'),
-                  value: '-',
+                  value: formatDate(
+                    houseSampleAndLab?.preparationFinishAt,
+                    'hh:mm A'
+                  ),
                 },
               ]}
               type="grid"
@@ -248,19 +497,25 @@ const ReadSampleHouseLabBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.analysisStartDate'),
-                  value: '-',
-                },
-                {
-                  dataKey: t('commonTypography.analysisEndDate'),
-                  value: '-',
+                  value: formatDate(houseSampleAndLab?.analysisStartAt),
                 },
                 {
                   dataKey: t('commonTypography.analysisStartHour'),
-                  value: '-',
+                  value: formatDate(
+                    houseSampleAndLab?.analysisStartAt,
+                    'hh:mm A'
+                  ),
+                },
+                {
+                  dataKey: t('commonTypography.analysisEndDate'),
+                  value: formatDate(houseSampleAndLab?.analysisFinishAt),
                 },
                 {
                   dataKey: t('commonTypography.analysisEndHour'),
-                  value: '-',
+                  value: formatDate(
+                    houseSampleAndLab?.analysisFinishAt,
+                    'hh:mm A'
+                  ),
                 },
               ]}
               type="grid"
@@ -280,29 +535,7 @@ const ReadSampleHouseLabBook = () => {
               {t('commonTypography.rate')}
             </Text>
             <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.province'),
-                  value: '-',
-                },
-                {
-                  dataKey: t('commonTypography.regency'),
-                  value: '-',
-                },
-                {
-                  dataKey: t('commonTypography.subdistrict'),
-
-                  value: '-',
-                },
-                {
-                  dataKey: t('commonTypography.village'),
-                  value: '-',
-                },
-                {
-                  dataKey: t('commonTypography.detailAddress'),
-                  value: '-',
-                },
-              ]}
+              data={[...(renderOtherLabElement ?? [])]}
               type="grid"
               keyStyleText={{
                 fw: 400,
