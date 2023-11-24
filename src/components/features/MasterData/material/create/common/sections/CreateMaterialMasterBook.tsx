@@ -12,11 +12,12 @@ import {
   IMutationMaterialValues,
   useCreateMaterialMaster,
 } from '@/services/graphql/mutation/material/useCreateMaterialMaster';
-import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
-import { globalSelect, globalText } from '@/utils/constants/Field/global-field';
+import {
+  globalText,
+  materialSelect,
+} from '@/utils/constants/Field/global-field';
 import { materialMutationValidation } from '@/utils/form-validation/material/material-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
-import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -37,13 +38,6 @@ const CreateMaterialMasterBook = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  const { materialsData } = useReadAllMaterialsMaster({
-    variables: {
-      limit: null,
-      orderDir: 'desc',
-      orderBy: 'createdAt',
-    },
-  });
 
   const [executeCreate, { loading }] = useCreateMaterialMaster({
     onCompleted: () => {
@@ -77,21 +71,18 @@ const CreateMaterialMasterBook = () => {
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
-  const { uncombinedItem } = useFilterItems({
-    data: materialsData ?? [],
-  });
+
   const fieldItem = React.useMemo(() => {
     const materialTypeItem = globalText({
       name: 'name',
       label: 'materialType',
       colSpan: 6,
     });
-    const materialSubItem = globalSelect({
+    const materialSubItem = materialSelect({
       colSpan: 6,
       name: 'parentId',
       label: 'materialSub',
-      data: uncombinedItem,
-      placeholder: 'chooseMaterialSub',
+      withAsterisk: false,
     });
 
     const field: ControllerGroup[] = [
@@ -104,7 +95,7 @@ const CreateMaterialMasterBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uncombinedItem]);
+  }, []);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */

@@ -13,10 +13,12 @@ import { IDateInputProps } from '@/components/elements/input/DateInputRhf';
 import { IDivisionSelectInputRhfProps } from '@/components/elements/input/DivisionSelectInputRhf';
 import { IDomeNameSelectInputRhfProps } from '@/components/elements/input/DomeNameSelectInputRhf';
 import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/input/EligibilityStatusSelectInputRhf';
+import { IEmployeeSelectInputRhfProps } from '@/components/elements/input/EmployeeSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
 import { IImageInputDropzoneRhfProps } from '@/components/elements/input/ImageInputDropzoneRhf';
 import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
+import { IMaterialSelectnputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { IPasswordInputProps } from '@/components/elements/input/PasswordInputRhf';
@@ -26,9 +28,11 @@ import { IProvinceSelectInputRhfProps } from '@/components/elements/input/Provin
 import { IRadioInputProps } from '@/components/elements/input/RadioInputRhf';
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
+import { ISampleTypesSelectnputRhfProps } from '@/components/elements/input/SampleTypeSelectInputRhf';
 import { ISelectHeavyEquipmentReferenceInputProps } from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
 import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
+import { IShiftSelectInputRhfProps } from '@/components/elements/input/ShiftSelectInputRhf';
 import { IStockpileNameSelectInputRhfProps } from '@/components/elements/input/StockpileNameSelectInputRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
@@ -76,6 +80,10 @@ export type ControllerProps =
   | ITimeInputRhfProps
   | IStockpileNameSelectInputRhfProps
   | IDomeNameSelectInputRhfProps
+  | IShiftSelectInputRhfProps
+  | ISampleTypesSelectnputRhfProps
+  | IMaterialSelectnputRhfProps
+  | IEmployeeSelectInputRhfProps
   | IDateInputProps;
 
 export type ControllerGroup = {

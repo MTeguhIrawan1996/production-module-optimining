@@ -82,7 +82,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <SessionProvider session={pageProps.session}>
+      <SessionProvider
+        session={pageProps.session}
+        refetchInterval={5 * 60}
+        refetchOnWindowFocus={false}
+      >
         <ApolloProvider client={client}>
           <QueryClientProvider client={queryClient}>
             <RealViewportProvider>
