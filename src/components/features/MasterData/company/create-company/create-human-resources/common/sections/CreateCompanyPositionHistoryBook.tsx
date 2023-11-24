@@ -24,6 +24,7 @@ import { ControllerGroup } from '@/types/global';
 const CreateCompanyPositionHistoryBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
+  const companyId = router.query?.id?.[0] as string;
   const employeId = router.query?.id?.[1] as string;
   const methods = useForm<
     Pick<IUpdateEmployeePositionsRequest, 'positionHistories'>
@@ -175,7 +176,7 @@ const CreateCompanyPositionHistoryBook = () => {
             }),
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push(`/master-data/company/read/${companyId}`),
         }}
       />
     </DashboardCard>

@@ -76,6 +76,9 @@ const UpdateUserBook = () => {
   } = methods;
   const photo = methods.watch('photo');
 
+  console.log(photo);
+  console.log(methods.formState.errors);
+
   const methodsUpdatePassword = useForm<Omit<IUpdateUserPasswordRequest, 'id'>>(
     {
       resolver: zodResolver(updateUserPasswordSchema),

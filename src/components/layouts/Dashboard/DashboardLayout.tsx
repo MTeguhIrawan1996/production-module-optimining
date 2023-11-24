@@ -7,11 +7,14 @@ import { Breadcrumb, LogoutConfirmModal } from '@/components/elements';
 import HeaderLayout from '@/components/layouts/Dashboard/HeaderLayout';
 
 import { linksDashboard } from '@/utils/constants/Links/linksDashboard';
+import { decodeFc } from '@/utils/helper/encodeDecode';
 import { filterMenuByPermission } from '@/utils/helper/filterMenuByPermission';
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
 import NavbarCollapse from './NavbarCollapse';
 import NavbarExpand from './NavbarExpand';
+
+import { IMenuItem } from '@/types/layout';
 
 const useStyles = createStyles(() => ({
   root: {
@@ -42,14 +45,24 @@ const DashboardLayout = ({ children }: LayoutProps) => {
   const [breadcrumbs] = useBreadcrumbs((state) => [state.breadcrumbs], shallow);
   const { data: sessionData } = useSession();
 
-  const filteredMenu = React.useMemo(() => {
-    // const permissionSession = sessionData?.user.permission;
+  const [filteredMenu, setFilteredMenu] = React.useState<IMenuItem[]>([]);
 
-    // if (sessionData)
-    // return filterMenuByPermission(linksDashboard, permissionSession);
-    // return [];
-    return filterMenuByPermission(linksDashboard, [{ slug: 'all' }]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  React.useEffect(() => {
+    const fetchData = async () => {
+      if (sessionData) {
+        const permissionSession = await decodeFc<string[]>(
+          sessionData.user.permission
+        );
+
+        const filtered = filterMenuByPermission(
+          linksDashboard,
+          permissionSession
+        );
+        setFilteredMenu(filtered);
+      }
+    };
+
+    fetchData();
   }, [sessionData]);
 
   const renderBreadcrumb = React.useMemo(() => {
