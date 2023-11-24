@@ -42,7 +42,7 @@ export async function middleware(request: NextRequest) {
     (path) => path.path === pathname
   );
 
-  if (matchProtectedPath && token && token.permission) {
+  if (matchProtectedPath && token) {
     const now = dayjs().unix();
     if (now < token.login?.accessToken?.exp) {
       const baseURL = process.env.NEXT_PUBLIC_REST_API_URL;

@@ -134,6 +134,7 @@ export const authOptions: NextAuthOptions = {
             permission: permission,
           };
         }
+        return token;
       }
 
       const res = await refreshToken(token);
