@@ -99,6 +99,19 @@ export const zImageRequired = z
       message: 'File harus Foto',
     }
   );
+export const zImageOptional = z
+  .custom<File>()
+  .refine(
+    (file) =>
+      file &&
+      ['image/png', 'image/jpeg', 'image/png', 'image/webp'].includes(
+        file.type
+      ),
+    {
+      message: 'File harus Foto',
+    }
+  )
+  .or(z.literal(null));
 
 export const zImageArrayRequired = z
   .custom<File>()

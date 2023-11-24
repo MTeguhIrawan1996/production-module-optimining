@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { GraphQLClient } from 'graphql-request';
 import Cookies from 'js-cookie';
 import type { NextAuthOptions } from 'next-auth';
@@ -109,8 +110,7 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user, trigger, session }) {
-      const dateTime = new Date().getTime();
-      const currentTimestampSeconds = Math.floor(dateTime / 1000);
+      const now = dayjs().unix();
 
       if (trigger === 'update') {
         return { ...token, ...session.user };
@@ -122,16 +122,19 @@ export const authOptions: NextAuthOptions = {
           ...user,
         };
       }
-
-      const permissionRes = await permission(token);
-      if (permissionRes) {
-        if (currentTimestampSeconds < token.login?.accessToken?.exp) {
-          const permission = encodeFc(permissionRes.role.permissions.data);
+      if (now < token.login?.accessToken?.exp - 10 * 60) {
+        const permissionRes = await permission(token);
+        if (permissionRes) {
+          const arrayOfString = permissionRes.role.permissions.data.map(
+            (val) => val.slug
+          );
+          const permission = await encodeFc(arrayOfString);
           return {
             ...token,
             permission: permission,
           };
         }
+        return token;
       }
 
       const res = await refreshToken(token);

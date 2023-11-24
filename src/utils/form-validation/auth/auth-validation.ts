@@ -1,8 +1,10 @@
 import { z } from 'zod';
 
+import { IUpdateAuthUser } from '@/services/restapi/auth/useUpdateAuthUser';
+
 import {
   zEmailValidation,
-  zImageRequired,
+  zImageOptional,
   zPasswordValidation,
   zRequiredNumberOfString,
   zRequiredString,
@@ -24,13 +26,9 @@ export const updateAuthUserPasswordSchema = z
     path: ['confirmPassword'], // path of error
   });
 
-export const updateAuthUserSchema = z.object({
+export const updateAuthUserSchema: z.ZodType<IUpdateAuthUser> = z.object({
   name: zRequiredString,
-  photo: z.union([
-    zImageRequired,
-    z.string(),
-    z.undefined().or(z.literal(null)),
-  ]),
+  photo: z.union([zImageOptional, z.string()]),
   email: zEmailValidation,
   phoneNumber: zRequiredNumberOfString.or(z.literal('')),
   username: zRequiredString,

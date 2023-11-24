@@ -205,7 +205,8 @@ const UpdateCompanyPositionHistoryBook = () => {
               }),
           }}
           backButton={{
-            onClick: () => router.back(),
+            onClick: () =>
+              router.push(`/master-data/company/read/${companyId}`),
           }}
         />
       ) : (

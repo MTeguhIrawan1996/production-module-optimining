@@ -43,6 +43,7 @@ import { ControllerGroup, ControllerProps } from '@/types/global';
 const CreateCompanyHumanResourcesBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
+  const companyId = router.query?.id?.[0] as string;
   const methods = useForm<Omit<ICreateCompanyHumanResource, 'id'>>({
     resolver: zodResolver(createHumanResourcesSchema),
     defaultValues: {
@@ -350,7 +351,7 @@ const CreateCompanyHumanResourcesBook = () => {
           loading: isLoading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push(`/master-data/company/read/${companyId}`),
         }}
       />
     </DashboardCard>
