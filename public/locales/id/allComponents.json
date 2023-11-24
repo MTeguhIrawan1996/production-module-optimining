@@ -102,7 +102,19 @@
       "domeName": "Nama Dome",
       "domeId": "ID Dome",
       "invalidReason": "Alasan Tidak Valid",
-      "rejectReason": "Alasan ditolak"
+      "rejectReason": "Alasan ditolak",
+      "laboratoriumName": "Nama Laboratorium",
+      "sampleDate": "Tanggal Pengambilan Sampel",
+      "sampleNumber": "Nomor Sampel",
+      "sampleName": "Nama Sampel",
+      "sampleType": "Tipe Sampel",
+      "categoryBulSampling": "Kategori Bulk Sampling",
+      "subCategoryBulSampling": "Sub Kategori Bulk Sampling",
+      "samplerName": "Nama Sampler",
+      "gcName": "Nama GC (Grade Control)",
+      "location": "Lokasi",
+      "sampleEnterLabDate": "Tanggal Sampel Masuk ke Lab",
+      "sampleEnterLabTime": "Jam Sampel Masuk ke Lab"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",

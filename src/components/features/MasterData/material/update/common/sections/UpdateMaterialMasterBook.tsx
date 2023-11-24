@@ -10,12 +10,13 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { IMutationMaterialValues } from '@/services/graphql/mutation/material/useCreateMaterialMaster';
 import { useUpdateMaterialMaster } from '@/services/graphql/mutation/material/useUpdateMaterialMaster';
-import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { useReadOneMaterialMaster } from '@/services/graphql/query/material/useReadOneMaterialMaster';
-import { globalSelect, globalText } from '@/utils/constants/Field/global-field';
+import {
+  globalText,
+  materialSelect,
+} from '@/utils/constants/Field/global-field';
 import { materialMutationValidation } from '@/utils/form-validation/material/material-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
-import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -40,14 +41,6 @@ const UpdateMaterialMasterBook = () => {
     onCompleted: ({ material }) => {
       methods.setValue('name', material.name);
       methods.setValue('parentId', material.parent?.id ?? null);
-    },
-  });
-
-  const { materialsData } = useReadAllMaterialsMaster({
-    variables: {
-      limit: 10,
-      orderDir: 'desc',
-      orderBy: 'createdAt',
     },
   });
 
@@ -80,21 +73,17 @@ const UpdateMaterialMasterBook = () => {
     },
   });
 
-  const { uncombinedItem } = useFilterItems({
-    data: materialsData ?? [],
-  });
   const fieldItem = React.useMemo(() => {
     const materialTypeItem = globalText({
       name: 'name',
       label: 'materialType',
       colSpan: 6,
     });
-    const materialSubItem = globalSelect({
+    const materialSubItem = materialSelect({
       colSpan: 6,
       name: 'parentId',
       label: 'materialSub',
-      data: uncombinedItem,
-      placeholder: 'chooseMaterialSub',
+      withAsterisk: false,
     });
 
     const field: ControllerGroup[] = [
@@ -107,7 +96,7 @@ const UpdateMaterialMasterBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uncombinedItem]);
+  }, []);
 
   const handleSubmitForm: SubmitHandler<IMutationMaterialValues> = async (
     data
