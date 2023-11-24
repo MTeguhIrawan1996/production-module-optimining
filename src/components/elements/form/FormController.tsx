@@ -11,10 +11,12 @@ import {
   DivisionSelectInputRhf,
   DomeNameSelectInputRhf,
   EligibilityStatusSelectInputRhf,
+  EmployeeSelectInputRhf,
   IdentityRadioInputRhf,
   ImageInputDropzoneRhf,
   LocationCategorySelectInputRhf,
   MarriageSelectInputRhf,
+  MaterialSelectInput,
   ModelSelectInputRhf,
   NumberInputRhf,
   PasswordInputRhf,
@@ -24,9 +26,11 @@ import {
   RadioInputRhf,
   RegencySelectInputRhf,
   RelegionSelectInputRhf,
+  SampleTypeSelectInput,
   SelectHeavyEquipmentReferenceInput,
   SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
+  ShiftSelectInputRhf,
   StockpileNameSelectInputRhf,
   SubDistrictSelectInputRhf,
   TextInputRhf,
@@ -103,6 +107,14 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <StockpileNameSelectInputRhf {...props} />;
     case 'domename-select-input':
       return <DomeNameSelectInputRhf {...props} />;
+    case 'shift-select-input':
+      return <ShiftSelectInputRhf {...props} />;
+    case 'sample-type-select-input':
+      return <SampleTypeSelectInput {...props} />;
+    case 'material-select-input':
+      return <MaterialSelectInput {...props} />;
+    case 'employee-select-input':
+      return <EmployeeSelectInputRhf {...props} />;
     default:
       return null;
   }

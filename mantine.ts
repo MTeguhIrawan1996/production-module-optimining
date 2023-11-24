@@ -144,10 +144,10 @@ export const theme: MantineProviderProps['theme'] = {
     '.duration-700': {
       transitionDuration: '700ms',
     },
-    '.mantine-ez3orv': {
+    '.mantine-17ieoi8': {
       pointerEvents: 'unset',
     },
-    '.mantine-1u51dh1': {
+    '.mantine-r4io66': {
       pointerEvents: 'unset',
     },
   }),

@@ -3,9 +3,11 @@ import { IClassSelectInputRhfProps } from '@/components/elements/input/ClassSele
 import { IDateInputProps } from '@/components/elements/input/DateInputRhf';
 import { IDivisionSelectInputRhfProps } from '@/components/elements/input/DivisionSelectInputRhf';
 import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/input/EligibilityStatusSelectInputRhf';
+import { IEmployeeSelectInputRhfProps } from '@/components/elements/input/EmployeeSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
 import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
+import { IMaterialSelectnputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
@@ -691,6 +693,48 @@ export const globalTimeInput = ({
     control: 'time-input',
     name,
     label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const materialSelect = ({
+  name = 'materialId',
+  label = 'material',
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IMaterialSelectnputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'material-select-input',
+    name,
+    label,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const employeeSelect = ({
+  name = 'samplerId',
+  label = 'samplerName',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IEmployeeSelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'employee-select-input',
+    name,
+    label,
+    searchable,
+    clearable,
     withAsterisk,
     colSpan,
     ...rest,

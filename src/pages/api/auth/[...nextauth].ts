@@ -62,11 +62,15 @@ async function permission(token: JWT) {
   graphQLClient.setHeaders({
     authorization,
   });
-  const { authUser } = await graphQLClient.request<IGetPermissionResponse>(
-    PERMISSION_USER
-  );
+  try {
+    const { authUser } = await graphQLClient.request<IGetPermissionResponse>(
+      PERMISSION_USER
+    );
 
-  return authUser;
+    return authUser;
+  } catch (error) {
+    return null;
+  }
 }
 
 export const authOptions: NextAuthOptions = {
@@ -123,16 +127,19 @@ export const authOptions: NextAuthOptions = {
         };
       }
       if (now < token.login?.accessToken?.exp - 10 * 60) {
-        const permissionRes = await permission(token);
-        if (permissionRes) {
-          const arrayOfString = permissionRes.role.permissions.data.map(
-            (val) => val.slug
-          );
-          const permission = await encodeFc(arrayOfString);
-          return {
-            ...token,
-            permission: permission,
-          };
+        if (token) {
+          const permissionRes = await permission(token);
+          if (permissionRes) {
+            const arrayOfString = permissionRes.role.permissions.data.map(
+              (val) => val.slug
+            );
+            const permission = await encodeFc(arrayOfString);
+            return {
+              ...token,
+              permission: permission,
+            };
+          }
+          return token;
         }
         return token;
       }
