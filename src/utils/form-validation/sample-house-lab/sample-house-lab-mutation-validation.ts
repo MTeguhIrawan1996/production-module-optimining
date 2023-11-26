@@ -7,7 +7,6 @@ import {
   zDateValidation,
   zImageArrayOptional,
   zOptionalString,
-  zRequiredNumberOfString,
   zRequiredSelectInput,
   zRequiredString,
 } from '@/utils/form-validation/global';
@@ -22,7 +21,7 @@ export const sampleHouseLabMutationValidation: z.ZodType<IMutationSampleHousePla
     laboratoriumName: zRequiredString,
     sampleDate: zDateValidation,
     shiftId: zRequiredString,
-    sampleNumber: zRequiredNumberOfString,
+    sampleNumber: zRequiredString,
     sampleName: zRequiredString,
     sampleTypeId: zRequiredSelectInput,
     materialId: zOptionalString.nullable(),

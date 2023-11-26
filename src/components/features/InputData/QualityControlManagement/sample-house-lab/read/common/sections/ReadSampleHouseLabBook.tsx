@@ -252,7 +252,10 @@ const ReadSampleHouseLabBook = () => {
       title={t('sampleHouseLab.readSampleHouseLab')}
       updateButton={{
         label: 'Edit',
-        onClick: () => router.push(`/master-data/human-resources/update/${id}`),
+        onClick: () =>
+          router.push(
+            `/input-data/quality-control-management/sample-house-lab/update/${id}`
+          ),
       }}
       validationButton={
         isShowButtonValidation
@@ -384,7 +387,7 @@ const ReadSampleHouseLabBook = () => {
                 },
                 {
                   dataKey: t('commonTypography.location'),
-                  value: houseSampleAndLab?.location,
+                  value: houseSampleAndLab?.location ?? '',
                 },
                 {
                   dataKey: t('commonTypography.sampleEnterLabAt'),

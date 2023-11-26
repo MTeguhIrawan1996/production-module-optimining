@@ -2,58 +2,38 @@ import { FileWithPath } from '@mantine/dropzone';
 import { useMutation } from '@tanstack/react-query';
 
 import axiosClient from '@/services/restapi/axiosClient';
+import {
+  IElementRhf,
+  IMutationSampleHousePlanValues,
+} from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
 
 import { AxiosRestErrorResponse } from '@/types/global';
 
-export type IElementRhf = {
-  elementId: string;
-  name: string;
-  value: string;
-};
-
-export interface IMutationSampleHousePlanValues {
-  laboratoriumName: string;
-  sampleDate?: Date | null;
-  shiftId: string;
-  sampleNumber: string;
-  sampleName: string;
-  sampleTypeId: string | null;
-  materialId: string | null;
-  subMaterialId: string | null;
-  samplerId: string | null;
-  gradeControlId: string | null;
-  location: string;
-  sampleEnterLabDate?: Date | null;
-  sampleEnterLabTime: string;
-  gradeControlElements: IElementRhf[];
-  density: string;
-  preparationStartDate?: Date | null;
-  preparationStartTime: string;
-  preparationFinishDate?: Date | null;
-  preparationFinishTime: string;
-  analysisStartDate?: Date | null;
-  analysisStartTime: string;
-  analysisFinishDate?: Date | null;
-  analysisFinishTime: string;
-  elements: IElementRhf[];
-  photo: FileWithPath[] | null;
-}
-
-interface ICreateSampleHousePlanResponse {
+interface IUpdateSampleHousePlanResponse {
   message: string;
 }
 
 type IPropsRequest = {
+  id: string;
   data: {
     name: keyof IMutationSampleHousePlanValues;
     value: string | FileWithPath[] | IElementRhf[] | null;
   }[];
+  deletePhoto: boolean | null;
 };
 
-const CreateSampleHousePlan = async ({ data }: IPropsRequest) => {
+const UpdateSampleHousePlan = async ({
+  data,
+  deletePhoto,
+  id,
+}: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
   const exclude = [''];
+  bodyFormData.append('id', id);
+  if (deletePhoto) {
+    bodyFormData.append('deletePhoto', 'true');
+  }
   data.forEach(({ name, value }) => {
     if (value) {
       if (name === 'photo') {
@@ -94,26 +74,29 @@ const CreateSampleHousePlan = async ({ data }: IPropsRequest) => {
     }
   });
 
-  const response = await axiosAuth.post(`/house-sample-and-labs`, bodyFormData);
+  const response = await axiosAuth.patch(
+    `/house-sample-and-labs/${id}`,
+    bodyFormData
+  );
   return response?.data;
 };
 
-export const useCreateSampleHousePlan = ({
+export const useUpdateSampleHousePlan = ({
   onError,
   onSuccess,
 }: {
-  onSuccess?: (success: ICreateSampleHousePlanResponse) => void;
+  onSuccess?: (success: IUpdateSampleHousePlanResponse) => void;
   onError?: (
     error: AxiosRestErrorResponse<IMutationSampleHousePlanValues>
   ) => unknown;
 }) => {
   return useMutation<
-    ICreateSampleHousePlanResponse,
+    IUpdateSampleHousePlanResponse,
     AxiosRestErrorResponse<IMutationSampleHousePlanValues>,
     IPropsRequest
   >({
     mutationFn: async (value) => {
-      const data = await CreateSampleHousePlan(value);
+      const data = await UpdateSampleHousePlan(value);
       return data;
     },
     onError: onError,
