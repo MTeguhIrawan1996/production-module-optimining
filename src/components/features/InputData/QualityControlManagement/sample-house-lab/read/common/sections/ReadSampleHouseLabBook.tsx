@@ -21,7 +21,7 @@ import {
   useUpdateIsValidateSampleHouseLab,
 } from '@/services/graphql/mutation/sample-house-lab/useIsValidateSampleHouseLab';
 import { useReadOneSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadOneSampleHouseLab';
-import { sampleHouselabMutationValidation } from '@/utils/form-validation/sample-house-lab/sample-house-lab-mutation-validation';
+import { sampleHouselabStatusValidation } from '@/utils/form-validation/sample-house-lab/sample-house-lab-mutation-validation';
 import { formatDate } from '@/utils/helper/dateFormat';
 
 import { IElementWithValue } from '@/types/global';
@@ -35,7 +35,7 @@ const ReadSampleHouseLabBook = () => {
   >([]);
 
   const methods = useForm<IUpdateIsValidateSampleHouseLabValues>({
-    resolver: zodResolver(sampleHouselabMutationValidation),
+    resolver: zodResolver(sampleHouselabStatusValidation),
     defaultValues: {
       statusMessage: '',
     },

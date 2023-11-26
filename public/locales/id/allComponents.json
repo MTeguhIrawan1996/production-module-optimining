@@ -114,7 +114,16 @@
       "gcName": "Nama GC (Grade Control)",
       "location": "Lokasi",
       "sampleEnterLabDate": "Tanggal Sampel Masuk ke Lab",
-      "sampleEnterLabTime": "Jam Sampel Masuk ke Lab"
+      "sampleEnterLabTime": "Jam Sampel Masuk ke Lab",
+      "densityBulkSampling": "Masa jenis (Hanya Untuk Bulk Sampling (Ton/M3))",
+      "preparationStartDate": "Tanggal Mulai Preparasi",
+      "preparationEndDate": "Tanggal Selesai Preparasi",
+      "preparationStartHour": "Jam Mulai Preparasi",
+      "preparationEndHour": "Jam Selesai Preparasi",
+      "analysisStartDate": "Tanggal Mulai Analisa",
+      "analysisEndDate": "Tanggal Selesai Analisa",
+      "analysisStartHour": "Jam Mulai Analisa",
+      "analysisEndHour": "Jam Selesai Analisa"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",

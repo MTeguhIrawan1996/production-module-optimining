@@ -18,6 +18,7 @@ import { CommonProps } from '@/types/global';
 export type ITextInputProps = {
   control: 'text-input';
   name: string;
+  labelWithTranslate?: boolean;
   deleteButtonField?: Omit<IPrimaryButtonProps, 'label'>;
 } & Omit<TextInputProps, 'name'> &
   CommonProps;
@@ -27,6 +28,7 @@ const TextInputRhf: React.FC<ITextInputProps> = ({
   control,
   label,
   deleteButtonField,
+  labelWithTranslate = true,
   ...rest
 }) => {
   const {
@@ -50,7 +52,13 @@ const TextInputRhf: React.FC<ITextInputProps> = ({
           descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
           autoComplete="off"
           data-control={control}
-          label={label ? t(`components.field.${label}`) : null}
+          label={
+            labelWithTranslate
+              ? label
+                ? t(`components.field.${label}`)
+                : null
+              : label
+          }
           {...rest}
         />
         {deleteButtonField ? (

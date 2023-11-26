@@ -3,15 +3,16 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import {
-  ICreateHeavyEquipmentMasterValues,
-  useCreateHeavyEquipmentMaster,
-} from '@/services/restapi/heavy-equipment/useCreateHeavyEquipmentMaster';
+  IMutationSampleHousePlanValues,
+  useCreateSampleHousePlan,
+} from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
 import {
   employeeSelect,
   globalDate,
@@ -23,7 +24,8 @@ import {
   sampleTypeSelect,
   shiftSelect,
 } from '@/utils/constants/Field/sample-house-field';
-import { createHeavyEquipmentMasterSchema } from '@/utils/form-validation/master-heavy-equipment/heavy-equipment-validation';
+import { sampleHouseLabMutationValidation } from '@/utils/form-validation/sample-house-lab/sample-house-lab-mutation-validation';
+import { dateToString } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
@@ -35,8 +37,8 @@ const CreateSmapleHouseLabBook = () => {
   const router = useRouter();
 
   /* #   /**=========== Methods =========== */
-  const methods = useForm<any>({
-    resolver: zodResolver(createHeavyEquipmentMasterSchema),
+  const methods = useForm<IMutationSampleHousePlanValues>({
+    resolver: zodResolver(sampleHouseLabMutationValidation),
     defaultValues: {
       laboratoriumName: '',
       sampleDate: undefined,
@@ -44,6 +46,7 @@ const CreateSmapleHouseLabBook = () => {
       sampleNumber: '',
       sampleName: '',
       sampleTypeId: '',
+      materialId: '',
       subMaterialId: '',
       samplerId: '',
       gradeControlId: '',
@@ -53,6 +56,7 @@ const CreateSmapleHouseLabBook = () => {
       gradeControlElements: [
         {
           elementId: '',
+          name: '',
           value: '',
         },
       ],
@@ -68,6 +72,7 @@ const CreateSmapleHouseLabBook = () => {
       elements: [
         {
           elementId: '',
+          name: '',
           value: '',
         },
       ],
@@ -75,12 +80,37 @@ const CreateSmapleHouseLabBook = () => {
     },
     mode: 'onBlur',
   });
+  const sampleTypeId = methods.watch('sampleTypeId');
 
+  const { fields, replace } = useFieldArray({
+    name: 'gradeControlElements',
+    control: methods.control,
+  });
+  const { fields: fieldsElements, replace: replaceElements } = useFieldArray({
+    name: 'elements',
+    control: methods.control,
+  });
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
+  const { elementsDataLoading } = useReadAllElementMaster({
+    variables: {
+      limit: null,
+    },
+    onCompleted: (data) => {
+      const otherElements = data.elements.data.map((val) => {
+        return {
+          elementId: val.id,
+          name: val.name,
+          value: '',
+        };
+      });
+      replace(otherElements);
+      replaceElements(otherElements);
+    },
+  });
 
-  const { mutate, isLoading } = useCreateHeavyEquipmentMaster({
+  const { mutate, isLoading } = useCreateSampleHousePlan({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -102,17 +132,54 @@ const CreateSmapleHouseLabBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('heavyEquipment.successCreateMasterMessage'),
+        message: t('sampleHouseLab.successCreateMasterMessage'),
         icon: <IconCheck />,
       });
-      router.push('/master-data/heavy-equipment');
+      router.push('/input-data/quality-control-management/sample-house-lab');
       methods.reset();
     },
   });
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
-  const fieldCreateHeavyEquipment = React.useMemo(() => {
+
+  const fieldGradeControlElements = React.useCallback(
+    (val, index: number) => {
+      const activityItem = globalText({
+        name: `gradeControlElements.${index}.value`,
+        label: `${val.name} ${t('commonTypography.estimationGC')}`,
+        colSpan: 6,
+        withAsterisk: false,
+        labelWithTranslate: false,
+      });
+
+      return activityItem;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fields]
+  );
+  const fieldGradeControlElementsItem = fields.map(fieldGradeControlElements);
+
+  const fieldElements = React.useCallback(
+    (val, index: number) => {
+      const activityItem = globalText({
+        name: `elements.${index}.value`,
+        label: `${val.name} ${t('commonTypography.percentageLab')}`,
+        colSpan: 6,
+        withAsterisk: false,
+        labelWithTranslate: false,
+      });
+
+      return activityItem;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fields]
+  );
+  const fieldElementsItem = fieldsElements.map(fieldElements);
+
+  const fieldRhf = React.useMemo(() => {
+    const sampleBulk = sampleTypeId === 'b778c4e0-6c98-42ac-a12f-c06ad56ea96e';
+
     const laboratoriumName = globalText({
       name: 'laboratoriumName',
       label: 'laboratoriumName',
@@ -122,6 +189,7 @@ const CreateSmapleHouseLabBook = () => {
       name: 'sampleDate',
       label: 'sampleDate',
       withAsterisk: true,
+      clearable: true,
       colSpan: 6,
     });
     const shiftItem = shiftSelect({
@@ -145,12 +213,14 @@ const CreateSmapleHouseLabBook = () => {
       name: 'materialId',
       label: 'categoryBulSampling',
       withAsterisk: true,
+      disabled: !sampleBulk,
     });
     const materialSubItem = materialSelect({
       colSpan: 6,
       name: 'subMaterialId',
       label: 'subCategoryBulSampling',
       withAsterisk: true,
+      disabled: !sampleBulk,
     });
     const employeeItem = employeeSelect({
       colSpan: 6,
@@ -168,10 +238,12 @@ const CreateSmapleHouseLabBook = () => {
       name: 'location',
       label: 'location',
       colSpan: 6,
+      withAsterisk: false,
     });
     const sampleEnterLabDate = globalDate({
       name: 'sampleEnterLabDate',
       label: 'sampleEnterLabDate',
+      clearable: true,
       withAsterisk: true,
       colSpan: 6,
     });
@@ -179,26 +251,84 @@ const CreateSmapleHouseLabBook = () => {
       name: 'sampleEnterLabTime',
       label: 'sampleEnterLabTime',
       colSpan: 6,
-      withAsterisk: true,
+      withAsterisk: false,
+    });
+    const density = globalText({
+      name: 'density',
+      label: 'densityBulkSampling',
+      colSpan: 12,
+      withAsterisk: false,
+    });
+    const preparationStartDate = globalDate({
+      name: 'preparationStartDate',
+      label: 'preparationStartDate',
+      withAsterisk: false,
+      clearable: true,
+      colSpan: 6,
+    });
+    const preparationStartTime = globalTimeInput({
+      name: 'preparationStartTime',
+      label: 'preparationStartHour',
+      colSpan: 6,
+      withAsterisk: false,
+    });
+    const preparationFinishDate = globalDate({
+      name: 'preparationFinishDate',
+      label: 'preparationEndDate',
+      clearable: true,
+      withAsterisk: false,
+      colSpan: 6,
+    });
+    const preparationFinishTime = globalTimeInput({
+      name: 'preparationFinishTime',
+      label: 'preparationEndHour',
+      colSpan: 6,
+      withAsterisk: false,
+    });
+    const analysisStartDate = globalDate({
+      name: 'analysisStartDate',
+      label: 'analysisStartDate',
+      clearable: true,
+      withAsterisk: false,
+      colSpan: 6,
+    });
+    const analysisStartTime = globalTimeInput({
+      name: 'analysisStartTime',
+      label: 'analysisStartHour',
+      colSpan: 6,
+      withAsterisk: false,
+    });
+    const analysisFinishDate = globalDate({
+      name: 'analysisFinishDate',
+      label: 'analysisEndDate',
+      withAsterisk: false,
+      clearable: true,
+      colSpan: 6,
+    });
+    const analysisFinishTime = globalTimeInput({
+      name: 'analysisFinishTime',
+      label: 'analysisEndHour',
+      colSpan: 6,
+      withAsterisk: false,
     });
 
-    const vehicleNumberPhoto: ControllerProps = {
+    const photo: ControllerProps = {
       control: 'image-dropzone',
-      name: 'vehicleNumberPhoto',
-      label: 'vehicleDocument',
+      name: 'photo',
+      label: 'photo',
       description: 'photoDescription',
       maxSize: 10 * 1024 ** 2 /* 10MB */,
       multiple: false,
       enableDeletePhoto: true,
       onDrop: (value) => {
-        methods.setValue('vehicleNumberPhoto', value);
-        methods.clearErrors('vehicleNumberPhoto');
+        methods.setValue('photo', value);
+        methods.clearErrors('photo');
       },
       onReject: (files) =>
-        handleRejectFile<ICreateHeavyEquipmentMasterValues>({
+        handleRejectFile<IMutationSampleHousePlanValues>({
           methods,
           files,
-          field: 'vehicleNumberPhoto',
+          field: 'photo',
         }),
     };
 
@@ -223,32 +353,90 @@ const CreateSmapleHouseLabBook = () => {
         ],
       },
       {
-        group: t('commonTypography.document'),
+        group: t('commonTypography.rate'),
         enableGroupLabel: true,
-        formControllers: [vehicleNumberPhoto],
+        formControllers: [...fieldGradeControlElementsItem],
+      },
+      {
+        group: t('commonTypography.density'),
+        formControllers: [density],
+      },
+      {
+        group: t('commonTypography.preparationTime'),
+        enableGroupLabel: true,
+        formControllers: [
+          preparationStartDate,
+          preparationFinishDate,
+          preparationStartTime,
+          preparationFinishTime,
+        ],
+      },
+      {
+        group: t('commonTypography.analysisTime'),
+        enableGroupLabel: true,
+        formControllers: [
+          analysisStartDate,
+          analysisFinishDate,
+          analysisStartTime,
+          analysisFinishTime,
+        ],
+      },
+      {
+        group: t('commonTypography.rate'),
+        enableGroupLabel: true,
+        formControllers: [...fieldElementsItem],
+      },
+      {
+        group: t('commonTypography.photo'),
+        formControllers: [photo],
       },
     ];
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [sampleTypeId, fieldGradeControlElementsItem, fieldElementsItem]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
-  const handleSubmitForm: SubmitHandler<ICreateHeavyEquipmentMasterValues> = (
+  const handleSubmitForm: SubmitHandler<IMutationSampleHousePlanValues> = (
     data
   ) => {
+    methods.clearErrors('gradeControlElements');
+    methods.clearErrors('elements');
+
     const values = objectToArrayValue(data);
+    const dateValue = [
+      'sampleDate',
+      'sampleEnterLabDate',
+      'preparationStartDate',
+      'preparationFinishDate',
+      'analysisStartDate',
+      'analysisFinishDate',
+    ];
+    const valuesWithDateString = values.map((val) => {
+      if (dateValue.includes(val.name)) {
+        const date = dateToString(val.value);
+        return {
+          name: val.name,
+          value: date,
+        };
+      }
+      return {
+        name: val.name,
+        value: val.value,
+      };
+    });
+
     mutate({
-      data: values,
+      data: valuesWithDateString,
     });
   };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={elementsDataLoading}>
       <GlobalFormGroup
-        field={fieldCreateHeavyEquipment}
+        field={fieldRhf}
         methods={methods}
         submitForm={handleSubmitForm}
         submitButton={{
