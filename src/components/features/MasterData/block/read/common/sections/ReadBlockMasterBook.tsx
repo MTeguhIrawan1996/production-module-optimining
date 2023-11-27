@@ -17,8 +17,8 @@ import {
 } from '@/components/elements';
 
 import { useDeleteBlockPitMaster } from '@/services/graphql/mutation/block/useDeleteBlockPitMaster';
+import { useReadAllBlockPitMaster } from '@/services/graphql/query/block/useReadAllBlockPitMaster';
 import { useReadOneBlockMaster } from '@/services/graphql/query/block/useReadOneBlockMaster';
-import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
 
 const ReadBlockMasterBook = () => {
   const { t } = useTranslation('default');
@@ -44,7 +44,7 @@ const ReadBlockMasterBook = () => {
     blockPitMasterMeta,
     blockPitMasterLoading,
     refetchBlocks,
-  } = useReadOneBlockPitMaster({
+  } = useReadAllBlockPitMaster({
     variables: {
       id,
       limit: 10,

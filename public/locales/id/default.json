@@ -411,6 +411,7 @@
     "createBlockPit": "$t(commonTypography.create) $t(commonTypography.pit)",
     "readBlock": "$t(commonTypography.detail) $t(commonTypography.block)",
     "updateBlock": "$t(commonTypography.edit) $t(commonTypography.block)",
+    "updateBlockPit": "$t(commonTypography.edit) $t(commonTypography.pit)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.blockName) dan $t(commonTypography.blockId)",
     "searchPitPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.pitName) dan $t(commonTypography.pitId)",
     "successDeleteMessage": "$t(commonTypography.block) berhasil dihapus",
@@ -418,9 +419,11 @@
     "formBlock": "$t(commonTypography.form) $t(block.createBlock)",
     "formBlockPit": "$t(commonTypography.form) $t(block.createBlockPit)",
     "formUpdateBlock": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.block)",
+    "formUpdateBlockPit": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.pit)",
     "successCreateMessage": "$t(commonTypography.block) berhasil dibuat",
     "successCreatePitMessage": "$t(commonTypography.pit) berhasil dibuat",
-    "successUpdateMessage": "$t(commonTypography.block) berhasil diubah"
+    "successUpdateMessage": "$t(commonTypography.block) berhasil diubah",
+    "successUpdatePitMessage": "$t(commonTypography.pit) berhasil diubah"
   },
   "material": {
     "createMaterial": "$t(commonTypography.create) $t(commonTypography.material)",
