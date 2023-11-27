@@ -125,7 +125,9 @@
       "analysisStartHour": "Jam Mulai Analisa",
       "analysisEndHour": "Jam Selesai Analisa",
       "blockId": "ID Block",
-      "blockName": "Nama Block"
+      "blockName": "Nama Block",
+      "pitId": "ID PIT",
+      "pitName": "Nama PIT"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",

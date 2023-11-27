@@ -5,12 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import CreateBlockMasterBook from '@/components/features/MasterData/block/create/common/sections/CreateBlockMasterBook';
+import CreateBlockPitMasterBook from '@/components/features/MasterData/block/create/pit/common/sections/CreateBlockPitMasterBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const CreateBlockMasterPage = () => {
+const CreateBlockPitMasterPage = () => {
   const router = useRouter();
+  const blockId = router.query?.id as string;
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
@@ -24,7 +25,11 @@ const CreateBlockMasterPage = () => {
         path: '/master-data/block',
       },
       {
-        label: t('block.createBlock'),
+        label: t('block.readBlock'),
+        path: `/master-data/block/read/${blockId}`,
+      },
+      {
+        label: t('block.createBlockPit'),
         path: router.asPath,
       },
     ]);
@@ -35,7 +40,7 @@ const CreateBlockMasterPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('block.formBlock'),
+          title: t('block.formBlockPit'),
           mb: 'md',
         }}
       >
@@ -56,7 +61,7 @@ const CreateBlockMasterPage = () => {
             </Tabs.List>
           </ScrollArea>
           <Tabs.Panel value="information">
-            <CreateBlockMasterBook />
+            <CreateBlockPitMasterBook />
           </Tabs.Panel>
         </Tabs>
       </InnerWrapper>
@@ -64,4 +69,4 @@ const CreateBlockMasterPage = () => {
   );
 };
 
-export default CreateBlockMasterPage;
+export default CreateBlockPitMasterPage;

@@ -1,12 +1,12 @@
-import { CreateBlocakMasterPage } from '@/components/features';
+import { CreateBlockMasterPage } from '@/components/features';
 import { DashboardLayout } from '@/components/layouts';
 
-const CreateBlocakMaster = () => {
-  return <CreateBlocakMasterPage />;
+const CreateBlockMaster = () => {
+  return <CreateBlockMasterPage />;
 };
 
-export default CreateBlocakMaster;
+export default CreateBlockMaster;
 
-CreateBlocakMaster.getLayout = function getLayout(page: React.ReactElement) {
+CreateBlockMaster.getLayout = function getLayout(page: React.ReactElement) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };

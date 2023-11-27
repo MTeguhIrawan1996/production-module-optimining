@@ -408,7 +408,7 @@
   },
   "block": {
     "createBlock": "$t(commonTypography.create) $t(commonTypography.block)",
-    "createPitBlock": "$t(commonTypography.create) $t(commonTypography.pit)",
+    "createBlockPit": "$t(commonTypography.create) $t(commonTypography.pit)",
     "readBlock": "$t(commonTypography.detail) $t(commonTypography.block)",
     "updateBlock": "$t(commonTypography.edit) $t(commonTypography.block)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.blockName) dan $t(commonTypography.blockId)",
@@ -416,8 +416,10 @@
     "successDeleteMessage": "$t(commonTypography.block) berhasil dihapus",
     "successDeletePitMessage": "$t(commonTypography.pit) berhasil dihapus",
     "formBlock": "$t(commonTypography.form) $t(block.createBlock)",
+    "formBlockPit": "$t(commonTypography.form) $t(block.createBlockPit)",
     "formUpdateBlock": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.block)",
     "successCreateMessage": "$t(commonTypography.block) berhasil dibuat",
+    "successCreatePitMessage": "$t(commonTypography.pit) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.block) berhasil diubah"
   },
   "material": {

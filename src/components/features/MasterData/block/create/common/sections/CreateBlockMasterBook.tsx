@@ -18,7 +18,7 @@ import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
-const CreateBlocakMasterBook = () => {
+const CreateBlockMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
 
@@ -123,4 +123,4 @@ const CreateBlocakMasterBook = () => {
   );
 };
 
-export default CreateBlocakMasterBook;
+export default CreateBlockMasterBook;

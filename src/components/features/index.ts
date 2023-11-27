@@ -14,7 +14,8 @@ import CreateActivityPlanMasterPage from '@/components/features/MasterData/activ
 import ReadActivityPlanPage from '@/components/features/MasterData/activity-plan/read/common';
 import UpdateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/update/common';
 import BlockPage from '@/components/features/MasterData/block/common';
-import CreateBlocakMasterPage from '@/components/features/MasterData/block/create/common';
+import CreateBlockMasterPage from '@/components/features/MasterData/block/create/common';
+import CreateBlockPitMasterPage from '@/components/features/MasterData/block/create/pit/common';
 import ReadBlockMasterPage from '@/components/features/MasterData/block/read/common';
 import CompanyPage from '@/components/features/MasterData/company/common';
 import CreateCompanyPage from '@/components/features/MasterData/company/create-company/common';
@@ -86,7 +87,8 @@ export {
   CompanyTypePage,
   ComponentsPage,
   CreateActivityPlanMasterPage,
-  CreateBlocakMasterPage,
+  CreateBlockMasterPage,
+  CreateBlockPitMasterPage,
   CreateCompanyHeavyEquipmentPage,
   CreateCompanyHumanResourcesPage,
   CreateCompanyPage,

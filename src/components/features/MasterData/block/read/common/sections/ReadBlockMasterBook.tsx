@@ -26,7 +26,7 @@ const ReadBlockMasterBook = () => {
   const pageParams = useSearchParams();
   const id = router.query.id as string;
   const page = Number(pageParams.get('page')) || 1;
-  const url = `/master-data/block/read/${id}?page=${page}`;
+  const url = `/master-data/block/read/${id}?page=1`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [pitId, setPitId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -47,7 +47,7 @@ const ReadBlockMasterBook = () => {
   } = useReadOneBlockPitMaster({
     variables: {
       id,
-      limit: 15,
+      limit: 10,
       page: page,
       orderDir: 'desc',
       orderBy: 'createdAt',
@@ -141,7 +141,7 @@ const ReadBlockMasterBook = () => {
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
           actionButton: {
-            label: t('block.createPitBlock'),
+            label: t('block.createBlockPit'),
             onClick: () => router.push(`/master-data/block/create/pit/${id}`),
           },
         }}
@@ -225,7 +225,7 @@ const ReadBlockMasterBook = () => {
             p={0}
             title={t('commonTypography.pit')}
             addButton={{
-              label: t('block.createPitBlock'),
+              label: t('block.createBlockPit'),
               onClick: () => router.push(`/master-data/block/create/pit/${id}`),
             }}
             searchBar={{
