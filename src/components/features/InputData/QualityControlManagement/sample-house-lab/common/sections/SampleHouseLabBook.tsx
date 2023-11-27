@@ -37,6 +37,12 @@ const SampleHouseLabBook = () => {
     React.useState<boolean>(false);
 
   /* #   /**=========== Query =========== */
+  const { elementsData } = useReadAllElementMaster({
+    variables: {
+      limit: null,
+    },
+  });
+
   const {
     houseSampleAndLabsData,
     houseSampleAndLabsDataLoading,
@@ -49,12 +55,6 @@ const SampleHouseLabBook = () => {
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
-    },
-  });
-
-  const { elementsData } = useReadAllElementMaster({
-    variables: {
-      limit: null,
     },
   });
 
@@ -120,7 +120,6 @@ const SampleHouseLabBook = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
-
   const renderOtherColumn = elementsData?.map(renderOtherColumnCallback);
 
   const renderOtherPrcentageLabColumnCallback = React.useCallback(
@@ -140,7 +139,6 @@ const SampleHouseLabBook = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
-
   const renderOtherColumnPercentageLab = elementsData?.map(
     renderOtherPrcentageLabColumnCallback
   );
@@ -281,7 +279,12 @@ const SampleHouseLabBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [houseSampleAndLabsData, houseSampleAndLabsDataLoading]);
+  }, [
+    houseSampleAndLabsData,
+    renderOtherColumn,
+    renderOtherColumnPercentageLab,
+    houseSampleAndLabsDataLoading,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (

@@ -32,6 +32,11 @@ export const linksDashboard: IMenuItem[] = [
         access: ['create-location'],
       },
       {
+        label: 'block',
+        href: '/master-data/block',
+        access: ['create-block'],
+      },
+      {
         label: 'material',
         href: '/master-data/material',
         access: ['create-material'],
@@ -91,11 +96,11 @@ export const linksDashboard: IMenuItem[] = [
       {
         label: 'qualityControlManagement',
         subMenu: [
-          {
-            label: 'stockpileMonitoring',
-            href: '/input-data/quality-control-management/stockpile-monitoring',
-            access: ['create-monitoring-stockpile'],
-          },
+          // {
+          //   label: 'stockpileMonitoring',
+          //   href: '/input-data/quality-control-management/stockpile-monitoring',
+          //   access: ['create-monitoring-stockpile'],
+          // },
           {
             label: 'sampleHouseLab',
             href: '/input-data/quality-control-management/sample-house-lab',

@@ -13,6 +13,7 @@ import ActivityPlanMasterPage from '@/components/features/MasterData/activity-pl
 import CreateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/create/common';
 import ReadActivityPlanPage from '@/components/features/MasterData/activity-plan/read/common';
 import UpdateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/update/common';
+import BlockPage from '@/components/features/MasterData/block/common';
 import CompanyPage from '@/components/features/MasterData/company/common';
 import CreateCompanyPage from '@/components/features/MasterData/company/create-company/common';
 import CreateCompanyHeavyEquipmentPage from '@/components/features/MasterData/company/create-company/create-heavy-equipment/common';
@@ -78,6 +79,7 @@ import UpdateUserPage from '@/components/features/Setting/user/update-user/commo
 export {
   ActivityPlanMasterPage,
   AuthPage,
+  BlockPage,
   CompanyPage,
   CompanyTypePage,
   ComponentsPage,
