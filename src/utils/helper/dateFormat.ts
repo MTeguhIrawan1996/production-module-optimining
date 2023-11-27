@@ -18,6 +18,8 @@ export const formatDate = (
     | 'LL, hh:mm WIB'
     | 'DD, LL, hh:mm WIB'
     | 'hh:mm A'
+    | 'hh:mm:ss'
+    | 'HH:mm:ss'
 ) => {
   return value
     ? dayjs(value)

@@ -399,12 +399,15 @@ const UpdateCompanyHeavyEquipmentBook = () => {
     data
   ) => {
     const values = objectToArrayValue(data);
+    const deletedVehicleNumberPhoto =
+      serverVehicleNumberPhoto && serverVehicleNumberPhoto.length === 0;
     mutate({
       companyId: companyId,
       deletedPhotoIds,
       heavyEquipmentId,
       companyHeavyEquipmentId,
       data: values,
+      deletedVehicleNumberPhoto,
     });
   };
   /* #endregion  /**======== HandleSubmitFc =========== */

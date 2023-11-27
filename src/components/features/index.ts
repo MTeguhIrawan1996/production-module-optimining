@@ -6,6 +6,7 @@ import FormExamplePage from '@/components/features/Example/form-example/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
 import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/create/common';
 import ReadSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/read/common';
+import UpdateSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/update/common';
 import StockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/common';
 import CreateStockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/create/common';
 import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
@@ -145,6 +146,7 @@ export {
   UpdateLocationMasterPage,
   UpdateManagementRolePage,
   UpdateMaterialMasterPage,
+  UpdateSampleHouseLabPage,
   UpdateShiftMasterPage,
   UpdateUserPage,
   UpdateWorkingHoursPlanMasterPage,

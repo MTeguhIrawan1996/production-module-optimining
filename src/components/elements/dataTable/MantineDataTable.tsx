@@ -93,7 +93,7 @@ export default function MantineDataTable<T>({
             ? minHeight
             : fetching
             ? 280
-            : 0
+            : 160
         }
         defaultColumnProps={{
           textAlignment: 'center',

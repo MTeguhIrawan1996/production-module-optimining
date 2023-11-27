@@ -1,6 +1,5 @@
 /* eslint-disable unused-imports/no-unused-vars */
 import { Select, SelectProps } from '@mantine/core';
-import { useDebouncedValue } from '@mantine/hooks';
 import * as React from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -31,12 +30,10 @@ const MarriageSelectInputRhf: React.FC<IMarriagaSelectInputRhfProps> = ({
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
   const [searchTerm, setSearchTerm] = React.useState<string>('');
-  const [searchQuery] = useDebouncedValue<string>(searchTerm, 400);
 
   const { marriageData } = useReadAllMarriage({
     variables: {
       limit: null,
-      search: searchQuery === '' ? null : searchQuery,
     },
   });
 

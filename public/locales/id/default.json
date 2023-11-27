@@ -487,7 +487,7 @@
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.laboratoriumName), $t(commonTypography.sampleDate), $t(commonTypography.shift), $t(commonTypography.sampleNumber), $t(commonTypography.sampleName) dan $t(commonTypography.sampleType)",
     "successDeleteMessage": "Data $t(commonTypography.sampleHouseLab) berhasil dihapus",
     "formSampleHouseLab": "$t(commonTypography.form) $t(sampleHouseLab.sampleHouseLabTitle)",
-    "formUpdateSampleHouseLab": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.sampleHouseLab)",
+    "formUpdateSampleHouseLab": "$t(commonTypography.form) $t(commonTypography.edit) $t(sampleHouseLab.sampleHouseLabTitle)",
     "successCreateMessage": "$t(commonTypography.sampleHouseLab) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.sampleHouseLab) berhasil diubah",
     "qualityMaterialInformation": "Informasi Quality Material",
