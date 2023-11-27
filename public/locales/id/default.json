@@ -4,7 +4,13 @@
     "company": "Perusahaan",
     "employee": "Pegawai",
     "location": "Lokasi",
+    "block": "Block",
+    "pit": "PIT",
     "locationId": "ID Lokasi",
+    "blockId": "ID Block",
+    "blockName": "Nama Block",
+    "pitId": "ID PIT",
+    "pitName": "Nama PIT",
     "locationCategory": "Kategori Lokasi",
     "locationName": "Nama Lokasi",
     "material": "Material",
@@ -255,7 +261,8 @@
     "inputData": "$t(commonTypography.inputData)",
     "qualityControlManagement": "$t(commonTypography.qualityControlManagement)",
     "stockpileMonitoring": "$t(commonTypography.stockpileMonitoring)",
-    "sampleHouseLab": "$t(commonTypography.sampleHouseLab)"
+    "sampleHouseLab": "$t(commonTypography.sampleHouseLab)",
+    "block": "$t(commonTypography.block)"
   },
   "auth": {
     "button": {
@@ -398,6 +405,25 @@
     "formUpdateLocation": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.location)",
     "successCreateMessage": "$t(commonTypography.location) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.location) berhasil diubah"
+  },
+  "block": {
+    "createBlock": "$t(commonTypography.create) $t(commonTypography.block)",
+    "createBlockPit": "$t(commonTypography.create) $t(commonTypography.pit)",
+    "readBlock": "$t(commonTypography.detail) $t(commonTypography.block)",
+    "updateBlock": "$t(commonTypography.edit) $t(commonTypography.block)",
+    "updateBlockPit": "$t(commonTypography.edit) $t(commonTypography.pit)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.blockName) dan $t(commonTypography.blockId)",
+    "searchPitPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.pitName) dan $t(commonTypography.pitId)",
+    "successDeleteMessage": "$t(commonTypography.block) berhasil dihapus",
+    "successDeletePitMessage": "$t(commonTypography.pit) berhasil dihapus",
+    "formBlock": "$t(commonTypography.form) $t(block.createBlock)",
+    "formBlockPit": "$t(commonTypography.form) $t(block.createBlockPit)",
+    "formUpdateBlock": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.block)",
+    "formUpdateBlockPit": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.pit)",
+    "successCreateMessage": "$t(commonTypography.block) berhasil dibuat",
+    "successCreatePitMessage": "$t(commonTypography.pit) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.block) berhasil diubah",
+    "successUpdatePitMessage": "$t(commonTypography.pit) berhasil diubah"
   },
   "material": {
     "createMaterial": "$t(commonTypography.create) $t(commonTypography.material)",

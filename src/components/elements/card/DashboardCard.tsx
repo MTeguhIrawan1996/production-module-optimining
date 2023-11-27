@@ -163,25 +163,33 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
           />
         ) : null}
       </Paper>
-      <Group w="100%" mt="lg" position={enebleBackBottom ? 'apart' : 'right'}>
-        {enebleBackBottom ? (
-          <PrimaryButton
-            type="button"
-            variant="outline"
-            leftIcon={<IconChevronLeft size="1rem" />}
-            label={t('commonTypography.back')}
-            onClick={() => router.back()}
-          />
-        ) : null}
-        <Group spacing="xs">
-          {notValidButton ? (
-            <NotValidButton color="red" {...notValidButton} />
+      {enebleBackBottom ? (
+        <Group w="100%" mt="lg" position={enebleBackBottom ? 'apart' : 'right'}>
+          {enebleBackBottom ? (
+            <PrimaryButton
+              type="button"
+              variant="outline"
+              leftIcon={<IconChevronLeft size="1rem" />}
+              label={t('commonTypography.back')}
+              onClick={() => router.back()}
+            />
           ) : null}
-          {rejectButton ? <RejectButton color="red" {...rejectButton} /> : null}
-          {validationButton ? <ValidationButton {...validationButton} /> : null}
-          {determinedButton ? <DeterminedButton {...determinedButton} /> : null}
+          <Group spacing="xs">
+            {notValidButton ? (
+              <NotValidButton color="red" {...notValidButton} />
+            ) : null}
+            {rejectButton ? (
+              <RejectButton color="red" {...rejectButton} />
+            ) : null}
+            {validationButton ? (
+              <ValidationButton {...validationButton} />
+            ) : null}
+            {determinedButton ? (
+              <DeterminedButton {...determinedButton} />
+            ) : null}
+          </Group>
         </Group>
-      </Group>
+      ) : null}
     </>
   );
 };
