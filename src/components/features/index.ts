@@ -17,6 +17,7 @@ import BlockPage from '@/components/features/MasterData/block/common';
 import CreateBlockMasterPage from '@/components/features/MasterData/block/create/common';
 import CreateBlockPitMasterPage from '@/components/features/MasterData/block/create/pit/common';
 import ReadBlockMasterPage from '@/components/features/MasterData/block/read/common';
+import UpdateBlockMasterPage from '@/components/features/MasterData/block/update/common';
 import UpdateBlockPitMasterPage from '@/components/features/MasterData/block/update/pit/common';
 import CompanyPage from '@/components/features/MasterData/company/common';
 import CreateCompanyPage from '@/components/features/MasterData/company/create-company/common';
@@ -143,6 +144,7 @@ export {
   ShiftMasterPage,
   StockpilePage,
   UpdateActivityPlanMasterPage,
+  UpdateBlockMasterPage,
   UpdateBlockPitMasterPage,
   UpdateCompanyHeavyEquipmentPage,
   UpdateCompanyHumanResourcesPage,
