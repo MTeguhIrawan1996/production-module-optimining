@@ -20,6 +20,7 @@ type IPropsRequest = {
     value: string | FileWithPath[] | boolean | undefined | null;
   }[];
   deletedPhotoIds: string[];
+  deletedVehicleNumberPhoto: boolean | null;
 };
 
 const UpdateHeavyEquipmentCompany = async ({
@@ -28,6 +29,7 @@ const UpdateHeavyEquipmentCompany = async ({
   heavyEquipmentId,
   companyHeavyEquipmentId,
   deletedPhotoIds,
+  deletedVehicleNumberPhoto,
 }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
@@ -43,6 +45,9 @@ const UpdateHeavyEquipmentCompany = async ({
   ];
   bodyFormData.append('id', companyHeavyEquipmentId);
   bodyFormData.append('heavyEquipmentId', heavyEquipmentId);
+  if (deletedVehicleNumberPhoto) {
+    bodyFormData.append('deletedVehicleNumberPhoto', 'true');
+  }
   if (deletedPhotoIds) {
     deletedPhotoIds.forEach((deletedId) => {
       bodyFormData.append('deletedPhotoIds[]', deletedId);
