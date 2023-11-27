@@ -409,7 +409,7 @@
     "updateBlock": "$t(commonTypography.edit) $t(commonTypography.block)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.blockName) dan $t(commonTypography.blockId)",
     "successDeleteMessage": "$t(commonTypography.block) berhasil dihapus",
-    "formBlock": "$t(commonTypography.form) $t(commonTypography.block)",
+    "formBlock": "$t(commonTypography.form) $t(block.createBlock)",
     "formUpdateBlock": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.block)",
     "successCreateMessage": "$t(commonTypography.block) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.block) berhasil diubah"
