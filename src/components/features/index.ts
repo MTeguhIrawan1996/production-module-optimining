@@ -15,6 +15,7 @@ import ReadActivityPlanPage from '@/components/features/MasterData/activity-plan
 import UpdateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/update/common';
 import BlockPage from '@/components/features/MasterData/block/common';
 import CreateBlocakMasterPage from '@/components/features/MasterData/block/create/common';
+import ReadBlockMasterPage from '@/components/features/MasterData/block/read/common';
 import CompanyPage from '@/components/features/MasterData/company/common';
 import CreateCompanyPage from '@/components/features/MasterData/company/create-company/common';
 import CreateCompanyHeavyEquipmentPage from '@/components/features/MasterData/company/create-company/create-heavy-equipment/common';
@@ -119,6 +120,7 @@ export {
   MaterialMasterPage,
   ProfilePage,
   ReadActivityPlanPage,
+  ReadBlockMasterPage,
   ReadCompanyHeavyEquipmentPage,
   ReadCompanyHumanResourcesPage,
   ReadCompanyPage,
