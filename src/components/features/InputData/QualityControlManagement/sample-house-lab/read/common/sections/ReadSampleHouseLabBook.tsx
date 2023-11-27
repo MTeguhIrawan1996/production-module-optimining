@@ -21,7 +21,7 @@ import {
   useUpdateIsValidateSampleHouseLab,
 } from '@/services/graphql/mutation/sample-house-lab/useIsValidateSampleHouseLab';
 import { useReadOneSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadOneSampleHouseLab';
-import { sampleHouselabMutationValidation } from '@/utils/form-validation/sample-house-lab/sample-house-lab-mutation-validation';
+import { sampleHouselabStatusValidation } from '@/utils/form-validation/sample-house-lab/sample-house-lab-mutation-validation';
 import { formatDate } from '@/utils/helper/dateFormat';
 
 import { IElementWithValue } from '@/types/global';
@@ -35,7 +35,7 @@ const ReadSampleHouseLabBook = () => {
   >([]);
 
   const methods = useForm<IUpdateIsValidateSampleHouseLabValues>({
-    resolver: zodResolver(sampleHouselabMutationValidation),
+    resolver: zodResolver(sampleHouselabStatusValidation),
     defaultValues: {
       statusMessage: '',
     },
@@ -252,7 +252,10 @@ const ReadSampleHouseLabBook = () => {
       title={t('sampleHouseLab.readSampleHouseLab')}
       updateButton={{
         label: 'Edit',
-        onClick: () => router.push(`/master-data/human-resources/update/${id}`),
+        onClick: () =>
+          router.push(
+            `/input-data/quality-control-management/sample-house-lab/update/${id}`
+          ),
       }}
       validationButton={
         isShowButtonValidation
@@ -384,7 +387,7 @@ const ReadSampleHouseLabBook = () => {
                 },
                 {
                   dataKey: t('commonTypography.location'),
-                  value: houseSampleAndLab?.location,
+                  value: houseSampleAndLab?.location ?? '',
                 },
                 {
                   dataKey: t('commonTypography.sampleEnterLabAt'),

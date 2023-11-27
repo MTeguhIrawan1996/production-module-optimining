@@ -1,6 +1,5 @@
 /* eslint-disable unused-imports/no-unused-vars */
 import { Select, SelectProps } from '@mantine/core';
-import { useDebouncedValue } from '@mantine/hooks';
 import * as React from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -33,14 +32,12 @@ const SampleTypeSelectInput: React.FC<ISampleTypesSelectnputRhfProps> = ({
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
   const [searchTerm, setSearchTerm] = React.useState<string>('');
-  const [searchQuery] = useDebouncedValue<string>(searchTerm, 400);
 
   const { sampleTypesdata } = useReadAllSampleType({
     variables: {
       limit: null,
       orderDir: 'desc',
       orderBy: 'createdAt',
-      search: searchQuery === '' ? null : searchQuery,
     },
   });
 

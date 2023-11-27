@@ -327,10 +327,14 @@ const UpdateHeavyEquipmentMasterBook = () => {
     Omit<IUpdateHeavyEquipmentMasterValues, 'id'>
   > = (data) => {
     const values = objectToArrayValue(data);
+    const deletedVehicleNumberPhoto =
+      serverVehicleNumberPhoto && serverVehicleNumberPhoto.length === 0;
+
     mutate({
       id,
       deletedPhotoIds,
       data: values,
+      deletedVehicleNumberPhoto,
     });
   };
   /* #endregion  /**======== HandleSubmitFc =========== */

@@ -9,10 +9,12 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
+import { useReadOneSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadOneSampleHouseLab';
 import {
+  IElementRhf,
   IMutationSampleHousePlanValues,
-  useCreateSampleHousePlan,
 } from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
+import { useUpdateSampleHousePlan } from '@/services/restapi/sample-house-plan/useUpdateSampleHousePlan';
 import {
   employeeSelect,
   globalDate,
@@ -25,16 +27,21 @@ import {
   shiftSelect,
 } from '@/utils/constants/Field/sample-house-field';
 import { sampleHouseLabMutationValidation } from '@/utils/form-validation/sample-house-lab/sample-house-lab-mutation-validation';
-import { dateToString } from '@/utils/helper/dateToString';
+import { formatDate } from '@/utils/helper/dateFormat';
+import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
-import { ControllerGroup, ControllerProps } from '@/types/global';
+import { ControllerGroup, ControllerProps, IFile } from '@/types/global';
 
-const CreateSmapleHouseLabBook = () => {
+const UpdateSampleHouseLabPage = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
+  const [serverPhoto, setServerPhoto] = React.useState<
+    Omit<IFile, 'mime' | 'path'>[] | null
+  >([]);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationSampleHousePlanValues>({
@@ -90,10 +97,11 @@ const CreateSmapleHouseLabBook = () => {
     name: 'elements',
     control: methods.control,
   });
+
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  const { elementsDataLoading } = useReadAllElementMaster({
+  const { elementsData, elementsDataLoading } = useReadAllElementMaster({
     variables: {
       limit: null,
     },
@@ -110,7 +118,110 @@ const CreateSmapleHouseLabBook = () => {
     },
   });
 
-  const { mutate, isLoading } = useCreateSampleHousePlan({
+  const isOwnElemntsData =
+    elementsData && elementsData.length > 0 ? true : false;
+
+  useReadOneSampleHouseLab({
+    variables: {
+      id,
+    },
+    skip: !router.isReady || !isOwnElemntsData,
+    onCompleted: ({ houseSampleAndLab }) => {
+      const isOwnParent = houseSampleAndLab.material.parent !== null;
+      fields.map((o, i) => {
+        const valueGCElements = houseSampleAndLab?.gradeControlElements?.find(
+          (val) => val.element?.id === o.elementId
+        );
+        const valueElements = houseSampleAndLab?.elements?.find(
+          (val) => val.element?.id === o.elementId
+        );
+        methods.setValue(
+          `gradeControlElements.${i}.value`,
+          valueGCElements && valueGCElements.value
+            ? `${valueGCElements.value}`
+            : ''
+        );
+        methods.setValue(
+          `elements.${i}.value`,
+          valueElements && valueElements.value ? `${valueElements.value}` : ''
+        );
+      });
+      const sampleDate = stringToDate(houseSampleAndLab.sampleDate ?? null);
+      const sampleEnterLabDate = stringToDate(
+        houseSampleAndLab.sampleEnterLabAt ?? null
+      );
+      const sampleEnterLabTime = formatDate(
+        houseSampleAndLab.sampleEnterLabAt,
+        'HH:mm:ss'
+      );
+      const preparationStartDate = stringToDate(
+        houseSampleAndLab.preparationStartAt ?? null
+      );
+      const preparationStartTime = formatDate(
+        houseSampleAndLab.preparationStartAt,
+        'HH:mm:ss'
+      );
+      const preparationFinishDate = stringToDate(
+        houseSampleAndLab.preparationFinishAt ?? null
+      );
+      const preparationFinishTime = formatDate(
+        houseSampleAndLab.preparationFinishAt,
+        'HH:mm:ss'
+      );
+      const analysisStartDate = stringToDate(
+        houseSampleAndLab.analysisStartAt ?? null
+      );
+      const analysisStartTime = formatDate(
+        houseSampleAndLab.analysisStartAt,
+        'HH:mm:ss'
+      );
+      const analysisFinishDate = stringToDate(
+        houseSampleAndLab.analysisFinishAt ?? null
+      );
+      const analysisFinishTime = formatDate(
+        houseSampleAndLab.analysisFinishAt,
+        'HH:mm:ss'
+      );
+
+      methods.setValue('laboratoriumName', houseSampleAndLab.laboratoriumName);
+      methods.setValue('sampleDate', sampleDate);
+      methods.setValue('shiftId', houseSampleAndLab.shift?.id ?? '');
+      methods.setValue('sampleNumber', houseSampleAndLab?.sampleNumber ?? '');
+      methods.setValue('sampleName', houseSampleAndLab?.sampleName ?? '');
+      methods.setValue('sampleTypeId', houseSampleAndLab?.sampleType?.id ?? '');
+      methods.setValue(
+        'materialId',
+        isOwnParent
+          ? houseSampleAndLab.material.parent?.id ?? ''
+          : houseSampleAndLab.material.id
+      );
+      if (isOwnParent) {
+        methods.setValue('subMaterialId', houseSampleAndLab.material.id);
+      }
+      methods.setValue('samplerId', houseSampleAndLab.sampler?.id ?? '');
+      methods.setValue(
+        'gradeControlId',
+        houseSampleAndLab.gradeControl?.id ?? ''
+      );
+      methods.setValue('location', houseSampleAndLab.location ?? '');
+      methods.setValue('sampleEnterLabDate', sampleEnterLabDate);
+      methods.setValue('sampleEnterLabTime', sampleEnterLabTime);
+      methods.setValue('density', houseSampleAndLab.density ?? '');
+      methods.setValue('preparationStartDate', preparationStartDate);
+      methods.setValue('preparationStartTime', preparationStartTime);
+      methods.setValue('preparationFinishDate', preparationFinishDate);
+      methods.setValue('preparationFinishTime', preparationFinishTime);
+      methods.setValue('analysisStartDate', analysisStartDate);
+      methods.setValue('analysisStartTime', analysisStartTime);
+      methods.setValue('analysisFinishDate', analysisFinishDate);
+      methods.setValue('analysisFinishTime', analysisFinishTime);
+      if (houseSampleAndLab.photo) {
+        setServerPhoto([houseSampleAndLab.photo]);
+      }
+    },
+  });
+
+  const { mutate, isLoading } = useUpdateSampleHousePlan({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -132,7 +243,7 @@ const CreateSmapleHouseLabBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('sampleHouseLab.successCreateMessage'),
+        message: t('sampleHouseLab.successUpdateMessage'),
         icon: <IconCheck />,
       });
       router.push('/input-data/quality-control-management/sample-house-lab');
@@ -142,9 +253,8 @@ const CreateSmapleHouseLabBook = () => {
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
-
   const fieldGradeControlElements = React.useCallback(
-    (val, index: number) => {
+    (val: IElementRhf, index: number) => {
       const elementItem = globalText({
         name: `gradeControlElements.${index}.value`,
         label: `${val.name} ${t('commonTypography.estimationGC')}`,
@@ -161,7 +271,7 @@ const CreateSmapleHouseLabBook = () => {
   const fieldGradeControlElementsItem = fields.map(fieldGradeControlElements);
 
   const fieldElements = React.useCallback(
-    (val, index: number) => {
+    (val: IElementRhf, index: number) => {
       const elementItem = globalText({
         name: `elements.${index}.value`,
         label: `${val.name} ${t('commonTypography.percentageLab')}`,
@@ -320,6 +430,10 @@ const CreateSmapleHouseLabBook = () => {
       maxSize: 10 * 1024 ** 2 /* 10MB */,
       multiple: false,
       enableDeletePhoto: true,
+      serverPhotos: serverPhoto,
+      handleDeleteServerPhotos: () => {
+        setServerPhoto([]);
+      },
       onDrop: (value) => {
         methods.setValue('photo', value);
         methods.clearErrors('photo');
@@ -394,7 +508,12 @@ const CreateSmapleHouseLabBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sampleTypeId, fieldGradeControlElementsItem, fieldElementsItem]);
+  }, [
+    sampleTypeId,
+    fieldGradeControlElementsItem,
+    fieldElementsItem,
+    serverPhoto,
+  ]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
@@ -426,9 +545,12 @@ const CreateSmapleHouseLabBook = () => {
         value: val.value,
       };
     });
+    const deletePhoto = serverPhoto && serverPhoto.length === 0;
 
     mutate({
+      id,
       data: valuesWithDateString,
+      deletePhoto,
     });
   };
   /* #endregion  /**======== HandleSubmitFc =========== */
@@ -444,11 +566,14 @@ const CreateSmapleHouseLabBook = () => {
           loading: isLoading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () =>
+            router.push(
+              '/input-data/quality-control-management/sample-house-lab'
+            ),
         }}
       />
     </DashboardCard>
   );
 };
 
-export default CreateSmapleHouseLabBook;
+export default UpdateSampleHouseLabPage;

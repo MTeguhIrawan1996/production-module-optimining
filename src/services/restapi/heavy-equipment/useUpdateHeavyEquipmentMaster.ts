@@ -33,12 +33,14 @@ type IPropsRequest = {
     value: string | null | FileWithPath[];
   }[];
   deletedPhotoIds: string[];
+  deletedVehicleNumberPhoto: boolean | null;
 };
 
 const UpdateHeavyEquipmentMaster = async ({
   data,
   id,
   deletedPhotoIds,
+  deletedVehicleNumberPhoto,
 }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
@@ -51,6 +53,9 @@ const UpdateHeavyEquipmentMaster = async ({
   ];
 
   bodyFormData.append('id', id);
+  if (deletedVehicleNumberPhoto) {
+    bodyFormData.append('deletedVehicleNumberPhoto', 'true');
+  }
   if (deletedPhotoIds) {
     deletedPhotoIds.forEach((deletedId) => {
       bodyFormData.append('deletedPhotoIds[]', deletedId);

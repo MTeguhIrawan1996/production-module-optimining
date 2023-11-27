@@ -111,7 +111,7 @@ export interface IHouseSampleAndLabsData {
       name: string;
     } | null;
   } | null;
-  location: string;
+  location: string | null;
   sampleEnterLabAt: string | null;
   gradeControlElements: IElementWithValue[] | null;
   elements: IElementWithValue[] | null;
