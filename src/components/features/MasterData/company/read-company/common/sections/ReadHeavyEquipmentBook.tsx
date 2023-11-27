@@ -311,7 +311,7 @@ const ReadHeavyEquipmentBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         setIsOpenDeleteConfirmation((prev) => !prev);
-                        setHeavyEquipmentId(id);
+                        setHeavyEquipmentId(heavyEquipmentId);
                       },
                     }}
                   />
