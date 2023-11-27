@@ -101,7 +101,7 @@ const UpdateSampleHouseLabPage = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  const { elementsData } = useReadAllElementMaster({
+  const { elementsData, elementsDataLoading } = useReadAllElementMaster({
     variables: {
       limit: null,
     },
@@ -121,7 +121,7 @@ const UpdateSampleHouseLabPage = () => {
   const isOwnElemntsData =
     elementsData && elementsData.length > 0 ? true : false;
 
-  const { houseSampleAndLabLoading } = useReadOneSampleHouseLab({
+  useReadOneSampleHouseLab({
     variables: {
       id,
     },
@@ -556,7 +556,7 @@ const UpdateSampleHouseLabPage = () => {
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0} isLoading={houseSampleAndLabLoading}>
+    <DashboardCard p={0} isLoading={elementsDataLoading}>
       <GlobalFormGroup
         field={fieldRhf}
         methods={methods}

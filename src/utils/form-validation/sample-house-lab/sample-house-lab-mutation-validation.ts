@@ -20,7 +20,7 @@ export const sampleHouseLabMutationValidation: z.ZodType<IMutationSampleHousePla
   z.object({
     laboratoriumName: zRequiredString,
     sampleDate: zDateValidation,
-    shiftId: zRequiredString,
+    shiftId: zRequiredSelectInput,
     sampleNumber: zRequiredString,
     sampleName: zRequiredString,
     sampleTypeId: zRequiredSelectInput,

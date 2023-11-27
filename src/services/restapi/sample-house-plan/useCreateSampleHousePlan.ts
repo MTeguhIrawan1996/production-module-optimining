@@ -14,7 +14,7 @@ export type IElementRhf = {
 export interface IMutationSampleHousePlanValues {
   laboratoriumName: string;
   sampleDate?: Date | null;
-  shiftId: string;
+  shiftId: string | null;
   sampleNumber: string;
   sampleName: string;
   sampleTypeId: string | null;
