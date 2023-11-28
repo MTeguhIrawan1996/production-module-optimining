@@ -13,6 +13,12 @@ import ActivityPlanMasterPage from '@/components/features/MasterData/activity-pl
 import CreateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/create/common';
 import ReadActivityPlanPage from '@/components/features/MasterData/activity-plan/read/common';
 import UpdateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/update/common';
+import BlockPage from '@/components/features/MasterData/block/common';
+import CreateBlockMasterPage from '@/components/features/MasterData/block/create/common';
+import CreateBlockPitMasterPage from '@/components/features/MasterData/block/create/pit/common';
+import ReadBlockMasterPage from '@/components/features/MasterData/block/read/common';
+import UpdateBlockMasterPage from '@/components/features/MasterData/block/update/common';
+import UpdateBlockPitMasterPage from '@/components/features/MasterData/block/update/pit/common';
 import CompanyPage from '@/components/features/MasterData/company/common';
 import CreateCompanyPage from '@/components/features/MasterData/company/create-company/common';
 import CreateCompanyHeavyEquipmentPage from '@/components/features/MasterData/company/create-company/create-heavy-equipment/common';
@@ -78,10 +84,13 @@ import UpdateUserPage from '@/components/features/Setting/user/update-user/commo
 export {
   ActivityPlanMasterPage,
   AuthPage,
+  BlockPage,
   CompanyPage,
   CompanyTypePage,
   ComponentsPage,
   CreateActivityPlanMasterPage,
+  CreateBlockMasterPage,
+  CreateBlockPitMasterPage,
   CreateCompanyHeavyEquipmentPage,
   CreateCompanyHumanResourcesPage,
   CreateCompanyPage,
@@ -115,6 +124,7 @@ export {
   MaterialMasterPage,
   ProfilePage,
   ReadActivityPlanPage,
+  ReadBlockMasterPage,
   ReadCompanyHeavyEquipmentPage,
   ReadCompanyHumanResourcesPage,
   ReadCompanyPage,
@@ -134,6 +144,8 @@ export {
   ShiftMasterPage,
   StockpilePage,
   UpdateActivityPlanMasterPage,
+  UpdateBlockMasterPage,
+  UpdateBlockPitMasterPage,
   UpdateCompanyHeavyEquipmentPage,
   UpdateCompanyHumanResourcesPage,
   UpdateCompanyPage,
