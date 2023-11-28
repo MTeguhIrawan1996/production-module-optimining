@@ -91,6 +91,7 @@
       "locationName": "Nama Lokasi",
       "materialType": "Jenis Material",
       "materialSub": "Sub Jenis Material",
+      "materialSubBy": "Sub Jenis Material Dari",
       "activity": "Kegiatan",
       "activityPlan": "Rencana Aktivitas",
       "element": "Unsur Kandungan",

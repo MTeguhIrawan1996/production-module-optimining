@@ -1,11 +1,17 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
+import { ISubmaterials } from '@/services/graphql/query/material/useReadAllMaterialMaster';
+
 export const READ_ONE_MATERIAL_MASTER = gql`
   query ReadOneMaterialMaster($id: String!) {
     material(id: $id) {
       id
       name
       parent {
+        id
+        name
+      }
+      subMaterials {
         id
         name
       }
@@ -20,6 +26,7 @@ export interface IReadOneMaterialMaster {
     id: string;
     name: string;
   } | null;
+  subMaterials: ISubmaterials[];
 }
 
 export interface IReadOneMaterialMasterResponse {

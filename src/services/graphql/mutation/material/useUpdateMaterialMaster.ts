@@ -1,24 +1,32 @@
 import { ApolloError, gql, useMutation } from '@apollo/client';
 
-import { IMutationMaterialValues } from '@/services/graphql/mutation/material/useCreateMaterialMaster';
-
 export const UPDATE_MATERIAL_MASTER = gql`
   mutation UpdateMaterialMaster(
     $id: String!
     $name: String!
-    $parentId: String
+    $subMaterials: [UpdateSubMaterialDto!]
   ) {
     updateMaterial(
-      updateMaterialInput: { id: $id, name: $name, parentId: $parentId }
+      updateMaterialInput: { id: $id, name: $name, subMaterials: $subMaterials }
     ) {
       id
     }
   }
 `;
 
+export interface IMutationUpdateMaterialValues {
+  name: string;
+  subMaterials:
+    | {
+        subMaterialId: string | null;
+        name: string;
+      }[]
+    | null;
+}
+
 type IUpdateMaterialMasterRequest = {
   id: string;
-} & IMutationMaterialValues;
+} & IMutationUpdateMaterialValues;
 
 interface IUpdateMaterialMasterResponse {
   updateMaterial: {

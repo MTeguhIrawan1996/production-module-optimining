@@ -16,6 +16,7 @@
     "material": "Material",
     "materialType": "Jenis Material",
     "materialSub": "Sub Jenis Material",
+    "materialSubBy": "Sub Jenis Material Dari",
     "workingHoursPlan": "Rencana Jam Kerja",
     "activity": "Kegiatan",
     "activityPlan": "Rencana Aktivitas",
@@ -448,6 +449,7 @@
   },
   "material": {
     "createMaterial": "$t(commonTypography.create) $t(commonTypography.material)",
+    "createMaterialSub": "$t(commonTypography.create) $t(commonTypography.materialSub)",
     "readMaterial": "$t(commonTypography.detail) $t(commonTypography.material)",
     "updateMaterial": "$t(commonTypography.edit) $t(commonTypography.material)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type) $t(commonTypography.material)",
