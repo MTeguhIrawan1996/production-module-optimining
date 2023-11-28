@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { IMutationMaterialValues } from '@/services/graphql/mutation/material/useCreateMaterialMaster';
+import { IMutationUpdateMaterialValues } from '@/services/graphql/mutation/material/useUpdateMaterialMaster';
 import {
   zOptionalString,
   zRequiredString,
@@ -9,5 +10,19 @@ import {
 export const materialMutationValidation: z.ZodType<IMutationMaterialValues> =
   z.object({
     name: zRequiredString,
-    parentId: zOptionalString.nullable(),
+    subMaterials: z
+      .object({
+        name: zOptionalString,
+      })
+      .array(),
+  });
+export const materialMutationUpdateValidation: z.ZodType<IMutationUpdateMaterialValues> =
+  z.object({
+    name: zRequiredString,
+    subMaterials: z
+      .object({
+        subMaterialId: zOptionalString.nullable(),
+        name: zOptionalString,
+      })
+      .array(),
   });

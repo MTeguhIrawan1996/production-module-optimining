@@ -38,6 +38,13 @@ const CreateMaterialMasterPage = () => {
           title: t('material.formMaterial'),
           mb: 'md',
         }}
+        alertProps={{
+          mb: 'md',
+          fz: 14,
+          fw: 400,
+          description:
+            'Jika ingin menambahkan jenis material, isi jenis material saja dan kosongkan sub jenis material',
+        }}
       >
         <Tabs
           defaultValue="information"

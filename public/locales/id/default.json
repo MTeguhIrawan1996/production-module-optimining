@@ -16,6 +16,7 @@
     "material": "Material",
     "materialType": "Jenis Material",
     "materialSub": "Sub Jenis Material",
+    "materialSubBy": "Sub Jenis Material Dari",
     "workingHoursPlan": "Rencana Jam Kerja",
     "activity": "Kegiatan",
     "activityPlan": "Rencana Aktivitas",
@@ -207,6 +208,7 @@
     "domeId": "ID Dome",
     "domeStatus": "Status Dome",
     "stockpileName": "Nama Stockpile",
+    "stockpileId": "ID Stockpile",
     "stockpile": "Stockpile",
     "stockpileInformation": "$t(commonTypography.information) $t(commonTypography.stockpile)",
     "tonByRitage": "Ton Berdasarkan Ritase",
@@ -262,7 +264,8 @@
     "qualityControlManagement": "$t(commonTypography.qualityControlManagement)",
     "stockpileMonitoring": "$t(commonTypography.stockpileMonitoring)",
     "sampleHouseLab": "$t(commonTypography.sampleHouseLab)",
-    "block": "$t(commonTypography.block)"
+    "block": "$t(commonTypography.block)",
+    "stockpile": "$t(commonTypography.stockpile)"
   },
   "auth": {
     "button": {
@@ -425,8 +428,28 @@
     "successUpdateMessage": "$t(commonTypography.block) berhasil diubah",
     "successUpdatePitMessage": "$t(commonTypography.pit) berhasil diubah"
   },
+  "stockpile": {
+    "createStockpile": "$t(commonTypography.create) $t(commonTypography.stockpile)",
+    "createStockpileDome": "$t(commonTypography.create) $t(commonTypography.dome)",
+    "readStockpile": "$t(commonTypography.detail) $t(commonTypography.stockpile)",
+    "updateStockpile": "$t(commonTypography.edit) $t(commonTypography.stockpile)",
+    "updateStockpileDome": "$t(commonTypography.edit) $t(commonTypography.dome)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.stockpileName) dan $t(commonTypography.stockpileId)",
+    "searchDomePlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.domeName) dan $t(commonTypography.domeId)",
+    "successDeleteMessage": "$t(commonTypography.stockpile) berhasil dihapus",
+    "successDeleteDomeMessage": "$t(commonTypography.dome) berhasil dihapus",
+    "formStockpile": "$t(commonTypography.form) $t(stockpile.createStockpile)",
+    "formStockpileDome": "$t(commonTypography.form) $t(stockpile.createStockpileDome)",
+    "formUpdateStockpile": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.stockpile)",
+    "formUpdateStockpileDome": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.dome)",
+    "successCreateMessage": "$t(commonTypography.stockpile) berhasil dibuat",
+    "successCreateDomeMessage": "$t(commonTypography.dome) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.stockpile) berhasil diubah",
+    "successUpdateDomeMessage": "$t(commonTypography.dome) berhasil diubah"
+  },
   "material": {
     "createMaterial": "$t(commonTypography.create) $t(commonTypography.material)",
+    "createMaterialSub": "$t(commonTypography.create) $t(commonTypography.materialSub)",
     "readMaterial": "$t(commonTypography.detail) $t(commonTypography.material)",
     "updateMaterial": "$t(commonTypography.edit) $t(commonTypography.material)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type) $t(commonTypography.material)",

@@ -1,9 +1,12 @@
 /* eslint-disable unused-imports/no-unused-vars */
-import { Select, SelectProps } from '@mantine/core';
+import { Flex, Select, SelectProps, Stack } from '@mantine/core';
 import * as React from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import PrimaryButton, {
+  IPrimaryButtonProps,
+} from '@/components/elements/button/PrimaryButton';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
 import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
@@ -15,6 +18,7 @@ export type IMaterialSelectnputRhfProps = {
   control: 'material-select-input';
   name: string;
   labelValue?: string;
+  deleteButtonField?: Omit<IPrimaryButtonProps, 'label'>;
 } & Omit<
   SelectProps,
   | 'name'
@@ -32,16 +36,23 @@ const MaterialSelectInput: React.FC<IMaterialSelectnputRhfProps> = ({
   label,
   labelValue,
   defaultValue,
+  deleteButtonField,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
+  const {
+    variant = 'light',
+    color = 'red',
+    ...restDeleteButtonField
+  } = deleteButtonField || {};
 
   const { materialsData } = useReadAllMaterialsMaster({
     variables: {
       limit: null,
       orderDir: 'desc',
       orderBy: 'createdAt',
+      isHaveParent: false,
     },
   });
 
@@ -50,34 +61,48 @@ const MaterialSelectInput: React.FC<IMaterialSelectnputRhfProps> = ({
   });
 
   return (
-    <Select
-      {...field}
-      radius={8}
-      data={uncombinedItem}
-      defaultValue={defaultValue}
-      labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
-      descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
-      styles={(theme) => ({
-        item: {
-          borderRadius: theme.spacing.xs,
-        },
-        dropdown: {
-          borderRadius: theme.spacing.xs,
-        },
-      })}
-      data-control={control}
-      placeholder={t('commonTypography.chooseMaterial', {
-        ns: 'default',
-      })}
-      label={label ? t(`components.field.${label}`) : null}
-      error={
-        fieldState &&
-        fieldState.error && (
-          <FieldErrorMessage>{fieldState.error.message}</FieldErrorMessage>
-        )
-      }
-      {...rest}
-    />
+    <Stack spacing={8}>
+      <Flex w="100%" align="flex-end" gap="sm">
+        <Select
+          {...field}
+          radius={8}
+          w="100%"
+          data={uncombinedItem}
+          defaultValue={defaultValue}
+          labelProps={{
+            style: { fontWeight: 400, fontSize: 16, marginBottom: 8 },
+          }}
+          descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
+          styles={(theme) => ({
+            item: {
+              borderRadius: theme.spacing.xs,
+            },
+            dropdown: {
+              borderRadius: theme.spacing.xs,
+            },
+          })}
+          data-control={control}
+          placeholder={t('commonTypography.chooseMaterial', {
+            ns: 'default',
+          })}
+          label={label ? t(`components.field.${label}`) : null}
+          {...rest}
+        />
+        {deleteButtonField ? (
+          <PrimaryButton
+            label={t('commonTypography.delete', { ns: 'default' })}
+            variant={variant}
+            color={color}
+            {...restDeleteButtonField}
+          />
+        ) : null}
+      </Flex>
+      {fieldState && fieldState.error && (
+        <FieldErrorMessage color="red">
+          {fieldState.error.message}
+        </FieldErrorMessage>
+      )}
+    </Stack>
   );
 };
 

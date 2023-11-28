@@ -10,6 +10,7 @@ export const READ_ALL_MATERIAL_MASTER = gql`
     $orderBy: String
     $orderDir: String
     $parentId: String
+    $isHaveParent: Boolean
   ) {
     materials(
       findAllMaterialInput: {
@@ -19,6 +20,7 @@ export const READ_ALL_MATERIAL_MASTER = gql`
         orderBy: $orderBy
         orderDir: $orderDir
         parentId: $parentId
+        isHaveParent: $isHaveParent
       }
     ) {
       meta {
@@ -30,7 +32,7 @@ export const READ_ALL_MATERIAL_MASTER = gql`
       data {
         id
         name
-        parent {
+        subMaterials {
           id
           name
         }
@@ -39,13 +41,15 @@ export const READ_ALL_MATERIAL_MASTER = gql`
   }
 `;
 
+export interface ISubmaterials {
+  id: string;
+  name: string;
+}
+
 interface IMaterialsData {
   id: string;
   name: string;
-  parent: {
-    id: string;
-    name: string;
-  } | null;
+  subMaterials: ISubmaterials[];
 }
 
 interface IMaterialsResponse {
@@ -54,6 +58,7 @@ interface IMaterialsResponse {
 
 interface IMaterialsRequest extends Partial<IGlobalMetaRequest> {
   parentId?: string | null;
+  isHaveParent?: boolean;
 }
 
 export const useReadAllMaterialsMaster = ({
