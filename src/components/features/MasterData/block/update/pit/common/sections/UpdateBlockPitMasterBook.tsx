@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -13,6 +14,7 @@ import {
 } from '@/services/graphql/mutation/block/useUpdateBlockPitMaster';
 import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
 import { globalText } from '@/utils/constants/Field/global-field';
+import { blockPitMutationUpdateValidation } from '@/utils/form-validation/block/block-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -25,7 +27,7 @@ const UpdateBlockPitMasterBook = () => {
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationUpdateBlockPitValues>({
-    // resolver: zodResolver(blockPitMutationValidation),
+    resolver: zodResolver(blockPitMutationUpdateValidation),
     defaultValues: {
       name: '',
       handBookId: '',
@@ -47,7 +49,7 @@ const UpdateBlockPitMasterBook = () => {
     },
   });
 
-  const [executeCreate, { loading }] = useUpdateBlockPitMaster({
+  const [executeUpdate, { loading }] = useUpdateBlockPitMaster({
     onCompleted: () => {
       notifications.show({
         color: 'green',
@@ -108,7 +110,7 @@ const UpdateBlockPitMasterBook = () => {
   const handleSubmitForm: SubmitHandler<IMutationUpdateBlockPitValues> = async (
     data
   ) => {
-    await executeCreate({
+    await executeUpdate({
       variables: {
         id: pitId,
         blockId: blockId,
