@@ -3,7 +3,7 @@ import { ApolloError, gql, useMutation } from '@apollo/client';
 export const CREATE_MATERIAL_MASTER = gql`
   mutation CreateMaterialMaster(
     $name: String!
-    $subMaterials: [CreateMaterialDto!]
+    $subMaterials: [CreateSubMaterialDto!]
   ) {
     createMaterial(
       createMaterialInput: { name: $name, subMaterials: $subMaterials }
