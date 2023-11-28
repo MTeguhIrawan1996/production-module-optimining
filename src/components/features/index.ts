@@ -59,6 +59,7 @@ import ShiftMasterPage from '@/components/features/MasterData/shift/common';
 import CreateShiftMasterPage from '@/components/features/MasterData/shift/create/common';
 import ReadShiftMasterPage from '@/components/features/MasterData/shift/read/common';
 import UpdateShiftMasterPage from '@/components/features/MasterData/shift/update/common';
+import StockpileMasterPage from '@/components/features/MasterData/stockpile/common';
 import WorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/common';
 import CreateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/create/common';
 import ReadWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/read/common';
@@ -142,6 +143,7 @@ export {
   ReadWorkingHoursPlanMasterPage,
   SampleHouseLabPage,
   ShiftMasterPage,
+  StockpileMasterPage,
   StockpilePage,
   UpdateActivityPlanMasterPage,
   UpdateBlockMasterPage,

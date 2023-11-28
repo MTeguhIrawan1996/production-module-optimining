@@ -50,11 +50,12 @@ export async function middleware(request: NextRequest) {
         ? `Bearer ${token.login.accessToken.token}`
         : '';
 
-      const response = await fetch(`${baseURL}/auth/profile/permissions`, {
-        method: 'GET',
-        headers: { authorization },
-      });
-      if (response.ok) {
+      try {
+        const response = await fetch(`${baseURL}/auth/profile/permissions`, {
+          method: 'GET',
+          headers: { authorization },
+        });
+
         const { data } = await response.json();
         const permission = (data as IPermissionAuth[]).map((val) => val.slug);
         const validAccess = matchProtectedPath?.allowedPermissions.some(
@@ -69,7 +70,7 @@ export async function middleware(request: NextRequest) {
           const url = new URL(`/not-found`, request.url);
           return NextResponse.rewrite(url);
         }
-      } else {
+      } catch (error) {
         return NextResponse.next();
       }
     }
