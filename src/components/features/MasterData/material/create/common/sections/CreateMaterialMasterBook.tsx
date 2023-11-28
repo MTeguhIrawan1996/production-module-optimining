@@ -27,11 +27,7 @@ const CreateMaterialMasterBook = () => {
     resolver: zodResolver(materialMutationValidation),
     defaultValues: {
       name: '',
-      subMaterials: [
-        {
-          name: '',
-        },
-      ],
+      subMaterials: [],
     },
     mode: 'onBlur',
   });
@@ -81,10 +77,10 @@ const CreateMaterialMasterBook = () => {
         colSpan: 12,
         name: `subMaterials.${index}.name`,
         label: 'materialSub',
-        withAsterisk: false,
+        withAsterisk: true,
         deleteButtonField: {
           onClick: () => {
-            fields.length > 1 ? remove(index) : null;
+            remove(index);
           },
         },
       });
@@ -140,7 +136,7 @@ const CreateMaterialMasterBook = () => {
       variables: {
         name,
         subMaterials:
-          subMaterials && subMaterials[0].name !== '' ? subMaterials : null,
+          subMaterials && subMaterials.length > 0 ? subMaterials : null,
       },
     });
   };

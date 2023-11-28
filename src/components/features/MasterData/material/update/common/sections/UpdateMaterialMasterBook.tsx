@@ -99,7 +99,7 @@ const UpdateMaterialMasterBook = () => {
         colSpan: 12,
         name: `subMaterials.${index}.name`,
         label: `materialSub`,
-        withAsterisk: false,
+        withAsterisk: true,
         value: methods.watch(`subMaterials.${index}.name`),
         onChange: (event) => {
           methods.setValue(
@@ -163,11 +163,7 @@ const UpdateMaterialMasterBook = () => {
         id,
         name,
         subMaterials:
-          subMaterials &&
-          subMaterials?.length > 0 &&
-          subMaterials[0].name !== ''
-            ? subMaterials
-            : null,
+          subMaterials && subMaterials?.length > 0 ? subMaterials : null,
       },
     });
   };

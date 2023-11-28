@@ -12,7 +12,7 @@ export const materialMutationValidation: z.ZodType<IMutationMaterialValues> =
     name: zRequiredString,
     subMaterials: z
       .object({
-        name: zOptionalString,
+        name: zRequiredString,
       })
       .array(),
   });
@@ -22,7 +22,7 @@ export const materialMutationUpdateValidation: z.ZodType<IMutationUpdateMaterial
     subMaterials: z
       .object({
         subMaterialId: zOptionalString.nullable(),
-        name: zOptionalString,
+        name: zRequiredString,
       })
       .array(),
   });
