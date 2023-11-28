@@ -64,6 +64,7 @@ import CreateStockpileMasterPage from '@/components/features/MasterData/stockpil
 import CreateStockpileDomeMasterPage from '@/components/features/MasterData/stockpile/create/dome/common';
 import ReadStockpileMasterPage from '@/components/features/MasterData/stockpile/read/common';
 import UpdateStockpileMasterPage from '@/components/features/MasterData/stockpile/update/common';
+import UpdateStockpileDomeMasterPage from '@/components/features/MasterData/stockpile/update/dome/common';
 import WorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/common';
 import CreateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/create/common';
 import ReadWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/read/common';
@@ -169,6 +170,7 @@ export {
   UpdateMaterialMasterPage,
   UpdateSampleHouseLabPage,
   UpdateShiftMasterPage,
+  UpdateStockpileDomeMasterPage,
   UpdateStockpileMasterPage,
   UpdateUserPage,
   UpdateWorkingHoursPlanMasterPage,
