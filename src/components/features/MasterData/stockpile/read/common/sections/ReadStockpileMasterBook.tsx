@@ -65,7 +65,7 @@ const ReadStockpileMasterBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('stcokpile.successDeleteDomeMessage'),
+        message: t('stockpile.successDeleteDomeMessage'),
         icon: <IconCheck />,
       });
     },

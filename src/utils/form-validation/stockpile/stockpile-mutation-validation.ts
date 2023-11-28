@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { IMutationBlockPitValues } from '@/services/graphql/mutation/block/useCreateBlockPitMaster';
+import { IMutationStockpileDomeValues } from '@/services/graphql/mutation/stockpile-master/useCreateStockpileDomeMaster';
 import { IMutationStockpileValues } from '@/services/graphql/mutation/stockpile-master/useCreateStockpileMaster';
 import { zRequiredString } from '@/utils/form-validation/global';
 
@@ -10,9 +10,9 @@ export const stockpileMutationValidation: z.ZodType<IMutationStockpileValues> =
     handBookId: zRequiredString,
   });
 
-export const stockpileDomeMutationValidation: z.ZodType<IMutationBlockPitValues> =
+export const stockpileDomeMutationValidation: z.ZodType<IMutationStockpileDomeValues> =
   z.object({
-    pits: z
+    domes: z
       .object({
         name: zRequiredString,
         handBookId: zRequiredString,
