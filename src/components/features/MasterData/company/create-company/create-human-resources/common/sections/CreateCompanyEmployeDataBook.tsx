@@ -92,11 +92,12 @@ const CreateCompanyEmployeDataBook = () => {
       data: employeStatusFilter,
       placeholder: 'chooseEmployeStatus',
       colSpan: 6,
+      withAsterisk: true,
     });
     const entryDateItem = globalDate({
       name: 'entryDate',
       label: 'entryDate',
-      withAsterisk: false,
+      withAsterisk: true,
       clearable: true,
     });
     const quitDateItem = globalDate({
