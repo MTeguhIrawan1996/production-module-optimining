@@ -3,7 +3,7 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
@@ -12,10 +12,7 @@ import {
   IMutationMaterialValues,
   useCreateMaterialMaster,
 } from '@/services/graphql/mutation/material/useCreateMaterialMaster';
-import {
-  globalText,
-  materialSelect,
-} from '@/utils/constants/Field/global-field';
+import { globalText } from '@/utils/constants/Field/global-field';
 import { materialMutationValidation } from '@/utils/form-validation/material/material-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
@@ -30,11 +27,14 @@ const CreateMaterialMasterBook = () => {
     resolver: zodResolver(materialMutationValidation),
     defaultValues: {
       name: '',
-      parentId: null,
+      subMaterials: [],
     },
     mode: 'onBlur',
   });
-
+  const { fields, remove, append } = useFieldArray({
+    name: 'subMaterials',
+    control: methods.control,
+  });
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
@@ -71,43 +71,72 @@ const CreateMaterialMasterBook = () => {
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
+  const fieldsSubMaterial = React.useCallback(
+    (_, index: number) => {
+      const materialSubItem = globalText({
+        colSpan: 12,
+        name: `subMaterials.${index}.name`,
+        label: 'materialSub',
+        withAsterisk: true,
+        deleteButtonField: {
+          onClick: () => {
+            remove(index);
+          },
+        },
+      });
+
+      return materialSubItem;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fields]
+  );
+  const fieldElementsItem = fields.map(fieldsSubMaterial);
 
   const fieldItem = React.useMemo(() => {
     const materialTypeItem = globalText({
       name: 'name',
       label: 'materialType',
-      colSpan: 6,
-    });
-    const materialSubItem = materialSelect({
-      colSpan: 6,
-      name: 'parentId',
-      label: 'materialSub',
-      withAsterisk: false,
+      colSpan: 12,
     });
 
     const field: ControllerGroup[] = [
       {
         group: t('commonTypography.material'),
         enableGroupLabel: true,
-        formControllers: [materialTypeItem, materialSubItem],
+        formControllers: [materialTypeItem],
+      },
+      {
+        group: t('commonTypography.materialSub'),
+        enableGroupLabel: true,
+        actionGroup: {
+          addButton: {
+            label: t('material.createMaterialSub'),
+            onClick: () =>
+              append({
+                name: '',
+              }),
+          },
+        },
+        formControllers: [...fieldElementsItem],
       },
     ];
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fieldElementsItem]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<IMutationMaterialValues> = async (
     data
   ) => {
-    const { name, parentId } = data;
+    const { name, subMaterials } = data;
 
     await executeCreate({
       variables: {
         name,
-        parentId,
+        subMaterials:
+          subMaterials && subMaterials.length > 0 ? subMaterials : null,
       },
     });
   };

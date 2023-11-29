@@ -1,7 +1,5 @@
 import { ApolloError, gql, useMutation } from '@apollo/client';
 
-import { IDate } from '@/types/global';
-
 export const UPDATE_COMPANY_POSITION_HISTORY = gql`
   mutation UpdateCompanyPositionHistory(
     $id: String!
@@ -21,9 +19,9 @@ export const UPDATE_COMPANY_POSITION_HISTORY = gql`
 export interface IPositionHistories {
   positionId: string | null;
   divisionId: string | null;
-  startDate: IDate;
+  startDate?: Date | string | null;
   isStill: boolean;
-  endDate: IDate;
+  endDate?: Date | string | null;
 }
 
 export interface IUpdateEmployeePositionsRequest {

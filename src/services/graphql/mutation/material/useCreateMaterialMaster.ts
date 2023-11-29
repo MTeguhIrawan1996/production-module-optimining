@@ -1,8 +1,13 @@
 import { ApolloError, gql, useMutation } from '@apollo/client';
 
 export const CREATE_MATERIAL_MASTER = gql`
-  mutation CreateMaterialMaster($name: String!, $parentId: String) {
-    createMaterial(createMaterialInput: { name: $name, parentId: $parentId }) {
+  mutation CreateMaterialMaster(
+    $name: String!
+    $subMaterials: [CreateSubMaterialDto!]
+  ) {
+    createMaterial(
+      createMaterialInput: { name: $name, subMaterials: $subMaterials }
+    ) {
       id
     }
   }
@@ -10,7 +15,11 @@ export const CREATE_MATERIAL_MASTER = gql`
 
 export interface IMutationMaterialValues {
   name: string;
-  parentId: string | null;
+  subMaterials:
+    | {
+        name: string;
+      }[]
+    | null;
 }
 
 type ICreateMaterialMasterRequest = IMutationMaterialValues;

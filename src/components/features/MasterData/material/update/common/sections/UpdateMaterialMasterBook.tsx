@@ -3,19 +3,18 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import { IMutationMaterialValues } from '@/services/graphql/mutation/material/useCreateMaterialMaster';
-import { useUpdateMaterialMaster } from '@/services/graphql/mutation/material/useUpdateMaterialMaster';
-import { useReadOneMaterialMaster } from '@/services/graphql/query/material/useReadOneMaterialMaster';
 import {
-  globalText,
-  materialSelect,
-} from '@/utils/constants/Field/global-field';
-import { materialMutationValidation } from '@/utils/form-validation/material/material-mutation-validation';
+  IMutationUpdateMaterialValues,
+  useUpdateMaterialMaster,
+} from '@/services/graphql/mutation/material/useUpdateMaterialMaster';
+import { useReadOneMaterialMaster } from '@/services/graphql/query/material/useReadOneMaterialMaster';
+import { globalText } from '@/utils/constants/Field/global-field';
+import { materialMutationUpdateValidation } from '@/utils/form-validation/material/material-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -24,13 +23,23 @@ const UpdateMaterialMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const methods = useForm<IMutationMaterialValues>({
-    resolver: zodResolver(materialMutationValidation),
+  const methods = useForm<IMutationUpdateMaterialValues>({
+    resolver: zodResolver(materialMutationUpdateValidation),
     defaultValues: {
       name: '',
-      parentId: null,
+      subMaterials: [
+        {
+          subMaterialId: null,
+          name: '',
+        },
+      ],
     },
     mode: 'onBlur',
+  });
+
+  const { fields, remove, append, replace } = useFieldArray({
+    name: 'subMaterials',
+    control: methods.control,
   });
 
   const { materialMasterLoading } = useReadOneMaterialMaster({
@@ -39,8 +48,18 @@ const UpdateMaterialMasterBook = () => {
     },
     skip: !router.isReady,
     onCompleted: ({ material }) => {
+      const subMaterials = material.subMaterials.map((val) => {
+        return {
+          subMaterialId: val.id,
+          name: val.name,
+        };
+      });
+      replace(
+        subMaterials.length > 0
+          ? subMaterials
+          : { subMaterialId: null, name: '' }
+      );
       methods.setValue('name', material.name);
-      methods.setValue('parentId', material.parent?.id ?? null);
     },
   });
 
@@ -56,7 +75,8 @@ const UpdateMaterialMasterBook = () => {
     },
     onError: (error) => {
       if (error.graphQLErrors) {
-        const errorArry = errorBadRequestField<IMutationMaterialValues>(error);
+        const errorArry =
+          errorBadRequestField<IMutationUpdateMaterialValues>(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
             methods.setError(name, { type, message });
@@ -73,40 +93,77 @@ const UpdateMaterialMasterBook = () => {
     },
   });
 
+  const fieldsSubMaterial = React.useCallback(
+    (_, index: number) => {
+      const materialSubItem = globalText({
+        colSpan: 12,
+        name: `subMaterials.${index}.name`,
+        label: `materialSub`,
+        withAsterisk: true,
+        value: methods.watch(`subMaterials.${index}.name`),
+        onChange: (event) => {
+          methods.setValue(
+            `subMaterials.${index}.name`,
+            event.currentTarget.value
+          );
+        },
+        deleteButtonField: {
+          onClick: () => {
+            remove(index);
+          },
+        },
+      });
+      return materialSubItem;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fields]
+  );
+  const fieldSubMaterialsItem = fields.map(fieldsSubMaterial);
+
   const fieldItem = React.useMemo(() => {
     const materialTypeItem = globalText({
       name: 'name',
       label: 'materialType',
-      colSpan: 6,
-    });
-    const materialSubItem = materialSelect({
-      colSpan: 6,
-      name: 'parentId',
-      label: 'materialSub',
-      withAsterisk: false,
+      colSpan: 12,
     });
 
     const field: ControllerGroup[] = [
       {
         group: t('commonTypography.material'),
         enableGroupLabel: true,
-        formControllers: [materialTypeItem, materialSubItem],
+        formControllers: [materialTypeItem],
+      },
+      {
+        group: t('commonTypography.materialSub'),
+        enableGroupLabel: true,
+        actionGroup: {
+          addButton: {
+            label: t('material.createMaterialSub'),
+            onClick: () =>
+              append({
+                subMaterialId: null,
+                name: '',
+              }),
+          },
+        },
+        formControllers: fieldSubMaterialsItem,
       },
     ];
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fieldSubMaterialsItem]);
 
-  const handleSubmitForm: SubmitHandler<IMutationMaterialValues> = async (
+  const handleSubmitForm: SubmitHandler<IMutationUpdateMaterialValues> = async (
     data
   ) => {
-    const { name, parentId } = data;
+    const { name, subMaterials } = data;
     await executeUpdate({
       variables: {
         id,
         name,
-        parentId,
+        subMaterials:
+          subMaterials && subMaterials?.length > 0 ? subMaterials : null,
       },
     });
   };

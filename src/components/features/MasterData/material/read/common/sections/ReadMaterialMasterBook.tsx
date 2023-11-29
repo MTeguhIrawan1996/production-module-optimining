@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, KeyValueList } from '@/components/elements';
 
+import { ISubmaterials } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { useReadOneMaterialMaster } from '@/services/graphql/query/material/useReadOneMaterialMaster';
 
 const ReadMaterialMasterBook = () => {
@@ -20,6 +21,15 @@ const ReadMaterialMasterBook = () => {
     skip: !router.isReady,
   });
   /* #endregion  /**======== Query =========== */
+
+  const renderModel = React.useCallback((value: ISubmaterials) => {
+    return {
+      dataKey: t('commonTypography.materialSub'),
+      value: `${value.name}`,
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const subMaterial = materialMaster?.subMaterials?.map(renderModel);
 
   return (
     <DashboardCard
@@ -67,10 +77,7 @@ const ReadMaterialMasterBook = () => {
                   dataKey: t('commonTypography.materialType'),
                   value: materialMaster?.name ?? '-',
                 },
-                {
-                  dataKey: t('commonTypography.materialSub'),
-                  value: materialMaster?.parent?.name ?? '-',
-                },
+                ...(subMaterial ?? []),
               ]}
               type="grid"
               keyStyleText={{

@@ -37,6 +37,11 @@ export const linksDashboard: IMenuItem[] = [
         access: ['create-block'],
       },
       {
+        label: 'stockpile',
+        href: '/master-data/stockpile',
+        access: ['create-stockpile'],
+      },
+      {
         label: 'material',
         href: '/master-data/material',
         access: ['create-material'],

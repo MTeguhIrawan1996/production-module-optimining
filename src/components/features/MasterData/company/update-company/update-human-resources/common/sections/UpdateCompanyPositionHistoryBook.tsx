@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Paper } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -18,6 +19,7 @@ import {
   globalDate,
   positionSelectRhf,
 } from '@/utils/constants/Field/global-field';
+import { createCompanyPositionHistroySchema } from '@/utils/form-validation/company/company-employe-validation';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
@@ -31,6 +33,7 @@ const UpdateCompanyPositionHistoryBook = () => {
   const methods = useForm<
     Pick<IUpdateEmployeePositionsRequest, 'positionHistories'>
   >({
+    resolver: zodResolver(createCompanyPositionHistroySchema),
     defaultValues: {
       positionHistories: [
         {

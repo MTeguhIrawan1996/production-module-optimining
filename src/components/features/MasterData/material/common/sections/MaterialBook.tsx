@@ -39,6 +39,7 @@ const MaterialBook = () => {
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
+      isHaveParent: false,
     },
   });
 
@@ -110,7 +111,12 @@ const MaterialBook = () => {
             {
               accessor: 'materialSub',
               title: t('commonTypography.materialSub'),
-              render: ({ parent }) => parent?.name ?? '-',
+              render: ({ subMaterials }) => {
+                const material = subMaterials?.map((val) => val.name);
+                const value =
+                  material && material.length ? material.join(', ') : '-';
+                return value;
+              },
             },
             {
               accessor: 'action',

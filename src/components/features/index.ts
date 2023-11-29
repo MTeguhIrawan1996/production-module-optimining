@@ -59,6 +59,12 @@ import ShiftMasterPage from '@/components/features/MasterData/shift/common';
 import CreateShiftMasterPage from '@/components/features/MasterData/shift/create/common';
 import ReadShiftMasterPage from '@/components/features/MasterData/shift/read/common';
 import UpdateShiftMasterPage from '@/components/features/MasterData/shift/update/common';
+import StockpileMasterPage from '@/components/features/MasterData/stockpile/common';
+import CreateStockpileMasterPage from '@/components/features/MasterData/stockpile/create/common';
+import CreateStockpileDomeMasterPage from '@/components/features/MasterData/stockpile/create/dome/common';
+import ReadStockpileMasterPage from '@/components/features/MasterData/stockpile/read/common';
+import UpdateStockpileMasterPage from '@/components/features/MasterData/stockpile/update/common';
+import UpdateStockpileDomeMasterPage from '@/components/features/MasterData/stockpile/update/dome/common';
 import WorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/common';
 import CreateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/create/common';
 import ReadWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/read/common';
@@ -107,6 +113,8 @@ export {
   CreateMaterialMasterPage,
   CreateShiftMasterPage,
   CreateSmapleHouseLabPage,
+  CreateStockpileDomeMasterPage,
+  CreateStockpileMasterPage,
   CreateStockpilePage,
   CreateUserPage,
   CreateWorkingHoursPlanMasterPage,
@@ -139,9 +147,11 @@ export {
   ReadMaterialMasterPage,
   ReadSampleHouseLabPage,
   ReadShiftMasterPage,
+  ReadStockpileMasterPage,
   ReadWorkingHoursPlanMasterPage,
   SampleHouseLabPage,
   ShiftMasterPage,
+  StockpileMasterPage,
   StockpilePage,
   UpdateActivityPlanMasterPage,
   UpdateBlockMasterPage,
@@ -160,6 +170,8 @@ export {
   UpdateMaterialMasterPage,
   UpdateSampleHouseLabPage,
   UpdateShiftMasterPage,
+  UpdateStockpileDomeMasterPage,
+  UpdateStockpileMasterPage,
   UpdateUserPage,
   UpdateWorkingHoursPlanMasterPage,
   UserPage,
