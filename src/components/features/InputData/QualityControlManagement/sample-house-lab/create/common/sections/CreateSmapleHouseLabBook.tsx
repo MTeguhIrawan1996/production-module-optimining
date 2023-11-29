@@ -81,6 +81,7 @@ const CreateSmapleHouseLabBook = () => {
     mode: 'onBlur',
   });
   const sampleTypeId = methods.watch('sampleTypeId');
+  const materialId = methods.watch('materialId');
 
   const { fields, replace } = useFieldArray({
     name: 'gradeControlElements',
@@ -207,6 +208,12 @@ const CreateSmapleHouseLabBook = () => {
     });
     const sampleTypesItem = sampleTypeSelect({
       colSpan: 6,
+      onChange: (value) => {
+        methods.setValue('sampleTypeId', value ?? '');
+        methods.setValue('materialId', '');
+        methods.setValue('subMaterialId', '');
+        methods.trigger('sampleTypeId');
+      },
     });
     const materialItem = materialSelect({
       colSpan: 6,
@@ -214,6 +221,15 @@ const CreateSmapleHouseLabBook = () => {
       label: 'categoryBulSampling',
       withAsterisk: true,
       disabled: !sampleBulk,
+      includeIds: [
+        'a380ffd2-d78e-4ec3-b118-d7b3bd53f8ab',
+        '15f2dada-9b59-403d-a19e-57a3b89df78b',
+      ],
+      onChange: (value) => {
+        methods.setValue('materialId', value ?? '');
+        methods.setValue('subMaterialId', '');
+        methods.trigger('materialId');
+      },
     });
     const materialSubItem = materialSelect({
       colSpan: 6,
@@ -221,6 +237,8 @@ const CreateSmapleHouseLabBook = () => {
       label: 'subCategoryBulSampling',
       withAsterisk: true,
       disabled: !sampleBulk,
+      parentId: materialId,
+      isHaveParent: null,
     });
     const employeeItem = employeeSelect({
       colSpan: 6,
@@ -238,7 +256,7 @@ const CreateSmapleHouseLabBook = () => {
       name: 'location',
       label: 'location',
       colSpan: 6,
-      withAsterisk: false,
+      withAsterisk: true,
     });
     const sampleEnterLabDate = globalDate({
       name: 'sampleEnterLabDate',
@@ -251,13 +269,14 @@ const CreateSmapleHouseLabBook = () => {
       name: 'sampleEnterLabTime',
       label: 'sampleEnterLabTime',
       colSpan: 6,
-      withAsterisk: false,
+      withAsterisk: true,
     });
     const density = globalText({
       name: 'density',
       label: 'densityBulkSampling',
       colSpan: 12,
-      withAsterisk: false,
+      withAsterisk: true,
+      disabled: !sampleBulk,
     });
     const preparationStartDate = globalDate({
       name: 'preparationStartDate',
@@ -394,7 +413,12 @@ const CreateSmapleHouseLabBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sampleTypeId, fieldGradeControlElementsItem, fieldElementsItem]);
+  }, [
+    sampleTypeId,
+    fieldGradeControlElementsItem,
+    fieldElementsItem,
+    materialId,
+  ]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */

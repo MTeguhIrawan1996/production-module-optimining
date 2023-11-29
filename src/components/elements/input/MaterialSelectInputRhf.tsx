@@ -19,6 +19,9 @@ export type IMaterialSelectnputRhfProps = {
   name: string;
   labelValue?: string;
   deleteButtonField?: Omit<IPrimaryButtonProps, 'label'>;
+  parentId?: string | null;
+  includeIds?: string[];
+  isHaveParent?: boolean | null;
 } & Omit<
   SelectProps,
   | 'name'
@@ -37,6 +40,9 @@ const MaterialSelectInput: React.FC<IMaterialSelectnputRhfProps> = ({
   labelValue,
   defaultValue,
   deleteButtonField,
+  isHaveParent = false,
+  parentId,
+  includeIds,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -52,7 +58,9 @@ const MaterialSelectInput: React.FC<IMaterialSelectnputRhfProps> = ({
       limit: null,
       orderDir: 'desc',
       orderBy: 'createdAt',
-      isHaveParent: false,
+      isHaveParent: isHaveParent,
+      parentId: parentId === '' ? null : parentId,
+      includeIds,
     },
   });
 
