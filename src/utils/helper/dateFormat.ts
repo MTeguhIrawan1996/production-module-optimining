@@ -1,9 +1,11 @@
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import 'dayjs/locale/id';
 
 dayjs.locale('id');
 dayjs.extend(localizedFormat);
+dayjs.extend(duration);
 
 export const formatDate = (
   //  formatDate
@@ -11,6 +13,7 @@ export const formatDate = (
   format?:
     | 'DD'
     | 'LL'
+    | 'YYYY-MM-DD'
     | 'dddd, LL'
     | 'LLLL WIB'
     | 'hh:mm WIB'
@@ -18,6 +21,7 @@ export const formatDate = (
     | 'LL, hh:mm WIB'
     | 'DD, LL, hh:mm WIB'
     | 'hh:mm A'
+    | 'hh:mm:ss A'
     | 'hh:mm:ss'
     | 'HH:mm:ss'
 ) => {
@@ -35,12 +39,14 @@ export const formatDate2 = (
     | 'DD'
     | 'LL'
     | 'dddd, LL'
+    | 'YYYY-MM-DD'
     | 'LLLL WIB'
     | 'hh:mm WIB'
     | 'DD, LL'
     | 'LL, hh:mm WIB'
     | 'DD, LL, hh:mm WIB'
     | 'hh:mm A'
+    | 'hh:mm:ss A'
     | 'hh:mm:ss'
     | 'HH:mm:ss'
 ) => {
@@ -49,4 +55,10 @@ export const formatDate2 = (
         .locale('id')
         .format(format ?? 'LL')
     : null;
+};
+
+export const secondsDuration = (duration: number | null) => {
+  const secondsToMinutes =
+    dayjs.duration(duration ?? 0, 'seconds').asMinutes() / 60;
+  return secondsToMinutes.toFixed(2);
 };

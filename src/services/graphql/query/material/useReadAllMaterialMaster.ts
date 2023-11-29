@@ -48,7 +48,7 @@ export interface ISubmaterials {
   name: string;
 }
 
-interface IMaterialsData {
+export interface IMaterialsData {
   id: string;
   name: string;
   subMaterials: ISubmaterials[];
