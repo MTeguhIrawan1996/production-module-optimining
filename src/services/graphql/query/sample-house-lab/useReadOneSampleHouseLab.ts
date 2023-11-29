@@ -82,7 +82,7 @@ export const READ_ONE_SAMPLE_HOUSE_LAB = gql`
 
 interface IReadOneSampleHouseLab extends IHouseSampleAndLabsData {
   photo: Omit<IFile, 'mime' | 'path'> | null;
-  material: IReadOneMaterialMaster;
+  material: IReadOneMaterialMaster | null;
   density: string;
   preparationStartAt: string | null;
   preparationFinishAt: string | null;

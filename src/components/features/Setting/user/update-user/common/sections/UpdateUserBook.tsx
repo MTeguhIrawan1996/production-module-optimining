@@ -345,7 +345,7 @@ const UpdateUserBook = () => {
             <Text fw={400} fz={10} color="gray.6" align="center">
               {userData?.isActive
                 ? t('commonTypography.modalNonActiveDescription')
-                : t('commonTypography.modalNonActiveDescription')}
+                : t('commonTypography.modalActiveDescription')}
             </Text>
           ),
         }}

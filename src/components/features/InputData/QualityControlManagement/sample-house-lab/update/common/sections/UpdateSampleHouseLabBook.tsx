@@ -27,7 +27,7 @@ import {
   shiftSelect,
 } from '@/utils/constants/Field/sample-house-field';
 import { sampleHouseLabMutationValidation } from '@/utils/form-validation/sample-house-lab/sample-house-lab-mutation-validation';
-import { formatDate } from '@/utils/helper/dateFormat';
+import { formatDate2 } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -88,6 +88,7 @@ const UpdateSampleHouseLabPage = () => {
     mode: 'onBlur',
   });
   const sampleTypeId = methods.watch('sampleTypeId');
+  const materialId = methods.watch('materialId');
 
   const { fields, replace } = useFieldArray({
     name: 'gradeControlElements',
@@ -127,7 +128,7 @@ const UpdateSampleHouseLabPage = () => {
     },
     skip: !router.isReady || !isOwnElemntsData,
     onCompleted: ({ houseSampleAndLab }) => {
-      const isOwnParent = houseSampleAndLab.material.parent !== null;
+      const isOwnParent = houseSampleAndLab.material?.parent !== null;
       fields.map((o, i) => {
         const valueGCElements = houseSampleAndLab?.gradeControlElements?.find(
           (val) => val.element?.id === o.elementId
@@ -150,35 +151,35 @@ const UpdateSampleHouseLabPage = () => {
       const sampleEnterLabDate = stringToDate(
         houseSampleAndLab.sampleEnterLabAt ?? null
       );
-      const sampleEnterLabTime = formatDate(
+      const sampleEnterLabTime = formatDate2(
         houseSampleAndLab.sampleEnterLabAt,
         'HH:mm:ss'
       );
       const preparationStartDate = stringToDate(
         houseSampleAndLab.preparationStartAt ?? null
       );
-      const preparationStartTime = formatDate(
+      const preparationStartTime = formatDate2(
         houseSampleAndLab.preparationStartAt,
         'HH:mm:ss'
       );
       const preparationFinishDate = stringToDate(
         houseSampleAndLab.preparationFinishAt ?? null
       );
-      const preparationFinishTime = formatDate(
+      const preparationFinishTime = formatDate2(
         houseSampleAndLab.preparationFinishAt,
         'HH:mm:ss'
       );
       const analysisStartDate = stringToDate(
         houseSampleAndLab.analysisStartAt ?? null
       );
-      const analysisStartTime = formatDate(
+      const analysisStartTime = formatDate2(
         houseSampleAndLab.analysisStartAt,
         'HH:mm:ss'
       );
       const analysisFinishDate = stringToDate(
         houseSampleAndLab.analysisFinishAt ?? null
       );
-      const analysisFinishTime = formatDate(
+      const analysisFinishTime = formatDate2(
         houseSampleAndLab.analysisFinishAt,
         'HH:mm:ss'
       );
@@ -192,11 +193,11 @@ const UpdateSampleHouseLabPage = () => {
       methods.setValue(
         'materialId',
         isOwnParent
-          ? houseSampleAndLab.material.parent?.id ?? ''
-          : houseSampleAndLab.material.id
+          ? houseSampleAndLab.material?.parent?.id ?? ''
+          : houseSampleAndLab.material?.id ?? ''
       );
       if (isOwnParent) {
-        methods.setValue('subMaterialId', houseSampleAndLab.material.id);
+        methods.setValue('subMaterialId', houseSampleAndLab.material?.id ?? '');
       }
       methods.setValue('samplerId', houseSampleAndLab.sampler?.id ?? '');
       methods.setValue(
@@ -205,16 +206,16 @@ const UpdateSampleHouseLabPage = () => {
       );
       methods.setValue('location', houseSampleAndLab.location ?? '');
       methods.setValue('sampleEnterLabDate', sampleEnterLabDate);
-      methods.setValue('sampleEnterLabTime', sampleEnterLabTime);
+      methods.setValue('sampleEnterLabTime', sampleEnterLabTime ?? '');
       methods.setValue('density', houseSampleAndLab.density ?? '');
       methods.setValue('preparationStartDate', preparationStartDate);
-      methods.setValue('preparationStartTime', preparationStartTime);
+      methods.setValue('preparationStartTime', preparationStartTime ?? '');
       methods.setValue('preparationFinishDate', preparationFinishDate);
-      methods.setValue('preparationFinishTime', preparationFinishTime);
+      methods.setValue('preparationFinishTime', preparationFinishTime ?? '');
       methods.setValue('analysisStartDate', analysisStartDate);
-      methods.setValue('analysisStartTime', analysisStartTime);
+      methods.setValue('analysisStartTime', analysisStartTime ?? '');
       methods.setValue('analysisFinishDate', analysisFinishDate);
-      methods.setValue('analysisFinishTime', analysisFinishTime);
+      methods.setValue('analysisFinishTime', analysisFinishTime ?? '');
       if (houseSampleAndLab.photo) {
         setServerPhoto([houseSampleAndLab.photo]);
       }
@@ -317,6 +318,12 @@ const UpdateSampleHouseLabPage = () => {
     });
     const sampleTypesItem = sampleTypeSelect({
       colSpan: 6,
+      onChange: (value) => {
+        methods.setValue('sampleTypeId', value ?? '');
+        methods.setValue('materialId', '');
+        methods.setValue('subMaterialId', '');
+        methods.trigger('sampleTypeId');
+      },
     });
     const materialItem = materialSelect({
       colSpan: 6,
@@ -324,6 +331,15 @@ const UpdateSampleHouseLabPage = () => {
       label: 'categoryBulSampling',
       withAsterisk: true,
       disabled: !sampleBulk,
+      includeIds: [
+        'a380ffd2-d78e-4ec3-b118-d7b3bd53f8ab',
+        '15f2dada-9b59-403d-a19e-57a3b89df78b',
+      ],
+      onChange: (value) => {
+        methods.setValue('materialId', value ?? '');
+        methods.setValue('subMaterialId', '');
+        methods.trigger('materialId');
+      },
     });
     const materialSubItem = materialSelect({
       colSpan: 6,
@@ -331,6 +347,8 @@ const UpdateSampleHouseLabPage = () => {
       label: 'subCategoryBulSampling',
       withAsterisk: true,
       disabled: !sampleBulk,
+      parentId: materialId,
+      isHaveParent: null,
     });
     const employeeItem = employeeSelect({
       colSpan: 6,
@@ -348,7 +366,7 @@ const UpdateSampleHouseLabPage = () => {
       name: 'location',
       label: 'location',
       colSpan: 6,
-      withAsterisk: false,
+      withAsterisk: true,
     });
     const sampleEnterLabDate = globalDate({
       name: 'sampleEnterLabDate',
@@ -361,13 +379,14 @@ const UpdateSampleHouseLabPage = () => {
       name: 'sampleEnterLabTime',
       label: 'sampleEnterLabTime',
       colSpan: 6,
-      withAsterisk: false,
+      withAsterisk: true,
     });
     const density = globalText({
       name: 'density',
       label: 'densityBulkSampling',
       colSpan: 12,
-      withAsterisk: false,
+      withAsterisk: true,
+      disabled: !sampleBulk,
     });
     const preparationStartDate = globalDate({
       name: 'preparationStartDate',
@@ -513,6 +532,7 @@ const UpdateSampleHouseLabPage = () => {
     fieldGradeControlElementsItem,
     fieldElementsItem,
     serverPhoto,
+    materialId,
   ]);
   /* #endregion  /**======== Field =========== */
 
