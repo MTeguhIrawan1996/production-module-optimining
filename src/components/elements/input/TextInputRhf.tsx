@@ -29,6 +29,7 @@ const TextInputRhf: React.FC<ITextInputProps> = ({
   label,
   deleteButtonField,
   labelWithTranslate = true,
+  description,
   ...rest
 }) => {
   const {
@@ -47,11 +48,16 @@ const TextInputRhf: React.FC<ITextInputProps> = ({
           radius={8}
           w="100%"
           labelProps={{
-            style: { fontWeight: 400, fontSize: 16, marginBottom: 8 },
+            style: {
+              fontWeight: 400,
+              fontSize: 16,
+              marginBottom: description ? 2 : 8,
+            },
           }}
-          descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
+          descriptionProps={{ style: { fontWeight: 400, fontSize: 12 } }}
           autoComplete="off"
           data-control={control}
+          description={description}
           label={
             labelWithTranslate
               ? label

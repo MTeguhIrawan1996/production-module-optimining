@@ -28,9 +28,9 @@ export const sampleHouseLabMutationValidation: z.ZodType<IMutationSampleHousePla
     subMaterialId: zOptionalString.nullable(),
     samplerId: zOptionalString.nullable(),
     gradeControlId: zOptionalString.nullable(),
-    location: zOptionalString,
+    location: zRequiredString,
     sampleEnterLabDate: zDateValidation,
-    sampleEnterLabTime: zOptionalString,
+    sampleEnterLabTime: zRequiredString,
     gradeControlElements: z
       .object({
         elementId: zRequiredString,
