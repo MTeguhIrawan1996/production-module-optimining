@@ -4,6 +4,9 @@
     "company": "Perusahaan",
     "employee": "Pegawai",
     "location": "Lokasi",
+    "production": "Produksi",
+    "dataRitage": "Data Ritase",
+    "dataRitageOre": "Data Ritase Ore",
     "block": "Block",
     "pit": "PIT",
     "locationId": "ID Lokasi",
@@ -85,6 +88,17 @@
     "detail": "Detail",
     "login": "Masuk",
     "description": "Deskripsi",
+    "desc": "Keterangan",
+    "checkerFromName": "Nama Checker Asal",
+    "checkerToName": "Nama Checker Tujuan",
+    "fromAt": "Waktu dari Asal",
+    "arriveAt": "Waktu sampai Tujuan",
+    "ritageDuration": "Waktu Ritase",
+    "weather": "Cuaca",
+    "fromLocation": "Lokasi Asal",
+    "fromLevel": "Dari Level",
+    "toLevel": "Ke Level",
+    "bucketVolume": "Volume Bucket",
     "save": "Simpan",
     "cancelled": "Batal",
     "back": "Kembali",
@@ -135,6 +149,7 @@
     "successUpdatePasswordMessage": "Password berhasil diubah",
     "class": "Kelas",
     "chooseClass": "Pilih / Ketikan Kelas",
+    "chooseDate": "Pilih Tanggal",
     "chooseEligibilityStatus": "Pilih Status Kelayakan",
     "brand": "Merk",
     "model": "Model",
@@ -265,7 +280,9 @@
     "stockpileMonitoring": "$t(commonTypography.stockpileMonitoring)",
     "sampleHouseLab": "$t(commonTypography.sampleHouseLab)",
     "block": "$t(commonTypography.block)",
-    "stockpile": "$t(commonTypography.stockpile)"
+    "stockpile": "$t(commonTypography.stockpile)",
+    "production": "$t(commonTypography.production)",
+    "dataRitage": "$t(commonTypography.dataRitage)"
   },
   "auth": {
     "button": {
@@ -544,5 +561,10 @@
     "successIsNotValidateMessage": "Status Data $t(commonTypography.sampleHouseLab) Tidak Valid",
     "successIsDeterminedMessage": "$t(sampleHouseLab.sampleHouseLabTitle) berhasil ditetapkan",
     "successIsRejectMessage": "$t(sampleHouseLab.sampleHouseLabTitle) berhasil $t(commonTypography.reject)"
+  },
+  "ritageOre": {
+    "ritageOreTitle": "$t(commonTypography.dataRitageOre)",
+    "createRitageOre": "$t(commonTypography.create) $t(commonTypography.dataRitageOre)",
+    "successDeleteMessage": "$t(commonTypography.dataRitageOre) berhasil dihapus"
   }
 }

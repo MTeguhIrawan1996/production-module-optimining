@@ -10,6 +10,7 @@ import MantineDataTable from '@/components/elements/dataTable/MantineDataTable';
 import AuthGlobalForm from '@/components/elements/form/AuthGlobalForm';
 import FormController from '@/components/elements/form/FormController';
 import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
+import FormControllerNative from '@/components/elements/form/InputControllerNative';
 import SteperFormGroup from '@/components/elements/form/SteperFormGroup';
 import UserProfileForm from '@/components/elements/form/UserProfileForm';
 import Breadcrumb from '@/components/elements/global/Breadcrumb';
@@ -19,6 +20,7 @@ import GlobalActionTable from '@/components/elements/global/GlobalActionTable';
 import GlobalAlert from '@/components/elements/global/GlobalAlert';
 import GlobalBadgeStatus from '@/components/elements/global/GlobalBadgeStatus';
 import GlobalKebabButton from '@/components/elements/global/GlobalKebabButton';
+import GlobalTabs from '@/components/elements/global/GlobalTabs';
 import KeyValueList from '@/components/elements/global/KeyValueList';
 import MultipleFilter from '@/components/elements/global/MultipleFilter';
 import NavbarCollapseLinksGroup from '@/components/elements/global/NavbarCollapseLinksGroup';
@@ -31,6 +33,7 @@ import CheckboxGroupAccess from '@/components/elements/input/CheckboxGroupAccess
 import ClassSelectInputRhf from '@/components/elements/input/ClassSelectInputRhf';
 import CompanyPermissionTypeSelectInputRhf from '@/components/elements/input/CompanyPermissionTypeSelectInputRhf';
 import CompanyTypeSelectInputRhf from '@/components/elements/input/CompanyTypeSelectInputRhf';
+import DateInputNative from '@/components/elements/input/DateInputNative';
 import DateInputRhf from '@/components/elements/input/DateInputRhf';
 import DivisionSelectInputRhf from '@/components/elements/input/DivisionSelectInputRhf';
 import DomeNameSelectInputRhf from '@/components/elements/input/DomeNameSelectInputRhf';
@@ -87,6 +90,7 @@ export {
   CompanyPermissionTypeSelectInputRhf,
   CompanyTypeSelectInputRhf,
   DashboardCard,
+  DateInputNative,
   DateInputRhf,
   DeterminedButton,
   DivisionSelectInputRhf,
@@ -95,6 +99,7 @@ export {
   EmployeeSelectInputRhf,
   FieldErrorMessage,
   FormController,
+  FormControllerNative,
   GlobalActionTable,
   GlobalAlert,
   GlobalBadgeStatus,
@@ -102,6 +107,7 @@ export {
   GlobalHeaderDetail,
   GlobalKebabButton,
   GlobalPagination,
+  GlobalTabs,
   IdentityRadioInputRhf,
   ImageInputDropzoneRhf,
   InnerWrapper,

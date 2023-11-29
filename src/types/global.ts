@@ -9,6 +9,7 @@ import { ICheckboxGroupAccessProps } from '@/components/elements/input/CheckboxG
 import { IClassSelectInputRhfProps } from '@/components/elements/input/ClassSelectInputRhf';
 import { ICompanyPermissionTypesSelectInputRhfProps } from '@/components/elements/input/CompanyPermissionTypeSelectInputRhf';
 import { ICompanyTypesSelectInputRhfProps } from '@/components/elements/input/CompanyTypeSelectInputRhf';
+import { IDateInputNativeProps } from '@/components/elements/input/DateInputNative';
 import { IDateInputProps } from '@/components/elements/input/DateInputRhf';
 import { IDivisionSelectInputRhfProps } from '@/components/elements/input/DivisionSelectInputRhf';
 import { IDomeNameSelectInputRhfProps } from '@/components/elements/input/DomeNameSelectInputRhf';
@@ -85,6 +86,8 @@ export type ControllerProps =
   | IMaterialSelectnputRhfProps
   | IEmployeeSelectInputRhfProps
   | IDateInputProps;
+
+export type InputControllerNativeProps = IDateInputNativeProps;
 
 export type ControllerGroup = {
   group: string;
@@ -234,4 +237,10 @@ export interface IElementsData {
 export interface IElementWithValue {
   value: string | null;
   element: IElementsData | null;
+}
+
+export interface IStatus {
+  id: string;
+  name: string;
+  color: string;
 }

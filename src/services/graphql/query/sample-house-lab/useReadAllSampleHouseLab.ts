@@ -4,6 +4,7 @@ import {
   GResponse,
   IElementWithValue,
   IGlobalMetaRequest,
+  IStatus,
 } from '@/types/global';
 
 export const READ_ALL_SAMPLE_HOUSE_LAB = gql`
@@ -115,11 +116,7 @@ export interface IHouseSampleAndLabsData {
   sampleEnterLabAt: string | null;
   gradeControlElements: IElementWithValue[] | null;
   elements: IElementWithValue[] | null;
-  status: {
-    id: string;
-    name: string;
-    color: string;
-  } | null;
+  status: IStatus | null;
 }
 
 interface IHouseSampleAndLabsResponse {

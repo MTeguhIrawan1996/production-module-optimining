@@ -99,6 +99,16 @@ export const linksDashboard: IMenuItem[] = [
     icon: 'tabler:file-symlink',
     subMenu: [
       {
+        label: 'production',
+        subMenu: [
+          {
+            label: 'dataRitage',
+            href: '/input-data/production/data-ritage',
+            access: ['create-house-sample-and-lab'],
+          },
+        ],
+      },
+      {
         label: 'qualityControlManagement',
         subMenu: [
           // {

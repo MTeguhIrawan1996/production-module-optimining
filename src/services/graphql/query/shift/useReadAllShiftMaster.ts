@@ -35,7 +35,7 @@ export const READ_ALL_SHIFT_MASTER = gql`
   }
 `;
 
-interface IShiftsData {
+export interface IShiftsData {
   id: string;
   name: string;
   startHour: string;

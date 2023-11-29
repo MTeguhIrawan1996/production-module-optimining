@@ -34,7 +34,7 @@ export const READ_ALL_STOCK_MASTER = gql`
   }
 `;
 
-interface IStockpilesData {
+export interface IStockpilesData {
   id: string;
   name: string;
   handBookId: string;

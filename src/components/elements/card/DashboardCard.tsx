@@ -3,12 +3,18 @@ import {
   LoadingOverlay,
   Paper,
   PaperProps,
+  SimpleGrid,
   Stack,
   StackProps,
   Title,
   TitleProps,
 } from '@mantine/core';
-import { IconChevronLeft, IconPencil, IconPlus } from '@tabler/icons-react';
+import {
+  IconChevronLeft,
+  IconDownload,
+  IconPencil,
+  IconPlus,
+} from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -28,10 +34,18 @@ import RejectButton, {
 import ValidationButton, {
   IValidationButtonProps,
 } from '@/components/elements/button/ValidationButton';
+import InputControllerNative from '@/components/elements/form/InputControllerNative';
 import MultipleFilter, {
   IMultipleFilterProps,
 } from '@/components/elements/global/MultipleFilter';
 import SearchBar, { ISerachBar } from '@/components/elements/global/SearchBar';
+
+import { InputControllerNativeProps } from '@/types/global';
+
+type IDownloadButton = {
+  label: string;
+  url: string;
+};
 
 interface IDashboardCardProps extends PaperProps {
   children: React.ReactNode;
@@ -48,9 +62,14 @@ interface IDashboardCardProps extends PaperProps {
   isLoading?: boolean;
   searchBar?: ISerachBar;
   MultipleFilter?: IMultipleFilterProps;
+  filterDateWithSelect?: {
+    colSpan?: number;
+    items: InputControllerNativeProps[];
+  };
   paperStackProps?: StackProps;
   childrenStackProps?: StackProps;
   titleStyle?: TitleProps;
+  downloadButton?: IDownloadButton[];
 }
 
 const DashboardCard: React.FC<IDashboardCardProps> = ({
@@ -75,6 +94,8 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
   withBorder,
   p = 'md',
   titleStyle,
+  downloadButton,
+  filterDateWithSelect,
   ...restPaper
 }) => {
   const router = useRouter();
@@ -144,6 +165,30 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
           {searchBar && <SearchBar {...searchBar} />}
           <Stack {...childrenStackProps}>
             {MultiFilter ? <MultipleFilter {...MultiFilter} /> : null}
+            {filterDateWithSelect ? (
+              <SimpleGrid
+                cols={filterDateWithSelect.colSpan ?? 3}
+                breakpoints={[
+                  { maxWidth: 'sm', cols: 1 },
+                  { maxWidth: 'md', cols: 2 },
+                ]}
+              >
+                {filterDateWithSelect.items.map((val, key) => (
+                  <InputControllerNative {...val} key={key} />
+                ))}
+              </SimpleGrid>
+            ) : null}
+            {downloadButton && downloadButton.length > 0 ? (
+              <Group>
+                {downloadButton.map((obj, i) => (
+                  <PrimaryButton
+                    leftIcon={<IconDownload size="20px" />}
+                    label={obj.label}
+                    key={i}
+                  />
+                ))}
+              </Group>
+            ) : null}
             {children}
           </Stack>
         </Stack>
