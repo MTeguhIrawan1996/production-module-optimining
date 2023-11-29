@@ -254,7 +254,11 @@
     "analysisStartDate": "Tanggal Mulai Analisa",
     "analysisEndDate": "Tanggal Selesai Analisa",
     "analysisStartHour": "Jam Mulai Analisa",
-    "analysisEndHour": "Jam Selesai Analisa"
+    "analysisEndHour": "Jam Selesai Analisa",
+    "downloadReference": "Unduh Referensi",
+    "dataRitageDumpTruck": "Data Ritase Dump Truck",
+    "totalRitage": "Jumlah Ritase",
+    "operatorName": "Nama Operator"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -565,6 +569,7 @@
   "ritageOre": {
     "ritageOreTitle": "$t(commonTypography.dataRitageOre)",
     "createRitageOre": "$t(commonTypography.create) $t(commonTypography.dataRitageOre)",
-    "successDeleteMessage": "$t(commonTypography.dataRitageOre) berhasil dihapus"
+    "successDeleteMessage": "$t(commonTypography.dataRitageOre) berhasil dihapus",
+    "downloadTemplateOre": "Unduh Tamplate Input Data Ritase Ore"
   }
 }

@@ -12,6 +12,7 @@ import {
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
+import ListDataRitageDumptruckBook from '@/components/features/InputData/production/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
 import { useDeleteOreRitage } from '@/services/graphql/mutation/ore-ritage/useDeleteOreRitage';
 import { useReadAllRitageOre } from '@/services/graphql/query/ore-ritage/useReadAllOreRitage';
@@ -308,16 +309,17 @@ const ListDataOreRitageBook = () => {
       }}
       downloadButton={[
         {
-          label: 'Unduh Tamplate Input Data Ritase Ore',
+          label: t('ritageOre.downloadTemplateOre'),
           url: '',
         },
         {
-          label: 'Unduh Referensi',
+          label: t('commonTypography.downloadReference'),
           url: '',
         },
       ]}
     >
       {renderTable}
+      <ListDataRitageDumptruckBook />
       <ModalConfirmation
         isOpenModalConfirmation={isOpenDeleteConfirmation}
         actionModalConfirmation={() =>
