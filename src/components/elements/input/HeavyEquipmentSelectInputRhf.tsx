@@ -1,50 +1,71 @@
 import { Select, SelectProps } from '@mantine/core';
+import { useDebouncedValue } from '@mantine/hooks';
 import * as React from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllRelegion } from '@/services/graphql/query/global-select/useReadAllRelegion';
-import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { useReadAllHeavyEquipmentSelect } from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
+import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
-export type IRelegionSelectInputRhfProps = {
-  control: 'relegion-select-input';
+export type IHeavyEquipmentSelectInputRhfProps = {
+  control: 'heavyEquipment-select-input';
   name: string;
+  labelValue?: string;
+  categorySlug?: string | null;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
 > &
   CommonProps;
 
-const RelegionSelectInputRhf: React.FC<IRelegionSelectInputRhfProps> = ({
+const HeavyEquipmentSelectInputRhf: React.FC<
+  IHeavyEquipmentSelectInputRhfProps
+> = ({
   name,
   control,
   label,
+  labelValue,
   defaultValue,
+  categorySlug,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
   const [searchTerm, setSearchTerm] = React.useState<string>('');
+  const [searchQuery] = useDebouncedValue<string>(searchTerm, 400);
+  const currentValue = field.value === '' ? null : field.value;
 
-  const { relegionsData } = useReadAllRelegion({
+  const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
     variables: {
-      limit: null,
+      limit: 15,
+      search: searchQuery === '' ? null : searchQuery,
+      isComplete: true,
+      categorySlug: categorySlug === '' ? null : categorySlug,
     },
   });
 
-  const { uncombinedItem } = useFilterItems({
-    data: relegionsData ?? [],
+  const heavyEquipmentItem = heavyEquipmentSelect?.map((val) => {
+    return {
+      name: val.hullNumber ?? '',
+      id: val.id ?? '',
+    };
+  });
+
+  const { combinedItems, uncombinedItem } = useCombineFilterItems({
+    data: heavyEquipmentItem ?? [],
+    combinedId: defaultValue ?? '',
+    combinedName: labelValue,
   });
 
   return (
     <Select
       {...field}
       radius={8}
-      data={uncombinedItem}
+      data={!currentValue || !defaultValue ? uncombinedItem : combinedItems}
       defaultValue={defaultValue}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
@@ -59,7 +80,9 @@ const RelegionSelectInputRhf: React.FC<IRelegionSelectInputRhfProps> = ({
       onSearchChange={setSearchTerm}
       searchValue={searchTerm}
       data-control={control}
-      placeholder={t('commonTypography.chooseRelegion', { ns: 'default' })}
+      placeholder={t('commonTypography.chooseHeavyEquipmentCode', {
+        ns: 'default',
+      })}
       label={label ? t(`components.field.${label}`) : null}
       error={
         fieldState &&
@@ -72,4 +95,4 @@ const RelegionSelectInputRhf: React.FC<IRelegionSelectInputRhfProps> = ({
   );
 };
 
-export default RelegionSelectInputRhf;
+export default HeavyEquipmentSelectInputRhf;

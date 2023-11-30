@@ -12,15 +12,18 @@ import {
   DomeNameSelectInputRhf,
   EligibilityStatusSelectInputRhf,
   EmployeeSelectInputRhf,
+  HeavyEquipmentSelectInputRhf,
   IdentityRadioInputRhf,
   ImageInputDropzoneRhf,
   LocationCategorySelectInputRhf,
+  LocationSelectInputRhf,
   MarriageSelectInputRhf,
   MaterialSelectInput,
   ModelSelectInputRhf,
   NumberInputRhf,
   PasswordInputRhf,
   PdfInputDropzoneRhf,
+  PitSelectInputRhf,
   PositionSelectInputRhf,
   ProvinceSelectInputRhf,
   RadioInputRhf,
@@ -37,6 +40,7 @@ import {
   TimeInputRhf,
   TypeSelectInputRhf,
   VillageSelectInputRhf,
+  WeatherSelectInputRhf,
 } from '@/components/elements';
 
 import { ControllerProps } from '@/types/global';
@@ -115,6 +119,14 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <MaterialSelectInput {...props} />;
     case 'employee-select-input':
       return <EmployeeSelectInputRhf {...props} />;
+    case 'heavyEquipment-select-input':
+      return <HeavyEquipmentSelectInputRhf {...props} />;
+    case 'weathers-select-input':
+      return <WeatherSelectInputRhf {...props} />;
+    case 'pit-select-input':
+      return <PitSelectInputRhf {...props} />;
+    case 'location-select-input':
+      return <LocationSelectInputRhf {...props} />;
     default:
       return null;
   }

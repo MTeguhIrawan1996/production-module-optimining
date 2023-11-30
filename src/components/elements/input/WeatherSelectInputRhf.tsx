@@ -5,13 +5,13 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllRelegion } from '@/services/graphql/query/global-select/useReadAllRelegion';
+import { useReadAllWeather } from '@/services/graphql/query/global-select/useReadAllWeather';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
-export type IRelegionSelectInputRhfProps = {
-  control: 'relegion-select-input';
+export type IWeatherSelectInputRhfProps = {
+  control: 'weathers-select-input';
   name: string;
 } & Omit<
   SelectProps,
@@ -19,7 +19,7 @@ export type IRelegionSelectInputRhfProps = {
 > &
   CommonProps;
 
-const RelegionSelectInputRhf: React.FC<IRelegionSelectInputRhfProps> = ({
+const WeatherSelectInputRhf: React.FC<IWeatherSelectInputRhfProps> = ({
   name,
   control,
   label,
@@ -30,14 +30,14 @@ const RelegionSelectInputRhf: React.FC<IRelegionSelectInputRhfProps> = ({
   const { field, fieldState } = useController({ name });
   const [searchTerm, setSearchTerm] = React.useState<string>('');
 
-  const { relegionsData } = useReadAllRelegion({
+  const { weathersData } = useReadAllWeather({
     variables: {
       limit: null,
     },
   });
 
   const { uncombinedItem } = useFilterItems({
-    data: relegionsData ?? [],
+    data: weathersData ?? [],
   });
 
   return (
@@ -59,7 +59,7 @@ const RelegionSelectInputRhf: React.FC<IRelegionSelectInputRhfProps> = ({
       onSearchChange={setSearchTerm}
       searchValue={searchTerm}
       data-control={control}
-      placeholder={t('commonTypography.chooseRelegion', { ns: 'default' })}
+      placeholder={t('commonTypography.chooseWeather', { ns: 'default' })}
       label={label ? t(`components.field.${label}`) : null}
       error={
         fieldState &&
@@ -72,4 +72,4 @@ const RelegionSelectInputRhf: React.FC<IRelegionSelectInputRhfProps> = ({
   );
 };
 
-export default RelegionSelectInputRhf;
+export default WeatherSelectInputRhf;

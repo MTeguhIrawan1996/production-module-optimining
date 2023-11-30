@@ -11,6 +11,7 @@ import {
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
+  SelectionButtonModal,
 } from '@/components/elements';
 import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
@@ -32,6 +33,8 @@ const ListDataOreRitageBook = () => {
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
+    React.useState<boolean>(false);
+  const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
   const [date, setDate] = React.useState('');
 
@@ -280,7 +283,7 @@ const ListDataOreRitageBook = () => {
           title: t('commonTypography.dataNotfound'),
           actionButton: {
             label: t('ritageOre.createRitageOre'),
-            onClick: () => router.push('/input-data/production/data-ritage'),
+            onClick: () => setIsOpenSelectionModal((prev) => !prev),
           },
         }}
         paginationProps={{
@@ -301,7 +304,7 @@ const ListDataOreRitageBook = () => {
       title={t('ritageOre.ritageOreTitle')}
       addButton={{
         label: t('ritageOre.createRitageOre'),
-        onClick: () => router.push('/input-data/production/data-ritage'),
+        onClick: () => setIsOpenSelectionModal((prev) => !prev),
       }}
       filterDateWithSelect={{
         colSpan: 3,
@@ -340,6 +343,20 @@ const ListDataOreRitageBook = () => {
           description: t('commonTypography.alertDescConfirmDelete'),
         }}
         withDivider
+      />
+      <SelectionButtonModal
+        isOpenSelectionModal={isOpenSelectionModal}
+        actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
+        firstButton={{
+          label: t('commonTypography.inputDataRitage'),
+          onClick: () =>
+            router.push('/input-data/production/data-ritage/create-ritage-ore'),
+        }}
+        secondButton={{
+          label: t('commonTypography.uploadFile'),
+          onClick: () =>
+            router.push('/input-data/production/data-ritage/upload'),
+        }}
       />
     </DashboardCard>
   );
