@@ -3,7 +3,7 @@ import DashboardPage from '@/components/features/Dashboard/common';
 import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
 import FormExamplePage from '@/components/features/Example/form-example/common';
-import DataRitagePage from '@/components/features/InputData/production/data-ritage/common';
+import DataRitagePage from '@/components/features/InputData/Productions/data-ritage/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
 import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/create/common';
 import ReadSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/read/common';

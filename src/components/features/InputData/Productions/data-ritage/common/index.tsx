@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { GlobalTabs, InnerWrapper, RootWrapper } from '@/components/elements';
-import ListDataOreRitageBook from '@/components/features/InputData/production/data-ritage/common/sections/ListDataOreRitageBook';
+import ListDataOreRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataOreRitageBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 

@@ -12,7 +12,7 @@ import {
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
-import ListDataRitageDumptruckBook from '@/components/features/InputData/production/data-ritage/common/elements/ListDataRitageDumptruckBook';
+import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
 import { useDeleteOreRitage } from '@/services/graphql/mutation/ore-ritage/useDeleteOreRitage';
 import { useReadAllRitageOre } from '@/services/graphql/query/ore-ritage/useReadAllOreRitage';
