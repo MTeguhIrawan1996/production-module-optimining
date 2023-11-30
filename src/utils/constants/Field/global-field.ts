@@ -12,6 +12,7 @@ import { ILocationSelectInputRhfProps } from '@/components/elements/input/Locati
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import { IMaterialSelectnputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
+import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { IPitSelectInputRhfProps } from '@/components/elements/input/PitSelectInputRhf';
 import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
@@ -546,6 +547,24 @@ export const globalText = ({
 }: Partial<ITextInputProps>) => {
   const field: ControllerProps = {
     control: 'text-input',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalNumberInput = ({
+  name = 'globalNumberInput',
+  label = 'globalNumberInput',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<INumberInputProps>) => {
+  const field: ControllerProps = {
+    control: 'number-input',
     name,
     label,
     withAsterisk,
