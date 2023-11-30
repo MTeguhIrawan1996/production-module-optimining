@@ -153,7 +153,7 @@ const ReadSampleHouseLabBook = () => {
         dataKey: `${gcElement.element?.name} ${t(
           'commonTypography.estimationGC'
         )}`,
-        value: gcElement.value,
+        value: `${gcElement.value}`,
       };
       return column;
     },
@@ -171,7 +171,7 @@ const ReadSampleHouseLabBook = () => {
         dataKey: `${labElement.element?.name} ${t(
           'commonTypography.percentageLab'
         )}`,
-        value: labElement.value,
+        value: `${labElement.value}`,
       };
       return column;
     },
@@ -436,7 +436,7 @@ const ReadSampleHouseLabBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.density'),
-                  value: houseSampleAndLab?.density,
+                  value: `${houseSampleAndLab?.density}`,
                 },
               ]}
               type="grid"

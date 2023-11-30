@@ -235,7 +235,7 @@ export interface IElementsData {
 }
 
 export interface IElementWithValue {
-  value: string | null;
+  value: number | null;
   element: IElementsData | null;
 }
 
