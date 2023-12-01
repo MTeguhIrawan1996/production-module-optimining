@@ -1,3 +1,5 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -9,9 +11,9 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
 import {
-  IMutationSampleHousePlanValues,
-  useCreateSampleHousePlan,
-} from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
+  IMutationRitageOre,
+  useCreateRitageOre,
+} from '@/services/restapi/ritage-productions/useCreateRitageOre';
 import {
   employeeSelect,
   globalDate,
@@ -29,23 +31,32 @@ import {
   domeNameSelect,
   stockpileNameSelect,
 } from '@/utils/constants/Field/stockpile-field';
+import { ritageOreMutationValidation } from '@/utils/form-validation/ritage/ritage-ore-validation';
+import { dateToString } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { hourDiff } from '@/utils/helper/hourDiff';
+import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
 import { ControllerGroup, ControllerProps } from '@/types/global';
 
 const CreateRitageOreBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const [tonByRitage, setTonByRitage] = React.useState<string>('');
+  const [newFromTime, setNewFromTime] = useDebouncedState<string>('', 400);
+  const [newArriveTime, setNewArriveTime] = useDebouncedState<string>('', 400);
+  const [newBulkSamplingDensity, setNewBulkSamplingDensity] =
+    useDebouncedState<string>('', 400);
+  const [newBucketVolume, setNewBucketVolume] = useDebouncedState<string>(
+    '',
+    400
+  );
 
   /* #   /**=========== Methods =========== */
-  const methods = useForm<any>({
-    // resolver: zodResolver(sampleHouseLabMutationValidation),
+  const methods = useForm<IMutationRitageOre>({
+    resolver: zodResolver(ritageOreMutationValidation),
     defaultValues: {
-      date: new Date(),
+      date: undefined,
       checkerFromId: '',
       checkerFromPosition: '',
       checkerToId: '',
@@ -56,6 +67,7 @@ const CreateRitageOreBook = () => {
       subMaterialId: '',
       fromTime: '',
       arriveTime: '',
+      ritageDuration: '',
       block: '',
       weatherId: '',
       fromPitId: '',
@@ -67,44 +79,44 @@ const CreateRitageOreBook = () => {
       toLevel: '',
       stockpileId: '',
       domeId: '',
-      closeDome: 'false',
+      closeDome: false,
       bulkSamplingDensity: '',
       bucketVolume: '',
+      tonByRitage: '',
       sampleNumber: '',
       desc: '',
       photos: [],
     },
     mode: 'onBlur',
   });
-  const newFromTime = methods.watch('fromTime');
-  const newArriveTime = methods.watch('arriveTime');
   const fromPitId = methods.watch('fromPitId');
   const photos = methods.watch('photos');
-  const ritageDuration = hourDiff(newFromTime, newArriveTime);
 
-  // const countTonByRitage = () => {
-  //   if (bucketVolume !== '' && bulkSamplingDensity !== '') {
-  //     const amount = Number(bucketVolume) * Number(bulkSamplingDensity);
-  //     setTonByRitage(`${amount ?? ''}`);
-  //   }
-  //   return null;
-  // };
-  // countTonByRitage();
+  React.useEffect(() => {
+    const ritageDuration = hourDiff(newFromTime, newArriveTime);
+    const amount = Number(newBucketVolume) * Number(newBulkSamplingDensity);
+    methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
+    methods.setValue('date', new Date());
+    methods.setValue('ritageDuration', ritageDuration ?? '');
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newFromTime, newArriveTime, newBulkSamplingDensity, newBucketVolume]);
 
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
   useReadOneBlockPitMaster({
     variables: {
-      id: fromPitId,
+      id: fromPitId as string,
     },
     skip: fromPitId === '' || !fromPitId,
     onCompleted: ({ pit }) => {
       methods.setValue('block', pit.block.name);
     },
   });
+
   // eslint-disable-next-line unused-imports/no-unused-vars
-  const { mutate, isLoading } = useCreateSampleHousePlan({
+  const { mutate, isLoading } = useCreateRitageOre({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -204,12 +216,22 @@ const CreateRitageOreBook = () => {
       label: 'fromTime',
       withAsterisk: true,
       colSpan: 6,
+      onChange: (e) => {
+        methods.setValue('fromTime', e.currentTarget.value);
+        setNewFromTime(e.currentTarget.value);
+        methods.trigger('fromTime');
+      },
     });
     const arriveTime = globalTimeInput({
       name: 'arriveTime',
       label: 'arriveTime',
       withAsterisk: false,
       colSpan: 6,
+      onChange: (e) => {
+        methods.setValue('arriveTime', e.currentTarget.value);
+        setNewArriveTime(e.currentTarget.value);
+        methods.trigger('arriveTime');
+      },
     });
     const ritageDurationItem = globalText({
       name: 'ritageDuration',
@@ -217,7 +239,6 @@ const CreateRitageOreBook = () => {
       colSpan: 6,
       disabled: true,
       withAsterisk: false,
-      value: ritageDuration ?? '',
     });
     const weatherItem = weatherSelect({
       colSpan: 6,
@@ -299,12 +320,22 @@ const CreateRitageOreBook = () => {
       name: 'bulkSamplingDensity',
       label: 'bulkSamplingDensity',
       withAsterisk: true,
+      onChange: (value) => {
+        methods.setValue('bulkSamplingDensity', value);
+        setNewBulkSamplingDensity(`${value}`);
+        methods.trigger('bulkSamplingDensity');
+      },
     });
     const bucketVolumeItem = globalNumberInput({
       colSpan: 6,
       name: 'bucketVolume',
       label: 'bucketVolume',
       withAsterisk: true,
+      onChange: (value) => {
+        methods.setValue('bucketVolume', value);
+        setNewBucketVolume(`${value}`);
+        methods.trigger('bucketVolume');
+      },
     });
     const tonByRitageItem = globalText({
       colSpan: 6,
@@ -312,7 +343,6 @@ const CreateRitageOreBook = () => {
       label: 'tonByRitage',
       withAsterisk: false,
       disabled: true,
-      value: tonByRitage,
     });
     const sampleNumberItem = globalText({
       colSpan: 6,
@@ -431,36 +461,28 @@ const CreateRitageOreBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ritageDuration, photos]);
+  }, [photos]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
-  const handleSubmitForm: SubmitHandler<IMutationSampleHousePlanValues> = (
-    // eslint-disable-next-line unused-imports/no-unused-vars
-    data
-  ) => {
-    // const values = objectToArrayValue(data);
-    // const dateValue = [
-    //   'sampleDate',
-    //   'sampleEnterLabDate',
-    //   'preparationStartDate',
-    //   'preparationFinishDate',
-    //   'analysisStartDate',
-    //   'analysisFinishDate',
-    // ];
-    // const valuesWithDateString = values.map((val) => {
-    //   if (dateValue.includes(val.name)) {
-    //     const date = dateToString(val.value);
-    //     return {
-    //       name: val.name,
-    //       value: date,
-    //     };
-    //   }
-    //   return {
-    //     name: val.name,
-    //     value: val.value,
-    //   };
-    // });
+  const handleSubmitForm: SubmitHandler<IMutationRitageOre> = (data) => {
+    const values = objectToArrayValue(data);
+    const dateValue = ['date'];
+    const valuesWithDateString = values.map((val) => {
+      if (dateValue.includes(val.name)) {
+        const date = dateToString(val.value);
+        return {
+          name: val.name,
+          value: date,
+        };
+      }
+      return {
+        name: val.name,
+        value: val.value,
+      };
+    });
+    // eslint-disable-next-line no-console
+    console.log(valuesWithDateString);
     // mutate({
     //   data: valuesWithDateString,
     // });
@@ -484,7 +506,7 @@ const CreateRitageOreBook = () => {
         }}
         submitButton={{
           label: t('commonTypography.save'),
-          loading: isLoading,
+          // loading: isLoading,
         }}
         backButton={{
           onClick: () =>
