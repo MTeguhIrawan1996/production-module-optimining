@@ -35,7 +35,9 @@ const NumberInputRhf: React.FC<INumberInputProps> = ({
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
       data-control={control}
       label={label ? t(`components.field.${label}`) : null}
-      parser={(value: string) => value.replace(/[^0-9]/g, '')}
+      // parser={(value: string) => value.replace(/[^0-9]/g, '')}
+      // step={0.05}
+      precision={2}
       error={
         fieldState &&
         fieldState.error && (
