@@ -6,13 +6,13 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllStockpileMaster } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
+import { useReadAllPit } from '@/services/graphql/query/global-select/useReadAllPit';
 import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
-export type IStockpileNameSelectInputRhfProps = {
-  control: 'stockpilename-select-input';
+export type IPitSelectInputRhfProps = {
+  control: 'pit-select-input';
   name: string;
   labelValue?: string;
 } & Omit<
@@ -21,26 +21,29 @@ export type IStockpileNameSelectInputRhfProps = {
 > &
   CommonProps;
 
-const StockpileNameSelectInputRhf: React.FC<
-  IStockpileNameSelectInputRhfProps
-> = ({ name, control, label, labelValue, defaultValue, ...rest }) => {
+const PitSelectInputRhf: React.FC<IPitSelectInputRhfProps> = ({
+  name,
+  control,
+  label,
+  defaultValue,
+  labelValue,
+  ...rest
+}) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [searchQuery] = useDebouncedValue<string>(searchTerm, 400);
   const currentValue = field.value === '' ? null : field.value;
 
-  const { stockpilesData } = useReadAllStockpileMaster({
+  const { pit } = useReadAllPit({
     variables: {
       limit: 15,
-      orderDir: 'desc',
-      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
     },
   });
 
   const { combinedItems, uncombinedItem } = useCombineFilterItems({
-    data: stockpilesData ?? [],
+    data: pit ?? [],
     combinedId: defaultValue ?? '',
     combinedName: labelValue,
   });
@@ -64,9 +67,7 @@ const StockpileNameSelectInputRhf: React.FC<
       onSearchChange={setSearchTerm}
       searchValue={searchTerm}
       data-control={control}
-      placeholder={t('commonTypography.chooseStockpileName', {
-        ns: 'default',
-      })}
+      placeholder={t('commonTypography.chooseLocation', { ns: 'default' })}
       label={label ? t(`components.field.${label}`) : null}
       error={
         fieldState &&
@@ -79,4 +80,4 @@ const StockpileNameSelectInputRhf: React.FC<
   );
 };
 
-export default StockpileNameSelectInputRhf;
+export default PitSelectInputRhf;

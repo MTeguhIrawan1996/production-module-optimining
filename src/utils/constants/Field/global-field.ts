@@ -5,11 +5,15 @@ import { IDateInputProps } from '@/components/elements/input/DateInputRhf';
 import { IDivisionSelectInputRhfProps } from '@/components/elements/input/DivisionSelectInputRhf';
 import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/input/EligibilityStatusSelectInputRhf';
 import { IEmployeeSelectInputRhfProps } from '@/components/elements/input/EmployeeSelectInputRhf';
+import { IHeavyEquipmentSelectInputRhfProps } from '@/components/elements/input/HeavyEquipmentSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
 import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
+import { ILocationSelectInputRhfProps } from '@/components/elements/input/LocationSelectInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import { IMaterialSelectnputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
+import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
+import { IPitSelectInputRhfProps } from '@/components/elements/input/PitSelectInputRhf';
 import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
@@ -20,6 +24,7 @@ import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
 import { ITimeInputRhfProps } from '@/components/elements/input/TimeInputRhf';
 import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelectInputRhf';
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
+import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
 
 import { ControllerProps, InputControllerNativeProps } from '@/types/global';
 
@@ -551,6 +556,24 @@ export const globalText = ({
   return field;
 };
 
+export const globalNumberInput = ({
+  name = 'globalNumberInput',
+  label = 'globalNumberInput',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<INumberInputProps>) => {
+  const field: ControllerProps = {
+    control: 'number-input',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
 export const brandSelect = ({
   name = 'brandId',
   label = 'brand',
@@ -745,6 +768,90 @@ export const employeeSelect = ({
 }: Partial<IEmployeeSelectInputRhfProps>) => {
   const field: ControllerProps = {
     control: 'employee-select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const heavyEquipmentSelect = ({
+  name = 'companyHeavyEquipmentId',
+  label = 'hullNumber',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IHeavyEquipmentSelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'heavyEquipment-select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const weatherSelect = ({
+  name = 'weatherId',
+  label = 'weather',
+  clearable = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IWeatherSelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'weathers-select-input',
+    name,
+    label,
+    colSpan,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
+
+export const pitSelect = ({
+  name = 'fromPitId',
+  label = 'fromPit',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IPitSelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'pit-select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const locationSelect = ({
+  name = 'fromlocationId',
+  label = 'fromlocationId',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ILocationSelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'location-select-input',
     name,
     label,
     searchable,

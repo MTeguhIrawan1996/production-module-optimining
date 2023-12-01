@@ -6,6 +6,8 @@ import {
   Paper,
   SimpleGrid,
   Stack,
+  Switch,
+  SwitchProps,
   Text,
 } from '@mantine/core';
 import {
@@ -37,6 +39,10 @@ interface IGlobalFormGroupProps {
   validationButton?: Partial<IPrimaryButtonProps>;
   backButton?: Partial<IPrimaryButtonProps>;
   modalConfirmation?: IModalConfirmationProps;
+  switchProps?: {
+    switchItem: SwitchProps;
+    label: string;
+  };
   children?: React.ReactNode;
 }
 
@@ -50,6 +56,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
   validationButton,
   backButton,
   modalConfirmation,
+  switchProps,
   children,
 }) => {
   const { t } = useTranslation('default');
@@ -79,6 +86,27 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(submitForm)}>
         <Flex gap={32} direction="column" align="flex-end" p={32}>
+          {switchProps ? (
+            <Stack justify="flex-start" align="flex-start" w="100%" spacing={8}>
+              <Text component="label" fw={400} fz={16}>
+                {t(`components.field.${switchProps.label}`, {
+                  ns: 'allComponents',
+                })}
+              </Text>
+              <Switch
+                size="md"
+                styles={{
+                  trackLabel: {
+                    cursor: 'pointer',
+                  },
+                  thumb: {
+                    cursor: 'pointer',
+                  },
+                }}
+                {...switchProps.switchItem}
+              />
+            </Stack>
+          ) : null}
           {outerButton ? (
             <PrimaryButton
               label={outerButtonLabel}

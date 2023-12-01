@@ -8,13 +8,15 @@ dayjs.extend(localizedFormat);
 dayjs.extend(customParseFormat);
 
 export const hourFromat = (
-  //  formatDate
   value: string | Date | undefined | null,
-  format?: 'hh:mm:ss A' | 'hh:mm A'
+  format?: 'hh:mm:ss A' | 'hh:mm A' | 'LLLL',
+  elseReturn?: string | null
 ) => {
   return value
     ? dayjs(value, 'HH:mm:ss')
         .locale('id')
         .format(format ?? 'hh:mm:ss A')
+    : elseReturn
+    ? elseReturn
     : '-';
 };

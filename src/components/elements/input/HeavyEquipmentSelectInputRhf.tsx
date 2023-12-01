@@ -6,41 +6,57 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllStockpileMaster } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
+import { useReadAllHeavyEquipmentSelect } from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
 import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
-export type IStockpileNameSelectInputRhfProps = {
-  control: 'stockpilename-select-input';
+export type IHeavyEquipmentSelectInputRhfProps = {
+  control: 'heavyEquipment-select-input';
   name: string;
   labelValue?: string;
+  categorySlug?: string | null;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
 > &
   CommonProps;
 
-const StockpileNameSelectInputRhf: React.FC<
-  IStockpileNameSelectInputRhfProps
-> = ({ name, control, label, labelValue, defaultValue, ...rest }) => {
+const HeavyEquipmentSelectInputRhf: React.FC<
+  IHeavyEquipmentSelectInputRhfProps
+> = ({
+  name,
+  control,
+  label,
+  labelValue,
+  defaultValue,
+  categorySlug,
+  ...rest
+}) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [searchQuery] = useDebouncedValue<string>(searchTerm, 400);
   const currentValue = field.value === '' ? null : field.value;
 
-  const { stockpilesData } = useReadAllStockpileMaster({
+  const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
     variables: {
       limit: 15,
-      orderDir: 'desc',
-      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
+      isComplete: true,
+      categorySlug: categorySlug === '' ? null : categorySlug,
     },
   });
 
+  const heavyEquipmentItem = heavyEquipmentSelect?.map((val) => {
+    return {
+      name: val.hullNumber ?? '',
+      id: val.id ?? '',
+    };
+  });
+
   const { combinedItems, uncombinedItem } = useCombineFilterItems({
-    data: stockpilesData ?? [],
+    data: heavyEquipmentItem ?? [],
     combinedId: defaultValue ?? '',
     combinedName: labelValue,
   });
@@ -64,7 +80,7 @@ const StockpileNameSelectInputRhf: React.FC<
       onSearchChange={setSearchTerm}
       searchValue={searchTerm}
       data-control={control}
-      placeholder={t('commonTypography.chooseStockpileName', {
+      placeholder={t('commonTypography.chooseHeavyEquipmentCode', {
         ns: 'default',
       })}
       label={label ? t(`components.field.${label}`) : null}
@@ -79,4 +95,4 @@ const StockpileNameSelectInputRhf: React.FC<
   );
 };
 
-export default StockpileNameSelectInputRhf;
+export default HeavyEquipmentSelectInputRhf;
