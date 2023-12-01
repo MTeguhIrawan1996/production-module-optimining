@@ -217,6 +217,7 @@ const CreateSmapleHouseLabBook = () => {
         methods.setValue('sampleTypeId', value ?? '');
         methods.setValue('materialId', '');
         methods.setValue('subMaterialId', '');
+        methods.setValue('density', '');
         methods.trigger('sampleTypeId');
       },
     });

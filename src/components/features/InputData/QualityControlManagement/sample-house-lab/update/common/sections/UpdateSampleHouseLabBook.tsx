@@ -217,7 +217,7 @@ const UpdateSampleHouseLabPage = () => {
       methods.setValue('locationName', houseSampleAndLab.locationName ?? '');
       methods.setValue('sampleEnterLabDate', sampleEnterLabDate);
       methods.setValue('sampleEnterLabTime', sampleEnterLabTime ?? '');
-      methods.setValue('density', `${houseSampleAndLab.density}` ?? '');
+      methods.setValue('density', `${houseSampleAndLab.density ?? ''}`);
       methods.setValue('preparationStartDate', preparationStartDate);
       methods.setValue('preparationStartTime', preparationStartTime ?? '');
       methods.setValue('preparationFinishDate', preparationFinishDate);
@@ -332,6 +332,7 @@ const UpdateSampleHouseLabPage = () => {
         methods.setValue('sampleTypeId', value ?? '');
         methods.setValue('materialId', '');
         methods.setValue('subMaterialId', '');
+        methods.setValue('density', '');
         methods.trigger('sampleTypeId');
       },
     });
