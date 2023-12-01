@@ -9,6 +9,7 @@ export const PERMISSION_USER = gql`
         slug
         permissions {
           data {
+            name
             slug
           }
         }

@@ -3,23 +3,25 @@ import { Box } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { SignInResponse } from 'next-auth/react';
+import { SignInResponse, useSession } from 'next-auth/react';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { AuthGlobalForm } from '@/components/elements';
 
+import { useReadPermissionUser } from '@/services/graphql/query/auth/useReadPermission';
 import { ILogin, useLogin } from '@/services/next-auth/login/useLogin';
 import authField from '@/utils/constants/Field/auth-field';
 import { authValidationSchema } from '@/utils/form-validation/auth/auth-validation';
+import { encodeFc } from '@/utils/helper/encodeDecode';
 
 import { IErrorResponseExtensionNextAuth } from '@/types/global';
 
 const AuthBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
-
+  const { data: session, update } = useSession();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const methods = useForm<ILogin>({
@@ -31,10 +33,10 @@ const AuthBook = () => {
     mode: 'onSubmit',
   });
 
-  const { mutate } = useLogin({
-    onSuccess: () => {
-      router.push('/dashboard');
-    },
+  const { data, mutate } = useLogin({
+    // onSuccess: () => {
+    //   router.push('/dashboard');
+    // },
     onError: (err: SignInResponse) => {
       setIsLoading(false);
       if (err.error === 'CredentialsSignin') {
@@ -61,32 +63,33 @@ const AuthBook = () => {
     },
   });
 
-  // useReadPermissionUser({
-  //   skip: !data || !data.ok,
-  //   onCompleted: (res) => {
-  //     if (res && session) {
-  //       const encode = encodeFc(res.authUser.role.permissions.data);
-  //       console.log(encode);
-
-  //       try {
-  //         const updateSession = async () => {
-  //           await update({
-  //             ...session,
-  //             user: {
-  //               ...session?.user,
-  //               permission: encode,
-  //               role: res.authUser?.role?.slug,
-  //             },
-  //           });
-  //         };
-  //         updateSession();
-  //         router.push('/dashboard');
-  //       } catch (err) {
-  //         return;
-  //       }
-  //     }
-  //   },
-  // });
+  useReadPermissionUser({
+    skip: !data || !data.ok,
+    onCompleted: (res) => {
+      if (res && session) {
+        const arrayOfString = res.authUser.role.permissions.data.map(
+          (val) => val.slug
+        );
+        try {
+          const updateSession = async () => {
+            const encode = await encodeFc(arrayOfString);
+            await update({
+              ...session,
+              user: {
+                ...session?.user,
+                permission: encode,
+                role: res.authUser?.role?.slug,
+              },
+            });
+          };
+          updateSession();
+          router.push('/dashboard');
+        } catch (err) {
+          return;
+        }
+      }
+    },
+  });
 
   const onSubmitForm: SubmitHandler<ILogin> = (value) => {
     setIsLoading(true);
