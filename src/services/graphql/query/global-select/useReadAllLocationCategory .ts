@@ -9,6 +9,7 @@ export const READ_ALL_LOCATION_CATEGORY = gql`
     $search: String
     $orderBy: String
     $orderDir: String
+    $excludeIds: [String!]
   ) {
     locationCategories(
       findAllLocationCategoryInput: {
@@ -17,6 +18,7 @@ export const READ_ALL_LOCATION_CATEGORY = gql`
         search: $search
         orderBy: $orderBy
         orderDir: $orderDir
+        excludeIds: $excludeIds
       }
     ) {
       meta {
@@ -40,6 +42,10 @@ export interface ILocationCategoriesData {
   slug: string;
 }
 
+interface ILocationCategoriesRequest extends IGlobalMetaRequest {
+  excludeIds: string[] | null;
+}
+
 interface ILocationCategoriesResponse {
   locationCategories: GResponse<ILocationCategoriesData>;
 }
@@ -48,11 +54,11 @@ export const useReadAllLocationCategory = ({
   variables,
   onCompleted,
 }: {
-  variables?: Partial<IGlobalMetaRequest>;
+  variables?: Partial<ILocationCategoriesRequest>;
   onCompleted?: (data: ILocationCategoriesResponse) => void;
 }) => {
   const { data: locationCategoriesdata, loading: locationCategoriesLoading } =
-    useQuery<ILocationCategoriesResponse, Partial<IGlobalMetaRequest>>(
+    useQuery<ILocationCategoriesResponse, Partial<ILocationCategoriesRequest>>(
       READ_ALL_LOCATION_CATEGORY,
       {
         variables: variables,

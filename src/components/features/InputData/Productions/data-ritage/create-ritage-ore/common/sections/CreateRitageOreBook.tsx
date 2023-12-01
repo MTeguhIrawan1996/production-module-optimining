@@ -86,11 +86,15 @@ const CreateRitageOreBook = () => {
       sampleNumber: '',
       desc: '',
       photos: [],
+      isRitageProblematic: false,
+      companyHeavyEquipmentChangeId: '',
     },
     mode: 'onBlur',
   });
   const fromPitId = methods.watch('fromPitId');
   const photos = methods.watch('photos');
+  const isRitageProblematic = methods.watch('isRitageProblematic');
+  const closeDome = methods.watch('closeDome');
 
   React.useEffect(() => {
     const ritageDuration = hourDiff(newFromTime, newArriveTime);
@@ -138,10 +142,10 @@ const CreateRitageOreBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('sampleHouseLab.successCreateMessage'),
+        message: t('ritageOre.successCreateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/input-data/quality-control-management/sample-house-lab');
+      router.push('/input-data/production/data-ritage?tabs=ore');
       methods.reset();
     },
   });
@@ -189,6 +193,12 @@ const CreateRitageOreBook = () => {
       colSpan: 6,
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
+      withAsterisk: true,
+    });
+    const hullNumberSubstitution = heavyEquipmentSelect({
+      colSpan: 6,
+      name: 'companyHeavyEquipmentChangeId',
+      label: 'heavyEquipmentCodeSubstitutione',
       withAsterisk: true,
     });
     const materialItem = materialSelect({
@@ -405,6 +415,7 @@ const CreateRitageOreBook = () => {
           toCheckerPosition,
           shiftItem,
           hullNumber,
+          hullNumberSubstitution,
           materialItem,
           materialSubItem,
           fromTime,
@@ -434,7 +445,11 @@ const CreateRitageOreBook = () => {
         group: t('commonTypography.arrive'),
         enableGroupLabel: true,
         groupCheckbox: {
-          onChange: () => {},
+          onChange: () => {
+            closeDome === true
+              ? methods.setValue('closeDome', false)
+              : methods.setValue('closeDome', true);
+          },
           label: t('commonTypography.closeDome'),
         },
         formControllers: [stockpileItem, domeItem],
@@ -459,16 +474,19 @@ const CreateRitageOreBook = () => {
       },
     ];
 
+    isRitageProblematic ? field : field[1].formControllers.splice(6, 1);
+
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photos]);
+  }, [photos, closeDome, isRitageProblematic]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<IMutationRitageOre> = (data) => {
     const values = objectToArrayValue(data);
     const dateValue = ['date'];
-    const valuesWithDateString = values.map((val) => {
+    const numberValue = ['bucketVolume', 'bulkSamplingDensity'];
+    const manipulateValue = values.map((val) => {
       if (dateValue.includes(val.name)) {
         const date = dateToString(val.value);
         return {
@@ -476,16 +494,20 @@ const CreateRitageOreBook = () => {
           value: date,
         };
       }
+      if (numberValue.includes(val.name)) {
+        return {
+          name: val.name,
+          value: `${val.value}`,
+        };
+      }
       return {
         name: val.name,
         value: val.value,
       };
     });
-    // eslint-disable-next-line no-console
-    console.log(valuesWithDateString);
-    // mutate({
-    //   data: valuesWithDateString,
-    // });
+    mutate({
+      data: manipulateValue,
+    });
   };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
@@ -498,15 +520,17 @@ const CreateRitageOreBook = () => {
         switchProps={{
           label: 'problemRitage',
           switchItem: {
-            // checked:{isActive}
-            // onChange:{(value) =>
-            //   handleSwtich(id, value.currentTarget.checked)
-            // }
+            checked: isRitageProblematic,
+            onChange: (value) =>
+              methods.setValue(
+                'isRitageProblematic',
+                value.currentTarget.checked
+              ),
           },
         }}
         submitButton={{
           label: t('commonTypography.save'),
-          // loading: isLoading,
+          loading: isLoading,
         }}
         backButton={{
           onClick: () =>

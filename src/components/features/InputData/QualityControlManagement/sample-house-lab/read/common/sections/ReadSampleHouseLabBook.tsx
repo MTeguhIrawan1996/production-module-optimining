@@ -153,7 +153,7 @@ const ReadSampleHouseLabBook = () => {
         dataKey: `${gcElement.element?.name} ${t(
           'commonTypography.estimationGC'
         )}`,
-        value: `${gcElement.value}`,
+        value: `${gcElement.value ?? '-'}`,
       };
       return column;
     },
@@ -171,7 +171,7 @@ const ReadSampleHouseLabBook = () => {
         dataKey: `${labElement.element?.name} ${t(
           'commonTypography.percentageLab'
         )}`,
-        value: `${labElement.value}`,
+        value: `${labElement.value ?? '-'}`,
       };
       return column;
     },
@@ -383,11 +383,19 @@ const ReadSampleHouseLabBook = () => {
                 ...bulkSamplingCategory,
                 {
                   dataKey: t('commonTypography.samplerName'),
-                  value: houseSampleAndLab?.sampler?.humanResource?.name,
+                  value: houseSampleAndLab?.sampler?.humanResource?.name ?? '-',
+                },
+                {
+                  dataKey: t('commonTypography.gcName'),
+                  value:
+                    houseSampleAndLab?.gradeControl?.humanResource?.name ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.location'),
-                  value: houseSampleAndLab?.location ?? '',
+                  value:
+                    houseSampleAndLab && houseSampleAndLab.locationName
+                      ? houseSampleAndLab?.locationName ?? '-'
+                      : houseSampleAndLab?.location?.name ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.sampleEnterLabAt'),
@@ -436,7 +444,7 @@ const ReadSampleHouseLabBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.density'),
-                  value: `${houseSampleAndLab?.density}`,
+                  value: `${houseSampleAndLab?.density ?? '-'}`,
                 },
               ]}
               type="grid"

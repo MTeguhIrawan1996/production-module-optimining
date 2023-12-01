@@ -14,11 +14,6 @@ import {
   IRefreshToken,
   REFRESH_TOKEN,
 } from '@/services/graphql/mutation/auth/useRefreshToken';
-import {
-  IGetPermissionResponse,
-  PERMISSION_USER,
-} from '@/services/graphql/query/auth/useReadPermission';
-import { encodeFc } from '@/utils/helper/encodeDecode';
 
 const storedLanguage = Cookies.get('language');
 const initialLanguage = storedLanguage || 'id';
@@ -32,19 +27,19 @@ const client = new GraphQLClient(
   }
 );
 
-const graphQLClient = new GraphQLClient(
-  process.env.NEXT_PUBLIC_GRAPHQL_API_URL || '',
-  {
-    method: `GET`,
-    headers: {
-      'Accept-Language': initialLanguage,
-    },
-    jsonSerializer: {
-      parse: JSON.parse,
-      stringify: JSON.stringify,
-    },
-  }
-);
+// const graphQLClient = new GraphQLClient(
+//   process.env.NEXT_PUBLIC_GRAPHQL_API_URL || '',
+//   {
+//     method: `GET`,
+//     headers: {
+//       'Accept-Language': initialLanguage,
+//     },
+//     jsonSerializer: {
+//       parse: JSON.parse,
+//       stringify: JSON.stringify,
+//     },
+//   }
+// );
 
 async function refreshToken(token: JWT) {
   const authorization = token ? `Bearer ${token.login.refreshToken.token}` : '';
@@ -56,22 +51,22 @@ async function refreshToken(token: JWT) {
 
   return refreshToken;
 }
-async function permission(token: JWT) {
-  const authorization = token ? `Bearer ${token.login.accessToken.token}` : '';
+// async function permission(token: JWT) {
+//   const authorization = token ? `Bearer ${token.login.accessToken.token}` : '';
 
-  graphQLClient.setHeaders({
-    authorization,
-  });
-  try {
-    const { authUser } = await graphQLClient.request<IGetPermissionResponse>(
-      PERMISSION_USER
-    );
+//   graphQLClient.setHeaders({
+//     authorization,
+//   });
+//   try {
+//     const { authUser } = await graphQLClient.request<IGetPermissionResponse>(
+//       PERMISSION_USER
+//     );
 
-    return authUser;
-  } catch (error) {
-    return null;
-  }
-}
+//     return authUser;
+//   } catch (error) {
+//     return null;
+//   }
+// }
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -127,20 +122,20 @@ export const authOptions: NextAuthOptions = {
         };
       }
       if (now < token.login?.accessToken?.exp - 10 * 60) {
-        if (token) {
-          const permissionRes = await permission(token);
-          if (permissionRes) {
-            const arrayOfString = permissionRes.role.permissions.data.map(
-              (val) => val.slug
-            );
-            const permission = await encodeFc(arrayOfString);
-            return {
-              ...token,
-              permission: permission,
-            };
-          }
-          return token;
-        }
+        // if (token) {
+        //   const permissionRes = await permission(token);
+        //   if (permissionRes) {
+        //     const arrayOfString = permissionRes.role.permissions.data.map(
+        //       (val) => val.slug
+        //     );
+        //     const permission = await encodeFc(arrayOfString);
+        //     return {
+        //       ...token,
+        //       permission: permission,
+        //     };
+        //   }
+        //   return token;
+        // }
         return token;
       }
 

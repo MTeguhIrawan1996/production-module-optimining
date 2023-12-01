@@ -583,6 +583,7 @@
     "createRitageOre": "$t(commonTypography.create) $t(commonTypography.dataRitageOre)",
     "successDeleteMessage": "$t(commonTypography.dataRitageOre) berhasil dihapus",
     "downloadTemplateOre": "Unduh Tamplate Input Data Ritase Ore",
-    "formRitageOre": "$t(commonTypography.form) $t(ritageOre.ritageOreTitle)"
+    "formRitageOre": "$t(commonTypography.form) $t(ritageOre.ritageOreTitle)",
+    "successCreateMessage": "$t(commonTypography.dataRitageOre) berhasil dibuat"
   }
 }
