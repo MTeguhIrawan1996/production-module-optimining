@@ -211,7 +211,7 @@ const UpdateSampleHouseLabPage = () => {
       );
       methods.setValue(
         'locationCategoryId',
-        houseSampleAndLab.location?.category?.id ?? ''
+        houseSampleAndLab.locationCategory?.id ?? ''
       );
       methods.setValue('locationId', houseSampleAndLab.location?.id ?? '');
       methods.setValue('locationName', houseSampleAndLab.locationName ?? '');
