@@ -20,6 +20,8 @@ import {
   globalDate,
   globalText,
   globalTimeInput,
+  locationCategorySelect,
+  locationSelect,
   materialSelect,
 } from '@/utils/constants/Field/global-field';
 import {
@@ -57,7 +59,9 @@ const UpdateSampleHouseLabPage = () => {
       subMaterialId: '',
       samplerId: '',
       gradeControlId: '',
-      location: '',
+      locationCategoryId: '',
+      locationId: '',
+      locationName: '',
       sampleEnterLabDate: undefined,
       sampleEnterLabTime: '',
       gradeControlElements: [
@@ -89,6 +93,7 @@ const UpdateSampleHouseLabPage = () => {
   });
   const sampleTypeId = methods.watch('sampleTypeId');
   const materialId = methods.watch('materialId');
+  const locationCategoryId = methods.watch('locationCategoryId');
 
   const { fields, replace } = useFieldArray({
     name: 'gradeControlElements',
@@ -204,7 +209,12 @@ const UpdateSampleHouseLabPage = () => {
         'gradeControlId',
         houseSampleAndLab.gradeControl?.id ?? ''
       );
-      methods.setValue('location', houseSampleAndLab.location ?? '');
+      methods.setValue(
+        'locationCategoryId',
+        houseSampleAndLab.location?.category?.id ?? ''
+      );
+      methods.setValue('locationId', houseSampleAndLab.location?.id ?? '');
+      methods.setValue('locationName', houseSampleAndLab.locationName ?? '');
       methods.setValue('sampleEnterLabDate', sampleEnterLabDate);
       methods.setValue('sampleEnterLabTime', sampleEnterLabTime ?? '');
       methods.setValue('density', `${houseSampleAndLab.density}` ?? '');
@@ -362,9 +372,20 @@ const UpdateSampleHouseLabPage = () => {
       label: 'gcName',
       withAsterisk: false,
     });
+    const locationCategoryItem = locationCategorySelect({
+      clearable: true,
+      name: 'locationCategoryId',
+    });
+    const locationItem = locationSelect({
+      colSpan: 6,
+      name: 'locationId',
+      label: 'locationName',
+      withAsterisk: true,
+      categoryId: locationCategoryId,
+    });
     const location = globalText({
-      name: 'location',
-      label: 'location',
+      name: 'locationName',
+      label: 'locationName',
       colSpan: 6,
       withAsterisk: true,
     });
@@ -480,7 +501,7 @@ const UpdateSampleHouseLabPage = () => {
           materialSubItem,
           employeeItem,
           gradeControlItem,
-          location,
+          locationCategoryItem,
           sampleEnterLabDate,
           sampleEnterLabTime,
         ],
@@ -525,6 +546,14 @@ const UpdateSampleHouseLabPage = () => {
       },
     ];
 
+    const newCategoryId = locationCategoryId === '' ? null : locationCategoryId;
+
+    !newCategoryId
+      ? field
+      : newCategoryId === `${process.env.NEXT_PUBLIC_OTHER_LOCATION_ID}`
+      ? field[0].formControllers.splice(11, 0, location)
+      : field[0].formControllers.splice(11, 0, locationItem);
+
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -533,6 +562,7 @@ const UpdateSampleHouseLabPage = () => {
     fieldElementsItem,
     serverPhoto,
     materialId,
+    locationCategoryId,
   ]);
   /* #endregion  /**======== Field =========== */
 

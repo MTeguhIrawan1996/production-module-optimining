@@ -1,5 +1,7 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
+import { IReadOneLocationMaster } from '@/services/graphql/query/location/useReadOneLocationMaster';
+
 import {
   GResponse,
   IElementWithValue,
@@ -58,7 +60,15 @@ export const READ_ALL_SAMPLE_HOUSE_LAB = gql`
             name
           }
         }
-        location
+        location {
+          id
+          name
+          category {
+            id
+            name
+          }
+        }
+        locationName
         sampleEnterLabAt
         gradeControlElements {
           value
@@ -112,7 +122,8 @@ export interface IHouseSampleAndLabsData {
       name: string;
     } | null;
   } | null;
-  location: string | null;
+  location: Omit<IReadOneLocationMaster, 'handBookId'> | null;
+  locationName: string | null;
   sampleEnterLabAt: string | null;
   gradeControlElements: IElementWithValue[] | null;
   elements: IElementWithValue[] | null;

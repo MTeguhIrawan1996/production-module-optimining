@@ -383,11 +383,14 @@ const ReadSampleHouseLabBook = () => {
                 ...bulkSamplingCategory,
                 {
                   dataKey: t('commonTypography.samplerName'),
-                  value: houseSampleAndLab?.sampler?.humanResource?.name,
+                  value: houseSampleAndLab?.sampler?.humanResource?.name ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.location'),
-                  value: houseSampleAndLab?.location ?? '',
+                  value:
+                    houseSampleAndLab && houseSampleAndLab.locationName
+                      ? houseSampleAndLab?.locationName ?? '-'
+                      : houseSampleAndLab?.location?.name ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.sampleEnterLabAt'),

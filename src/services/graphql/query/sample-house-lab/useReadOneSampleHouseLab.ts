@@ -43,7 +43,15 @@ export const READ_ONE_SAMPLE_HOUSE_LAB = gql`
           name
         }
       }
-      location
+      location {
+        id
+        name
+        category {
+          id
+          name
+        }
+      }
+      locationName
       sampleEnterLabAt
       gradeControlElements {
         value

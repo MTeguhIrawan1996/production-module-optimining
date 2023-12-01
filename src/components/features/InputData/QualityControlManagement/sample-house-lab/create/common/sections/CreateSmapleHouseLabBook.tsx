@@ -18,6 +18,8 @@ import {
   globalDate,
   globalText,
   globalTimeInput,
+  locationCategorySelect,
+  locationSelect,
   materialSelect,
 } from '@/utils/constants/Field/global-field';
 import {
@@ -50,7 +52,9 @@ const CreateSmapleHouseLabBook = () => {
       subMaterialId: '',
       samplerId: '',
       gradeControlId: '',
-      location: '',
+      locationCategoryId: '',
+      locationId: '',
+      locationName: '',
       sampleEnterLabDate: undefined,
       sampleEnterLabTime: '',
       gradeControlElements: [
@@ -80,6 +84,7 @@ const CreateSmapleHouseLabBook = () => {
     },
     mode: 'onBlur',
   });
+  const locationCategoryId = methods.watch('locationCategoryId');
   const sampleTypeId = methods.watch('sampleTypeId');
   const materialId = methods.watch('materialId');
 
@@ -252,9 +257,20 @@ const CreateSmapleHouseLabBook = () => {
       label: 'gcName',
       withAsterisk: false,
     });
+    const locationCategoryItem = locationCategorySelect({
+      clearable: true,
+      name: 'locationCategoryId',
+    });
+    const locationItem = locationSelect({
+      colSpan: 6,
+      name: 'locationId',
+      label: 'locationName',
+      withAsterisk: true,
+      categoryId: locationCategoryId,
+    });
     const location = globalText({
-      name: 'location',
-      label: 'location',
+      name: 'locationName',
+      label: 'locationName',
       colSpan: 6,
       withAsterisk: true,
     });
@@ -366,7 +382,7 @@ const CreateSmapleHouseLabBook = () => {
           materialSubItem,
           employeeItem,
           gradeControlItem,
-          location,
+          locationCategoryItem,
           sampleEnterLabDate,
           sampleEnterLabTime,
         ],
@@ -411,6 +427,14 @@ const CreateSmapleHouseLabBook = () => {
       },
     ];
 
+    const newCategoryId = locationCategoryId === '' ? null : locationCategoryId;
+
+    !newCategoryId
+      ? field
+      : newCategoryId === `${process.env.NEXT_PUBLIC_OTHER_LOCATION_ID}`
+      ? field[0].formControllers.splice(11, 0, location)
+      : field[0].formControllers.splice(11, 0, locationItem);
+
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -418,6 +442,7 @@ const CreateSmapleHouseLabBook = () => {
     fieldGradeControlElementsItem,
     fieldElementsItem,
     materialId,
+    locationCategoryId,
   ]);
   /* #endregion  /**======== Field =========== */
 

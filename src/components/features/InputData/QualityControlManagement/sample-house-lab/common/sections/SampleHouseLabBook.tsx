@@ -197,12 +197,18 @@ const SampleHouseLabBook = () => {
             {
               accessor: 'gcName',
               title: t('commonTypography.gcName'),
-              render: ({ gradeControl }) => gradeControl?.humanResource?.name,
+              render: ({ gradeControl }) =>
+                gradeControl?.humanResource?.name ?? '-',
             },
             {
               accessor: 'location',
               width: 160,
               title: t('commonTypography.location'),
+              render: (value) => {
+                return value.locationName
+                  ? value.locationName ?? '-'
+                  : value.location?.name ?? '-';
+              },
             },
             {
               accessor: 'sampleEnterLabAt',

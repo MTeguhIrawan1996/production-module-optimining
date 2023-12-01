@@ -22,7 +22,9 @@ export interface IMutationSampleHousePlanValues {
   subMaterialId: string | null;
   samplerId: string | null;
   gradeControlId: string | null;
-  location: string;
+  locationId: string | null;
+  locationCategoryId: string | null;
+  locationName: string;
   sampleEnterLabDate?: Date | null;
   sampleEnterLabTime: string;
   gradeControlElements: IElementRhf[];
