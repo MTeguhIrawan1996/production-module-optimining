@@ -84,6 +84,7 @@
       "dateComplateOffice": "Tanggal Selesai Menjabat",
       "vehicleDocument": "Surat Kendaraan",
       "heavyEquipmentCode": "Nomor Lambung",
+      "heavyEquipmentCodeSubstitutione": "Nomor Lambung Pengganti",
       "startDate": "Tanggal Mulai",
       "endDate": "Tanggal Selesai",
       "businessType": "Jenis Badan Usaha",

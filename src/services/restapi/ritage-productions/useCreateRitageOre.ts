@@ -36,6 +36,8 @@ export interface IMutationRitageOre {
   sampleNumber: string;
   desc: string;
   photos: FileWithPath[] | null;
+  isRitageProblematic: boolean;
+  companyHeavyEquipmentChangeId: string | null;
 }
 interface ICreateRitageOreResponse {
   message: string;
@@ -51,8 +53,14 @@ type IPropsRequest = {
 const CreateRitageOre = async ({ data }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
-  const exclude = [''];
+  const exclude = ['tonByRitage', 'ritageDuration'];
   data.forEach(({ name, value }) => {
+    if (name === 'closeDome') {
+      bodyFormData.append('closeDome', String(value));
+    }
+    if (name === 'isRitageProblematic') {
+      bodyFormData.append('isRitageProblematic', String(value));
+    }
     if (value) {
       if (name === 'photos') {
         (value as FileWithPath[]).forEach((image) => {

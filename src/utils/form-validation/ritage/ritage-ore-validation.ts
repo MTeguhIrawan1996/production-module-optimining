@@ -16,8 +16,8 @@ export const sampleHouselabStatusValidation: z.ZodType<IUpdateIsValidateSampleHo
     statusMessage: zRequiredString,
   });
 
-export const ritageOreMutationValidation: z.ZodType<IMutationRitageOre> =
-  z.object({
+export const ritageOreMutationValidation: z.ZodType<IMutationRitageOre> = z
+  .object({
     date: zDateValidation,
     checkerFromId: zRequiredSelectInput,
     checkerFromPosition: zOptionalString,
@@ -48,4 +48,23 @@ export const ritageOreMutationValidation: z.ZodType<IMutationRitageOre> =
     sampleNumber: zOptionalString,
     desc: zOptionalString,
     photos: zImageArrayOptional,
+    isRitageProblematic: z.boolean(),
+    companyHeavyEquipmentChangeId: zOptionalString.nullable(),
+  })
+  .superRefine((arg, ctx) => {
+    const newHeavyequipmentContinueId =
+      arg.companyHeavyEquipmentChangeId === ''
+        ? null
+        : arg.companyHeavyEquipmentChangeId;
+    if (arg.isRitageProblematic) {
+      if (!newHeavyequipmentContinueId) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom, // customize your issue
+          path: ['companyHeavyEquipmentChangeId'],
+          message: 'Kolom tidak boleh kosong',
+        });
+      }
+
+      return z.NEVER; // The return value is not used, but we need to return something to satisfy the typing
+    }
   });
