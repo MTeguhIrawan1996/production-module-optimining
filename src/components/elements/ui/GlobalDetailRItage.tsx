@@ -57,7 +57,7 @@ const GlobalDetailRitage = <T extends IReadOneOreRitage>({
               value: data?.material?.name,
             },
             {
-              dataKey: t('commonTypography.materialSub'),
+              dataKey: t('commonTypography.subMaterialType'),
               value: data?.subMaterial?.name,
             },
             {

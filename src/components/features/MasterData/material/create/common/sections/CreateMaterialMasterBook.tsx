@@ -76,7 +76,7 @@ const CreateMaterialMasterBook = () => {
       const materialSubItem = globalText({
         colSpan: 12,
         name: `subMaterials.${index}.name`,
-        label: 'materialSub',
+        label: 'subMaterialType',
         withAsterisk: true,
         deleteButtonField: {
           onClick: () => {
@@ -106,7 +106,7 @@ const CreateMaterialMasterBook = () => {
         formControllers: [materialTypeItem],
       },
       {
-        group: t('commonTypography.materialSub'),
+        group: t('commonTypography.subMaterialType'),
         enableGroupLabel: true,
         actionGroup: {
           addButton: {

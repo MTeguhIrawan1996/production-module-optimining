@@ -17,9 +17,10 @@
     "locationCategory": "Kategori Lokasi",
     "locationName": "Nama Lokasi",
     "material": "Material",
+    "subMaterial": "Sub Material",
     "materialType": "Jenis Material",
-    "materialSub": "Sub Jenis Material",
-    "materialSubBy": "Sub Jenis Material Dari",
+    "subMaterialType": "Sub Jenis Material",
+    "subMaterialTypeBy": "Sub Jenis Material Dari",
     "workingHoursPlan": "Rencana Jam Kerja",
     "activity": "Kegiatan",
     "activityPlan": "Rencana Aktivitas",
@@ -280,7 +281,8 @@
     "fromGrid": "Dari Grid",
     "fromSequence": "Dari Sequence",
     "fromElevasi": "Dari Elevasi",
-    "bulkSamplingDensity": "Massa Jenis Bulk Sampling"
+    "bulkSamplingDensity": "Massa Jenis Bulk Sampling",
+    "statusRitage": "Status Ritase"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -492,7 +494,7 @@
   },
   "material": {
     "createMaterial": "$t(commonTypography.create) $t(commonTypography.material)",
-    "createMaterialSub": "$t(commonTypography.create) $t(commonTypography.materialSub)",
+    "createMaterialSub": "$t(commonTypography.create) $t(commonTypography.subMaterialType)",
     "readMaterial": "$t(commonTypography.detail) $t(commonTypography.material)",
     "updateMaterial": "$t(commonTypography.edit) $t(commonTypography.material)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type) $t(commonTypography.material)",

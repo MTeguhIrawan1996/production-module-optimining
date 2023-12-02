@@ -98,7 +98,7 @@ const UpdateMaterialMasterBook = () => {
       const materialSubItem = globalText({
         colSpan: 12,
         name: `subMaterials.${index}.name`,
-        label: `materialSub`,
+        label: `subMaterialType`,
         withAsterisk: true,
         value: methods.watch(`subMaterials.${index}.name`),
         onChange: (event) => {
@@ -134,7 +134,7 @@ const UpdateMaterialMasterBook = () => {
         formControllers: [materialTypeItem],
       },
       {
-        group: t('commonTypography.materialSub'),
+        group: t('commonTypography.subMaterialType'),
         enableGroupLabel: true,
         actionGroup: {
           addButton: {

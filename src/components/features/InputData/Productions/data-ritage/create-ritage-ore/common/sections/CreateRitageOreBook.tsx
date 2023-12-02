@@ -216,7 +216,7 @@ const CreateRitageOreBook = () => {
     const materialSubItem = materialSelect({
       colSpan: 6,
       name: 'subMaterialId',
-      label: 'materialSub',
+      label: 'subMaterialType',
       withAsterisk: true,
       parentId: `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`,
       isHaveParent: null,

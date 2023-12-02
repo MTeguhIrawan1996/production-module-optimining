@@ -331,7 +331,7 @@ const ReadRitageOreBook = () => {
                   value: oreRitage?.material?.name,
                 },
                 {
-                  dataKey: t('commonTypography.materialSub'),
+                  dataKey: t('commonTypography.subMaterialType'),
                   value: oreRitage?.subMaterial?.name,
                 },
                 {

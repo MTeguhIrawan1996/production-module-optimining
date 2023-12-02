@@ -240,7 +240,6 @@ const ReadCompanyHumanResourceBook = () => {
               title: t('commonTypography.employeStatus'),
               render: ({ status }) => status?.name,
             },
-
             {
               accessor: 'formStatus',
               title: t('commonTypography.formStatus'),

@@ -59,6 +59,10 @@ export const READ_ALL_RITAGE_ORE = gql`
           id
           name
         }
+        subMaterial {
+          id
+          name
+        }
         fromAt
         arriveAt
         duration
@@ -89,6 +93,7 @@ export const READ_ALL_RITAGE_ORE = gql`
           name
           color
         }
+        isComplete
       }
     }
   }
@@ -109,6 +114,7 @@ interface IOreRitagesData {
   > | null;
   fromAt: Date | string | null;
   material: Pick<IMaterialsData, 'id' | 'name'> | null;
+  subMaterial: Pick<IMaterialsData, 'id' | 'name'> | null;
   arriveAt: Date | string | null;
   duration: number | null;
   weather: {
@@ -128,6 +134,7 @@ interface IOreRitagesData {
   sampleNumber: string | null;
   desc: string | null;
   status: IStatus | null;
+  isComplete: boolean;
 }
 
 interface IOreRitagesResponse {
