@@ -20,6 +20,7 @@ const NumberInputRhf: React.FC<INumberInputProps> = ({
   name,
   control,
   label,
+  precision = 2,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -37,7 +38,7 @@ const NumberInputRhf: React.FC<INumberInputProps> = ({
       label={label ? t(`components.field.${label}`) : null}
       // parser={(value: string) => value.replace(/[^0-9]/g, '')}
       // step={0.05}
-      precision={2}
+      precision={precision}
       error={
         fieldState &&
         fieldState.error && (

@@ -6,6 +6,8 @@ import {
   zDateOptionalValidation,
   zDateValidation,
   zImageArrayOptional,
+  zOptionalNumber,
+  zOptionalNumberOfString,
   zOptionalString,
   zRequiredSelectInput,
   zRequiredString,
@@ -38,10 +40,10 @@ export const sampleHouseLabMutationValidation: z.ZodType<IMutationSampleHousePla
         .object({
           elementId: zRequiredString,
           name: zRequiredString,
-          value: zOptionalString,
+          value: zOptionalNumberOfString,
         })
         .array(),
-      density: zOptionalString,
+      density: zOptionalNumber,
       preparationStartDate: zDateOptionalValidation,
       preparationStartTime: zOptionalString,
       preparationFinishDate: zDateOptionalValidation,
@@ -54,13 +56,23 @@ export const sampleHouseLabMutationValidation: z.ZodType<IMutationSampleHousePla
         .object({
           elementId: zRequiredString,
           name: zRequiredString,
-          value: zOptionalString,
+          value: zOptionalNumberOfString,
         })
         .array(),
       photo: zImageArrayOptional,
     })
     .superRefine((arg, ctx) => {
       const newLocationId = arg.locationId === '' ? null : arg.locationId;
+      if (arg.sampleTypeId === `${process.env.NEXT_PUBLIC_SAMPLE_BULK_ID}`) {
+        if (arg.density === '') {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom, // customize your issue
+            path: ['density'],
+            message: 'Kolom tidak boleh kosong',
+          });
+        }
+        return z.NEVER; // The return value is not used, but we need to return something to satisfy the typing
+      }
       if (arg.locationCategoryId) {
         if (
           arg.locationCategoryId !==

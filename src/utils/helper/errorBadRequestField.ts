@@ -60,8 +60,29 @@ export const errorBadRequestField = <T>(err: ApolloError) => {
 
 export const errorRestBadRequestField = <T>(err: AxiosRestErrorResponse<T>) => {
   return err.response?.data?.errors?.reduce(
-    (acc: IReponse<T>[], { constraints, property }) => {
+    (acc: IReponse<T>[], { constraints, children, property }) => {
       if (err.response?.data.statusCode === 400) {
+        if (children.length > 0) {
+          children.forEach(({ property: indexRes, children: children1 }) => {
+            children1.forEach(
+              ({ constraints: constraints2, property: property2 }) => {
+                for (const key in constraints2) {
+                  if (Object.prototype.hasOwnProperty.call(constraints2, key)) {
+                    const message = constraints2[key];
+                    const name = `${property as string}.${indexRes as string}.${
+                      property2 as string
+                    }`;
+                    acc.push({
+                      type: 'manual',
+                      name: name as any,
+                      message,
+                    });
+                  }
+                }
+              }
+            );
+          });
+        }
         for (const key in constraints) {
           if (Object.prototype.hasOwnProperty.call(constraints, key)) {
             const message = constraints[key];

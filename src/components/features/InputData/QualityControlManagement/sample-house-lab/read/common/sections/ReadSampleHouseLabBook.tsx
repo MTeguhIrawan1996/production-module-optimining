@@ -51,15 +51,15 @@ const ReadSampleHouseLabBook = () => {
       skip: !router.isReady,
       onCompleted: (data) => {
         setBulkSamplingCategory(() =>
-          data.houseSampleAndLab?.material?.parent
+          data.houseSampleAndLab.subMaterial
             ? [
                 {
                   dataKey: t('commonTypography.bulkSamplingCategory'),
-                  value: data.houseSampleAndLab.material.parent.name,
+                  value: data.houseSampleAndLab.material?.name,
                 },
                 {
                   dataKey: t('commonTypography.bulkSamplingCategorySub'),
-                  value: data.houseSampleAndLab.material.name,
+                  value: data.houseSampleAndLab.subMaterial.name,
                 },
               ]
             : [

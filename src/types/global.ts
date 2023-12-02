@@ -185,6 +185,7 @@ export type IErrorResponseExtensionGql<T extends React.ReactNode> =
 // REST API
 export interface ErrorValidationMessage<T> {
   property: keyof T;
+  children: IChildren<T>[];
   constraints: {
     [type: string]: string;
   };

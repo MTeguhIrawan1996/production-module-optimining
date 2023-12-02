@@ -18,6 +18,7 @@ import { useUpdateSampleHousePlan } from '@/services/restapi/sample-house-plan/u
 import {
   employeeSelect,
   globalDate,
+  globalNumberInput,
   globalText,
   globalTimeInput,
   locationCategorySelect,
@@ -127,13 +128,13 @@ const UpdateSampleHouseLabPage = () => {
   const isOwnElemntsData =
     elementsData && elementsData.length > 0 ? true : false;
 
-  useReadOneSampleHouseLab({
+  const { houseSampleAndLab } = useReadOneSampleHouseLab({
     variables: {
       id,
     },
     skip: !router.isReady || !isOwnElemntsData,
     onCompleted: ({ houseSampleAndLab }) => {
-      const isOwnParent = houseSampleAndLab.material?.parent !== null;
+      const isOwnSubMaterial = houseSampleAndLab.subMaterial !== null;
       fields.map((o, i) => {
         const valueGCElements = houseSampleAndLab?.gradeControlElements?.find(
           (val) => val.element?.id === o.elementId
@@ -195,14 +196,12 @@ const UpdateSampleHouseLabPage = () => {
       methods.setValue('sampleNumber', houseSampleAndLab?.sampleNumber ?? '');
       methods.setValue('sampleName', houseSampleAndLab?.sampleName ?? '');
       methods.setValue('sampleTypeId', houseSampleAndLab?.sampleType?.id ?? '');
-      methods.setValue(
-        'materialId',
-        isOwnParent
-          ? houseSampleAndLab.material?.parent?.id ?? ''
-          : houseSampleAndLab.material?.id ?? ''
-      );
-      if (isOwnParent) {
-        methods.setValue('subMaterialId', houseSampleAndLab.material?.id ?? '');
+      methods.setValue('materialId', houseSampleAndLab.material?.id ?? '');
+      if (isOwnSubMaterial) {
+        methods.setValue(
+          'subMaterialId',
+          houseSampleAndLab.subMaterial?.id ?? ''
+        );
       }
       methods.setValue('samplerId', houseSampleAndLab.sampler?.id ?? '');
       methods.setValue(
@@ -217,7 +216,7 @@ const UpdateSampleHouseLabPage = () => {
       methods.setValue('locationName', houseSampleAndLab.locationName ?? '');
       methods.setValue('sampleEnterLabDate', sampleEnterLabDate);
       methods.setValue('sampleEnterLabTime', sampleEnterLabTime ?? '');
-      methods.setValue('density', `${houseSampleAndLab.density ?? ''}`);
+      methods.setValue('density', houseSampleAndLab.density ?? '');
       methods.setValue('preparationStartDate', preparationStartDate);
       methods.setValue('preparationStartTime', preparationStartTime ?? '');
       methods.setValue('preparationFinishDate', preparationFinishDate);
@@ -366,12 +365,16 @@ const UpdateSampleHouseLabPage = () => {
       name: 'samplerId',
       label: 'samplerName',
       withAsterisk: false,
+      defaultValue: houseSampleAndLab?.sampler?.id,
+      labelValue: houseSampleAndLab?.sampler?.humanResource?.name,
     });
     const gradeControlItem = employeeSelect({
       colSpan: 6,
       name: 'gradeControlId',
       label: 'gcName',
       withAsterisk: false,
+      defaultValue: houseSampleAndLab?.gradeControl?.id,
+      labelValue: houseSampleAndLab?.gradeControl?.humanResource?.name,
     });
     const locationCategoryItem = locationCategorySelect({
       clearable: true,
@@ -403,11 +406,12 @@ const UpdateSampleHouseLabPage = () => {
       colSpan: 6,
       withAsterisk: true,
     });
-    const density = globalText({
+    const density = globalNumberInput({
       name: 'density',
       label: 'densityBulkSampling',
       colSpan: 12,
       withAsterisk: true,
+      precision: 3,
       disabled: !sampleBulk,
     });
     const preparationStartDate = globalDate({
@@ -564,6 +568,7 @@ const UpdateSampleHouseLabPage = () => {
     serverPhoto,
     materialId,
     locationCategoryId,
+    houseSampleAndLab,
   ]);
   /* #endregion  /**======== Field =========== */
 
@@ -583,6 +588,8 @@ const UpdateSampleHouseLabPage = () => {
       'analysisStartDate',
       'analysisFinishDate',
     ];
+    const numberValue = ['density'];
+
     const valuesWithDateString = values.map((val) => {
       if (dateValue.includes(val.name)) {
         const date = dateToString(val.value);
@@ -591,13 +598,18 @@ const UpdateSampleHouseLabPage = () => {
           value: date,
         };
       }
+      if (numberValue.includes(val.name)) {
+        return {
+          name: val.name,
+          value: `${val.value}`,
+        };
+      }
       return {
         name: val.name,
         value: val.value,
       };
     });
     const deletePhoto = serverPhoto && serverPhoto.length === 0;
-
     mutate({
       id,
       data: valuesWithDateString,
