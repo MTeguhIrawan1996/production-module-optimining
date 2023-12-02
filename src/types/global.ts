@@ -253,3 +253,7 @@ export interface IStatus {
   name: string;
   color: string;
 }
+
+export interface IUpdateStatusValues {
+  statusMessage: string | null;
+}

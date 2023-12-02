@@ -94,18 +94,14 @@ export const READ_ALL_RITAGE_ORE = gql`
   }
 `;
 
-type ICheckerFrom = {
-  id: string;
-} & Pick<IEmployeesData, 'humanResource'>;
-
-type ICheckerTo = {
+type IChecker = {
   id: string;
 } & Pick<IEmployeesData, 'humanResource'>;
 
 interface IOreRitagesData {
   id: string;
-  checkerFrom: ICheckerFrom | null;
-  checkerTo: ICheckerTo | null;
+  checkerFrom: IChecker | null;
+  checkerTo: IChecker | null;
   shift: Pick<IShiftsData, 'id' | 'name'> | null;
   companyHeavyEquipment: Pick<
     IHeavyEquipmentCompany,

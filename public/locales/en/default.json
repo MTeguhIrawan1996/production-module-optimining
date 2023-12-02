@@ -37,6 +37,7 @@
     "companyName": "Nama Perusahaan",
     "companyCode": "Kode Perusahaan",
     "heavyEquipmentCode": "Nomor Lambung",
+    "heavyEquipmentCodeSubstitution": "Nomor Lambung Pengganti",
     "companyLogo": "Logo Perusahaan",
     "next": "Selanjutnya",
     "prev": "Sebelumnya",
@@ -92,7 +93,9 @@
     "description": "Deskripsi",
     "desc": "Keterangan",
     "checkerFromName": "Nama Checker Asal",
+    "fromCheckerPosition": "Posisi Checker Asal",
     "checkerToName": "Nama Checker Tujuan",
+    "toCheckerPosition": "Posisi Checker Tujuan",
     "fromAt": "Waktu dari Asal",
     "arriveAt": "Waktu sampai Tujuan",
     "arrive": "Tujuan",
@@ -270,7 +273,14 @@
     "operatorName": "Nama Operator",
     "inputDataRitage": "Input Data Ritase",
     "uploadFile": "Unggah File",
-    "checkerInformation": "Informasi Checker"
+    "checkerInformation": "Informasi Checker",
+    "fromPit": "Dari Pit",
+    "fromBlock": "Dari Block",
+    "fromFront": "Dari Front",
+    "fromGrid": "Dari Grid",
+    "fromSequence": "Dari Sequence",
+    "fromElevasi": "Dari Elevasi",
+    "bulkSamplingDensity": "Massa Jenis Bulk Sampling"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -581,9 +591,14 @@
   "ritageOre": {
     "ritageOreTitle": "$t(commonTypography.dataRitageOre)",
     "createRitageOre": "$t(commonTypography.create) $t(commonTypography.dataRitageOre)",
+    "readRitageOre": "$t(commonTypography.detail) $t(commonTypography.dataRitageOre)",
     "successDeleteMessage": "$t(commonTypography.dataRitageOre) berhasil dihapus",
     "downloadTemplateOre": "Unduh Tamplate Input Data Ritase Ore",
     "formRitageOre": "$t(commonTypography.form) $t(ritageOre.ritageOreTitle)",
-    "successCreateMessage": "$t(commonTypography.dataRitageOre) berhasil dibuat"
+    "successCreateMessage": "$t(commonTypography.dataRitageOre) berhasil dibuat",
+    "successIsValidateMessage": "$t(ritageOre.ritageOreTitle) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(ritageOre.ritageOreTitle) Tidak Valid",
+    "successIsDeterminedMessage": "$t(ritageOre.ritageOreTitle) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(ritageOre.ritageOreTitle) berhasil $t(commonTypography.reject)"
   }
 }

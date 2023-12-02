@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-import { IUpdateIsValidateSampleHouseLabValues } from '@/services/graphql/mutation/sample-house-lab/useIsValidateSampleHouseLab';
 import { IMutationSampleHousePlanValues } from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
 import {
   zDateOptionalValidation,
@@ -12,11 +11,6 @@ import {
   zRequiredSelectInput,
   zRequiredString,
 } from '@/utils/form-validation/global';
-
-export const sampleHouselabStatusValidation: z.ZodType<IUpdateIsValidateSampleHouseLabValues> =
-  z.object({
-    statusMessage: zRequiredString,
-  });
 
 export const sampleHouseLabMutationValidation: z.ZodType<IMutationSampleHousePlanValues> =
   z

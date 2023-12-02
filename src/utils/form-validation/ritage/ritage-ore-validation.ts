@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-import { IUpdateIsValidateSampleHouseLabValues } from '@/services/graphql/mutation/sample-house-lab/useIsValidateSampleHouseLab';
 import { IMutationRitageOre } from '@/services/restapi/ritage-productions/useCreateRitageOre';
 import {
   zDateValidation,
@@ -10,11 +9,6 @@ import {
   zRequiredSelectInput,
   zRequiredString,
 } from '@/utils/form-validation/global';
-
-export const sampleHouselabStatusValidation: z.ZodType<IUpdateIsValidateSampleHouseLabValues> =
-  z.object({
-    statusMessage: zRequiredString,
-  });
 
 export const ritageOreMutationValidation: z.ZodType<IMutationRitageOre> = z
   .object({

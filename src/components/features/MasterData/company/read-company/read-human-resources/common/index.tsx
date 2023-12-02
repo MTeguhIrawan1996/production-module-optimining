@@ -88,7 +88,9 @@ const ReadCompanyHumanResourcesPage = () => {
           }}
           isLoading={employeeDataLoading}
           withBorder
-          enebleBackBottom
+          enebleBackBottomOuter={{
+            onClick: () => router.back(),
+          }}
           shadow="xs"
           paperStackProps={{
             spacing: 'sm',

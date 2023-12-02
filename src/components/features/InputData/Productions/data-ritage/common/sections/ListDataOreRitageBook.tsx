@@ -257,7 +257,9 @@ const ListDataOreRitageBook = () => {
                     actionRead={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        router.push(`/input-data/production/data-ritage/${id}`);
+                        router.push(
+                          `/input-data/production/data-ritage/read-ritage-ore/${id}`
+                        );
                       },
                     }}
                     actionUpdate={{

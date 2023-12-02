@@ -61,7 +61,9 @@ const ReadHumanResourceBook = () => {
         fz: 30,
       }}
       withBorder
-      enebleBackBottom
+      enebleBackBottomOuter={{
+        onClick: () => router.back(),
+      }}
       shadow="xs"
       isLoading={humanResourceDataLoading}
       paperStackProps={{

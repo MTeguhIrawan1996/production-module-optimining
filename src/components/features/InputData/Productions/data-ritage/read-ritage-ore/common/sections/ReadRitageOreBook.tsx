@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Divider, Stack, Tabs, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconCheck, IconX } from '@tabler/icons-react';
+import { IconCheck } from '@tabler/icons-react';
+import { IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -13,23 +14,19 @@ import {
   GlobalHeaderDetail,
   KeyValueList,
 } from '@/components/elements';
-import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
-import { useUpdateIsDeterminedSampleHouseLab } from '@/services/graphql/mutation/sample-house-lab/useIsDeterminedSampleHouseLab';
-import { useUpdateIsValidateSampleHouseLab } from '@/services/graphql/mutation/sample-house-lab/useIsValidateSampleHouseLab';
-import { useReadOneSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadOneSampleHouseLab';
+import { useUpdateIsDeterminedOreRitage } from '@/services/graphql/mutation/ore-ritage/useIsDeterminedOreRitage';
+import { useUpdateIsValidateOreRitage } from '@/services/graphql/mutation/ore-ritage/useIsValidateOreRitage';
+import { useReadOneOreRitage } from '@/services/graphql/query/ore-ritage/useReadOneOreRitage';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
-import { formatDate } from '@/utils/helper/dateFormat';
+import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
 
-import { IElementWithValue, IUpdateStatusValues } from '@/types/global';
+import { IFile, IUpdateStatusValues } from '@/types/global';
 
-const ReadSampleHouseLabBook = () => {
+const ReadRitageOreBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const [bulkSamplingCategory, setBulkSamplingCategory] = React.useState<
-    Pick<IKeyValueItemProps, 'value' | 'dataKey'>[]
-  >([]);
 
   const methods = useForm<IUpdateStatusValues>({
     resolver: zodResolver(statusValidationSchema),
@@ -40,53 +37,31 @@ const ReadSampleHouseLabBook = () => {
   });
 
   /* #   /**=========== Query =========== */
-  const { houseSampleAndLab, houseSampleAndLabLoading } =
-    useReadOneSampleHouseLab({
-      variables: {
-        id,
-      },
-      skip: !router.isReady,
-      onCompleted: (data) => {
-        setBulkSamplingCategory(() =>
-          data.houseSampleAndLab.subMaterial
-            ? [
-                {
-                  dataKey: t('commonTypography.bulkSamplingCategory'),
-                  value: data.houseSampleAndLab.material?.name,
-                },
-                {
-                  dataKey: t('commonTypography.bulkSamplingCategorySub'),
-                  value: data.houseSampleAndLab.subMaterial.name,
-                },
-              ]
-            : [
-                {
-                  dataKey: t('commonTypography.bulkSamplingCategory'),
-                  value: data.houseSampleAndLab?.material?.name,
-                },
-              ]
-        );
-      },
-    });
+  const { oreRitage, oreRitageLoading } = useReadOneOreRitage({
+    variables: {
+      id,
+    },
+    skip: !router.isReady,
+  });
 
-  const [executeUpdateStatus, { loading }] = useUpdateIsValidateSampleHouseLab({
+  const [executeUpdateStatus, { loading }] = useUpdateIsValidateOreRitage({
     onCompleted: (data) => {
       const message = {
         '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
-          'sampleHouseLab.successIsValidateMessage'
+          'ritageOre.successIsValidateMessage'
         ),
         'af06163a-2ba3-45ee-a724-ab3af0c97cc9': t(
-          'sampleHouseLab.successIsNotValidateMessage'
+          'ritageOre.successIsNotValidateMessage'
         ),
-        default: t('commonTypography.sampleHouseLab'),
+        default: t('commonTypography.dataRitageOre'),
       };
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: message[data.validateHouseSampleAndLab.status.id],
+        message: message[data.validateOreRitage.status.id],
         icon: <IconCheck />,
       });
-      router.push('/input-data/quality-control-management/sample-house-lab');
+      router.push('/input-data/production/data-ritage?tabs=ore');
     },
     onError: (error) => {
       if (error.graphQLErrors) {
@@ -101,24 +76,24 @@ const ReadSampleHouseLabBook = () => {
   });
 
   const [executeUpdateStatusDetermiend, { loading: determinedLoading }] =
-    useUpdateIsDeterminedSampleHouseLab({
+    useUpdateIsDeterminedOreRitage({
       onCompleted: (data) => {
         const message = {
           'f5f644d9-8810-44f7-8d42-36b5222b97d1': t(
-            'sampleHouseLab.successIsDeterminedMessage'
+            'ritageOre.successIsDeterminedMessage'
           ),
           '7848a063-ae40-4a80-af86-dfc532cbb688': t(
-            'sampleHouseLab.successIsRejectMessage'
+            'ritageOre.successIsRejectMessage'
           ),
-          default: t('commonTypography.sampleHouseLab'),
+          default: t('commonTypography.dataRitageOre'),
         };
         notifications.show({
           color: 'green',
           title: 'Selamat',
-          message: message[data.determineHouseSampleAndLab.status.id],
+          message: message[data.determineOreRitage.status.id],
           icon: <IconCheck />,
         });
-        router.push('/input-data/quality-control-management/sample-house-lab');
+        router.push('/input-data/production/data-ritage?tabs=ore');
       },
       onError: (error) => {
         if (error.graphQLErrors) {
@@ -133,65 +108,26 @@ const ReadSampleHouseLabBook = () => {
     });
   /* #endregion  /**======== Query =========== */
 
-  const yourPhoto = houseSampleAndLab?.photo
-    ? [
-        {
-          type: 'photo',
-          alt: houseSampleAndLab?.photo?.fileName,
-          fileName: houseSampleAndLab?.photo?.originalFileName,
-          src: houseSampleAndLab?.photo?.url,
-        },
-      ]
-    : [];
+  const photosCallback = React.useCallback(
+    (
+      { fileName, originalFileName, url }: Omit<IFile, 'mime' | 'path'>,
+      i: number
+    ) => {
+      i;
 
-  const renderOtherGcElementCallback = React.useCallback(
-    (gcElement: IElementWithValue) => {
-      const column: Pick<IKeyValueItemProps, 'value' | 'dataKey'> = {
-        dataKey: `${gcElement.element?.name} ${t(
-          'commonTypography.estimationGC'
-        )}`,
-        value: `${gcElement.value ?? '-'}`,
+      return {
+        type: i > 0 ? '' : 'photo',
+        fileName: originalFileName,
+        src: url,
+        alt: fileName,
       };
-      return column;
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
-
-  const renderOtherGcElement = houseSampleAndLab?.gradeControlElements?.map(
-    renderOtherGcElementCallback
-  );
-
-  const renderOtherLabElementCallback = React.useCallback(
-    (labElement: IElementWithValue) => {
-      const column: Pick<IKeyValueItemProps, 'value' | 'dataKey'> = {
-        dataKey: `${labElement.element?.name} ${t(
-          'commonTypography.percentageLab'
-        )}`,
-        value: `${labElement.value ?? '-'}`,
-      };
-      return column;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  const renderOtherLabElement = houseSampleAndLab?.elements?.map(
-    renderOtherLabElementCallback
-  );
+  const photosItem = oreRitage?.photos?.map(photosCallback);
 
   const handleIsValid = async () => {
     await executeUpdateStatus({
-      variables: {
-        id,
-        status: true,
-        statusMessage: null,
-      },
-    });
-  };
-
-  const handleIsDetermined = async () => {
-    await executeUpdateStatusDetermiend({
       variables: {
         id,
         status: true,
@@ -212,6 +148,16 @@ const ReadSampleHouseLabBook = () => {
     });
   };
 
+  const handleIsDetermined = async () => {
+    await executeUpdateStatusDetermiend({
+      variables: {
+        id,
+        status: true,
+        statusMessage: null,
+      },
+    });
+  };
+
   const handleRejectForm: SubmitHandler<IUpdateStatusValues> = async (data) => {
     await executeUpdateStatusDetermiend({
       variables: {
@@ -227,29 +173,29 @@ const ReadSampleHouseLabBook = () => {
   const includesValid = ['4d4d646d-d0e5-4f94-ba6d-171be20032fc'];
 
   const isShowButtonValidation = includesWaiting.includes(
-    houseSampleAndLab?.status?.id ?? ''
+    oreRitage?.status?.id ?? ''
   );
 
   const isShowButtonInvalidation = includesWaiting.includes(
-    houseSampleAndLab?.status?.id ?? ''
+    oreRitage?.status?.id ?? ''
   );
 
   const isShowButtonDetermined = includesValid.includes(
-    houseSampleAndLab?.status?.id ?? ''
+    oreRitage?.status?.id ?? ''
   );
 
   const isShowButtonReject = includesValid.includes(
-    houseSampleAndLab?.status?.id ?? ''
+    oreRitage?.status?.id ?? ''
   );
 
   return (
     <DashboardCard
-      title={t('sampleHouseLab.readSampleHouseLab')}
+      title={t('ritageOre.readRitageOre')}
       updateButton={{
         label: 'Edit',
         onClick: () =>
           router.push(
-            `/input-data/quality-control-management/sample-house-lab/update/${id}`
+            `/input-data/production/data-ritage/update-ritage-ore/${id}`
           ),
       }}
       validationButton={
@@ -296,10 +242,11 @@ const ReadSampleHouseLabBook = () => {
       }}
       withBorder
       enebleBackBottomOuter={{
-        onClick: () => router.back(),
+        onClick: () =>
+          router.push('/input-data/production/data-ritage?tabs=ore'),
       }}
       shadow="xs"
-      isLoading={houseSampleAndLabLoading}
+      isLoading={oreRitageLoading}
       paperStackProps={{
         spacing: 'sm',
       }}
@@ -319,29 +266,27 @@ const ReadSampleHouseLabBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          {houseSampleAndLab?.status?.id ===
-          'af06163a-2ba3-45ee-a724-ab3af0c97cc9' ? (
+          {oreRitage?.status?.id === 'af06163a-2ba3-45ee-a724-ab3af0c97cc9' ? (
             <GlobalAlert
-              description={houseSampleAndLab?.statusMessage ?? ''}
+              description={oreRitage?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
               mt="md"
             />
           ) : null}
-          {houseSampleAndLab?.status?.id ===
-          '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
+          {oreRitage?.status?.id === '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
             <GlobalAlert
-              description={houseSampleAndLab?.statusMessage ?? ''}
+              description={oreRitage?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
               mt="md"
             />
           ) : null}
-          {!houseSampleAndLabLoading && houseSampleAndLab ? (
+          {!oreRitageLoading && oreRitage ? (
             <>
               <GlobalHeaderDetail
-                data={[...yourPhoto]}
-                title="document"
+                data={photosItem ?? []}
+                title="documentation"
                 pt="md"
               />
               <Divider my="md" />
@@ -349,81 +294,195 @@ const ReadSampleHouseLabBook = () => {
           ) : null}
           <Stack spacing="sm">
             <Text fz={24} fw={600} color="brand">
-              {t('sampleHouseLab.qualityMaterialInformation')}
+              {t('commonTypography.checkerInformation')}
             </Text>
             <KeyValueList
               data={[
                 {
-                  dataKey: t('commonTypography.laboratoriumName'),
-                  value: houseSampleAndLab?.laboratoriumName,
+                  dataKey: t('commonTypography.checkerFromName'),
+                  value: oreRitage?.checkerFrom?.humanResource?.name,
                 },
                 {
-                  dataKey: t('commonTypography.sampleDate'),
-                  value: formatDate(houseSampleAndLab?.sampleDate),
+                  dataKey: t('commonTypography.fromCheckerPosition'),
+                  value: oreRitage?.checkerFromPosition,
+                },
+                {
+                  dataKey: t('commonTypography.checkerToName'),
+                  value: oreRitage?.checkerTo?.humanResource?.name,
+                },
+                {
+                  dataKey: t('commonTypography.toCheckerPosition'),
+                  value: oreRitage?.checkerToPosition,
                 },
                 {
                   dataKey: t('commonTypography.shift'),
-                  value: houseSampleAndLab?.shift?.name,
+                  value: oreRitage?.shift?.name,
+                },
+                {
+                  dataKey: t('commonTypography.heavyEquipmentCode'),
+                  value: oreRitage?.companyHeavyEquipment?.hullNumber,
+                },
+                {
+                  dataKey: t('commonTypography.heavyEquipmentCodeSubstitution'),
+                  value: oreRitage?.companyHeavyEquipmentChange?.hullNumber,
+                },
+                {
+                  dataKey: t('commonTypography.materialType'),
+                  value: oreRitage?.material?.name,
+                },
+                {
+                  dataKey: t('commonTypography.materialSub'),
+                  value: oreRitage?.subMaterial?.name,
+                },
+                {
+                  dataKey: t('commonTypography.fromAt'),
+                  value: formatDate(oreRitage?.fromAt, 'hh:mm:ss A'),
+                },
+                {
+                  dataKey: t('commonTypography.arriveAt'),
+                  value: formatDate(oreRitage?.arriveAt, 'hh:mm:ss A'),
+                },
+                {
+                  dataKey: t('commonTypography.ritageDuration'),
+                  value: secondsDuration(oreRitage?.duration ?? null),
+                },
+                {
+                  dataKey: t('commonTypography.weather'),
+                  value: oreRitage?.weather?.name,
+                },
+              ]}
+              type="grid"
+              keyStyleText={{
+                fw: 400,
+                fz: 20,
+              }}
+              valueStyleText={{
+                fw: 600,
+                fz: 20,
+              }}
+            />
+          </Stack>
+          <Divider my="md" />
+          <Stack spacing="sm">
+            <Text fz={24} fw={600} color="brand">
+              {t('commonTypography.location')}
+            </Text>
+            <KeyValueList
+              data={[
+                {
+                  dataKey: t('commonTypography.fromPit'),
+                  value: oreRitage?.fromPit?.name,
+                },
+                {
+                  dataKey: t('commonTypography.fromFront'),
+                  value: oreRitage?.fromFront?.name,
+                },
+                {
+                  dataKey: t('commonTypography.fromBlock'),
+                  value: oreRitage?.fromBlock?.name,
+                },
+                {
+                  dataKey: t('commonTypography.fromGrid'),
+                  value: oreRitage?.fromGrid?.name,
+                },
+                {
+                  dataKey: t('commonTypography.fromSequence'),
+                  value: oreRitage?.fromSequence?.name,
+                },
+                {
+                  dataKey: t('commonTypography.fromElevasi'),
+                  value: oreRitage?.fromElevation?.name,
+                },
+              ]}
+              type="grid"
+              keyStyleText={{
+                fw: 400,
+                fz: 20,
+              }}
+              valueStyleText={{
+                fw: 600,
+                fz: 20,
+              }}
+            />
+          </Stack>
+          <Divider my="md" />
+          <Stack spacing="sm">
+            <Text fz={24} fw={600} color="brand">
+              {t('commonTypography.level')}
+            </Text>
+            <KeyValueList
+              data={[
+                {
+                  dataKey: t('commonTypography.fromLevel'),
+                  value: oreRitage?.fromLevel,
+                },
+                {
+                  dataKey: t('commonTypography.toLevel'),
+                  value: oreRitage?.toLevel,
+                },
+              ]}
+              type="grid"
+              keyStyleText={{
+                fw: 400,
+                fz: 20,
+              }}
+              valueStyleText={{
+                fw: 600,
+                fz: 20,
+              }}
+            />
+          </Stack>
+          <Divider my="md" />
+          <Stack spacing="sm">
+            <Text fz={24} fw={600} color="brand">
+              {t('commonTypography.arrive')}
+            </Text>
+            <KeyValueList
+              data={[
+                {
+                  dataKey: t('commonTypography.stockpile'),
+                  value: oreRitage?.stockpile?.name,
+                },
+                {
+                  dataKey: t('commonTypography.dome'),
+                  value: oreRitage?.dome?.name,
+                },
+              ]}
+              type="grid"
+              keyStyleText={{
+                fw: 400,
+                fz: 20,
+              }}
+              valueStyleText={{
+                fw: 600,
+                fz: 20,
+              }}
+            />
+          </Stack>
+          <Divider my="md" />
+          <Stack spacing="sm">
+            <Text fz={24} fw={600} color="brand">
+              {t('commonTypography.detail')}
+            </Text>
+            <KeyValueList
+              data={[
+                {
+                  dataKey: t('commonTypography.bucketVolume'),
+                  value: `${oreRitage?.bucketVolume ?? '-'}`,
+                },
+                {
+                  dataKey: t('commonTypography.bulkSamplingDensity'),
+                  value: `${oreRitage?.bulkSamplingDensity ?? '-'}`,
+                },
+                {
+                  dataKey: t('commonTypography.tonByRitage'),
+                  value: `${oreRitage?.tonByRitage ?? '-'}`,
                 },
                 {
                   dataKey: t('commonTypography.sampleNumber'),
-                  value: houseSampleAndLab?.sampleNumber,
-                },
-                {
-                  dataKey: t('commonTypography.sampleName'),
-                  value: houseSampleAndLab?.sampleName,
-                },
-                {
-                  dataKey: t('commonTypography.sampleType'),
-                  value: houseSampleAndLab?.sampleType?.name,
-                },
-                ...bulkSamplingCategory,
-                {
-                  dataKey: t('commonTypography.samplerName'),
-                  value: houseSampleAndLab?.sampler?.humanResource?.name ?? '-',
-                },
-                {
-                  dataKey: t('commonTypography.gcName'),
-                  value:
-                    houseSampleAndLab?.gradeControl?.humanResource?.name ?? '-',
-                },
-                {
-                  dataKey: t('commonTypography.location'),
-                  value:
-                    houseSampleAndLab && houseSampleAndLab.locationName
-                      ? houseSampleAndLab?.locationName ?? '-'
-                      : houseSampleAndLab?.location?.name ?? '-',
-                },
-                {
-                  dataKey: t('commonTypography.sampleEnterLabAt'),
-                  value: formatDate(houseSampleAndLab?.sampleEnterLabAt),
-                },
-                {
-                  dataKey: t('commonTypography.sampleEnterLabHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.sampleEnterLabAt,
-                    'hh:mm A'
-                  ),
+                  value: oreRitage?.sampleNumber,
                 },
               ]}
-              type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
-            />
-          </Stack>
-          <Divider my="md" />
-          <Stack spacing="sm">
-            <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.rate')}
-            </Text>
-            <KeyValueList
-              data={[...(renderOtherGcElement ?? [])]}
               type="grid"
               keyStyleText={{
                 fw: 400,
@@ -440,110 +499,10 @@ const ReadSampleHouseLabBook = () => {
             <KeyValueList
               data={[
                 {
-                  dataKey: t('commonTypography.density'),
-                  value: `${houseSampleAndLab?.density ?? '-'}`,
+                  dataKey: t('commonTypography.desc'),
+                  value: oreRitage?.desc,
                 },
               ]}
-              type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
-            />
-          </Stack>
-          <Divider my="md" />
-          <Stack spacing="sm">
-            <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.preparationTime')}
-            </Text>
-            <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.preparationStartDate'),
-                  value: formatDate(houseSampleAndLab?.preparationStartAt),
-                },
-                {
-                  dataKey: t('commonTypography.preparationStartHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.preparationStartAt,
-                    'hh:mm A'
-                  ),
-                },
-                {
-                  dataKey: t('commonTypography.preparationEndDate'),
-                  value: formatDate(houseSampleAndLab?.preparationFinishAt),
-                },
-                {
-                  dataKey: t('commonTypography.preparationEndHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.preparationFinishAt,
-                    'hh:mm A'
-                  ),
-                },
-              ]}
-              type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
-            />
-          </Stack>
-          <Divider my="md" />
-          <Stack spacing="sm">
-            <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.analysisTime')}
-            </Text>
-            <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.analysisStartDate'),
-                  value: formatDate(houseSampleAndLab?.analysisStartAt),
-                },
-                {
-                  dataKey: t('commonTypography.analysisStartHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.analysisStartAt,
-                    'hh:mm A'
-                  ),
-                },
-                {
-                  dataKey: t('commonTypography.analysisEndDate'),
-                  value: formatDate(houseSampleAndLab?.analysisFinishAt),
-                },
-                {
-                  dataKey: t('commonTypography.analysisEndHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.analysisFinishAt,
-                    'hh:mm A'
-                  ),
-                },
-              ]}
-              type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
-            />
-          </Stack>
-          <Divider my="md" />
-          <Stack spacing="sm">
-            <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.rate')}
-            </Text>
-            <KeyValueList
-              data={[...(renderOtherLabElement ?? [])]}
               type="grid"
               keyStyleText={{
                 fw: 400,
@@ -561,4 +520,4 @@ const ReadSampleHouseLabBook = () => {
   );
 };
 
-export default ReadSampleHouseLabBook;
+export default ReadRitageOreBook;

@@ -198,7 +198,7 @@ const CreateRitageOreBook = () => {
     const hullNumberSubstitution = heavyEquipmentSelect({
       colSpan: 6,
       name: 'companyHeavyEquipmentChangeId',
-      label: 'heavyEquipmentCodeSubstitutione',
+      label: 'heavyEquipmentCodeSubstitution',
       withAsterisk: true,
     });
     const materialItem = materialSelect({

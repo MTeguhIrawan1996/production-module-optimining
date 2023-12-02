@@ -53,7 +53,7 @@ interface IDashboardCardProps extends PaperProps {
   addButton?: IPrimaryButtonProps;
   updateButton?: IPrimaryButtonProps;
   enebleBack?: boolean;
-  enebleBackBottom?: boolean;
+  enebleBackBottomOuter?: Partial<IPrimaryButtonProps>;
   enebleBackBottomInner?: Partial<IPrimaryButtonProps>;
   validationButton?: IValidationButtonProps;
   notValidButton?: INotValidButtonProps;
@@ -77,7 +77,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
   title,
   MultipleFilter: MultiFilter,
   enebleBack,
-  enebleBackBottom,
+  enebleBackBottomOuter,
   enebleBackBottomInner,
   determinedButton,
   addButton,
@@ -208,17 +208,19 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
           />
         ) : null}
       </Paper>
-      {enebleBackBottom ? (
-        <Group w="100%" mt="lg" position={enebleBackBottom ? 'apart' : 'right'}>
-          {enebleBackBottom ? (
-            <PrimaryButton
-              type="button"
-              variant="outline"
-              leftIcon={<IconChevronLeft size="1rem" />}
-              label={t('commonTypography.back')}
-              onClick={() => router.back()}
-            />
-          ) : null}
+      {enebleBackBottomOuter ? (
+        <Group
+          w="100%"
+          mt="lg"
+          position={enebleBackBottomOuter ? 'apart' : 'right'}
+        >
+          <PrimaryButton
+            type="button"
+            variant="outline"
+            leftIcon={<IconChevronLeft size="1rem" />}
+            label={t('commonTypography.back')}
+            {...enebleBackBottomOuter}
+          />
           <Group spacing="xs">
             {notValidButton ? (
               <NotValidButton color="red" {...notValidButton} />

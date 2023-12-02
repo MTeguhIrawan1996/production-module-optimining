@@ -1,6 +1,6 @@
 import { ApolloError, gql, useMutation } from '@apollo/client';
 
-import { IUpdateIsValidateSampleHouseLabValues } from '@/services/graphql/mutation/sample-house-lab/useIsValidateSampleHouseLab';
+import { IUpdateStatusValues } from '@/types/global';
 
 export const UPDATE_ISDETERMINED_SAMPLE_HOUSE_LAB = gql`
   mutation UpdateIsDeterminedSampleHouseLab(
@@ -25,7 +25,7 @@ export const UPDATE_ISDETERMINED_SAMPLE_HOUSE_LAB = gql`
 `;
 
 export interface IUpdateIsDeterminedSampleHouseLabRequest
-  extends IUpdateIsValidateSampleHouseLabValues {
+  extends IUpdateStatusValues {
   id: string;
   status: boolean;
 }
