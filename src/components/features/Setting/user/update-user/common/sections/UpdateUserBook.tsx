@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Stack, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
@@ -75,9 +74,6 @@ const UpdateUserBook = () => {
     formState: { isDirty },
   } = methods;
   const photo = methods.watch('photo');
-
-  console.log(photo);
-  console.log(methods.formState.errors);
 
   const methodsUpdatePassword = useForm<Omit<IUpdateUserPasswordRequest, 'id'>>(
     {

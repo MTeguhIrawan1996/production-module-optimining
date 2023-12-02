@@ -2,58 +2,37 @@ import { FileWithPath } from '@mantine/dropzone';
 import { useMutation } from '@tanstack/react-query';
 
 import axiosClient from '@/services/restapi/axiosClient';
+import { IMutationRitageOre } from '@/services/restapi/ritage-productions/useCreateRitageOre';
 
 import { AxiosRestErrorResponse } from '@/types/global';
 
-export interface IMutationRitageOre {
-  isRitageProblematic: boolean;
-  date?: Date | null;
-  checkerFromId: string | null;
-  checkerFromPosition: string;
-  checkerToId: string | null;
-  checkerToPosition: string;
-  shiftId: string | null;
-  companyHeavyEquipmentId: string | null;
-  companyHeavyEquipmentChangeId: string | null;
-  materialId: string | null;
-  subMaterialId: string | null;
-  fromTime: string;
-  arriveTime: string;
-  ritageDuration: string;
-  block: string;
-  weatherId: string | null;
-  fromPitId: string | null;
-  fromFrontId: string | null;
-  fromGridId: string | null;
-  fromSequenceId: string | null;
-  fromElevationId: string | null;
-  fromLevel: string;
-  toLevel: string;
-  stockpileId: string | null;
-  domeId: string | null;
-  closeDome: boolean;
-  bulkSamplingDensity: string | number;
-  bucketVolume: string | number;
-  tonByRitage: string;
-  sampleNumber: string;
-  desc: string;
-  photos: FileWithPath[] | null;
-}
-interface ICreateRitageOreResponse {
+interface IUpdateRitageOreResponse {
   message: string;
 }
 
 type IPropsRequest = {
+  id: string;
   data: {
     name: keyof IMutationRitageOre;
     value: string | FileWithPath[] | boolean | null;
   }[];
+  deletedPhotoIds: string[];
 };
 
-const CreateRitageOre = async ({ data }: IPropsRequest) => {
+const UpdateRitageOre = async ({
+  data,
+  deletedPhotoIds,
+  id,
+}: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
   const exclude = ['tonByRitage', 'ritageDuration'];
+  bodyFormData.append('id', id);
+  if (deletedPhotoIds) {
+    deletedPhotoIds.forEach((deletedId) => {
+      bodyFormData.append('deletedPhotoIds[]', deletedId);
+    });
+  }
   data.forEach(({ name, value }) => {
     if (name === 'closeDome') {
       bodyFormData.append('closeDome', String(value));
@@ -75,24 +54,24 @@ const CreateRitageOre = async ({ data }: IPropsRequest) => {
     }
   });
 
-  const response = await axiosAuth.post(`/ore-ritages`, bodyFormData);
+  const response = await axiosAuth.patch(`/ore-ritages/${id}`, bodyFormData);
   return response?.data;
 };
 
-export const useCreateRitageOre = ({
+export const useUpdateRitageOre = ({
   onError,
   onSuccess,
 }: {
-  onSuccess?: (success: ICreateRitageOreResponse) => void;
+  onSuccess?: (success: IUpdateRitageOreResponse) => void;
   onError?: (error: AxiosRestErrorResponse<IMutationRitageOre>) => unknown;
 }) => {
   return useMutation<
-    ICreateRitageOreResponse,
+    IUpdateRitageOreResponse,
     AxiosRestErrorResponse<IMutationRitageOre>,
     IPropsRequest
   >({
     mutationFn: async (value) => {
-      const data = await CreateRitageOre(value);
+      const data = await UpdateRitageOre(value);
       return data;
     },
     onError: onError,

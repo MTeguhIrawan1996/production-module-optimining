@@ -10,10 +10,9 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
-import {
-  IMutationRitageOre,
-  useCreateRitageOre,
-} from '@/services/restapi/ritage-productions/useCreateRitageOre';
+import { useReadOneOreRitage } from '@/services/graphql/query/ore-ritage/useReadOneOreRitage';
+import { IMutationRitageOre } from '@/services/restapi/ritage-productions/useCreateRitageOre';
+import { useUpdateRitageOre } from '@/services/restapi/ritage-productions/useUpdateRitageOre';
 import {
   employeeSelect,
   globalDate,
@@ -32,17 +31,19 @@ import {
   stockpileNameSelect,
 } from '@/utils/constants/Field/stockpile-field';
 import { ritageOreMutationValidation } from '@/utils/form-validation/ritage/ritage-ore-validation';
-import { dateToString } from '@/utils/helper/dateToString';
+import { formatDate2 } from '@/utils/helper/dateFormat';
+import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { hourDiff } from '@/utils/helper/hourDiff';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
-import { ControllerGroup, ControllerProps } from '@/types/global';
+import { ControllerGroup, ControllerProps, IFile } from '@/types/global';
 
-const CreateRitageOreBook = () => {
+const UpdateRitageOreBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
   const [newFromTime, setNewFromTime] = useDebouncedState<string>('', 400);
   const [newArriveTime, setNewArriveTime] = useDebouncedState<string>('', 400);
   const [newBulkSamplingDensity, setNewBulkSamplingDensity] =
@@ -51,6 +52,10 @@ const CreateRitageOreBook = () => {
     '',
     400
   );
+  const [serverPhotos, setServerPhotos] = React.useState<
+    Omit<IFile, 'mime' | 'path'>[] | null
+  >([]);
+  const [deletedPhotoIds, setDeletedPhotoIds] = React.useState<string[]>([]);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationRitageOre>({
@@ -109,6 +114,62 @@ const CreateRitageOreBook = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
+  const { oreRitage, oreRitageLoading } = useReadOneOreRitage({
+    variables: {
+      id,
+    },
+    skip: !router.isReady,
+    onCompleted: ({ oreRitage }) => {
+      const ritageDate = stringToDate(oreRitage.date ?? null);
+      const fromTime = formatDate2(oreRitage.fromAt, 'HH:mm:ss');
+      const arriveTime = formatDate2(oreRitage.arriveAt, 'HH:mm:ss');
+      methods.setValue('isRitageProblematic', oreRitage.isRitageProblematic);
+      methods.setValue('date', ritageDate);
+      methods.setValue('checkerFromId', oreRitage.checkerFrom?.id ?? '');
+      methods.setValue(
+        'checkerFromPosition',
+        oreRitage.checkerFromPosition ?? ''
+      );
+      methods.setValue('checkerToId', oreRitage.checkerTo?.id ?? '');
+      methods.setValue('checkerToPosition', oreRitage.checkerToPosition ?? '');
+      methods.setValue('shiftId', oreRitage.shift?.id ?? '');
+      methods.setValue(
+        'companyHeavyEquipmentId',
+        oreRitage.companyHeavyEquipment?.id ?? ''
+      );
+      methods.setValue(
+        'companyHeavyEquipmentChangeId',
+        oreRitage.companyHeavyEquipmentChange?.id ?? ''
+      );
+      methods.setValue('materialId', oreRitage.material?.id ?? '');
+      methods.setValue('subMaterialId', oreRitage.subMaterial?.id ?? '');
+      methods.setValue('fromTime', fromTime ?? '');
+      setNewFromTime(fromTime ?? '');
+      methods.setValue('arriveTime', arriveTime ?? '');
+      setNewArriveTime(arriveTime ?? '');
+      methods.setValue('weatherId', oreRitage.weather?.id ?? '');
+      methods.setValue('fromPitId', oreRitage.fromPit?.id ?? '');
+      methods.setValue('fromElevationId', oreRitage.fromElevation?.id ?? '');
+      methods.setValue('fromGridId', oreRitage.fromGrid?.id ?? '');
+      methods.setValue('fromFrontId', oreRitage.fromFront?.id ?? '');
+      methods.setValue('fromSequenceId', oreRitage.fromSequence?.id ?? '');
+      methods.setValue('fromLevel', oreRitage.fromLevel ?? '');
+      methods.setValue('toLevel', oreRitage.toLevel ?? '');
+      methods.setValue('stockpileId', oreRitage.stockpile?.id ?? '');
+      methods.setValue('domeId', oreRitage.dome?.id ?? '');
+      methods.setValue('closeDome', oreRitage.closeDome);
+      methods.setValue(
+        'bulkSamplingDensity',
+        oreRitage.bulkSamplingDensity ?? ''
+      );
+      setNewBulkSamplingDensity(`${oreRitage.bulkSamplingDensity ?? ''}`);
+      methods.setValue('bucketVolume', oreRitage.bucketVolume ?? '');
+      setNewBucketVolume(`${oreRitage.bucketVolume ?? ''}`);
+      methods.setValue('sampleNumber', oreRitage.sampleNumber ?? '');
+      methods.setValue('desc', oreRitage.desc ?? '');
+      setServerPhotos(oreRitage.photos ?? []);
+    },
+  });
   useReadOneBlockPitMaster({
     variables: {
       id: fromPitId as string,
@@ -119,8 +180,7 @@ const CreateRitageOreBook = () => {
     },
   });
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const { mutate, isLoading } = useCreateRitageOre({
+  const { mutate, isLoading } = useUpdateRitageOre({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -142,7 +202,7 @@ const CreateRitageOreBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('ritageOre.successCreateMessage'),
+        message: t('ritageOre.successUpdateMessage'),
         icon: <IconCheck />,
       });
       router.push('/input-data/production/data-ritage?tabs=ore');
@@ -195,6 +255,8 @@ const CreateRitageOreBook = () => {
       label: 'heavyEquipmentCode',
       withAsterisk: true,
       categorySlug: 'dump-truck',
+      defaultValue: oreRitage?.companyHeavyEquipment?.id,
+      labelValue: oreRitage?.companyHeavyEquipment?.hullNumber ?? '',
     });
     const hullNumberSubstitution = heavyEquipmentSelect({
       colSpan: 6,
@@ -202,6 +264,8 @@ const CreateRitageOreBook = () => {
       label: 'heavyEquipmentCodeSubstitution',
       withAsterisk: true,
       categorySlug: 'dump-truck',
+      defaultValue: oreRitage?.companyHeavyEquipmentChange?.id,
+      labelValue: oreRitage?.companyHeavyEquipmentChange?.hullNumber ?? '',
     });
     const materialItem = materialSelect({
       colSpan: 6,
@@ -266,6 +330,8 @@ const CreateRitageOreBook = () => {
         methods.setValue('block', '');
         methods.trigger('fromPitId');
       },
+      defaultValue: oreRitage?.fromPit?.id,
+      labelValue: oreRitage?.fromPit?.name,
     });
     const frontItem = locationSelect({
       colSpan: 6,
@@ -273,6 +339,8 @@ const CreateRitageOreBook = () => {
       label: 'fromFront',
       withAsterisk: false,
       categoryId: `${process.env.NEXT_PUBLIC_FRONT_ID}`,
+      defaultValue: oreRitage?.fromFront?.id,
+      labelValue: oreRitage?.fromFront?.name,
     });
     const block = globalText({
       colSpan: 6,
@@ -287,6 +355,8 @@ const CreateRitageOreBook = () => {
       label: 'fromGrid',
       withAsterisk: false,
       categoryId: `${process.env.NEXT_PUBLIC_GRID_ID}`,
+      defaultValue: oreRitage?.fromGrid?.id,
+      labelValue: oreRitage?.fromGrid?.name,
     });
     const sequenceItem = locationSelect({
       colSpan: 6,
@@ -294,6 +364,8 @@ const CreateRitageOreBook = () => {
       label: 'fromSequence',
       withAsterisk: false,
       categoryId: `${process.env.NEXT_PUBLIC_SEQUENCE_ID}`,
+      defaultValue: oreRitage?.fromSequence?.id,
+      labelValue: oreRitage?.fromSequence?.name,
     });
     const elevasiItem = locationSelect({
       colSpan: 6,
@@ -301,6 +373,8 @@ const CreateRitageOreBook = () => {
       label: 'fromElevasi',
       withAsterisk: false,
       categoryId: `${process.env.NEXT_PUBLIC_ELEVASI_ID}`,
+      defaultValue: oreRitage?.fromElevation?.id,
+      labelValue: oreRitage?.fromElevation?.name,
     });
     const fromLevel = globalText({
       colSpan: 6,
@@ -319,6 +393,8 @@ const CreateRitageOreBook = () => {
       name: 'stockpileId',
       label: 'stockpileName',
       withAsterisk: false,
+      defaultValue: oreRitage?.stockpile?.id,
+      labelValue: oreRitage?.stockpile?.name,
     });
     const domeItem = domeNameSelect({
       colSpan: 6,
@@ -326,6 +402,8 @@ const CreateRitageOreBook = () => {
       label: 'domeName',
       stockpileId: null,
       withAsterisk: false,
+      defaultValue: oreRitage?.dome?.id,
+      labelValue: oreRitage?.dome?.name,
     });
     const bulkSamplingDensityItem = globalNumberInput({
       colSpan: 6,
@@ -380,13 +458,18 @@ const CreateRitageOreBook = () => {
       enableDeletePhoto: true,
       onDrop: (value) => {
         if (photos) {
-          if (value.length + photos.length > 5) {
+          const totalPhotos = photos.length + value.length;
+          const totalServerPhotos =
+            serverPhotos &&
+            totalPhotos + (serverPhotos.length - deletedPhotoIds.length) > 5;
+          if (totalPhotos > 5 || totalServerPhotos) {
             methods.setError('photos', {
               type: 'manual',
               message: 'Jumlah foto melebihi batas maksimal',
             });
             return;
           }
+
           methods.setValue('photos', [...photos, ...value]);
           methods.clearErrors('photos');
           return;
@@ -394,6 +477,9 @@ const CreateRitageOreBook = () => {
         methods.setValue('photos', value);
         methods.clearErrors('photos');
       },
+      deletedPhotoIds: deletedPhotoIds,
+      handleDeleteServerPhotos: (id) =>
+        setDeletedPhotoIds((prev) => [...prev, id]),
       onReject: (files) =>
         handleRejectFile<IMutationRitageOre>({
           methods,
@@ -452,6 +538,7 @@ const CreateRitageOreBook = () => {
               ? methods.setValue('closeDome', false)
               : methods.setValue('closeDome', true);
           },
+          checked: closeDome,
           label: t('commonTypography.closeDome'),
         },
         formControllers: [stockpileItem, domeItem],
@@ -480,7 +567,14 @@ const CreateRitageOreBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photos, closeDome, isRitageProblematic]);
+  }, [
+    photos,
+    serverPhotos,
+    deletedPhotoIds,
+    closeDome,
+    isRitageProblematic,
+    oreRitage,
+  ]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
@@ -508,13 +602,15 @@ const CreateRitageOreBook = () => {
       };
     });
     mutate({
+      id,
       data: manipulateValue,
+      deletedPhotoIds,
     });
   };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={oreRitageLoading}>
       <GlobalFormGroup
         field={fieldRhf}
         methods={methods}
@@ -543,4 +639,4 @@ const CreateRitageOreBook = () => {
   );
 };
 
-export default CreateRitageOreBook;
+export default UpdateRitageOreBook;

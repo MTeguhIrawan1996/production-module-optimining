@@ -105,6 +105,9 @@ export const READ_ONE_ORE_RITAGE = gql`
         name
       }
       statusMessage
+      isRitageProblematic
+      date
+      closeDome
     }
   }
 `;
@@ -173,6 +176,9 @@ export interface IReadOneOreRitage {
   photos: Omit<IFile, 'mime' | 'path'>[] | null;
   status: IStatus | null;
   statusMessage: string | null;
+  isRitageProblematic: boolean;
+  date: string | null;
+  closeDome: boolean;
 }
 
 interface IReadOneOreRitageResponse {
