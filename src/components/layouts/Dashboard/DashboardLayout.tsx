@@ -10,6 +10,7 @@ import { linksDashboard } from '@/utils/constants/Links/linksDashboard';
 import { decodeFc } from '@/utils/helper/encodeDecode';
 import { filterMenuByPermission } from '@/utils/helper/filterMenuByPermission';
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
+import { usePermissions } from '@/utils/store/usePermissions';
 
 import NavbarCollapse from './NavbarCollapse';
 import NavbarExpand from './NavbarExpand';
@@ -43,6 +44,10 @@ const DashboardLayout = ({ children }: LayoutProps) => {
   const [isExpand, setIsExpand] = React.useState<boolean>(true);
   const [isConfirmLogout, setIsConfirmLogout] = React.useState<boolean>(false);
   const [breadcrumbs] = useBreadcrumbs((state) => [state.breadcrumbs], shallow);
+  const [setPermissions] = usePermissions(
+    (state) => [state.setPermissions],
+    shallow
+  );
   const { data: sessionData } = useSession();
 
   const [filteredMenu, setFilteredMenu] = React.useState<IMenuItem[]>([]);
@@ -53,7 +58,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
         const permissionSession = await decodeFc<string[]>(
           sessionData.user.permission
         );
-
+        setPermissions(permissionSession);
         const filtered = filterMenuByPermission(
           linksDashboard,
           permissionSession
@@ -63,6 +68,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionData]);
 
   const renderBreadcrumb = React.useMemo(() => {

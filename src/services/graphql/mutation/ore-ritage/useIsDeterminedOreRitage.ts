@@ -2,14 +2,14 @@ import { ApolloError, gql, useMutation } from '@apollo/client';
 
 import { IUpdateStatusValues } from '@/types/global';
 
-export const UPDATE_ISVALID_SAMPLE_HOUSE_LAB = gql`
-  mutation UpdateIsValidateSampleHouseLab(
+export const UPDATE_ISDETERMINED_ORE_RITAGE = gql`
+  mutation UpdateIsDeterminedOreRitage(
     $id: String!
     $status: Boolean
     $statusMessage: String
   ) {
-    validateHouseSampleAndLab(
-      validateHouseSampleAndLabInput: {
+    determineOreRitage(
+      determineOreRitageInput: {
         id: $id
         status: $status
         statusMessage: $statusMessage
@@ -24,14 +24,14 @@ export const UPDATE_ISVALID_SAMPLE_HOUSE_LAB = gql`
   }
 `;
 
-export interface IUpdateIsValidateSampleHouseLabRequest
+export interface IUpdateIsDeterminedOreRitageRequest
   extends IUpdateStatusValues {
   id: string;
   status: boolean;
 }
 
-interface IUpdateIsValidateSampleHouseLabResponse {
-  validateHouseSampleAndLab: {
+interface IUpdateIsDeterminedOreRitageResponse {
+  determineOreRitage: {
     id: string;
     status: {
       id: string;
@@ -39,17 +39,17 @@ interface IUpdateIsValidateSampleHouseLabResponse {
   };
 }
 
-export const useUpdateIsValidateSampleHouseLab = ({
+export const useUpdateIsDeterminedOreRitage = ({
   onError,
   onCompleted,
 }: {
   onError?: ({ graphQLErrors }: ApolloError) => void;
-  onCompleted?: (data: IUpdateIsValidateSampleHouseLabResponse) => void;
+  onCompleted?: (data: IUpdateIsDeterminedOreRitageResponse) => void;
 }) => {
   return useMutation<
-    IUpdateIsValidateSampleHouseLabResponse,
-    IUpdateIsValidateSampleHouseLabRequest
-  >(UPDATE_ISVALID_SAMPLE_HOUSE_LAB, {
+    IUpdateIsDeterminedOreRitageResponse,
+    IUpdateIsDeterminedOreRitageRequest
+  >(UPDATE_ISDETERMINED_ORE_RITAGE, {
     onError,
     onCompleted,
   });

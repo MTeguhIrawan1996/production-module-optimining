@@ -109,8 +109,8 @@ const MaterialBook = () => {
               title: t('commonTypography.materialType'),
             },
             {
-              accessor: 'materialSub',
-              title: t('commonTypography.materialSub'),
+              accessor: 'subMaterialType',
+              title: t('commonTypography.subMaterialType'),
               render: ({ subMaterials }) => {
                 const material = subMaterials?.map((val) => val.name);
                 const value =

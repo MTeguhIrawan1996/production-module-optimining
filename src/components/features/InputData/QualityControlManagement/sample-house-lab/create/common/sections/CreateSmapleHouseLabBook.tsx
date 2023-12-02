@@ -16,6 +16,7 @@ import {
 import {
   employeeSelect,
   globalDate,
+  globalNumberInput,
   globalText,
   globalTimeInput,
   locationCategorySelect,
@@ -288,11 +289,12 @@ const CreateSmapleHouseLabBook = () => {
       colSpan: 6,
       withAsterisk: true,
     });
-    const density = globalText({
+    const density = globalNumberInput({
       name: 'density',
       label: 'densityBulkSampling',
       colSpan: 12,
       withAsterisk: true,
+      precision: 3,
       disabled: !sampleBulk,
     });
     const preparationStartDate = globalDate({
@@ -463,12 +465,20 @@ const CreateSmapleHouseLabBook = () => {
       'analysisStartDate',
       'analysisFinishDate',
     ];
+    const numberValue = ['density'];
+
     const valuesWithDateString = values.map((val) => {
       if (dateValue.includes(val.name)) {
         const date = dateToString(val.value);
         return {
           name: val.name,
           value: date,
+        };
+      }
+      if (numberValue.includes(val.name)) {
+        return {
+          name: val.name,
+          value: `${val.value}`,
         };
       }
       return {

@@ -39,6 +39,7 @@ import MultipleFilter, {
   IMultipleFilterProps,
 } from '@/components/elements/global/MultipleFilter';
 import SearchBar, { ISerachBar } from '@/components/elements/global/SearchBar';
+import LinkButton from '@/components/elements/link/LinkButton';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -53,7 +54,7 @@ interface IDashboardCardProps extends PaperProps {
   addButton?: IPrimaryButtonProps;
   updateButton?: IPrimaryButtonProps;
   enebleBack?: boolean;
-  enebleBackBottom?: boolean;
+  enebleBackBottomOuter?: Partial<IPrimaryButtonProps>;
   enebleBackBottomInner?: Partial<IPrimaryButtonProps>;
   validationButton?: IValidationButtonProps;
   notValidButton?: INotValidButtonProps;
@@ -77,7 +78,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
   title,
   MultipleFilter: MultiFilter,
   enebleBack,
-  enebleBackBottom,
+  enebleBackBottomOuter,
   enebleBackBottomInner,
   determinedButton,
   addButton,
@@ -181,8 +182,11 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
             {downloadButton && downloadButton.length > 0 ? (
               <Group>
                 {downloadButton.map((obj, i) => (
-                  <PrimaryButton
-                    leftIcon={<IconDownload size="20px" />}
+                  <LinkButton
+                    buttonProps={{
+                      leftIcon: <IconDownload size="20px" />,
+                    }}
+                    href={obj.url}
                     label={obj.label}
                     key={i}
                   />
@@ -208,17 +212,19 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
           />
         ) : null}
       </Paper>
-      {enebleBackBottom ? (
-        <Group w="100%" mt="lg" position={enebleBackBottom ? 'apart' : 'right'}>
-          {enebleBackBottom ? (
-            <PrimaryButton
-              type="button"
-              variant="outline"
-              leftIcon={<IconChevronLeft size="1rem" />}
-              label={t('commonTypography.back')}
-              onClick={() => router.back()}
-            />
-          ) : null}
+      {enebleBackBottomOuter ? (
+        <Group
+          w="100%"
+          mt="lg"
+          position={enebleBackBottomOuter ? 'apart' : 'right'}
+        >
+          <PrimaryButton
+            type="button"
+            variant="outline"
+            leftIcon={<IconChevronLeft size="1rem" />}
+            label={t('commonTypography.back')}
+            {...enebleBackBottomOuter}
+          />
           <Group spacing="xs">
             {notValidButton ? (
               <NotValidButton color="red" {...notValidButton} />

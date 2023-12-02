@@ -59,6 +59,10 @@ export const READ_ALL_RITAGE_ORE = gql`
           id
           name
         }
+        subMaterial {
+          id
+          name
+        }
         fromAt
         arriveAt
         duration
@@ -89,23 +93,20 @@ export const READ_ALL_RITAGE_ORE = gql`
           name
           color
         }
+        isComplete
       }
     }
   }
 `;
 
-type ICheckerFrom = {
-  id: string;
-} & Pick<IEmployeesData, 'humanResource'>;
-
-type ICheckerTo = {
+type IChecker = {
   id: string;
 } & Pick<IEmployeesData, 'humanResource'>;
 
 interface IOreRitagesData {
   id: string;
-  checkerFrom: ICheckerFrom | null;
-  checkerTo: ICheckerTo | null;
+  checkerFrom: IChecker | null;
+  checkerTo: IChecker | null;
   shift: Pick<IShiftsData, 'id' | 'name'> | null;
   companyHeavyEquipment: Pick<
     IHeavyEquipmentCompany,
@@ -113,6 +114,7 @@ interface IOreRitagesData {
   > | null;
   fromAt: Date | string | null;
   material: Pick<IMaterialsData, 'id' | 'name'> | null;
+  subMaterial: Pick<IMaterialsData, 'id' | 'name'> | null;
   arriveAt: Date | string | null;
   duration: number | null;
   weather: {
@@ -132,6 +134,7 @@ interface IOreRitagesData {
   sampleNumber: string | null;
   desc: string | null;
   status: IStatus | null;
+  isComplete: boolean;
 }
 
 interface IOreRitagesResponse {

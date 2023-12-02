@@ -17,9 +17,10 @@
     "locationCategory": "Kategori Lokasi",
     "locationName": "Nama Lokasi",
     "material": "Material",
+    "subMaterial": "Sub Material",
     "materialType": "Jenis Material",
-    "materialSub": "Sub Jenis Material",
-    "materialSubBy": "Sub Jenis Material Dari",
+    "subMaterialType": "Sub Jenis Material",
+    "subMaterialTypeBy": "Sub Jenis Material Dari",
     "workingHoursPlan": "Rencana Jam Kerja",
     "activity": "Kegiatan",
     "activityPlan": "Rencana Aktivitas",
@@ -37,6 +38,7 @@
     "companyName": "Nama Perusahaan",
     "companyCode": "Kode Perusahaan",
     "heavyEquipmentCode": "Nomor Lambung",
+    "heavyEquipmentCodeSubstitution": "Nomor Lambung Pengganti",
     "companyLogo": "Logo Perusahaan",
     "next": "Selanjutnya",
     "prev": "Sebelumnya",
@@ -92,7 +94,9 @@
     "description": "Deskripsi",
     "desc": "Keterangan",
     "checkerFromName": "Nama Checker Asal",
+    "fromCheckerPosition": "Posisi Checker Asal",
     "checkerToName": "Nama Checker Tujuan",
+    "toCheckerPosition": "Posisi Checker Tujuan",
     "fromAt": "Waktu dari Asal",
     "arriveAt": "Waktu sampai Tujuan",
     "arrive": "Tujuan",
@@ -270,7 +274,15 @@
     "operatorName": "Nama Operator",
     "inputDataRitage": "Input Data Ritase",
     "uploadFile": "Unggah File",
-    "checkerInformation": "Informasi Checker"
+    "checkerInformation": "Informasi Checker",
+    "fromPit": "Dari Pit",
+    "fromBlock": "Dari Block",
+    "fromFront": "Dari Front",
+    "fromGrid": "Dari Grid",
+    "fromSequence": "Dari Sequence",
+    "fromElevasi": "Dari Elevasi",
+    "bulkSamplingDensity": "Massa Jenis Bulk Sampling",
+    "statusRitage": "Status Ritase"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -482,7 +494,7 @@
   },
   "material": {
     "createMaterial": "$t(commonTypography.create) $t(commonTypography.material)",
-    "createMaterialSub": "$t(commonTypography.create) $t(commonTypography.materialSub)",
+    "createMaterialSub": "$t(commonTypography.create) $t(commonTypography.subMaterialType)",
     "readMaterial": "$t(commonTypography.detail) $t(commonTypography.material)",
     "updateMaterial": "$t(commonTypography.edit) $t(commonTypography.material)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.type) $t(commonTypography.material)",
@@ -581,9 +593,17 @@
   "ritageOre": {
     "ritageOreTitle": "$t(commonTypography.dataRitageOre)",
     "createRitageOre": "$t(commonTypography.create) $t(commonTypography.dataRitageOre)",
+    "readRitageOre": "$t(commonTypography.detail) $t(commonTypography.dataRitageOre)",
+    "updateRitageOre": "$t(commonTypography.edit) $t(commonTypography.dataRitageOre)",
     "successDeleteMessage": "$t(commonTypography.dataRitageOre) berhasil dihapus",
     "downloadTemplateOre": "Unduh Tamplate Input Data Ritase Ore",
     "formRitageOre": "$t(commonTypography.form) $t(ritageOre.ritageOreTitle)",
-    "successCreateMessage": "$t(commonTypography.dataRitageOre) berhasil dibuat"
+    "formUpdateRitageOre": "$t(commonTypography.form) $t(commonTypography.edit) $t(ritageOre.ritageOreTitle)",
+    "successCreateMessage": "$t(commonTypography.dataRitageOre) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.dataRitageOre) berhasil diubah",
+    "successIsValidateMessage": "$t(ritageOre.ritageOreTitle) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(ritageOre.ritageOreTitle) Tidak Valid",
+    "successIsDeterminedMessage": "$t(ritageOre.ritageOreTitle) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(ritageOre.ritageOreTitle) berhasil $t(commonTypography.reject)"
   }
 }

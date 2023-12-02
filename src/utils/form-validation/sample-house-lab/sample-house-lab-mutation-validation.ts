@@ -1,20 +1,16 @@
 import { z } from 'zod';
 
-import { IUpdateIsValidateSampleHouseLabValues } from '@/services/graphql/mutation/sample-house-lab/useIsValidateSampleHouseLab';
 import { IMutationSampleHousePlanValues } from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
 import {
   zDateOptionalValidation,
   zDateValidation,
   zImageArrayOptional,
+  zOptionalNumber,
+  zOptionalNumberOfString,
   zOptionalString,
   zRequiredSelectInput,
   zRequiredString,
 } from '@/utils/form-validation/global';
-
-export const sampleHouselabStatusValidation: z.ZodType<IUpdateIsValidateSampleHouseLabValues> =
-  z.object({
-    statusMessage: zRequiredString,
-  });
 
 export const sampleHouseLabMutationValidation: z.ZodType<IMutationSampleHousePlanValues> =
   z
@@ -38,10 +34,10 @@ export const sampleHouseLabMutationValidation: z.ZodType<IMutationSampleHousePla
         .object({
           elementId: zRequiredString,
           name: zRequiredString,
-          value: zOptionalString,
+          value: zOptionalNumberOfString,
         })
         .array(),
-      density: zOptionalString,
+      density: zOptionalNumber,
       preparationStartDate: zDateOptionalValidation,
       preparationStartTime: zOptionalString,
       preparationFinishDate: zDateOptionalValidation,
@@ -54,13 +50,23 @@ export const sampleHouseLabMutationValidation: z.ZodType<IMutationSampleHousePla
         .object({
           elementId: zRequiredString,
           name: zRequiredString,
-          value: zOptionalString,
+          value: zOptionalNumberOfString,
         })
         .array(),
       photo: zImageArrayOptional,
     })
     .superRefine((arg, ctx) => {
       const newLocationId = arg.locationId === '' ? null : arg.locationId;
+      if (arg.sampleTypeId === `${process.env.NEXT_PUBLIC_SAMPLE_BULK_ID}`) {
+        if (arg.density === '') {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom, // customize your issue
+            path: ['density'],
+            message: 'Kolom tidak boleh kosong',
+          });
+        }
+        return z.NEVER; // The return value is not used, but we need to return something to satisfy the typing
+      }
       if (arg.locationCategoryId) {
         if (
           arg.locationCategoryId !==

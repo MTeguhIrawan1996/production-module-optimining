@@ -28,7 +28,7 @@ export interface IMutationSampleHousePlanValues {
   sampleEnterLabDate?: Date | null;
   sampleEnterLabTime: string;
   gradeControlElements: IElementRhf[];
-  density: string;
+  density: string | number;
   preparationStartDate?: Date | null;
   preparationStartTime: string;
   preparationFinishDate?: Date | null;
@@ -65,27 +65,20 @@ const CreateSampleHousePlan = async ({ data }: IPropsRequest) => {
       }
       if (name === 'gradeControlElements') {
         (value as IElementRhf[]).forEach((value, index: number) => {
-          if (value.value !== '') {
-            bodyFormData.append(
-              `gradeControlElements[${index}][elementId]`,
-              value.elementId
-            );
-            bodyFormData.append(
-              `gradeControlElements[${index}][value]`,
-              value.value
-            );
-          }
+          bodyFormData.append(
+            `gradeControlElements[${index}][elementId]`,
+            value.elementId
+          );
+          bodyFormData.append(
+            `gradeControlElements[${index}][value]`,
+            value.value
+          );
         });
       }
       if (name === 'elements') {
         (value as IElementRhf[]).forEach((value, index: number) => {
-          if (value.value !== '') {
-            bodyFormData.append(
-              `elements[${index}][elementId]`,
-              value.elementId
-            );
-            bodyFormData.append(`elements[${index}][value]`, value.value);
-          }
+          bodyFormData.append(`elements[${index}][elementId]`, value.elementId);
+          bodyFormData.append(`elements[${index}][value]`, value.value);
         });
       }
       if (!exclude.includes(name) && typeof value === 'string') {
