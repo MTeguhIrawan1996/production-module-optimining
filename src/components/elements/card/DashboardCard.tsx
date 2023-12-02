@@ -39,6 +39,7 @@ import MultipleFilter, {
   IMultipleFilterProps,
 } from '@/components/elements/global/MultipleFilter';
 import SearchBar, { ISerachBar } from '@/components/elements/global/SearchBar';
+import LinkButton from '@/components/elements/link/LinkButton';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -181,8 +182,11 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
             {downloadButton && downloadButton.length > 0 ? (
               <Group>
                 {downloadButton.map((obj, i) => (
-                  <PrimaryButton
-                    leftIcon={<IconDownload size="20px" />}
+                  <LinkButton
+                    buttonProps={{
+                      leftIcon: <IconDownload size="20px" />,
+                    }}
+                    href={obj.url}
                     label={obj.label}
                     key={i}
                   />

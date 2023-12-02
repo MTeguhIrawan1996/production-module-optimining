@@ -315,11 +315,11 @@ const ListDataOreRitageBook = () => {
       downloadButton={[
         {
           label: t('ritageOre.downloadTemplateOre'),
-          url: '',
+          url: `${process.env.NEXT_PUBLIC_REST_API_URL}/download/references`,
         },
         {
           label: t('commonTypography.downloadReference'),
-          url: '',
+          url: `${process.env.NEXT_PUBLIC_REST_API_URL}/download/references`,
         },
       ]}
     >

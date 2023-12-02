@@ -69,6 +69,7 @@ import TimeInputRhf from '@/components/elements/input/TimeInputRhf';
 import TypeSelectInputRhf from '@/components/elements/input/TypeSelectInputRhf';
 import VillageSelectInputRhf from '@/components/elements/input/VillageSelectInputRhf';
 import WeatherSelectInputRhf from '@/components/elements/input/WeatherSelectInputRhf';
+import LinkButton from '@/components/elements/link/LinkButton';
 import PrimaryLink from '@/components/elements/link/PrimaryLink';
 import LogoutConfirmModal from '@/components/elements/modal/LogoutConfirmModal';
 import ModalConfirmation from '@/components/elements/modal/ModalConfirmation';
@@ -117,6 +118,7 @@ export {
   ImageInputDropzoneRhf,
   InnerWrapper,
   KeyValueList,
+  LinkButton,
   LocationCategorySelectInputRhf,
   LocationSelectInputRhf,
   LogoutConfirmModal,
