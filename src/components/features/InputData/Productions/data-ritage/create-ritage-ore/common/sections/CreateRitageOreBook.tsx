@@ -32,6 +32,7 @@ import {
   stockpileNameSelect,
 } from '@/utils/constants/Field/stockpile-field';
 import { ritageOreMutationValidation } from '@/utils/form-validation/ritage/ritage-ore-validation';
+import { countTonByRitage } from '@/utils/helper/countTonByRitage';
 import { dateToString } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -98,7 +99,7 @@ const CreateRitageOreBook = () => {
 
   React.useEffect(() => {
     const ritageDuration = hourDiff(newFromTime, newArriveTime);
-    const amount = Number(newBucketVolume) * Number(newBulkSamplingDensity);
+    const amount = countTonByRitage(newBucketVolume, newBulkSamplingDensity);
     methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
     methods.setValue('date', new Date());
     methods.setValue('ritageDuration', ritageDuration ?? '');
@@ -416,15 +417,17 @@ const CreateRitageOreBook = () => {
           toCheckerName,
           toCheckerPosition,
           shiftItem,
-          hullNumber,
-          hullNumberSubstitution,
           materialItem,
           materialSubItem,
-          fromTime,
-          arriveTime,
-          ritageDurationItem,
+          hullNumber,
+          hullNumberSubstitution,
           weatherItem,
         ],
+      },
+      {
+        group: t('commonTypography.ritageDuration'),
+        enableGroupLabel: true,
+        formControllers: [fromTime, arriveTime, ritageDurationItem],
       },
       {
         group: t('commonTypography.location'),
@@ -476,7 +479,7 @@ const CreateRitageOreBook = () => {
       },
     ];
 
-    isRitageProblematic ? field : field[1].formControllers.splice(6, 1);
+    isRitageProblematic ? field : field[1].formControllers.splice(8, 1);
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
