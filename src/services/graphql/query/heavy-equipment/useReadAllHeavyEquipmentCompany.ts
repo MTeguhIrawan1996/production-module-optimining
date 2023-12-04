@@ -16,7 +16,7 @@ export const READ_ALL_HEAVY_EQUIPMENT_COMPANY = gql`
     $brandId: String
     $referenceId: String
     $classId: String
-    $categorySlug: string
+    $categorySlug: String
   ) {
     companyHeavyEquipments(
       findAllCompanyHeavyEquipmentInput: {

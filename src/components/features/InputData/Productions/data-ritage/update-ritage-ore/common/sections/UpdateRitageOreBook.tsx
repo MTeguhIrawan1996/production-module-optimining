@@ -31,6 +31,7 @@ import {
   stockpileNameSelect,
 } from '@/utils/constants/Field/stockpile-field';
 import { ritageOreMutationValidation } from '@/utils/form-validation/ritage/ritage-ore-validation';
+import { countTonByRitage } from '@/utils/helper/countTonByRitage';
 import { formatDate2 } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
@@ -103,9 +104,8 @@ const UpdateRitageOreBook = () => {
 
   React.useEffect(() => {
     const ritageDuration = hourDiff(newFromTime, newArriveTime);
-    const amount = Number(newBucketVolume) * Number(newBulkSamplingDensity);
+    const amount = countTonByRitage(newBucketVolume, newBulkSamplingDensity);
     methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
-    methods.setValue('date', new Date());
     methods.setValue('ritageDuration', ritageDuration ?? '');
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -193,7 +193,7 @@ const UpdateRitageOreBook = () => {
         notifications.show({
           color: 'red',
           title: 'Gagal',
-          message: err.message,
+          message: err.response.data.message,
           icon: <IconX />,
         });
       }
@@ -456,6 +456,7 @@ const UpdateRitageOreBook = () => {
       multiple: true,
       maxFiles: 5,
       enableDeletePhoto: true,
+      serverPhotos: serverPhotos,
       onDrop: (value) => {
         if (photos) {
           const totalPhotos = photos.length + value.length;
@@ -488,6 +489,19 @@ const UpdateRitageOreBook = () => {
         }),
     };
 
+    const checkerInformation = [
+      fromCheckerName,
+      fromCheckerPosition,
+      toCheckerName,
+      toCheckerPosition,
+      shiftItem,
+      materialItem,
+      materialSubItem,
+      hullNumber,
+      hullNumberSubstitution,
+      weatherItem,
+    ];
+
     const field: ControllerGroup[] = [
       {
         group: t('commonTypography.date'),
@@ -496,21 +510,12 @@ const UpdateRitageOreBook = () => {
       {
         group: t('commonTypography.checkerInformation'),
         enableGroupLabel: true,
-        formControllers: [
-          fromCheckerName,
-          fromCheckerPosition,
-          toCheckerName,
-          toCheckerPosition,
-          shiftItem,
-          hullNumber,
-          hullNumberSubstitution,
-          materialItem,
-          materialSubItem,
-          fromTime,
-          arriveTime,
-          ritageDurationItem,
-          weatherItem,
-        ],
+        formControllers: checkerInformation,
+      },
+      {
+        group: t('commonTypography.ritageDuration'),
+        enableGroupLabel: true,
+        formControllers: [fromTime, arriveTime, ritageDurationItem],
       },
       {
         group: t('commonTypography.location'),
@@ -563,17 +568,17 @@ const UpdateRitageOreBook = () => {
       },
     ];
 
-    isRitageProblematic ? field : field[1].formControllers.splice(6, 1);
+    isRitageProblematic ? field : field[1].formControllers.splice(8, 1);
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    oreRitage,
+    isRitageProblematic,
     photos,
     serverPhotos,
     deletedPhotoIds,
     closeDome,
-    isRitageProblematic,
-    oreRitage,
   ]);
   /* #endregion  /**======== Field =========== */
 
@@ -619,11 +624,13 @@ const UpdateRitageOreBook = () => {
           label: 'problemRitage',
           switchItem: {
             checked: isRitageProblematic,
-            onChange: (value) =>
+            onChange: (value) => {
               methods.setValue(
                 'isRitageProblematic',
                 value.currentTarget.checked
               ),
+                methods.setValue('companyHeavyEquipmentChangeId', '');
+            },
           },
         }}
         submitButton={{

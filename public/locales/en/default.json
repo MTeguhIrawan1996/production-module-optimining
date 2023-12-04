@@ -203,6 +203,7 @@
     "choosePit": "Pilih / Ketikan Pit",
     "chooseLocation": "Pilih / Ketikan Lokasi",
     "chooseWeather": "Pilih Cuaca",
+    "chooseRitageStatus": "Pilih Status Ritase",
     "chooseHeavyEquipmentCode": "Pilih / Ketikan Nomor Lambung",
     "chooseType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.type)",
     "chooseBrand": "$t(commonTypography.choose) / Ketikan $t(commonTypography.brand)",
@@ -214,11 +215,11 @@
     "chooseMaterial": "$t(commonTypography.choose) $t(commonTypography.material)",
     "chooseStockpileName": "$t(commonTypography.choose) / Ketikan $t(commonTypography.stockpileName)",
     "chooseDomeName": "$t(commonTypography.choose) / Ketikan $t(commonTypography.domeName)",
-    "chooseShift": "$t(commonTypography.choose) / Ketikan $t(commonTypography.shift)",
+    "chooseShift": "$t(commonTypography.choose) $t(commonTypography.shift)",
     "chooseSampleType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.sampleType)",
     "chooseEmployee": "$t(commonTypography.choose) / Ketikan $t(commonTypography.employee)",
     "complete": "Lengkap",
-    "inComplete": "Tidak Lengkap",
+    "unComplete": "Tidak Lengkap",
     "engineNumber": "Nomor Mesin",
     "frameNumber": "Nomor Rangka",
     "masterData": "Master Data",
@@ -282,7 +283,7 @@
     "fromSequence": "Dari Sequence",
     "fromElevasi": "Dari Elevasi",
     "bulkSamplingDensity": "Massa Jenis Bulk Sampling",
-    "statusRitage": "Status Ritase"
+    "ritageStatus": "Status Ritase"
   },
   "sideBar": {
     "dashboard": "Dashboard",

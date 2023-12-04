@@ -6,7 +6,7 @@ import { ControllerProps } from '@/types/global';
 export const shiftSelect = ({
   name = 'shiftId',
   label = 'shift',
-  searchable = true,
+  searchable = false,
   clearable = true,
   withAsterisk = true,
   colSpan = 6,

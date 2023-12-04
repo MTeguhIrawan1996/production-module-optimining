@@ -152,7 +152,8 @@
       "toLevel": "Ke Level",
       "bulkSamplingDensity": "Massa Jenis Bulk Sampling",
       "bucketVolume": "Volume Bucket",
-      "tonByRitage": "Ton Berdasarkan Ritase"
+      "tonByRitage": "Ton Berdasarkan Ritase",
+      "ritageStatus": "Status Ritase"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",

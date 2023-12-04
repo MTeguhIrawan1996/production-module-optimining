@@ -233,7 +233,7 @@ const SampleHouseLabBook = () => {
               accessor: 'action',
               title: t('commonTypography.action'),
               width: 100,
-              render: ({ id }) => {
+              render: ({ id, status }) => {
                 return (
                   <GlobalKebabButton
                     actionRead={{
@@ -244,21 +244,29 @@ const SampleHouseLabBook = () => {
                         );
                       },
                     }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/quality-control-management/sample-house-lab/update/${id}`
-                        );
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionUpdate={
+                      status?.id !== 'f5f644d9-8810-44f7-8d42-36b5222b97d1'
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/quality-control-management/sample-house-lab/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      status?.id !== 'f5f644d9-8810-44f7-8d42-36b5222b97d1'
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },

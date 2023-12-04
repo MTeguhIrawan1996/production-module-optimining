@@ -1,7 +1,6 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
 import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
-import { IEmployeesData } from '@/services/graphql/query/master-data-company/useReadAllEmploye';
 import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { IShiftsData } from '@/services/graphql/query/shift/useReadAllShiftMaster';
 import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
@@ -15,6 +14,9 @@ export const READ_ALL_RITAGE_ORE = gql`
     $date: String
     $orderBy: String
     $orderDir: String
+    $shiftId: String
+    $companyHeavyEquipmentId: String
+    $isRitageProblematic: Boolean
   ) {
     oreRitages(
       findAllOreRitageInput: {
@@ -23,6 +25,9 @@ export const READ_ALL_RITAGE_ORE = gql`
         date: $date
         orderBy: $orderBy
         orderDir: $orderDir
+        shiftId: $shiftId
+        companyHeavyEquipmentId: $companyHeavyEquipmentId
+        isRitageProblematic: $isRitageProblematic
       }
     ) {
       meta {
@@ -33,20 +38,6 @@ export const READ_ALL_RITAGE_ORE = gql`
       }
       data {
         id
-        checkerFrom {
-          id
-          humanResource {
-            id
-            name
-          }
-        }
-        checkerTo {
-          id
-          humanResource {
-            id
-            name
-          }
-        }
         shift {
           id
           name
@@ -55,28 +46,13 @@ export const READ_ALL_RITAGE_ORE = gql`
           id
           hullNumber
         }
-        material {
-          id
-          name
-        }
         subMaterial {
           id
           name
         }
         fromAt
         arriveAt
-        duration
-        weather {
-          id
-          name
-        }
         fromPit {
-          id
-          name
-        }
-        fromLevel
-        toLevel
-        stockpile {
           id
           name
         }
@@ -84,57 +60,38 @@ export const READ_ALL_RITAGE_ORE = gql`
           id
           name
         }
-        bucketVolume
-        tonByRitage
         sampleNumber
-        desc
         status {
           id
           name
           color
         }
         isComplete
+        isRitageProblematic
       }
     }
   }
 `;
 
-type IChecker = {
-  id: string;
-} & Pick<IEmployeesData, 'humanResource'>;
-
 interface IOreRitagesData {
   id: string;
-  checkerFrom: IChecker | null;
-  checkerTo: IChecker | null;
   shift: Pick<IShiftsData, 'id' | 'name'> | null;
   companyHeavyEquipment: Pick<
     IHeavyEquipmentCompany,
     'id' | 'hullNumber'
   > | null;
   fromAt: Date | string | null;
-  material: Pick<IMaterialsData, 'id' | 'name'> | null;
-  subMaterial: Pick<IMaterialsData, 'id' | 'name'> | null;
   arriveAt: Date | string | null;
-  duration: number | null;
-  weather: {
-    id: string;
-    name: string;
-  } | null;
+  subMaterial: Pick<IMaterialsData, 'id' | 'name'> | null;
   fromPit: {
     id: string;
     name: string;
   } | null;
-  fromLevel: string | null;
-  toLevel: string | null;
-  stockpile: Pick<IStockpilesData, 'id' | 'name'> | null;
   dome: Pick<IStockpilesData, 'id' | 'name'> | null;
-  bucketVolume: number | null;
-  tonByRitage: number | null;
   sampleNumber: string | null;
-  desc: string | null;
   status: IStatus | null;
   isComplete: boolean;
+  isRitageProblematic: boolean;
 }
 
 interface IOreRitagesResponse {
@@ -144,6 +101,9 @@ interface IOreRitagesResponse {
 interface IOreRitagesRequest
   extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
   date?: string | null;
+  shiftId?: string | null;
+  isRitageProblematic?: boolean | null;
+  companyHeavyEquipmentId?: string | null;
 }
 
 export const useReadAllRitageOre = ({

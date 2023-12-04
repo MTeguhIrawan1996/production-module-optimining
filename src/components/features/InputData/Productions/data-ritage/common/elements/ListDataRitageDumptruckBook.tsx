@@ -9,40 +9,40 @@ import {
   MantineDataTable,
 } from '@/components/elements';
 
-import { useReadAllRitageOre } from '@/services/graphql/query/ore-ritage/useReadAllOreRitage';
-import { globalDateNative } from '@/utils/constants/Field/global-field';
+import { globalDateNative } from '@/utils/constants/Field/native-field';
 import { formatDate2 } from '@/utils/helper/dateFormat';
 
-import { InputControllerNativeProps } from '@/types/global';
+import {
+  IDumpTruckRitagesData,
+  IMeta,
+  InputControllerNativeProps,
+} from '@/types/global';
 
-const ListDataRitageDumptruckBook = () => {
+interface IRitageDTProps {
+  data?: IDumpTruckRitagesData[];
+  meta?: IMeta;
+  tabs: 'ore' | 'ob';
+  fetching?: boolean;
+  setDate: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const ListDataRitageDumptruckBook: React.FC<IRitageDTProps> = ({
+  data,
+  meta,
+  tabs,
+  fetching,
+  setDate,
+}) => {
   const router = useRouter();
   const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const page = Number(pageParams.get('rp')) || 1;
+  const heavyEquipmentPage = Number(pageParams.get('hp')) || 1;
+  const url = `/input-data/production/data-ritage?rp=${page}&hp=1&tabs=${tabs}`;
   const { t } = useTranslation('default');
-  const [date, setDate] = React.useState('');
 
-  /* #   /**=========== Query =========== */
-  const { oreRitagesData, oreRitagesDataLoading, oreRitagesDataMeta } =
-    useReadAllRitageOre({
-      variables: {
-        limit: 10,
-        page: page,
-        orderDir: 'desc',
-        orderBy: 'createdAt',
-        date: date === '' ? null : date,
-      },
-    });
-
-  /* #endregion  /**======== Query =========== */
-
-  const handleSetPage = (page: number) => {
-    router.push({
-      href: router.asPath,
-      query: {
-        page: page,
-      },
-    });
+  const handleSetPage = (newPage: number) => {
+    const urlSet = `/input-data/production/data-ritage?rp=${page}&hp=${newPage}&tabs=${tabs}`;
+    router.push(urlSet, undefined, { shallow: true });
   };
 
   const filter = React.useMemo(() => {
@@ -52,12 +52,7 @@ const ListDataRitageDumptruckBook = () => {
       radius: 'lg',
       clearable: true,
       onChange: (value) => {
-        router.push({
-          href: router.asPath,
-          query: {
-            page: 1,
-          },
-        });
+        router.push(url, undefined, { shallow: true });
         const date = formatDate2(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
@@ -65,35 +60,38 @@ const ListDataRitageDumptruckBook = () => {
     const item: InputControllerNativeProps[] = [stockpileNameItem];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [url]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
     return (
       <MantineDataTable
         tableProps={{
-          records: oreRitagesData,
-          fetching: oreRitagesDataLoading,
+          records: data,
+          fetching: fetching,
           highlightOnHover: true,
           withColumnBorders: false,
+          idAccessor: (record) => {
+            const key = data && data.indexOf(record) + 1;
+            return `${key}`;
+          },
           columns: [
             {
               accessor: 'index',
               title: 'No',
-              render: (record) =>
-                oreRitagesData && oreRitagesData.indexOf(record) + 1,
+              render: (record) => data && data.indexOf(record) + 1,
               width: 60,
             },
             {
               accessor: 'hullNumber',
               title: t('commonTypography.heavyEquipmentCode'),
-              render: ({ checkerFrom }) =>
-                checkerFrom?.humanResource?.name ?? '-',
+              render: ({ companyHeavyEquipment }) =>
+                companyHeavyEquipment?.hullNumber ?? '-',
             },
             {
               accessor: 'operatorName',
               title: t('commonTypography.operatorName'),
-              render: ({ checkerTo }) => checkerTo?.humanResource?.name ?? '-',
+              // render: ({ checkerTo }) => checkerTo?.humanResource?.name ?? '-',
             },
             {
               accessor: 'shift',
@@ -103,26 +101,26 @@ const ListDataRitageDumptruckBook = () => {
             {
               accessor: 'totalRitage',
               title: t('commonTypography.totalRitage'),
-              render: ({ companyHeavyEquipment }) =>
-                companyHeavyEquipment?.hullNumber ?? '-',
+              render: ({ ritageCount }) => ritageCount ?? '-',
             },
             {
               accessor: 'tonByRitage',
               title: t('commonTypography.tonByRitage'),
-              render: ({ companyHeavyEquipment }) =>
-                companyHeavyEquipment?.hullNumber ?? '-',
+              render: ({ tonByRitage }) => tonByRitage ?? '-',
             },
             {
               accessor: 'action',
               title: t('commonTypography.action'),
               width: 100,
-              render: ({ id }) => {
+              render: ({ date }) => {
                 return (
                   <GlobalKebabButton
                     actionRead={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        router.push(`/input-data/production/data-ritage/${id}`);
+                        router.push(
+                          `/input-data/production/data-ritage/${date}`
+                        );
                       },
                     }}
                   />
@@ -140,15 +138,15 @@ const ListDataRitageDumptruckBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: page,
-          totalAllData: oreRitagesDataMeta?.totalAllData ?? 0,
-          totalData: oreRitagesDataMeta?.totalData ?? 0,
-          totalPage: oreRitagesDataMeta?.totalPage ?? 0,
+          currentPage: heavyEquipmentPage,
+          totalAllData: meta?.totalAllData ?? 0,
+          totalData: meta?.totalData ?? 0,
+          totalPage: meta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [oreRitagesData, oreRitagesDataLoading]);
+  }, [data]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (

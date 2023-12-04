@@ -1,6 +1,5 @@
 import { IBrandSelectInputRhfProps } from '@/components/elements/input/BrandSelectInputRhf';
 import { IClassSelectInputRhfProps } from '@/components/elements/input/ClassSelectInputRhf';
-import { IDateInputNativeProps } from '@/components/elements/input/DateInputNative';
 import { IDateInputProps } from '@/components/elements/input/DateInputRhf';
 import { IDivisionSelectInputRhfProps } from '@/components/elements/input/DivisionSelectInputRhf';
 import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/input/EligibilityStatusSelectInputRhf';
@@ -26,7 +25,7 @@ import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelect
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
 
-import { ControllerProps, InputControllerNativeProps } from '@/types/global';
+import { ControllerProps } from '@/types/global';
 
 export const name: ControllerProps = {
   control: 'text-input',
@@ -521,18 +520,6 @@ export const globalDate = ({
     label,
     withAsterisk,
     colSpan,
-    ...rest,
-  };
-  return field;
-};
-
-export const globalDateNative = ({
-  label = 'date',
-  ...rest
-}: Partial<IDateInputNativeProps>) => {
-  const field: InputControllerNativeProps = {
-    control: 'date-input-native',
-    label,
     ...rest,
   };
   return field;
