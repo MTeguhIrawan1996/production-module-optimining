@@ -10,7 +10,7 @@ import {
 } from '@/components/elements';
 
 import { useReadAllRitageOre } from '@/services/graphql/query/ore-ritage/useReadAllOreRitage';
-import { globalDateNative } from '@/utils/constants/Field/global-field';
+import { globalDateNative } from '@/utils/constants/Field/native-field';
 import { formatDate2 } from '@/utils/helper/dateFormat';
 
 import { InputControllerNativeProps } from '@/types/global';
@@ -87,13 +87,13 @@ const ListDataRitageDumptruckBook = () => {
             {
               accessor: 'hullNumber',
               title: t('commonTypography.heavyEquipmentCode'),
-              render: ({ checkerFrom }) =>
-                checkerFrom?.humanResource?.name ?? '-',
+              // render: ({ checkerFrom }) =>
+              //   checkerFrom?.humanResource?.name ?? '-',
             },
             {
               accessor: 'operatorName',
               title: t('commonTypography.operatorName'),
-              render: ({ checkerTo }) => checkerTo?.humanResource?.name ?? '-',
+              // render: ({ checkerTo }) => checkerTo?.humanResource?.name ?? '-',
             },
             {
               accessor: 'shift',

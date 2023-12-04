@@ -81,7 +81,7 @@ const CreateCompanyHeavyEquipmentBook = () => {
         notifications.show({
           color: 'red',
           title: 'Gagal',
-          message: err.message,
+          message: err.response.data.message,
           icon: <IconX />,
         });
       }

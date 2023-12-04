@@ -1,3 +1,4 @@
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useSearchParams } from 'next/navigation';
@@ -16,16 +17,24 @@ import {
 import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
 import { useDeleteOreRitage } from '@/services/graphql/mutation/ore-ritage/useDeleteOreRitage';
+import { useReadAllHeavyEquipmentSelect } from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
 import { useReadAllRitageOre } from '@/services/graphql/query/ore-ritage/useReadAllOreRitage';
-import { globalDateNative } from '@/utils/constants/Field/global-field';
+import { useReadAllShiftMaster } from '@/services/graphql/query/shift/useReadAllShiftMaster';
+import {
+  globalDateNative,
+  globalSelectNative,
+} from '@/utils/constants/Field/native-field';
 import { formatDate, formatDate2 } from '@/utils/helper/dateFormat';
+import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { InputControllerNativeProps } from '@/types/global';
 
 const ListDataOreRitageBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const page = Number(pageParams.get('cp')) || 1;
+  const heavyEquipmentPage = Number(pageParams.get('hp')) || 1;
+  const url = `/input-data/production/data-ritage?p=1&hp=${heavyEquipmentPage}&tabs=ore`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -33,8 +42,52 @@ const ListDataOreRitageBook = () => {
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
   const [date, setDate] = React.useState('');
+  const [isRitageProblematic, setIsRitageProblematic] = React.useState<
+    boolean | null
+  >(null);
+  const [shiftId, setShiftId] = React.useState<string | null>(null);
+  const [heavyEquipmentSeacrhTerm, setHeavyEquipmentSeacrhTerm] =
+    React.useState<string>('');
+  const [heavyEquipmentSearchQuery] = useDebouncedValue<string>(
+    heavyEquipmentSeacrhTerm,
+    400
+  );
+  const [heavyEquipmentId, setHeavyEquipmentId] = React.useState<string | null>(
+    null
+  );
 
   /* #   /**=========== Query =========== */
+  const { shiftsData } = useReadAllShiftMaster({
+    variables: {
+      limit: null,
+      orderDir: 'desc',
+      orderBy: 'createdAt',
+    },
+  });
+
+  const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
+    variables: {
+      limit: 15,
+      search:
+        heavyEquipmentSearchQuery === '' ? null : heavyEquipmentSearchQuery,
+      isComplete: true,
+      categorySlug: 'dump-truck',
+    },
+  });
+
+  const heavyEquipmentItem = heavyEquipmentSelect?.map((val) => {
+    return {
+      name: val.hullNumber ?? '',
+      id: val.id ?? '',
+    };
+  });
+  const { uncombinedItem: heavyEquipmentItemFilter } = useFilterItems({
+    data: heavyEquipmentItem ?? [],
+  });
+  const { uncombinedItem: shiftFilterItem } = useFilterItems({
+    data: shiftsData ?? [],
+  });
+
   const {
     oreRitagesData,
     oreRitagesDataLoading,
@@ -47,6 +100,10 @@ const ListDataOreRitageBook = () => {
       orderDir: 'desc',
       orderBy: 'createdAt',
       date: date === '' ? null : date,
+      shiftId: shiftId === '' ? null : shiftId,
+      isRitageProblematic: isRitageProblematic,
+      companyHeavyEquipmentId:
+        heavyEquipmentId === '' ? null : heavyEquipmentId,
     },
   });
 
@@ -54,12 +111,7 @@ const ListDataOreRitageBook = () => {
     onCompleted: () => {
       refetchOreRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push({
-        href: router.asPath,
-        query: {
-          page: 1,
-        },
-      });
+      router.push(url, undefined, { shallow: true });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -87,35 +139,74 @@ const ListDataOreRitageBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    router.push({
-      href: router.asPath,
-      query: {
-        page: page,
-      },
-    });
+    const urlSet = `/input-data/production/data-ritage?p=${page}&hp=${heavyEquipmentPage}&tabs=ore`;
+    router.push(urlSet, undefined, { shallow: true });
   };
 
   const filter = React.useMemo(() => {
-    const stockpileNameItem = globalDateNative({
+    const dateItem = globalDateNative({
       label: 'date',
       placeholder: 'chooseDate',
       radius: 'lg',
       clearable: true,
       onChange: (value) => {
-        router.push({
-          href: router.asPath,
-          query: {
-            page: 1,
-          },
-        });
+        router.push(url, undefined, { shallow: true });
         const date = formatDate2(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
     });
-    const item: InputControllerNativeProps[] = [stockpileNameItem];
+    const ritageProblematic = globalSelectNative({
+      placeholder: 'chooseRitageStatus',
+      label: 'ritageStatus',
+      data: [
+        {
+          label: t('commonTypography.complete'),
+          value: 'true',
+        },
+        {
+          label: t('commonTypography.unComplete'),
+          value: 'false',
+        },
+      ],
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setIsRitageProblematic(
+          value ? (value === 'true' ? false : true) : null
+        );
+      },
+    });
+    const shiftItem = globalSelectNative({
+      placeholder: 'chooseShift',
+      label: 'shift',
+      searchable: false,
+      data: shiftFilterItem,
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setShiftId(value);
+      },
+    });
+    const heavyEquipmentItem = globalSelectNative({
+      placeholder: 'chooseHeavyEquipmentCode',
+      label: 'heavyEquipmentCode',
+      searchable: true,
+      data: heavyEquipmentItemFilter,
+      onSearchChange: setHeavyEquipmentSeacrhTerm,
+      searchValue: heavyEquipmentSeacrhTerm,
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setHeavyEquipmentId(value);
+      },
+    });
+
+    const item: InputControllerNativeProps[] = [
+      dateItem,
+      ritageProblematic,
+      shiftItem,
+      heavyEquipmentItem,
+    ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [heavyEquipmentItemFilter, shiftFilterItem]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -166,73 +257,6 @@ const ListDataOreRitageBook = () => {
               title: t('commonTypography.dome'),
               render: ({ dome }) => dome?.name ?? '-',
             },
-
-            // {
-            //   accessor: 'checkerFrom',
-            //   title: t('commonTypography.checkerFromName'),
-            //   render: ({ checkerFrom }) =>
-            //     checkerFrom?.humanResource?.name ?? '-',
-            // },
-            // {
-            //   accessor: 'checkerTo',
-            //   title: t('commonTypography.checkerToName'),
-            //   render: ({ checkerTo }) => checkerTo?.humanResource?.name ?? '-',
-            // },
-            // {
-            //   accessor: 'material',
-            //   title: t('commonTypography.material'),
-            //   render: ({ material }) => material?.name ?? '-',
-            // },
-            // {
-            //   accessor: 'arriveAt',
-            //   title: t('commonTypography.arriveAt'),
-            //   render: ({ arriveAt }) => formatDate(arriveAt, 'hh:mm:ss A'),
-            // },
-            // {
-            //   accessor: 'ritageDuration',
-            //   title: t('commonTypography.ritageDuration'),
-            //   render: ({ duration }) => secondsDuration(duration),
-            // },
-            // {
-            //   accessor: 'weather',
-            //   title: t('commonTypography.weather'),
-            //   render: ({ weather }) => weather?.name ?? '-',
-            // },
-            // {
-            //   accessor: 'fromLevel',
-            //   title: t('commonTypography.fromLevel'),
-            //   render: ({ fromLevel }) => fromLevel ?? '-',
-            // },
-            // {
-            //   accessor: 'toLevel',
-            //   title: t('commonTypography.toLevel'),
-            //   render: ({ toLevel }) => toLevel ?? '-',
-            // },
-            // {
-            //   accessor: 'stockpileName',
-            //   title: t('commonTypography.stockpileName'),
-            //   render: ({ stockpile }) => stockpile?.name ?? '-',
-            // },
-            // {
-            //   accessor: 'bucketVolume',
-            //   title: t('commonTypography.bucketVolume'),
-            //   render: ({ bucketVolume }) => bucketVolume ?? '-',
-            // },
-            // {
-            //   accessor: 'tonByRitage',
-            //   title: t('commonTypography.tonByRitage'),
-            //   render: ({ tonByRitage }) => tonByRitage ?? '-',
-            // },
-            // {
-            //   accessor: 'sampleNumber',
-            //   title: t('commonTypography.sampleNumber'),
-            //   render: ({ sampleNumber }) => sampleNumber ?? '-',
-            // },
-            // {
-            //   accessor: 'desc',
-            //   title: t('commonTypography.desc'),
-            //   render: ({ desc }) => desc ?? '-',
-            // },
             {
               accessor: 'status',
               title: t('commonTypography.status'),
@@ -246,15 +270,15 @@ const ListDataOreRitageBook = () => {
               },
             },
             {
-              accessor: 'statusRitage',
-              title: t('commonTypography.statusRitage'),
-              render: ({ isComplete }) => (
+              accessor: 'ritageStatus',
+              title: t('commonTypography.ritageStatus'),
+              render: ({ isRitageProblematic }) => (
                 <GlobalBadgeStatus
-                  color={isComplete ? 'brand.6' : 'gray.6'}
+                  color={isRitageProblematic ? 'gray.6' : 'brand.6'}
                   label={
-                    isComplete
-                      ? t('commonTypography.complete')
-                      : t('commonTypography.inComplete')
+                    isRitageProblematic
+                      ? t('commonTypography.unComplete')
+                      : t('commonTypography.complete')
                   }
                 />
               ),
@@ -323,7 +347,7 @@ const ListDataOreRitageBook = () => {
         onClick: () => setIsOpenSelectionModal((prev) => !prev),
       }}
       filterDateWithSelect={{
-        colSpan: 3,
+        colSpan: 4,
         items: filter,
       }}
       downloadButton={[

@@ -59,6 +59,7 @@ import RelegionSelectInputRhf from '@/components/elements/input/RelegionSelectIn
 import SampleTypeSelectInput from '@/components/elements/input/SampleTypeSelectInputRhf';
 import SelectHeavyEquipmentReferenceInput from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
 import SelectHeavyEquipmentTypesInput from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
+import SelectInputNative from '@/components/elements/input/SelectInputNative';
 import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
 import ShiftSelectInputRhf from '@/components/elements/input/ShiftSelectInputRhf';
 import StockpileNameSelectInputRhf from '@/components/elements/input/StockpileNameSelectInputRhf';
@@ -150,6 +151,7 @@ export {
   SearchBar,
   SelectHeavyEquipmentReferenceInput,
   SelectHeavyEquipmentTypesInput,
+  SelectInputNative,
   SelectInputRhf,
   SelectionButtonModal,
   ShiftSelectInputRhf,
