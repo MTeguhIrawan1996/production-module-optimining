@@ -3,12 +3,12 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
-import { GlobalTabs, InnerWrapper, RootWrapper } from '@/components/elements';
-import ListDataOreRitageBook from '@/components/features/InputData/production/data-ritage/common/sections/ListDataOreRitageBook';
+import { InnerWrapper, RootWrapper } from '@/components/elements';
+import ReadRitageOreBook from '@/components/features/InputData/Productions/data-ritage/read-ritage-ore/common/sections/ReadRitageOreBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const DataRitagePage = () => {
+const ReadRitageOrePage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -20,6 +20,10 @@ const DataRitagePage = () => {
     setBreadcrumbs([
       {
         label: t('commonTypography.dataRitage'),
+        path: '/input-data/production/data-ritage?tabs=ore',
+      },
+      {
+        label: t('ritageOre.readRitageOre'),
         path: router.asPath,
       },
     ]);
@@ -28,24 +32,11 @@ const DataRitagePage = () => {
 
   return (
     <RootWrapper>
-      <InnerWrapper
-        titleProps={{
-          title: t('commonTypography.dataRitage'),
-          mb: 'md',
-        }}
-      >
-        <GlobalTabs
-          tabsData={[
-            {
-              label: 'Ore',
-              value: 'ore',
-              component: <ListDataOreRitageBook />,
-            },
-          ]}
-        />
+      <InnerWrapper>
+        <ReadRitageOreBook />
       </InnerWrapper>
     </RootWrapper>
   );
 };
 
-export default DataRitagePage;
+export default ReadRitageOrePage;

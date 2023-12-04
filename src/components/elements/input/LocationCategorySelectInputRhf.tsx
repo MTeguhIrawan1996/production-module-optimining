@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-vars */
 import { Select, SelectProps } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import * as React from 'react';
@@ -16,6 +15,7 @@ export type ILocationCategorySelectInputRhfProps = {
   control: 'location-category-select-input';
   name: string;
   labelValue?: string;
+  excludeIds?: string[] | null;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
@@ -24,7 +24,15 @@ export type ILocationCategorySelectInputRhfProps = {
 
 const LocationCategorySelectInputRhf: React.FC<
   ILocationCategorySelectInputRhfProps
-> = ({ name, control, label, labelValue, defaultValue, ...rest }) => {
+> = ({
+  name,
+  control,
+  label,
+  labelValue,
+  excludeIds = null,
+  defaultValue,
+  ...rest
+}) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
   const [searchTerm, setSearchTerm] = React.useState<string>('');
@@ -35,6 +43,7 @@ const LocationCategorySelectInputRhf: React.FC<
     variables: {
       limit: 15,
       search: searchQuery === '' ? null : searchQuery,
+      excludeIds: excludeIds,
     },
   });
 

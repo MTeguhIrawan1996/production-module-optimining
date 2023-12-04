@@ -3,29 +3,37 @@ import { z } from 'zod';
 export const zRequiredString = z
   .string()
   .min(1, { message: 'Kolom tidak boleh kosong' });
+
 export const zRequiredRole = z
   .string()
   .min(1, { message: 'Pilih salah satu role yang sesuai' });
 export const zOptionalString = z.string();
+
 export const zRequiredSelectInput = zRequiredString
   .nullable()
   .refine((val) => val, {
     message: 'Kolom tidak boleh kosong',
   });
+
 export const zArrayOfString = z.string().array();
+
 export const zRequiredNumber = z.number({
   required_error: 'Kolom tidak boleh kosong',
   invalid_type_error: 'Harus angka',
 });
+
+export const zOptionalNumber = z.number().or(z.literal(''));
+
 export const zRequiredNumberOfString = z
   .string()
   .min(1, { message: 'Kolom tidak boleh kosong' })
-  .refine((value) => /^[0-9]+$/.test(value), {
+  .refine((value) => /^[0-9.]+$/.test(value), {
     message: 'Input hanya boleh berisi angka',
   });
+
 export const zOptionalNumberOfString = z
   .string()
-  .refine((value) => /^[0-9]+$/.test(value), {
+  .refine((value) => /^[0-9.]+$/.test(value), {
     message: 'Input hanya boleh berisi angka',
   })
   .or(z.literal(''));
@@ -51,6 +59,7 @@ export const zDateValidation = z.date({
   required_error: 'Kolom tidak boleh kosong',
   invalid_type_error: 'Kolom tidak boleh kosong / Format tanggal salah',
 });
+
 export const zDateOptionalValidation = z
   .date({
     required_error: 'Kolom tidak boleh kosong',
@@ -99,6 +108,7 @@ export const zImageRequired = z
       message: 'File harus Foto',
     }
   );
+
 export const zImageOptional = z
   .custom<File>()
   .refine(

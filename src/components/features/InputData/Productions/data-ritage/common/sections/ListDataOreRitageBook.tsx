@@ -11,17 +11,14 @@ import {
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
+  SelectionButtonModal,
 } from '@/components/elements';
-import ListDataRitageDumptruckBook from '@/components/features/InputData/production/data-ritage/common/elements/ListDataRitageDumptruckBook';
+import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
 import { useDeleteOreRitage } from '@/services/graphql/mutation/ore-ritage/useDeleteOreRitage';
 import { useReadAllRitageOre } from '@/services/graphql/query/ore-ritage/useReadAllOreRitage';
 import { globalDateNative } from '@/utils/constants/Field/global-field';
-import {
-  formatDate,
-  formatDate2,
-  secondsDuration,
-} from '@/utils/helper/dateFormat';
+import { formatDate, formatDate2 } from '@/utils/helper/dateFormat';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -32,6 +29,8 @@ const ListDataOreRitageBook = () => {
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
+    React.useState<boolean>(false);
+  const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
   const [date, setDate] = React.useState('');
 
@@ -136,17 +135,6 @@ const ListDataOreRitageBook = () => {
               width: 60,
             },
             {
-              accessor: 'checkerFrom',
-              title: t('commonTypography.checkerFromName'),
-              render: ({ checkerFrom }) =>
-                checkerFrom?.humanResource?.name ?? '-',
-            },
-            {
-              accessor: 'checkerTo',
-              title: t('commonTypography.checkerToName'),
-              render: ({ checkerTo }) => checkerTo?.humanResource?.name ?? '-',
-            },
-            {
               accessor: 'shift',
               title: t('commonTypography.shift'),
               render: ({ shift }) => shift?.name ?? '-',
@@ -158,9 +146,9 @@ const ListDataOreRitageBook = () => {
                 companyHeavyEquipment?.hullNumber ?? '-',
             },
             {
-              accessor: 'material',
-              title: t('commonTypography.material'),
-              render: ({ material }) => material?.name ?? '-',
+              accessor: 'subMaterial',
+              title: t('commonTypography.subMaterial'),
+              render: ({ subMaterial }) => subMaterial?.name ?? '-',
             },
             {
               accessor: 'fromAt',
@@ -168,65 +156,83 @@ const ListDataOreRitageBook = () => {
               render: ({ fromAt }) => formatDate(fromAt, 'hh:mm:ss A'),
             },
             {
-              accessor: 'arriveAt',
-              title: t('commonTypography.arriveAt'),
-              render: ({ arriveAt }) => formatDate(arriveAt, 'hh:mm:ss A'),
-            },
-            {
-              accessor: 'ritageDuration',
-              title: t('commonTypography.ritageDuration'),
-              render: ({ duration }) => secondsDuration(duration),
-            },
-            {
-              accessor: 'weather',
-              title: t('commonTypography.weather'),
-              render: ({ weather }) => weather?.name ?? '-',
-            },
-            {
               accessor: 'fromPit',
-              title: t('commonTypography.fromLocation'),
+              title: t('commonTypography.pit'),
+              width: 120,
               render: ({ fromPit }) => fromPit?.name ?? '-',
-            },
-            {
-              accessor: 'fromLevel',
-              title: t('commonTypography.fromLevel'),
-              render: ({ fromLevel }) => fromLevel ?? '-',
-            },
-            {
-              accessor: 'toLevel',
-              title: t('commonTypography.toLevel'),
-              render: ({ toLevel }) => toLevel ?? '-',
-            },
-            {
-              accessor: 'stockpileName',
-              title: t('commonTypography.stockpileName'),
-              render: ({ stockpile }) => stockpile?.name ?? '-',
             },
             {
               accessor: 'dome',
               title: t('commonTypography.dome'),
               render: ({ dome }) => dome?.name ?? '-',
             },
-            {
-              accessor: 'bucketVolume',
-              title: t('commonTypography.bucketVolume'),
-              render: ({ bucketVolume }) => bucketVolume ?? '-',
-            },
-            {
-              accessor: 'tonByRitage',
-              title: t('commonTypography.tonByRitage'),
-              render: ({ tonByRitage }) => tonByRitage ?? '-',
-            },
-            {
-              accessor: 'sampleNumber',
-              title: t('commonTypography.sampleNumber'),
-              render: ({ sampleNumber }) => sampleNumber ?? '-',
-            },
-            {
-              accessor: 'desc',
-              title: t('commonTypography.desc'),
-              render: ({ desc }) => desc ?? '-',
-            },
+
+            // {
+            //   accessor: 'checkerFrom',
+            //   title: t('commonTypography.checkerFromName'),
+            //   render: ({ checkerFrom }) =>
+            //     checkerFrom?.humanResource?.name ?? '-',
+            // },
+            // {
+            //   accessor: 'checkerTo',
+            //   title: t('commonTypography.checkerToName'),
+            //   render: ({ checkerTo }) => checkerTo?.humanResource?.name ?? '-',
+            // },
+            // {
+            //   accessor: 'material',
+            //   title: t('commonTypography.material'),
+            //   render: ({ material }) => material?.name ?? '-',
+            // },
+            // {
+            //   accessor: 'arriveAt',
+            //   title: t('commonTypography.arriveAt'),
+            //   render: ({ arriveAt }) => formatDate(arriveAt, 'hh:mm:ss A'),
+            // },
+            // {
+            //   accessor: 'ritageDuration',
+            //   title: t('commonTypography.ritageDuration'),
+            //   render: ({ duration }) => secondsDuration(duration),
+            // },
+            // {
+            //   accessor: 'weather',
+            //   title: t('commonTypography.weather'),
+            //   render: ({ weather }) => weather?.name ?? '-',
+            // },
+            // {
+            //   accessor: 'fromLevel',
+            //   title: t('commonTypography.fromLevel'),
+            //   render: ({ fromLevel }) => fromLevel ?? '-',
+            // },
+            // {
+            //   accessor: 'toLevel',
+            //   title: t('commonTypography.toLevel'),
+            //   render: ({ toLevel }) => toLevel ?? '-',
+            // },
+            // {
+            //   accessor: 'stockpileName',
+            //   title: t('commonTypography.stockpileName'),
+            //   render: ({ stockpile }) => stockpile?.name ?? '-',
+            // },
+            // {
+            //   accessor: 'bucketVolume',
+            //   title: t('commonTypography.bucketVolume'),
+            //   render: ({ bucketVolume }) => bucketVolume ?? '-',
+            // },
+            // {
+            //   accessor: 'tonByRitage',
+            //   title: t('commonTypography.tonByRitage'),
+            //   render: ({ tonByRitage }) => tonByRitage ?? '-',
+            // },
+            // {
+            //   accessor: 'sampleNumber',
+            //   title: t('commonTypography.sampleNumber'),
+            //   render: ({ sampleNumber }) => sampleNumber ?? '-',
+            // },
+            // {
+            //   accessor: 'desc',
+            //   title: t('commonTypography.desc'),
+            //   render: ({ desc }) => desc ?? '-',
+            // },
             {
               accessor: 'status',
               title: t('commonTypography.status'),
@@ -240,9 +246,18 @@ const ListDataOreRitageBook = () => {
               },
             },
             {
-              accessor: 'formStatus',
-              title: t('commonTypography.formStatus'),
-              // render: ({ desc }) => desc ?? '-',
+              accessor: 'statusRitage',
+              title: t('commonTypography.statusRitage'),
+              render: ({ isComplete }) => (
+                <GlobalBadgeStatus
+                  color={isComplete ? 'brand.6' : 'gray.6'}
+                  label={
+                    isComplete
+                      ? t('commonTypography.complete')
+                      : t('commonTypography.inComplete')
+                  }
+                />
+              ),
             },
             {
               accessor: 'action',
@@ -254,13 +269,17 @@ const ListDataOreRitageBook = () => {
                     actionRead={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        router.push(`/input-data/production/data-ritage/${id}`);
+                        router.push(
+                          `/input-data/production/data-ritage/read-ritage-ore/${id}`
+                        );
                       },
                     }}
                     actionUpdate={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        router.push(`/input-data/production/data-ritage/${id}`);
+                        router.push(
+                          `/input-data/production/data-ritage/update-ritage-ore/${id}`
+                        );
                       },
                     }}
                     actionDelete={{
@@ -280,7 +299,7 @@ const ListDataOreRitageBook = () => {
           title: t('commonTypography.dataNotfound'),
           actionButton: {
             label: t('ritageOre.createRitageOre'),
-            onClick: () => router.push('/input-data/production/data-ritage'),
+            onClick: () => setIsOpenSelectionModal((prev) => !prev),
           },
         }}
         paginationProps={{
@@ -301,7 +320,7 @@ const ListDataOreRitageBook = () => {
       title={t('ritageOre.ritageOreTitle')}
       addButton={{
         label: t('ritageOre.createRitageOre'),
-        onClick: () => router.push('/input-data/production/data-ritage'),
+        onClick: () => setIsOpenSelectionModal((prev) => !prev),
       }}
       filterDateWithSelect={{
         colSpan: 3,
@@ -310,11 +329,11 @@ const ListDataOreRitageBook = () => {
       downloadButton={[
         {
           label: t('ritageOre.downloadTemplateOre'),
-          url: '',
+          url: `${process.env.NEXT_PUBLIC_REST_API_URL}/download/references`,
         },
         {
           label: t('commonTypography.downloadReference'),
-          url: '',
+          url: `${process.env.NEXT_PUBLIC_REST_API_URL}/download/references`,
         },
       ]}
     >
@@ -340,6 +359,20 @@ const ListDataOreRitageBook = () => {
           description: t('commonTypography.alertDescConfirmDelete'),
         }}
         withDivider
+      />
+      <SelectionButtonModal
+        isOpenSelectionModal={isOpenSelectionModal}
+        actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
+        firstButton={{
+          label: t('commonTypography.inputDataRitage'),
+          onClick: () =>
+            router.push('/input-data/production/data-ritage/create-ritage-ore'),
+        }}
+        secondButton={{
+          label: t('commonTypography.uploadFile'),
+          onClick: () =>
+            router.push('/input-data/production/data-ritage/upload'),
+        }}
       />
     </DashboardCard>
   );

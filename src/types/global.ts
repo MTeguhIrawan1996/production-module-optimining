@@ -15,15 +15,18 @@ import { IDivisionSelectInputRhfProps } from '@/components/elements/input/Divisi
 import { IDomeNameSelectInputRhfProps } from '@/components/elements/input/DomeNameSelectInputRhf';
 import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/input/EligibilityStatusSelectInputRhf';
 import { IEmployeeSelectInputRhfProps } from '@/components/elements/input/EmployeeSelectInputRhf';
+import { IHeavyEquipmentSelectInputRhfProps } from '@/components/elements/input/HeavyEquipmentSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
 import { IImageInputDropzoneRhfProps } from '@/components/elements/input/ImageInputDropzoneRhf';
 import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
+import { ILocationSelectInputRhfProps } from '@/components/elements/input/LocationSelectInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import { IMaterialSelectnputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { IPasswordInputProps } from '@/components/elements/input/PasswordInputRhf';
 import { IPdfInputDropzoneRhfProps } from '@/components/elements/input/PdfInputDropzoneRhf';
+import { IPitSelectInputRhfProps } from '@/components/elements/input/PitSelectInputRhf';
 import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
 import { IRadioInputProps } from '@/components/elements/input/RadioInputRhf';
@@ -40,6 +43,7 @@ import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
 import { ITimeInputRhfProps } from '@/components/elements/input/TimeInputRhf';
 import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelectInputRhf';
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
+import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
 
 // import { TablerIconsProps } from '@tabler/icons-react';
 
@@ -85,7 +89,11 @@ export type ControllerProps =
   | ISampleTypesSelectnputRhfProps
   | IMaterialSelectnputRhfProps
   | IEmployeeSelectInputRhfProps
-  | IDateInputProps;
+  | IDateInputProps
+  | IHeavyEquipmentSelectInputRhfProps
+  | IWeatherSelectInputRhfProps
+  | ILocationSelectInputRhfProps
+  | IPitSelectInputRhfProps;
 
 export type InputControllerNativeProps = IDateInputNativeProps;
 
@@ -177,6 +185,7 @@ export type IErrorResponseExtensionGql<T extends React.ReactNode> =
 // REST API
 export interface ErrorValidationMessage<T> {
   property: keyof T;
+  children: IChildren<T>[];
   constraints: {
     [type: string]: string;
   };
@@ -235,7 +244,7 @@ export interface IElementsData {
 }
 
 export interface IElementWithValue {
-  value: string | null;
+  value: number | null;
   element: IElementsData | null;
 }
 
@@ -243,4 +252,8 @@ export interface IStatus {
   id: string;
   name: string;
   color: string;
+}
+
+export interface IUpdateStatusValues {
+  statusMessage: string | null;
 }

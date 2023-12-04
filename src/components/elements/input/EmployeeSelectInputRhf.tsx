@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-vars */
 import { Group, Select, SelectProps, Text } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import * as React from 'react';
@@ -26,7 +25,6 @@ export type IEmployeeSelectInputRhfProps = {
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   label: string;
-  value: string;
   nip: string;
 }
 
@@ -42,7 +40,7 @@ const EmployeeSelectInputRhf: React.FC<IEmployeeSelectInputRhfProps> = ({
   const { field, fieldState } = useController({ name });
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [searchQuery] = useDebouncedValue<string>(searchTerm, 400);
-  const currentValue = field.value;
+  const currentValue = field.value === '' ? null : field.value;
   const { employeesData } = useReadAllCompanyEmploye({
     variables: {
       limit: 15,
@@ -72,7 +70,7 @@ const EmployeeSelectInputRhf: React.FC<IEmployeeSelectInputRhfProps> = ({
   const combinedItems = [selectedItem, ...(Items ?? [])];
 
   const SelectItem = React.forwardRef<HTMLDivElement, ItemProps>(
-    ({ label, nip, value, ...others }: ItemProps, ref) => (
+    ({ label, nip, ...others }: ItemProps, ref) => (
       <div ref={ref} {...others}>
         <Group>
           <Text size="sm" opacity={0.65}>
@@ -88,9 +86,7 @@ const EmployeeSelectInputRhf: React.FC<IEmployeeSelectInputRhfProps> = ({
     <Select
       {...field}
       radius={8}
-      data={
-        currentValue === '' || !defaultValue ? uncombinedItem : combinedItems
-      }
+      data={!currentValue || !defaultValue ? uncombinedItem : combinedItems}
       defaultValue={defaultValue}
       itemComponent={SelectItem}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
@@ -110,6 +106,10 @@ const EmployeeSelectInputRhf: React.FC<IEmployeeSelectInputRhfProps> = ({
         ns: 'default',
       })}
       label={label ? t(`components.field.${label}`) : null}
+      filter={(value, item) =>
+        item?.label?.toLowerCase().includes(value.toLowerCase().trim()) ||
+        item?.nip?.toLowerCase().includes(value.toLowerCase().trim())
+      }
       error={
         fieldState &&
         fieldState.error && (

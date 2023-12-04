@@ -84,6 +84,13 @@ const CreateLocationMasterBook = () => {
     });
     const locationCategoryItem = locationCategorySelect({
       clearable: true,
+      excludeIds: [
+        `${process.env.NEXT_PUBLIC_OTHER_LOCATION_ID}`,
+        `${process.env.NEXT_PUBLIC_DOME_ID}`,
+        `${process.env.NEXT_PUBLIC_BLOCK_ID}`,
+        `${process.env.NEXT_PUBLIC_STOCKPILE_ID}`,
+        `${process.env.NEXT_PUBLIC_PIT_ID}`,
+      ],
     });
 
     const field: ControllerGroup[] = [

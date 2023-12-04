@@ -2,8 +2,10 @@ import AuthPage from '@/components/features/Auth/common';
 import DashboardPage from '@/components/features/Dashboard/common';
 import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
-import FormExamplePage from '@/components/features/Example/form-example/common';
-import DataRitagePage from '@/components/features/InputData/production/data-ritage/common';
+import DataRitagePage from '@/components/features/InputData/Productions/data-ritage/common';
+import CreateRitageOrePage from '@/components/features/InputData/Productions/data-ritage/create-ritage-ore/common';
+import ReadRitageOrePage from '@/components/features/InputData/Productions/data-ritage/read-ritage-ore/common';
+import UpdateRitageOrePage from '@/components/features/InputData/Productions/data-ritage/update-ritage-ore/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
 import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/create/common';
 import ReadSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/read/common';
@@ -112,6 +114,7 @@ export {
   CreateLocationMasterPage,
   CreateManagementRolePage,
   CreateMaterialMasterPage,
+  CreateRitageOrePage,
   CreateShiftMasterPage,
   CreateSmapleHouseLabPage,
   CreateStockpileDomeMasterPage,
@@ -124,7 +127,6 @@ export {
   DataTablePage,
   ElementMasterPage,
   FactoryMasterPage,
-  FormExamplePage,
   HeavyEquipmentClassPage,
   HeavyEquipmentMasterPage,
   HeavyEquipmentPage,
@@ -147,6 +149,7 @@ export {
   ReadLocationMasterPage,
   ReadManagementRolePage,
   ReadMaterialMasterPage,
+  ReadRitageOrePage,
   ReadSampleHouseLabPage,
   ReadShiftMasterPage,
   ReadStockpileMasterPage,
@@ -170,6 +173,7 @@ export {
   UpdateLocationMasterPage,
   UpdateManagementRolePage,
   UpdateMaterialMasterPage,
+  UpdateRitageOrePage,
   UpdateSampleHouseLabPage,
   UpdateShiftMasterPage,
   UpdateStockpileDomeMasterPage,

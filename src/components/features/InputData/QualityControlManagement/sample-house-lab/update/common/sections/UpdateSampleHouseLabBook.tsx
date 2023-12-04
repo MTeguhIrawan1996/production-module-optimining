@@ -18,8 +18,11 @@ import { useUpdateSampleHousePlan } from '@/services/restapi/sample-house-plan/u
 import {
   employeeSelect,
   globalDate,
+  globalNumberInput,
   globalText,
   globalTimeInput,
+  locationCategorySelect,
+  locationSelect,
   materialSelect,
 } from '@/utils/constants/Field/global-field';
 import {
@@ -57,7 +60,9 @@ const UpdateSampleHouseLabPage = () => {
       subMaterialId: '',
       samplerId: '',
       gradeControlId: '',
-      location: '',
+      locationCategoryId: '',
+      locationId: '',
+      locationName: '',
       sampleEnterLabDate: undefined,
       sampleEnterLabTime: '',
       gradeControlElements: [
@@ -89,6 +94,7 @@ const UpdateSampleHouseLabPage = () => {
   });
   const sampleTypeId = methods.watch('sampleTypeId');
   const materialId = methods.watch('materialId');
+  const locationCategoryId = methods.watch('locationCategoryId');
 
   const { fields, replace } = useFieldArray({
     name: 'gradeControlElements',
@@ -122,13 +128,13 @@ const UpdateSampleHouseLabPage = () => {
   const isOwnElemntsData =
     elementsData && elementsData.length > 0 ? true : false;
 
-  useReadOneSampleHouseLab({
+  const { houseSampleAndLab } = useReadOneSampleHouseLab({
     variables: {
       id,
     },
     skip: !router.isReady || !isOwnElemntsData,
     onCompleted: ({ houseSampleAndLab }) => {
-      const isOwnParent = houseSampleAndLab.material?.parent !== null;
+      const isOwnSubMaterial = houseSampleAndLab.subMaterial !== null;
       fields.map((o, i) => {
         const valueGCElements = houseSampleAndLab?.gradeControlElements?.find(
           (val) => val.element?.id === o.elementId
@@ -190,21 +196,24 @@ const UpdateSampleHouseLabPage = () => {
       methods.setValue('sampleNumber', houseSampleAndLab?.sampleNumber ?? '');
       methods.setValue('sampleName', houseSampleAndLab?.sampleName ?? '');
       methods.setValue('sampleTypeId', houseSampleAndLab?.sampleType?.id ?? '');
-      methods.setValue(
-        'materialId',
-        isOwnParent
-          ? houseSampleAndLab.material?.parent?.id ?? ''
-          : houseSampleAndLab.material?.id ?? ''
-      );
-      if (isOwnParent) {
-        methods.setValue('subMaterialId', houseSampleAndLab.material?.id ?? '');
+      methods.setValue('materialId', houseSampleAndLab.material?.id ?? '');
+      if (isOwnSubMaterial) {
+        methods.setValue(
+          'subMaterialId',
+          houseSampleAndLab.subMaterial?.id ?? ''
+        );
       }
       methods.setValue('samplerId', houseSampleAndLab.sampler?.id ?? '');
       methods.setValue(
         'gradeControlId',
         houseSampleAndLab.gradeControl?.id ?? ''
       );
-      methods.setValue('location', houseSampleAndLab.location ?? '');
+      methods.setValue(
+        'locationCategoryId',
+        houseSampleAndLab.locationCategory?.id ?? ''
+      );
+      methods.setValue('locationId', houseSampleAndLab.location?.id ?? '');
+      methods.setValue('locationName', houseSampleAndLab.locationName ?? '');
       methods.setValue('sampleEnterLabDate', sampleEnterLabDate);
       methods.setValue('sampleEnterLabTime', sampleEnterLabTime ?? '');
       methods.setValue('density', houseSampleAndLab.density ?? '');
@@ -322,6 +331,7 @@ const UpdateSampleHouseLabPage = () => {
         methods.setValue('sampleTypeId', value ?? '');
         methods.setValue('materialId', '');
         methods.setValue('subMaterialId', '');
+        methods.setValue('density', '');
         methods.trigger('sampleTypeId');
       },
     });
@@ -332,8 +342,8 @@ const UpdateSampleHouseLabPage = () => {
       withAsterisk: true,
       disabled: !sampleBulk,
       includeIds: [
-        'a380ffd2-d78e-4ec3-b118-d7b3bd53f8ab',
-        '15f2dada-9b59-403d-a19e-57a3b89df78b',
+        `${process.env.NEXT_PUBLIC_MATERIAL_OB_ID}`,
+        `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`,
       ],
       onChange: (value) => {
         methods.setValue('materialId', value ?? '');
@@ -355,16 +365,31 @@ const UpdateSampleHouseLabPage = () => {
       name: 'samplerId',
       label: 'samplerName',
       withAsterisk: false,
+      defaultValue: houseSampleAndLab?.sampler?.id,
+      labelValue: houseSampleAndLab?.sampler?.humanResource?.name,
     });
     const gradeControlItem = employeeSelect({
       colSpan: 6,
       name: 'gradeControlId',
       label: 'gcName',
       withAsterisk: false,
+      defaultValue: houseSampleAndLab?.gradeControl?.id,
+      labelValue: houseSampleAndLab?.gradeControl?.humanResource?.name,
+    });
+    const locationCategoryItem = locationCategorySelect({
+      clearable: true,
+      name: 'locationCategoryId',
+    });
+    const locationItem = locationSelect({
+      colSpan: 6,
+      name: 'locationId',
+      label: 'locationName',
+      withAsterisk: true,
+      categoryId: locationCategoryId,
     });
     const location = globalText({
-      name: 'location',
-      label: 'location',
+      name: 'locationName',
+      label: 'locationName',
       colSpan: 6,
       withAsterisk: true,
     });
@@ -381,11 +406,12 @@ const UpdateSampleHouseLabPage = () => {
       colSpan: 6,
       withAsterisk: true,
     });
-    const density = globalText({
+    const density = globalNumberInput({
       name: 'density',
       label: 'densityBulkSampling',
       colSpan: 12,
       withAsterisk: true,
+      precision: 3,
       disabled: !sampleBulk,
     });
     const preparationStartDate = globalDate({
@@ -480,7 +506,7 @@ const UpdateSampleHouseLabPage = () => {
           materialSubItem,
           employeeItem,
           gradeControlItem,
-          location,
+          locationCategoryItem,
           sampleEnterLabDate,
           sampleEnterLabTime,
         ],
@@ -525,6 +551,14 @@ const UpdateSampleHouseLabPage = () => {
       },
     ];
 
+    const newCategoryId = locationCategoryId === '' ? null : locationCategoryId;
+
+    !newCategoryId
+      ? field
+      : newCategoryId === `${process.env.NEXT_PUBLIC_OTHER_LOCATION_ID}`
+      ? field[0].formControllers.splice(11, 0, location)
+      : field[0].formControllers.splice(11, 0, locationItem);
+
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -533,6 +567,8 @@ const UpdateSampleHouseLabPage = () => {
     fieldElementsItem,
     serverPhoto,
     materialId,
+    locationCategoryId,
+    houseSampleAndLab,
   ]);
   /* #endregion  /**======== Field =========== */
 
@@ -552,6 +588,8 @@ const UpdateSampleHouseLabPage = () => {
       'analysisStartDate',
       'analysisFinishDate',
     ];
+    const numberValue = ['density'];
+
     const valuesWithDateString = values.map((val) => {
       if (dateValue.includes(val.name)) {
         const date = dateToString(val.value);
@@ -560,13 +598,18 @@ const UpdateSampleHouseLabPage = () => {
           value: date,
         };
       }
+      if (numberValue.includes(val.name)) {
+        return {
+          name: val.name,
+          value: `${val.value}`,
+        };
+      }
       return {
         name: val.name,
         value: val.value,
       };
     });
     const deletePhoto = serverPhoto && serverPhoto.length === 0;
-
     mutate({
       id,
       data: valuesWithDateString,

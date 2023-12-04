@@ -58,7 +58,15 @@ export const READ_ALL_SAMPLE_HOUSE_LAB = gql`
             name
           }
         }
-        location
+        locationCategory {
+          id
+          name
+        }
+        location {
+          id
+          name
+        }
+        locationName
         sampleEnterLabAt
         gradeControlElements {
           value
@@ -112,7 +120,15 @@ export interface IHouseSampleAndLabsData {
       name: string;
     } | null;
   } | null;
-  location: string | null;
+  locationCategory: {
+    id: string;
+    name: string;
+  } | null;
+  location: {
+    id: string;
+    name: string;
+  } | null;
+  locationName: string | null;
   sampleEnterLabAt: string | null;
   gradeControlElements: IElementWithValue[] | null;
   elements: IElementWithValue[] | null;

@@ -92,6 +92,10 @@ const getClient = (tokenServer?: ISessionServer | null) => {
       'ReadAllLoactionCategory',
       'ReadAllHeavyEquipmentClass',
       'ReadAllSampleType',
+      'ReadAllHeavyEquipmentSelect',
+      'ReadAllWeather',
+      'ReadAllPit',
+      'ReadAllDome',
     ];
 
     if (blackList.includes(operation.operationName)) {

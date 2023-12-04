@@ -1,6 +1,5 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
-import { IReadOneMaterialMaster } from '@/services/graphql/query/material/useReadOneMaterialMaster';
 import { IHouseSampleAndLabsData } from '@/services/graphql/query/sample-house-lab/useReadAllSampleHouseLab';
 
 import { IFile } from '@/types/global';
@@ -24,10 +23,10 @@ export const READ_ONE_SAMPLE_HOUSE_LAB = gql`
       material {
         id
         name
-        parent {
-          id
-          name
-        }
+      }
+      subMaterial {
+        id
+        name
       }
       sampler {
         id
@@ -43,7 +42,15 @@ export const READ_ONE_SAMPLE_HOUSE_LAB = gql`
           name
         }
       }
-      location
+      locationCategory {
+        id
+        name
+      }
+      location {
+        id
+        name
+      }
+      locationName
       sampleEnterLabAt
       gradeControlElements {
         value
@@ -82,8 +89,15 @@ export const READ_ONE_SAMPLE_HOUSE_LAB = gql`
 
 interface IReadOneSampleHouseLab extends IHouseSampleAndLabsData {
   photo: Omit<IFile, 'mime' | 'path'> | null;
-  material: IReadOneMaterialMaster | null;
-  density: string;
+  material: {
+    id: string;
+    name: string;
+  } | null;
+  subMaterial: {
+    id: string;
+    name: string;
+  } | null;
+  density: number;
   preparationStartAt: string | null;
   preparationFinishAt: string | null;
   analysisStartAt: string | null;

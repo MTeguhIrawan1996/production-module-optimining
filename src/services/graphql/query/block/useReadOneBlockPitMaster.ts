@@ -6,6 +6,10 @@ export const READ_ONE_BLOCK_PIT_MASTER = gql`
       id
       handBookId
       name
+      block {
+        id
+        name
+      }
     }
   }
 `;
@@ -14,6 +18,10 @@ export interface IReadOneBlockPitMaster {
   id: string;
   handBookId: string;
   name: string;
+  block: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface IReadOneBlockPitMasterResponse {

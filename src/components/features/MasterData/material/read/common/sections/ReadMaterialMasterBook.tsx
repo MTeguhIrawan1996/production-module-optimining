@@ -24,7 +24,7 @@ const ReadMaterialMasterBook = () => {
 
   const renderModel = React.useCallback((value: ISubmaterials) => {
     return {
-      dataKey: t('commonTypography.materialSub'),
+      dataKey: t('commonTypography.subMaterialType'),
       value: `${value.name}`,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

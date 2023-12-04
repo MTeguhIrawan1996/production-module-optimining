@@ -16,15 +16,12 @@ import {
 import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
 import { useUpdateIsDeterminedSampleHouseLab } from '@/services/graphql/mutation/sample-house-lab/useIsDeterminedSampleHouseLab';
-import {
-  IUpdateIsValidateSampleHouseLabValues,
-  useUpdateIsValidateSampleHouseLab,
-} from '@/services/graphql/mutation/sample-house-lab/useIsValidateSampleHouseLab';
+import { useUpdateIsValidateSampleHouseLab } from '@/services/graphql/mutation/sample-house-lab/useIsValidateSampleHouseLab';
 import { useReadOneSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadOneSampleHouseLab';
-import { sampleHouselabStatusValidation } from '@/utils/form-validation/sample-house-lab/sample-house-lab-mutation-validation';
+import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate } from '@/utils/helper/dateFormat';
 
-import { IElementWithValue } from '@/types/global';
+import { IElementWithValue, IUpdateStatusValues } from '@/types/global';
 
 const ReadSampleHouseLabBook = () => {
   const { t } = useTranslation('default');
@@ -34,8 +31,8 @@ const ReadSampleHouseLabBook = () => {
     Pick<IKeyValueItemProps, 'value' | 'dataKey'>[]
   >([]);
 
-  const methods = useForm<IUpdateIsValidateSampleHouseLabValues>({
-    resolver: zodResolver(sampleHouselabStatusValidation),
+  const methods = useForm<IUpdateStatusValues>({
+    resolver: zodResolver(statusValidationSchema),
     defaultValues: {
       statusMessage: '',
     },
@@ -51,15 +48,15 @@ const ReadSampleHouseLabBook = () => {
       skip: !router.isReady,
       onCompleted: (data) => {
         setBulkSamplingCategory(() =>
-          data.houseSampleAndLab?.material?.parent
+          data.houseSampleAndLab.subMaterial
             ? [
                 {
                   dataKey: t('commonTypography.bulkSamplingCategory'),
-                  value: data.houseSampleAndLab.material.parent.name,
+                  value: data.houseSampleAndLab.material?.name,
                 },
                 {
                   dataKey: t('commonTypography.bulkSamplingCategorySub'),
-                  value: data.houseSampleAndLab.material.name,
+                  value: data.houseSampleAndLab.subMaterial.name,
                 },
               ]
             : [
@@ -153,7 +150,7 @@ const ReadSampleHouseLabBook = () => {
         dataKey: `${gcElement.element?.name} ${t(
           'commonTypography.estimationGC'
         )}`,
-        value: gcElement.value,
+        value: `${gcElement.value ?? '-'}`,
       };
       return column;
     },
@@ -171,7 +168,7 @@ const ReadSampleHouseLabBook = () => {
         dataKey: `${labElement.element?.name} ${t(
           'commonTypography.percentageLab'
         )}`,
-        value: labElement.value,
+        value: `${labElement.value ?? '-'}`,
       };
       return column;
     },
@@ -203,9 +200,9 @@ const ReadSampleHouseLabBook = () => {
     });
   };
 
-  const handleInvalidForm: SubmitHandler<
-    IUpdateIsValidateSampleHouseLabValues
-  > = async (data) => {
+  const handleInvalidForm: SubmitHandler<IUpdateStatusValues> = async (
+    data
+  ) => {
     await executeUpdateStatus({
       variables: {
         id,
@@ -215,9 +212,7 @@ const ReadSampleHouseLabBook = () => {
     });
   };
 
-  const handleRejectForm: SubmitHandler<
-    IUpdateIsValidateSampleHouseLabValues
-  > = async (data) => {
+  const handleRejectForm: SubmitHandler<IUpdateStatusValues> = async (data) => {
     await executeUpdateStatusDetermiend({
       variables: {
         id,
@@ -300,7 +295,9 @@ const ReadSampleHouseLabBook = () => {
         fz: 30,
       }}
       withBorder
-      enebleBackBottom
+      enebleBackBottomOuter={{
+        onClick: () => router.back(),
+      }}
       shadow="xs"
       isLoading={houseSampleAndLabLoading}
       paperStackProps={{
@@ -383,11 +380,19 @@ const ReadSampleHouseLabBook = () => {
                 ...bulkSamplingCategory,
                 {
                   dataKey: t('commonTypography.samplerName'),
-                  value: houseSampleAndLab?.sampler?.humanResource?.name,
+                  value: houseSampleAndLab?.sampler?.humanResource?.name ?? '-',
+                },
+                {
+                  dataKey: t('commonTypography.gcName'),
+                  value:
+                    houseSampleAndLab?.gradeControl?.humanResource?.name ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.location'),
-                  value: houseSampleAndLab?.location ?? '',
+                  value:
+                    houseSampleAndLab && houseSampleAndLab.locationName
+                      ? houseSampleAndLab?.locationName ?? '-'
+                      : houseSampleAndLab?.location?.name ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.sampleEnterLabAt'),
@@ -436,7 +441,7 @@ const ReadSampleHouseLabBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.density'),
-                  value: houseSampleAndLab?.density,
+                  value: `${houseSampleAndLab?.density ?? '-'}`,
                 },
               ]}
               type="grid"

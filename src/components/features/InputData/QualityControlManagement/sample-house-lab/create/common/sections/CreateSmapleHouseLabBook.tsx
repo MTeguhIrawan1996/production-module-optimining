@@ -16,8 +16,11 @@ import {
 import {
   employeeSelect,
   globalDate,
+  globalNumberInput,
   globalText,
   globalTimeInput,
+  locationCategorySelect,
+  locationSelect,
   materialSelect,
 } from '@/utils/constants/Field/global-field';
 import {
@@ -50,7 +53,9 @@ const CreateSmapleHouseLabBook = () => {
       subMaterialId: '',
       samplerId: '',
       gradeControlId: '',
-      location: '',
+      locationCategoryId: '',
+      locationId: '',
+      locationName: '',
       sampleEnterLabDate: undefined,
       sampleEnterLabTime: '',
       gradeControlElements: [
@@ -80,6 +85,7 @@ const CreateSmapleHouseLabBook = () => {
     },
     mode: 'onBlur',
   });
+  const locationCategoryId = methods.watch('locationCategoryId');
   const sampleTypeId = methods.watch('sampleTypeId');
   const materialId = methods.watch('materialId');
 
@@ -212,6 +218,7 @@ const CreateSmapleHouseLabBook = () => {
         methods.setValue('sampleTypeId', value ?? '');
         methods.setValue('materialId', '');
         methods.setValue('subMaterialId', '');
+        methods.setValue('density', '');
         methods.trigger('sampleTypeId');
       },
     });
@@ -222,8 +229,8 @@ const CreateSmapleHouseLabBook = () => {
       withAsterisk: true,
       disabled: !sampleBulk,
       includeIds: [
-        'a380ffd2-d78e-4ec3-b118-d7b3bd53f8ab',
-        '15f2dada-9b59-403d-a19e-57a3b89df78b',
+        `${process.env.NEXT_PUBLIC_MATERIAL_OB_ID}`,
+        `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`,
       ],
       onChange: (value) => {
         methods.setValue('materialId', value ?? '');
@@ -252,9 +259,20 @@ const CreateSmapleHouseLabBook = () => {
       label: 'gcName',
       withAsterisk: false,
     });
+    const locationCategoryItem = locationCategorySelect({
+      clearable: true,
+      name: 'locationCategoryId',
+    });
+    const locationItem = locationSelect({
+      colSpan: 6,
+      name: 'locationId',
+      label: 'locationName',
+      withAsterisk: true,
+      categoryId: locationCategoryId,
+    });
     const location = globalText({
-      name: 'location',
-      label: 'location',
+      name: 'locationName',
+      label: 'locationName',
       colSpan: 6,
       withAsterisk: true,
     });
@@ -271,11 +289,12 @@ const CreateSmapleHouseLabBook = () => {
       colSpan: 6,
       withAsterisk: true,
     });
-    const density = globalText({
+    const density = globalNumberInput({
       name: 'density',
       label: 'densityBulkSampling',
       colSpan: 12,
       withAsterisk: true,
+      precision: 3,
       disabled: !sampleBulk,
     });
     const preparationStartDate = globalDate({
@@ -366,7 +385,7 @@ const CreateSmapleHouseLabBook = () => {
           materialSubItem,
           employeeItem,
           gradeControlItem,
-          location,
+          locationCategoryItem,
           sampleEnterLabDate,
           sampleEnterLabTime,
         ],
@@ -411,6 +430,14 @@ const CreateSmapleHouseLabBook = () => {
       },
     ];
 
+    const newCategoryId = locationCategoryId === '' ? null : locationCategoryId;
+
+    !newCategoryId
+      ? field
+      : newCategoryId === `${process.env.NEXT_PUBLIC_OTHER_LOCATION_ID}`
+      ? field[0].formControllers.splice(11, 0, location)
+      : field[0].formControllers.splice(11, 0, locationItem);
+
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -418,6 +445,7 @@ const CreateSmapleHouseLabBook = () => {
     fieldGradeControlElementsItem,
     fieldElementsItem,
     materialId,
+    locationCategoryId,
   ]);
   /* #endregion  /**======== Field =========== */
 
@@ -437,12 +465,20 @@ const CreateSmapleHouseLabBook = () => {
       'analysisStartDate',
       'analysisFinishDate',
     ];
+    const numberValue = ['density'];
+
     const valuesWithDateString = values.map((val) => {
       if (dateValue.includes(val.name)) {
         const date = dateToString(val.value);
         return {
           name: val.name,
           value: date,
+        };
+      }
+      if (numberValue.includes(val.name)) {
+        return {
+          name: val.name,
+          value: `${val.value}`,
         };
       }
       return {

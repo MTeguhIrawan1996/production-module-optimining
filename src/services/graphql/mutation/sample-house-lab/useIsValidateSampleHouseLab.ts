@@ -1,5 +1,7 @@
 import { ApolloError, gql, useMutation } from '@apollo/client';
 
+import { IUpdateStatusValues } from '@/types/global';
+
 export const UPDATE_ISVALID_SAMPLE_HOUSE_LAB = gql`
   mutation UpdateIsValidateSampleHouseLab(
     $id: String!
@@ -22,12 +24,8 @@ export const UPDATE_ISVALID_SAMPLE_HOUSE_LAB = gql`
   }
 `;
 
-export interface IUpdateIsValidateSampleHouseLabValues {
-  statusMessage: string | null;
-}
-
 export interface IUpdateIsValidateSampleHouseLabRequest
-  extends IUpdateIsValidateSampleHouseLabValues {
+  extends IUpdateStatusValues {
   id: string;
   status: boolean;
 }
