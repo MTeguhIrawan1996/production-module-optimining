@@ -260,3 +260,22 @@ export interface IStatus {
 export interface IUpdateStatusValues {
   statusMessage: string | null;
 }
+
+export interface IDumpTruckRitagesData {
+  date: Date | string | null;
+  companyHeavyEquipment: {
+    id: string;
+    hullNumber: string;
+  } | null;
+  shift: {
+    id: string;
+    name: string;
+  } | null;
+  ritageCount: number | null;
+  tonByRitage: number | null;
+}
+
+export interface IDumpTruckRitagesRequest
+  extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
+  date?: string | null;
+}

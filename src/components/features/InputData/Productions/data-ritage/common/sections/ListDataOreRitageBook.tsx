@@ -19,6 +19,7 @@ import ListDataRitageDumptruckBook from '@/components/features/InputData/Product
 import { useDeleteOreRitage } from '@/services/graphql/mutation/ore-ritage/useDeleteOreRitage';
 import { useReadAllHeavyEquipmentSelect } from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
 import { useReadAllRitageOre } from '@/services/graphql/query/ore-ritage/useReadAllOreRitage';
+import { useReadAllRitageOreDT } from '@/services/graphql/query/ore-ritage/useReadAllOreRitageDT';
 import { useReadAllShiftMaster } from '@/services/graphql/query/shift/useReadAllShiftMaster';
 import {
   globalDateNative,
@@ -32,9 +33,9 @@ import { InputControllerNativeProps } from '@/types/global';
 const ListDataOreRitageBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
-  const page = Number(pageParams.get('cp')) || 1;
+  const page = Number(pageParams.get('rp')) || 1;
   const heavyEquipmentPage = Number(pageParams.get('hp')) || 1;
-  const url = `/input-data/production/data-ritage?p=1&hp=${heavyEquipmentPage}&tabs=ore`;
+  const url = `/input-data/production/data-ritage?rp=1&hp=${heavyEquipmentPage}&tabs=ore`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -42,6 +43,7 @@ const ListDataOreRitageBook = () => {
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
   const [date, setDate] = React.useState('');
+  const [dateHeavyEquipment, setDateHeavyEquipment] = React.useState('');
   const [isRitageProblematic, setIsRitageProblematic] = React.useState<
     boolean | null
   >(null);
@@ -86,6 +88,19 @@ const ListDataOreRitageBook = () => {
   });
   const { uncombinedItem: shiftFilterItem } = useFilterItems({
     data: shiftsData ?? [],
+  });
+
+  const {
+    oreDumpTruckRitagesData,
+    oreDumpTruckRitagesDataMeta,
+    oreDumpTruckRitagesDataLoading,
+  } = useReadAllRitageOreDT({
+    variables: {
+      limit: 10,
+      page: heavyEquipmentPage,
+      orderDir: 'desc',
+      date: dateHeavyEquipment === '' ? null : dateHeavyEquipment,
+    },
   });
 
   const {
@@ -139,7 +154,7 @@ const ListDataOreRitageBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/data-ritage?p=${page}&hp=${heavyEquipmentPage}&tabs=ore`;
+    const urlSet = `/input-data/production/data-ritage?rp=${page}&hp=${heavyEquipmentPage}&tabs=ore`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
@@ -206,7 +221,7 @@ const ListDataOreRitageBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [heavyEquipmentItemFilter, shiftFilterItem]);
+  }, [url, heavyEquipmentItemFilter, shiftFilterItem]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -362,7 +377,13 @@ const ListDataOreRitageBook = () => {
       ]}
     >
       {renderTable}
-      <ListDataRitageDumptruckBook />
+      <ListDataRitageDumptruckBook
+        data={oreDumpTruckRitagesData}
+        meta={oreDumpTruckRitagesDataMeta}
+        fetching={oreDumpTruckRitagesDataLoading}
+        tabs="ore"
+        setDate={setDateHeavyEquipment}
+      />
       <ModalConfirmation
         isOpenModalConfirmation={isOpenDeleteConfirmation}
         actionModalConfirmation={() =>
