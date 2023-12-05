@@ -62,7 +62,7 @@ const ReadHumanResourceBook = () => {
       }}
       withBorder
       enebleBackBottomOuter={{
-        onClick: () => router.back(),
+        onClick: () => router.push('/master-data/human-resources'),
       }}
       shadow="xs"
       isLoading={humanResourceDataLoading}

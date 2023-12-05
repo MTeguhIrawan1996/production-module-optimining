@@ -238,7 +238,7 @@ const UpdateHeavyEquipmentClassBook = () => {
           loading: loading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push('/reference/heavy-equipment-class'),
         }}
       />
     </DashboardCard>

@@ -39,6 +39,7 @@ import DivisionSelectInputRhf from '@/components/elements/input/DivisionSelectIn
 import DomeNameSelectInputRhf from '@/components/elements/input/DomeNameSelectInputRhf';
 import EligibilityStatusSelectInputRhf from '@/components/elements/input/EligibilityStatusSelectInputRhf';
 import EmployeeSelectInputRhf from '@/components/elements/input/EmployeeSelectInputRhf';
+import ExcelInputDropzoneRhf from '@/components/elements/input/ExcelInputDropzoneRhf';
 import HeavyEquipmentSelectInputRhf from '@/components/elements/input/HeavyEquipmentSelectInputRhf';
 import IdentityRadioInputRhf from '@/components/elements/input/IdentityRadioInputRhf';
 import ImageInputDropzoneRhf from '@/components/elements/input/ImageInputDropzoneRhf';
@@ -103,6 +104,7 @@ export {
   DomeNameSelectInputRhf,
   EligibilityStatusSelectInputRhf,
   EmployeeSelectInputRhf,
+  ExcelInputDropzoneRhf,
   FieldErrorMessage,
   FormController,
   FormControllerNative,

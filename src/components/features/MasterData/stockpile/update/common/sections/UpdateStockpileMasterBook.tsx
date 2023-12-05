@@ -117,7 +117,7 @@ const UpdateStockpileMasterBook = () => {
           loading: loading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push('/master-data/stockpile'),
         }}
       />
     </DashboardCard>

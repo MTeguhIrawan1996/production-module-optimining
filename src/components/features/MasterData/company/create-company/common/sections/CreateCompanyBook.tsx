@@ -342,7 +342,7 @@ const CreateCompanyBook = () => {
           loading: isLoading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push('/master-data/company'),
         }}
       />
     </DashboardCard>

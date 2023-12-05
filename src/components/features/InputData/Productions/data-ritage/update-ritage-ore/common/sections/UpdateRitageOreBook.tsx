@@ -57,6 +57,8 @@ const UpdateRitageOreBook = () => {
     Omit<IFile, 'mime' | 'path'>[] | null
   >([]);
   const [deletedPhotoIds, setDeletedPhotoIds] = React.useState<string[]>([]);
+  const [isOpenConfirmation, setIsOpenConfirmation] =
+    React.useState<boolean>(false);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationRitageOre>({
@@ -205,8 +207,9 @@ const UpdateRitageOreBook = () => {
         message: t('ritageOre.successUpdateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/input-data/production/data-ritage?tabs=ore');
+      setIsOpenConfirmation((prev) => !prev);
       methods.reset();
+      router.push('/input-data/production/data-ritage?tabs=ore');
     },
   });
   /* #endregion  /**======== Query =========== */
@@ -612,6 +615,9 @@ const UpdateRitageOreBook = () => {
       deletedPhotoIds,
     });
   };
+  const handleConfirmation = () => {
+    methods.handleSubmit(handleSubmitForm)();
+  };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
@@ -635,11 +641,30 @@ const UpdateRitageOreBook = () => {
         }}
         submitButton={{
           label: t('commonTypography.save'),
-          loading: isLoading,
+          type: 'button',
+          onClick: () => setIsOpenConfirmation((prev) => !prev),
         }}
         backButton={{
           onClick: () =>
             router.push('/input-data/production/data-ritage?tabs=ore'),
+        }}
+        modalConfirmation={{
+          isOpenModalConfirmation: isOpenConfirmation,
+          actionModalConfirmation: () => setIsOpenConfirmation((prev) => !prev),
+          actionButton: {
+            label: t('commonTypography.yes'),
+            type: 'button',
+            onClick: handleConfirmation,
+            loading: isLoading,
+          },
+          backButton: {
+            label: 'Batal',
+          },
+          modalType: {
+            type: 'default',
+            title: t('commonTypography.alertTitleConfirmUpdate'),
+          },
+          withDivider: true,
         }}
       />
     </DashboardCard>

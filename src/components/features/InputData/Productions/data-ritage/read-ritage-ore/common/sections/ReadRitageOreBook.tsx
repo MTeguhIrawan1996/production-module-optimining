@@ -14,6 +14,7 @@ import {
   GlobalHeaderDetail,
   KeyValueList,
 } from '@/components/elements';
+import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
 import { useUpdateIsDeterminedOreRitage } from '@/services/graphql/mutation/ore-ritage/useIsDeterminedOreRitage';
 import { useUpdateIsValidateOreRitage } from '@/services/graphql/mutation/ore-ritage/useIsValidateOreRitage';
@@ -21,7 +22,7 @@ import { useReadOneOreRitage } from '@/services/graphql/query/ore-ritage/useRead
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
 
-import { IFile, IUpdateStatusValues } from '@/types/global';
+import { IElementWithValue, IFile, IUpdateStatusValues } from '@/types/global';
 
 const ReadRitageOreBook = () => {
   const { t } = useTranslation('default');
@@ -125,6 +126,22 @@ const ReadRitageOreBook = () => {
     []
   );
   const photosItem = oreRitage?.photos?.map(photosCallback);
+
+  const renderOtherElementCallback = React.useCallback(
+    (element: IElementWithValue) => {
+      const column: Pick<IKeyValueItemProps, 'value' | 'dataKey'> = {
+        dataKey: `${element.element?.name}`,
+        value: `${element.value ?? '-'}`,
+      };
+      return column;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  const renderOtherElement =
+    oreRitage?.houseSampleAndLab?.elements?.map(renderOtherElementCallback) ??
+    [];
 
   const handleIsValid = async () => {
     await executeUpdateStatus({
@@ -335,6 +352,29 @@ const ReadRitageOreBook = () => {
                   value: oreRitage?.subMaterial?.name,
                 },
                 {
+                  dataKey: t('commonTypography.weather'),
+                  value: oreRitage?.weather?.name,
+                },
+              ]}
+              type="grid"
+              keyStyleText={{
+                fw: 400,
+                fz: 20,
+              }}
+              valueStyleText={{
+                fw: 600,
+                fz: 20,
+              }}
+            />
+          </Stack>
+          <Divider my="md" />
+          <Stack spacing="sm">
+            <Text fz={24} fw={600} color="brand">
+              {t('commonTypography.ritageDuration')}
+            </Text>
+            <KeyValueList
+              data={[
+                {
                   dataKey: t('commonTypography.fromAt'),
                   value: formatDate(oreRitage?.fromAt, 'hh:mm:ss A'),
                 },
@@ -345,10 +385,6 @@ const ReadRitageOreBook = () => {
                 {
                   dataKey: t('commonTypography.ritageDuration'),
                   value: secondsDuration(oreRitage?.duration ?? null),
-                },
-                {
-                  dataKey: t('commonTypography.weather'),
-                  value: oreRitage?.weather?.name,
                 },
               ]}
               type="grid"
@@ -493,6 +529,28 @@ const ReadRitageOreBook = () => {
                 fz: 20,
               }}
             />
+          </Stack>
+          <Divider my="md" />
+          <Stack spacing="sm">
+            <Text fz={24} fw={600} color="brand">
+              {t('commonTypography.rate')}
+            </Text>
+            {renderOtherElement.length > 0 ? (
+              <KeyValueList
+                data={[...renderOtherElement]}
+                type="grid"
+                keyStyleText={{
+                  fw: 400,
+                  fz: 20,
+                }}
+                valueStyleText={{
+                  fw: 600,
+                  fz: 20,
+                }}
+              />
+            ) : (
+              <Text color="gray.6">{t(`commonTypography.rateNotFound`)}</Text>
+            )}
           </Stack>
           <Divider my="md" />
           <Stack spacing="sm">

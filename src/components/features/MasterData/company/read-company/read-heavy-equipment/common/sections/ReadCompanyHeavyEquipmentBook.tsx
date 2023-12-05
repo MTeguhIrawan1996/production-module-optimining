@@ -86,7 +86,7 @@ const ReadCompanyHeavyEquipmentBook = () => {
       shadow="xs"
       isLoading={heavyEquipmentCompanyDataLoading}
       enebleBackBottomInner={{
-        onClick: () => router.back(),
+        onClick: () => router.push(`/master-data/company/read/${companyId}`),
       }}
       paperStackProps={{
         spacing: 'sm',

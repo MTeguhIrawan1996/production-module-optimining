@@ -25,6 +25,7 @@ const CreateHeavyEquipmentAvailableBook = () => {
   const { t } = useTranslation('default');
   const companyId = router.query?.id as string;
   const url = `/master-data/company/create/heavy-equipment-available/${companyId}?page=1`;
+  const urlCreate = `/master-data/company/read/${companyId}`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [choosesHeavyEquipment, setChooseHeavyEquipment] = React.useState<
     IHeavyEquipmentMasterData[]
@@ -51,7 +52,6 @@ const CreateHeavyEquipmentAvailableBook = () => {
         message: t('heavyEquipment.successCreateCompanyMessage'),
         icon: <IconCheck />,
       });
-      const urlCreate = `/master-data/company/read/${companyId}`;
       router.push(urlCreate);
     },
     onError: (error) => {
@@ -265,7 +265,7 @@ const CreateHeavyEquipmentAvailableBook = () => {
             variant="outline"
             leftIcon={<IconChevronLeft size="1rem" />}
             label={t('commonTypography.back')}
-            onClick={() => router.back()}
+            onClick={() => router.push(urlCreate)}
           />
 
           <PrimaryButton

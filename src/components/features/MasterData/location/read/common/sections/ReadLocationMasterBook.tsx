@@ -36,7 +36,7 @@ const ReadLocationMasterBook = () => {
       shadow="xs"
       isLoading={locationMasterLoading}
       enebleBackBottomInner={{
-        onClick: () => router.back(),
+        onClick: () => router.push('/master-data/location'),
       }}
       paperStackProps={{
         spacing: 'sm',

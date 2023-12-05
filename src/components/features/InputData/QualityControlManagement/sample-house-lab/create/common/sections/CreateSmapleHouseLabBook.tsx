@@ -504,7 +504,10 @@ const CreateSmapleHouseLabBook = () => {
           loading: isLoading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () =>
+            router.push(
+              '/input-data/quality-control-management/sample-house-lab'
+            ),
         }}
       />
     </DashboardCard>

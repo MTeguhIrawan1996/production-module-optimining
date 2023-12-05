@@ -350,7 +350,7 @@ const UpdateHeavyEquipmentMasterBook = () => {
           loading: isLoading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push('/master-data/heavy-equipment'),
         }}
       />
     </DashboardCard>

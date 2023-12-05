@@ -42,7 +42,7 @@ const ReadManagementRoleBook = () => {
     <DashboardCard
       withBorder
       enebleBackBottomInner={{
-        onClick: () => router.back(),
+        onClick: () => router.push('/setting/management-role'),
       }}
       shadow="xs"
       title={t('managementRole.managementRoleTitle')}
