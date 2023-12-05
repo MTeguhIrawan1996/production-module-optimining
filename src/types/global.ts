@@ -15,6 +15,7 @@ import { IDivisionSelectInputRhfProps } from '@/components/elements/input/Divisi
 import { IDomeNameSelectInputRhfProps } from '@/components/elements/input/DomeNameSelectInputRhf';
 import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/input/EligibilityStatusSelectInputRhf';
 import { IEmployeeSelectInputRhfProps } from '@/components/elements/input/EmployeeSelectInputRhf';
+import { IExcelInputDropzoneRhfProps } from '@/components/elements/input/ExcelInputDropzoneRhf';
 import { IHeavyEquipmentSelectInputRhfProps } from '@/components/elements/input/HeavyEquipmentSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
 import { IImageInputDropzoneRhfProps } from '@/components/elements/input/ImageInputDropzoneRhf';
@@ -61,6 +62,7 @@ export type ControllerProps =
   | IPasswordInputProps
   | IImageInputDropzoneRhfProps
   | IPdfInputDropzoneRhfProps
+  | IExcelInputDropzoneRhfProps
   | INumberInputProps
   | IRadioInputProps
   | ISelectHeavyEquipmentTypesInputProps

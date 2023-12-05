@@ -153,14 +153,16 @@
       "bulkSamplingDensity": "Massa Jenis Bulk Sampling",
       "bucketVolume": "Volume Bucket",
       "tonByRitage": "Ton Berdasarkan Ritase",
-      "ritageStatus": "Status Ritase"
+      "ritageStatus": "Status Ritase",
+      "uploadDataRitage": "Upload Data Ritase"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",
       "photoDescription": "Maksimal 10MB dengan extention .JPEG .JPG .PNG atau .WEBP",
       "photoDescription3": "Jumlah file maksimal 3 dengan ukuran 10MB extention .JPEG .JPG .PNG atau .WEBP",
       "photoDescription5": "Jumlah file maksimal 5 dengan ukuran 10MB extention .JPEG .JPG .PNG atau .WEBP",
-      "uploadPdfDescription": "Unggah Dokumen Maksimal 10Mb dengan extention PDF"
+      "uploadPdfDescription": "Unggah Dokumen Maksimal 10MB dengan extention PDF",
+      "uploadExcelDescription": "Unggah Dokumen Maksimal 20MB dengan extention .Excel"
     },
     "modal": {
       "updatePasswordModal": {

@@ -416,7 +416,7 @@ const ListDataOreRitageBook = () => {
         secondButton={{
           label: t('commonTypography.uploadFile'),
           onClick: () =>
-            router.push('/input-data/production/data-ritage/upload'),
+            router.push('/input-data/production/data-ritage/upload-ritage-ore'),
         }}
       />
     </DashboardCard>
