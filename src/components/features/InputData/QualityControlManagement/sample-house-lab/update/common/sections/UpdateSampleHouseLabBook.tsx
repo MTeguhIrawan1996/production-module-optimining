@@ -45,6 +45,8 @@ const UpdateSampleHouseLabPage = () => {
   const [serverPhoto, setServerPhoto] = React.useState<
     Omit<IFile, 'mime' | 'path'>[] | null
   >([]);
+  const [isOpenConfirmation, setIsOpenConfirmation] =
+    React.useState<boolean>(false);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationSampleHousePlanValues>({
@@ -256,8 +258,9 @@ const UpdateSampleHouseLabPage = () => {
         message: t('sampleHouseLab.successUpdateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/input-data/quality-control-management/sample-house-lab');
+      setIsOpenConfirmation((prev) => !prev);
       methods.reset();
+      router.push('/input-data/quality-control-management/sample-house-lab');
     },
   });
   /* #endregion  /**======== Query =========== */
@@ -616,6 +619,10 @@ const UpdateSampleHouseLabPage = () => {
       deletePhoto,
     });
   };
+
+  const handleConfirmation = () => {
+    methods.handleSubmit(handleSubmitForm)();
+  };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
@@ -626,13 +633,32 @@ const UpdateSampleHouseLabPage = () => {
         submitForm={handleSubmitForm}
         submitButton={{
           label: t('commonTypography.save'),
-          loading: isLoading,
+          type: 'button',
+          onClick: () => setIsOpenConfirmation((prev) => !prev),
         }}
         backButton={{
           onClick: () =>
             router.push(
               '/input-data/quality-control-management/sample-house-lab'
             ),
+        }}
+        modalConfirmation={{
+          isOpenModalConfirmation: isOpenConfirmation,
+          actionModalConfirmation: () => setIsOpenConfirmation((prev) => !prev),
+          actionButton: {
+            label: t('commonTypography.yes'),
+            type: 'button',
+            onClick: handleConfirmation,
+            loading: isLoading,
+          },
+          backButton: {
+            label: 'Batal',
+          },
+          modalType: {
+            type: 'default',
+            title: t('commonTypography.alertTitleConfirmUpdate'),
+          },
+          withDivider: true,
         }}
       />
     </DashboardCard>

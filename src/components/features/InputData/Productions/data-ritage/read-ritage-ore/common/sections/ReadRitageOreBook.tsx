@@ -335,6 +335,29 @@ const ReadRitageOreBook = () => {
                   value: oreRitage?.subMaterial?.name,
                 },
                 {
+                  dataKey: t('commonTypography.weather'),
+                  value: oreRitage?.weather?.name,
+                },
+              ]}
+              type="grid"
+              keyStyleText={{
+                fw: 400,
+                fz: 20,
+              }}
+              valueStyleText={{
+                fw: 600,
+                fz: 20,
+              }}
+            />
+          </Stack>
+          <Divider my="md" />
+          <Stack spacing="sm">
+            <Text fz={24} fw={600} color="brand">
+              {t('commonTypography.ritageDuration')}
+            </Text>
+            <KeyValueList
+              data={[
+                {
                   dataKey: t('commonTypography.fromAt'),
                   value: formatDate(oreRitage?.fromAt, 'hh:mm:ss A'),
                 },
@@ -345,10 +368,6 @@ const ReadRitageOreBook = () => {
                 {
                   dataKey: t('commonTypography.ritageDuration'),
                   value: secondsDuration(oreRitage?.duration ?? null),
-                },
-                {
-                  dataKey: t('commonTypography.weather'),
-                  value: oreRitage?.weather?.name,
                 },
               ]}
               type="grid"
