@@ -37,7 +37,7 @@ const ReadActivityPlanBook = () => {
       shadow="xs"
       isLoading={activityPlanMasterLoading}
       enebleBackBottomInner={{
-        onClick: () => router.back(),
+        onClick: () => router.push(`/master-data/activity-plan`),
       }}
       paperStackProps={{
         spacing: 'sm',

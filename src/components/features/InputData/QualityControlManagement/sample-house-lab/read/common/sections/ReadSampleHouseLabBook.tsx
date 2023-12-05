@@ -158,9 +158,10 @@ const ReadSampleHouseLabBook = () => {
     []
   );
 
-  const renderOtherGcElement = houseSampleAndLab?.gradeControlElements?.map(
-    renderOtherGcElementCallback
-  );
+  const renderOtherGcElement =
+    houseSampleAndLab?.gradeControlElements?.map(
+      renderOtherGcElementCallback
+    ) ?? [];
 
   const renderOtherLabElementCallback = React.useCallback(
     (labElement: IElementWithValue) => {
@@ -176,9 +177,8 @@ const ReadSampleHouseLabBook = () => {
     []
   );
 
-  const renderOtherLabElement = houseSampleAndLab?.elements?.map(
-    renderOtherLabElementCallback
-  );
+  const renderOtherLabElement =
+    houseSampleAndLab?.elements?.map(renderOtherLabElementCallback) ?? [];
 
   const handleIsValid = async () => {
     await executeUpdateStatus({
@@ -296,7 +296,10 @@ const ReadSampleHouseLabBook = () => {
       }}
       withBorder
       enebleBackBottomOuter={{
-        onClick: () => router.back(),
+        onClick: () =>
+          router.push(
+            '/input-data/quality-control-management/sample-house-lab'
+          ),
       }}
       shadow="xs"
       isLoading={houseSampleAndLabLoading}
@@ -422,18 +425,22 @@ const ReadSampleHouseLabBook = () => {
             <Text fz={24} fw={600} color="brand">
               {t('commonTypography.rate')}
             </Text>
-            <KeyValueList
-              data={[...(renderOtherGcElement ?? [])]}
-              type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
-            />
+            {renderOtherGcElement.length > 0 ? (
+              <KeyValueList
+                data={[...renderOtherGcElement]}
+                type="grid"
+                keyStyleText={{
+                  fw: 400,
+                  fz: 20,
+                }}
+                valueStyleText={{
+                  fw: 600,
+                  fz: 20,
+                }}
+              />
+            ) : (
+              <Text color="gray.6">{t(`commonTypography.rateNotFound`)}</Text>
+            )}
           </Stack>
           <Divider my="md" />
           <Stack spacing="sm">
@@ -542,18 +549,22 @@ const ReadSampleHouseLabBook = () => {
             <Text fz={24} fw={600} color="brand">
               {t('commonTypography.rate')}
             </Text>
-            <KeyValueList
-              data={[...(renderOtherLabElement ?? [])]}
-              type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
-            />
+            {renderOtherLabElement.length > 0 ? (
+              <KeyValueList
+                data={[...renderOtherLabElement]}
+                type="grid"
+                keyStyleText={{
+                  fw: 400,
+                  fz: 20,
+                }}
+                valueStyleText={{
+                  fw: 600,
+                  fz: 20,
+                }}
+              />
+            ) : (
+              <Text color="gray.6">{t(`commonTypography.rateNotFound`)}</Text>
+            )}
           </Stack>
         </Tabs.Panel>
       </Tabs>
