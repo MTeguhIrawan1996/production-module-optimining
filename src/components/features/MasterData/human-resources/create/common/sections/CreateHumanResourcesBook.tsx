@@ -346,7 +346,7 @@ const CreateHumanResourcesBook = () => {
           loading: isLoading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push('/master-data/human-resources'),
         }}
       />
     </DashboardCard>

@@ -34,6 +34,7 @@ const CreateCompanyHeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const url = `/master-data/company/read/${id}`;
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateHeavyEquipmentCompanyValues>({
@@ -93,7 +94,6 @@ const CreateCompanyHeavyEquipmentBook = () => {
         message: t('heavyEquipment.successCreateCompanyMessage'),
         icon: <IconCheck />,
       });
-      const url = `/master-data/company/read/${id}`;
       router.push(url);
       methods.reset();
     },
@@ -312,7 +312,7 @@ const CreateCompanyHeavyEquipmentBook = () => {
           loading: isLoading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push(url),
         }}
       />
     </DashboardCard>

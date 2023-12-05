@@ -38,7 +38,7 @@ const ReadWorkingHoursPlanBook = () => {
       shadow="xs"
       isLoading={workingHourPlanMasterLoading}
       enebleBackBottomInner={{
-        onClick: () => router.back(),
+        onClick: () => router.push('/master-data/working-hours-plan'),
       }}
       paperStackProps={{
         spacing: 'sm',

@@ -140,7 +140,7 @@ const CreateWorkingHoursPlanBook = () => {
             }),
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push('/master-data/working-hours-plan'),
         }}
         modalConfirmation={{
           isOpenModalConfirmation: isOpenConfirmation,

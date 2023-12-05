@@ -76,7 +76,7 @@ const ReadHeavyEquipmentMasterBook = () => {
       shadow="xs"
       isLoading={heavyEquipmentMasterDataLoading}
       enebleBackBottomInner={{
-        onClick: () => router.back(),
+        onClick: () => router.push('/master-data/heavy-equipment'),
       }}
       paperStackProps={{
         spacing: 'sm',

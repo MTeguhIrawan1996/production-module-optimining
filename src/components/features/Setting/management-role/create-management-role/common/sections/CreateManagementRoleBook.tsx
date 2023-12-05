@@ -158,7 +158,7 @@ const CreateManagementRoleBook = () => {
                 type="button"
                 variant="outline"
                 leftIcon={<IconChevronLeft size="1rem" />}
-                onClick={() => router.back()}
+                onClick={() => router.push('/setting/management-role')}
               />
               <PrimaryButton
                 label={t('commonTypography.save')}

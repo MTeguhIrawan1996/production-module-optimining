@@ -131,7 +131,7 @@ const CreateShiftBook = () => {
           loading: loading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push('/master-data/shift'),
         }}
       />
     </DashboardCard>

@@ -116,7 +116,7 @@ const CreateBlockMasterBook = () => {
           loading: loading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push('/master-data/block'),
         }}
       />
     </DashboardCard>

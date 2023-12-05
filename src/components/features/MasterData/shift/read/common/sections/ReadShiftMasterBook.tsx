@@ -37,7 +37,7 @@ const ReadShiftMasterBook = () => {
       shadow="xs"
       isLoading={shiftMasterLoading}
       enebleBackBottomInner={{
-        onClick: () => router.back(),
+        onClick: () => router.push('/master-data/shift'),
       }}
       paperStackProps={{
         spacing: 'sm',

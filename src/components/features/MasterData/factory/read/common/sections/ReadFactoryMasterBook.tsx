@@ -36,7 +36,7 @@ const ReadFactoryMasterBook = () => {
       shadow="xs"
       isLoading={factoryMasterLoading}
       enebleBackBottomInner={{
-        onClick: () => router.back(),
+        onClick: () => router.push('/master-data/factory'),
       }}
       paperStackProps={{
         spacing: 'sm',
