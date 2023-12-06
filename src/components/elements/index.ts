@@ -1,4 +1,5 @@
 import DeterminedButton from '@/components/elements/button/DeterminedButton';
+import DownloadButton from '@/components/elements/button/DownloadButton';
 import NotValidButton from '@/components/elements/button/NotValidButton';
 import PrimaryButton from '@/components/elements/button/PrimaryButton';
 import RejectButton from '@/components/elements/button/RejectButton';
@@ -102,6 +103,7 @@ export {
   DeterminedButton,
   DivisionSelectInputRhf,
   DomeNameSelectInputRhf,
+  DownloadButton,
   EligibilityStatusSelectInputRhf,
   EmployeeSelectInputRhf,
   ExcelInputDropzoneRhf,

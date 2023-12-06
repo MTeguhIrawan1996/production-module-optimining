@@ -22,6 +22,9 @@ import { useTranslation } from 'react-i18next';
 import DeterminedButton, {
   IDeterminedButtonProps,
 } from '@/components/elements/button/DeterminedButton';
+import DownloadButton, {
+  IDownloadButtonProps,
+} from '@/components/elements/button/DownloadButton';
 import NotValidButton, {
   INotValidButtonProps,
 } from '@/components/elements/button/NotValidButton';
@@ -39,14 +42,8 @@ import MultipleFilter, {
   IMultipleFilterProps,
 } from '@/components/elements/global/MultipleFilter';
 import SearchBar, { ISerachBar } from '@/components/elements/global/SearchBar';
-import LinkButton from '@/components/elements/link/LinkButton';
 
 import { InputControllerNativeProps } from '@/types/global';
-
-type IDownloadButton = {
-  label: string;
-  url: string;
-};
 
 interface IDashboardCardProps extends PaperProps {
   children: React.ReactNode;
@@ -70,7 +67,7 @@ interface IDashboardCardProps extends PaperProps {
   paperStackProps?: StackProps;
   childrenStackProps?: StackProps;
   titleStyle?: TitleProps;
-  downloadButton?: IDownloadButton[];
+  downloadButton?: IDownloadButtonProps[];
 }
 
 const DashboardCard: React.FC<IDashboardCardProps> = ({
@@ -182,12 +179,11 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
             {downloadButton && downloadButton.length > 0 ? (
               <Group>
                 {downloadButton.map((obj, i) => (
-                  <LinkButton
-                    buttonProps={{
-                      leftIcon: <IconDownload size="20px" />,
-                    }}
-                    href={obj.url}
+                  <DownloadButton
+                    leftIcon={<IconDownload size="20px" />}
+                    url={obj.url}
                     label={obj.label}
+                    fileName={obj.fileName}
                     key={i}
                   />
                 ))}
