@@ -6,7 +6,7 @@ import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMate
 import { IShiftsData } from '@/services/graphql/query/shift/useReadAllShiftMaster';
 import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
 
-import { IFile, IStatus } from '@/types/global';
+import { IElementWithValue, IFile, IStatus } from '@/types/global';
 
 export const READ_ONE_ORE_RITAGE = gql`
   query ReadOneOreRitage($id: String!) {
@@ -108,6 +108,15 @@ export const READ_ONE_ORE_RITAGE = gql`
       isRitageProblematic
       date
       closeDome
+      houseSampleAndLab {
+        elements {
+          value
+          element {
+            id
+            name
+          }
+        }
+      }
     }
   }
 `;
@@ -116,7 +125,7 @@ type IChecker = {
   id: string;
 } & Pick<IEmployeesData, 'humanResource'>;
 
-export interface IReadOneOreRitage {
+interface IReadOneOreRitage {
   id: string;
   checkerFrom: IChecker | null;
   checkerFromPosition: string | null;
@@ -179,6 +188,9 @@ export interface IReadOneOreRitage {
   isRitageProblematic: boolean;
   date: string | null;
   closeDome: boolean;
+  houseSampleAndLab: {
+    elements: IElementWithValue[] | null;
+  } | null;
 }
 
 interface IReadOneOreRitageResponse {

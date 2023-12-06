@@ -113,7 +113,7 @@ const CreateElementBook = () => {
           loading: loading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push('/master-data/element'),
         }}
       />
     </DashboardCard>

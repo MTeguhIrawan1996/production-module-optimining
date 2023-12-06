@@ -25,6 +25,7 @@ const CreateHumanResourcesAvailableBook = () => {
   const { t } = useTranslation('default');
   const companyId = router.query?.id as string;
   const url = `/master-data/company/create/human-resources-available/${companyId}?page=1`;
+  const urlCreate = `/master-data/company/read/${companyId}`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [choosesHumanResources, setChooseHumanResources] = React.useState<
     IHumanResourcesData[]
@@ -51,7 +52,6 @@ const CreateHumanResourcesAvailableBook = () => {
         message: t('humanResources.successCreateMessage'),
         icon: <IconCheck />,
       });
-      const urlCreate = `/master-data/company/read/${companyId}`;
       router.push(urlCreate);
     },
     onError: (error) => {
@@ -240,7 +240,7 @@ const CreateHumanResourcesAvailableBook = () => {
             variant="outline"
             leftIcon={<IconChevronLeft size="1rem" />}
             label={t('commonTypography.back')}
-            onClick={() => router.back()}
+            onClick={() => router.push(urlCreate)}
           />
 
           <PrimaryButton

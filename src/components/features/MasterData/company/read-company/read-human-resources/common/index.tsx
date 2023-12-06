@@ -89,7 +89,8 @@ const ReadCompanyHumanResourcesPage = () => {
           isLoading={employeeDataLoading}
           withBorder
           enebleBackBottomOuter={{
-            onClick: () => router.back(),
+            onClick: () =>
+              router.push(`/master-data/company/read/${companyId}`),
           }}
           shadow="xs"
           paperStackProps={{

@@ -130,7 +130,7 @@ const CreateSmapleHouseLabBook = () => {
         notifications.show({
           color: 'red',
           title: 'Gagal',
-          message: err.message,
+          message: err.response.data.message,
           icon: <IconX />,
         });
       }
@@ -504,7 +504,10 @@ const CreateSmapleHouseLabBook = () => {
           loading: isLoading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () =>
+            router.push(
+              '/input-data/quality-control-management/sample-house-lab'
+            ),
         }}
       />
     </DashboardCard>

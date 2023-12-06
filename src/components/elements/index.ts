@@ -39,6 +39,7 @@ import DivisionSelectInputRhf from '@/components/elements/input/DivisionSelectIn
 import DomeNameSelectInputRhf from '@/components/elements/input/DomeNameSelectInputRhf';
 import EligibilityStatusSelectInputRhf from '@/components/elements/input/EligibilityStatusSelectInputRhf';
 import EmployeeSelectInputRhf from '@/components/elements/input/EmployeeSelectInputRhf';
+import ExcelInputDropzoneRhf from '@/components/elements/input/ExcelInputDropzoneRhf';
 import HeavyEquipmentSelectInputRhf from '@/components/elements/input/HeavyEquipmentSelectInputRhf';
 import IdentityRadioInputRhf from '@/components/elements/input/IdentityRadioInputRhf';
 import ImageInputDropzoneRhf from '@/components/elements/input/ImageInputDropzoneRhf';
@@ -59,6 +60,7 @@ import RelegionSelectInputRhf from '@/components/elements/input/RelegionSelectIn
 import SampleTypeSelectInput from '@/components/elements/input/SampleTypeSelectInputRhf';
 import SelectHeavyEquipmentReferenceInput from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
 import SelectHeavyEquipmentTypesInput from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
+import SelectInputNative from '@/components/elements/input/SelectInputNative';
 import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
 import ShiftSelectInputRhf from '@/components/elements/input/ShiftSelectInputRhf';
 import StockpileNameSelectInputRhf from '@/components/elements/input/StockpileNameSelectInputRhf';
@@ -102,6 +104,7 @@ export {
   DomeNameSelectInputRhf,
   EligibilityStatusSelectInputRhf,
   EmployeeSelectInputRhf,
+  ExcelInputDropzoneRhf,
   FieldErrorMessage,
   FormController,
   FormControllerNative,
@@ -150,6 +153,7 @@ export {
   SearchBar,
   SelectHeavyEquipmentReferenceInput,
   SelectHeavyEquipmentTypesInput,
+  SelectInputNative,
   SelectInputRhf,
   SelectionButtonModal,
   ShiftSelectInputRhf,

@@ -34,6 +34,7 @@ const UpdateCompanyHeavyEquipmentBook = () => {
   const router = useRouter();
   const companyId = router.query?.id?.[0] as string;
   const companyHeavyEquipmentId = router.query?.id?.[1] as string;
+  const url = `/master-data/company/read/${companyId}`;
   const [heavyEquipmentId, setHeavyEquipmentId] = React.useState<string>('');
   const [serverPhotos, setServerPhotos] = React.useState<
     Omit<IFile, 'mime' | 'path'>[] | null
@@ -163,7 +164,7 @@ const UpdateCompanyHeavyEquipmentBook = () => {
         notifications.show({
           color: 'red',
           title: 'Gagal',
-          message: err.message,
+          message: err.response.data.message,
           icon: <IconX />,
         });
       }
@@ -175,7 +176,6 @@ const UpdateCompanyHeavyEquipmentBook = () => {
         message: t('heavyEquipment.successUpdateCompanyMessage'),
         icon: <IconCheck />,
       });
-      const url = `/master-data/company/read/${companyId}`;
       router.push(url);
       methods.reset();
     },
@@ -423,7 +423,7 @@ const UpdateCompanyHeavyEquipmentBook = () => {
           loading: isLoading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push(url),
         }}
       />
     </DashboardCard>

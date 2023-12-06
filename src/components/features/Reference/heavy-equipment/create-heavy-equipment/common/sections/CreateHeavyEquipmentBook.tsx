@@ -54,7 +54,7 @@ const CreateHeavyEquipmentBook = () => {
         notifications.show({
           color: 'red',
           title: 'Gagal',
-          message: err.message,
+          message: err.response.data.message,
           icon: <IconX />,
         });
       }
@@ -191,7 +191,7 @@ const CreateHeavyEquipmentBook = () => {
           loading: isLoading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push('/reference/heavy-equipment'),
         }}
       />
     </DashboardCard>

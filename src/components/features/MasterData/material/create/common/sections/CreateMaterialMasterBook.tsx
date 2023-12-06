@@ -153,7 +153,7 @@ const CreateMaterialMasterBook = () => {
           loading: loading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push('/master-data/material'),
         }}
       />
     </DashboardCard>

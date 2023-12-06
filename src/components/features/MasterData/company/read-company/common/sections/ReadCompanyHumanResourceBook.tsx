@@ -50,7 +50,7 @@ const ReadCompanyHumanResourceBook = () => {
     400
   );
   const [divisionId, setDivisionId] = React.useState<string | null>(null);
-  const [positionSearchTerm, setpPsitionSearchTerm] =
+  const [positionSearchTerm, setPositionSearchTerm] =
     React.useState<string>('');
   const [positionSearchQuery] = useDebouncedValue<string>(
     positionSearchTerm,
@@ -146,7 +146,7 @@ const ReadCompanyHumanResourceBook = () => {
     });
     const positionItem = positionSelect({
       data: employePositionFilter,
-      onSearchChange: setpPsitionSearchTerm,
+      onSearchChange: setPositionSearchTerm,
       searchValue: positionSearchTerm,
       placeholder: 'choosePosition',
       onChange: (value) => {
@@ -170,7 +170,7 @@ const ReadCompanyHumanResourceBook = () => {
           value: 'true',
         },
         {
-          label: t('commonTypography.inComplete'),
+          label: t('commonTypography.unComplete'),
           value: 'false',
         },
       ],
@@ -249,7 +249,7 @@ const ReadCompanyHumanResourceBook = () => {
                   label={
                     isComplete
                       ? t('commonTypography.complete')
-                      : t('commonTypography.inComplete')
+                      : t('commonTypography.unComplete')
                   }
                 />
               ),

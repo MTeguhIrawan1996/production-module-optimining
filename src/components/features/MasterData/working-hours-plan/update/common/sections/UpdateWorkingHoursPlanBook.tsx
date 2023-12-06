@@ -111,7 +111,7 @@ const UpdateWorkingHoursPlanBook = () => {
           loading: loading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push('/master-data/working-hours-plan'),
         }}
       />
     </DashboardCard>

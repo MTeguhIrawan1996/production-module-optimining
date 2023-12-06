@@ -28,7 +28,7 @@ const DateInputNative: React.FC<IDateInputNativeProps> = ({
           ? t(`commonTypography.${placeholder}`, { ns: 'default' })
           : undefined
       }
-      radius={8}
+      radius="lg"
       label={label ? t(`components.field.${label}`) : null}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}

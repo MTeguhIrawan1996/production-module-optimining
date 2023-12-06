@@ -6,6 +6,7 @@ import DataRitagePage from '@/components/features/InputData/Productions/data-rit
 import CreateRitageOrePage from '@/components/features/InputData/Productions/data-ritage/create-ritage-ore/common';
 import ReadRitageOrePage from '@/components/features/InputData/Productions/data-ritage/read-ritage-ore/common';
 import UpdateRitageOrePage from '@/components/features/InputData/Productions/data-ritage/update-ritage-ore/common';
+import UploadRitageOrePage from '@/components/features/InputData/Productions/data-ritage/upload-ritage-ore/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
 import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/create/common';
 import ReadSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/read/common';
@@ -180,6 +181,7 @@ export {
   UpdateStockpileMasterPage,
   UpdateUserPage,
   UpdateWorkingHoursPlanMasterPage,
+  UploadRitageOrePage,
   UserPage,
   WorkingHoursPlanMasterPage,
 };

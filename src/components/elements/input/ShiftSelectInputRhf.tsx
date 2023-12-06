@@ -31,7 +31,6 @@ const ShiftSelectInputRhf: React.FC<IShiftSelectInputRhfProps> = ({
 }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
-  const [searchTerm, setSearchTerm] = React.useState<string>('');
 
   const { shiftsData } = useReadAllShiftMaster({
     variables: {
@@ -61,8 +60,6 @@ const ShiftSelectInputRhf: React.FC<IShiftSelectInputRhfProps> = ({
           borderRadius: theme.spacing.xs,
         },
       })}
-      onSearchChange={setSearchTerm}
-      searchValue={searchTerm}
       data-control={control}
       placeholder={t('commonTypography.chooseShift', {
         ns: 'default',

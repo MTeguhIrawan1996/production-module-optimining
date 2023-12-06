@@ -285,7 +285,7 @@ const HeavyEquipmentMasterBook = () => {
             {
               accessor: 'specification',
               title: t('commonTypography.specification'),
-              render: ({ reference }) => reference?.spec,
+              render: ({ reference }) => reference?.spec ?? '-',
             },
             {
               accessor: 'action',

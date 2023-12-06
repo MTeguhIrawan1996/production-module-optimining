@@ -280,7 +280,7 @@ const ReadHeavyEquipmentBook = () => {
                   label={
                     isComplete
                       ? t('commonTypography.complete')
-                      : t('commonTypography.inComplete')
+                      : t('commonTypography.unComplete')
                   }
                 />
               ),

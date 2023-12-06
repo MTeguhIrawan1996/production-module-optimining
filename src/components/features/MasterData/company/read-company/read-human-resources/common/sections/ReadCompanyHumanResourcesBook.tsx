@@ -67,7 +67,6 @@ const ReadCompanyHumanResourceBook: React.FC<IProps> = ({
             },
             {
               dataKey: t('commonTypography.country'),
-
               value: humanResource
                 ? humanResource?.isWni === true
                   ? 'WNI'
@@ -88,11 +87,13 @@ const ReadCompanyHumanResourceBook: React.FC<IProps> = ({
             },
             {
               dataKey: t('commonTypography.dob'),
-              value: formatDate(humanResource?.dob ?? ''),
+              value: formatDate(humanResource?.dob ?? '-'),
             },
             {
               dataKey: t('commonTypography.gender'),
-              value: t(`commonTypography.${humanResource?.gender}`),
+              value: humanResource?.gender
+                ? t(`commonTypography.${humanResource?.gender}`)
+                : '-',
             },
             {
               dataKey: t('commonTypography.religion'),

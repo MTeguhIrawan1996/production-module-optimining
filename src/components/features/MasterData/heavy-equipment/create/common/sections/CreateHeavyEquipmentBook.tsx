@@ -85,7 +85,7 @@ const CreateHeavyEquipmentMasterBook = () => {
         notifications.show({
           color: 'red',
           title: 'Gagal',
-          message: err.message,
+          message: err.response.data.message,
           icon: <IconX />,
         });
       }
@@ -270,7 +270,7 @@ const CreateHeavyEquipmentMasterBook = () => {
           loading: isLoading,
         }}
         backButton={{
-          onClick: () => router.back(),
+          onClick: () => router.push('/master-data/heavy-equipment'),
         }}
       />
     </DashboardCard>
