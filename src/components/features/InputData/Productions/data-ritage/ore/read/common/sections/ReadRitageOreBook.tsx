@@ -211,9 +211,7 @@ const ReadRitageOreBook = () => {
       updateButton={{
         label: 'Edit',
         onClick: () =>
-          router.push(
-            `/input-data/production/data-ritage/update-ritage-ore/${id}`
-          ),
+          router.push(`/input-data/production/data-ritage/ore/update/${id}`),
       }}
       validationButton={
         isShowButtonValidation

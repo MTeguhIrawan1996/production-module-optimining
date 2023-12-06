@@ -309,7 +309,7 @@ const ListDataOreRitageBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/input-data/production/data-ritage/read-ritage-ore/${id}`
+                          `/input-data/production/data-ritage/ore/read/${id}`
                         );
                       },
                     }}
@@ -317,7 +317,7 @@ const ListDataOreRitageBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/input-data/production/data-ritage/update-ritage-ore/${id}`
+                          `/input-data/production/data-ritage/ore/update/${id}`
                         );
                       },
                     }}
@@ -413,12 +413,12 @@ const ListDataOreRitageBook = () => {
         firstButton={{
           label: t('commonTypography.inputDataRitage'),
           onClick: () =>
-            router.push('/input-data/production/data-ritage/create-ritage-ore'),
+            router.push('/input-data/production/data-ritage/ore/create'),
         }}
         secondButton={{
           label: t('commonTypography.uploadFile'),
           onClick: () =>
-            router.push('/input-data/production/data-ritage/upload-ritage-ore'),
+            router.push('/input-data/production/data-ritage/ore/upload'),
         }}
       />
     </DashboardCard>

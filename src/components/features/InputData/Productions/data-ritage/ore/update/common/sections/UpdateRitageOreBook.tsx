@@ -160,7 +160,7 @@ const UpdateRitageOreBook = () => {
       methods.setValue('toLevel', oreRitage.toLevel ?? '');
       methods.setValue('stockpileId', oreRitage.stockpile?.id ?? '');
       methods.setValue('domeId', oreRitage.dome?.id ?? '');
-      methods.setValue('closeDome', oreRitage.closeDome);
+      methods.setValue('closeDome', oreRitage.closeDome ?? false);
       methods.setValue(
         'bulkSamplingDensity',
         oreRitage.bulkSamplingDensity ?? ''
