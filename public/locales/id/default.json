@@ -287,7 +287,9 @@
     "fromElevasi": "Dari Elevasi",
     "bulkSamplingDensity": "Massa Jenis Bulk Sampling",
     "ritageStatus": "Status Ritase",
-    "readRitageDT": "$t(commonTypography.detail) Data Ritase Dump Truck"
+    "readRitageDT": "$t(commonTypography.detail) Data Ritase Dump Truck",
+    "problem": "Bermasalah",
+    "unProblem": "Tidak Bermasalah"
   },
   "sideBar": {
     "dashboard": "Dashboard",
