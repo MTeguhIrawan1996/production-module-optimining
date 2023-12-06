@@ -385,6 +385,7 @@ const ListDataOreRitageBook = () => {
         fetching={oreDumpTruckRitagesDataLoading}
         tabs="ore"
         setDate={setDateHeavyEquipment}
+        urlDetail="/input-data/production/data-ritage/ore/read-dump-truck"
       />
       <ModalConfirmation
         isOpenModalConfirmation={isOpenDeleteConfirmation}

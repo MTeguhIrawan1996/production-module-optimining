@@ -16,12 +16,14 @@ import {
   IDumpTruckRitagesData,
   IMeta,
   InputControllerNativeProps,
+  ITabs,
 } from '@/types/global';
 
 interface IRitageDTProps {
   data?: IDumpTruckRitagesData[];
   meta?: IMeta;
-  tabs: 'ore' | 'ob';
+  tabs: ITabs;
+  urlDetail: string;
   fetching?: boolean;
   setDate: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -31,6 +33,7 @@ const ListDataRitageDumptruckBook: React.FC<IRitageDTProps> = ({
   meta,
   tabs,
   fetching,
+  urlDetail,
   setDate,
 }) => {
   const router = useRouter();
@@ -112,14 +115,14 @@ const ListDataRitageDumptruckBook: React.FC<IRitageDTProps> = ({
               accessor: 'action',
               title: t('commonTypography.action'),
               width: 100,
-              render: ({ date }) => {
+              render: ({ date, shift, companyHeavyEquipment }) => {
                 return (
                   <GlobalKebabButton
                     actionRead={{
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/input-data/production/data-ritage/${date}`
+                          `${urlDetail}/${date}/${shift?.id}/${companyHeavyEquipment?.id}?p=1&shift=${shift?.name}&c=${companyHeavyEquipment?.hullNumber}&tabs=${tabs}`
                         );
                       },
                     }}
@@ -146,7 +149,7 @@ const ListDataRitageDumptruckBook: React.FC<IRitageDTProps> = ({
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data, fetching]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (

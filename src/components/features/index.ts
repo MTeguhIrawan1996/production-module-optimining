@@ -5,6 +5,7 @@ import DataTablePage from '@/components/features/Example/datatable/common';
 import DataRitagePage from '@/components/features/InputData/Productions/data-ritage/common';
 import CreateRitageOrePage from '@/components/features/InputData/Productions/data-ritage/ore/create/common';
 import ReadRitageOrePage from '@/components/features/InputData/Productions/data-ritage/ore/read/common';
+import ReadOreDumpTruckPage from '@/components/features/InputData/Productions/data-ritage/ore/read-dump-truck/common';
 import UpdateRitageOrePage from '@/components/features/InputData/Productions/data-ritage/ore/update/common';
 import UploadRitageOrePage from '@/components/features/InputData/Productions/data-ritage/ore/upload/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
@@ -150,6 +151,7 @@ export {
   ReadLocationMasterPage,
   ReadManagementRolePage,
   ReadMaterialMasterPage,
+  ReadOreDumpTruckPage,
   ReadRitageOrePage,
   ReadSampleHouseLabPage,
   ReadShiftMasterPage,

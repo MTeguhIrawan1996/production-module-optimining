@@ -47,6 +47,10 @@ import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelect
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
 
+import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
+import { IShiftsData } from '@/services/graphql/query/shift/useReadAllShiftMaster';
+import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
+
 // import { TablerIconsProps } from '@tabler/icons-react';
 
 export type CommonProps = {
@@ -223,6 +227,7 @@ export type IProvinceDetail = {
   } | null;
   address: string;
 };
+
 export type IDomicileProvinceDetail = {
   domicileProvince: {
     id: string;
@@ -281,3 +286,28 @@ export interface IDumpTruckRitagesRequest
   extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
   date?: string | null;
 }
+
+export interface IListDetailRitageDTData {
+  id: string;
+  shift: Pick<IShiftsData, 'id' | 'name'> | null;
+  weather: {
+    id: string;
+    name: string;
+  } | null;
+  fromAt: Date | string | null;
+  arriveAt: Date | string | null;
+  duration: number | null;
+  fromLevel: string | null;
+  toLevel: string | null;
+  bucketVolume: number | null;
+  tonByRitage: number | null;
+  material: Pick<IMaterialsData, 'id' | 'name'> | null;
+  subMaterial: Pick<IMaterialsData, 'id' | 'name'> | null;
+  dome: Pick<IStockpilesData, 'id' | 'name'> | null;
+  sampleNumber: string | null;
+  houseSampleAndLab: {
+    elements: IElementWithValue[] | null;
+  } | null;
+}
+
+export type ITabs = 'ore' | 'ob';
