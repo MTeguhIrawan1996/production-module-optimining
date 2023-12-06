@@ -154,7 +154,8 @@
       "bucketVolume": "Volume Bucket",
       "tonByRitage": "Ton Berdasarkan Ritase",
       "ritageStatus": "Status Ritase",
-      "uploadDataRitage": "Upload Data Ritase"
+      "uploadDataRitage": "Upload Data Ritase",
+      "fromBlock": "Dari Block"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG .PNG atau .WEBP",

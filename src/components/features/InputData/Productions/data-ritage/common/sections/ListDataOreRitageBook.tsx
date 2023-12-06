@@ -309,7 +309,7 @@ const ListDataOreRitageBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/input-data/production/data-ritage/read-ritage-ore/${id}`
+                          `/input-data/production/data-ritage/ore/read/${id}`
                         );
                       },
                     }}
@@ -317,7 +317,7 @@ const ListDataOreRitageBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/input-data/production/data-ritage/update-ritage-ore/${id}`
+                          `/input-data/production/data-ritage/ore/update/${id}`
                         );
                       },
                     }}
@@ -368,11 +368,13 @@ const ListDataOreRitageBook = () => {
       downloadButton={[
         {
           label: t('ritageOre.downloadTemplateOre'),
-          url: `${process.env.NEXT_PUBLIC_REST_API_URL}/download/references`,
+          url: `/ore-ritages/file`,
+          fileName: 'template-ore',
         },
         {
           label: t('commonTypography.downloadReference'),
-          url: `${process.env.NEXT_PUBLIC_REST_API_URL}/download/references`,
+          url: `/download/references`,
+          fileName: 'referensi-ore',
         },
       ]}
     >
@@ -383,6 +385,7 @@ const ListDataOreRitageBook = () => {
         fetching={oreDumpTruckRitagesDataLoading}
         tabs="ore"
         setDate={setDateHeavyEquipment}
+        urlDetail="/input-data/production/data-ritage/ore/read-dump-truck"
       />
       <ModalConfirmation
         isOpenModalConfirmation={isOpenDeleteConfirmation}
@@ -411,12 +414,12 @@ const ListDataOreRitageBook = () => {
         firstButton={{
           label: t('commonTypography.inputDataRitage'),
           onClick: () =>
-            router.push('/input-data/production/data-ritage/create-ritage-ore'),
+            router.push('/input-data/production/data-ritage/ore/create'),
         }}
         secondButton={{
           label: t('commonTypography.uploadFile'),
           onClick: () =>
-            router.push('/input-data/production/data-ritage/upload-ritage-ore'),
+            router.push('/input-data/production/data-ritage/ore/upload'),
         }}
       />
     </DashboardCard>

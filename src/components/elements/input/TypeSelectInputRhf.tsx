@@ -29,7 +29,7 @@ const TypeSelectInputRhf: React.FC<ITypeSelectInputRhfProps> = ({
   label,
   labelValue,
   defaultValue,
-  brandId,
+  brandId = null,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');

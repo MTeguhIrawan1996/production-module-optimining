@@ -3,6 +3,7 @@ import {
   Dropzone,
   DropzoneProps,
   FileWithPath,
+  MIME_TYPES,
   MS_EXCEL_MIME_TYPE,
 } from '@mantine/dropzone';
 import { IconUpload, IconX } from '@tabler/icons-react';
@@ -16,6 +17,8 @@ import * as XLSX from 'xlsx';
 import MantineDataTable from '@/components/elements/dataTable/MantineDataTable';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 import GlobalBadgeStatus from '@/components/elements/global/GlobalBadgeStatus';
+
+import { formatDate } from '@/utils/helper/dateFormat';
 
 import { CommonProps } from '@/types/global';
 
@@ -43,7 +46,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
       accessor: string;
     }>[]
   >([]);
-  const ACCEPTED_MIME_TYPES = [...MS_EXCEL_MIME_TYPE];
+  const ACCEPTED_MIME_TYPES = [...MS_EXCEL_MIME_TYPE, MIME_TYPES.csv];
   const theme = useMantineTheme();
   const { field, fieldState } = useController({
     name,
@@ -51,16 +54,24 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
 
   React.useEffect(() => {
     const currentValue = field.value as FileWithPath[];
+
     if (currentValue && currentValue.length > 0) {
       if (typeof window !== 'undefined') {
         const reader = new FileReader();
         reader.readAsArrayBuffer(currentValue[0]);
         reader.onload = (e) => {
           const bstr = e.target?.result;
-          const workBook = XLSX.read(bstr, { type: 'buffer' });
+          const workBook = XLSX.read(bstr, {
+            type: 'buffer',
+            cellDates: true,
+            cellText: false,
+          });
           const workSheetName = workBook.SheetNames[0];
           const workSheet = workBook.Sheets[workSheetName];
-          const data = XLSX.utils.sheet_to_json(workSheet);
+          const data = XLSX.utils.sheet_to_json(workSheet, {
+            raw: false,
+            dateNF: 'd"/"m"/"yyyy',
+          });
           const limitData = data.slice(0, 5);
           const modifiedArray = Object.keys(limitData[0] as any).map((key) => ({
             accessor: key,
@@ -68,6 +79,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
           const accessor = modifiedArray.map((val) => {
             const column: DataTableColumn<(typeof modifiedArray)[number]> = {
               accessor: `${val.accessor}`,
+              width: val.accessor === 'date' ? 160 : undefined,
             };
             return column;
           });
@@ -96,20 +108,23 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
               if (accesor === 'is_ritage_problematic') {
                 return (
                   <GlobalBadgeStatus
-                    color={data ? 'gray.6' : 'brand.6'}
+                    color={data === 'TRUE' ? 'gray.6' : 'brand.6'}
                     label={
-                      data
-                        ? t('commonTypography.unComplete', { ns: 'default' })
-                        : t('commonTypography.complete', { ns: 'default' })
+                      data === 'TRUE'
+                        ? t('commonTypography.problem', { ns: 'default' })
+                        : t('commonTypography.unProblem', { ns: 'default' })
                     }
                   />
                 );
               }
+              if (accesor === 'date') {
+                return formatDate(data);
+              }
               if (accesor === 'close_dome') {
                 return (
                   <GlobalBadgeStatus
-                    color={data ? 'gray.6' : 'brand.6'}
-                    label={data ? 'true' : 'false'}
+                    color={data === 'TRUE' ? 'gray.6' : 'brand.6'}
+                    label={data === 'TRUE' ? 'Close' : 'Open'}
                   />
                 );
               }

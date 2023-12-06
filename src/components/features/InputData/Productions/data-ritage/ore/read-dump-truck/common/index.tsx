@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import ReadRitageOreBook from '@/components/features/InputData/Productions/data-ritage/read-ritage-ore/common/sections/ReadRitageOreBook';
+import ReadOreDumpTruckBook from '@/components/features/InputData/Productions/data-ritage/ore/read-dump-truck/common/sections/ReadRitageOreBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const ReadRitageOrePage = () => {
+const ReadOreDumpTruckPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -23,7 +23,7 @@ const ReadRitageOrePage = () => {
         path: '/input-data/production/data-ritage?tabs=ore',
       },
       {
-        label: t('ritageOre.readRitageOre'),
+        label: t('commonTypography.readRitageDT'),
         path: router.asPath,
       },
     ]);
@@ -32,11 +32,15 @@ const ReadRitageOrePage = () => {
 
   return (
     <RootWrapper>
-      <InnerWrapper>
-        <ReadRitageOreBook />
+      <InnerWrapper
+        titleProps={{
+          title: t('commonTypography.readRitageDT'),
+        }}
+      >
+        <ReadOreDumpTruckBook />
       </InnerWrapper>
     </RootWrapper>
   );
 };
 
-export default ReadRitageOrePage;
+export default ReadOreDumpTruckPage;

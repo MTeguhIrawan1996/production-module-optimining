@@ -187,7 +187,7 @@ interface IReadOneOreRitage {
   statusMessage: string | null;
   isRitageProblematic: boolean;
   date: string | null;
-  closeDome: boolean;
+  closeDome: boolean | null;
   houseSampleAndLab: {
     elements: IElementWithValue[] | null;
   } | null;

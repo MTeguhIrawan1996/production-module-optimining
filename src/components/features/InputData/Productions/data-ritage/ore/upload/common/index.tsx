@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import UploadRitageOreBook from '@/components/features/InputData/Productions/data-ritage/upload-ritage-ore/common/sections/UploadRitageOreBook';
+import UploadRitageOreBook from '@/components/features/InputData/Productions/data-ritage/ore/upload/common/sections/UploadRitageOreBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
