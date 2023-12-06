@@ -93,6 +93,7 @@ const CreateRitageOreBook = () => {
     mode: 'onBlur',
   });
   const fromPitId = methods.watch('fromPitId');
+  const stockpileId = methods.watch('stockpileId');
   const photos = methods.watch('photos');
   const isRitageProblematic = methods.watch('isRitageProblematic');
   const closeDome = methods.watch('closeDome');
@@ -167,6 +168,7 @@ const CreateRitageOreBook = () => {
       name: 'checkerFromId',
       label: 'fromCheckerName',
       withAsterisk: true,
+      positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
     });
     const fromCheckerPosition = globalText({
       name: 'checkerFromPosition',
@@ -179,6 +181,7 @@ const CreateRitageOreBook = () => {
       name: 'checkerToId',
       label: 'toCheckerName',
       withAsterisk: false,
+      positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
     });
     const toCheckerPosition = globalText({
       colSpan: 6,
@@ -278,7 +281,7 @@ const CreateRitageOreBook = () => {
     const block = globalText({
       colSpan: 6,
       name: 'block',
-      label: 'block',
+      label: 'fromBlock',
       withAsterisk: false,
       disabled: true,
     });
@@ -325,7 +328,7 @@ const CreateRitageOreBook = () => {
       colSpan: 6,
       name: 'domeId',
       label: 'domeName',
-      stockpileId: null,
+      stockpileId: stockpileId,
       withAsterisk: false,
     });
     const bulkSamplingDensityItem = globalNumberInput({
@@ -483,7 +486,7 @@ const CreateRitageOreBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photos, closeDome, isRitageProblematic]);
+  }, [photos, closeDome, isRitageProblematic, stockpileId]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */

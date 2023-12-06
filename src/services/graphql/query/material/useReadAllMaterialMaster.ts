@@ -61,7 +61,7 @@ interface IMaterialsResponse {
 interface IMaterialsRequest extends Partial<IGlobalMetaRequest> {
   parentId?: string | null;
   isHaveParent?: boolean | null;
-  includeIds?: string[];
+  includeIds?: string[] | null;
 }
 
 export const useReadAllMaterialsMaster = ({

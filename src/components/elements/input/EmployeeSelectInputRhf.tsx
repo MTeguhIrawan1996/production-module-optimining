@@ -17,6 +17,7 @@ export type IEmployeeSelectInputRhfProps = {
   control: 'employee-select-input';
   name: string;
   labelValue?: string;
+  positionId?: string | null;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
@@ -34,6 +35,7 @@ const EmployeeSelectInputRhf: React.FC<IEmployeeSelectInputRhfProps> = ({
   label,
   labelValue,
   defaultValue,
+  positionId = null,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -46,6 +48,7 @@ const EmployeeSelectInputRhf: React.FC<IEmployeeSelectInputRhfProps> = ({
       limit: 15,
       search: searchQuery === '' ? null : searchQuery,
       isComplete: true,
+      positionId: positionId === '' ? null : positionId,
     },
   });
 

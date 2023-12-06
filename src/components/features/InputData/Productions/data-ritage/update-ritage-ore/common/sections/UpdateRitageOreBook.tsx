@@ -100,6 +100,7 @@ const UpdateRitageOreBook = () => {
     mode: 'onBlur',
   });
   const fromPitId = methods.watch('fromPitId');
+  const stockpileId = methods.watch('stockpileId');
   const photos = methods.watch('photos');
   const isRitageProblematic = methods.watch('isRitageProblematic');
   const closeDome = methods.watch('closeDome');
@@ -229,6 +230,7 @@ const UpdateRitageOreBook = () => {
       name: 'checkerFromId',
       label: 'fromCheckerName',
       withAsterisk: true,
+      positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
     });
     const fromCheckerPosition = globalText({
       name: 'checkerFromPosition',
@@ -241,6 +243,7 @@ const UpdateRitageOreBook = () => {
       name: 'checkerToId',
       label: 'toCheckerName',
       withAsterisk: false,
+      positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
     });
     const toCheckerPosition = globalText({
       colSpan: 6,
@@ -348,7 +351,7 @@ const UpdateRitageOreBook = () => {
     const block = globalText({
       colSpan: 6,
       name: 'block',
-      label: 'block',
+      label: 'fromBlock',
       withAsterisk: false,
       disabled: true,
     });
@@ -403,7 +406,7 @@ const UpdateRitageOreBook = () => {
       colSpan: 6,
       name: 'domeId',
       label: 'domeName',
-      stockpileId: null,
+      stockpileId: stockpileId,
       withAsterisk: false,
       defaultValue: oreRitage?.dome?.id,
       labelValue: oreRitage?.dome?.name,
@@ -582,6 +585,7 @@ const UpdateRitageOreBook = () => {
     serverPhotos,
     deletedPhotoIds,
     closeDome,
+    stockpileId,
   ]);
   /* #endregion  /**======== Field =========== */
 
