@@ -1,5 +1,6 @@
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -7,26 +8,28 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import {
-  IMutationRitageOre,
-  useCreateRitageOre,
-} from '@/services/restapi/ritage-productions/useCreateRitageOre';
-import { dateToString } from '@/utils/helper/dateToString';
+import { useReadOneUploadFileTRK } from '@/services/graphql/query/file/useReadOneUploadFile';
+import { useUploadFileRitageOre } from '@/services/restapi/ritage-productions/useUploadFileRitageOre';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
-import { ControllerGroup, ControllerProps } from '@/types/global';
+import {
+  ControllerGroup,
+  ControllerProps,
+  ICreateFileProps,
+} from '@/types/global';
 
 const UploadRitageOreBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const [isDirtyFile, setIsDirtyFile] = React.useState<boolean>(false);
+  const [fileId, setFileId] = React.useState<string | null>(null);
 
   /* #   /**=========== Methods =========== */
-  const methods = useForm<any>({
-    // resolver: zodResolver(ritageOreMutationValidation),
+  const methods = useForm<ICreateFileProps>({
     defaultValues: {
-      excel: [],
+      file: [],
     },
     mode: 'onBlur',
   });
@@ -35,8 +38,13 @@ const UploadRitageOreBook = () => {
 
   /* #   /**=========== Query =========== */
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const { mutate, isLoading } = useCreateRitageOre({
+  const { data } = useReadOneUploadFileTRK({
+    variable: {
+      id: fileId as string,
+    },
+  });
+
+  const { mutate, isLoading } = useUploadFileRitageOre({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -54,17 +62,17 @@ const UploadRitageOreBook = () => {
         });
       }
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setFileId(data.data.id);
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('ritageOre.successCreateMessage'),
+        message: data.message,
         icon: <IconCheck />,
       });
-      router.push('/input-data/production/data-ritage?tabs=ore');
-      methods.reset();
     },
   });
+
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
@@ -72,20 +80,22 @@ const UploadRitageOreBook = () => {
   const fieldRhf = React.useMemo(() => {
     const excelFile: ControllerProps = {
       control: 'excel-dropzone',
-      name: 'excel',
+      name: 'file',
       label: 'uploadDataRitage',
       description: 'uploadExcelDescription',
       maxSize: 20 * 1024 ** 2 /* 10MB */,
       multiple: false,
+      dataFaild: data?.uploadFileData.failedData,
       onDrop: (value) => {
-        methods.setValue('excel', value);
-        methods.clearErrors('excel');
+        methods.setValue('file', value);
+        setIsDirtyFile(true);
+        methods.clearErrors('file');
       },
       onReject: (files) =>
-        handleRejectFile<any>({
+        handleRejectFile<ICreateFileProps>({
           methods,
           files,
-          field: 'excel',
+          field: 'file',
         }),
     };
 
@@ -98,37 +108,20 @@ const UploadRitageOreBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [data]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
-  const handleSubmitForm: SubmitHandler<IMutationRitageOre> = (data) => {
+  const handleSubmitForm: SubmitHandler<ICreateFileProps> = (data) => {
     const values = objectToArrayValue(data);
-    const dateValue = ['date'];
-    const numberValue = ['bucketVolume', 'bulkSamplingDensity'];
-    const manipulateValue = values.map((val) => {
-      if (dateValue.includes(val.name)) {
-        const date = dateToString(val.value);
-        return {
-          name: val.name,
-          value: date,
-        };
-      }
-      if (numberValue.includes(val.name)) {
-        return {
-          name: val.name,
-          value: `${val.value}`,
-        };
-      }
-      return {
-        name: val.name,
-        value: val.value,
-      };
-    });
+    const utcOffset = dayjs().utcOffset() / 60;
+
     mutate({
-      data: manipulateValue,
+      data: values,
+      utcOffset: `${utcOffset}`,
     });
   };
+
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
@@ -157,6 +150,7 @@ const UploadRitageOreBook = () => {
         submitButton={{
           label: t('commonTypography.save'),
           loading: isLoading,
+          disabled: !isDirtyFile,
         }}
         backButton={{
           onClick: () =>

@@ -6,7 +6,6 @@ export const READ_ONE_FOTO_ORE_RITAGE_DT = gql`
   query ReadOneFotoOreRitageDT($id: String!) {
     oreRitage(id: $id) {
       id
-
       photos {
         id
         originalFileName
@@ -19,7 +18,6 @@ export const READ_ONE_FOTO_ORE_RITAGE_DT = gql`
 
 interface IReadOneFotoOreRitageDT {
   id: string;
-
   photos: Omit<IFile, 'mime' | 'path'>[] | null;
 }
 

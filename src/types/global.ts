@@ -1,4 +1,5 @@
 import { CheckboxProps } from '@mantine/core';
+import { FileWithPath } from '@mantine/dropzone';
 import { AxiosError } from 'axios';
 import { GraphQLErrorExtensions } from 'graphql';
 
@@ -314,3 +315,7 @@ export interface IListDetailRitageDTData {
 /* #endregion  /**======== Ritage DT =========== */
 
 export type ITabs = 'ore' | 'ob';
+
+export interface ICreateFileProps {
+  file: FileWithPath[] | null;
+}
