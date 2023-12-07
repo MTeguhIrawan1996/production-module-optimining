@@ -28,6 +28,7 @@ export type IExcelInputDropzoneRhfProps = {
   label?: string;
   description?: string;
   withAsterisk?: boolean;
+  dataFaild?: unknown[];
 } & Omit<DropzoneProps, 'name' | 'children'> &
   CommonProps;
 
@@ -37,6 +38,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
   description,
   label,
   withAsterisk,
+  dataFaild,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -72,7 +74,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
             raw: false,
             dateNF: 'd"/"m"/"yyyy',
           });
-          const limitData = data.slice(0, 5);
+          const limitData = data.slice(0, 10);
           const modifiedArray = Object.keys(limitData[0] as any).map((key) => ({
             accessor: key,
           }));
@@ -91,26 +93,81 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
   }, [field.value]);
 
   const renderTable: JSX.Element | undefined = React.useMemo(() => {
+    const currentValue = field.value as FileWithPath[];
+
     if (data && data.length > 0) {
+      return (
+        <Stack align="center" spacing="xs">
+          <MantineDataTable
+            tableProps={{
+              records: data as any,
+              fetching: false,
+              highlightOnHover: true,
+              idAccessor: (record) => {
+                const key = data && data.indexOf(record) + 1;
+                return `${key}`;
+              },
+              columns: [...accessor],
+              defaultColumnRender: (record, _, accesor) => {
+                const data = record[accesor as keyof typeof record];
+                if (accesor === 'is_ritage_problematic') {
+                  return (
+                    <GlobalBadgeStatus
+                      color={data === 'TRUE' ? 'gray.6' : 'brand.6'}
+                      label={
+                        data === 'TRUE'
+                          ? t('commonTypography.problem', { ns: 'default' })
+                          : t('commonTypography.unProblem', { ns: 'default' })
+                      }
+                    />
+                  );
+                }
+                if (accesor === 'date') {
+                  return formatDate(data);
+                }
+                if (accesor === 'close_dome') {
+                  return (
+                    <GlobalBadgeStatus
+                      color={data === 'TRUE' ? 'gray.6' : 'brand.6'}
+                      label={data === 'TRUE' ? 'Close' : 'Open'}
+                    />
+                  );
+                }
+                return data ? data : '-';
+              },
+            }}
+          />
+          <Text fz={14} fw={500} color="gray.6">
+            {currentValue[0].name}
+          </Text>
+        </Stack>
+      );
+    }
+    return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, accessor]);
+
+  const renderFaildTable: JSX.Element | undefined = React.useMemo(() => {
+    if (dataFaild && dataFaild.length > 0) {
       return (
         <MantineDataTable
           tableProps={{
-            records: data as any,
+            records: dataFaild as any,
             fetching: false,
             highlightOnHover: true,
             idAccessor: (record) => {
-              const key = data && data.indexOf(record) + 1;
+              const key = dataFaild && dataFaild.indexOf(record) + 1;
               return `${key}`;
             },
             columns: [...accessor],
             defaultColumnRender: (record, _, accesor) => {
-              const data = record[accesor as keyof typeof record];
+              const rowData = record[accesor as keyof typeof record];
               if (accesor === 'is_ritage_problematic') {
                 return (
                   <GlobalBadgeStatus
-                    color={data === 'TRUE' ? 'gray.6' : 'brand.6'}
+                    color={rowData === 'TRUE' ? 'gray.6' : 'brand.6'}
                     label={
-                      data === 'TRUE'
+                      rowData === 'TRUE'
                         ? t('commonTypography.problem', { ns: 'default' })
                         : t('commonTypography.unProblem', { ns: 'default' })
                     }
@@ -118,17 +175,17 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
                 );
               }
               if (accesor === 'date') {
-                return formatDate(data);
+                return formatDate(rowData);
               }
               if (accesor === 'close_dome') {
                 return (
                   <GlobalBadgeStatus
-                    color={data === 'TRUE' ? 'gray.6' : 'brand.6'}
-                    label={data === 'TRUE' ? 'Close' : 'Open'}
+                    color={rowData === 'TRUE' ? 'gray.6' : 'brand.6'}
+                    label={rowData === 'TRUE' ? 'Close' : 'Open'}
                   />
                 );
               }
-              return data ? data : '-';
+              return rowData ? rowData : '-';
             },
           }}
         />
@@ -136,7 +193,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
     }
     return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, accessor]);
+  }, [dataFaild, accessor]);
 
   return (
     <Stack spacing={8}>
@@ -210,6 +267,16 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
       <SimpleGrid cols={1} mt="sm">
         {renderTable}
       </SimpleGrid>
+      {dataFaild && dataFaild.length ? (
+        <Stack spacing={4} mt="lg">
+          <Text fz={14} fw={500}>
+            List Data Gagal diupload
+          </Text>
+          <SimpleGrid cols={1} mt="sm">
+            {renderFaildTable}
+          </SimpleGrid>
+        </Stack>
+      ) : null}
     </Stack>
   );
 };

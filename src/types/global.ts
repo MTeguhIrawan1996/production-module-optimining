@@ -1,4 +1,5 @@
 import { CheckboxProps } from '@mantine/core';
+import { FileWithPath } from '@mantine/dropzone';
 import { AxiosError } from 'axios';
 import { GraphQLErrorExtensions } from 'graphql';
 
@@ -268,6 +269,7 @@ export interface IUpdateStatusValues {
   statusMessage: string | null;
 }
 
+/* #   /**=========== Ritage DT =========== */
 export interface IDumpTruckRitagesData {
   date: Date | string | null;
   companyHeavyEquipment: {
@@ -310,4 +312,10 @@ export interface IListDetailRitageDTData {
   } | null;
 }
 
+/* #endregion  /**======== Ritage DT =========== */
+
 export type ITabs = 'ore' | 'ob';
+
+export interface ICreateFileProps {
+  file: FileWithPath[] | null;
+}
