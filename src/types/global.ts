@@ -268,6 +268,7 @@ export interface IUpdateStatusValues {
   statusMessage: string | null;
 }
 
+/* #   /**=========== Ritage DT =========== */
 export interface IDumpTruckRitagesData {
   date: Date | string | null;
   companyHeavyEquipment: {
@@ -309,5 +310,7 @@ export interface IListDetailRitageDTData {
     elements: IElementWithValue[] | null;
   } | null;
 }
+
+/* #endregion  /**======== Ritage DT =========== */
 
 export type ITabs = 'ore' | 'ob';

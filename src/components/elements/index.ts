@@ -74,6 +74,7 @@ import VillageSelectInputRhf from '@/components/elements/input/VillageSelectInpu
 import WeatherSelectInputRhf from '@/components/elements/input/WeatherSelectInputRhf';
 import LinkButton from '@/components/elements/link/LinkButton';
 import PrimaryLink from '@/components/elements/link/PrimaryLink';
+import ImageModal from '@/components/elements/modal/ImageModal';
 import LogoutConfirmModal from '@/components/elements/modal/LogoutConfirmModal';
 import ModalConfirmation from '@/components/elements/modal/ModalConfirmation';
 import SelectionButtonModal from '@/components/elements/modal/SelectionButtonModal';
@@ -122,6 +123,7 @@ export {
   HeavyEquipmentSelectInputRhf,
   IdentityRadioInputRhf,
   ImageInputDropzoneRhf,
+  ImageModal,
   InnerWrapper,
   KeyValueList,
   LinkButton,

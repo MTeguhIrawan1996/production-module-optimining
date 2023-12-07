@@ -5,29 +5,37 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GlobalActionTable, MantineDataTable } from '@/components/elements';
+import {
+  GlobalActionTable,
+  ImageModal,
+  MantineDataTable,
+} from '@/components/elements';
 import KeyValueList from '@/components/elements/global/KeyValueList';
+import { IImageModalProps } from '@/components/elements/modal/ImageModal';
 
-import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
 
-import {
-  IElementsData,
-  IListDetailRitageDTData,
-  IMeta,
-  ITabs,
-} from '@/types/global';
+import { IListDetailRitageDTData, IMeta, ITabs } from '@/types/global';
 
-interface IListDetailsRitageDTProps {
-  data?: IListDetailRitageDTData[];
+interface IListDetailsRitageDTProps<T> {
+  data?: T[];
+  columns?: DataTableColumn<T>[];
   meta?: IMeta;
   fetching?: boolean;
   tabs: ITabs;
+  modalProps?: IImageModalProps;
+  onOpenModal: (id: string) => Promise<void>;
 }
 
-const ListDetailsRitageDT: React.FunctionComponent<
-  IListDetailsRitageDTProps
-> = ({ data, meta, fetching, tabs }) => {
+export default function ListDetailsRitageDT<T extends IListDetailRitageDTData>({
+  data,
+  meta,
+  fetching,
+  tabs,
+  columns,
+  modalProps,
+  onOpenModal,
+}: IListDetailsRitageDTProps<T>) {
   const { t } = useTranslation('default');
   const router = useRouter();
   const pageParams = useSearchParams();
@@ -40,34 +48,9 @@ const ListDetailsRitageDT: React.FunctionComponent<
   const companyHeavyEquipmentId = router.query?.id?.[2] as string;
 
   const handleSetPage = (newPage: number) => {
-    const urlSet = `/input-data/production/data-ritage/ore/read-dump-truck/${date}/${shiftId}/${companyHeavyEquipmentId}?p=${newPage}&shift=${shift}&c=${heavyEquipmentCode}&tabs=${tabs}`;
+    const urlSet = `/input-data/production/data-ritage/ore/read/dump-truck/${date}/${shiftId}/${companyHeavyEquipmentId}?p=${newPage}&op=OperatorName&shift=${shift}&c=${heavyEquipmentCode}&tabs=${tabs}`;
     router.push(urlSet, undefined, { shallow: true });
   };
-
-  const { elementsData } = useReadAllElementMaster({
-    variables: {
-      limit: null,
-    },
-  });
-
-  const renderOtherColumnCallback = React.useCallback(
-    (element: IElementsData) => {
-      const column: DataTableColumn<IListDetailRitageDTData> = {
-        accessor: `${element.name}`,
-        title: `${element.name}`,
-        render: ({ houseSampleAndLab }) => {
-          const value = houseSampleAndLab?.elements?.find(
-            (val) => val.element?.name === element.name
-          );
-          return value?.value ?? '-';
-        },
-      };
-      return column;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-  const renderOtherColumn = elementsData?.map(renderOtherColumnCallback);
 
   const renderTable = React.useMemo(() => {
     return (
@@ -144,7 +127,7 @@ const ListDetailsRitageDT: React.FunctionComponent<
               title: t('commonTypography.sampleNumber'),
               render: ({ sampleNumber }) => sampleNumber ?? '-',
             },
-            ...(renderOtherColumn ?? []),
+            ...(columns ?? []),
             {
               accessor: 'photo',
               title: t('commonTypography.photo'),
@@ -155,9 +138,7 @@ const ListDetailsRitageDT: React.FunctionComponent<
                     actionRead={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        router.push(
-                          `/input-data/production/data-ritage/ore/read/${id}`
-                        );
+                        onOpenModal(id);
                       },
                     }}
                   />
@@ -179,7 +160,7 @@ const ListDetailsRitageDT: React.FunctionComponent<
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, fetching, renderOtherColumn]);
+  }, [data, columns, fetching]);
 
   return (
     <>
@@ -217,8 +198,7 @@ const ListDetailsRitageDT: React.FunctionComponent<
         />
       </Stack>
       {renderTable}
+      {modalProps && <ImageModal {...modalProps} />}
     </>
   );
-};
-
-export default ListDetailsRitageDT;
+}

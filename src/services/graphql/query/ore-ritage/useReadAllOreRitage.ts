@@ -38,6 +38,7 @@ export const READ_ALL_RITAGE_ORE = gql`
       }
       data {
         id
+        date
         shift {
           id
           name
@@ -75,6 +76,7 @@ export const READ_ALL_RITAGE_ORE = gql`
 
 interface IOreRitagesData {
   id: string;
+  date: Date | string | null;
   shift: Pick<IShiftsData, 'id' | 'name'> | null;
   companyHeavyEquipment: Pick<
     IHeavyEquipmentCompany,
