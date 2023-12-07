@@ -29,7 +29,7 @@ const RegencySelectInputRhf: React.FC<IRegencySelectInputRhfProps> = ({
   label,
   labelValue,
   defaultValue,
-  provinceId,
+  provinceId = null,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');

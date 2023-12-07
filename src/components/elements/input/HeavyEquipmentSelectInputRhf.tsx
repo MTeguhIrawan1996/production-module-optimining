@@ -30,7 +30,7 @@ const HeavyEquipmentSelectInputRhf: React.FC<
   label,
   labelValue,
   defaultValue,
-  categorySlug,
+  categorySlug = null,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');

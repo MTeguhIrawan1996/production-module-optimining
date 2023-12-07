@@ -118,17 +118,18 @@ export default function MantineDataTable<T>({
                     <Text fw={700} fz={26} color="dark.4" align="center">
                       {emptyStateProps?.title}
                     </Text>
-                    <Box
-                      sx={{
-                        pointerEvents: 'auto',
-                      }}
-                    >
-                      <PrimaryButton
-                        label="Label"
-                        leftIcon={<IconPlus size="20px" />}
-                        {...emptyStateProps?.actionButton}
-                      />
-                    </Box>
+                    {emptyStateProps && emptyStateProps?.actionButton ? (
+                      <Box
+                        sx={{
+                          pointerEvents: 'auto',
+                        }}
+                      >
+                        <PrimaryButton
+                          leftIcon={<IconPlus size="20px" />}
+                          {...emptyStateProps?.actionButton}
+                        />
+                      </Box>
+                    ) : null}
                   </Stack>
                 </Stack>
               ) as any)

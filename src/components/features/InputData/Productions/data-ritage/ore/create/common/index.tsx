@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import UpdateRitageOreBook from '@/components/features/InputData/Productions/data-ritage/update-ritage-ore/common/sections/UpdateRitageOreBook';
+import CreateRitageOreBook from '@/components/features/InputData/Productions/data-ritage/ore/create/common/sections/CreateRitageOreBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const UpdateRitageOrePage = () => {
+const CreateRitageOrePage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -24,7 +24,7 @@ const UpdateRitageOrePage = () => {
         path: '/input-data/production/data-ritage?tabs=ore',
       },
       {
-        label: t('ritageOre.updateRitageOre'),
+        label: t('ritageOre.createRitageOre'),
         path: router.asPath,
       },
     ]);
@@ -34,7 +34,7 @@ const UpdateRitageOrePage = () => {
   return (
     <RootWrapper>
       <InnerWrapper
-        titleProps={{ title: t('ritageOre.formUpdateRitageOre'), mb: 'md' }}
+        titleProps={{ title: t('ritageOre.formRitageOre'), mb: 'md' }}
       >
         <Tabs defaultValue="information" radius={4}>
           <Tabs.List>
@@ -43,7 +43,7 @@ const UpdateRitageOrePage = () => {
             </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="information">
-            <UpdateRitageOreBook />
+            <CreateRitageOreBook />
           </Tabs.Panel>
         </Tabs>
       </InnerWrapper>
@@ -51,4 +51,4 @@ const UpdateRitageOrePage = () => {
   );
 };
 
-export default UpdateRitageOrePage;
+export default CreateRitageOrePage;

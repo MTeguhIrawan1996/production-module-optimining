@@ -31,9 +31,9 @@ const VillageSelectInputRhf: React.FC<IVillageInputRhfProps> = ({
   label,
   labelValue,
   defaultValue,
-  provinceId,
-  regencyId,
-  subdistrictId,
+  provinceId = null,
+  regencyId = null,
+  subdistrictId = null,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');

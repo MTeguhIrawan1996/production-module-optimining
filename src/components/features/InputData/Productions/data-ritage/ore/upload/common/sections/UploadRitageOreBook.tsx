@@ -140,11 +140,13 @@ const UploadRitageOreBook = () => {
       downloadButton={[
         {
           label: t('ritageOre.downloadTemplateOre'),
-          url: `${process.env.NEXT_PUBLIC_REST_API_URL}/download/references`,
+          url: `/ore-ritages/file`,
+          fileName: 'template-ore',
         },
         {
           label: t('commonTypography.downloadReference'),
-          url: `${process.env.NEXT_PUBLIC_REST_API_URL}/download/references`,
+          url: `/download/references`,
+          fileName: 'referensi-ore',
         },
       ]}
     >

@@ -30,8 +30,8 @@ const SubDistrictSelectInputRhf: React.FC<ISubDistrictSelectInputRhfProps> = ({
   label,
   labelValue,
   defaultValue,
-  provinceId,
-  regencyId,
+  provinceId = null,
+  regencyId = null,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');

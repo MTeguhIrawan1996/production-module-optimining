@@ -30,8 +30,8 @@ const ModelSelectInputRhf: React.FC<IModelSelectInputRhfProps> = ({
   label,
   labelValue,
   defaultValue,
-  brandId,
-  typeId,
+  brandId = null,
+  typeId = null,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');

@@ -28,7 +28,7 @@ const LocationSelectInputRhf: React.FC<ILocationSelectInputRhfProps> = ({
   label,
   labelValue,
   defaultValue,
-  categoryId,
+  categoryId = null,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');

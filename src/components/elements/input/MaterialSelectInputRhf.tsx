@@ -41,8 +41,8 @@ const MaterialSelectInput: React.FC<IMaterialSelectnputRhfProps> = ({
   defaultValue,
   deleteButtonField,
   isHaveParent = false,
-  parentId,
-  includeIds,
+  parentId = null,
+  includeIds = null,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -60,7 +60,7 @@ const MaterialSelectInput: React.FC<IMaterialSelectnputRhfProps> = ({
       orderBy: 'createdAt',
       isHaveParent: isHaveParent,
       parentId: parentId === '' ? null : parentId,
-      includeIds,
+      includeIds: includeIds ? includeIds : null,
     },
   });
 

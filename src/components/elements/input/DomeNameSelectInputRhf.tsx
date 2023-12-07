@@ -28,7 +28,7 @@ const DomeNameSelectInputRhf: React.FC<IDomeNameSelectInputRhfProps> = ({
   label,
   labelValue,
   defaultValue,
-  stockpileId,
+  stockpileId = null,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
