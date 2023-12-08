@@ -27,7 +27,7 @@ const UploadRitageOreBook = () => {
   const [isDirtyFile, setIsDirtyFile] = React.useState<boolean>(false);
   const [fileId, setFileId] = React.useState<string | null>(null);
   const [mounted, setMounted] = React.useState<boolean>(false);
-  const [dataFiald, setDataFaild] = React.useState<unknown[]>([]);
+  const [dataFiald, setfaildData] = React.useState<unknown[]>([]);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateFileProps>({
@@ -47,7 +47,8 @@ const UploadRitageOreBook = () => {
     },
     onSuccess: (data) => {
       if (data.processed === data.total) {
-        setDataFaild(data.failedData);
+        setfaildData(data.failedData);
+        setIsDirtyFile(false);
       }
     },
   });
@@ -92,11 +93,11 @@ const UploadRitageOreBook = () => {
       description: 'uploadExcelDescription',
       maxSize: 20 * 1024 ** 2 /* 10MB */,
       multiple: false,
-      dataFaild: dataFiald,
+      faildData: dataFiald,
       onDrop: (value) => {
         methods.setValue('file', value);
         setIsDirtyFile(true);
-        setDataFaild([]);
+        setfaildData([]);
         setMounted(false);
         methods.clearErrors('file');
       },
