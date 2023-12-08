@@ -1,8 +1,8 @@
-import { ReadOreDumpTruckPage } from '@/components/features';
+import { ReadDTOreRitagePage } from '@/components/features';
 import { DashboardLayout } from '@/components/layouts';
 
 const ReadOreDumpTruck = () => {
-  return <ReadOreDumpTruckPage />;
+  return <ReadDTOreRitagePage />;
 };
 
 export default ReadOreDumpTruck;

@@ -1,3 +1,4 @@
+import { DataTableColumn } from 'mantine-datatable';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -10,7 +11,7 @@ import {
 } from '@/components/elements';
 
 import { globalDateNative } from '@/utils/constants/Field/native-field';
-import { formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate, formatDate2 } from '@/utils/helper/dateFormat';
 
 import {
   IDumpTruckRitagesData,
@@ -19,23 +20,27 @@ import {
   ITabs,
 } from '@/types/global';
 
-interface IRitageDTProps {
-  data?: IDumpTruckRitagesData[];
+interface IRitageDTProps<T> {
+  data?: T[];
   meta?: IMeta;
+  columns?: DataTableColumn<T>[];
   tabs: ITabs;
   urlDetail: string;
   fetching?: boolean;
   setDate: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const ListDataRitageDumptruckBook: React.FC<IRitageDTProps> = ({
+export default function ListDataRitageDumptruckBook<
+  T extends IDumpTruckRitagesData
+>({
   data,
   meta,
   tabs,
   fetching,
   urlDetail,
   setDate,
-}) => {
+  columns,
+}: IRitageDTProps<T>) {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('rp')) || 1;
@@ -86,6 +91,12 @@ const ListDataRitageDumptruckBook: React.FC<IRitageDTProps> = ({
               width: 60,
             },
             {
+              accessor: 'date',
+              title: t('commonTypography.date'),
+              width: 160,
+              render: ({ date }) => formatDate(date),
+            },
+            {
               accessor: 'hullNumber',
               title: t('commonTypography.heavyEquipmentCode'),
               render: ({ companyHeavyEquipment }) =>
@@ -111,6 +122,7 @@ const ListDataRitageDumptruckBook: React.FC<IRitageDTProps> = ({
               title: t('commonTypography.tonByRitage'),
               render: ({ tonByRitage }) => tonByRitage ?? '-',
             },
+            ...(columns ?? []),
             {
               accessor: 'action',
               title: t('commonTypography.action'),
@@ -122,7 +134,7 @@ const ListDataRitageDumptruckBook: React.FC<IRitageDTProps> = ({
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `${urlDetail}/${date}/${shift?.id}/${companyHeavyEquipment?.id}?p=1&shift=${shift?.name}&c=${companyHeavyEquipment?.hullNumber}&tabs=${tabs}`
+                          `${urlDetail}/${date}/${shift?.id}/${companyHeavyEquipment?.id}?p=1&op=OperatorName&shift=${shift?.name}&c=${companyHeavyEquipment?.hullNumber}&tabs=${tabs}`
                         );
                       },
                     }}
@@ -149,7 +161,7 @@ const ListDataRitageDumptruckBook: React.FC<IRitageDTProps> = ({
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, fetching]);
+  }, [data, columns, fetching]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
@@ -165,6 +177,4 @@ const ListDataRitageDumptruckBook: React.FC<IRitageDTProps> = ({
       {renderTable}
     </DashboardCard>
   );
-};
-
-export default ListDataRitageDumptruckBook;
+}

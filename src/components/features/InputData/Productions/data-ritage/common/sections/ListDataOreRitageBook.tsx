@@ -113,7 +113,6 @@ const ListDataOreRitageBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      orderBy: 'createdAt',
       date: date === '' ? null : date,
       shiftId: shiftId === '' ? null : shiftId,
       isRitageProblematic: isRitageProblematic,
@@ -239,6 +238,12 @@ const ListDataOreRitageBook = () => {
               render: (record) =>
                 oreRitagesData && oreRitagesData.indexOf(record) + 1,
               width: 60,
+            },
+            {
+              accessor: 'date',
+              title: t('commonTypography.date'),
+              width: 160,
+              render: ({ date }) => formatDate(date),
             },
             {
               accessor: 'shift',
@@ -385,7 +390,7 @@ const ListDataOreRitageBook = () => {
         fetching={oreDumpTruckRitagesDataLoading}
         tabs="ore"
         setDate={setDateHeavyEquipment}
-        urlDetail="/input-data/production/data-ritage/ore/read-dump-truck"
+        urlDetail="/input-data/production/data-ritage/ore/read/dump-truck"
       />
       <ModalConfirmation
         isOpenModalConfirmation={isOpenDeleteConfirmation}
