@@ -166,9 +166,9 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
               if (accesor === 'is_ritage_problematic') {
                 return (
                   <GlobalBadgeStatus
-                    color={rowData === 'TRUE' ? 'gray.6' : 'brand.6'}
+                    color={rowData || rowData === 'TRUE' ? 'gray.6' : 'brand.6'}
                     label={
-                      rowData === 'TRUE'
+                      rowData || rowData === 'TRUE'
                         ? t('commonTypography.problem', { ns: 'default' })
                         : t('commonTypography.unProblem', { ns: 'default' })
                     }
