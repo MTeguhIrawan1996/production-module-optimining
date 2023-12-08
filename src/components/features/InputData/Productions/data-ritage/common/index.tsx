@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { GlobalTabs, InnerWrapper, RootWrapper } from '@/components/elements';
+import ListDataObRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataObRitageBook';
 import ListDataOreRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataOreRitageBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
@@ -47,14 +48,14 @@ const DataRitagePage = () => {
           }}
           tabsData={[
             {
-              label: 'Ore',
+              label: 'Ore (Ore/HGO/LGO)',
               value: 'ore',
               component: <ListDataOreRitageBook />,
             },
             {
-              label: 'Ob',
+              label: 'Overburden (OB)',
               value: 'ob',
-              component: <div className="">OB</div>,
+              component: <ListDataObRitageBook />,
             },
           ]}
         />

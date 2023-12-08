@@ -8,12 +8,14 @@ import {
 } from '@mantine/dropzone';
 import { IconUpload, IconX } from '@tabler/icons-react';
 import { IconFileUpload } from '@tabler/icons-react';
+import { IconDownload } from '@tabler/icons-react';
 import { DataTableColumn } from 'mantine-datatable';
 import * as React from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as XLSX from 'xlsx';
 
+import PrimaryButton from '@/components/elements/button/PrimaryButton';
 import MantineDataTable from '@/components/elements/dataTable/MantineDataTable';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 import GlobalBadgeStatus from '@/components/elements/global/GlobalBadgeStatus';
@@ -28,7 +30,7 @@ export type IExcelInputDropzoneRhfProps = {
   label?: string;
   description?: string;
   withAsterisk?: boolean;
-  dataFaild?: unknown[];
+  faildData?: unknown[];
 } & Omit<DropzoneProps, 'name' | 'children'> &
   CommonProps;
 
@@ -38,7 +40,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
   description,
   label,
   withAsterisk,
-  dataFaild,
+  faildData,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -54,6 +56,41 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
     name,
   });
 
+  const convertJSONtoExcel = () => {
+    if (faildData) {
+      const formattedData = (faildData as any).map((item: any) => {
+        return {
+          ...item,
+          date: formatDate(item.date, 'DD/MM/YYYY'),
+          is_ritage_problematic: item.is_ritage_problematic ? 'TRUE' : 'FALSE',
+          close_dome: item.close_dome ? 'TRUE' : 'FALSE',
+          from_time: formatDate(item.from_time, 'LTS'),
+          arrive_time: formatDate(item.arrive_time, 'LTS'),
+        };
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(formattedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'sheet1');
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array',
+      });
+      const dataExcel = new Blob([excelBuffer], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      const excelFileName = 'faild_data.xlsx';
+
+      if (typeof window !== 'undefined') {
+        // Check if browser is running in the client-side
+        const excelLink = document.createElement('a');
+        excelLink.href = window.URL.createObjectURL(dataExcel);
+        excelLink.download = excelFileName;
+        excelLink.click();
+      }
+    }
+  };
+
   React.useEffect(() => {
     const currentValue = field.value as FileWithPath[];
 
@@ -66,14 +103,15 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
           const workBook = XLSX.read(bstr, {
             type: 'buffer',
             cellDates: true,
-            cellText: false,
+            cellText: true,
           });
           const workSheetName = workBook.SheetNames[0];
           const workSheet = workBook.Sheets[workSheetName];
           const data = XLSX.utils.sheet_to_json(workSheet, {
             raw: false,
-            dateNF: 'd"/"m"/"yyyy',
+            dateNF: 'm/d/yyyy',
           });
+
           const limitData = data.slice(0, 10);
           const modifiedArray = Object.keys(limitData[0] as any).map((key) => ({
             accessor: key,
@@ -98,6 +136,9 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
     if (data && data.length > 0) {
       return (
         <Stack align="center" spacing="xs">
+          <Text fz={14} fw={500} color="gray.6">
+            {currentValue[0].name}
+          </Text>
           <MantineDataTable
             tableProps={{
               records: data as any,
@@ -137,9 +178,6 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
               },
             }}
           />
-          <Text fz={14} fw={500} color="gray.6">
-            {currentValue[0].name}
-          </Text>
         </Stack>
       );
     }
@@ -148,15 +186,15 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
   }, [data, accessor]);
 
   const renderFaildTable: JSX.Element | undefined = React.useMemo(() => {
-    if (dataFaild && dataFaild.length > 0) {
+    if (faildData && faildData.length > 0) {
       return (
         <MantineDataTable
           tableProps={{
-            records: dataFaild as any,
+            records: faildData as any,
             fetching: false,
             highlightOnHover: true,
             idAccessor: (record) => {
-              const key = dataFaild && dataFaild.indexOf(record) + 1;
+              const key = faildData && faildData.indexOf(record) + 1;
               return `${key}`;
             },
             columns: [...accessor],
@@ -165,9 +203,9 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
               if (accesor === 'is_ritage_problematic') {
                 return (
                   <GlobalBadgeStatus
-                    color={rowData === 'TRUE' ? 'gray.6' : 'brand.6'}
+                    color={rowData || rowData === 'TRUE' ? 'gray.6' : 'brand.6'}
                     label={
-                      rowData === 'TRUE'
+                      rowData || rowData === 'TRUE'
                         ? t('commonTypography.problem', { ns: 'default' })
                         : t('commonTypography.unProblem', { ns: 'default' })
                     }
@@ -176,6 +214,12 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
               }
               if (accesor === 'date') {
                 return formatDate(rowData);
+              }
+              if (accesor === 'from_time') {
+                return formatDate(rowData, 'hh:mm:ss A');
+              }
+              if (accesor === 'arrive_time') {
+                return formatDate(rowData, 'hh:mm:ss A');
               }
               if (accesor === 'close_dome') {
                 return (
@@ -193,7 +237,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
     }
     return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataFaild, accessor]);
+  }, [faildData, accessor]);
 
   return (
     <Stack spacing={8}>
@@ -267,11 +311,17 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
       <SimpleGrid cols={1} mt="sm">
         {renderTable}
       </SimpleGrid>
-      {dataFaild && dataFaild.length ? (
-        <Stack spacing={4} mt="lg">
-          <Text fz={14} fw={500}>
+      {faildData && faildData.length ? (
+        <Stack spacing={4} mt="lg" align="flex-start">
+          <Text fz={16} fw={400} component="span">
             List Data Gagal diupload
           </Text>
+          <PrimaryButton
+            label={t('commonTypography.download', { ns: 'default' })}
+            leftIcon={<IconDownload size="20px" />}
+            mt={3}
+            onClick={() => convertJSONtoExcel()}
+          />
           <SimpleGrid cols={1} mt="sm">
             {renderFaildTable}
           </SimpleGrid>

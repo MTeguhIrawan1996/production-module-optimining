@@ -185,9 +185,9 @@ const ReadRitageOreBook = () => {
     });
   };
 
-  const includesWaiting = ['e0d4c28c-7496-485f-bcf6-fec7ff3ea688'];
-
-  const includesValid = ['4d4d646d-d0e5-4f94-ba6d-171be20032fc'];
+  const includesWaiting = [`${process.env.NEXT_PUBLIC_STATUS_WAITING}`];
+  const includesValid = [`${process.env.NEXT_PUBLIC_STATUS_VALID}`];
+  const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
   const isShowButtonValidation = includesWaiting.includes(
     oreRitage?.status?.id ?? ''
@@ -204,15 +204,24 @@ const ReadRitageOreBook = () => {
   const isShowButtonReject = includesValid.includes(
     oreRitage?.status?.id ?? ''
   );
+  const isHiddenButtonEdit = includesDetermined.includes(
+    oreRitage?.status?.id ?? ''
+  );
 
   return (
     <DashboardCard
       title={t('ritageOre.readRitageOre')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () =>
-          router.push(`/input-data/production/data-ritage/ore/update/${id}`),
-      }}
+      updateButton={
+        isHiddenButtonEdit
+          ? undefined
+          : {
+              label: 'Edit',
+              onClick: () =>
+                router.push(
+                  `/input-data/production/data-ritage/ore/update/${id}`
+                ),
+            }
+      }
       validationButton={
         isShowButtonValidation
           ? {
