@@ -1,28 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { gql } from 'graphql-request';
-import { getSession } from 'next-auth/react';
 
-import { gqlClient } from '@/services/graphql/graphql-request';
+import axiosClient from '@/services/restapi/axiosClient';
 
-import { IFile } from '@/types/global';
-
-export const READ_ONE_UPLOAD_FILE = gql`
-  query ReadOneUploadFile($id: String!) {
-    uploadFileData(id: $id) {
-      id
-      file {
-        id
-        originalFileName
-        url
-        fileName
-      }
-      total
-      succeed
-      processed
-      failedData
-    }
-  }
-`;
+import { AxiosRestErrorResponse, IFile } from '@/types/global';
 
 export interface IReadOneUploadFile {
   id: string;
@@ -33,54 +13,51 @@ export interface IReadOneUploadFile {
   failedData: unknown[];
 }
 
-export interface IReadOneUploadFileResponse {
-  uploadFileData: IReadOneUploadFile;
-}
+export type IReadOneUploadFileResponse = IReadOneUploadFile;
 
 export interface IReadOneUploadFileRequest {
   id: string;
 }
 
+const ReadOneUploadFileTRK = async ({ id }: IReadOneUploadFileRequest) => {
+  const axiosAuth = axiosClient();
+  const response = await axiosAuth.get(`/upload-file-datas/${id}`);
+  return response.data;
+};
+
 export const useReadOneUploadFileTRK = ({
   variable,
   onSuccess,
+  onError,
 }: {
   variable: IReadOneUploadFileRequest;
-  onSuccess?: () => void;
+  onSuccess?: (data: IReadOneUploadFileResponse) => void;
+  onError?: (
+    error: AxiosRestErrorResponse<Omit<IReadOneUploadFile, 'id'>>
+  ) => unknown;
 }) => {
   const { id } = variable;
 
-  return useQuery<IReadOneUploadFileResponse | null, any>({
+  return useQuery<
+    IReadOneUploadFileResponse,
+    AxiosRestErrorResponse<Omit<IReadOneUploadFile, 'id'>>
+  >({
     queryFn: async () => {
-      const session = await getSession();
-      const authorization = session
-        ? `Bearer ${session.user.login.accessToken.token}`
-        : '';
-      gqlClient.setHeaders({
-        authorization,
-      });
-
-      try {
-        return await gqlClient.request(
-          READ_ONE_UPLOAD_FILE,
-          // variables are type-checked too!
-          { id: id }
-        );
-      } catch (error) {
-        return null;
-      }
+      const data = await ReadOneUploadFileTRK({ id });
+      return data;
     },
     onSuccess: onSuccess,
+    onError: onError,
     queryKey: ['fileData', { id }],
     enabled: !!id,
     refetchInterval: (data) => {
-      if (data?.uploadFileData.processed === data?.uploadFileData.total) {
+      if (data?.processed === data?.total) {
         return false;
       }
-      if (data?.uploadFileData.succeed === data?.uploadFileData.total) {
+      if (data?.succeed === data?.total) {
         return false;
       }
-      return 3000;
+      return 500;
     },
   });
 };

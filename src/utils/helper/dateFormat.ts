@@ -14,6 +14,7 @@ export const formatDate = (
     | 'DD'
     | 'LL'
     | 'YYYY-MM-DD'
+    | 'YYYY-DD-MM'
     | 'dddd, LL'
     | 'LLLL WIB'
     | 'hh:mm WIB'

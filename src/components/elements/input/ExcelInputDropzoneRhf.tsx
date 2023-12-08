@@ -66,14 +66,15 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
           const workBook = XLSX.read(bstr, {
             type: 'buffer',
             cellDates: true,
-            cellText: false,
+            cellText: true,
           });
           const workSheetName = workBook.SheetNames[0];
           const workSheet = workBook.Sheets[workSheetName];
           const data = XLSX.utils.sheet_to_json(workSheet, {
             raw: false,
-            dateNF: 'd"/"m"/"yyyy',
+            dateNF: 'm/d/yyyy',
           });
+
           const limitData = data.slice(0, 10);
           const modifiedArray = Object.keys(limitData[0] as any).map((key) => ({
             accessor: key,
@@ -98,6 +99,9 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
     if (data && data.length > 0) {
       return (
         <Stack align="center" spacing="xs">
+          <Text fz={14} fw={500} color="gray.6">
+            {currentValue[0].name}
+          </Text>
           <MantineDataTable
             tableProps={{
               records: data as any,
@@ -137,9 +141,6 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
               },
             }}
           />
-          <Text fz={14} fw={500} color="gray.6">
-            {currentValue[0].name}
-          </Text>
         </Stack>
       );
     }
@@ -269,7 +270,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
       </SimpleGrid>
       {dataFaild && dataFaild.length ? (
         <Stack spacing={4} mt="lg">
-          <Text fz={14} fw={500}>
+          <Text fz={16} fw={400} component="span">
             List Data Gagal diupload
           </Text>
           <SimpleGrid cols={1} mt="sm">
