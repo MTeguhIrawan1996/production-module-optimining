@@ -19,7 +19,7 @@ import ListDataRitageDumptruckBook from '@/components/features/InputData/Product
 import { useDeleteOverburdenRitage } from '@/services/graphql/mutation/ob-ritage/useDeleteObRitage';
 import { useReadAllHeavyEquipmentSelect } from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
 import { useReadAllRitageOB } from '@/services/graphql/query/ob-ritage/useReadAllObRitage';
-import { useReadAllRitageOreDT } from '@/services/graphql/query/ore-ritage/useReadAllOreRitageDT';
+import { useReadAllRitageObDT } from '@/services/graphql/query/ob-ritage/useReadAllObRitageDT';
 import { useReadAllShiftMaster } from '@/services/graphql/query/shift/useReadAllShiftMaster';
 import {
   globalDateNative,
@@ -91,10 +91,10 @@ const ListDataObRitageBook = () => {
   });
 
   const {
-    oreDumpTruckRitagesData,
-    oreDumpTruckRitagesDataMeta,
-    oreDumpTruckRitagesDataLoading,
-  } = useReadAllRitageOreDT({
+    overburdenDumpTruckRitagesData,
+    overburdenDumpTruckRitagesDataLoading,
+    overburdenDumpTruckRitagesDataMeta,
+  } = useReadAllRitageObDT({
     variables: {
       limit: 10,
       page: heavyEquipmentPage,
@@ -386,9 +386,9 @@ const ListDataObRitageBook = () => {
     >
       {renderTable}
       <ListDataRitageDumptruckBook
-        data={oreDumpTruckRitagesData}
-        meta={oreDumpTruckRitagesDataMeta}
-        fetching={oreDumpTruckRitagesDataLoading}
+        data={overburdenDumpTruckRitagesData}
+        meta={overburdenDumpTruckRitagesDataMeta}
+        fetching={overburdenDumpTruckRitagesDataLoading}
         tabs="ob"
         setDate={setDateHeavyEquipment}
         urlDetail="/input-data/production/data-ritage/ob/read/dump-truck"
