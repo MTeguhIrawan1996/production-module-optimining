@@ -2,7 +2,7 @@ import { FileWithPath } from '@mantine/dropzone';
 import { useMutation } from '@tanstack/react-query';
 
 import axiosClient from '@/services/restapi/axiosClient';
-import { IMutationRitageOre } from '@/services/restapi/ritage-productions/useCreateRitageOre';
+import { IMutationRitageOre } from '@/services/restapi/ritage-productions/ore/useCreateRitageOre';
 
 import { AxiosRestErrorResponse } from '@/types/global';
 

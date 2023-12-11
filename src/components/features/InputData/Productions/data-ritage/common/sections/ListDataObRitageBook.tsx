@@ -308,7 +308,7 @@ const ListDataObRitageBook = () => {
               accessor: 'action',
               title: t('commonTypography.action'),
               width: 100,
-              render: ({ id }) => {
+              render: ({ id, status }) => {
                 return (
                   <GlobalKebabButton
                     actionRead={{
@@ -319,21 +319,31 @@ const ListDataObRitageBook = () => {
                         );
                       },
                     }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/production/data-ritage/ob/update/${id}`
-                        );
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionUpdate={
+                      status?.id !==
+                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/data-ritage/ob/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      status?.id !==
+                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },

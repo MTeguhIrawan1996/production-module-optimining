@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { IMutationRitageOre } from '@/services/restapi/ritage-productions/ore/useCreateRitageOre';
+import { IMutationRitageOb } from '@/services/restapi/ritage-productions/ob/useCreateRitageOb';
 import {
   zDateValidation,
   zImageArrayOptional,
@@ -10,7 +10,7 @@ import {
   zRequiredString,
 } from '@/utils/form-validation/global';
 
-export const ritageOreMutationValidation: z.ZodType<IMutationRitageOre> = z
+export const ritageObMutationValidation: z.ZodType<IMutationRitageOb> = z
   .object({
     date: zDateValidation,
     checkerFromId: zRequiredSelectInput,
@@ -31,11 +31,7 @@ export const ritageOreMutationValidation: z.ZodType<IMutationRitageOre> = z
     fromGridId: zOptionalString.nullable(),
     fromSequenceId: zOptionalString.nullable(),
     fromElevationId: zOptionalString.nullable(),
-    fromLevel: zOptionalString,
-    toLevel: zOptionalString,
-    stockpileId: zOptionalString.nullable(),
-    domeId: zOptionalString.nullable(),
-    closeDome: z.boolean(),
+    disposalId: zOptionalString.nullable(),
     bulkSamplingDensity: zRequiredNumber,
     bucketVolume: zRequiredNumber,
     tonByRitage: zOptionalString,

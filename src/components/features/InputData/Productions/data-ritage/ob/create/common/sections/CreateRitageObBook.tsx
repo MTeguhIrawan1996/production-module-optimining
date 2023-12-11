@@ -11,9 +11,9 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
 import {
-  IMutationRitageOre,
-  useCreateRitageOre,
-} from '@/services/restapi/ritage-productions/ore/useCreateRitageOre';
+  IMutationRitageOb,
+  useCreateRitageOb,
+} from '@/services/restapi/ritage-productions/ob/useCreateRitageOb';
 import {
   employeeSelect,
   globalDate,
@@ -27,11 +27,7 @@ import {
   weatherSelect,
 } from '@/utils/constants/Field/global-field';
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
-import {
-  domeNameSelect,
-  stockpileNameSelect,
-} from '@/utils/constants/Field/stockpile-field';
-import { ritageOreMutationValidation } from '@/utils/form-validation/ritage/ritage-ore-validation';
+import { ritageObMutationValidation } from '@/utils/form-validation/ritage/ritage-ob-validation';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
 import { dateToString } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
@@ -41,7 +37,7 @@ import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
 import { ControllerGroup, ControllerProps } from '@/types/global';
 
-const CreateRitageOreBook = () => {
+const CreateRitageObBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const [newFromTime, setNewFromTime] = useDebouncedState<string>('', 400);
@@ -54,8 +50,8 @@ const CreateRitageOreBook = () => {
   );
 
   /* #   /**=========== Methods =========== */
-  const methods = useForm<IMutationRitageOre>({
-    resolver: zodResolver(ritageOreMutationValidation),
+  const methods = useForm<IMutationRitageOb>({
+    resolver: zodResolver(ritageObMutationValidation),
     defaultValues: {
       date: new Date(),
       checkerFromId: '',
@@ -64,7 +60,7 @@ const CreateRitageOreBook = () => {
       checkerToPosition: '',
       shiftId: '',
       companyHeavyEquipmentId: '',
-      materialId: `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`,
+      materialId: `${process.env.NEXT_PUBLIC_MATERIAL_OB_ID}`,
       subMaterialId: '',
       fromTime: '',
       arriveTime: '',
@@ -76,11 +72,7 @@ const CreateRitageOreBook = () => {
       fromGridId: '',
       fromSequenceId: '',
       fromElevationId: '',
-      fromLevel: '',
-      toLevel: '',
-      stockpileId: '',
-      domeId: '',
-      closeDome: false,
+      disposalId: '',
       bulkSamplingDensity: '',
       bucketVolume: '',
       tonByRitage: '',
@@ -93,10 +85,8 @@ const CreateRitageOreBook = () => {
     mode: 'onBlur',
   });
   const fromPitId = methods.watch('fromPitId');
-  const stockpileId = methods.watch('stockpileId');
   const photos = methods.watch('photos');
   const isRitageProblematic = methods.watch('isRitageProblematic');
-  const closeDome = methods.watch('closeDome');
 
   React.useEffect(() => {
     const ritageDuration = hourDiff(newFromTime, newArriveTime);
@@ -121,7 +111,7 @@ const CreateRitageOreBook = () => {
   });
 
   // eslint-disable-next-line unused-imports/no-unused-vars
-  const { mutate, isLoading } = useCreateRitageOre({
+  const { mutate, isLoading } = useCreateRitageOb({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -143,10 +133,10 @@ const CreateRitageOreBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('ritageOre.successCreateMessage'),
+        message: t('ritageOb.successCreateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/input-data/production/data-ritage?tabs=ore');
+      router.push('/input-data/production/data-ritage?tabs=ob');
       methods.reset();
     },
   });
@@ -210,21 +200,16 @@ const CreateRitageOreBook = () => {
       colSpan: 6,
       name: 'materialId',
       label: 'material',
-      disabled: true,
       withAsterisk: true,
-      includeIds: [`${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`],
-      onChange: (value) => {
-        methods.setValue('materialId', value ?? '');
-        methods.setValue('subMaterialId', '');
-        methods.trigger('materialId');
-      },
+      disabled: true,
+      includeIds: [`${process.env.NEXT_PUBLIC_MATERIAL_OB_ID}`],
     });
     const materialSubItem = materialSelect({
       colSpan: 6,
       name: 'subMaterialId',
       label: 'subMaterial',
       withAsterisk: true,
-      parentId: `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`,
+      parentId: `${process.env.NEXT_PUBLIC_MATERIAL_OB_ID}`,
       isHaveParent: null,
     });
     const fromTime = globalTimeInput({
@@ -306,31 +291,14 @@ const CreateRitageOreBook = () => {
       withAsterisk: false,
       categoryId: `${process.env.NEXT_PUBLIC_ELEVASI_ID}`,
     });
-    const fromLevel = globalText({
-      colSpan: 6,
-      name: 'fromLevel',
-      label: 'fromLevel',
+    const disposalItem = locationSelect({
+      colSpan: 12,
+      name: 'disposalId',
+      label: 'toDisposal',
       withAsterisk: false,
+      categoryId: `${process.env.NEXT_PUBLIC_DISPOSAL_ID}`,
     });
-    const toLevel = globalText({
-      colSpan: 6,
-      name: 'toLevel',
-      label: 'toLevel',
-      withAsterisk: false,
-    });
-    const stockpileItem = stockpileNameSelect({
-      colSpan: 6,
-      name: 'stockpileId',
-      label: 'stockpileName',
-      withAsterisk: false,
-    });
-    const domeItem = domeNameSelect({
-      colSpan: 6,
-      name: 'domeId',
-      label: 'domeName',
-      stockpileId: stockpileId,
-      withAsterisk: false,
-    });
+
     const bulkSamplingDensityItem = globalNumberInput({
       colSpan: 6,
       name: 'bulkSamplingDensity',
@@ -359,12 +327,6 @@ const CreateRitageOreBook = () => {
       label: 'tonByRitage',
       withAsterisk: false,
       disabled: true,
-    });
-    const sampleNumberItem = globalText({
-      colSpan: 6,
-      name: 'sampleNumber',
-      label: 'sampleNumber',
-      withAsterisk: false,
     });
     const desc = globalText({
       colSpan: 12,
@@ -399,7 +361,7 @@ const CreateRitageOreBook = () => {
         methods.clearErrors('photos');
       },
       onReject: (files) =>
-        handleRejectFile<IMutationRitageOre>({
+        handleRejectFile<IMutationRitageOb>({
           methods,
           files,
           field: 'photos',
@@ -445,22 +407,9 @@ const CreateRitageOreBook = () => {
         ],
       },
       {
-        group: t('commonTypography.level'),
-        enableGroupLabel: true,
-        formControllers: [fromLevel, toLevel],
-      },
-      {
         group: t('commonTypography.arrive'),
         enableGroupLabel: true,
-        groupCheckbox: {
-          onChange: () => {
-            closeDome === true
-              ? methods.setValue('closeDome', false)
-              : methods.setValue('closeDome', true);
-          },
-          label: t('commonTypography.closeDome'),
-        },
-        formControllers: [stockpileItem, domeItem],
+        formControllers: [disposalItem],
       },
       {
         group: t('commonTypography.detail'),
@@ -469,7 +418,6 @@ const CreateRitageOreBook = () => {
           bulkSamplingDensityItem,
           bucketVolumeItem,
           tonByRitageItem,
-          sampleNumberItem,
         ],
       },
       {
@@ -486,11 +434,11 @@ const CreateRitageOreBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photos, closeDome, isRitageProblematic, stockpileId]);
+  }, [photos, isRitageProblematic]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
-  const handleSubmitForm: SubmitHandler<IMutationRitageOre> = (data) => {
+  const handleSubmitForm: SubmitHandler<IMutationRitageOb> = (data) => {
     const values = objectToArrayValue(data);
     const dateValue = ['date'];
     const numberValue = ['bucketVolume', 'bulkSamplingDensity'];
@@ -542,11 +490,11 @@ const CreateRitageOreBook = () => {
         }}
         backButton={{
           onClick: () =>
-            router.push('/input-data/production/data-ritage?tabs=ore'),
+            router.push('/input-data/production/data-ritage?tabs=ob'),
         }}
       />
     </DashboardCard>
   );
 };
 
-export default CreateRitageOreBook;
+export default CreateRitageObBook;
