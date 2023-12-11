@@ -1,6 +1,6 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
-import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
+import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
 
 import {
   GResponse,
@@ -8,8 +8,8 @@ import {
   IGlobalMetaRequest,
 } from '@/types/global';
 
-export const READ_ALL_RITAGE_ORE = gql`
-  query ReadAllRitageOre(
+export const READ_ALL_RITAGE_OB = gql`
+  query ReadAllRitageOB(
     $page: Int
     $limit: Int
     $date: String
@@ -19,8 +19,8 @@ export const READ_ALL_RITAGE_ORE = gql`
     $companyHeavyEquipmentId: String
     $isRitageProblematic: Boolean
   ) {
-    oreRitages(
-      findAllOreRitageInput: {
+    overburdenRitages(
+      findAllOverburdenRitageInput: {
         page: $page
         limit: $limit
         date: $date
@@ -58,11 +58,10 @@ export const READ_ALL_RITAGE_ORE = gql`
           id
           name
         }
-        dome {
+        disposal {
           id
           name
         }
-        sampleNumber
         status {
           id
           name
@@ -76,15 +75,15 @@ export const READ_ALL_RITAGE_ORE = gql`
 `;
 
 interface IOtherProps {
-  dome: Pick<IStockpilesData, 'id' | 'name'> | null;
+  disposal: Pick<ILocationsData, 'id' | 'name'> | null;
   sampleNumber: string | null;
 }
 
-interface IOreRitagesResponse {
-  oreRitages: GResponse<ICommonRitagesData<IOtherProps>>;
+interface IOverburdenRitagesResponse {
+  overburdenRitages: GResponse<ICommonRitagesData<IOtherProps>>;
 }
 
-interface IOreRitagesRequest
+interface IOverburdenRitagesRequest
   extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
   date?: string | null;
   shiftId?: string | null;
@@ -92,33 +91,36 @@ interface IOreRitagesRequest
   companyHeavyEquipmentId?: string | null;
 }
 
-export const useReadAllRitageOre = ({
+export const useReadAllRitageOB = ({
   variables,
   onCompleted,
   skip,
 }: {
-  variables?: IOreRitagesRequest;
-  onCompleted?: (data: IOreRitagesResponse) => void;
+  variables?: IOverburdenRitagesRequest;
+  onCompleted?: (data: IOverburdenRitagesResponse) => void;
   skip?: boolean;
 }) => {
   const {
-    data: oreRitagesData,
-    loading: oreRitagesDataLoading,
+    data: overburdenRitagesData,
+    loading: overburdenRitagesDataLoading,
     refetch,
-  } = useQuery<IOreRitagesResponse, IOreRitagesRequest>(READ_ALL_RITAGE_ORE, {
-    variables: variables,
-    skip: skip,
-    onError: (err: ApolloError) => {
-      return err;
-    },
-    onCompleted,
-    fetchPolicy: 'cache-and-network',
-  });
+  } = useQuery<IOverburdenRitagesResponse, IOverburdenRitagesRequest>(
+    READ_ALL_RITAGE_OB,
+    {
+      variables: variables,
+      skip: skip,
+      onError: (err: ApolloError) => {
+        return err;
+      },
+      onCompleted,
+      fetchPolicy: 'cache-and-network',
+    }
+  );
 
   return {
-    oreRitagesData: oreRitagesData?.oreRitages.data,
-    oreRitagesDataMeta: oreRitagesData?.oreRitages.meta,
-    oreRitagesDataLoading,
-    refetchOreRitages: refetch,
+    overburdenRitagesData: overburdenRitagesData?.overburdenRitages.data,
+    overburdenRitagesDataMeta: overburdenRitagesData?.overburdenRitages.meta,
+    overburdenRitagesDataLoading,
+    refetchOverburdenRitages: refetch,
   };
 };

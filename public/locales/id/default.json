@@ -7,7 +7,7 @@
     "production": "Produksi",
     "dataRitage": "Data Ritase",
     "dataRitageOre": "Data Ritase Ore",
-    "dataRitageOb": "Data Ritase Ob",
+    "dataRitageOb": "Data Ritase OB",
     "block": "Block",
     "pit": "PIT",
     "locationId": "ID Lokasi",
@@ -292,7 +292,8 @@
     "ritageStatus": "Status Ritase",
     "readRitageDT": "$t(commonTypography.detail) Data Ritase Dump Truck",
     "problem": "Bermasalah",
-    "unProblem": "Tidak Bermasalah"
+    "unProblem": "Tidak Bermasalah",
+    "toDisposal": "Ke Disposal"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -625,7 +626,7 @@
     "readRitageOb": "$t(commonTypography.detail) $t(commonTypography.dataRitageOb)",
     "updateRitageOb": "$t(commonTypography.edit) $t(commonTypography.dataRitageOb)",
     "successDeleteMessage": "$t(commonTypography.dataRitageOb) berhasil dihapus",
-    "downloadTemplateOb": "Unduh Tamplate Input Data Ritase Ob",
+    "downloadTemplateOb": "Unduh Tamplate Input Data Ritase OB",
     "formRitageOb": "$t(commonTypography.form) $t(ritageOb.ritageObTitle)",
     "formUploadRitageOb": "$t(commonTypography.form) $t(commonTypography.upload) $t(ritageOb.ritageObTitle)",
     "formUpdateRitageOb": "$t(commonTypography.form) $t(commonTypography.edit) $t(ritageOb.ritageObTitle)",

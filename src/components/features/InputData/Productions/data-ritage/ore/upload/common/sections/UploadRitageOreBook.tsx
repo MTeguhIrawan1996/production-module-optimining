@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { useReadOneUploadFileTRK } from '@/services/graphql/query/file/useReadOneUploadFile';
-import { useUploadFileRitageOre } from '@/services/restapi/ritage-productions/useUploadFileRitageOre';
+import { useUploadFileRitageOre } from '@/services/restapi/ritage-productions/ore/useUploadFileRitageOre';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';

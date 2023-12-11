@@ -11,8 +11,8 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
 import { useReadOneOreRitage } from '@/services/graphql/query/ore-ritage/useReadOneOreRitage';
-import { IMutationRitageOre } from '@/services/restapi/ritage-productions/useCreateRitageOre';
-import { useUpdateRitageOre } from '@/services/restapi/ritage-productions/useUpdateRitageOre';
+import { IMutationRitageOre } from '@/services/restapi/ritage-productions/ore/useCreateRitageOre';
+import { useUpdateRitageOre } from '@/services/restapi/ritage-productions/ore/useUpdateRitageOre';
 import {
   employeeSelect,
   globalDate,
