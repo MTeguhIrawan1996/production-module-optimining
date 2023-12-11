@@ -291,6 +291,25 @@ const ReadRitageObBook = () => {
               mt="md"
             />
           ) : null}
+          <Stack spacing="sm" mt="md">
+            <KeyValueList
+              data={[
+                {
+                  dataKey: t('commonTypography.date'),
+                  value: formatDate(overburdenRitage?.date),
+                },
+              ]}
+              type="grid"
+              keyStyleText={{
+                fw: 400,
+                fz: 20,
+              }}
+              valueStyleText={{
+                fw: 600,
+                fz: 20,
+              }}
+            />
+          </Stack>
           {!overburdenRitageLoading && overburdenRitage ? (
             <>
               <GlobalHeaderDetail
