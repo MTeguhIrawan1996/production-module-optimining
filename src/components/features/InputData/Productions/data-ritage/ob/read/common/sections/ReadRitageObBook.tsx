@@ -15,8 +15,8 @@ import {
   KeyValueList,
 } from '@/components/elements';
 
-import { useUpdateIsDeterminedOreRitage } from '@/services/graphql/mutation/ore-ritage/useIsDeterminedOreRitage';
-import { useUpdateIsValidateOreRitage } from '@/services/graphql/mutation/ore-ritage/useIsValidateOreRitage';
+import { useUpdateIsDeterminedObRitage } from '@/services/graphql/mutation/ob-ritage/useIsDeterminedObRitage';
+import { useUpdateIsValidateObRitage } from '@/services/graphql/mutation/ob-ritage/useIsValidateObRitage';
 import { useReadOneObRitage } from '@/services/graphql/query/ob-ritage/useReadOneObRitage';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
@@ -44,24 +44,24 @@ const ReadRitageObBook = () => {
     skip: !router.isReady,
   });
 
-  const [executeUpdateStatus, { loading }] = useUpdateIsValidateOreRitage({
+  const [executeUpdateStatus, { loading }] = useUpdateIsValidateObRitage({
     onCompleted: (data) => {
       const message = {
         '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
-          'ritageOre.successIsValidateMessage'
+          'ritageOb.successIsValidateMessage'
         ),
         'af06163a-2ba3-45ee-a724-ab3af0c97cc9': t(
-          'ritageOre.successIsNotValidateMessage'
+          'ritageOb.successIsNotValidateMessage'
         ),
-        default: t('commonTypography.dataRitageOre'),
+        default: t('commonTypography.dataRitageOb'),
       };
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: message[data.validateOreRitage.status.id],
+        message: message[data.validateOverburdenRitage.status.id],
         icon: <IconCheck />,
       });
-      router.push('/input-data/production/data-ritage?tabs=ore');
+      router.push('/input-data/production/data-ritage?tabs=ob');
     },
     onError: (error) => {
       if (error.graphQLErrors) {
@@ -76,24 +76,24 @@ const ReadRitageObBook = () => {
   });
 
   const [executeUpdateStatusDetermiend, { loading: determinedLoading }] =
-    useUpdateIsDeterminedOreRitage({
+    useUpdateIsDeterminedObRitage({
       onCompleted: (data) => {
         const message = {
           'f5f644d9-8810-44f7-8d42-36b5222b97d1': t(
-            'ritageOre.successIsDeterminedMessage'
+            'ritageOb.successIsDeterminedMessage'
           ),
           '7848a063-ae40-4a80-af86-dfc532cbb688': t(
-            'ritageOre.successIsRejectMessage'
+            'ritageOb.successIsRejectMessage'
           ),
-          default: t('commonTypography.dataRitageOre'),
+          default: t('commonTypography.dataRitageOb'),
         };
         notifications.show({
           color: 'green',
           title: 'Selamat',
-          message: message[data.determineOreRitage.status.id],
+          message: message[data.determineOverburdenRitage.status.id],
           icon: <IconCheck />,
         });
-        router.push('/input-data/production/data-ritage?tabs=ore');
+        router.push('/input-data/production/data-ritage?tabs=ob');
       },
       onError: (error) => {
         if (error.graphQLErrors) {
