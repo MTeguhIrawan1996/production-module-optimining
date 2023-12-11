@@ -54,7 +54,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      if (sessionData) {
+      if (sessionData && sessionData.user.permission) {
         const permissionSession = await decodeFc<string[]>(
           sessionData.user.permission
         );

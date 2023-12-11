@@ -384,7 +384,7 @@ const ListDataObRitageBook = () => {
       downloadButton={[
         {
           label: t('ritageOb.downloadTemplateOb'),
-          url: `/ob-ritages/file`,
+          url: `/overburden-ritages/file`,
           fileName: 'template-ob',
         },
         {
