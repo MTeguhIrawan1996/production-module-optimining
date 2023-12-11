@@ -4,6 +4,7 @@ import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
 import DataRitagePage from '@/components/features/InputData/Productions/data-ritage/common';
 import CreateRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/create/common';
+import ReadRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/read/common';
 import CreateRitageOrePage from '@/components/features/InputData/Productions/data-ritage/ore/create/common';
 import ReadRitageOrePage from '@/components/features/InputData/Productions/data-ritage/ore/read/common';
 import ReadDTOreRitagePage from '@/components/features/InputData/Productions/data-ritage/ore/read/read-dump-truck/common';
@@ -154,6 +155,7 @@ export {
   ReadLocationMasterPage,
   ReadManagementRolePage,
   ReadMaterialMasterPage,
+  ReadRitageObPage,
   ReadRitageOrePage,
   ReadSampleHouseLabPage,
   ReadShiftMasterPage,

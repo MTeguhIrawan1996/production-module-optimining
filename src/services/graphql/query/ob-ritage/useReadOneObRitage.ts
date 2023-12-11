@@ -1,12 +1,12 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
-import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
+import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
 
-import { IElementWithValue, IReadOneRitage } from '@/types/global';
+import { IReadOneRitage } from '@/types/global';
 
-export const READ_ONE_ORE_RITAGE = gql`
-  query ReadOneOreRitage($id: String!) {
-    oreRitage(id: $id) {
+export const READ_ONE_OB_RITAGE = gql`
+  query ReadOneObRitage($id: String!) {
+    overburdenRitage(id: $id) {
       id
       date
       checkerFrom {
@@ -75,20 +75,13 @@ export const READ_ONE_ORE_RITAGE = gql`
         id
         name
       }
-      fromLevel
-      toLevel
-      stockpile {
-        id
-        name
-      }
-      dome {
+      disposal {
         id
         name
       }
       bulkSamplingDensity
       bucketVolume
       tonByRitage
-      sampleNumber
       desc
       photos {
         id
@@ -102,53 +95,35 @@ export const READ_ONE_ORE_RITAGE = gql`
       }
       statusMessage
       isRitageProblematic
-      closeDome
-      houseSampleAndLab {
-        elements {
-          value
-          element {
-            id
-            name
-          }
-        }
-      }
     }
   }
 `;
 
-interface IReadOneOreRitage {
-  fromLevel: string | null;
-  toLevel: string | null;
-  stockpile: Pick<IStockpilesData, 'id' | 'name'> | null;
-  dome: Pick<IStockpilesData, 'id' | 'name'> | null;
-  sampleNumber: string | null;
-  closeDome: boolean | null;
-  houseSampleAndLab: {
-    elements: IElementWithValue[] | null;
-  } | null;
+interface IReadOneObRitage {
+  disposal: Pick<ILocationsData, 'id' | 'name'> | null;
 }
 
-interface IReadOneOreRitageResponse {
-  oreRitage: IReadOneRitage<IReadOneOreRitage>;
+interface IReadOneObRitageResponse {
+  overburdenRitage: IReadOneRitage<IReadOneObRitage>;
 }
 
-interface IReadOneOreRitageRequest {
+interface IReadOneObRitageRequest {
   id: string;
 }
 
-export const useReadOneOreRitage = ({
+export const useReadOneObRitage = ({
   variables,
   skip,
   onCompleted,
 }: {
-  variables: IReadOneOreRitageRequest;
+  variables: IReadOneObRitageRequest;
   skip?: boolean;
-  onCompleted?: (data: IReadOneOreRitageResponse) => void;
+  onCompleted?: (data: IReadOneObRitageResponse) => void;
 }) => {
-  const { data: oreRitage, loading: oreRitageLoading } = useQuery<
-    IReadOneOreRitageResponse,
-    IReadOneOreRitageRequest
-  >(READ_ONE_ORE_RITAGE, {
+  const { data: overburdenRitage, loading: overburdenRitageLoading } = useQuery<
+    IReadOneObRitageResponse,
+    IReadOneObRitageRequest
+  >(READ_ONE_OB_RITAGE, {
     variables,
     onError: (err: ApolloError) => {
       return err;
@@ -159,7 +134,7 @@ export const useReadOneOreRitage = ({
   });
 
   return {
-    oreRitage: oreRitage?.oreRitage,
-    oreRitageLoading,
+    overburdenRitage: overburdenRitage?.overburdenRitage,
+    overburdenRitageLoading,
   };
 };

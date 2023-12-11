@@ -292,7 +292,8 @@
     "ritageStatus": "Status Ritase",
     "readRitageDT": "$t(commonTypography.detail) Data Ritase Dump Truck",
     "problem": "Bermasalah",
-    "unProblem": "Tidak Bermasalah"
+    "unProblem": "Tidak Bermasalah",
+    "toDisposal": "Ke Disposal"
   },
   "sideBar": {
     "dashboard": "Dashboard",

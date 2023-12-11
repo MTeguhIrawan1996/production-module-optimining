@@ -49,6 +49,7 @@ import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelect
 import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
 
 import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
+import { IEmployeesData } from '@/services/graphql/query/master-data-company/useReadAllEmploye';
 import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { IShiftsData } from '@/services/graphql/query/shift/useReadAllShiftMaster';
 import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
@@ -339,6 +340,69 @@ export type ICommonRitagesData<T = unknown> = {
   } | null;
   status: IStatus | null;
   isComplete: boolean;
+  isRitageProblematic: boolean;
+} & T;
+
+type IChecker = {
+  id: string;
+} & Pick<IEmployeesData, 'humanResource'>;
+
+export type IReadOneRitage<T = unknown> = {
+  id: string;
+  date: string | null;
+  checkerFrom: IChecker | null;
+  checkerFromPosition: string | null;
+  checkerTo: IChecker | null;
+  checkerToPosition: string | null;
+  shift: Pick<IShiftsData, 'id' | 'name'> | null;
+  companyHeavyEquipment: Pick<
+    IHeavyEquipmentCompany,
+    'id' | 'hullNumber'
+  > | null;
+  companyHeavyEquipmentChange: Pick<
+    IHeavyEquipmentCompany,
+    'id' | 'hullNumber'
+  > | null;
+  material: Pick<IMaterialsData, 'id' | 'name'> | null;
+  subMaterial: Pick<IMaterialsData, 'id' | 'name'> | null;
+  fromAt: Date | string | null;
+  arriveAt: Date | string | null;
+  duration: number | null;
+  weather: {
+    id: string;
+    name: string;
+  } | null;
+  fromPit: {
+    id: string;
+    name: string;
+  } | null;
+  fromFront: {
+    id: string;
+    name: string;
+  } | null;
+  fromBlock: {
+    id: string;
+    name: string;
+  } | null;
+  fromGrid: {
+    id: string;
+    name: string;
+  } | null;
+  fromSequence: {
+    id: string;
+    name: string;
+  } | null;
+  fromElevation: {
+    id: string;
+    name: string;
+  } | null;
+  bucketVolume: number | null;
+  bulkSamplingDensity: number | null;
+  tonByRitage: number | null;
+  desc: string | null;
+  photos: Omit<IFile, 'mime' | 'path'>[] | null;
+  status: IStatus | null;
+  statusMessage: string | null;
   isRitageProblematic: boolean;
 } & T;
 
