@@ -244,7 +244,8 @@ const SampleHouseLabBook = () => {
                       },
                     }}
                     actionUpdate={
-                      status?.id !== 'f5f644d9-8810-44f7-8d42-36b5222b97d1'
+                      status?.id !==
+                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -256,7 +257,8 @@ const SampleHouseLabBook = () => {
                         : undefined
                     }
                     actionDelete={
-                      status?.id !== 'f5f644d9-8810-44f7-8d42-36b5222b97d1'
+                      status?.id !==
+                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();

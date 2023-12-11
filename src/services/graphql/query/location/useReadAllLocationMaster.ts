@@ -40,7 +40,7 @@ export const READ_ALL_LOCATION_MASTER = gql`
   }
 `;
 
-interface ILocationsData {
+export interface ILocationsData {
   id: string;
   name: string;
   handBookId: string;

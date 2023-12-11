@@ -21,6 +21,7 @@ import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 import GlobalBadgeStatus from '@/components/elements/global/GlobalBadgeStatus';
 
 import { formatDate } from '@/utils/helper/dateFormat';
+import { hourFromat } from '@/utils/helper/hourFromat';
 
 import { CommonProps } from '@/types/global';
 
@@ -64,8 +65,8 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
           date: formatDate(item.date, 'DD/MM/YYYY'),
           is_ritage_problematic: item.is_ritage_problematic ? 'TRUE' : 'FALSE',
           close_dome: item.close_dome ? 'TRUE' : 'FALSE',
-          from_time: formatDate(item.from_time, 'LTS'),
-          arrive_time: formatDate(item.arrive_time, 'LTS'),
+          // from_time: formatDate(item.from_time, 'LTS'),
+          // arrive_time: formatDate(item.arrive_time, 'LTS'),
         };
       });
 
@@ -216,10 +217,10 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
                 return formatDate(rowData);
               }
               if (accesor === 'from_time') {
-                return formatDate(rowData, 'hh:mm:ss A');
+                return hourFromat(rowData, 'hh:mm:ss A');
               }
               if (accesor === 'arrive_time') {
-                return formatDate(rowData, 'hh:mm:ss A');
+                return hourFromat(rowData, 'hh:mm:ss A');
               }
               if (accesor === 'close_dome') {
                 return (

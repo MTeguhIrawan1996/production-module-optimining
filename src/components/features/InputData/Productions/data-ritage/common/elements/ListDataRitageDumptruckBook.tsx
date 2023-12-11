@@ -146,10 +146,6 @@ export default function ListDataRitageDumptruckBook<
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('ritageOre.createRitageOre'),
-            onClick: () => router.push('/input-data/production/data-ritage'),
-          },
         }}
         paginationProps={{
           setPage: handleSetPage,

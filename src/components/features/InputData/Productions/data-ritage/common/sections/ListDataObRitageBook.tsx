@@ -16,10 +16,10 @@ import {
 } from '@/components/elements';
 import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
-import { useDeleteOreRitage } from '@/services/graphql/mutation/ore-ritage/useDeleteOreRitage';
+import { useDeleteOverburdenRitage } from '@/services/graphql/mutation/ob-ritage/useDeleteObRitage';
 import { useReadAllHeavyEquipmentSelect } from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
-import { useReadAllRitageOre } from '@/services/graphql/query/ore-ritage/useReadAllOreRitage';
-import { useReadAllRitageOreDT } from '@/services/graphql/query/ore-ritage/useReadAllOreRitageDT';
+import { useReadAllRitageOB } from '@/services/graphql/query/ob-ritage/useReadAllObRitage';
+import { useReadAllRitageObDT } from '@/services/graphql/query/ob-ritage/useReadAllObRitageDT';
 import { useReadAllShiftMaster } from '@/services/graphql/query/shift/useReadAllShiftMaster';
 import {
   globalDateNative,
@@ -91,10 +91,10 @@ const ListDataObRitageBook = () => {
   });
 
   const {
-    oreDumpTruckRitagesData,
-    oreDumpTruckRitagesDataMeta,
-    oreDumpTruckRitagesDataLoading,
-  } = useReadAllRitageOreDT({
+    overburdenDumpTruckRitagesData,
+    overburdenDumpTruckRitagesDataLoading,
+    overburdenDumpTruckRitagesDataMeta,
+  } = useReadAllRitageObDT({
     variables: {
       limit: 10,
       page: heavyEquipmentPage,
@@ -104,11 +104,11 @@ const ListDataObRitageBook = () => {
   });
 
   const {
-    oreRitagesData,
-    oreRitagesDataLoading,
-    oreRitagesDataMeta,
-    refetchOreRitages,
-  } = useReadAllRitageOre({
+    overburdenRitagesData,
+    overburdenRitagesDataLoading,
+    overburdenRitagesDataMeta,
+    refetchOverburdenRitages,
+  } = useReadAllRitageOB({
     variables: {
       limit: 10,
       page: page,
@@ -121,15 +121,15 @@ const ListDataObRitageBook = () => {
     },
   });
 
-  const [executeDelete, { loading }] = useDeleteOreRitage({
+  const [executeDelete, { loading }] = useDeleteOverburdenRitage({
     onCompleted: () => {
-      refetchOreRitages();
+      refetchOverburdenRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
       router.push(url, undefined, { shallow: true });
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('ritageOre.successDeleteMessage'),
+        message: t('ritageOb.successDeleteMessage'),
         icon: <IconCheck />,
       });
     },
@@ -153,7 +153,7 @@ const ListDataObRitageBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/data-ritage?rp=${page}&hp=${heavyEquipmentPage}&tabs=ore`;
+    const urlSet = `/input-data/production/data-ritage?rp=${page}&hp=${heavyEquipmentPage}&tabs=ob`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
@@ -227,8 +227,8 @@ const ListDataObRitageBook = () => {
     return (
       <MantineDataTable
         tableProps={{
-          records: oreRitagesData,
-          fetching: oreRitagesDataLoading,
+          records: overburdenRitagesData,
+          fetching: overburdenRitagesDataLoading,
           highlightOnHover: true,
           withColumnBorders: false,
           columns: [
@@ -236,7 +236,8 @@ const ListDataObRitageBook = () => {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                oreRitagesData && oreRitagesData.indexOf(record) + 1,
+                overburdenRitagesData &&
+                overburdenRitagesData.indexOf(record) + 1,
               width: 60,
             },
             {
@@ -273,9 +274,9 @@ const ListDataObRitageBook = () => {
               render: ({ fromPit }) => fromPit?.name ?? '-',
             },
             {
-              accessor: 'dome',
-              title: t('commonTypography.dome'),
-              render: ({ dome }) => dome?.name ?? '-',
+              accessor: 'disposal',
+              title: 'Disposal',
+              render: ({ disposal }) => disposal?.name ?? '-',
             },
             {
               accessor: 'status',
@@ -307,32 +308,42 @@ const ListDataObRitageBook = () => {
               accessor: 'action',
               title: t('commonTypography.action'),
               width: 100,
-              render: ({ id }) => {
+              render: ({ id, status }) => {
                 return (
                   <GlobalKebabButton
                     actionRead={{
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/input-data/production/data-ritage/ore/read/${id}`
+                          `/input-data/production/data-ritage/ob/read/${id}`
                         );
                       },
                     }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/production/data-ritage/ore/update/${id}`
-                        );
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionUpdate={
+                      status?.id !==
+                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/data-ritage/ob/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      status?.id !==
+                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -342,21 +353,21 @@ const ListDataObRitageBook = () => {
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
           actionButton: {
-            label: t('ritageOre.createRitageOre'),
+            label: t('ritageOb.createRitageOb'),
             onClick: () => setIsOpenSelectionModal((prev) => !prev),
           },
         }}
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: oreRitagesDataMeta?.totalAllData ?? 0,
-          totalData: oreRitagesDataMeta?.totalData ?? 0,
-          totalPage: oreRitagesDataMeta?.totalPage ?? 0,
+          totalAllData: overburdenRitagesDataMeta?.totalAllData ?? 0,
+          totalData: overburdenRitagesDataMeta?.totalData ?? 0,
+          totalPage: overburdenRitagesDataMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [oreRitagesData, oreRitagesDataLoading]);
+  }, [overburdenRitagesData, overburdenRitagesDataLoading]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
@@ -372,25 +383,25 @@ const ListDataObRitageBook = () => {
       }}
       downloadButton={[
         {
-          label: t('ritageOb.downloadTemplateOre'),
-          url: `/ore-ritages/file`,
-          fileName: 'template-ore',
+          label: t('ritageOb.downloadTemplateOb'),
+          url: `/overburden-ritages/file`,
+          fileName: 'template-ob',
         },
         {
           label: t('commonTypography.downloadReference'),
           url: `/download/references`,
-          fileName: 'referensi-ore',
+          fileName: 'referensi-ob',
         },
       ]}
     >
       {renderTable}
       <ListDataRitageDumptruckBook
-        data={oreDumpTruckRitagesData}
-        meta={oreDumpTruckRitagesDataMeta}
-        fetching={oreDumpTruckRitagesDataLoading}
-        tabs="ore"
+        data={overburdenDumpTruckRitagesData}
+        meta={overburdenDumpTruckRitagesDataMeta}
+        fetching={overburdenDumpTruckRitagesDataLoading}
+        tabs="ob"
         setDate={setDateHeavyEquipment}
-        urlDetail="/input-data/production/data-ritage/ore/read/dump-truck"
+        urlDetail="/input-data/production/data-ritage/ob/read/dump-truck"
       />
       <ModalConfirmation
         isOpenModalConfirmation={isOpenDeleteConfirmation}
@@ -419,12 +430,12 @@ const ListDataObRitageBook = () => {
         firstButton={{
           label: t('commonTypography.inputDataRitage'),
           onClick: () =>
-            router.push('/input-data/production/data-ritage/ore/create'),
+            router.push('/input-data/production/data-ritage/ob/create'),
         }}
         secondButton={{
           label: t('commonTypography.uploadFile'),
           onClick: () =>
-            router.push('/input-data/production/data-ritage/ore/upload'),
+            router.push('/input-data/production/data-ritage/ob/upload'),
         }}
       />
     </DashboardCard>
