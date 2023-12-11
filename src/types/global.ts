@@ -48,6 +48,7 @@ import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelect
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
 
+import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
 import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { IShiftsData } from '@/services/graphql/query/shift/useReadAllShiftMaster';
 import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
@@ -319,3 +320,26 @@ export type ITabs = 'ore' | 'ob';
 export interface ICreateFileProps {
   file: FileWithPath[] | null;
 }
+
+/* #   /**=========== Common Ritages =========== */
+export type ICommonRitagesData<T = unknown> = {
+  id: string;
+  date: Date | string | null;
+  shift: Pick<IShiftsData, 'id' | 'name'> | null;
+  companyHeavyEquipment: Pick<
+    IHeavyEquipmentCompany,
+    'id' | 'hullNumber'
+  > | null;
+  fromAt: Date | string | null;
+  arriveAt: Date | string | null;
+  subMaterial: Pick<IMaterialsData, 'id' | 'name'> | null;
+  fromPit: {
+    id: string;
+    name: string;
+  } | null;
+  status: IStatus | null;
+  isComplete: boolean;
+  isRitageProblematic: boolean;
+} & T;
+
+/* #endregion  /**======== Common Ritages =========== */
