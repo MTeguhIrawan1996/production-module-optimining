@@ -163,7 +163,7 @@
       "photoDescription3": "Jumlah file maksimal 3 dengan ukuran 10MB extention .JPEG .JPG .PNG atau .WEBP",
       "photoDescription5": "Jumlah file maksimal 5 dengan ukuran 10MB extention .JPEG .JPG .PNG atau .WEBP",
       "uploadPdfDescription": "Unggah Dokumen Maksimal 10MB dengan extention PDF",
-      "uploadExcelDescription": "Unggah Dokumen Maksimal 20MB dengan extention .Excel dan .CSV"
+      "uploadExcelDescription": "Unggah Dokumen Maksimal 20MB dengan extention .xlsx dan .CSV"
     },
     "modal": {
       "updatePasswordModal": {

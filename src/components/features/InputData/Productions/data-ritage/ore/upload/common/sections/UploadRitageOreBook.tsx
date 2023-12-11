@@ -1,3 +1,4 @@
+import { Progress, Transition } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import dayjs from 'dayjs';
@@ -25,6 +26,8 @@ const UploadRitageOreBook = () => {
   const router = useRouter();
   const [isDirtyFile, setIsDirtyFile] = React.useState<boolean>(false);
   const [fileId, setFileId] = React.useState<string | null>(null);
+  const [mounted, setMounted] = React.useState<boolean>(false);
+  const [dataFiald, setfaildData] = React.useState<unknown[]>([]);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateFileProps>({
@@ -41,6 +44,12 @@ const UploadRitageOreBook = () => {
   const { data } = useReadOneUploadFileTRK({
     variable: {
       id: fileId as string,
+    },
+    onSuccess: (data) => {
+      if (data.processed === data.total) {
+        setfaildData(data.failedData);
+        setIsDirtyFile(false);
+      }
     },
   });
 
@@ -64,6 +73,7 @@ const UploadRitageOreBook = () => {
     },
     onSuccess: (data) => {
       setFileId(data.data.id);
+      setMounted(true);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -72,11 +82,9 @@ const UploadRitageOreBook = () => {
       });
     },
   });
-
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
-
   const fieldRhf = React.useMemo(() => {
     const excelFile: ControllerProps = {
       control: 'excel-dropzone',
@@ -85,10 +93,12 @@ const UploadRitageOreBook = () => {
       description: 'uploadExcelDescription',
       maxSize: 20 * 1024 ** 2 /* 10MB */,
       multiple: false,
-      dataFaild: data?.uploadFileData.failedData,
+      faildData: dataFiald,
       onDrop: (value) => {
         methods.setValue('file', value);
         setIsDirtyFile(true);
+        setfaildData([]);
+        setMounted(false);
         methods.clearErrors('file');
       },
       onReject: (files) =>
@@ -108,8 +118,42 @@ const UploadRitageOreBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [dataFiald]);
   /* #endregion  /**======== Field =========== */
+
+  const renderProgress = React.useMemo(() => {
+    if (data) {
+      const total = data.total ?? 0;
+      const process = data.processed ?? 0;
+      const percentage = (process / total) * 100;
+      const mathPercentage = Math.round(percentage);
+      return (
+        <Transition
+          mounted={mounted}
+          transition="slide-left"
+          duration={300}
+          timingFunction="ease"
+        >
+          {(styles) => (
+            <Progress
+              style={styles}
+              sections={[
+                {
+                  value: mathPercentage,
+                  color: 'brand.6',
+                  className: mathPercentage === 100 ? '' : 'animated-pulse',
+                  label: `${mathPercentage}% Completed`,
+                },
+              ]}
+              size="xl"
+              radius="xl"
+              mt="md"
+            />
+          )}
+        </Transition>
+      );
+    }
+  }, [data, mounted]);
 
   /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<ICreateFileProps> = (data) => {
@@ -121,7 +165,6 @@ const UploadRitageOreBook = () => {
       utcOffset: `${utcOffset}`,
     });
   };
-
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
@@ -143,6 +186,7 @@ const UploadRitageOreBook = () => {
         },
       ]}
     >
+      {renderProgress}
       <GlobalFormGroup
         field={fieldRhf}
         methods={methods}

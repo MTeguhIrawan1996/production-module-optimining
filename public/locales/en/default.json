@@ -7,6 +7,7 @@
     "production": "Produksi",
     "dataRitage": "Data Ritase",
     "dataRitageOre": "Data Ritase Ore",
+    "dataRitageOb": "Data Ritase Ob",
     "block": "Block",
     "pit": "PIT",
     "locationId": "ID Lokasi",
@@ -273,6 +274,7 @@
     "analysisStartHour": "Jam Mulai Analisa",
     "analysisEndHour": "Jam Selesai Analisa",
     "downloadReference": "Unduh Referensi",
+    "download": "Unduh",
     "dataRitageDumpTruck": "Data Ritase Dump Truck",
     "totalRitage": "Jumlah Ritase",
     "operatorName": "Nama Operator",
@@ -615,5 +617,23 @@
     "successIsNotValidateMessage": "Status $t(ritageOre.ritageOreTitle) Tidak Valid",
     "successIsDeterminedMessage": "$t(ritageOre.ritageOreTitle) berhasil ditetapkan",
     "successIsRejectMessage": "$t(ritageOre.ritageOreTitle) berhasil $t(commonTypography.reject)"
+  },
+  "ritageOb": {
+    "ritageObTitle": "$t(commonTypography.dataRitageOb)",
+    "createRitageOb": "$t(commonTypography.create) $t(commonTypography.dataRitageOb)",
+    "uploadRitageOb": "$t(commonTypography.upload) $t(commonTypography.dataRitageOb)",
+    "readRitageOb": "$t(commonTypography.detail) $t(commonTypography.dataRitageOb)",
+    "updateRitageOb": "$t(commonTypography.edit) $t(commonTypography.dataRitageOb)",
+    "successDeleteMessage": "$t(commonTypography.dataRitageOb) berhasil dihapus",
+    "downloadTemplateOb": "Unduh Tamplate Input Data Ritase Ob",
+    "formRitageOb": "$t(commonTypography.form) $t(ritageOb.ritageObTitle)",
+    "formUploadRitageOb": "$t(commonTypography.form) $t(commonTypography.upload) $t(ritageOb.ritageObTitle)",
+    "formUpdateRitageOb": "$t(commonTypography.form) $t(commonTypography.edit) $t(ritageOb.ritageObTitle)",
+    "successCreateMessage": "$t(commonTypography.dataRitageOb) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.dataRitageOb) berhasil diubah",
+    "successIsValidateMessage": "$t(ritageOb.ritageObTitle) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(ritageOb.ritageObTitle) Tidak Valid",
+    "successIsDeterminedMessage": "$t(ritageOb.ritageObTitle) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(ritageOb.ritageObTitle) berhasil $t(commonTypography.reject)"
   }
 }
