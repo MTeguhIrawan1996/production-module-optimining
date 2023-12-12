@@ -33,7 +33,7 @@ import { InputControllerNativeProps } from '@/types/global';
 const ListDataOreRitageBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
-  const tabs = pageParams.get('tabs') || '';
+  const tabs = pageParams.get('tabs') || 'ore';
   const page = Number(pageParams.get('rp')) || 1;
   const heavyEquipmentPage = Number(pageParams.get('hp')) || 1;
   const url = `/input-data/production/data-ritage?rp=1&hp=${heavyEquipmentPage}&tabs=ore`;

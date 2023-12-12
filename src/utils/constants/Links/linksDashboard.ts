@@ -103,7 +103,7 @@ export const linksDashboard: IMenuItem[] = [
         subMenu: [
           {
             label: 'dataRitage',
-            href: '/input-data/production/data-ritage?tabs=ore',
+            href: '/input-data/production/data-ritage',
             access: ['create-house-sample-and-lab'],
           },
         ],
