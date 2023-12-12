@@ -94,10 +94,12 @@ interface IOverburdenRitagesRequest
 export const useReadAllRitageOB = ({
   variables,
   onCompleted,
+  onError,
   skip,
 }: {
   variables?: IOverburdenRitagesRequest;
   onCompleted?: (data: IOverburdenRitagesResponse) => void;
+  onError?: ({ graphQLErrors }: ApolloError) => void;
   skip?: boolean;
 }) => {
   const {
@@ -109,9 +111,7 @@ export const useReadAllRitageOB = ({
     {
       variables: variables,
       skip: skip,
-      onError: (err: ApolloError) => {
-        return err;
-      },
+      onError,
       onCompleted,
       fetchPolicy: 'cache-and-network',
     }

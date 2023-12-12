@@ -130,14 +130,14 @@ export interface IPermissionAuth {
   slug: string;
 }
 
-export interface IErrorResponseExtensionNextAuth {
+export type IErrorResponseExtensionNextAuth = {
   code: string;
   originalError: {
     statusCode: number;
     message: string;
     error: string;
   };
-}
+};
 
 // RESPONSE REQUEST GRAPHQL
 export interface IMeta {
@@ -190,8 +190,7 @@ export interface IExtensionKey<T> extends GraphQLErrorExtensions {
   };
 }
 
-export type IErrorResponseExtensionGql<T extends React.ReactNode> =
-  IExtensionKey<T>;
+export type IErrorResponseExtensionGql<T = unknown> = IExtensionKey<T>;
 // END RESPONSE REQUEST GRAPHQL
 
 // REST API
