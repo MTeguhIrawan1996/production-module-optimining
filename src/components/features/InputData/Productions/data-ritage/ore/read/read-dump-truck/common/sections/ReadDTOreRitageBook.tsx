@@ -2,16 +2,21 @@ import { DataTableColumn } from 'mantine-datatable';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, ListDetailsRitageDT } from '@/components/elements';
 
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
-import { useReadDetailsOreRitageDT } from '@/services/graphql/query/ore-ritage/useReadDetailsOreritageDT';
+import {
+  IOtherDetailsRitageOreDT,
+  useReadDetailsOreRitageDT,
+} from '@/services/graphql/query/ore-ritage/useReadDetailsOreritageDT';
 import { useReadOneFotoOreRitageDT } from '@/services/graphql/query/ore-ritage/useReadOneOreRitageDT';
 
 import { IElementsData, IListDetailRitageDTData } from '@/types/global';
 
 const ReadDTOreRitageBook = () => {
+  const { t } = useTranslation('default');
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('p')) || 1;
@@ -31,7 +36,6 @@ const ReadDTOreRitageBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      orderBy: 'createdAt',
       date: date,
       shiftId: shiftId,
       companyHeavyEquipmentId: companyHeavyEquipmentId,
@@ -51,7 +55,9 @@ const ReadDTOreRitageBook = () => {
 
   const renderOtherColumnCallback = React.useCallback(
     (element: IElementsData) => {
-      const column: DataTableColumn<IListDetailRitageDTData> = {
+      const column: DataTableColumn<
+        IListDetailRitageDTData<IOtherDetailsRitageOreDT>
+      > = {
         accessor: `${element.name}`,
         title: `${element.name}`,
         render: ({ houseSampleAndLab }) => {
@@ -90,7 +96,39 @@ const ReadDTOreRitageBook = () => {
     >
       <ListDetailsRitageDT
         data={detailsOreRitageDTData}
-        columns={[...(renderOtherColumn ?? [])]}
+        columns={[
+          {
+            accessor: 'fromLevel',
+            title: t('commonTypography.fromLevel'),
+            render: ({ fromLevel }) => fromLevel ?? '-',
+          },
+          {
+            accessor: 'toLevel',
+            title: t('commonTypography.toLevel'),
+            render: ({ toLevel }) => toLevel ?? '-',
+          },
+          {
+            accessor: 'dome',
+            title: t('commonTypography.dome'),
+            render: ({ dome }) => dome?.name ?? '-',
+          },
+          {
+            accessor: 'bucketVolume',
+            title: t('commonTypography.bucketVolume'),
+            render: ({ bucketVolume }) => bucketVolume ?? '-',
+          },
+          {
+            accessor: 'tonByRitage',
+            title: t('commonTypography.tonByRitage'),
+            render: ({ tonByRitage }) => tonByRitage ?? '-',
+          },
+          {
+            accessor: 'sampleNumber',
+            title: t('commonTypography.sampleNumber'),
+            render: ({ sampleNumber }) => sampleNumber ?? '-',
+          },
+          ...(renderOtherColumn ?? []),
+        ]}
         onOpenModal={onOpenModal}
         tabs="ore"
         fetching={detailsOreRitageDTDataLoading}

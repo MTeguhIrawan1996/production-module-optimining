@@ -4,12 +4,12 @@ import { ILocationsData } from '@/services/graphql/query/location/useReadAllLoca
 
 import {
   GResponse,
-  ICommonRitagesData,
   IGlobalMetaRequest,
+  IListDetailRitageDTData,
 } from '@/types/global';
 
-export const READ_ALL_RITAGE_OB = gql`
-  query ReadAllRitageOB(
+export const READ_DETAILS_OB_RITAGE_DT = gql`
+  query ReadDetailsObRitageDT(
     $page: Int
     $limit: Int
     $date: String
@@ -39,14 +39,17 @@ export const READ_ALL_RITAGE_OB = gql`
       }
       data {
         id
-        date
         shift {
           id
           name
         }
-        companyHeavyEquipment {
+        weather {
           id
-          hullNumber
+          name
+        }
+        material {
+          id
+          name
         }
         subMaterial {
           id
@@ -54,6 +57,8 @@ export const READ_ALL_RITAGE_OB = gql`
         }
         fromAt
         arriveAt
+        duration
+        tonByRitage
         fromPit {
           id
           name
@@ -62,27 +67,26 @@ export const READ_ALL_RITAGE_OB = gql`
           id
           name
         }
-        status {
-          id
-          name
-          color
-        }
-        isComplete
-        isRitageProblematic
       }
     }
   }
 `;
 
-interface IOtherProps {
+export interface IOtherDetailsRitageObDT {
   disposal: Pick<ILocationsData, 'id' | 'name'> | null;
+  fromPit: {
+    id: string;
+    name: string;
+  } | null;
 }
 
-interface IOverburdenRitagesResponse {
-  overburdenRitages: GResponse<ICommonRitagesData<IOtherProps>>;
+interface IDetailsObRitageDTResponse {
+  overburdenRitages: GResponse<
+    IListDetailRitageDTData<IOtherDetailsRitageObDT>
+  >;
 }
 
-interface IOverburdenRitagesRequest
+interface IDetailsObRitageDTRequest
   extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
   date?: string | null;
   shiftId?: string | null;
@@ -90,36 +94,36 @@ interface IOverburdenRitagesRequest
   companyHeavyEquipmentId?: string | null;
 }
 
-export const useReadAllRitageOB = ({
+export const useReadDetailsObRitageDT = ({
   variables,
   onCompleted,
-  onError,
   skip,
 }: {
-  variables?: IOverburdenRitagesRequest;
-  onCompleted?: (data: IOverburdenRitagesResponse) => void;
-  onError?: ({ graphQLErrors }: ApolloError) => void;
+  variables?: IDetailsObRitageDTRequest;
+  onCompleted?: (data: IDetailsObRitageDTResponse) => void;
   skip?: boolean;
 }) => {
   const {
-    data: overburdenRitagesData,
-    loading: overburdenRitagesDataLoading,
+    data: detailsObRitageDTData,
+    loading: detailsObRitageDTDataLoading,
     refetch,
-  } = useQuery<IOverburdenRitagesResponse, IOverburdenRitagesRequest>(
-    READ_ALL_RITAGE_OB,
+  } = useQuery<IDetailsObRitageDTResponse, IDetailsObRitageDTRequest>(
+    READ_DETAILS_OB_RITAGE_DT,
     {
       variables: variables,
       skip: skip,
-      onError,
+      onError: (err: ApolloError) => {
+        return err;
+      },
       onCompleted,
       fetchPolicy: 'cache-and-network',
     }
   );
 
   return {
-    overburdenRitagesData: overburdenRitagesData?.overburdenRitages.data,
-    overburdenRitagesDataMeta: overburdenRitagesData?.overburdenRitages.meta,
-    overburdenRitagesDataLoading,
-    refetchOverburdenRitages: refetch,
+    detailsObRitageDTData: detailsObRitageDTData?.overburdenRitages.data,
+    detailsObRitageDTDataMeta: detailsObRitageDTData?.overburdenRitages.meta,
+    detailsObRitageDTDataLoading,
+    refetchDetailsObRitageDT: refetch,
   };
 };
