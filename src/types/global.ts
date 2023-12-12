@@ -52,7 +52,6 @@ import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment
 import { IEmployeesData } from '@/services/graphql/query/master-data-company/useReadAllEmploye';
 import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { IShiftsData } from '@/services/graphql/query/shift/useReadAllShiftMaster';
-import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
 
 // import { TablerIconsProps } from '@tabler/icons-react';
 
@@ -130,14 +129,14 @@ export interface IPermissionAuth {
   slug: string;
 }
 
-export interface IErrorResponseExtensionNextAuth {
+export type IErrorResponseExtensionNextAuth = {
   code: string;
   originalError: {
     statusCode: number;
     message: string;
     error: string;
   };
-}
+};
 
 // RESPONSE REQUEST GRAPHQL
 export interface IMeta {
@@ -190,8 +189,7 @@ export interface IExtensionKey<T> extends GraphQLErrorExtensions {
   };
 }
 
-export type IErrorResponseExtensionGql<T extends React.ReactNode> =
-  IExtensionKey<T>;
+export type IErrorResponseExtensionGql<T = unknown> = IExtensionKey<T>;
 // END RESPONSE REQUEST GRAPHQL
 
 // REST API
@@ -291,7 +289,7 @@ export interface IDumpTruckRitagesRequest
   date?: string | null;
 }
 
-export interface IListDetailRitageDTData {
+export type IListDetailRitageDTData<T = unknown> = {
   id: string;
   shift: Pick<IShiftsData, 'id' | 'name'> | null;
   weather: {
@@ -301,18 +299,10 @@ export interface IListDetailRitageDTData {
   fromAt: Date | string | null;
   arriveAt: Date | string | null;
   duration: number | null;
-  fromLevel: string | null;
-  toLevel: string | null;
-  bucketVolume: number | null;
   tonByRitage: number | null;
   material: Pick<IMaterialsData, 'id' | 'name'> | null;
   subMaterial: Pick<IMaterialsData, 'id' | 'name'> | null;
-  dome: Pick<IStockpilesData, 'id' | 'name'> | null;
-  sampleNumber: string | null;
-  houseSampleAndLab: {
-    elements: IElementWithValue[] | null;
-  } | null;
-}
+} & T;
 
 /* #endregion  /**======== Ritage DT =========== */
 

@@ -34,6 +34,10 @@ export async function middleware(request: NextRequest) {
       path: '/exmaple/data-table',
       allowedPermissions: ['all'],
     },
+    {
+      path: '/input-data/production/data-ritage',
+      allowedPermissions: ['all'],
+    },
   ];
 
   // const cleanedPath = pathname.split('/').slice(0, 4).join('/');
@@ -79,5 +83,10 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/dashboard', '/example/:path*'],
+  matcher: [
+    '/',
+    '/dashboard',
+    '/example/:path*',
+    '/input-data/production/:path*',
+  ],
 };
