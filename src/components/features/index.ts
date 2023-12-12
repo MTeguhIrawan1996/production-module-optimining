@@ -6,6 +6,7 @@ import DataRitagePage from '@/components/features/InputData/Productions/data-rit
 import CreateRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/create/common';
 import ReadRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/read/common';
 import UpdateRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/update/common';
+import UploadRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/upload/common';
 import CreateRitageOrePage from '@/components/features/InputData/Productions/data-ritage/ore/create/common';
 import ReadRitageOrePage from '@/components/features/InputData/Productions/data-ritage/ore/read/common';
 import ReadDTOreRitagePage from '@/components/features/InputData/Productions/data-ritage/ore/read/read-dump-truck/common';
@@ -189,6 +190,7 @@ export {
   UpdateStockpileMasterPage,
   UpdateUserPage,
   UpdateWorkingHoursPlanMasterPage,
+  UploadRitageObPage,
   UploadRitageOrePage,
   UserPage,
   WorkingHoursPlanMasterPage,
