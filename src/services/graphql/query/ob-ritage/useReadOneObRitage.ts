@@ -12,6 +12,7 @@ export const READ_ONE_OB_RITAGE = gql`
       checkerFrom {
         id
         humanResource {
+          id
           name
         }
       }
