@@ -33,6 +33,7 @@ import { InputControllerNativeProps } from '@/types/global';
 const ListDataObRitageBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
+  const tabs = pageParams.get('tabs') || '';
   const page = Number(pageParams.get('rp')) || 1;
   const heavyEquipmentPage = Number(pageParams.get('hp')) || 1;
   const url = `/input-data/production/data-ritage?rp=1&hp=${heavyEquipmentPage}&tabs=ob`;
@@ -65,6 +66,7 @@ const ListDataObRitageBook = () => {
       orderDir: 'desc',
       orderBy: 'createdAt',
     },
+    skip: tabs !== 'ob',
   });
 
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
@@ -75,6 +77,7 @@ const ListDataObRitageBook = () => {
       isComplete: true,
       categorySlug: 'dump-truck',
     },
+    skip: tabs !== 'ob',
   });
 
   const heavyEquipmentItem = heavyEquipmentSelect?.map((val) => {
@@ -101,6 +104,7 @@ const ListDataObRitageBook = () => {
       orderDir: 'desc',
       date: dateHeavyEquipment === '' ? null : dateHeavyEquipment,
     },
+    skip: tabs !== 'ob',
   });
 
   const {
@@ -119,6 +123,7 @@ const ListDataObRitageBook = () => {
       companyHeavyEquipmentId:
         heavyEquipmentId === '' ? null : heavyEquipmentId,
     },
+    skip: tabs !== 'ob',
   });
 
   const [executeDelete, { loading }] = useDeleteOverburdenRitage({
