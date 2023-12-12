@@ -1,7 +1,10 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
+import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
+
 import {
   GResponse,
+  IElementWithValue,
   IGlobalMetaRequest,
   IListDetailRitageDTData,
 } from '@/types/global';
@@ -79,8 +82,19 @@ export const READ_DETAILS_ORE_RITAGE_DT = gql`
   }
 `;
 
+export interface IOtherDetailsRitageOreDT {
+  fromLevel: string | null;
+  toLevel: string | null;
+  bucketVolume: number | null;
+  dome: Pick<IStockpilesData, 'id' | 'name'> | null;
+  sampleNumber: string | null;
+  houseSampleAndLab: {
+    elements: IElementWithValue[] | null;
+  } | null;
+}
+
 interface IDetailsOreRitageDTResponse {
-  oreRitages: GResponse<IListDetailRitageDTData>;
+  oreRitages: GResponse<IListDetailRitageDTData<IOtherDetailsRitageOreDT>>;
 }
 
 interface IDetailsOreRitageDTRequest

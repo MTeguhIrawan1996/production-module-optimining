@@ -9,14 +9,19 @@ import ListDataObRitageBook from '@/components/features/InputData/Productions/da
 import ListDataOreRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataOreRitageBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
+import { usePermissions } from '@/utils/store/usePermissions';
 
 const DataRitagePage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
+  const [permission] = usePermissions((state) => [state.permissions], shallow);
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
     shallow
   );
+
+  const isPremissionOre = permission.includes('read-ore-ritage');
+  const isPremissionOb = permission.includes('read-overburden-ritage');
 
   React.useEffect(() => {
     setBreadcrumbs([
@@ -51,11 +56,13 @@ const DataRitagePage = () => {
               label: 'Ore (Ore/HGO/LGO)',
               value: 'ore',
               component: <ListDataOreRitageBook />,
+              isShowItem: isPremissionOre,
             },
             {
               label: 'Overburden (OB)',
               value: 'ob',
               component: <ListDataObRitageBook />,
+              isShowItem: isPremissionOb,
             },
           ]}
         />

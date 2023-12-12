@@ -48,7 +48,7 @@ export default function ListDetailsRitageDT<T extends IListDetailRitageDTData>({
   const companyHeavyEquipmentId = router.query?.id?.[2] as string;
 
   const handleSetPage = (newPage: number) => {
-    const urlSet = `/input-data/production/data-ritage/ore/read/dump-truck/${date}/${shiftId}/${companyHeavyEquipmentId}?p=${newPage}&op=OperatorName&shift=${shift}&c=${heavyEquipmentCode}&tabs=${tabs}`;
+    const urlSet = `/input-data/production/data-ritage/${tabs}/read/dump-truck/${date}/${shiftId}/${companyHeavyEquipmentId}?p=${newPage}&op=OperatorName&shift=${shift}&c=${heavyEquipmentCode}&tabs=${tabs}`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
@@ -96,36 +96,6 @@ export default function ListDetailsRitageDT<T extends IListDetailRitageDTData>({
               accessor: 'ritageDuration',
               title: t('commonTypography.ritageDuration'),
               render: ({ duration }) => secondsDuration(duration),
-            },
-            {
-              accessor: 'fromLevel',
-              title: t('commonTypography.fromLevel'),
-              render: ({ fromLevel }) => fromLevel ?? '-',
-            },
-            {
-              accessor: 'toLevel',
-              title: t('commonTypography.toLevel'),
-              render: ({ toLevel }) => toLevel ?? '-',
-            },
-            {
-              accessor: 'dome',
-              title: t('commonTypography.dome'),
-              render: ({ dome }) => dome?.name ?? '-',
-            },
-            {
-              accessor: 'bucketVolume',
-              title: t('commonTypography.bucketVolume'),
-              render: ({ bucketVolume }) => bucketVolume ?? '-',
-            },
-            {
-              accessor: 'tonByRitage',
-              title: t('commonTypography.tonByRitage'),
-              render: ({ tonByRitage }) => tonByRitage ?? '-',
-            },
-            {
-              accessor: 'sampleNumber',
-              title: t('commonTypography.sampleNumber'),
-              render: ({ sampleNumber }) => sampleNumber ?? '-',
             },
             ...(columns ?? []),
             {
