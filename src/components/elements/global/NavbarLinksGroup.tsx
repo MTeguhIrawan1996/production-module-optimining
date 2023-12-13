@@ -38,15 +38,6 @@ const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
     return pathname;
   }, [router]);
   const cleanedPath = router.pathname.split('/').slice(0, 3).join('/');
-  // const someItem = itemLabel.some(
-  //   (items) => items.toLowerCase().replace(/-/g, '') === label.toLowerCase()
-  // );
-
-  // React.useEffect(() => {
-  //   if (!someItem) {
-  //     setOpened(false);
-  //   }
-  // }, [someItem]);
 
   const linksItem = React.useCallback(
     (item: IMenuItem, i) => {

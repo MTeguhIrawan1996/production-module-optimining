@@ -33,6 +33,7 @@ import { InputControllerNativeProps } from '@/types/global';
 const ListDataOreRitageBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
+  const tabs = pageParams.get('tabs') || 'ore';
   const page = Number(pageParams.get('rp')) || 1;
   const heavyEquipmentPage = Number(pageParams.get('hp')) || 1;
   const url = `/input-data/production/data-ritage?rp=1&hp=${heavyEquipmentPage}&tabs=ore`;
@@ -65,6 +66,7 @@ const ListDataOreRitageBook = () => {
       orderDir: 'desc',
       orderBy: 'createdAt',
     },
+    skip: tabs !== 'ore',
   });
 
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
@@ -75,6 +77,7 @@ const ListDataOreRitageBook = () => {
       isComplete: true,
       categorySlug: 'dump-truck',
     },
+    skip: tabs !== 'ore',
   });
 
   const heavyEquipmentItem = heavyEquipmentSelect?.map((val) => {
@@ -101,6 +104,7 @@ const ListDataOreRitageBook = () => {
       orderDir: 'desc',
       date: dateHeavyEquipment === '' ? null : dateHeavyEquipment,
     },
+    skip: tabs !== 'ore',
   });
 
   const {
@@ -119,6 +123,7 @@ const ListDataOreRitageBook = () => {
       companyHeavyEquipmentId:
         heavyEquipmentId === '' ? null : heavyEquipmentId,
     },
+    skip: tabs !== 'ore',
   });
 
   const [executeDelete, { loading }] = useDeleteOreRitage({
@@ -371,7 +376,6 @@ const ListDataOreRitageBook = () => {
 
   return (
     <DashboardCard
-      title={t('ritageOre.ritageOreTitle')}
       addButton={{
         label: t('ritageOre.createRitageOre'),
         onClick: () => setIsOpenSelectionModal((prev) => !prev),

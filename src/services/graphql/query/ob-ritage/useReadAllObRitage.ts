@@ -76,6 +76,7 @@ export const READ_ALL_RITAGE_OB = gql`
 
 interface IOtherProps {
   disposal: Pick<ILocationsData, 'id' | 'name'> | null;
+  fromPit: Pick<ILocationsData, 'id' | 'name'> | null;
 }
 
 interface IOverburdenRitagesResponse {
