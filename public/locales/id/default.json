@@ -8,6 +8,7 @@
     "dataRitage": "Data Ritase",
     "dataRitageOre": "Data Ritase Ore",
     "dataRitageOb": "Data Ritase OB",
+    "dataRitageQuarry": "Data Ritase Quarry",
     "block": "Block",
     "pit": "PIT",
     "locationId": "ID Lokasi",
@@ -293,7 +294,8 @@
     "readRitageDT": "$t(commonTypography.detail) Data Ritase Dump Truck",
     "problem": "Bermasalah",
     "unProblem": "Tidak Bermasalah",
-    "toDisposal": "Ke Disposal"
+    "toDisposal": "Ke Disposal",
+    "toLocation": "Ke tujuan"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -636,5 +638,23 @@
     "successIsNotValidateMessage": "Status $t(ritageOb.ritageObTitle) Tidak Valid",
     "successIsDeterminedMessage": "$t(ritageOb.ritageObTitle) berhasil ditetapkan",
     "successIsRejectMessage": "$t(ritageOb.ritageObTitle) berhasil $t(commonTypography.reject)"
+  },
+  "ritageQuarry": {
+    "ritageQuarryTitle": "$t(commonTypography.dataRitageQuarry)",
+    "createRitageQuarry": "$t(commonTypography.create) $t(commonTypography.dataRitageQuarry)",
+    "uploadRitageQuarry": "$t(commonTypography.upload) $t(commonTypography.dataRitageQuarry)",
+    "readRitageQuarry": "$t(commonTypography.detail) $t(commonTypography.dataRitageQuarry)",
+    "updateRitageQuarry": "$t(commonTypography.edit) $t(commonTypography.dataRitageQuarry)",
+    "successDeleteMessage": "$t(commonTypography.dataRitageQuarry) berhasil dihapus",
+    "downloadTemplateQuarry": "Unduh Tamplate Input Data Ritase Quarry",
+    "formRitageQuarry": "$t(commonTypography.form) $t(ritageQuarry.ritageQuarryTitle)",
+    "formUploadRitageQuarry": "$t(commonTypography.form) $t(commonTypography.upload) $t(ritageQuarry.ritageQuarryTitle)",
+    "formUpdateRitageQuarry": "$t(commonTypography.form) $t(commonTypography.edit) $t(ritageQuarry.ritageQuarryTitle)",
+    "successCreateMessage": "$t(commonTypography.dataRitageQuarry) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.dataRitageQuarry) berhasil diubah",
+    "successIsValidateMessage": "$t(ritageQuarry.ritageQuarryTitle) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(ritageQuarry.ritageQuarryTitle) Tidak Valid",
+    "successIsDeterminedMessage": "$t(ritageQuarry.ritageQuarryTitle) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(ritageQuarry.ritageQuarryTitle) berhasil $t(commonTypography.reject)"
   }
 }

@@ -7,6 +7,7 @@ import { shallow } from 'zustand/shallow';
 import { GlobalTabs, InnerWrapper, RootWrapper } from '@/components/elements';
 import ListDataObRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataObRitageBook';
 import ListDataOreRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataOreRitageBook';
+import ListDataQuarryRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataQuarryRitageBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 import { usePermissions } from '@/utils/store/usePermissions';
@@ -22,6 +23,7 @@ const DataRitagePage = () => {
 
   const isPremissionOre = permission.includes('read-ore-ritage');
   const isPremissionOb = permission.includes('read-overburden-ritage');
+  const isPremissionQuarry = permission.includes('read-quarry-ritage');
 
   React.useEffect(() => {
     setBreadcrumbs([
@@ -63,6 +65,12 @@ const DataRitagePage = () => {
               value: 'ob',
               component: <ListDataObRitageBook />,
               isShowItem: isPremissionOb,
+            },
+            {
+              label: 'Quarry',
+              value: 'quarry',
+              component: <ListDataQuarryRitageBook />,
+              isShowItem: isPremissionQuarry,
             },
           ]}
         />

@@ -376,7 +376,6 @@ const ListDataOreRitageBook = () => {
 
   return (
     <DashboardCard
-      title={t('ritageOre.ritageOreTitle')}
       addButton={{
         label: t('ritageOre.createRitageOre'),
         onClick: () => setIsOpenSelectionModal((prev) => !prev),

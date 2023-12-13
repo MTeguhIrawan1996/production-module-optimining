@@ -306,7 +306,7 @@ export type IListDetailRitageDTData<T = unknown> = {
 
 /* #endregion  /**======== Ritage DT =========== */
 
-export type ITabs = 'ore' | 'ob';
+export type ITabs = 'ore' | 'ob' | 'quarry';
 
 export interface ICreateFileProps {
   file: FileWithPath[] | null;
@@ -324,10 +324,6 @@ export type ICommonRitagesData<T = unknown> = {
   fromAt: Date | string | null;
   arriveAt: Date | string | null;
   subMaterial: Pick<IMaterialsData, 'id' | 'name'> | null;
-  fromPit: {
-    id: string;
-    name: string;
-  } | null;
   status: IStatus | null;
   isComplete: boolean;
   isRitageProblematic: boolean;

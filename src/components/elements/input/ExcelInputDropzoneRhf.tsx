@@ -110,6 +110,8 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
           const bstr = e.target?.result;
           const workBook = XLSX.read(bstr, {
             type: 'buffer',
+            cellDates: true,
+            cellText: true,
           });
           const workSheetName = workBook.SheetNames[0];
           const workSheet = workBook.Sheets[workSheetName];
