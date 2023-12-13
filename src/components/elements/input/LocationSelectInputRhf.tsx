@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllLocationsMaster } from '@/services/graphql/query/location/useReadAllLocationMaster';
+import { useReadAllLocationselect } from '@/services/graphql/query/global-select/useReadAllLocationSelect';
 import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
@@ -37,18 +37,17 @@ const LocationSelectInputRhf: React.FC<ILocationSelectInputRhfProps> = ({
   const [searchQuery] = useDebouncedValue<string>(searchTerm, 400);
   const currentValue = field.value === '' ? null : field.value;
 
-  const { locationsData } = useReadAllLocationsMaster({
+  const { allLocationsData } = useReadAllLocationselect({
     variables: {
       limit: 15,
       orderDir: 'desc',
-      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       categoryId: categoryId === '' ? null : categoryId,
     },
   });
 
   const { combinedItems, uncombinedItem } = useCombineFilterItems({
-    data: locationsData ?? [],
+    data: allLocationsData ?? [],
     combinedId: defaultValue ?? '',
     combinedName: labelValue,
   });
