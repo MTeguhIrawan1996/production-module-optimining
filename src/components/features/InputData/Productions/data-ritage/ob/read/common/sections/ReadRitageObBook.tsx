@@ -356,11 +356,11 @@ const ReadRitageObBook = () => {
                     overburdenRitage?.companyHeavyEquipmentChange?.hullNumber,
                 },
                 {
-                  dataKey: t('commonTypography.materialType'),
+                  dataKey: t('commonTypography.material'),
                   value: overburdenRitage?.material?.name,
                 },
                 {
-                  dataKey: t('commonTypography.subMaterialType'),
+                  dataKey: t('commonTypography.subMaterial'),
                   value: overburdenRitage?.subMaterial?.name,
                 },
                 {
