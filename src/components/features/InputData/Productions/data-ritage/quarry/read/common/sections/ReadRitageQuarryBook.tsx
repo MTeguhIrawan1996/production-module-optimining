@@ -14,17 +14,16 @@ import {
   GlobalHeaderDetail,
   KeyValueList,
 } from '@/components/elements';
-import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
-import { useUpdateIsDeterminedOreRitage } from '@/services/graphql/mutation/ore-ritage/useIsDeterminedOreRitage';
-import { useUpdateIsValidateOreRitage } from '@/services/graphql/mutation/ore-ritage/useIsValidateOreRitage';
-import { useReadOneOreRitage } from '@/services/graphql/query/ore-ritage/useReadOneOreRitage';
+import { useUpdateIsDeterminedQuarryRitage } from '@/services/graphql/mutation/quarry-ritage/useIsDeterminedQuarryRitage';
+import { useUpdateIsValidateQuarryRitage } from '@/services/graphql/mutation/quarry-ritage/useIsValidateQuarryRitage';
+import { useReadOneQuarryRitage } from '@/services/graphql/query/quarry-ritage/useReadOneQuarryRitage';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
 
-import { IElementWithValue, IFile, IUpdateStatusValues } from '@/types/global';
+import { IFile, IUpdateStatusValues } from '@/types/global';
 
-const ReadRitageOreBook = () => {
+const ReadRitageQuarryBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
@@ -38,31 +37,31 @@ const ReadRitageOreBook = () => {
   });
 
   /* #   /**=========== Query =========== */
-  const { oreRitage, oreRitageLoading } = useReadOneOreRitage({
+  const { quarryRitage, quarryRitageLoading } = useReadOneQuarryRitage({
     variables: {
       id,
     },
     skip: !router.isReady,
   });
 
-  const [executeUpdateStatus, { loading }] = useUpdateIsValidateOreRitage({
+  const [executeUpdateStatus, { loading }] = useUpdateIsValidateQuarryRitage({
     onCompleted: (data) => {
       const message = {
         '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
-          'ritageOre.successIsValidateMessage'
+          'ritageQuarry.successIsValidateMessage'
         ),
         'af06163a-2ba3-45ee-a724-ab3af0c97cc9': t(
-          'ritageOre.successIsNotValidateMessage'
+          'ritageQuarry.successIsNotValidateMessage'
         ),
-        default: t('commonTypography.dataRitageOre'),
+        default: t('commonTypography.dataRitageQuarry'),
       };
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: message[data.validateOreRitage.status.id],
+        message: message[data.validateQuarryRitage.status.id],
         icon: <IconCheck />,
       });
-      router.push('/input-data/production/data-ritage?tabs=ore');
+      router.push('/input-data/production/data-ritage?tabs=quarry');
     },
     onError: (error) => {
       if (error.graphQLErrors) {
@@ -77,24 +76,24 @@ const ReadRitageOreBook = () => {
   });
 
   const [executeUpdateStatusDetermiend, { loading: determinedLoading }] =
-    useUpdateIsDeterminedOreRitage({
+    useUpdateIsDeterminedQuarryRitage({
       onCompleted: (data) => {
         const message = {
           'f5f644d9-8810-44f7-8d42-36b5222b97d1': t(
-            'ritageOre.successIsDeterminedMessage'
+            'ritageQuarry.successIsDeterminedMessage'
           ),
           '7848a063-ae40-4a80-af86-dfc532cbb688': t(
-            'ritageOre.successIsRejectMessage'
+            'ritageQuarry.successIsRejectMessage'
           ),
-          default: t('commonTypography.dataRitageOre'),
+          default: t('commonTypography.dataRitageQuarry'),
         };
         notifications.show({
           color: 'green',
           title: 'Selamat',
-          message: message[data.determineOreRitage.status.id],
+          message: message[data.determineQuarryRitage.status.id],
           icon: <IconCheck />,
         });
-        router.push('/input-data/production/data-ritage?tabs=ore');
+        router.push('/input-data/production/data-ritage?tabs=quarry');
       },
       onError: (error) => {
         if (error.graphQLErrors) {
@@ -125,23 +124,7 @@ const ReadRitageOreBook = () => {
     },
     []
   );
-  const photosItem = oreRitage?.photos?.map(photosCallback);
-
-  const renderOtherElementCallback = React.useCallback(
-    (element: IElementWithValue) => {
-      const column: Pick<IKeyValueItemProps, 'value' | 'dataKey'> = {
-        dataKey: `${element.element?.name}`,
-        value: `${element.value ?? '-'}`,
-      };
-      return column;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  const renderOtherElement =
-    oreRitage?.houseSampleAndLab?.elements?.map(renderOtherElementCallback) ??
-    [];
+  const photosItem = quarryRitage?.photos?.map(photosCallback);
 
   const handleIsValid = async () => {
     await executeUpdateStatus({
@@ -190,27 +173,27 @@ const ReadRitageOreBook = () => {
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
   const isShowButtonValidation = includesWaiting.includes(
-    oreRitage?.status?.id ?? ''
+    quarryRitage?.status?.id ?? ''
   );
 
   const isShowButtonInvalidation = includesWaiting.includes(
-    oreRitage?.status?.id ?? ''
+    quarryRitage?.status?.id ?? ''
   );
 
   const isShowButtonDetermined = includesValid.includes(
-    oreRitage?.status?.id ?? ''
+    quarryRitage?.status?.id ?? ''
   );
 
   const isShowButtonReject = includesValid.includes(
-    oreRitage?.status?.id ?? ''
+    quarryRitage?.status?.id ?? ''
   );
   const isHiddenButtonEdit = includesDetermined.includes(
-    oreRitage?.status?.id ?? ''
+    quarryRitage?.status?.id ?? ''
   );
 
   return (
     <DashboardCard
-      title={t('ritageOre.readRitageOre')}
+      title={t('ritageQuarry.readRitageQuarry')}
       updateButton={
         isHiddenButtonEdit
           ? undefined
@@ -218,7 +201,7 @@ const ReadRitageOreBook = () => {
               label: 'Edit',
               onClick: () =>
                 router.push(
-                  `/input-data/production/data-ritage/ore/update/${id}`
+                  `/input-data/production/data-ritage/quarry/update/${id}`
                 ),
             }
       }
@@ -267,10 +250,10 @@ const ReadRitageOreBook = () => {
       withBorder
       enebleBackBottomOuter={{
         onClick: () =>
-          router.push('/input-data/production/data-ritage?tabs=ore'),
+          router.push('/input-data/production/data-ritage?tabs=quarry'),
       }}
       shadow="xs"
-      isLoading={oreRitageLoading}
+      isLoading={quarryRitageLoading}
       paperStackProps={{
         spacing: 'sm',
       }}
@@ -290,17 +273,19 @@ const ReadRitageOreBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          {oreRitage?.status?.id === 'af06163a-2ba3-45ee-a724-ab3af0c97cc9' ? (
+          {quarryRitage?.status?.id ===
+          'af06163a-2ba3-45ee-a724-ab3af0c97cc9' ? (
             <GlobalAlert
-              description={oreRitage?.statusMessage ?? ''}
+              description={quarryRitage?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
               mt="md"
             />
           ) : null}
-          {oreRitage?.status?.id === '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
+          {quarryRitage?.status?.id ===
+          '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
             <GlobalAlert
-              description={oreRitage?.statusMessage ?? ''}
+              description={quarryRitage?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
               mt="md"
@@ -311,7 +296,7 @@ const ReadRitageOreBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.date'),
-                  value: formatDate(oreRitage?.date),
+                  value: formatDate(quarryRitage?.date),
                 },
               ]}
               type="grid"
@@ -325,7 +310,7 @@ const ReadRitageOreBook = () => {
               }}
             />
           </Stack>
-          {!oreRitageLoading && oreRitage ? (
+          {!quarryRitageLoading && quarryRitage ? (
             <>
               <GlobalHeaderDetail
                 data={photosItem ?? []}
@@ -343,43 +328,43 @@ const ReadRitageOreBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.checkerFromName'),
-                  value: oreRitage?.checkerFrom?.humanResource?.name,
+                  value: quarryRitage?.checkerFrom?.humanResource?.name,
                 },
                 {
                   dataKey: t('commonTypography.fromCheckerPosition'),
-                  value: oreRitage?.checkerFromPosition,
+                  value: quarryRitage?.checkerFromPosition,
                 },
                 {
                   dataKey: t('commonTypography.checkerToName'),
-                  value: oreRitage?.checkerTo?.humanResource?.name,
+                  value: quarryRitage?.checkerTo?.humanResource?.name,
                 },
                 {
                   dataKey: t('commonTypography.toCheckerPosition'),
-                  value: oreRitage?.checkerToPosition,
+                  value: quarryRitage?.checkerToPosition,
                 },
                 {
                   dataKey: t('commonTypography.shift'),
-                  value: oreRitage?.shift?.name,
+                  value: quarryRitage?.shift?.name,
                 },
                 {
                   dataKey: t('commonTypography.heavyEquipmentCode'),
-                  value: oreRitage?.companyHeavyEquipment?.hullNumber,
+                  value: quarryRitage?.companyHeavyEquipment?.hullNumber,
                 },
                 {
                   dataKey: t('commonTypography.heavyEquipmentCodeSubstitution'),
-                  value: oreRitage?.companyHeavyEquipmentChange?.hullNumber,
+                  value: quarryRitage?.companyHeavyEquipmentChange?.hullNumber,
                 },
                 {
                   dataKey: t('commonTypography.material'),
-                  value: oreRitage?.material?.name,
+                  value: quarryRitage?.material?.name,
                 },
                 {
                   dataKey: t('commonTypography.subMaterial'),
-                  value: oreRitage?.subMaterial?.name,
+                  value: quarryRitage?.subMaterial?.name,
                 },
                 {
                   dataKey: t('commonTypography.weather'),
-                  value: oreRitage?.weather?.name,
+                  value: quarryRitage?.weather?.name,
                 },
               ]}
               type="grid"
@@ -402,15 +387,15 @@ const ReadRitageOreBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.fromAt'),
-                  value: formatDate(oreRitage?.fromAt, 'hh:mm:ss A'),
+                  value: formatDate(quarryRitage?.fromAt, 'hh:mm:ss A'),
                 },
                 {
                   dataKey: t('commonTypography.arriveAt'),
-                  value: formatDate(oreRitage?.arriveAt, 'hh:mm:ss A'),
+                  value: formatDate(quarryRitage?.arriveAt, 'hh:mm:ss A'),
                 },
                 {
                   dataKey: t('commonTypography.ritageDuration'),
-                  value: secondsDuration(oreRitage?.duration ?? null),
+                  value: secondsDuration(quarryRitage?.duration ?? null),
                 },
               ]}
               type="grid"
@@ -433,54 +418,27 @@ const ReadRitageOreBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.fromPit'),
-                  value: oreRitage?.fromPit?.name,
+                  value: quarryRitage?.fromPit?.name,
                 },
                 {
                   dataKey: t('commonTypography.fromFront'),
-                  value: oreRitage?.fromFront?.name,
+                  value: quarryRitage?.fromFront?.name,
                 },
                 {
                   dataKey: t('commonTypography.fromBlock'),
-                  value: oreRitage?.fromBlock?.name,
+                  value: quarryRitage?.fromBlock?.name,
                 },
                 {
                   dataKey: t('commonTypography.fromGrid'),
-                  value: oreRitage?.fromGrid?.name,
+                  value: quarryRitage?.fromGrid?.name,
                 },
                 {
                   dataKey: t('commonTypography.fromSequence'),
-                  value: oreRitage?.fromSequence?.name,
+                  value: quarryRitage?.fromSequence?.name,
                 },
                 {
                   dataKey: t('commonTypography.fromElevasi'),
-                  value: oreRitage?.fromElevation?.name,
-                },
-              ]}
-              type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
-            />
-          </Stack>
-          <Divider my="md" />
-          <Stack spacing="sm">
-            <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.level')}
-            </Text>
-            <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.fromLevel'),
-                  value: oreRitage?.fromLevel,
-                },
-                {
-                  dataKey: t('commonTypography.toLevel'),
-                  value: oreRitage?.toLevel,
+                  value: quarryRitage?.fromElevation?.name,
                 },
               ]}
               type="grid"
@@ -502,12 +460,12 @@ const ReadRitageOreBook = () => {
             <KeyValueList
               data={[
                 {
-                  dataKey: t('commonTypography.stockpile'),
-                  value: oreRitage?.stockpile?.name,
+                  dataKey: t('commonTypography.locationCategory'),
+                  value: quarryRitage?.locationCategory?.name,
                 },
                 {
-                  dataKey: t('commonTypography.dome'),
-                  value: oreRitage?.dome?.name,
+                  dataKey: t('commonTypography.locationName'),
+                  value: quarryRitage?.toLocation?.name,
                 },
               ]}
               type="grid"
@@ -530,19 +488,15 @@ const ReadRitageOreBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.bucketVolume'),
-                  value: `${oreRitage?.bucketVolume ?? '-'}`,
+                  value: `${quarryRitage?.bucketVolume ?? '-'}`,
                 },
                 {
                   dataKey: t('commonTypography.bulkSamplingDensity'),
-                  value: `${oreRitage?.bulkSamplingDensity ?? '-'}`,
+                  value: `${quarryRitage?.bulkSamplingDensity ?? '-'}`,
                 },
                 {
                   dataKey: t('commonTypography.tonByRitage'),
-                  value: `${oreRitage?.tonByRitage ?? '-'}`,
-                },
-                {
-                  dataKey: t('commonTypography.sampleNumber'),
-                  value: oreRitage?.sampleNumber,
+                  value: `${quarryRitage?.tonByRitage ?? '-'}`,
                 },
               ]}
               type="grid"
@@ -558,33 +512,11 @@ const ReadRitageOreBook = () => {
           </Stack>
           <Divider my="md" />
           <Stack spacing="sm">
-            <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.rate')}
-            </Text>
-            {renderOtherElement.length > 0 ? (
-              <KeyValueList
-                data={[...renderOtherElement]}
-                type="grid"
-                keyStyleText={{
-                  fw: 400,
-                  fz: 20,
-                }}
-                valueStyleText={{
-                  fw: 600,
-                  fz: 20,
-                }}
-              />
-            ) : (
-              <Text color="gray.6">{t(`commonTypography.rateNotFound`)}</Text>
-            )}
-          </Stack>
-          <Divider my="md" />
-          <Stack spacing="sm">
             <KeyValueList
               data={[
                 {
                   dataKey: t('commonTypography.desc'),
-                  value: oreRitage?.desc,
+                  value: quarryRitage?.desc,
                 },
               ]}
               type="grid"
@@ -604,4 +536,4 @@ const ReadRitageOreBook = () => {
   );
 };
 
-export default ReadRitageOreBook;
+export default ReadRitageQuarryBook;

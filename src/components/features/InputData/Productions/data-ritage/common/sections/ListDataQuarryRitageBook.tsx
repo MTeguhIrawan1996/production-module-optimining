@@ -16,10 +16,10 @@ import {
 } from '@/components/elements';
 import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
-import { useDeleteOverburdenRitage } from '@/services/graphql/mutation/ob-ritage/useDeleteObRitage';
+import { useDeleteQuarryRitage } from '@/services/graphql/mutation/quarry-ritage/useDeleteQuarryRitage';
 import { useReadAllHeavyEquipmentSelect } from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
-import { useReadAllRitageOB } from '@/services/graphql/query/ob-ritage/useReadAllObRitage';
-import { useReadAllRitageObDT } from '@/services/graphql/query/ob-ritage/useReadAllObRitageDT';
+import { useReadAllRitageQuarry } from '@/services/graphql/query/quarry-ritage/useReadAllQuarryRitage';
+import { useReadAllRitageQuarryDT } from '@/services/graphql/query/quarry-ritage/useReadAllQuarryRitageDT';
 import { useReadAllShiftMaster } from '@/services/graphql/query/shift/useReadAllShiftMaster';
 import {
   globalDateNative,
@@ -30,13 +30,13 @@ import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { InputControllerNativeProps } from '@/types/global';
 
-const ListDataObRitageBook = () => {
+const ListDataQuarryRitageBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const tabs = pageParams.get('tabs') || '';
   const page = Number(pageParams.get('rp')) || 1;
   const heavyEquipmentPage = Number(pageParams.get('hp')) || 1;
-  const url = `/input-data/production/data-ritage?rp=1&hp=${heavyEquipmentPage}&tabs=ob`;
+  const url = `/input-data/production/data-ritage?rp=1&hp=${heavyEquipmentPage}&tabs=quarry`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -66,7 +66,7 @@ const ListDataObRitageBook = () => {
       orderDir: 'desc',
       orderBy: 'createdAt',
     },
-    skip: tabs !== 'ob',
+    skip: tabs !== 'quarry',
   });
 
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
@@ -77,7 +77,7 @@ const ListDataObRitageBook = () => {
       isComplete: true,
       categorySlug: 'dump-truck',
     },
-    skip: tabs !== 'ob',
+    skip: tabs !== 'quarry',
   });
 
   const heavyEquipmentItem = heavyEquipmentSelect?.map((val) => {
@@ -94,25 +94,25 @@ const ListDataObRitageBook = () => {
   });
 
   const {
-    overburdenDumpTruckRitagesData,
-    overburdenDumpTruckRitagesDataLoading,
-    overburdenDumpTruckRitagesDataMeta,
-  } = useReadAllRitageObDT({
+    quarryDumpTruckRitagesData,
+    quarryDumpTruckRitagesDataLoading,
+    quarryDumpTruckRitagesDataMeta,
+  } = useReadAllRitageQuarryDT({
     variables: {
       limit: 10,
       page: heavyEquipmentPage,
       orderDir: 'desc',
       date: dateHeavyEquipment === '' ? null : dateHeavyEquipment,
     },
-    skip: tabs !== 'ob',
+    skip: tabs !== 'quarry',
   });
 
   const {
-    overburdenRitagesData,
-    overburdenRitagesDataLoading,
-    overburdenRitagesDataMeta,
-    refetchOverburdenRitages,
-  } = useReadAllRitageOB({
+    quarryRitagesData,
+    quarryRitagesDataLoading,
+    quarryRitagesDataMeta,
+    refetchQuarryRitages,
+  } = useReadAllRitageQuarry({
     variables: {
       limit: 10,
       page: page,
@@ -123,18 +123,18 @@ const ListDataObRitageBook = () => {
       companyHeavyEquipmentId:
         heavyEquipmentId === '' ? null : heavyEquipmentId,
     },
-    skip: tabs !== 'ob',
+    skip: tabs !== 'quarry',
   });
 
-  const [executeDelete, { loading }] = useDeleteOverburdenRitage({
+  const [executeDelete, { loading }] = useDeleteQuarryRitage({
     onCompleted: () => {
-      refetchOverburdenRitages();
+      refetchQuarryRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
       router.push(url, undefined, { shallow: true });
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('ritageOb.successDeleteMessage'),
+        message: t('ritageQuarry.successDeleteMessage'),
         icon: <IconCheck />,
       });
     },
@@ -158,7 +158,7 @@ const ListDataObRitageBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/data-ritage?rp=${page}&hp=${heavyEquipmentPage}&tabs=ob`;
+    const urlSet = `/input-data/production/data-ritage?rp=${page}&hp=${heavyEquipmentPage}&tabs=quarry`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
@@ -232,8 +232,8 @@ const ListDataObRitageBook = () => {
     return (
       <MantineDataTable
         tableProps={{
-          records: overburdenRitagesData,
-          fetching: overburdenRitagesDataLoading,
+          records: quarryRitagesData,
+          fetching: quarryRitagesDataLoading,
           highlightOnHover: true,
           withColumnBorders: false,
           columns: [
@@ -241,8 +241,7 @@ const ListDataObRitageBook = () => {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                overburdenRitagesData &&
-                overburdenRitagesData.indexOf(record) + 1,
+                quarryRitagesData && quarryRitagesData.indexOf(record) + 1,
               width: 60,
             },
             {
@@ -263,9 +262,9 @@ const ListDataObRitageBook = () => {
                 companyHeavyEquipment?.hullNumber ?? '-',
             },
             {
-              accessor: 'subMaterial',
-              title: t('commonTypography.subMaterial'),
-              render: ({ subMaterial }) => subMaterial?.name ?? '-',
+              accessor: 'material',
+              title: t('commonTypography.material'),
+              render: ({ material }) => material?.name ?? '-',
             },
             {
               accessor: 'fromAt',
@@ -273,15 +272,15 @@ const ListDataObRitageBook = () => {
               render: ({ fromAt }) => formatDate(fromAt, 'hh:mm:ss A'),
             },
             {
-              accessor: 'fromPit',
-              title: t('commonTypography.pit'),
+              accessor: 'fromLocation',
+              title: t('commonTypography.fromLocation'),
               width: 120,
               render: ({ fromPit }) => fromPit?.name ?? '-',
             },
             {
-              accessor: 'disposal',
-              title: 'Disposal',
-              render: ({ disposal }) => disposal?.name ?? '-',
+              accessor: 'toLocation',
+              title: t('commonTypography.toLocation'),
+              render: ({ toLocation }) => toLocation?.name ?? '-',
             },
             {
               accessor: 'status',
@@ -320,7 +319,7 @@ const ListDataObRitageBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/input-data/production/data-ritage/ob/read/${id}`
+                          `/input-data/production/data-ritage/quarry/read/${id}`
                         );
                       },
                     }}
@@ -331,7 +330,7 @@ const ListDataObRitageBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/production/data-ritage/ob/update/${id}`
+                                `/input-data/production/data-ritage/quarry/update/${id}`
                               );
                             },
                           }
@@ -358,27 +357,27 @@ const ListDataObRitageBook = () => {
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
           actionButton: {
-            label: t('ritageOb.createRitageOb'),
+            label: t('ritageQuarry.createRitageQuarry'),
             onClick: () => setIsOpenSelectionModal((prev) => !prev),
           },
         }}
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: overburdenRitagesDataMeta?.totalAllData ?? 0,
-          totalData: overburdenRitagesDataMeta?.totalData ?? 0,
-          totalPage: overburdenRitagesDataMeta?.totalPage ?? 0,
+          totalAllData: quarryRitagesDataMeta?.totalAllData ?? 0,
+          totalData: quarryRitagesDataMeta?.totalData ?? 0,
+          totalPage: quarryRitagesDataMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [overburdenRitagesData, overburdenRitagesDataLoading]);
+  }, [quarryRitagesData, quarryRitagesDataLoading]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
       addButton={{
-        label: t('ritageOb.createRitageOb'),
+        label: t('ritageQuarry.createRitageQuarry'),
         onClick: () => setIsOpenSelectionModal((prev) => !prev),
       }}
       filterDateWithSelect={{
@@ -387,25 +386,25 @@ const ListDataObRitageBook = () => {
       }}
       downloadButton={[
         {
-          label: t('ritageOb.downloadTemplateOb'),
-          url: `/overburden-ritages/file`,
-          fileName: 'template-ob',
+          label: t('ritageQuarry.downloadTemplateQuarry'),
+          url: `/quarry-ritages/file`,
+          fileName: 'template-quarry',
         },
         {
           label: t('commonTypography.downloadReference'),
           url: `/download/references`,
-          fileName: 'referensi-ob',
+          fileName: 'referensi-quarry',
         },
       ]}
     >
       {renderTable}
       <ListDataRitageDumptruckBook
-        data={overburdenDumpTruckRitagesData}
-        meta={overburdenDumpTruckRitagesDataMeta}
-        fetching={overburdenDumpTruckRitagesDataLoading}
-        tabs="ob"
+        data={quarryDumpTruckRitagesData}
+        meta={quarryDumpTruckRitagesDataMeta}
+        fetching={quarryDumpTruckRitagesDataLoading}
+        tabs="quarry"
         setDate={setDateHeavyEquipment}
-        urlDetail="/input-data/production/data-ritage/ob/read/dump-truck"
+        urlDetail="/input-data/production/data-ritage/quarry/read/dump-truck"
       />
       <ModalConfirmation
         isOpenModalConfirmation={isOpenDeleteConfirmation}
@@ -434,16 +433,16 @@ const ListDataObRitageBook = () => {
         firstButton={{
           label: t('commonTypography.inputDataRitage'),
           onClick: () =>
-            router.push('/input-data/production/data-ritage/ob/create'),
+            router.push('/input-data/production/data-ritage/quarry/create'),
         }}
         secondButton={{
           label: t('commonTypography.uploadFile'),
           onClick: () =>
-            router.push('/input-data/production/data-ritage/ob/upload'),
+            router.push('/input-data/production/data-ritage/quarry/upload'),
         }}
       />
     </DashboardCard>
   );
 };
 
-export default ListDataObRitageBook;
+export default ListDataQuarryRitageBook;

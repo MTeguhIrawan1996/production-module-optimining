@@ -1,5 +1,6 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
+import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
 import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
 
 import {
@@ -76,6 +77,7 @@ export const READ_ALL_RITAGE_ORE = gql`
 `;
 
 interface IOtherProps {
+  fromPit: Pick<ILocationsData, 'id' | 'name'> | null;
   dome: Pick<IStockpilesData, 'id' | 'name'> | null;
   sampleNumber: string | null;
 }
