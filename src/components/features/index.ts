@@ -15,6 +15,7 @@ import UpdateRitageOrePage from '@/components/features/InputData/Productions/dat
 import UploadRitageOrePage from '@/components/features/InputData/Productions/data-ritage/ore/upload/common';
 import CreateRitageQuarryPage from '@/components/features/InputData/Productions/data-ritage/quarry/create/common';
 import ReadRitageQuarryPage from '@/components/features/InputData/Productions/data-ritage/quarry/read/common';
+import UpdateRitageQuarryPage from '@/components/features/InputData/Productions/data-ritage/quarry/update/common';
 import UploadRitageQuarryPage from '@/components/features/InputData/Productions/data-ritage/quarry/upload/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
 import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/create/common';
@@ -191,6 +192,7 @@ export {
   UpdateMaterialMasterPage,
   UpdateRitageObPage,
   UpdateRitageOrePage,
+  UpdateRitageQuarryPage,
   UpdateSampleHouseLabPage,
   UpdateShiftMasterPage,
   UpdateStockpileDomeMasterPage,
