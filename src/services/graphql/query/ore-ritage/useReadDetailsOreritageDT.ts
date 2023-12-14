@@ -85,7 +85,6 @@ export const READ_DETAILS_ORE_RITAGE_DT = gql`
 export interface IOtherDetailsRitageOreDT {
   fromLevel: string | null;
   toLevel: string | null;
-  bucketVolume: number | null;
   dome: Pick<IStockpilesData, 'id' | 'name'> | null;
   sampleNumber: string | null;
   houseSampleAndLab: {
