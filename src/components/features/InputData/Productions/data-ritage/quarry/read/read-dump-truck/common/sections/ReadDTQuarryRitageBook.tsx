@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, ListDetailsRitageDT } from '@/components/elements';
 
-import { useReadDetailsObRitageDT } from '@/services/graphql/query/ob-ritage/useReadDetailsObRitageDT';
-import { useReadOneFotoObRitageDT } from '@/services/graphql/query/ob-ritage/useReadOneObRitageDT';
+import { useReadDetailsQuarryRitageDT } from '@/services/graphql/query/quarry-ritage/useReadDetailsQuarryRitageDT';
+import { useReadOneFotoQuarryRitageDT } from '@/services/graphql/query/quarry-ritage/useReadOneQuarryRitageDT';
 
-const ReadDTObRitageBook = () => {
+const ReadDTQuarryRitageBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const pageParams = useSearchParams();
@@ -21,10 +21,10 @@ const ReadDTObRitageBook = () => {
 
   /* #   /**=========== Query =========== */
   const {
-    detailsObRitageDTData,
-    detailsObRitageDTDataLoading,
-    detailsObRitageDTDataMeta,
-  } = useReadDetailsObRitageDT({
+    quarryRitagesDTData,
+    quarryRitagesDTDataLoading,
+    quarryRitagesDTDataMeta,
+  } = useReadDetailsQuarryRitageDT({
     variables: {
       limit: 10,
       page: page,
@@ -36,8 +36,8 @@ const ReadDTObRitageBook = () => {
     skip: !router.isReady,
   });
 
-  const { getData, overburdenRitage, overburdenRitageLoading } =
-    useReadOneFotoObRitageDT({});
+  const { getData, quarryRitage, quarryRitageLoading } =
+    useReadOneFotoQuarryRitageDT({});
 
   const onOpenModal = async (id: string) => {
     setIsOpenImageModal((prev) => !prev);
@@ -52,7 +52,7 @@ const ReadDTObRitageBook = () => {
     <DashboardCard
       enebleBackBottomInner={{
         onClick: () =>
-          router.push('/input-data/production/data-ritage?tabs=ob'),
+          router.push('/input-data/production/data-ritage?tabs=quarry'),
       }}
       shadow="none"
       childrenStackProps={{
@@ -60,7 +60,7 @@ const ReadDTObRitageBook = () => {
       }}
     >
       <ListDetailsRitageDT
-        data={detailsObRitageDTData}
+        data={quarryRitagesDTData}
         columns={[
           {
             accessor: 'fromPit',
@@ -69,9 +69,9 @@ const ReadDTObRitageBook = () => {
             render: ({ fromPit }) => fromPit?.name ?? '-',
           },
           {
-            accessor: 'toDisposal',
-            title: t('commonTypography.toDisposal'),
-            render: ({ disposal }) => disposal?.name ?? '-',
+            accessor: 'toLocation',
+            title: t('commonTypography.toLocation'),
+            render: ({ toLocation }) => toLocation?.name ?? '-',
           },
           {
             accessor: 'bucketVolume',
@@ -84,19 +84,20 @@ const ReadDTObRitageBook = () => {
             render: ({ tonByRitage }) => tonByRitage ?? '-',
           },
         ]}
+        subMaterialHidden
         onOpenModal={onOpenModal}
-        tabs="ob"
-        fetching={detailsObRitageDTDataLoading}
-        meta={detailsObRitageDTDataMeta}
+        tabs="quarry"
+        fetching={quarryRitagesDTDataLoading}
+        meta={quarryRitagesDTDataMeta}
         modalProps={{
           actionImageModal: () => setIsOpenImageModal((prev) => !prev),
           isOpenImageModal: isOpenImageModal,
-          photos: overburdenRitage?.photos,
-          isLoading: overburdenRitageLoading,
+          photos: quarryRitage?.photos,
+          isLoading: quarryRitageLoading,
         }}
       />
     </DashboardCard>
   );
 };
 
-export default ReadDTObRitageBook;
+export default ReadDTQuarryRitageBook;

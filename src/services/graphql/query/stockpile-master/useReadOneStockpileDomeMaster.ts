@@ -6,6 +6,10 @@ export const READ_ONE_STOCKPILE_DOME_MASTER = gql`
       id
       handBookId
       name
+      stockpile {
+        id
+        name
+      }
     }
   }
 `;
@@ -14,6 +18,10 @@ export interface IReadOneStockpileDomeMaster {
   id: string;
   handBookId: string;
   name: string;
+  stockpile: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface IReadOneStockpileDomeMasterResponse {

@@ -1,16 +1,17 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
+import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
+import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
 
 import {
   GResponse,
-  IElementWithValue,
+  ICommonRitagesData,
   IGlobalMetaRequest,
-  IListDetailRitageDTData,
 } from '@/types/global';
 
-export const READ_DETAILS_ORE_RITAGE_DT = gql`
-  query ReadDetailsOreRitageDT(
+export const READ_ALL_RITAGE_BARGING = gql`
+  query ReadAllRitageBarging(
     $page: Int
     $limit: Int
     $date: String
@@ -20,8 +21,8 @@ export const READ_DETAILS_ORE_RITAGE_DT = gql`
     $companyHeavyEquipmentId: String
     $isRitageProblematic: Boolean
   ) {
-    oreRitages(
-      findAllOreRitageInput: {
+    bargingRitages(
+      findAllBargingRitageInput: {
         page: $page
         limit: $limit
         date: $date
@@ -40,16 +41,16 @@ export const READ_DETAILS_ORE_RITAGE_DT = gql`
       }
       data {
         id
+        date
         shift {
           id
           name
         }
-        weather {
+        companyHeavyEquipment {
           id
-          name
+          hullNumber
         }
         material {
-          id
           name
         }
         subMaterial {
@@ -58,45 +59,48 @@ export const READ_DETAILS_ORE_RITAGE_DT = gql`
         }
         fromAt
         arriveAt
-        duration
-        fromLevel
-        toLevel
-        bucketVolume
-        tonByRitage
         dome {
+          id
+          name
+          stockpile {
+            id
+            name
+          }
+        }
+        barging {
           id
           name
         }
         sampleNumber
-        houseSampleAndLab {
-          elements {
-            value
-            element {
-              id
-              name
-            }
-          }
+        status {
+          id
+          name
+          color
         }
+        isComplete
+        isRitageProblematic
       }
     }
   }
 `;
 
-export interface IOtherDetailsRitageOreDT {
-  fromLevel: string | null;
-  toLevel: string | null;
-  dome: Pick<IStockpilesData, 'id' | 'name'> | null;
+type IDomeWithStockpile =
+  | {
+      stockpile: Pick<IStockpilesData, 'id' | 'name'> | null;
+    } & Pick<IStockpilesData, 'id' | 'name'>;
+
+interface IOtherProps {
+  barging: Pick<ILocationsData, 'id' | 'name'> | null;
+  dome: IDomeWithStockpile | null;
   sampleNumber: string | null;
-  houseSampleAndLab: {
-    elements: IElementWithValue[] | null;
-  } | null;
+  material: Pick<IMaterialsData, 'id' | 'name'> | null;
 }
 
-interface IDetailsOreRitageDTResponse {
-  oreRitages: GResponse<IListDetailRitageDTData<IOtherDetailsRitageOreDT>>;
+interface IBargingRitagesResponse {
+  bargingRitages: GResponse<ICommonRitagesData<IOtherProps>>;
 }
 
-interface IDetailsOreRitageDTRequest
+interface IBargingRitagesRequest
   extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
   date?: string | null;
   shiftId?: string | null;
@@ -104,21 +108,21 @@ interface IDetailsOreRitageDTRequest
   companyHeavyEquipmentId?: string | null;
 }
 
-export const useReadDetailsOreRitageDT = ({
+export const useReadAllRitageBarging = ({
   variables,
   onCompleted,
   skip,
 }: {
-  variables?: IDetailsOreRitageDTRequest;
-  onCompleted?: (data: IDetailsOreRitageDTResponse) => void;
+  variables?: IBargingRitagesRequest;
+  onCompleted?: (data: IBargingRitagesResponse) => void;
   skip?: boolean;
 }) => {
   const {
-    data: detailsOreRitageDTData,
-    loading: detailsOreRitageDTDataLoading,
+    data: bargingRitagesData,
+    loading: bargingRitagesDataLoading,
     refetch,
-  } = useQuery<IDetailsOreRitageDTResponse, IDetailsOreRitageDTRequest>(
-    READ_DETAILS_ORE_RITAGE_DT,
+  } = useQuery<IBargingRitagesResponse, IBargingRitagesRequest>(
+    READ_ALL_RITAGE_BARGING,
     {
       variables: variables,
       skip: skip,
@@ -131,9 +135,9 @@ export const useReadDetailsOreRitageDT = ({
   );
 
   return {
-    detailsOreRitageDTData: detailsOreRitageDTData?.oreRitages.data,
-    detailsOreRitageDTDataMeta: detailsOreRitageDTData?.oreRitages.meta,
-    detailsOreRitageDTDataLoading,
-    refetchDetailsOreRitageDT: refetch,
+    bargingRitagesData: bargingRitagesData?.bargingRitages.data,
+    bargingRitagesDataMeta: bargingRitagesData?.bargingRitages.meta,
+    bargingRitagesDataLoading,
+    refetchBargingRitages: refetch,
   };
 };

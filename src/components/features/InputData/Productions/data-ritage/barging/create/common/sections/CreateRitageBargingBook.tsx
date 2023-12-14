@@ -9,11 +9,11 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
+import { useReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 import {
-  IMutationRitageQuarry,
-  useCreateRitageQuarry,
-} from '@/services/restapi/ritage-productions/quarry/useCreateRitageQuarry';
+  IMutationRitageBarging,
+  useCreateRitageBarging,
+} from '@/services/restapi/ritage-productions/barging/useCreateRitageBarging';
 import {
   employeeSelect,
   globalDate,
@@ -21,14 +21,13 @@ import {
   globalText,
   globalTimeInput,
   heavyEquipmentSelect,
-  locationCategorySelect,
   locationSelect,
   materialSelect,
-  pitSelect,
   weatherSelect,
 } from '@/utils/constants/Field/global-field';
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
-import { ritageQuarryMutationValidation } from '@/utils/form-validation/ritage/ritage-quarry-validation';
+import { domeNameSelect } from '@/utils/constants/Field/stockpile-field';
+import { ritageBargingMutationValidation } from '@/utils/form-validation/ritage/ritage-barging-validation';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
 import { dateToString } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
@@ -38,7 +37,7 @@ import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
 import { ControllerGroup, ControllerProps } from '@/types/global';
 
-const CreateRitageQuarryBook = () => {
+const CreateRitageBargingBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const [newFromTime, setNewFromTime] = useDebouncedState<string>('', 400);
@@ -51,8 +50,8 @@ const CreateRitageQuarryBook = () => {
   );
 
   /* #   /**=========== Methods =========== */
-  const methods = useForm<IMutationRitageQuarry>({
-    resolver: zodResolver(ritageQuarryMutationValidation),
+  const methods = useForm<IMutationRitageBarging>({
+    resolver: zodResolver(ritageBargingMutationValidation),
     defaultValues: {
       date: new Date(),
       checkerFromId: '',
@@ -62,30 +61,27 @@ const CreateRitageQuarryBook = () => {
       shiftId: '',
       companyHeavyEquipmentId: '',
       companyHeavyEquipmentChangeId: '',
-      materialId: `${process.env.NEXT_PUBLIC_MATERIAL_QUARRY_ID}`,
+      materialId: '',
+      subMaterialId: '',
       fromTime: '',
       arriveTime: '',
       ritageDuration: '',
-      block: '',
       weatherId: '',
-      fromPitId: '',
-      fromFrontId: '',
-      fromGridId: '',
-      fromSequenceId: '',
-      fromElevationId: '',
-      locationCategoryId: '',
-      toLocationId: '',
+      domeId: '',
+      stockpileName: '',
+      bargingId: '',
       bulkSamplingDensity: '',
       bucketVolume: '',
       tonByRitage: '',
+      sampleNumber: '',
       desc: '',
       photos: [],
       isRitageProblematic: false,
     },
     mode: 'onBlur',
   });
-  const locationCategoryId = methods.watch('locationCategoryId');
-  const fromPitId = methods.watch('fromPitId');
+  const materialId = methods.watch('materialId');
+  const domeId = methods.watch('domeId');
   const photos = methods.watch('photos');
   const isRitageProblematic = methods.watch('isRitageProblematic');
 
@@ -101,17 +97,18 @@ const CreateRitageQuarryBook = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  useReadOneBlockPitMaster({
+  useReadOneStockpileDomeMaster({
     variables: {
-      id: fromPitId as string,
+      id: domeId as string,
     },
-    skip: fromPitId === '' || !fromPitId,
-    onCompleted: ({ pit }) => {
-      methods.setValue('block', pit.block.name);
+    skip: domeId === '' || !domeId,
+    onCompleted: ({ dome }) => {
+      methods.setValue('stockpileName', dome.stockpile.name);
     },
   });
 
-  const { mutate, isLoading } = useCreateRitageQuarry({
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  const { mutate, isLoading } = useCreateRitageBarging({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -133,10 +130,10 @@ const CreateRitageQuarryBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('ritageQuarry.successCreateMessage'),
+        message: t('ritageBarging.successCreateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/input-data/production/data-ritage?tabs=quarry');
+      router.push('/input-data/production/data-ritage?tabs=barging');
       methods.reset();
     },
   });
@@ -200,9 +197,22 @@ const CreateRitageQuarryBook = () => {
       colSpan: 6,
       name: 'materialId',
       label: 'material',
-      disabled: true,
       withAsterisk: true,
-      includeIds: [`${process.env.NEXT_PUBLIC_MATERIAL_QUARRY_ID}`],
+      onChange: (value) => {
+        methods.setValue('materialId', value ?? '');
+        methods.setValue('subMaterialId', '');
+        methods.trigger('materialId');
+      },
+    });
+    const newMaterialId = materialId === '' ? null : materialId;
+    const materialSubItem = materialSelect({
+      colSpan: 6,
+      name: 'subMaterialId',
+      label: 'subMaterial',
+      withAsterisk: false,
+      disabled: !newMaterialId,
+      parentId: materialId,
+      isHaveParent: true,
     });
     const fromTime = globalTimeInput({
       name: 'fromTime',
@@ -237,51 +247,26 @@ const CreateRitageQuarryBook = () => {
       colSpan: 6,
       name: 'weatherId',
     });
-    const pitItem = pitSelect({
+
+    const domeItem = domeNameSelect({
       colSpan: 6,
-      name: 'fromPitId',
-      label: 'fromPit',
-      withAsterisk: true,
-      onChange: (value) => {
-        methods.setValue('fromPitId', value ?? '');
-        methods.setValue('block', '');
-        methods.trigger('fromPitId');
-      },
-    });
-    const frontItem = locationSelect({
-      colSpan: 6,
-      name: 'fromFrontId',
-      label: 'fromFront',
+      name: 'domeId',
+      label: 'domeName',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_FRONT_ID}`,
     });
-    const block = globalText({
+    const stockpileItem = globalText({
       colSpan: 6,
-      name: 'block',
-      label: 'fromBlock',
+      name: 'stockpileName',
+      label: 'fromStockpile',
       withAsterisk: false,
       disabled: true,
     });
-    const gridItem = locationSelect({
+    const bargingItem = locationSelect({
       colSpan: 6,
-      name: 'fromGridId',
-      label: 'fromGrid',
+      name: 'bargingId',
+      label: 'toBarging',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_GRID_ID}`,
-    });
-    const sequenceItem = locationSelect({
-      colSpan: 6,
-      name: 'fromSequenceId',
-      label: 'fromSequence',
-      withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_SEQUENCE_ID}`,
-    });
-    const elevasiItem = locationSelect({
-      colSpan: 6,
-      name: 'fromElevationId',
-      label: 'fromElevasi',
-      withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_ELEVASI_ID}`,
+      categoryId: `${process.env.NEXT_PUBLIC_BARGING_ID}`,
     });
     const bulkSamplingDensityItem = globalNumberInput({
       colSpan: 6,
@@ -293,26 +278,6 @@ const CreateRitageQuarryBook = () => {
         setNewBulkSamplingDensity(`${value}`);
         methods.trigger('bulkSamplingDensity');
       },
-    });
-    const locationCategoryItem = locationCategorySelect({
-      clearable: true,
-      withAsterisk: false,
-      name: 'locationCategoryId',
-      onChange: (value) => {
-        methods.setValue('locationCategoryId', value ?? '');
-        methods.setValue('toLocationId', '');
-        methods.trigger('locationCategoryId');
-      },
-    });
-    const newLocationCategoryId =
-      locationCategoryId === '' ? null : locationCategoryId;
-    const locationItem = locationSelect({
-      colSpan: 6,
-      name: 'toLocationId',
-      label: 'locationName',
-      withAsterisk: false,
-      disabled: !newLocationCategoryId,
-      categoryId: locationCategoryId,
     });
     const bucketVolumeItem = globalNumberInput({
       colSpan: 6,
@@ -331,6 +296,12 @@ const CreateRitageQuarryBook = () => {
       label: 'tonByRitage',
       withAsterisk: false,
       disabled: true,
+    });
+    const sampleNumberItem = globalText({
+      colSpan: 6,
+      name: 'sampleNumber',
+      label: 'sampleNumber',
+      withAsterisk: false,
     });
     const desc = globalText({
       colSpan: 12,
@@ -365,7 +336,7 @@ const CreateRitageQuarryBook = () => {
         methods.clearErrors('photos');
       },
       onReject: (files) =>
-        handleRejectFile<IMutationRitageQuarry>({
+        handleRejectFile<IMutationRitageBarging>({
           methods,
           files,
           field: 'photos',
@@ -387,6 +358,7 @@ const CreateRitageQuarryBook = () => {
           toCheckerPosition,
           shiftItem,
           materialItem,
+          materialSubItem,
           hullNumber,
           hullNumberSubstitution,
           weatherItem,
@@ -398,21 +370,9 @@ const CreateRitageQuarryBook = () => {
         formControllers: [fromTime, arriveTime, ritageDurationItem],
       },
       {
-        group: t('commonTypography.location'),
-        enableGroupLabel: true,
-        formControllers: [
-          pitItem,
-          frontItem,
-          block,
-          gridItem,
-          sequenceItem,
-          elevasiItem,
-        ],
-      },
-      {
         group: t('commonTypography.arrive'),
         enableGroupLabel: true,
-        formControllers: [locationCategoryItem, locationItem],
+        formControllers: [domeItem, stockpileItem, bargingItem],
       },
       {
         group: t('commonTypography.detail'),
@@ -421,6 +381,7 @@ const CreateRitageQuarryBook = () => {
           bulkSamplingDensityItem,
           bucketVolumeItem,
           tonByRitageItem,
+          sampleNumberItem,
         ],
       },
       {
@@ -433,15 +394,15 @@ const CreateRitageQuarryBook = () => {
       },
     ];
 
-    isRitageProblematic ? field : field[1].formControllers.splice(7, 1);
+    isRitageProblematic ? field : field[1].formControllers.splice(8, 1);
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photos, isRitageProblematic, locationCategoryId]);
+  }, [photos, isRitageProblematic, materialId]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
-  const handleSubmitForm: SubmitHandler<IMutationRitageQuarry> = (data) => {
+  const handleSubmitForm: SubmitHandler<IMutationRitageBarging> = (data) => {
     const values = objectToArrayValue(data);
     const dateValue = ['date'];
     const numberValue = ['bucketVolume', 'bulkSamplingDensity'];
@@ -468,7 +429,6 @@ const CreateRitageQuarryBook = () => {
       data: manipulateValue,
     });
   };
-
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
@@ -494,11 +454,11 @@ const CreateRitageQuarryBook = () => {
         }}
         backButton={{
           onClick: () =>
-            router.push('/input-data/production/data-ritage?tabs=quarry'),
+            router.push('/input-data/production/data-ritage?tabs=barging'),
         }}
       />
     </DashboardCard>
   );
 };
 
-export default CreateRitageQuarryBook;
+export default CreateRitageBargingBook;

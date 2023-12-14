@@ -302,11 +302,13 @@ export type IListDetailRitageDTData<T = unknown> = {
   tonByRitage: number | null;
   material: Pick<IMaterialsData, 'id' | 'name'> | null;
   subMaterial: Pick<IMaterialsData, 'id' | 'name'> | null;
+  bucketVolume: number | null;
+  desc: string | null;
 } & T;
 
 /* #endregion  /**======== Ritage DT =========== */
 
-export type ITabs = 'ore' | 'ob' | 'quarry';
+export type ITabs = 'ore' | 'ob' | 'quarry' | 'barging';
 
 export interface ICreateFileProps {
   file: FileWithPath[] | null;
