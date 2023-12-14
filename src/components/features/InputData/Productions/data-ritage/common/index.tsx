@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { GlobalTabs, InnerWrapper, RootWrapper } from '@/components/elements';
+import ListDataBargingRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataBargingRitageBook';
 import ListDataObRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataObRitageBook';
 import ListDataOreRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataOreRitageBook';
 import ListDataQuarryRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataQuarryRitageBook';
@@ -24,6 +25,7 @@ const DataRitagePage = () => {
   const isPremissionOre = permission.includes('read-ore-ritage');
   const isPremissionOb = permission.includes('read-overburden-ritage');
   const isPremissionQuarry = permission.includes('read-quarry-ritage');
+  const isPremissionBarging = permission.includes('read-barging-ritage');
 
   React.useEffect(() => {
     setBreadcrumbs([
@@ -71,6 +73,12 @@ const DataRitagePage = () => {
               value: 'quarry',
               component: <ListDataQuarryRitageBook />,
               isShowItem: isPremissionQuarry,
+            },
+            {
+              label: 'Barging',
+              value: 'barging',
+              component: <ListDataBargingRitageBook />,
+              isShowItem: isPremissionBarging,
             },
           ]}
         />
