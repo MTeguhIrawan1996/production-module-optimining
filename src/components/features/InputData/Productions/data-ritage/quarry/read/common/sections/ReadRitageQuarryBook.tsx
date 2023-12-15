@@ -461,7 +461,7 @@ const ReadRitageQuarryBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.locationCategory'),
-                  value: quarryRitage?.locationCategory?.name,
+                  value: quarryRitage?.toLocationCategory?.name,
                 },
                 {
                   dataKey: t('commonTypography.locationName'),

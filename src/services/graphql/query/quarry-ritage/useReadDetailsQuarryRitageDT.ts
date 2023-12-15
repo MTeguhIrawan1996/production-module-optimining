@@ -8,8 +8,8 @@ import {
   IListDetailRitageDTData,
 } from '@/types/global';
 
-export const READ_DETAILS_OB_RITAGE_DT = gql`
-  query ReadDetailsObRitageDT(
+export const READ_DETAILS_QUARRY_RITAGE_DT = gql`
+  query ReadDetailsQuarryRitageDT(
     $page: Int
     $limit: Int
     $date: String
@@ -19,8 +19,8 @@ export const READ_DETAILS_OB_RITAGE_DT = gql`
     $companyHeavyEquipmentId: String
     $isRitageProblematic: Boolean
   ) {
-    overburdenRitages(
-      findAllOverburdenRitageInput: {
+    quarryRitages(
+      findAllQuarryRitageInput: {
         page: $page
         limit: $limit
         date: $date
@@ -58,33 +58,34 @@ export const READ_DETAILS_OB_RITAGE_DT = gql`
         fromAt
         arriveAt
         duration
-        tonByRitage
         bucketVolume
+        tonByRitage
         fromPit {
           id
           name
         }
-        disposal {
+        toLocation {
           id
           name
         }
+        desc
       }
     }
   }
 `;
 
-export interface IOtherDetailsRitageObDT {
-  disposal: Pick<ILocationsData, 'id' | 'name'> | null;
+export interface IOtherReadDetailsQuarryRitageDT {
   fromPit: Pick<ILocationsData, 'id' | 'name'> | null;
+  toLocation: Pick<ILocationsData, 'id' | 'name'> | null;
 }
 
-interface IDetailsObRitageDTResponse {
-  overburdenRitages: GResponse<
-    IListDetailRitageDTData<IOtherDetailsRitageObDT>
+interface IReadDetailsQuarryRitageDTResponse {
+  quarryRitages: GResponse<
+    IListDetailRitageDTData<IOtherReadDetailsQuarryRitageDT>
   >;
 }
 
-interface IDetailsObRitageDTRequest
+interface IReadDetailsQuarryRitageDTRequest
   extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
   date?: string | null;
   shiftId?: string | null;
@@ -92,36 +93,36 @@ interface IDetailsObRitageDTRequest
   companyHeavyEquipmentId?: string | null;
 }
 
-export const useReadDetailsObRitageDT = ({
+export const useReadDetailsQuarryRitageDT = ({
   variables,
   onCompleted,
   skip,
 }: {
-  variables?: IDetailsObRitageDTRequest;
-  onCompleted?: (data: IDetailsObRitageDTResponse) => void;
+  variables?: IReadDetailsQuarryRitageDTRequest;
+  onCompleted?: (data: IReadDetailsQuarryRitageDTResponse) => void;
   skip?: boolean;
 }) => {
   const {
-    data: detailsObRitageDTData,
-    loading: detailsObRitageDTDataLoading,
+    data: quarryRitagesDTData,
+    loading: quarryRitagesDTDataLoading,
     refetch,
-  } = useQuery<IDetailsObRitageDTResponse, IDetailsObRitageDTRequest>(
-    READ_DETAILS_OB_RITAGE_DT,
-    {
-      variables: variables,
-      skip: skip,
-      onError: (err: ApolloError) => {
-        return err;
-      },
-      onCompleted,
-      fetchPolicy: 'cache-and-network',
-    }
-  );
+  } = useQuery<
+    IReadDetailsQuarryRitageDTResponse,
+    IReadDetailsQuarryRitageDTRequest
+  >(READ_DETAILS_QUARRY_RITAGE_DT, {
+    variables: variables,
+    skip: skip,
+    onError: (err: ApolloError) => {
+      return err;
+    },
+    onCompleted,
+    fetchPolicy: 'cache-and-network',
+  });
 
   return {
-    detailsObRitageDTData: detailsObRitageDTData?.overburdenRitages.data,
-    detailsObRitageDTDataMeta: detailsObRitageDTData?.overburdenRitages.meta,
-    detailsObRitageDTDataLoading,
-    refetchDetailsObRitageDT: refetch,
+    quarryRitagesDTData: quarryRitagesDTData?.quarryRitages.data,
+    quarryRitagesDTDataMeta: quarryRitagesDTData?.quarryRitages.meta,
+    quarryRitagesDTDataLoading,
+    refetchQuarryRitagesDT: refetch,
   };
 };

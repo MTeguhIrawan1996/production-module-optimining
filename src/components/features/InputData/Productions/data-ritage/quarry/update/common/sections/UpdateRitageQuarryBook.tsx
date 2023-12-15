@@ -10,10 +10,9 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
-import {
-  IMutationRitageQuarry,
-  useCreateRitageQuarry,
-} from '@/services/restapi/ritage-productions/quarry/useCreateRitageQuarry';
+import { useReadOneQuarryRitage } from '@/services/graphql/query/quarry-ritage/useReadOneQuarryRitage';
+import { IMutationRitageQuarry } from '@/services/restapi/ritage-productions/quarry/useCreateRitageQuarry';
+import { useUpdateRitageQuarry } from '@/services/restapi/ritage-productions/quarry/useUpdateRitageQuarry';
 import {
   employeeSelect,
   globalDate,
@@ -30,17 +29,19 @@ import {
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { ritageQuarryMutationValidation } from '@/utils/form-validation/ritage/ritage-quarry-validation';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
-import { dateToString } from '@/utils/helper/dateToString';
+import { formatDate2 } from '@/utils/helper/dateFormat';
+import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { hourDiff } from '@/utils/helper/hourDiff';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
-import { ControllerGroup, ControllerProps } from '@/types/global';
+import { ControllerGroup, ControllerProps, IFile } from '@/types/global';
 
-const CreateRitageQuarryBook = () => {
+const UpdateRitageQuarryBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
   const [newFromTime, setNewFromTime] = useDebouncedState<string>('', 400);
   const [newArriveTime, setNewArriveTime] = useDebouncedState<string>('', 400);
   const [newBulkSamplingDensity, setNewBulkSamplingDensity] =
@@ -49,12 +50,18 @@ const CreateRitageQuarryBook = () => {
     '',
     400
   );
+  const [serverPhotos, setServerPhotos] = React.useState<
+    Omit<IFile, 'mime' | 'path'>[] | null
+  >([]);
+  const [deletedPhotoIds, setDeletedPhotoIds] = React.useState<string[]>([]);
+  const [isOpenConfirmation, setIsOpenConfirmation] =
+    React.useState<boolean>(false);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationRitageQuarry>({
     resolver: zodResolver(ritageQuarryMutationValidation),
     defaultValues: {
-      date: new Date(),
+      date: undefined,
       checkerFromId: '',
       checkerFromPosition: '',
       checkerToId: '',
@@ -62,7 +69,7 @@ const CreateRitageQuarryBook = () => {
       shiftId: '',
       companyHeavyEquipmentId: '',
       companyHeavyEquipmentChangeId: '',
-      materialId: `${process.env.NEXT_PUBLIC_MATERIAL_QUARRY_ID}`,
+      materialId: '',
       fromTime: '',
       arriveTime: '',
       ritageDuration: '',
@@ -101,6 +108,63 @@ const CreateRitageQuarryBook = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
+  const { quarryRitage, quarryRitageLoading } = useReadOneQuarryRitage({
+    variables: {
+      id,
+    },
+    skip: !router.isReady,
+    onCompleted: ({ quarryRitage }) => {
+      const ritageDate = stringToDate(quarryRitage.date ?? null);
+      const fromTime = formatDate2(quarryRitage.fromAt, 'HH:mm:ss');
+      const arriveTime = formatDate2(quarryRitage.arriveAt, 'HH:mm:ss');
+      methods.setValue('isRitageProblematic', quarryRitage.isRitageProblematic);
+      methods.setValue('date', ritageDate);
+      methods.setValue('checkerFromId', quarryRitage.checkerFrom?.id ?? '');
+      methods.setValue(
+        'checkerFromPosition',
+        quarryRitage.checkerFromPosition ?? ''
+      );
+      methods.setValue('checkerToId', quarryRitage.checkerTo?.id ?? '');
+      methods.setValue(
+        'checkerToPosition',
+        quarryRitage.checkerToPosition ?? ''
+      );
+      methods.setValue('shiftId', quarryRitage.shift?.id ?? '');
+      methods.setValue(
+        'companyHeavyEquipmentId',
+        quarryRitage.companyHeavyEquipment?.id ?? ''
+      );
+      methods.setValue(
+        'companyHeavyEquipmentChangeId',
+        quarryRitage.companyHeavyEquipmentChange?.id ?? ''
+      );
+      methods.setValue('materialId', quarryRitage.material?.id ?? '');
+      methods.setValue('fromTime', fromTime ?? '');
+      setNewFromTime(fromTime ?? '');
+      methods.setValue('arriveTime', arriveTime ?? '');
+      setNewArriveTime(arriveTime ?? '');
+      methods.setValue('weatherId', quarryRitage.weather?.id ?? '');
+      methods.setValue('fromPitId', quarryRitage.fromPit?.id ?? '');
+      methods.setValue('fromElevationId', quarryRitage.fromElevation?.id ?? '');
+      methods.setValue('fromGridId', quarryRitage.fromGrid?.id ?? '');
+      methods.setValue('fromFrontId', quarryRitage.fromFront?.id ?? '');
+      methods.setValue('fromSequenceId', quarryRitage.fromSequence?.id ?? '');
+      methods.setValue(
+        'locationCategoryId',
+        quarryRitage.toLocationCategory?.id ?? ''
+      );
+      methods.setValue('toLocationId', quarryRitage.toLocation?.id ?? '');
+      methods.setValue(
+        'bulkSamplingDensity',
+        quarryRitage.bulkSamplingDensity ?? ''
+      );
+      setNewBulkSamplingDensity(`${quarryRitage.bulkSamplingDensity ?? ''}`);
+      methods.setValue('bucketVolume', quarryRitage.bucketVolume ?? '');
+      setNewBucketVolume(`${quarryRitage.bucketVolume ?? ''}`);
+      methods.setValue('desc', quarryRitage.desc ?? '');
+      setServerPhotos(quarryRitage.photos ?? []);
+    },
+  });
   useReadOneBlockPitMaster({
     variables: {
       id: fromPitId as string,
@@ -111,7 +175,7 @@ const CreateRitageQuarryBook = () => {
     },
   });
 
-  const { mutate, isLoading } = useCreateRitageQuarry({
+  const { mutate, isLoading } = useUpdateRitageQuarry({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -133,11 +197,12 @@ const CreateRitageQuarryBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('ritageQuarry.successCreateMessage'),
+        message: t('ritageQuarry.successUpdateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/input-data/production/data-ritage?tabs=quarry');
+      setIsOpenConfirmation((prev) => !prev);
       methods.reset();
+      router.push('/input-data/production/data-ritage?tabs=quarry');
     },
   });
   /* #endregion  /**======== Query =========== */
@@ -158,6 +223,8 @@ const CreateRitageQuarryBook = () => {
       label: 'fromCheckerName',
       withAsterisk: true,
       positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
+      defaultValue: quarryRitage?.checkerFrom?.id,
+      labelValue: quarryRitage?.checkerFrom?.humanResource?.name,
     });
     const fromCheckerPosition = globalText({
       name: 'checkerFromPosition',
@@ -171,6 +238,8 @@ const CreateRitageQuarryBook = () => {
       label: 'toCheckerName',
       withAsterisk: false,
       positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
+      defaultValue: quarryRitage?.checkerTo?.id,
+      labelValue: quarryRitage?.checkerTo?.humanResource?.name,
     });
     const toCheckerPosition = globalText({
       colSpan: 6,
@@ -188,6 +257,8 @@ const CreateRitageQuarryBook = () => {
       label: 'heavyEquipmentCode',
       withAsterisk: true,
       categorySlug: 'dump-truck',
+      defaultValue: quarryRitage?.companyHeavyEquipment?.id,
+      labelValue: quarryRitage?.companyHeavyEquipment?.hullNumber ?? '',
     });
     const hullNumberSubstitution = heavyEquipmentSelect({
       colSpan: 6,
@@ -195,13 +266,15 @@ const CreateRitageQuarryBook = () => {
       label: 'heavyEquipmentCodeSubstitution',
       withAsterisk: true,
       categorySlug: 'dump-truck',
+      defaultValue: quarryRitage?.companyHeavyEquipmentChange?.id,
+      labelValue: quarryRitage?.companyHeavyEquipmentChange?.hullNumber ?? '',
     });
     const materialItem = materialSelect({
       colSpan: 6,
       name: 'materialId',
       label: 'material',
-      disabled: true,
       withAsterisk: true,
+      disabled: true,
       includeIds: [`${process.env.NEXT_PUBLIC_MATERIAL_QUARRY_ID}`],
     });
     const fromTime = globalTimeInput({
@@ -247,6 +320,8 @@ const CreateRitageQuarryBook = () => {
         methods.setValue('block', '');
         methods.trigger('fromPitId');
       },
+      defaultValue: quarryRitage?.fromPit?.id,
+      labelValue: quarryRitage?.fromPit?.name,
     });
     const frontItem = locationSelect({
       colSpan: 6,
@@ -254,6 +329,8 @@ const CreateRitageQuarryBook = () => {
       label: 'fromFront',
       withAsterisk: false,
       categoryId: `${process.env.NEXT_PUBLIC_FRONT_ID}`,
+      defaultValue: quarryRitage?.fromFront?.id,
+      labelValue: quarryRitage?.fromFront?.name,
     });
     const block = globalText({
       colSpan: 6,
@@ -268,6 +345,8 @@ const CreateRitageQuarryBook = () => {
       label: 'fromGrid',
       withAsterisk: false,
       categoryId: `${process.env.NEXT_PUBLIC_GRID_ID}`,
+      defaultValue: quarryRitage?.fromGrid?.id,
+      labelValue: quarryRitage?.fromGrid?.name,
     });
     const sequenceItem = locationSelect({
       colSpan: 6,
@@ -275,6 +354,8 @@ const CreateRitageQuarryBook = () => {
       label: 'fromSequence',
       withAsterisk: false,
       categoryId: `${process.env.NEXT_PUBLIC_SEQUENCE_ID}`,
+      defaultValue: quarryRitage?.fromSequence?.id,
+      labelValue: quarryRitage?.fromSequence?.name,
     });
     const elevasiItem = locationSelect({
       colSpan: 6,
@@ -282,22 +363,15 @@ const CreateRitageQuarryBook = () => {
       label: 'fromElevasi',
       withAsterisk: false,
       categoryId: `${process.env.NEXT_PUBLIC_ELEVASI_ID}`,
-    });
-    const bulkSamplingDensityItem = globalNumberInput({
-      colSpan: 6,
-      name: 'bulkSamplingDensity',
-      label: 'bulkSamplingDensity',
-      withAsterisk: true,
-      onChange: (value) => {
-        methods.setValue('bulkSamplingDensity', value);
-        setNewBulkSamplingDensity(`${value}`);
-        methods.trigger('bulkSamplingDensity');
-      },
+      defaultValue: quarryRitage?.fromElevation?.id,
+      labelValue: quarryRitage?.fromElevation?.name,
     });
     const locationCategoryItem = locationCategorySelect({
       clearable: true,
       withAsterisk: false,
       name: 'locationCategoryId',
+      defaultValue: quarryRitage?.toLocationCategory?.id,
+      labelValue: quarryRitage?.toLocationCategory?.name,
       onChange: (value) => {
         methods.setValue('locationCategoryId', value ?? '');
         methods.setValue('toLocationId', '');
@@ -311,8 +385,21 @@ const CreateRitageQuarryBook = () => {
       name: 'toLocationId',
       label: 'locationName',
       withAsterisk: false,
+      defaultValue: quarryRitage?.toLocation?.id,
+      labelValue: quarryRitage?.toLocation?.name,
       disabled: !newLocationCategoryId,
       categoryId: locationCategoryId,
+    });
+    const bulkSamplingDensityItem = globalNumberInput({
+      colSpan: 6,
+      name: 'bulkSamplingDensity',
+      label: 'bulkSamplingDensity',
+      withAsterisk: true,
+      onChange: (value) => {
+        methods.setValue('bulkSamplingDensity', value);
+        setNewBulkSamplingDensity(`${value}`);
+        methods.trigger('bulkSamplingDensity');
+      },
     });
     const bucketVolumeItem = globalNumberInput({
       colSpan: 6,
@@ -348,15 +435,21 @@ const CreateRitageQuarryBook = () => {
       multiple: true,
       maxFiles: 5,
       enableDeletePhoto: true,
+      serverPhotos: serverPhotos,
       onDrop: (value) => {
         if (photos) {
-          if (value.length + photos.length > 5) {
+          const totalPhotos = photos.length + value.length;
+          const totalServerPhotos =
+            serverPhotos &&
+            totalPhotos + (serverPhotos.length - deletedPhotoIds.length) > 5;
+          if (totalPhotos > 5 || totalServerPhotos) {
             methods.setError('photos', {
               type: 'manual',
               message: 'Jumlah foto melebihi batas maksimal',
             });
             return;
           }
+
           methods.setValue('photos', [...photos, ...value]);
           methods.clearErrors('photos');
           return;
@@ -364,6 +457,9 @@ const CreateRitageQuarryBook = () => {
         methods.setValue('photos', value);
         methods.clearErrors('photos');
       },
+      deletedPhotoIds: deletedPhotoIds,
+      handleDeleteServerPhotos: (id) =>
+        setDeletedPhotoIds((prev) => [...prev, id]),
       onReject: (files) =>
         handleRejectFile<IMutationRitageQuarry>({
           methods,
@@ -371,6 +467,18 @@ const CreateRitageQuarryBook = () => {
           field: 'photos',
         }),
     };
+
+    const checkerInformation = [
+      fromCheckerName,
+      fromCheckerPosition,
+      toCheckerName,
+      toCheckerPosition,
+      shiftItem,
+      materialItem,
+      hullNumber,
+      hullNumberSubstitution,
+      weatherItem,
+    ];
 
     const field: ControllerGroup[] = [
       {
@@ -380,17 +488,7 @@ const CreateRitageQuarryBook = () => {
       {
         group: t('commonTypography.checkerInformation'),
         enableGroupLabel: true,
-        formControllers: [
-          fromCheckerName,
-          fromCheckerPosition,
-          toCheckerName,
-          toCheckerPosition,
-          shiftItem,
-          materialItem,
-          hullNumber,
-          hullNumberSubstitution,
-          weatherItem,
-        ],
+        formControllers: checkerInformation,
       },
       {
         group: t('commonTypography.ritageDuration'),
@@ -437,7 +535,14 @@ const CreateRitageQuarryBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photos, isRitageProblematic, locationCategoryId]);
+  }, [
+    quarryRitage,
+    isRitageProblematic,
+    photos,
+    serverPhotos,
+    deletedPhotoIds,
+    locationCategoryId,
+  ]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
@@ -465,14 +570,18 @@ const CreateRitageQuarryBook = () => {
       };
     });
     mutate({
+      id,
       data: manipulateValue,
+      deletedPhotoIds,
     });
   };
-
+  const handleConfirmation = () => {
+    methods.handleSubmit(handleSubmitForm)();
+  };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={quarryRitageLoading}>
       <GlobalFormGroup
         field={fieldRhf}
         methods={methods}
@@ -481,24 +590,45 @@ const CreateRitageQuarryBook = () => {
           label: 'problemRitage',
           switchItem: {
             checked: isRitageProblematic,
-            onChange: (value) =>
+            onChange: (value) => {
               methods.setValue(
                 'isRitageProblematic',
                 value.currentTarget.checked
               ),
+                methods.setValue('companyHeavyEquipmentChangeId', '');
+            },
           },
         }}
         submitButton={{
           label: t('commonTypography.save'),
-          loading: isLoading,
+          type: 'button',
+          onClick: () => setIsOpenConfirmation((prev) => !prev),
         }}
         backButton={{
           onClick: () =>
             router.push('/input-data/production/data-ritage?tabs=quarry'),
+        }}
+        modalConfirmation={{
+          isOpenModalConfirmation: isOpenConfirmation,
+          actionModalConfirmation: () => setIsOpenConfirmation((prev) => !prev),
+          actionButton: {
+            label: t('commonTypography.yes'),
+            type: 'button',
+            onClick: handleConfirmation,
+            loading: isLoading,
+          },
+          backButton: {
+            label: 'Batal',
+          },
+          modalType: {
+            type: 'default',
+            title: t('commonTypography.alertTitleConfirmUpdate'),
+          },
+          withDivider: true,
         }}
       />
     </DashboardCard>
   );
 };
 
-export default CreateRitageQuarryBook;
+export default UpdateRitageQuarryBook;

@@ -77,6 +77,10 @@ export const READ_ONE_QUARRY_RITAGE = gql`
         id
         name
       }
+      toLocationCategory {
+        id
+        name
+      }
       toLocation {
         id
         name
@@ -103,7 +107,7 @@ export const READ_ONE_QUARRY_RITAGE = gql`
 
 interface IReadOneQuarryRitage {
   toLocation: Pick<ILocationsData, 'id' | 'name'> | null;
-  locationCategory: Pick<ILocationCategoriesData, 'id' | 'name'> | null;
+  toLocationCategory: Pick<ILocationCategoriesData, 'id' | 'name'> | null;
 }
 
 interface IReadOneQuarryRitageResponse {

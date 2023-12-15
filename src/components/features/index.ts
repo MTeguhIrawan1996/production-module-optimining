@@ -2,6 +2,7 @@ import AuthPage from '@/components/features/Auth/common';
 import DashboardPage from '@/components/features/Dashboard/common';
 import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
+import CreateRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/create/common';
 import DataRitagePage from '@/components/features/InputData/Productions/data-ritage/common';
 import CreateRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/create/common';
 import ReadRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/read/common';
@@ -15,6 +16,9 @@ import UpdateRitageOrePage from '@/components/features/InputData/Productions/dat
 import UploadRitageOrePage from '@/components/features/InputData/Productions/data-ritage/ore/upload/common';
 import CreateRitageQuarryPage from '@/components/features/InputData/Productions/data-ritage/quarry/create/common';
 import ReadRitageQuarryPage from '@/components/features/InputData/Productions/data-ritage/quarry/read/common';
+import ReadDTQuarryRitagePage from '@/components/features/InputData/Productions/data-ritage/quarry/read/read-dump-truck/common';
+import UpdateRitageQuarryPage from '@/components/features/InputData/Productions/data-ritage/quarry/update/common';
+import UploadRitageQuarryPage from '@/components/features/InputData/Productions/data-ritage/quarry/upload/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
 import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/create/common';
 import ReadSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/read/common';
@@ -123,6 +127,7 @@ export {
   CreateLocationMasterPage,
   CreateManagementRolePage,
   CreateMaterialMasterPage,
+  CreateRitageBargingPage,
   CreateRitageObPage,
   CreateRitageOrePage,
   CreateRitageQuarryPage,
@@ -153,6 +158,7 @@ export {
   ReadCompanyPage,
   ReadDTObRitagePage,
   ReadDTOreRitagePage,
+  ReadDTQuarryRitagePage,
   ReadElementMasterPage,
   ReadFactoryMasterPage,
   ReadHeavyEquipmentClassPage,
@@ -190,6 +196,7 @@ export {
   UpdateMaterialMasterPage,
   UpdateRitageObPage,
   UpdateRitageOrePage,
+  UpdateRitageQuarryPage,
   UpdateSampleHouseLabPage,
   UpdateShiftMasterPage,
   UpdateStockpileDomeMasterPage,
@@ -198,6 +205,7 @@ export {
   UpdateWorkingHoursPlanMasterPage,
   UploadRitageObPage,
   UploadRitageOrePage,
+  UploadRitageQuarryPage,
   UserPage,
   WorkingHoursPlanMasterPage,
 };

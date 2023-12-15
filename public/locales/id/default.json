@@ -9,6 +9,7 @@
     "dataRitageOre": "Data Ritase Ore",
     "dataRitageOb": "Data Ritase OB",
     "dataRitageQuarry": "Data Ritase Quarry",
+    "dataRitageBarging": "Data Ritase Barging",
     "block": "Block",
     "pit": "PIT",
     "locationId": "ID Lokasi",
@@ -283,7 +284,7 @@
     "upload": "Unggah",
     "uploadFile": "Unggah File",
     "checkerInformation": "Informasi Checker",
-    "fromPit": "Dari Pit",
+    "fromPit": "Dari PIT",
     "fromBlock": "Dari Block",
     "fromFront": "Dari Front",
     "fromGrid": "Dari Grid",
@@ -295,7 +296,10 @@
     "problem": "Bermasalah",
     "unProblem": "Tidak Bermasalah",
     "toDisposal": "Ke Disposal",
-    "toLocation": "Ke tujuan"
+    "toBarging": "Ke Barging",
+    "toLocation": "Ke tujuan",
+    "fromAtDome": "Waktu Dari Dome",
+    "fromStockpile": "Dari Stockpile"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -527,7 +531,7 @@
     "formUpdateWorkingHoursPlan": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.workingHoursPlan)",
     "successCreateMessage": "$t(commonTypography.workingHoursPlan) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.workingHoursPlan) berhasil diubah",
-    "workingHoursPlanDescription": "Anda bisa menambahkan lebih dari satu deskripsi. Karena data deskripsi ini akan berpengaruh kedalam rencana mingguan dan bulanan"
+    "workingHoursPlanDescription": "Anda bisa menambahkan lebih `dari s`atu deskripsi. Karena data deskripsi ini akan berpengaruh kedalam rencana mingguan dan bulanan"
   },
   "activityPlan": {
     "createActivityPlan": "$t(commonTypography.create) $t(commonTypography.activityPlan)",
@@ -656,5 +660,23 @@
     "successIsNotValidateMessage": "Status $t(ritageQuarry.ritageQuarryTitle) Tidak Valid",
     "successIsDeterminedMessage": "$t(ritageQuarry.ritageQuarryTitle) berhasil ditetapkan",
     "successIsRejectMessage": "$t(ritageQuarry.ritageQuarryTitle) berhasil $t(commonTypography.reject)"
+  },
+  "ritageBarging": {
+    "ritageBargingTitle": "$t(commonTypography.dataRitageBarging)",
+    "createRitageBarging": "$t(commonTypography.create) $t(commonTypography.dataRitageBarging)",
+    "uploadRitageBarging": "$t(commonTypography.upload) $t(commonTypography.dataRitageBarging)",
+    "readRitageBarging": "$t(commonTypography.detail) $t(commonTypography.dataRitageBarging)",
+    "updateRitageBarging": "$t(commonTypography.edit) $t(commonTypography.dataRitageBarging)",
+    "successDeleteMessage": "$t(commonTypography.dataRitageBarging) berhasil dihapus",
+    "downloadTemplateBarging": "Unduh Tamplate Input Data Ritase Barging",
+    "formRitageBarging": "$t(commonTypography.form) $t(ritageBarging.ritageBargingTitle)",
+    "formUploadRitageBarging": "$t(commonTypography.form) $t(commonTypography.upload) $t(ritageBarging.ritageBargingTitle)",
+    "formUpdateRitageBarging": "$t(commonTypography.form) $t(commonTypography.edit) $t(ritageBarging.ritageBargingTitle)",
+    "successCreateMessage": "$t(commonTypography.dataRitageBarging) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.dataRitageBarging) berhasil diubah",
+    "successIsValidateMessage": "$t(ritageBarging.ritageBargingTitle) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(ritageBarging.ritageBargingTitle) Tidak Valid",
+    "successIsDeterminedMessage": "$t(ritageBarging.ritageBargingTitle) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(ritageBarging.ritageBargingTitle) berhasil $t(commonTypography.reject)"
   }
 }

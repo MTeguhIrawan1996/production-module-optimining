@@ -20,6 +20,7 @@ import { IListDetailRitageDTData, IMeta, ITabs } from '@/types/global';
 interface IListDetailsRitageDTProps<T> {
   data?: T[];
   columns?: DataTableColumn<T>[];
+  subMaterialHidden?: boolean;
   meta?: IMeta;
   fetching?: boolean;
   tabs: ITabs;
@@ -34,6 +35,7 @@ export default function ListDetailsRitageDT<T extends IListDetailRitageDTData>({
   tabs,
   columns,
   modalProps,
+  subMaterialHidden = false,
   onOpenModal,
 }: IListDetailsRitageDTProps<T>) {
   const { t } = useTranslation('default');
@@ -76,6 +78,7 @@ export default function ListDetailsRitageDT<T extends IListDetailRitageDTData>({
               accessor: 'subMaterial',
               title: t('commonTypography.subMaterial'),
               render: ({ subMaterial }) => subMaterial?.name ?? '-',
+              hidden: subMaterialHidden,
             },
             {
               accessor: 'weather',
@@ -98,6 +101,11 @@ export default function ListDetailsRitageDT<T extends IListDetailRitageDTData>({
               render: ({ duration }) => secondsDuration(duration),
             },
             ...(columns ?? []),
+            {
+              accessor: 'desc',
+              title: t('commonTypography.desc'),
+              render: ({ desc }) => desc ?? '-',
+            },
             {
               accessor: 'photo',
               title: t('commonTypography.photo'),
@@ -130,7 +138,7 @@ export default function ListDetailsRitageDT<T extends IListDetailRitageDTData>({
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, columns, fetching]);
+  }, [data, columns, fetching, subMaterialHidden]);
 
   return (
     <>
