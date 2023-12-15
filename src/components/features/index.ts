@@ -3,6 +3,10 @@ import DashboardPage from '@/components/features/Dashboard/common';
 import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
 import CreateRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/create/common';
+import ReadRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/read/common';
+import ReadDTBargingRitagePage from '@/components/features/InputData/Productions/data-ritage/barging/read/read-dump-truck/common';
+import UpdateRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/update/common';
+import UploadRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/upload/common';
 import DataRitagePage from '@/components/features/InputData/Productions/data-ritage/common';
 import CreateRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/create/common';
 import ReadRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/read/common';
@@ -156,6 +160,7 @@ export {
   ReadCompanyHeavyEquipmentPage,
   ReadCompanyHumanResourcesPage,
   ReadCompanyPage,
+  ReadDTBargingRitagePage,
   ReadDTObRitagePage,
   ReadDTOreRitagePage,
   ReadDTQuarryRitagePage,
@@ -168,6 +173,7 @@ export {
   ReadLocationMasterPage,
   ReadManagementRolePage,
   ReadMaterialMasterPage,
+  ReadRitageBargingPage,
   ReadRitageObPage,
   ReadRitageOrePage,
   ReadRitageQuarryPage,
@@ -194,6 +200,7 @@ export {
   UpdateLocationMasterPage,
   UpdateManagementRolePage,
   UpdateMaterialMasterPage,
+  UpdateRitageBargingPage,
   UpdateRitageObPage,
   UpdateRitageOrePage,
   UpdateRitageQuarryPage,
@@ -203,6 +210,7 @@ export {
   UpdateStockpileMasterPage,
   UpdateUserPage,
   UpdateWorkingHoursPlanMasterPage,
+  UploadRitageBargingPage,
   UploadRitageObPage,
   UploadRitageOrePage,
   UploadRitageQuarryPage,

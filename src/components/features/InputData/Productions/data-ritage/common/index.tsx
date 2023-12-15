@@ -6,6 +6,7 @@ import { shallow } from 'zustand/shallow';
 
 import { GlobalTabs, InnerWrapper, RootWrapper } from '@/components/elements';
 import ListDataBargingRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataBargingRitageBook';
+import ListDataMovingRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataMovingRitageBook';
 import ListDataObRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataObRitageBook';
 import ListDataOreRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataOreRitageBook';
 import ListDataQuarryRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataQuarryRitageBook';
@@ -26,6 +27,7 @@ const DataRitagePage = () => {
   const isPremissionOb = permission.includes('read-overburden-ritage');
   const isPremissionQuarry = permission.includes('read-quarry-ritage');
   const isPremissionBarging = permission.includes('read-barging-ritage');
+  const isPremissionMoving = permission.includes('read-moving-ritage');
 
   React.useEffect(() => {
     setBreadcrumbs([
@@ -79,6 +81,12 @@ const DataRitagePage = () => {
               value: 'barging',
               component: <ListDataBargingRitageBook />,
               isShowItem: isPremissionBarging,
+            },
+            {
+              label: 'Moving',
+              value: 'moving',
+              component: <ListDataMovingRitageBook />,
+              isShowItem: isPremissionMoving,
             },
           ]}
         />
