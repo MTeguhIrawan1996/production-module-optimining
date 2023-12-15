@@ -308,7 +308,7 @@ export type IListDetailRitageDTData<T = unknown> = {
 
 /* #endregion  /**======== Ritage DT =========== */
 
-export type ITabs = 'ore' | 'ob' | 'quarry' | 'barging';
+export type ITabs = 'ore' | 'ob' | 'quarry' | 'barging' | 'moving';
 
 export interface ICreateFileProps {
   file: FileWithPath[] | null;
