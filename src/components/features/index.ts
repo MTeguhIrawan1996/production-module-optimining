@@ -3,6 +3,7 @@ import DashboardPage from '@/components/features/Dashboard/common';
 import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
 import CreateRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/create/common';
+import ReadRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/read/common';
 import DataRitagePage from '@/components/features/InputData/Productions/data-ritage/common';
 import CreateRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/create/common';
 import ReadRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/read/common';
@@ -168,6 +169,7 @@ export {
   ReadLocationMasterPage,
   ReadManagementRolePage,
   ReadMaterialMasterPage,
+  ReadRitageBargingPage,
   ReadRitageObPage,
   ReadRitageOrePage,
   ReadRitageQuarryPage,
