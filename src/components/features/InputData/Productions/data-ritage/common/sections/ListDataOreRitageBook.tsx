@@ -235,7 +235,6 @@ const ListDataOreRitageBook = () => {
           records: oreRitagesData,
           fetching: oreRitagesDataLoading,
           highlightOnHover: true,
-          withColumnBorders: false,
           columns: [
             {
               accessor: 'index',

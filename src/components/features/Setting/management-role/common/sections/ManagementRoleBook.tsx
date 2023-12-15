@@ -83,7 +83,6 @@ const ManagementRoleBook = () => {
     return (
       <MantineDataTable
         tableProps={{
-          withColumnBorders: false,
           highlightOnHover: true,
           columns: [
             { accessor: 'name', title: t('commonTypography.role'), width: 400 },

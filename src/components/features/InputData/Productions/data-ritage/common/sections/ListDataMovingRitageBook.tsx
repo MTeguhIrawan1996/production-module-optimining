@@ -235,7 +235,6 @@ const ListDataMovingRitageBook = () => {
           records: movingRitagesData,
           fetching: movingRitagesDataLoading,
           highlightOnHover: true,
-          withColumnBorders: false,
           columns: [
             {
               accessor: 'index',

@@ -100,7 +100,6 @@ const ReadStockpileMasterBook = () => {
         tableProps={{
           highlightOnHover: true,
           shadow: 'none',
-          withColumnBorders: false,
           columns: [
             {
               accessor: 'handBookId',

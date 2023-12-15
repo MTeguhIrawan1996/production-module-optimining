@@ -235,7 +235,6 @@ const ListDataQuarryRitageBook = () => {
           records: quarryRitagesData,
           fetching: quarryRitagesDataLoading,
           highlightOnHover: true,
-          withColumnBorders: false,
           columns: [
             {
               accessor: 'index',

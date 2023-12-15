@@ -60,7 +60,6 @@ const ReadCompanyPositionHistoryBook: React.FC<IProps> = ({ employe }) => {
             },
           ],
           withBorder: false,
-          withColumnBorders: false,
           shadow: 'none',
           emptyState: undefined,
           minHeight: 150,

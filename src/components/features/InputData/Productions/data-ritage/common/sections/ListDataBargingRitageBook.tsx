@@ -235,7 +235,6 @@ const ListDataBargingRitageBook = () => {
           records: bargingRitagesData,
           fetching: bargingRitagesDataLoading,
           highlightOnHover: true,
-          withColumnBorders: false,
           columns: [
             {
               accessor: 'index',
