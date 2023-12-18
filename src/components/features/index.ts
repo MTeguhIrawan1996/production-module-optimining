@@ -8,6 +8,7 @@ import ReadDTBargingRitagePage from '@/components/features/InputData/Productions
 import UpdateRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/update/common';
 import UploadRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/upload/common';
 import DataRitagePage from '@/components/features/InputData/Productions/data-ritage/common';
+import CreateRitageMovingPage from '@/components/features/InputData/Productions/data-ritage/moving/create/common';
 import CreateRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/create/common';
 import ReadRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/read/common';
 import ReadDTObRitagePage from '@/components/features/InputData/Productions/data-ritage/ob/read/read-dump-truck/common';
@@ -132,6 +133,7 @@ export {
   CreateManagementRolePage,
   CreateMaterialMasterPage,
   CreateRitageBargingPage,
+  CreateRitageMovingPage,
   CreateRitageObPage,
   CreateRitageOrePage,
   CreateRitageQuarryPage,
