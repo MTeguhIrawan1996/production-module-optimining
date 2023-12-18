@@ -177,7 +177,6 @@ const StockpileBook = () => {
           records: monitoringStockpilesData ?? [],
           fetching: monitoringStockpilesDataLoading,
           highlightOnHover: true,
-          withColumnBorders: false,
           columns: [
             {
               accessor: 'index',

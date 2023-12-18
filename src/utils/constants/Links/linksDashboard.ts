@@ -104,7 +104,14 @@ export const linksDashboard: IMenuItem[] = [
           {
             label: 'dataRitage',
             href: '/input-data/production/data-ritage',
-            access: ['create-house-sample-and-lab'],
+            access: [
+              'create-ore-ritage',
+              'create-overburden-ritage',
+              'create-quarry-ritage',
+              'create-barging-ritage',
+              'create-moving-ritage',
+              'create-topsoil-ritage',
+            ],
           },
         ],
       },

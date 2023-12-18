@@ -61,7 +61,6 @@ export default function ListDetailsRitageDT<T extends IListDetailRitageDTData>({
           records: data,
           fetching: fetching,
           highlightOnHover: true,
-          withColumnBorders: false,
           columns: [
             {
               accessor: 'index',
