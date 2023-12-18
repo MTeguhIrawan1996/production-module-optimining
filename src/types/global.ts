@@ -299,10 +299,10 @@ export type IListDetailRitageDTData<T = unknown> = {
   fromAt: Date | string | null;
   arriveAt: Date | string | null;
   duration: number | null;
-  tonByRitage: number | null;
   material: Pick<IMaterialsData, 'id' | 'name'> | null;
   subMaterial: Pick<IMaterialsData, 'id' | 'name'> | null;
   bucketVolume: number | null;
+  tonByRitage: number | null;
   desc: string | null;
 } & T;
 
