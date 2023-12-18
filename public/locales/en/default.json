@@ -11,6 +11,7 @@
     "dataRitageQuarry": "Data Ritase Quarry",
     "dataRitageBarging": "Data Ritase Barging",
     "dataRitageMoving": "Data Ritase Moving",
+    "dataRitageTopsoil": "Data Ritase Topsoil",
     "block": "Block",
     "pit": "PIT",
     "locationId": "ID Lokasi",
@@ -700,5 +701,23 @@
     "successIsNotValidateMessage": "Status $t(ritageMoving.ritageMovingTitle) Tidak Valid",
     "successIsDeterminedMessage": "$t(ritageMoving.ritageMovingTitle) berhasil ditetapkan",
     "successIsRejectMessage": "$t(ritageMoving.ritageMovingTitle) berhasil $t(commonTypography.reject)"
+  },
+  "ritageTopsoil": {
+    "ritageTopsoilTitle": "$t(commonTypography.dataRitageTopsoil)",
+    "createRitageTopsoil": "$t(commonTypography.create) $t(commonTypography.dataRitageTopsoil)",
+    "uploadRitageTopsoil": "$t(commonTypography.upload) $t(commonTypography.dataRitageTopsoil)",
+    "readRitageTopsoil": "$t(commonTypography.detail) $t(commonTypography.dataRitageTopsoil)",
+    "updateRitageTopsoil": "$t(commonTypography.edit) $t(commonTypography.dataRitageTopsoil)",
+    "successDeleteMessage": "$t(commonTypography.dataRitageTopsoil) berhasil dihapus",
+    "downloadTemplateTopsoil": "Unduh Tamplate Input Data Ritase Topsoil",
+    "formRitageTopsoil": "$t(commonTypography.form) $t(ritageTopsoil.ritageTopsoilTitle)",
+    "formUploadRitageTopsoil": "$t(commonTypography.form) $t(commonTypography.upload) $t(ritageTopsoil.ritageTopsoilTitle)",
+    "formUpdateRitageTopsoil": "$t(commonTypography.form) $t(commonTypography.edit) $t(ritageTopsoil.ritageTopsoilTitle)",
+    "successCreateMessage": "$t(commonTypography.dataRitageTopsoil) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.dataRitageTopsoil) berhasil diubah",
+    "successIsValidateMessage": "$t(ritageTopsoil.ritageTopsoilTitle) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(ritageTopsoil.ritageTopsoilTitle) Tidak Valid",
+    "successIsDeterminedMessage": "$t(ritageTopsoil.ritageTopsoilTitle) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(ritageTopsoil.ritageTopsoilTitle) berhasil $t(commonTypography.reject)"
   }
 }

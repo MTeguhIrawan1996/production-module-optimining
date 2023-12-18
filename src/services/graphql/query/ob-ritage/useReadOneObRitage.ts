@@ -101,6 +101,30 @@ export const READ_ONE_OB_RITAGE = gql`
 `;
 
 interface IReadOneObRitage {
+  fromPit: {
+    id: string;
+    name: string;
+  } | null;
+  fromFront: {
+    id: string;
+    name: string;
+  } | null;
+  fromBlock: {
+    id: string;
+    name: string;
+  } | null;
+  fromGrid: {
+    id: string;
+    name: string;
+  } | null;
+  fromSequence: {
+    id: string;
+    name: string;
+  } | null;
+  fromElevation: {
+    id: string;
+    name: string;
+  } | null;
   disposal: Pick<ILocationsData, 'id' | 'name'> | null;
 }
 

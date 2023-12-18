@@ -2,7 +2,7 @@ include: '.gitlab-ci/node.yml'
 
 variables:
   GIT_STRATEGY: fetch
-  GIT_CLEAN_FLAGS: -ffdx -e node_modules/ -e .npm/ -e .yarn/
+  GIT_CLEAN_FLAGS: -ffdx -e node_modules/
 
 dev:
   extends: .yarn # or .npm
@@ -52,7 +52,6 @@ bsa:
     - pm2 save
   tags:
     - ns1.optimap.id-dev01-ssh
-
 # preview:
 #   image: node:18.6.0-slim
 #   variables:

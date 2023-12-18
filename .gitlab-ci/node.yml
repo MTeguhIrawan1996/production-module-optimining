@@ -2,8 +2,8 @@
 
 .npm:
   before_script:
-    - npm ci --cache .npm --prefer-offline
+    - npm ci --prefer-offline
 
 .yarn:
   before_script:
-    - YARN_CACHE_FOLDER="./.yarn/cache" yarn install
+    - yarn install

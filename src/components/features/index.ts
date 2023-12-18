@@ -8,6 +8,11 @@ import ReadDTBargingRitagePage from '@/components/features/InputData/Productions
 import UpdateRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/update/common';
 import UploadRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/upload/common';
 import DataRitagePage from '@/components/features/InputData/Productions/data-ritage/common';
+import CreateRitageMovingPage from '@/components/features/InputData/Productions/data-ritage/moving/create/common';
+import ReadRitageMovingPage from '@/components/features/InputData/Productions/data-ritage/moving/read/common';
+import ReadDTMovingRitagePage from '@/components/features/InputData/Productions/data-ritage/moving/read/read-dump-truck/common';
+import UpdateRitageMovingPage from '@/components/features/InputData/Productions/data-ritage/moving/update/common';
+import UploadRitageMovingPage from '@/components/features/InputData/Productions/data-ritage/moving/upload/common';
 import CreateRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/create/common';
 import ReadRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/read/common';
 import ReadDTObRitagePage from '@/components/features/InputData/Productions/data-ritage/ob/read/read-dump-truck/common';
@@ -132,6 +137,7 @@ export {
   CreateManagementRolePage,
   CreateMaterialMasterPage,
   CreateRitageBargingPage,
+  CreateRitageMovingPage,
   CreateRitageObPage,
   CreateRitageOrePage,
   CreateRitageQuarryPage,
@@ -161,6 +167,7 @@ export {
   ReadCompanyHumanResourcesPage,
   ReadCompanyPage,
   ReadDTBargingRitagePage,
+  ReadDTMovingRitagePage,
   ReadDTObRitagePage,
   ReadDTOreRitagePage,
   ReadDTQuarryRitagePage,
@@ -174,6 +181,7 @@ export {
   ReadManagementRolePage,
   ReadMaterialMasterPage,
   ReadRitageBargingPage,
+  ReadRitageMovingPage,
   ReadRitageObPage,
   ReadRitageOrePage,
   ReadRitageQuarryPage,
@@ -201,6 +209,7 @@ export {
   UpdateManagementRolePage,
   UpdateMaterialMasterPage,
   UpdateRitageBargingPage,
+  UpdateRitageMovingPage,
   UpdateRitageObPage,
   UpdateRitageOrePage,
   UpdateRitageQuarryPage,
@@ -211,6 +220,7 @@ export {
   UpdateUserPage,
   UpdateWorkingHoursPlanMasterPage,
   UploadRitageBargingPage,
+  UploadRitageMovingPage,
   UploadRitageObPage,
   UploadRitageOrePage,
   UploadRitageQuarryPage,
