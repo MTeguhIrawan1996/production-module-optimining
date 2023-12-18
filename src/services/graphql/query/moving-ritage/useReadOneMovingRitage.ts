@@ -4,9 +4,9 @@ import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useRe
 
 import { IElementWithValue, IReadOneRitage } from '@/types/global';
 
-export const READ_ONE_ORE_RITAGE = gql`
-  query ReadOneOreRitage($id: String!) {
-    oreRitage(id: $id) {
+export const READ_ONE_MOVING_RITAGE = gql`
+  query ReadOneMovingRitage($id: String!) {
+    movingRitage(id: $id) {
       id
       date
       checkerFrom {
@@ -52,37 +52,11 @@ export const READ_ONE_ORE_RITAGE = gql`
         id
         name
       }
-      fromPit {
+      fromDome {
         id
         name
       }
-      fromFront {
-        id
-        name
-      }
-      fromBlock {
-        id
-        name
-      }
-      fromGrid {
-        id
-        name
-      }
-      fromSequence {
-        id
-        name
-      }
-      fromElevation {
-        id
-        name
-      }
-      fromLevel
-      toLevel
-      stockpile {
-        id
-        name
-      }
-      dome {
+      toDome {
         id
         name
       }
@@ -103,7 +77,6 @@ export const READ_ONE_ORE_RITAGE = gql`
       }
       statusMessage
       isRitageProblematic
-      closeDome
       houseSampleAndLab {
         elements {
           value
@@ -117,35 +90,9 @@ export const READ_ONE_ORE_RITAGE = gql`
   }
 `;
 
-interface IReadOneOreRitage {
-  fromPit: {
-    id: string;
-    name: string;
-  } | null;
-  fromFront: {
-    id: string;
-    name: string;
-  } | null;
-  fromBlock: {
-    id: string;
-    name: string;
-  } | null;
-  fromGrid: {
-    id: string;
-    name: string;
-  } | null;
-  fromSequence: {
-    id: string;
-    name: string;
-  } | null;
-  fromElevation: {
-    id: string;
-    name: string;
-  } | null;
-  fromLevel: string | null;
-  toLevel: string | null;
-  stockpile: Pick<IStockpilesData, 'id' | 'name'> | null;
-  dome: Pick<IStockpilesData, 'id' | 'name'> | null;
+interface IReadOneMovingRitage {
+  fromDome: Pick<IStockpilesData, 'id' | 'name'> | null;
+  toDome: Pick<IStockpilesData, 'id' | 'name'> | null;
   sampleNumber: string | null;
   closeDome: boolean | null;
   houseSampleAndLab: {
@@ -153,27 +100,27 @@ interface IReadOneOreRitage {
   } | null;
 }
 
-interface IReadOneOreRitageResponse {
-  oreRitage: IReadOneRitage<IReadOneOreRitage>;
+interface IReadOneMovingRitageResponse {
+  movingRitage: IReadOneRitage<IReadOneMovingRitage>;
 }
 
-interface IReadOneOreRitageRequest {
+interface IReadOneMovingRitageRequest {
   id: string;
 }
 
-export const useReadOneOreRitage = ({
+export const useReadOneMovingRitage = ({
   variables,
   skip,
   onCompleted,
 }: {
-  variables: IReadOneOreRitageRequest;
+  variables: IReadOneMovingRitageRequest;
   skip?: boolean;
-  onCompleted?: (data: IReadOneOreRitageResponse) => void;
+  onCompleted?: (data: IReadOneMovingRitageResponse) => void;
 }) => {
-  const { data: oreRitage, loading: oreRitageLoading } = useQuery<
-    IReadOneOreRitageResponse,
-    IReadOneOreRitageRequest
-  >(READ_ONE_ORE_RITAGE, {
+  const { data: movingRitage, loading: movingRitageLoading } = useQuery<
+    IReadOneMovingRitageResponse,
+    IReadOneMovingRitageRequest
+  >(READ_ONE_MOVING_RITAGE, {
     variables,
     onError: (err: ApolloError) => {
       return err;
@@ -184,7 +131,7 @@ export const useReadOneOreRitage = ({
   });
 
   return {
-    oreRitage: oreRitage?.oreRitage,
-    oreRitageLoading,
+    movingRitage: movingRitage?.movingRitage,
+    movingRitageLoading,
   };
 };

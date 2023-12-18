@@ -299,16 +299,16 @@ export type IListDetailRitageDTData<T = unknown> = {
   fromAt: Date | string | null;
   arriveAt: Date | string | null;
   duration: number | null;
-  tonByRitage: number | null;
   material: Pick<IMaterialsData, 'id' | 'name'> | null;
   subMaterial: Pick<IMaterialsData, 'id' | 'name'> | null;
   bucketVolume: number | null;
+  tonByRitage: number | null;
   desc: string | null;
 } & T;
 
 /* #endregion  /**======== Ritage DT =========== */
 
-export type ITabs = 'ore' | 'ob' | 'quarry' | 'barging' | 'moving';
+export type ITabs = 'ore' | 'ob' | 'quarry' | 'barging' | 'moving' | 'topsoil';
 
 export interface ICreateFileProps {
   file: FileWithPath[] | null;
@@ -357,30 +357,6 @@ export type IReadOneRitage<T = unknown> = {
   arriveAt: Date | string | null;
   duration: number | null;
   weather: {
-    id: string;
-    name: string;
-  } | null;
-  fromPit: {
-    id: string;
-    name: string;
-  } | null;
-  fromFront: {
-    id: string;
-    name: string;
-  } | null;
-  fromBlock: {
-    id: string;
-    name: string;
-  } | null;
-  fromGrid: {
-    id: string;
-    name: string;
-  } | null;
-  fromSequence: {
-    id: string;
-    name: string;
-  } | null;
-  fromElevation: {
     id: string;
     name: string;
   } | null;

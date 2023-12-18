@@ -77,7 +77,13 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
         };
       });
 
-      const worksheet = XLSX.utils.json_to_sheet(formattedData);
+      const newData = formattedData.map((item: any) => {
+        // eslint-disable-next-line unused-imports/no-unused-vars
+        const { errors, ...rest } = item;
+        return rest;
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(newData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'sheet1');
       const excelBuffer = XLSX.write(workbook, {
@@ -211,7 +217,27 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
               const key = faildData && faildData.indexOf(record) + 1;
               return `${key}`;
             },
-            columns: [...accessor],
+            columns: [
+              ...accessor,
+              {
+                accessor: 'errors',
+                width: 300,
+                title: 'Errors Description',
+                render: ({ errors }: any) => {
+                  return (
+                    <Stack spacing={2}>
+                      {errors?.map(({ message }, i: number) => {
+                        return (
+                          <Text key={i} color="red">
+                            {message}
+                          </Text>
+                        );
+                      })}
+                    </Stack>
+                  );
+                },
+              },
+            ],
             defaultColumnRender: (record, _, accesor) => {
               const rowData = record[accesor as keyof typeof record];
               if (accesor === 'is_ritage_problematic') {

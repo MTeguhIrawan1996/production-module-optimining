@@ -10,6 +10,7 @@ import ListDataMovingRitageBook from '@/components/features/InputData/Production
 import ListDataObRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataObRitageBook';
 import ListDataOreRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataOreRitageBook';
 import ListDataQuarryRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataQuarryRitageBook';
+import ListDataTopsoilRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataTopsoilRitageBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 import { usePermissions } from '@/utils/store/usePermissions';
@@ -28,6 +29,7 @@ const DataRitagePage = () => {
   const isPremissionQuarry = permission.includes('read-quarry-ritage');
   const isPremissionBarging = permission.includes('read-barging-ritage');
   const isPremissionMoving = permission.includes('read-moving-ritage');
+  const isPremissionTopsoil = permission.includes('read-topsoil-ritage');
 
   React.useEffect(() => {
     setBreadcrumbs([
@@ -81,6 +83,12 @@ const DataRitagePage = () => {
               value: 'barging',
               component: <ListDataBargingRitageBook />,
               isShowItem: isPremissionBarging,
+            },
+            {
+              label: 'Topsoil',
+              value: 'topsoil',
+              component: <ListDataTopsoilRitageBook />,
+              isShowItem: isPremissionTopsoil,
             },
             {
               label: 'Moving',

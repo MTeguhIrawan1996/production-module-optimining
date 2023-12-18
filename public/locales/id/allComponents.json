@@ -109,6 +109,8 @@
       "stockpileId": "ID Stockpile",
       "domeName": "Nama Dome",
       "domeId": "ID Dome",
+      "toDome": "Ke Dome",
+      "fromDome": "Dari Dome",
       "invalidReason": "Alasan Tidak Valid",
       "rejectReason": "Alasan ditolak",
       "laboratoriumName": "Nama Laboratorium",
