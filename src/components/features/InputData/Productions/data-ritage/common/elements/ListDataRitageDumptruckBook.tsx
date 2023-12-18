@@ -78,7 +78,6 @@ export default function ListDataRitageDumptruckBook<
           records: data,
           fetching: fetching,
           highlightOnHover: true,
-          withColumnBorders: false,
           idAccessor: (record) => {
             const key = data && data.indexOf(record) + 1;
             return `${key}`;

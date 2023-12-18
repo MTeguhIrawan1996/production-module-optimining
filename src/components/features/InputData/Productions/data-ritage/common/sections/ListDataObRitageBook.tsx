@@ -235,7 +235,6 @@ const ListDataObRitageBook = () => {
           records: overburdenRitagesData,
           fetching: overburdenRitagesDataLoading,
           highlightOnHover: true,
-          withColumnBorders: false,
           columns: [
             {
               accessor: 'index',

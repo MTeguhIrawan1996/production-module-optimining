@@ -1,8 +1,8 @@
 module.exports = {
   apps: [
     {
-      name: 'dev.optimining.optimap.id',
-      namespace: 'optimining-dev',
+      name: 'bsa.optimining.optimap.id',
+      namespace: 'optimining-bsa',
       script: 'node_modules/.bin/next',
       args: 'start',
       instances: '1',
@@ -10,7 +10,7 @@ module.exports = {
       watch: false,
       env: {
         NODE_ENV: 'production',
-        PORT: 31013,
+        PORT: 31015,
       },
     },
   ],
