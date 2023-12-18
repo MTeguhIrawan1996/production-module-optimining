@@ -2,31 +2,31 @@ import { FileWithPath } from '@mantine/dropzone';
 import { useMutation } from '@tanstack/react-query';
 
 import axiosClient from '@/services/restapi/axiosClient';
-import { IMutationRitageOre } from '@/services/restapi/ritage-productions/ore/useCreateRitageOre';
+import { IMutationRitageMoving } from '@/services/restapi/ritage-productions/moving/useCreateRitageMoving';
 
 import { AxiosRestErrorResponse } from '@/types/global';
 
-interface IUpdateRitageOreResponse {
+interface IUpdateRitageMovingResponse {
   message: string;
 }
 
 type IPropsRequest = {
   id: string;
   data: {
-    name: keyof IMutationRitageOre;
+    name: keyof IMutationRitageMoving;
     value: string | FileWithPath[] | boolean | null;
   }[];
   deletedPhotoIds: string[];
 };
 
-const UpdateRitageOre = async ({
+const UpdateRitageMoving = async ({
   data,
   deletedPhotoIds,
   id,
 }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
-  const exclude = ['tonByRitage', 'ritageDuration', 'block'];
+  const exclude = ['tonByRitage', 'ritageDuration'];
   bodyFormData.append('id', id);
   if (deletedPhotoIds) {
     deletedPhotoIds.forEach((deletedId) => {
@@ -34,9 +34,6 @@ const UpdateRitageOre = async ({
     });
   }
   data.forEach(({ name, value }) => {
-    if (name === 'closeDome') {
-      bodyFormData.append('closeDome', String(value));
-    }
     if (name === 'isRitageProblematic') {
       bodyFormData.append('isRitageProblematic', String(value));
     }
@@ -54,24 +51,24 @@ const UpdateRitageOre = async ({
     }
   });
 
-  const response = await axiosAuth.patch(`/ore-ritages/${id}`, bodyFormData);
+  const response = await axiosAuth.patch(`/moving-ritages/${id}`, bodyFormData);
   return response?.data;
 };
 
-export const useUpdateRitageOre = ({
+export const useUpdateRitageMoving = ({
   onError,
   onSuccess,
 }: {
-  onSuccess?: (success: IUpdateRitageOreResponse) => void;
-  onError?: (error: AxiosRestErrorResponse<IMutationRitageOre>) => unknown;
+  onSuccess?: (success: IUpdateRitageMovingResponse) => void;
+  onError?: (error: AxiosRestErrorResponse<IMutationRitageMoving>) => unknown;
 }) => {
   return useMutation<
-    IUpdateRitageOreResponse,
-    AxiosRestErrorResponse<IMutationRitageOre>,
+    IUpdateRitageMovingResponse,
+    AxiosRestErrorResponse<IMutationRitageMoving>,
     IPropsRequest
   >({
     mutationFn: async (value) => {
-      const data = await UpdateRitageOre(value);
+      const data = await UpdateRitageMoving(value);
       return data;
     },
     onError: onError,
