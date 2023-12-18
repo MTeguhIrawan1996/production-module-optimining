@@ -360,30 +360,6 @@ export type IReadOneRitage<T = unknown> = {
     id: string;
     name: string;
   } | null;
-  fromPit: {
-    id: string;
-    name: string;
-  } | null;
-  fromFront: {
-    id: string;
-    name: string;
-  } | null;
-  fromBlock: {
-    id: string;
-    name: string;
-  } | null;
-  fromGrid: {
-    id: string;
-    name: string;
-  } | null;
-  fromSequence: {
-    id: string;
-    name: string;
-  } | null;
-  fromElevation: {
-    id: string;
-    name: string;
-  } | null;
   bucketVolume: number | null;
   bulkSamplingDensity: number | null;
   tonByRitage: number | null;
