@@ -30,6 +30,7 @@ import UpdateRitageQuarryPage from '@/components/features/InputData/Productions/
 import UploadRitageQuarryPage from '@/components/features/InputData/Productions/data-ritage/quarry/upload/common';
 import CreateRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/create/common';
 import ReadRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/read/common';
+import ReadDTTopsoilRitagePage from '@/components/features/InputData/Productions/data-ritage/topsoil/read/read-dump-truck/common';
 import UpdateRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/update/common';
 import UploadRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/upload/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
@@ -176,6 +177,7 @@ export {
   ReadDTObRitagePage,
   ReadDTOreRitagePage,
   ReadDTQuarryRitagePage,
+  ReadDTTopsoilRitagePage,
   ReadElementMasterPage,
   ReadFactoryMasterPage,
   ReadHeavyEquipmentClassPage,

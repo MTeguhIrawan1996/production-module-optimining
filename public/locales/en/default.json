@@ -302,7 +302,8 @@
     "toDome": "Ke Dome",
     "toStockpile": "Ke Stockpile",
     "toBarging": "Ke Barging",
-    "toLocation": "Ke tujuan",
+    "toLocation": "Ke Lokasi",
+    "toArrive": "Ke Tujuan",
     "fromAtDome": "Waktu Dari Dome",
     "fromStockpile": "Dari Stockpile"
   },

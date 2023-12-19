@@ -278,7 +278,7 @@ const ListDataQuarryRitageBook = () => {
             },
             {
               accessor: 'toLocation',
-              title: t('commonTypography.toLocation'),
+              title: t('commonTypography.toArrive'),
               render: ({ toLocation }) => toLocation?.name ?? '-',
             },
             {
