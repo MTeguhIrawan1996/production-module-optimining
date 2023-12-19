@@ -2,24 +2,24 @@ import { FileWithPath } from '@mantine/dropzone';
 import { useMutation } from '@tanstack/react-query';
 
 import axiosClient from '@/services/restapi/axiosClient';
-import { IMutationRitageQuarry } from '@/services/restapi/ritage-productions/quarry/useCreateRitageQuarry';
+import { IMutationRitageTopsoil } from '@/services/restapi/ritage-productions/topsoil/useCreateRitageTopsoil';
 
 import { AxiosRestErrorResponse } from '@/types/global';
 
-interface IUpdateRitageQuarryResponse {
+interface IUpdateRitageTopsoilResponse {
   message: string;
 }
 
 type IPropsRequest = {
   id: string;
   data: {
-    name: keyof IMutationRitageQuarry;
+    name: keyof IMutationRitageTopsoil;
     value: string | FileWithPath[] | null;
   }[];
   deletedPhotoIds: string[];
 };
 
-const UpdateRitageQuarry = async ({
+const UpdateRitageTopsoil = async ({
   data,
   deletedPhotoIds,
   id,
@@ -51,24 +51,27 @@ const UpdateRitageQuarry = async ({
     }
   });
 
-  const response = await axiosAuth.patch(`/quarry-ritages/${id}`, bodyFormData);
+  const response = await axiosAuth.patch(
+    `/topsoil-ritages/${id}`,
+    bodyFormData
+  );
   return response?.data;
 };
 
-export const useUpdateRitageQuarry = ({
+export const useUpdateRitageTopsoil = ({
   onError,
   onSuccess,
 }: {
-  onSuccess?: (success: IUpdateRitageQuarryResponse) => void;
-  onError?: (error: AxiosRestErrorResponse<IMutationRitageQuarry>) => unknown;
+  onSuccess?: (success: IUpdateRitageTopsoilResponse) => void;
+  onError?: (error: AxiosRestErrorResponse<IMutationRitageTopsoil>) => unknown;
 }) => {
   return useMutation<
-    IUpdateRitageQuarryResponse,
-    AxiosRestErrorResponse<IMutationRitageQuarry>,
+    IUpdateRitageTopsoilResponse,
+    AxiosRestErrorResponse<IMutationRitageTopsoil>,
     IPropsRequest
   >({
     mutationFn: async (value) => {
-      const data = await UpdateRitageQuarry(value);
+      const data = await UpdateRitageTopsoil(value);
       return data;
     },
     onError: onError,

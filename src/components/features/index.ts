@@ -30,6 +30,7 @@ import UpdateRitageQuarryPage from '@/components/features/InputData/Productions/
 import UploadRitageQuarryPage from '@/components/features/InputData/Productions/data-ritage/quarry/upload/common';
 import CreateRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/create/common';
 import ReadRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/read/common';
+import UpdateRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/update/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
 import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/create/common';
 import ReadSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/read/common';
@@ -217,6 +218,7 @@ export {
   UpdateRitageObPage,
   UpdateRitageOrePage,
   UpdateRitageQuarryPage,
+  UpdateRitageTopsoilPage,
   UpdateSampleHouseLabPage,
   UpdateShiftMasterPage,
   UpdateStockpileDomeMasterPage,

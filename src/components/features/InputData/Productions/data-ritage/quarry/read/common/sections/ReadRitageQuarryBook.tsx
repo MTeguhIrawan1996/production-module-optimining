@@ -359,10 +359,6 @@ const ReadRitageQuarryBook = () => {
                   value: quarryRitage?.material?.name,
                 },
                 {
-                  dataKey: t('commonTypography.subMaterial'),
-                  value: quarryRitage?.subMaterial?.name,
-                },
-                {
                   dataKey: t('commonTypography.weather'),
                   value: quarryRitage?.weather?.name,
                 },
