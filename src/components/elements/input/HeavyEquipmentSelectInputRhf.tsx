@@ -15,7 +15,7 @@ export type IHeavyEquipmentSelectInputRhfProps = {
   control: 'heavyEquipment-select-input';
   name: string;
   labelValue?: string;
-  categorySlug?: string | null;
+  categoryId?: string | null;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
@@ -30,7 +30,7 @@ const HeavyEquipmentSelectInputRhf: React.FC<
   label,
   labelValue,
   defaultValue,
-  categorySlug = null,
+  categoryId = null,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -44,7 +44,7 @@ const HeavyEquipmentSelectInputRhf: React.FC<
       limit: 15,
       search: searchQuery === '' ? null : searchQuery,
       isComplete: true,
-      categorySlug: categorySlug === '' ? null : categorySlug,
+      categoryId: categoryId === '' ? null : categoryId,
     },
   });
 

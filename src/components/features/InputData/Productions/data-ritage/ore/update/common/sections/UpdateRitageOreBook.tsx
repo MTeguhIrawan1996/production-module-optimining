@@ -264,7 +264,7 @@ const UpdateRitageOreBook = () => {
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: oreRitage?.companyHeavyEquipment?.id,
       labelValue: oreRitage?.companyHeavyEquipment?.hullNumber ?? '',
     });
@@ -273,7 +273,7 @@ const UpdateRitageOreBook = () => {
       name: 'companyHeavyEquipmentChangeId',
       label: 'heavyEquipmentCodeSubstitution',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: oreRitage?.companyHeavyEquipmentChange?.id,
       labelValue: oreRitage?.companyHeavyEquipmentChange?.hullNumber ?? '',
     });

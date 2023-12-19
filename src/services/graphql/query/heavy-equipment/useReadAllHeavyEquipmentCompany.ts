@@ -16,7 +16,7 @@ export const READ_ALL_HEAVY_EQUIPMENT_COMPANY = gql`
     $brandId: String
     $referenceId: String
     $classId: String
-    $categorySlug: String
+    $categoryId: String
   ) {
     companyHeavyEquipments(
       findAllCompanyHeavyEquipmentInput: {
@@ -30,7 +30,7 @@ export const READ_ALL_HEAVY_EQUIPMENT_COMPANY = gql`
         companyId: $companyId
         referenceId: $referenceId
         classId: $classId
-        categorySlug: $categorySlug
+        categoryId: $categoryId
       }
     ) {
       meta {
@@ -106,7 +106,7 @@ interface IHeavyEquipmentCompanyRequest extends Partial<IGlobalMetaRequest> {
   referenceId?: string | null;
   classId?: string | null;
   companyId?: string | null;
-  categorySlug?: string | null;
+  categoryId?: string | null;
 }
 
 export const useReadAllHeavyEquipmentCompany = ({

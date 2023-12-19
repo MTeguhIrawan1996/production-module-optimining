@@ -256,7 +256,7 @@ const UpdateRitageQuarryBook = () => {
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: quarryRitage?.companyHeavyEquipment?.id,
       labelValue: quarryRitage?.companyHeavyEquipment?.hullNumber ?? '',
     });
@@ -265,7 +265,7 @@ const UpdateRitageQuarryBook = () => {
       name: 'companyHeavyEquipmentChangeId',
       label: 'heavyEquipmentCodeSubstitution',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: quarryRitage?.companyHeavyEquipmentChange?.id,
       labelValue: quarryRitage?.companyHeavyEquipmentChange?.hullNumber ?? '',
     });

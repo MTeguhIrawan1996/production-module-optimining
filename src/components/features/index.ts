@@ -28,6 +28,11 @@ import ReadRitageQuarryPage from '@/components/features/InputData/Productions/da
 import ReadDTQuarryRitagePage from '@/components/features/InputData/Productions/data-ritage/quarry/read/read-dump-truck/common';
 import UpdateRitageQuarryPage from '@/components/features/InputData/Productions/data-ritage/quarry/update/common';
 import UploadRitageQuarryPage from '@/components/features/InputData/Productions/data-ritage/quarry/upload/common';
+import CreateRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/create/common';
+import ReadRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/read/common';
+import ReadDTTopsoilRitagePage from '@/components/features/InputData/Productions/data-ritage/topsoil/read/read-dump-truck/common';
+import UpdateRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/update/common';
+import UploadRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/upload/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
 import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/create/common';
 import ReadSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/read/common';
@@ -141,6 +146,7 @@ export {
   CreateRitageObPage,
   CreateRitageOrePage,
   CreateRitageQuarryPage,
+  CreateRitageTopsoilPage,
   CreateShiftMasterPage,
   CreateSmapleHouseLabPage,
   CreateStockpileDomeMasterPage,
@@ -171,6 +177,7 @@ export {
   ReadDTObRitagePage,
   ReadDTOreRitagePage,
   ReadDTQuarryRitagePage,
+  ReadDTTopsoilRitagePage,
   ReadElementMasterPage,
   ReadFactoryMasterPage,
   ReadHeavyEquipmentClassPage,
@@ -185,6 +192,7 @@ export {
   ReadRitageObPage,
   ReadRitageOrePage,
   ReadRitageQuarryPage,
+  ReadRitageTopsoilPage,
   ReadSampleHouseLabPage,
   ReadShiftMasterPage,
   ReadStockpileMasterPage,
@@ -213,6 +221,7 @@ export {
   UpdateRitageObPage,
   UpdateRitageOrePage,
   UpdateRitageQuarryPage,
+  UpdateRitageTopsoilPage,
   UpdateSampleHouseLabPage,
   UpdateShiftMasterPage,
   UpdateStockpileDomeMasterPage,
@@ -224,6 +233,7 @@ export {
   UploadRitageObPage,
   UploadRitageOrePage,
   UploadRitageQuarryPage,
+  UploadRitageTopsoilPage,
   UserPage,
   WorkingHoursPlanMasterPage,
 };

@@ -14,7 +14,7 @@ export const READ_ALL_HEAVY_EQUIPMENT_SELECT = gql`
     $brandId: String
     $referenceId: String
     $classId: String
-    $categorySlug: String
+    $categoryId: String
     $isComplete: Boolean
   ) {
     companyHeavyEquipments(
@@ -29,7 +29,7 @@ export const READ_ALL_HEAVY_EQUIPMENT_SELECT = gql`
         companyId: $companyId
         referenceId: $referenceId
         classId: $classId
-        categorySlug: $categorySlug
+        categoryId: $categoryId
         isComplete: $isComplete
       }
     ) {
@@ -44,7 +44,6 @@ export const READ_ALL_HEAVY_EQUIPMENT_SELECT = gql`
         hullNumber
         heavyEquipment {
           id
-
           vehicleNumber
         }
       }
@@ -71,7 +70,7 @@ interface IHeavyEquipmentSelectRequest extends Partial<IGlobalMetaRequest> {
   referenceId?: string | null;
   classId?: string | null;
   companyId?: string | null;
-  categorySlug?: string | null;
+  categoryId?: string | null;
   isComplete?: boolean | null;
 }
 
