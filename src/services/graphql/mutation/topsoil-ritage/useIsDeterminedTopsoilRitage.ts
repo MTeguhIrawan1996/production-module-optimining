@@ -2,14 +2,14 @@ import { ApolloError, gql, useMutation } from '@apollo/client';
 
 import { IUpdateStatusValues } from '@/types/global';
 
-export const UPDATE_ISDETERMINED_QUARRY_RITAGE = gql`
-  mutation UpdateIsDeterminedQuarryRitage(
+export const UPDATE_ISDETERMINED_TOPSOIL_RITAGE = gql`
+  mutation UpdateIsDeterminedTopsoilRitage(
     $id: String!
     $status: Boolean
     $statusMessage: String
   ) {
-    determineQuarryRitage(
-      determineQuarryRitageInput: {
+    determineTopsoilRitage(
+      determineTopsoilRitageInput: {
         id: $id
         status: $status
         statusMessage: $statusMessage
@@ -24,14 +24,14 @@ export const UPDATE_ISDETERMINED_QUARRY_RITAGE = gql`
   }
 `;
 
-export interface IUpdateIsDeterminedQuarryRitageRequest
+export interface IUpdateIsDeterminedTopsoilRitageRequest
   extends IUpdateStatusValues {
   id: string;
   status: boolean;
 }
 
-interface IUpdateIsDeterminedQuarryRitageResponse {
-  determineQuarryRitage: {
+interface IUpdateIsDeterminedTopsoilRitageResponse {
+  determineTopsoilRitage: {
     id: string;
     status: {
       id: string;
@@ -39,17 +39,17 @@ interface IUpdateIsDeterminedQuarryRitageResponse {
   };
 }
 
-export const useUpdateIsDeterminedQuarryRitage = ({
+export const useUpdateIsDeterminedTopsoilRitage = ({
   onError,
   onCompleted,
 }: {
   onError?: ({ graphQLErrors }: ApolloError) => void;
-  onCompleted?: (data: IUpdateIsDeterminedQuarryRitageResponse) => void;
+  onCompleted?: (data: IUpdateIsDeterminedTopsoilRitageResponse) => void;
 }) => {
   return useMutation<
-    IUpdateIsDeterminedQuarryRitageResponse,
-    IUpdateIsDeterminedQuarryRitageRequest
-  >(UPDATE_ISDETERMINED_QUARRY_RITAGE, {
+    IUpdateIsDeterminedTopsoilRitageResponse,
+    IUpdateIsDeterminedTopsoilRitageRequest
+  >(UPDATE_ISDETERMINED_TOPSOIL_RITAGE, {
     onError,
     onCompleted,
   });
