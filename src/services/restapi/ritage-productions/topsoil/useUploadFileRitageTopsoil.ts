@@ -5,7 +5,7 @@ import axiosClient from '@/services/restapi/axiosClient';
 
 import { AxiosRestErrorResponse, ICreateFileProps } from '@/types/global';
 
-interface IUploadFileRitageQuarryResponse {
+interface IUploadFileRitageTopsoilResponse {
   message: string;
   data: {
     id: string;
@@ -20,7 +20,7 @@ type IPropsRequest = {
   }[];
 };
 
-const UploadFileRitageQuarry = async ({ data, utcOffset }: IPropsRequest) => {
+const UploadFileRitageTopsoil = async ({ data, utcOffset }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
 
@@ -36,24 +36,24 @@ const UploadFileRitageQuarry = async ({ data, utcOffset }: IPropsRequest) => {
     }
   });
 
-  const response = await axiosAuth.post(`/quarry-ritages/file`, bodyFormData);
+  const response = await axiosAuth.post(`/topsoil-ritages/file`, bodyFormData);
   return response?.data;
 };
 
-export const useUploadFileRitageQuarry = ({
+export const useUploadFileRitageTopsoil = ({
   onError,
   onSuccess,
 }: {
-  onSuccess?: (success: IUploadFileRitageQuarryResponse) => void;
+  onSuccess?: (success: IUploadFileRitageTopsoilResponse) => void;
   onError?: (error: AxiosRestErrorResponse<ICreateFileProps>) => unknown;
 }) => {
   return useMutation<
-    IUploadFileRitageQuarryResponse,
+    IUploadFileRitageTopsoilResponse,
     AxiosRestErrorResponse<ICreateFileProps>,
     IPropsRequest
   >({
     mutationFn: async (value) => {
-      const data = await UploadFileRitageQuarry(value);
+      const data = await UploadFileRitageTopsoil(value);
       return data;
     },
     onError: onError,

@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { useReadOneUploadFileTRK } from '@/services/graphql/query/file/useReadOneUploadFile';
-import { useUploadFileRitageOb } from '@/services/restapi/ritage-productions/ob/useUploadFileRitageOb';
+import { useUploadFileRitageTopsoil } from '@/services/restapi/ritage-productions/topsoil/useUploadFileRitageTopsoil';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
@@ -21,7 +21,7 @@ import {
   ICreateFileProps,
 } from '@/types/global';
 
-const UploadRitageObBook = () => {
+const UploadRitageTopsoilBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const [isDirtyFile, setIsDirtyFile] = React.useState<boolean>(false);
@@ -53,7 +53,7 @@ const UploadRitageObBook = () => {
     },
   });
 
-  const { mutate, isLoading } = useUploadFileRitageOb({
+  const { mutate, isLoading } = useUploadFileRitageTopsoil({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -91,7 +91,7 @@ const UploadRitageObBook = () => {
       name: 'file',
       label: 'uploadDataRitage',
       description: 'uploadExcelDescription',
-      maxSize: 100 * 1024 ** 2 /* 10MB */,
+      maxSize: 100 * 1024 ** 2 /* 20MB */,
       multiple: false,
       faildData: dataFiald,
       onDrop: (value) => {
@@ -175,14 +175,14 @@ const UploadRitageObBook = () => {
       }}
       downloadButton={[
         {
-          label: t('ritageOb.downloadTemplateOb'),
-          url: `/overburden-ritages/file`,
-          fileName: 'template-ob',
+          label: t('ritageTopsoil.downloadTemplateTopsoil'),
+          url: `/topsoil-ritages/file`,
+          fileName: 'template-topsoil',
         },
         {
           label: t('commonTypography.downloadReference'),
           url: `/download/references`,
-          fileName: 'referensi-ob',
+          fileName: 'referensi-topsoil',
         },
       ]}
     >
@@ -198,11 +198,11 @@ const UploadRitageObBook = () => {
         }}
         backButton={{
           onClick: () =>
-            router.push('/input-data/production/data-ritage?tabs=ob'),
+            router.push('/input-data/production/data-ritage?tabs=topsoil'),
         }}
       />
     </DashboardCard>
   );
 };
 
-export default UploadRitageObBook;
+export default UploadRitageTopsoilBook;

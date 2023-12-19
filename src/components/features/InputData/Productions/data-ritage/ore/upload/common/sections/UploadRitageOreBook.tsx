@@ -91,7 +91,7 @@ const UploadRitageOreBook = () => {
       name: 'file',
       label: 'uploadDataRitage',
       description: 'uploadExcelDescription',
-      maxSize: 20 * 1024 ** 2 /* 10MB */,
+      maxSize: 100 * 1024 ** 2 /* 10MB */,
       multiple: false,
       faildData: dataFiald,
       onDrop: (value) => {

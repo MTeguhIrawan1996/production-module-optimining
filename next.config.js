@@ -18,15 +18,14 @@ const moduleExports = {
     domains: [`${process.env.NEXT_PUBLIC_IMAGE_DOMAIN}`],
   },
   reactStrictMode: true,
-  webpack(config) {
-    config.module.rules.push({
-      test: /\.svg$/i,
-      issuer: /\.[jt]sx?$/,
-      use: [{ loader: '@svgr/webpack', options: { icon: false } }],
-    });
-
-    return config;
-  },
+  // webpack(config) {
+  //   // config.module.rules.push({
+  //   //   test: /\.svg$/i,
+  //   //   issuer: /\.[jt]sx?$/,
+  //   //   use: [{ loader: '@svgr/webpack', options: { icon: false } }],
+  //   // });
+  //   return config;
+  // },
   i18n,
 
   sentry: {

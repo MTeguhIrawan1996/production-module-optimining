@@ -57,7 +57,7 @@ export const useReadOneUploadFileTRK = ({
       if (data?.succeed === data?.total) {
         return false;
       }
-      return 500;
+      return 1500;
     },
   });
 };
