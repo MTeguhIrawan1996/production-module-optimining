@@ -262,7 +262,7 @@ const UpdateRitageTopsoilBook = () => {
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: topsoilRitage?.companyHeavyEquipment?.id,
       labelValue: topsoilRitage?.companyHeavyEquipment?.hullNumber ?? '',
     });
@@ -271,7 +271,7 @@ const UpdateRitageTopsoilBook = () => {
       name: 'companyHeavyEquipmentChangeId',
       label: 'heavyEquipmentCodeSubstitution',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: topsoilRitage?.companyHeavyEquipmentChange?.id,
       labelValue: topsoilRitage?.companyHeavyEquipmentChange?.hullNumber ?? '',
     });

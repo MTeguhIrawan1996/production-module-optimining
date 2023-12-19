@@ -249,7 +249,7 @@ const UpdateRitageBargingBook = () => {
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: bargingRitage?.companyHeavyEquipment?.id,
       labelValue: bargingRitage?.companyHeavyEquipment?.hullNumber ?? '',
     });
@@ -258,7 +258,7 @@ const UpdateRitageBargingBook = () => {
       name: 'companyHeavyEquipmentChangeId',
       label: 'heavyEquipmentCodeSubstitution',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: bargingRitage?.companyHeavyEquipmentChange?.id,
       labelValue: bargingRitage?.companyHeavyEquipmentChange?.hullNumber ?? '',
     });

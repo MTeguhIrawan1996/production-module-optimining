@@ -75,7 +75,7 @@ const ListDataTopsoilRitageBook = () => {
       search:
         heavyEquipmentSearchQuery === '' ? null : heavyEquipmentSearchQuery,
       isComplete: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
     },
     skip: tabs !== 'topsoil',
   });

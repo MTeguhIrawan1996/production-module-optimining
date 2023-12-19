@@ -263,7 +263,7 @@ const UpdateRitageObBook = () => {
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: overburdenRitage?.companyHeavyEquipment?.id,
       labelValue: overburdenRitage?.companyHeavyEquipment?.hullNumber ?? '',
     });
@@ -272,7 +272,7 @@ const UpdateRitageObBook = () => {
       name: 'companyHeavyEquipmentChangeId',
       label: 'heavyEquipmentCodeSubstitution',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: overburdenRitage?.companyHeavyEquipmentChange?.id,
       labelValue:
         overburdenRitage?.companyHeavyEquipmentChange?.hullNumber ?? '',
