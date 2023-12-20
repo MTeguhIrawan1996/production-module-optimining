@@ -1,5 +1,6 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
+import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
 import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
 import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
 
@@ -65,6 +66,11 @@ export const READ_ONE_BARGING_RITAGE = gql`
         id
         name
       }
+      bargeCompanyHeavyEquipment {
+        id
+        hullNumber
+      }
+      closeDome
       bulkSamplingDensity
       bucketVolume
       tonByRitage
@@ -104,6 +110,11 @@ interface IReadOneBargingRitage {
   dome: IDomeWithStockpile | null;
   barging: Pick<ILocationsData, 'id' | 'name'> | null;
   sampleNumber: string | null;
+  closeDome: boolean | null;
+  bargeCompanyHeavyEquipment: Pick<
+    IHeavyEquipmentCompany,
+    'id' | 'hullNumber'
+  > | null;
   houseSampleAndLab: {
     elements: IElementWithValue[] | null;
   } | null;

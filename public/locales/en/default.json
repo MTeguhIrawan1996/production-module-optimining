@@ -305,7 +305,8 @@
     "toLocation": "Ke Lokasi",
     "toArrive": "Ke Tujuan",
     "fromAtDome": "Waktu Dari Dome",
-    "fromStockpile": "Dari Stockpile"
+    "fromStockpile": "Dari Stockpile",
+    "bargeName": "Nama Tongkang"
   },
   "sideBar": {
     "dashboard": "Dashboard",

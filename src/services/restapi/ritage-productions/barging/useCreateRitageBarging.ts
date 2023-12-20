@@ -23,6 +23,8 @@ export interface IMutationRitageBarging {
   weatherId: string | null;
   stockpileName: string;
   domeId: string | null;
+  closeDome: boolean;
+  bargeCompanyHeavyEquipmentId: string | null;
   bargingId: string | null;
   bulkSamplingDensity: string | number;
   bucketVolume: string | number;
@@ -47,6 +49,9 @@ const CreateRitageBarging = async ({ data }: IPropsRequest) => {
   const bodyFormData = new FormData();
   const exclude = ['tonByRitage', 'ritageDuration', 'stockpileName'];
   data.forEach(({ name, value }) => {
+    if (name === 'closeDome') {
+      bodyFormData.append('closeDome', String(value));
+    }
     if (name === 'isRitageProblematic') {
       bodyFormData.append('isRitageProblematic', String(value));
     }
