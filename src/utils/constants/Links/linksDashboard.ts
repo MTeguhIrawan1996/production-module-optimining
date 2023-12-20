@@ -118,11 +118,11 @@ export const linksDashboard: IMenuItem[] = [
       {
         label: 'qualityControlManagement',
         subMenu: [
-          // {
-          //   label: 'stockpileMonitoring',
-          //   href: '/input-data/quality-control-management/stockpile-monitoring',
-          //   access: ['create-monitoring-stockpile'],
-          // },
+          {
+            label: 'stockpileMonitoring',
+            href: '/input-data/quality-control-management/stockpile-monitoring',
+            access: ['create-monitoring-stockpile'],
+          },
           {
             label: 'sampleHouseLab',
             href: '/input-data/quality-control-management/sample-house-lab',
@@ -148,35 +148,4 @@ export const linksDashboard: IMenuItem[] = [
       },
     ],
   },
-  // {
-  //   label: 'Example',
-  //   icon: 'tabler:briefcase',
-  //   subMenu: [
-  //     {
-  //       label: 'Sub Example',
-  //       subMenu: [
-  //         {
-  //           label: 'Sub Sub Example',
-  //           href: '/example/sub-example/coba',
-  //           access: ['all'],
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       label: 'Data Table',
-  //       href: '/example/data-table',
-  //       access: ['all'],
-  //     },
-  //     {
-  //       label: 'Form Example',
-  //       href: '/example/form-example',
-  //       access: ['all'],
-  //     },
-  //     {
-  //       label: 'Components',
-  //       href: '/example/c-example',
-  //       access: ['all'],
-  //     },
-  //   ],
-  // },
 ];
