@@ -91,7 +91,7 @@ const UploadRitageQuarryBook = () => {
       name: 'file',
       label: 'uploadDataRitage',
       description: 'uploadExcelDescription',
-      maxSize: 20 * 1024 ** 2 /* 20MB */,
+      maxSize: 100 * 1024 ** 2 /* 20MB */,
       multiple: false,
       faildData: dataFiald,
       onDrop: (value) => {
