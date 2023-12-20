@@ -33,7 +33,7 @@ export const companyMutationValidation: z.ZodType<ICompanyMutationValues> = z
     code: zOptionalString,
     nib: zOptionalString,
     logo: zImageArrayOptional,
-    permissionTypeId: zRequiredSelectInput,
+    permissionTypeId: zOptionalString.nullable(),
     permissionTypeNumber: zOptionalString,
     permissionTypeDate: zDateOptionalValidation,
     permissionTypeDocument: zPdfArrayOptional,
