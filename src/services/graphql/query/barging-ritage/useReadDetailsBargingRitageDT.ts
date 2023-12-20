@@ -75,6 +75,7 @@ export const READ_DETAILS_BARGING_RITAGE_DT = gql`
         bucketVolume
         tonByRitage
         sampleNumber
+        desc
         houseSampleAndLab {
           elements {
             value
