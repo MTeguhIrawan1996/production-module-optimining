@@ -446,6 +446,10 @@ const ReadRitageBargingBook = () => {
                   dataKey: t('commonTypography.toBarging'),
                   value: bargingRitage?.barging?.name,
                 },
+                {
+                  dataKey: t('commonTypography.bargeName'),
+                  value: bargingRitage?.bargeCompanyHeavyEquipment?.hullNumber,
+                },
               ]}
               type="grid"
               keyStyleText={{

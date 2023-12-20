@@ -61,7 +61,7 @@ const DataRitagePage = () => {
           }}
           tabsData={[
             {
-              label: 'Ore (Ore/HGO/LGO)',
+              label: 'Ore',
               value: 'ore',
               component: <ListDataOreRitageBook />,
               isShowItem: isPremissionOre,

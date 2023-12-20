@@ -77,6 +77,8 @@ const UpdateRitageBargingBook = () => {
       domeId: '',
       stockpileName: '',
       bargingId: '',
+      closeDome: false,
+      bargeCompanyHeavyEquipmentId: '',
       bulkSamplingDensity: '',
       bucketVolume: '',
       tonByRitage: '',
@@ -91,6 +93,7 @@ const UpdateRitageBargingBook = () => {
   const domeId = methods.watch('domeId');
   const photos = methods.watch('photos');
   const isRitageProblematic = methods.watch('isRitageProblematic');
+  const closeDome = methods.watch('closeDome');
 
   React.useEffect(() => {
     const ritageDuration = hourDiff(newFromTime, newArriveTime);
@@ -146,6 +149,11 @@ const UpdateRitageBargingBook = () => {
       methods.setValue('weatherId', bargingRitage.weather?.id ?? '');
       methods.setValue('domeId', bargingRitage.dome?.id ?? '');
       methods.setValue('bargingId', bargingRitage.barging?.id ?? '');
+      methods.setValue('closeDome', bargingRitage.closeDome ?? false);
+      methods.setValue(
+        'bargeCompanyHeavyEquipmentId',
+        bargingRitage.bargeCompanyHeavyEquipment?.id ?? ''
+      );
       methods.setValue(
         'bulkSamplingDensity',
         bargingRitage.bulkSamplingDensity ?? ''
@@ -340,6 +348,15 @@ const UpdateRitageBargingBook = () => {
       defaultValue: bargingRitage?.barging?.id,
       labelValue: bargingRitage?.barging?.name,
     });
+    const bargeCodeItem = heavyEquipmentSelect({
+      colSpan: 6,
+      name: 'bargeCompanyHeavyEquipmentId',
+      label: 'bargeName',
+      withAsterisk: false,
+      categoryId: `${process.env.NEXT_PUBLIC_BARGE_ID}`,
+      defaultValue: bargingRitage?.bargeCompanyHeavyEquipment?.id,
+      labelValue: bargingRitage?.bargeCompanyHeavyEquipment?.hullNumber ?? '',
+    });
     const bulkSamplingDensityItem = globalNumberInput({
       colSpan: 6,
       name: 'bulkSamplingDensity',
@@ -453,7 +470,16 @@ const UpdateRitageBargingBook = () => {
       {
         group: t('commonTypography.arrive'),
         enableGroupLabel: true,
-        formControllers: [domeItem, stockpileItem, bargingItem],
+        groupCheckbox: {
+          onChange: () => {
+            closeDome === true
+              ? methods.setValue('closeDome', false)
+              : methods.setValue('closeDome', true);
+          },
+          checked: closeDome,
+          label: t('commonTypography.closeDome'),
+        },
+        formControllers: [domeItem, stockpileItem, bargingItem, bargeCodeItem],
       },
       {
         group: t('commonTypography.detail'),
@@ -486,6 +512,7 @@ const UpdateRitageBargingBook = () => {
     serverPhotos,
     deletedPhotoIds,
     materialId,
+    closeDome,
   ]);
   /* #endregion  /**======== Field =========== */
 

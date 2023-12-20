@@ -70,6 +70,7 @@ export const READ_DETAILS_MOVING_RITAGE_DT = gql`
         bucketVolume
         tonByRitage
         sampleNumber
+        desc
         houseSampleAndLab {
           elements {
             value

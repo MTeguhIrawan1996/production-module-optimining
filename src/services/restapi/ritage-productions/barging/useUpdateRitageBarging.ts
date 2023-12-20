@@ -34,6 +34,9 @@ const UpdateRitageBarging = async ({
     });
   }
   data.forEach(({ name, value }) => {
+    if (name === 'closeDome') {
+      bodyFormData.append('closeDome', String(value));
+    }
     if (name === 'isRitageProblematic') {
       bodyFormData.append('isRitageProblematic', String(value));
     }
