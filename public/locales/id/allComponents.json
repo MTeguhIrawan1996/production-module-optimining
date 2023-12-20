@@ -39,7 +39,7 @@
       "type": "Jenis",
       "nib": "NIB (Nomor Izin Berusaha)",
       "nip": "NIP (Nomor Induk Pegawai)",
-      "companyType": "Jenis Perusahaan",
+      "companyType": "Jenis Izin Perusahaan",
       "companyPermissionType": "Legalitas Izin Usaha",
       "companyLogo": "Logo Perusahaan",
       "uploadPdf": "Unggah Dokumen",
