@@ -1,5 +1,6 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
+import { ILocationCategoriesData } from '@/services/graphql/query/global-select/useReadAllLocationCategory ';
 import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
 
 import {
@@ -64,6 +65,10 @@ export const READ_DETAILS_QUARRY_RITAGE_DT = gql`
           id
           name
         }
+        toLocationCategory {
+          id
+          name
+        }
         toLocation {
           id
           name
@@ -77,6 +82,7 @@ export const READ_DETAILS_QUARRY_RITAGE_DT = gql`
 export interface IOtherReadDetailsQuarryRitageDT {
   fromPit: Pick<ILocationsData, 'id' | 'name'> | null;
   toLocation: Pick<ILocationsData, 'id' | 'name'> | null;
+  toLocationCategory: Pick<ILocationCategoriesData, 'id' | 'name'> | null;
 }
 
 interface IReadDetailsQuarryRitageDTResponse {

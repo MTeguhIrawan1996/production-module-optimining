@@ -68,6 +68,7 @@ export const READ_DETAILS_ORE_RITAGE_DT = gql`
           name
         }
         sampleNumber
+        desc
         houseSampleAndLab {
           elements {
             value

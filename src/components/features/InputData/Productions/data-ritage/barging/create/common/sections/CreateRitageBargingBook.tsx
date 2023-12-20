@@ -70,6 +70,8 @@ const CreateRitageBargingBook = () => {
       domeId: '',
       stockpileName: '',
       bargingId: '',
+      closeDome: false,
+      bargeCompanyHeavyEquipmentId: '',
       bulkSamplingDensity: '',
       bucketVolume: '',
       tonByRitage: '',
@@ -84,6 +86,7 @@ const CreateRitageBargingBook = () => {
   const domeId = methods.watch('domeId');
   const photos = methods.watch('photos');
   const isRitageProblematic = methods.watch('isRitageProblematic');
+  const closeDome = methods.watch('closeDome');
 
   React.useEffect(() => {
     const ritageDuration = hourDiff(newFromTime, newArriveTime);
@@ -268,6 +271,13 @@ const CreateRitageBargingBook = () => {
       withAsterisk: false,
       categoryId: `${process.env.NEXT_PUBLIC_BARGING_ID}`,
     });
+    const bargeCodeItem = heavyEquipmentSelect({
+      colSpan: 6,
+      name: 'bargeCompanyHeavyEquipmentId',
+      label: 'bargeName',
+      withAsterisk: false,
+      categoryId: `${process.env.NEXT_PUBLIC_BARGE_ID}`,
+    });
     const bulkSamplingDensityItem = globalNumberInput({
       colSpan: 6,
       name: 'bulkSamplingDensity',
@@ -372,7 +382,15 @@ const CreateRitageBargingBook = () => {
       {
         group: t('commonTypography.arrive'),
         enableGroupLabel: true,
-        formControllers: [domeItem, stockpileItem, bargingItem],
+        groupCheckbox: {
+          onChange: () => {
+            closeDome === true
+              ? methods.setValue('closeDome', false)
+              : methods.setValue('closeDome', true);
+          },
+          label: t('commonTypography.closeDome'),
+        },
+        formControllers: [domeItem, stockpileItem, bargingItem, bargeCodeItem],
       },
       {
         group: t('commonTypography.detail'),
@@ -398,7 +416,7 @@ const CreateRitageBargingBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photos, isRitageProblematic, materialId]);
+  }, [photos, isRitageProblematic, materialId, closeDome]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */

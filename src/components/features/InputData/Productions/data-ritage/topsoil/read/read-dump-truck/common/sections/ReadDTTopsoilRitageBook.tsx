@@ -71,6 +71,11 @@ const ReadDTTopsoilRitageBook = () => {
           {
             accessor: 'toLocation',
             title: t('commonTypography.toLocation'),
+            render: ({ toLocationCategory }) => toLocationCategory?.name ?? '-',
+          },
+          {
+            accessor: 'locationName',
+            title: t('commonTypography.locationName'),
             render: ({ toLocation }) => toLocation?.name ?? '-',
           },
           {

@@ -26,7 +26,7 @@
     "materialType": "Jenis Material",
     "subMaterialType": "Sub Jenis Material",
     "subMaterialTypeBy": "Sub Jenis Material Dari",
-    "workingHoursPlan": "Rencana Jam Kerja",
+    "workingHoursPlan": "Rencana Waktu Hilang",
     "activity": "Kegiatan",
     "activityPlan": "Rencana Aktivitas",
     "element": "Unsur Kandungan",
@@ -39,7 +39,7 @@
     "number": "Nomor",
     "date": "Tanggal",
     "identity": "Identitas",
-    "companyType": "Jenis Perusahaan",
+    "companyType": "Jenis Izin Perusahaan",
     "companyName": "Nama Perusahaan",
     "companyCode": "Kode Perusahaan",
     "heavyEquipmentCode": "Nomor Lambung",
@@ -54,7 +54,7 @@
     "aliasName": "Nama Alias",
     "nib": "NIB (Nomor Izin Berusaha)",
     "nib2": "NIB",
-    "companyPermissionType": "Izin Usaha",
+    "companyPermissionType": "Legalitas Izin Usaha",
     "new": "Baru",
     "select": "Pilih",
     "existing": "yang sudah ada",
@@ -305,7 +305,8 @@
     "toLocation": "Ke Lokasi",
     "toArrive": "Ke Tujuan",
     "fromAtDome": "Waktu Dari Dome",
-    "fromStockpile": "Dari Stockpile"
+    "fromStockpile": "Dari Stockpile",
+    "bargeName": "Nama Tongkang"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -537,7 +538,7 @@
     "formUpdateWorkingHoursPlan": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.workingHoursPlan)",
     "successCreateMessage": "$t(commonTypography.workingHoursPlan) berhasil dibuat",
     "successUpdateMessage": "$t(commonTypography.workingHoursPlan) berhasil diubah",
-    "workingHoursPlanDescription": "Anda bisa menambahkan lebih `dari s`atu deskripsi. Karena data deskripsi ini akan berpengaruh kedalam rencana mingguan dan bulanan"
+    "workingHoursPlanDescription": "Anda bisa menambahkan lebih dari satu Kegiatan. Karena data Kegiatan ini akan berpengaruh kedalam rencana mingguan dan bulanan"
   },
   "activityPlan": {
     "createActivityPlan": "$t(commonTypography.create) $t(commonTypography.activityPlan)",

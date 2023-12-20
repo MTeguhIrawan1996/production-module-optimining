@@ -5,6 +5,7 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 /** @type {import('next').NextConfig} */
 const { withSentryConfig } = require('@sentry/nextjs');
+const NextFederationPlugin = require('@module-federation/nextjs-mf');
 const { i18n } = require('./next-i18next.config.js');
 
 const moduleExports = {
@@ -18,14 +19,21 @@ const moduleExports = {
     domains: [`${process.env.NEXT_PUBLIC_IMAGE_DOMAIN}`],
   },
   reactStrictMode: true,
-  // webpack(config) {
-  //   // config.module.rules.push({
-  //   //   test: /\.svg$/i,
-  //   //   issuer: /\.[jt]sx?$/,
-  //   //   use: [{ loader: '@svgr/webpack', options: { icon: false } }],
-  //   // });
-  //   return config;
-  // },
+  webpack(config, options) {
+    if (!options.isServer) {
+      config.plugins.push(
+        new NextFederationPlugin({
+          name: 'home',
+          filename: 'static/chunks/remoteEntry.js',
+          remotes: {},
+          exposes: {},
+          shared: {},
+        })
+      );
+    }
+
+    return config;
+  },
   i18n,
 
   sentry: {

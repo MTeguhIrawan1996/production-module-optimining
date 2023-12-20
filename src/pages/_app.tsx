@@ -12,7 +12,6 @@ import { SessionProvider } from 'next-auth/react';
 import { RealViewportProvider } from 'next-real-viewport';
 
 import '../styles/globals.css';
-import 'maplibre-gl/dist/maplibre-gl.css';
 
 import getClient from '@/services/graphql/apollo-client';
 import useScrollRestoration from '@/utils/hooks/detect-route/useScrollRestoration';
