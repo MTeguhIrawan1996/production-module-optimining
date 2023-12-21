@@ -33,7 +33,6 @@
     "@mantine/hooks": "^6.0.21",
     "@mantine/next": "^6.0.21",
     "@mantine/notifications": "^6.0.21",
-    "@module-federation/nextjs-mf": "^7.0.8",
     "@next/font": "^13.2.4",
     "@sentry/browser": "^7.42.0",
     "@sentry/nextjs": "^7.42.0",

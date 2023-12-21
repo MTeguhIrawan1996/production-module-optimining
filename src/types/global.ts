@@ -39,6 +39,9 @@ import { ISelectHeavyEquipmentReferenceInputProps } from '@/components/elements/
 import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import { ISelectInputNativeProps } from '@/components/elements/input/SelectInputNative';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
+import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
+import { ISelectWeekNativeProps } from '@/components/elements/input/SelectWeekNative';
+import { ISelectYearNativeProps } from '@/components/elements/input/SelectYearNative';
 import { IShiftSelectInputRhfProps } from '@/components/elements/input/ShiftSelectInputRhf';
 import { IStockpileNameSelectInputRhfProps } from '@/components/elements/input/StockpileNameSelectInputRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
@@ -106,7 +109,10 @@ export type ControllerProps =
 
 export type InputControllerNativeProps =
   | IDateInputNativeProps
-  | ISelectInputNativeProps;
+  | ISelectInputNativeProps
+  | ISelectYearNativeProps
+  | ISelectMonthNativeProps
+  | ISelectWeekNativeProps;
 
 export type ControllerGroup = {
   group: string;
