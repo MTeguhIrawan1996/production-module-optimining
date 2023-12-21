@@ -1,4 +1,3 @@
-import { SelectProps } from '@mantine/core';
 import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -11,6 +10,7 @@ import 'dayjs/locale/id';
 
 import {
   DashboardCard,
+  GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
@@ -18,20 +18,27 @@ import {
 
 import { useDeleteShiftMaster } from '@/services/graphql/mutation/shift/useDeleteShiftMaster';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
-import { useReadAllLocationsMaster } from '@/services/graphql/query/location/useReadAllLocationMaster';
+import { useReadAllLocationselect } from '@/services/graphql/query/global-select/useReadAllLocationSelect';
 import {
   IMonitoringStockpilesData,
   useReadAllStockpileMonitoring,
 } from '@/services/graphql/query/stockpile-monitoring/useReadAllStockpileMonitoring';
-import { globalSelect } from '@/utils/constants/Field/global-field';
+import {
+  globalSelectMonthNative,
+  globalSelectNative,
+  globalSelectWeekNative,
+  globalSelectYearNative,
+} from '@/utils/constants/Field/native-field';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
-import { IElementsData } from '@/types/global';
+import { IElementsData, InputControllerNativeProps } from '@/types/global';
 
 const StockpileBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
+  const url = `/input-data/quality-control-management/stockpile-monitoring?page=1`;
+
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -42,6 +49,9 @@ const StockpileBook = () => {
     400
   );
   const [stockpileId, setStockpileId] = React.useState<string | null>(null);
+  const [year, setYear] = React.useState<number | null>(null);
+  const [month, setMonth] = React.useState<number | null>(null);
+  const [week, setWeek] = React.useState<number | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
@@ -52,11 +62,10 @@ const StockpileBook = () => {
     },
   });
 
-  const { locationsData } = useReadAllLocationsMaster({
+  const { allLocationsData } = useReadAllLocationselect({
     variables: {
       limit: 15,
       orderDir: 'desc',
-      orderBy: 'createdAt',
       search: stockpileNameSearchQuery === '' ? null : stockpileNameSearchQuery,
       categoryId: `${process.env.NEXT_PUBLIC_STOCKPILE_ID}`,
     },
@@ -72,9 +81,11 @@ const StockpileBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       stockpileId,
+      year,
+      month,
+      week,
     },
   });
 
@@ -107,11 +118,11 @@ const StockpileBook = () => {
   /* #endregion  /**======== Query =========== */
 
   const { uncombinedItem: locationItems } = useFilterItems({
-    data: locationsData ?? [],
+    data: allLocationsData ?? [],
   });
 
   const filter = React.useMemo(() => {
-    const stockpileNameItem = globalSelect({
+    const stockpileNameItem = globalSelectNative({
       label: 'stockpileName',
       data: locationItems,
       searchable: true,
@@ -119,19 +130,46 @@ const StockpileBook = () => {
       onSearchChange: setStockpileNameSerachTerm,
       searchValue: stockpileNameSerachTerm,
       onChange: (value) => {
-        router.push({
-          href: router.asPath,
-          query: {
-            page: 1,
-          },
-        });
+        router.push(url, undefined, { shallow: true });
         setStockpileId(value);
       },
     });
-    const item: SelectProps[] = [stockpileNameItem];
+
+    const selectYearItem = globalSelectYearNative({
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setYear(value ? Number(value) : null);
+        setMonth(null);
+        setWeek(null);
+      },
+    });
+    const selectMonthItem = globalSelectMonthNative({
+      disabled: !year,
+      value: `${month}`,
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setMonth(value ? Number(value) : null);
+      },
+    });
+    const selectWeekItem = globalSelectWeekNative({
+      disabled: !year,
+      value: `${week}`,
+      year: year,
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setWeek(value ? Number(value) : null);
+      },
+    });
+
+    const item: InputControllerNativeProps[] = [
+      stockpileNameItem,
+      selectYearItem,
+      selectMonthItem,
+      selectWeekItem,
+    ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationItems]);
+  }, [locationItems, year, month, week]);
 
   const handleDelete = async () => {
     await executeDelete({
@@ -156,10 +194,10 @@ const StockpileBook = () => {
         accessor: element.name,
         title: element.name,
         render: ({ currentSample }) => {
-          const value = currentSample.elements?.find(
-            (val) => val.elementName === element.name
+          const value = currentSample?.elements?.find(
+            (val) => val.element?.name === element.name
           );
-          return value?.value;
+          return value?.value ?? '-';
         },
       };
       return column;
@@ -174,7 +212,7 @@ const StockpileBook = () => {
     return (
       <MantineDataTable
         tableProps={{
-          records: monitoringStockpilesData ?? [],
+          records: monitoringStockpilesData,
           fetching: monitoringStockpilesDataLoading,
           highlightOnHover: true,
           columns: [
@@ -189,40 +227,49 @@ const StockpileBook = () => {
             {
               accessor: 'name',
               title: t('commonTypography.stockpileName'),
-              render: ({ stockpile }) => stockpile?.name,
+              render: ({ dome }) => dome?.stockpile.name ?? '-',
             },
             {
               accessor: 'domeId',
               title: t('commonTypography.domeId'),
-              render: ({ dome }) => dome?.handBookId,
+              render: ({ dome }) => dome?.handBookId ?? '-',
             },
             {
               accessor: 'domeName',
               title: t('commonTypography.domeName'),
-              render: ({ dome }) => dome?.name,
+              render: ({ dome }) => dome?.name ?? '-',
             },
             {
               accessor: 'materialType',
               title: t('commonTypography.materialType'),
-              render: ({ material }) => material?.name,
+              render: ({ material }) => material?.name ?? '-',
             },
             {
               accessor: 'tonByRitage',
               title: t('commonTypography.tonByRitage'),
             },
             {
-              accessor: 'tonBySurvey',
+              accessor: 'tonBySurveys',
               title: t('commonTypography.tonBySurvey'),
+              render: ({ averageTonSurvey }) => averageTonSurvey ?? '-',
             },
             ...(renderOtherColumn ?? []),
             {
               accessor: 'domeStatus',
               title: t('commonTypography.domeStatus'),
+              render: ({ domeStatus }) => domeStatus ?? '-',
             },
             {
               accessor: 'status',
               title: t('commonTypography.status'),
-              // render: ({ material }) => material?.name,
+              render: ({ status }) => {
+                return (
+                  <GlobalBadgeStatus
+                    color={status?.color}
+                    label={status?.name ?? ''}
+                  />
+                );
+              },
             },
             {
               accessor: 'action',
@@ -299,8 +346,8 @@ const StockpileBook = () => {
         },
         searchQuery: searchQuery,
       }}
-      MultipleFilter={{
-        MultipleFilterData: filter,
+      filterDateWithSelect={{
+        items: filter,
         colSpan: 4,
       }}
     >

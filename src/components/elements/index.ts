@@ -63,6 +63,9 @@ import SelectHeavyEquipmentReferenceInput from '@/components/elements/input/Sele
 import SelectHeavyEquipmentTypesInput from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import SelectInputNative from '@/components/elements/input/SelectInputNative';
 import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
+import SelectMonthNative from '@/components/elements/input/SelectMonthNative';
+import SelectWeekNative from '@/components/elements/input/SelectWeekNative';
+import SelectYearNative from '@/components/elements/input/SelectYearNative';
 import ShiftSelectInputRhf from '@/components/elements/input/ShiftSelectInputRhf';
 import StockpileNameSelectInputRhf from '@/components/elements/input/StockpileNameSelectInputRhf';
 import SubDistrictSelectInputRhf from '@/components/elements/input/SubDistrictSelectInputRhf';
@@ -162,6 +165,9 @@ export {
   SelectInputNative,
   SelectInputRhf,
   SelectionButtonModal,
+  SelectMonthNative,
+  SelectWeekNative,
+  SelectYearNative,
   ShiftSelectInputRhf,
   SteperFormGroup,
   StockpileNameSelectInputRhf,
