@@ -16,7 +16,7 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteShiftMaster } from '@/services/graphql/mutation/shift/useDeleteShiftMaster';
+import { useDeleteStockpileMonitoring } from '@/services/graphql/mutation/stockpile-monitoring/useDeleteOreRitage';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import { useReadAllLocationselect } from '@/services/graphql/query/global-select/useReadAllLocationSelect';
 import {
@@ -38,7 +38,6 @@ const StockpileBook = () => {
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
   const url = `/input-data/quality-control-management/stockpile-monitoring?page=1`;
-
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -89,16 +88,11 @@ const StockpileBook = () => {
     },
   });
 
-  const [executeDelete, { loading }] = useDeleteShiftMaster({
+  const [executeDelete, { loading }] = useDeleteStockpileMonitoring({
     onCompleted: () => {
       refetchMonitoringStockpiles();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push({
-        href: router.asPath,
-        query: {
-          page: 1,
-        },
-      });
+      router.push(url, undefined, { shallow: true });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -134,7 +128,6 @@ const StockpileBook = () => {
         setStockpileId(value);
       },
     });
-
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });
@@ -180,12 +173,8 @@ const StockpileBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    router.push({
-      href: router.asPath,
-      query: {
-        page: page,
-      },
-    });
+    const urlSet = `/input-data/quality-control-management/stockpile-monitoring?page=${page}`;
+    router.push(urlSet, undefined, { shallow: true });
   };
 
   const renderOtherColumnCallback = React.useCallback(
