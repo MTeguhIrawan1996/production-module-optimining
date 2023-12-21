@@ -270,6 +270,7 @@
     "bulkSamplingCategorySub": "Sub Kategori Bulk Sampling",
     "rate": "Kadar",
     "density": "Masa Jenis",
+    "time": "Waktu",
     "preparationTime": "Waktu Preparasi",
     "preparationStartDate": "Tanggal Mulai Preparasi",
     "preparationEndDate": "Tanggal Selesai Preparasi",
@@ -309,7 +310,8 @@
     "toArrive": "Ke Tujuan",
     "fromAtDome": "Waktu Dari Dome",
     "fromStockpile": "Dari Stockpile",
-    "bargeName": "Nama Tongkang"
+    "bargeName": "Nama Tongkang",
+    "sampleInformation": "Informasi Sampel"
   },
   "sideBar": {
     "dashboard": "Dashboard",
