@@ -128,6 +128,9 @@
     "information": "Informasi",
     "choose": "Pilih",
     "chooseAll": "Pilih Semua",
+    "chooseYear": "Pilih Tahun",
+    "chooseMonth": "Pilih Bulan",
+    "chooseWeek": "Pilih Minggu",
     "entryDate": "Tanggal Masuk Bekerja",
     "startDate": "Tanggal Mulai",
     "endDate": "Tanggal Selesai",
@@ -267,6 +270,7 @@
     "bulkSamplingCategorySub": "Sub Kategori Bulk Sampling",
     "rate": "Kadar",
     "density": "Masa Jenis",
+    "time": "Waktu",
     "preparationTime": "Waktu Preparasi",
     "preparationStartDate": "Tanggal Mulai Preparasi",
     "preparationEndDate": "Tanggal Selesai Preparasi",
@@ -306,7 +310,8 @@
     "toArrive": "Ke Tujuan",
     "fromAtDome": "Waktu Dari Dome",
     "fromStockpile": "Dari Stockpile",
-    "bargeName": "Nama Tongkang"
+    "bargeName": "Nama Tongkang",
+    "sampleInformation": "Informasi Sampel"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -585,7 +590,7 @@
     "successUpdateMessage": "$t(commonTypography.factory) berhasil diubah"
   },
   "stockpileMonitoring": {
-    "stockpileMonitoringTitle": "$t(commonTypography.inputData) $t(commonTypography.stockpileMonitoring)",
+    "stockpileMonitoringTitle": "Data $t(commonTypography.stockpileMonitoring)",
     "createDome": "$t(commonTypography.create) $t(commonTypography.dome)",
     "readStockpileMonitoring": "$t(commonTypography.detail) $t(commonTypography.stockpileMonitoring)",
     "updateStockpileMonitoring": "$t(commonTypography.edit) $t(commonTypography.stockpileMonitoring)",

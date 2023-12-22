@@ -97,6 +97,9 @@ const getClient = (tokenServer?: ISessionServer | null) => {
       'ReadAllPit',
       'ReadAllDome',
       'ReadAllLocationSelect',
+      'ReadAllYearSelect',
+      'ReadAllMonthSelect',
+      'ReadAllWeekSelect',
     ];
 
     if (blackList.includes(operation.operationName)) {

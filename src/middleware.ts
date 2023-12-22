@@ -36,7 +36,7 @@ export async function middleware(request: NextRequest) {
     },
     {
       path: '/master-data/human-resources',
-      allowedPermissions: ['create-human-resources'],
+      allowedPermissions: ['create-human-resource'],
     },
     {
       path: '/master-data/heavy-equipment',

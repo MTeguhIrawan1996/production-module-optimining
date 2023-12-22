@@ -5,46 +5,53 @@ import axiosClient from '@/services/restapi/axiosClient';
 
 import { AxiosRestErrorResponse } from '@/types/global';
 
-export interface IMutationStockpile {
-  stockpileId: string;
-  domeId: string;
+export interface IMutationStockpileStepOne {
+  stockpileId: string | null;
   handbookId: string;
+  domeId: string | null;
   oreSubMaterialId: string | null;
-  openDate: Date | undefined | null;
+  openDate?: Date | null;
   openTime: string;
-  closeDate: Date | undefined | null;
+  closeDate?: Date | null;
   closeTime: string;
-  tonSurveys: {
-    date: string;
-    ton: string;
-  }[];
-  bargingStartDate: Date | undefined | null;
-  bargingStartTime: string;
-  bargingFinishDate: Date | undefined | null;
-  bargingFinishTime: string;
-  movings: {
-    startDate: Date | undefined | null;
-    startTime: string;
-    finishDate: Date | undefined | null;
-    finishTime: string;
-  }[];
-
-  reopens: {
-    openDate: Date | undefined | null;
-    openTime: string;
-    closeDate: Date | undefined | null;
-    closeTime: string;
-  }[];
   desc: string;
-  samples: {
-    date: Date | undefined | null;
-    sampleTypeId: string | null;
-    sampleNumber: string;
-    elementId: string | null;
-    value: string;
-  }[];
   photo: FileWithPath[] | null;
 }
+
+export interface IMutationStockpileStepTwo {
+  // tonSurveys: {
+  //   date: string;
+  //   ton: string;
+  // }[];
+  // bargingStartDate?: Date | null;
+  // bargingStartTime: string;
+  // bargingFinishDate?: Date | null;
+  // bargingFinishTime: string;
+  // movings: {
+  //   startDate?: Date | null;
+  //   startTime: string;
+  //   finishDate?: Date | null;
+  //   finishTime: string;
+  // }[];
+  // reopens: {
+  //   openDate?: Date | null;
+  //   openTime: string;
+  //   closeDate?: Date | null;
+  //   closeTime: string;
+  // }[];
+  samples: {
+    date?: Date | null;
+    sampleTypeId: string | null;
+    sampleNumber: string;
+    elements: {
+      elementId: string | null;
+      value: string;
+    }[];
+  }[];
+}
+
+export type IMutationStockpile = IMutationStockpileStepOne &
+  IMutationStockpileStepTwo;
 
 export interface ICreateStockpileResponse {
   message: string;
@@ -53,14 +60,14 @@ export interface ICreateStockpileResponse {
 type IPropsRequest = {
   data: {
     name: keyof IMutationStockpile;
-    value: string | null | undefined | FileWithPath[];
+    value: string | null | FileWithPath[];
   }[];
 };
 
 const CreateStockpileMonitoring = async ({ data }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
-  const exclude = ['domeID'];
+  const exclude = ['handbookId', 'stockpileId'];
   data.forEach(({ name, value }) => {
     if (value) {
       if (name === 'photo' && typeof value !== 'string') {
@@ -69,7 +76,9 @@ const CreateStockpileMonitoring = async ({ data }: IPropsRequest) => {
         });
       }
       if (!exclude.includes(name) && typeof value === 'string') {
-        bodyFormData.append(name, value);
+        if (value !== '') {
+          bodyFormData.append(name, value);
+        }
       }
     }
   });
