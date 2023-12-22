@@ -298,13 +298,6 @@ const StockpileBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('stockpileMonitoring.createDome'),
-            onClick: () =>
-              router.push(
-                '/input-data/quality-control-management/stockpile-monitoring/create'
-              ),
-          },
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -321,13 +314,6 @@ const StockpileBook = () => {
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('stockpileMonitoring.createDome'),
-        onClick: () =>
-          router.push(
-            '/input-data/quality-control-management/stockpile-monitoring/create'
-          ),
-      }}
       searchBar={{
         placeholder: t('stockpileMonitoring.searchPlaceholder'),
         onChange: (e) => {

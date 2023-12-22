@@ -38,7 +38,7 @@ import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityCon
 import ReadSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/read/common';
 import UpdateSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/update/common';
 import StockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/common';
-import CreateStockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/create/common';
+import UpdateStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/update/common';
 import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
 import CreateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/create/common';
 import ReadActivityPlanPage from '@/components/features/MasterData/activity-plan/read/common';
@@ -151,7 +151,6 @@ export {
   CreateSmapleHouseLabPage,
   CreateStockpileDomeMasterPage,
   CreateStockpileMasterPage,
-  CreateStockpilePage,
   CreateUserPage,
   CreateWorkingHoursPlanMasterPage,
   DashboardPage,
@@ -226,6 +225,7 @@ export {
   UpdateShiftMasterPage,
   UpdateStockpileDomeMasterPage,
   UpdateStockpileMasterPage,
+  UpdateStockpileMonitoringPage,
   UpdateUserPage,
   UpdateWorkingHoursPlanMasterPage,
   UploadRitageBargingPage,

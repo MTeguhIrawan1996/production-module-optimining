@@ -2,12 +2,9 @@ import { FileWithPath } from '@mantine/dropzone';
 import { useMutation } from '@tanstack/react-query';
 
 import axiosClient from '@/services/restapi/axiosClient';
-import {
-  IElementRhf,
-  IMutationSampleHousePlanValues,
-} from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
+import { IMutationSampleHousePlanValues } from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
 
-import { AxiosRestErrorResponse } from '@/types/global';
+import { AxiosRestErrorResponse, IElementRhf } from '@/types/global';
 
 interface IUpdateSampleHousePlanResponse {
   message: string;
