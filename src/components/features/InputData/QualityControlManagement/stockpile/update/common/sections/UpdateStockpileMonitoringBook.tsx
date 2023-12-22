@@ -117,6 +117,10 @@ const UpdateStockpileMonitoringBook = () => {
     name: 'tonSurveys',
     control: methods.control,
   });
+  const { fields: movingFields, replace: replaceMovingFields } = useFieldArray({
+    name: 'movings',
+    control: methods.control,
+  });
 
   /* #endregion  /**======== Methods =========== */
 
@@ -160,6 +164,7 @@ const UpdateStockpileMonitoringBook = () => {
       },
       skip: !router.isReady,
       onCompleted: ({ monitoringStockpile }) => {
+        // console.log(monitoringStockpile);
         const surveys = monitoringStockpile.tonSurveys?.map((val) => {
           const date = stringToDate(val.date ?? null);
           return {
@@ -167,8 +172,30 @@ const UpdateStockpileMonitoringBook = () => {
             ton: `${val.ton ?? ''}`,
           };
         });
+        const movings = monitoringStockpile.movings?.map((val) => {
+          const startDate = stringToDate(val.startAt ?? null);
+          const startTime = formatDate2(val.startAt, 'HH:mm:ss');
+          const finishDate = stringToDate(val.finishAt ?? null);
+          const finishTime = formatDate2(val.finishAt, 'HH:mm:ss');
+          return {
+            startDate: startDate,
+            startTime: startTime ?? '',
+            finishDate: finishDate,
+            finishTime: finishTime ?? '',
+          };
+        });
         replaceSurveyFields(
           surveys && surveys.length > 0 ? surveys : { date: undefined, ton: '' }
+        );
+        replaceMovingFields(
+          movings && movings.length > 0
+            ? movings
+            : {
+                startDate: undefined,
+                startTime: '',
+                finishDate: undefined,
+                finishTime: '',
+              }
         );
         const openDate = stringToDate(monitoringStockpile.openAt ?? null);
         const closeDate = stringToDate(monitoringStockpile.closeAt ?? null);
@@ -271,6 +298,56 @@ const UpdateStockpileMonitoringBook = () => {
     [surveyFields]
   );
   const surveyGroupItem = surveyFields.map(surveyGroup);
+
+  const movingGroup = React.useCallback(
+    (_, index: number) => {
+      const movingStartDateItem = globalDate({
+        name: `movings.${index}.startDate`,
+        label: 'movingStartDate',
+        value: methods.watch(`movings.${index}.startDate`),
+        withAsterisk: false,
+        clearable: true,
+        colSpan: 6,
+      });
+      const movingFinishDateItem = globalDate({
+        name: `movings.${index}.finishDate`,
+        label: 'movingFinishDate',
+        value: methods.watch(`movings.${index}.finishDate`),
+        withAsterisk: false,
+        clearable: true,
+        colSpan: 6,
+      });
+      const movingStartTimeItem = globalTimeInput({
+        name: `movings.${index}.startTime`,
+        label: 'movingStartTime',
+        value: methods.watch(`movings.${index}.startTime`),
+        withAsterisk: false,
+        colSpan: 6,
+      });
+      const movingFinishTimeItem = globalTimeInput({
+        name: `movings.${index}.finishTime`,
+        label: 'movingFinishTime',
+        value: methods.watch(`movings.${index}.finishTime`),
+        withAsterisk: false,
+        colSpan: 6,
+      });
+
+      const group: ControllerGroup = {
+        group: t('commonTypography.moving'),
+        enableGroupLabel: true,
+        formControllers: [
+          movingStartDateItem,
+          movingFinishDateItem,
+          movingStartTimeItem,
+          movingFinishTimeItem,
+        ],
+      };
+      return group;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [movingFields]
+  );
+  const movingGroupItem = movingFields.map(movingGroup);
 
   const fieldItemStepOne = React.useMemo(() => {
     const stockpileNameItem = stockpileNameSelect({
@@ -424,6 +501,7 @@ const UpdateStockpileMonitoringBook = () => {
           bargingFinishTimeItem,
         ],
       },
+      ...movingGroupItem,
       {
         group: t('commonTypography.desc'),
         formControllers: [desc],
@@ -549,7 +627,6 @@ const UpdateStockpileMonitoringBook = () => {
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
   const handleSubmitForm: SubmitHandler<IMutationStockpile> = async (data) => {
     const values = objectToArrayValue(data);
     const dateValue = ['openDate', 'closeDate'];
