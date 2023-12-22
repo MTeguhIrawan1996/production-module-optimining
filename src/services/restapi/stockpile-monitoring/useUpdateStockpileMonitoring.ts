@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import axiosClient from '@/services/restapi/axiosClient';
 
-import { AxiosRestErrorResponse } from '@/types/global';
+import { AxiosRestErrorResponse, IElementRhf } from '@/types/global';
 
 export interface IMutationStockpileStepOne {
   stockpileId: string | null;
@@ -14,64 +14,64 @@ export interface IMutationStockpileStepOne {
   openTime: string;
   closeDate?: Date | null;
   closeTime: string;
+  tonSurveys: {
+    date?: Date | null;
+    ton: string | number;
+  }[];
+  tonByRitage: string | number | null;
+  bargingStartDate?: Date | null;
+  bargingStartTime: string;
+  bargingFinishDate?: Date | null;
+  bargingFinishTime: string;
+  movings: {
+    startDate?: Date | null;
+    startTime: string;
+    finishDate?: Date | null;
+    finishTime: string;
+  }[];
+  reopens: {
+    openDate?: Date | null;
+    openTime: string;
+    closeDate?: Date | null;
+    closeTime: string;
+  }[];
   desc: string;
   photo: FileWithPath[] | null;
 }
 
 export interface IMutationStockpileStepTwo {
-  // tonSurveys: {
-  //   date: string;
-  //   ton: string;
-  // }[];
-  // bargingStartDate?: Date | null;
-  // bargingStartTime: string;
-  // bargingFinishDate?: Date | null;
-  // bargingFinishTime: string;
-  // movings: {
-  //   startDate?: Date | null;
-  //   startTime: string;
-  //   finishDate?: Date | null;
-  //   finishTime: string;
-  // }[];
-  // reopens: {
-  //   openDate?: Date | null;
-  //   openTime: string;
-  //   closeDate?: Date | null;
-  //   closeTime: string;
-  // }[];
   samples: {
     date?: Date | null;
     sampleTypeId: string | null;
     sampleNumber: string;
-    elements: {
-      elementId: string | null;
-      value: string;
-    }[];
+    elements: IElementRhf[];
   }[];
 }
 
 export type IMutationStockpile = IMutationStockpileStepOne &
   IMutationStockpileStepTwo;
 
-export interface ICreateStockpileResponse {
+export interface IUpdateStockpileResponse {
   message: string;
 }
 
 type IPropsRequest = {
+  id: string;
   data: {
     name: keyof IMutationStockpile;
-    value: string | null | FileWithPath[];
+    value: string | null | FileWithPath[] | IElementRhf[];
   }[];
+  deletePhoto: boolean | null;
 };
 
-const CreateStockpileMonitoring = async ({ data }: IPropsRequest) => {
+const UpdateStockpileMonitoring = async ({ data, id }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
   const exclude = ['handbookId', 'stockpileId'];
   data.forEach(({ name, value }) => {
     if (value) {
       if (name === 'photo' && typeof value !== 'string') {
-        value.forEach((image) => {
+        (value as FileWithPath[]).forEach((image) => {
           bodyFormData.append('photos', image);
         });
       }
@@ -83,24 +83,27 @@ const CreateStockpileMonitoring = async ({ data }: IPropsRequest) => {
     }
   });
 
-  const response = await axiosAuth.post(`/heavy-equipments`, bodyFormData);
+  const response = await axiosAuth.patch(
+    `/house-sample-and-labs/${id}`,
+    bodyFormData
+  );
   return response?.data;
 };
 
-export const useCreateStockpileMonitoring = ({
+export const useUpdateStockpileMonitoring = ({
   onError,
   onSuccess,
 }: {
-  onSuccess?: (success: ICreateStockpileResponse) => void;
+  onSuccess?: (success: IUpdateStockpileResponse) => void;
   onError?: (error: AxiosRestErrorResponse<IMutationStockpile>) => unknown;
 }) => {
   return useMutation<
-    ICreateStockpileResponse,
+    IUpdateStockpileResponse,
     AxiosRestErrorResponse<IMutationStockpile>,
     IPropsRequest
   >({
     mutationFn: async (value) => {
-      const data = await CreateStockpileMonitoring(value);
+      const data = await UpdateStockpileMonitoring(value);
       return data;
     },
     onError: onError,

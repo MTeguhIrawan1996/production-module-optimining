@@ -127,7 +127,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
             ) => {
               const { addButton, deleteButton } = actionGroup || {};
               return (
-                <Paper p={24} key={i} withBorder w="100%">
+                <Paper p={24} key={`${i}${group}`} withBorder w="100%">
                   <Stack spacing={8}>
                     {enableGroupLabel || actionGroup ? (
                       <SimpleGrid cols={2} mb="sm">
@@ -169,7 +169,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                       {formControllers.map(
                         ({ colSpan = 12, name, ...rest }, index) => {
                           return (
-                            <Grid.Col span={colSpan} key={index}>
+                            <Grid.Col span={colSpan} key={`${index}${name}`}>
                               <FormController name={name} {...rest} />
                             </Grid.Col>
                           );

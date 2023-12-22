@@ -62,6 +62,12 @@ export type CommonProps = {
   colSpan?: number;
 };
 
+export type IElementRhf = {
+  elementId: string;
+  name: string;
+  value: string;
+};
+
 export type IDate = Date | undefined | string | null;
 
 // Controller Field
@@ -120,6 +126,10 @@ export type ControllerGroup = {
   enableGroupLabel?: boolean;
   groupCheckbox?: CheckboxProps;
   actionGroup?: {
+    addButton?: IPrimaryButtonProps;
+    deleteButton?: IPrimaryButtonProps;
+  };
+  actionOuterGroup?: {
     addButton?: IPrimaryButtonProps;
     deleteButton?: IPrimaryButtonProps;
   };

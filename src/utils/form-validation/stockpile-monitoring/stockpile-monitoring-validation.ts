@@ -4,8 +4,10 @@ import {
   zDateOptionalValidation,
   zDateValidation,
   zImageArrayOptional,
+  zOptionalNumberOfString,
   zOptionalString,
   zRequiredSelectInput,
+  zRequiredString,
 } from '@/utils/form-validation/global';
 
 export const stockpileMonitoringMutationValidation: z.ZodType<any> = z.object({
@@ -46,8 +48,9 @@ export const stockpileMonitoringMutationValidation: z.ZodType<any> = z.object({
       sampleNumber: zOptionalString,
       elements: z
         .object({
-          elementId: zOptionalString.nullable(),
-          value: zOptionalString,
+          elementId: zRequiredString,
+          name: zRequiredString,
+          value: zOptionalNumberOfString,
         })
         .array(),
     })

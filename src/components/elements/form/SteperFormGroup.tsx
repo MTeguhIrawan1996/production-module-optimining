@@ -42,7 +42,6 @@ interface ISteperFormGroupProps {
   methods: UseFormReturn<any>;
   submitForm: SubmitHandler<any>;
   steps: ISteps[];
-  outerButton?: Partial<IPrimaryButtonProps>;
   modalConfirmation?: IModalConfirmationProps;
   active: number;
   setActive: (value: React.SetStateAction<number>) => void;
@@ -51,18 +50,12 @@ interface ISteperFormGroupProps {
 const SteperFormGroup: React.FC<ISteperFormGroupProps> = ({
   methods,
   submitForm,
-  outerButton,
   modalConfirmation,
   steps,
   active,
   setActive,
 }) => {
   const { t } = useTranslation('default');
-
-  const {
-    label: outerButtonLabel = t('commonTypography.create'),
-    ...restOuterButtonLabel
-  } = outerButton || {};
 
   return (
     <FormProvider {...methods}>
@@ -93,13 +86,6 @@ const SteperFormGroup: React.FC<ISteperFormGroupProps> = ({
                   pb={32}
                   px={32}
                 >
-                  {outerButton ? (
-                    <PrimaryButton
-                      label={outerButtonLabel}
-                      leftIcon={<IconPlus size="20px" />}
-                      {...restOuterButtonLabel}
-                    />
-                  ) : null}
                   {val.fields.map(
                     (
                       {
@@ -108,77 +94,115 @@ const SteperFormGroup: React.FC<ISteperFormGroupProps> = ({
                         group,
                         enableGroupLabel,
                         actionGroup,
+                        actionOuterGroup,
                       },
-                      i
+                      key
                     ) => {
                       const { addButton, deleteButton } = actionGroup || {};
+                      const {
+                        addButton: addButtonOuter,
+                        deleteButton: deleteButtonOuter,
+                      } = actionOuterGroup || {};
                       return (
-                        <Paper p={24} key={i} withBorder w="100%">
-                          <Stack spacing={8}>
-                            {enableGroupLabel || actionGroup ? (
-                              <SimpleGrid cols={2} mb="sm">
-                                {enableGroupLabel && (
-                                  <Text
-                                    component="span"
-                                    fw={500}
-                                    fz={16}
-                                    sx={{ alignSelf: 'center' }}
-                                  >
-                                    {group}
-                                  </Text>
+                        <Flex
+                          key={`${key}${group}`}
+                          gap={32}
+                          direction="column"
+                          align="flex-end"
+                          w="100%"
+                        >
+                          {addButtonOuter || deleteButtonOuter ? (
+                            <Group spacing="xs" position="right">
+                              {addButtonOuter ? (
+                                <PrimaryButton
+                                  leftIcon={<IconPlus size="20px" />}
+                                  {...addButtonOuter}
+                                />
+                              ) : null}
+                              {deleteButtonOuter ? (
+                                <PrimaryButton
+                                  color="red.5"
+                                  variant="light"
+                                  styles={(theme) => ({
+                                    root: {
+                                      border: `1px solid ${theme.colors.red[3]}`,
+                                    },
+                                  })}
+                                  {...deleteButtonOuter}
+                                />
+                              ) : null}
+                            </Group>
+                          ) : null}
+                          <Paper p={24} withBorder w="100%">
+                            <Stack spacing={8}>
+                              {enableGroupLabel || actionGroup ? (
+                                <SimpleGrid cols={2} mb="sm">
+                                  {enableGroupLabel && (
+                                    <Text
+                                      component="span"
+                                      fw={500}
+                                      fz={16}
+                                      sx={{ alignSelf: 'center' }}
+                                    >
+                                      {group}
+                                    </Text>
+                                  )}
+                                  {actionGroup ? (
+                                    <Group spacing="xs" position="right">
+                                      {addButton ? (
+                                        <PrimaryButton
+                                          leftIcon={<IconPlus size="20px" />}
+                                          {...addButton}
+                                        />
+                                      ) : null}
+                                      {deleteButton ? (
+                                        <PrimaryButton
+                                          color="red.5"
+                                          variant="light"
+                                          styles={(theme) => ({
+                                            root: {
+                                              border: `1px solid ${theme.colors.red[3]}`,
+                                            },
+                                          })}
+                                          {...deleteButton}
+                                        />
+                                      ) : null}
+                                    </Group>
+                                  ) : null}
+                                </SimpleGrid>
+                              ) : null}
+                              <Grid gutter="md">
+                                {formControllers.map(
+                                  ({ colSpan = 12, name, ...rest }, index) => {
+                                    return (
+                                      <Grid.Col
+                                        span={colSpan}
+                                        key={`${index}${name}`}
+                                      >
+                                        <FormController name={name} {...rest} />
+                                      </Grid.Col>
+                                    );
+                                  }
                                 )}
-                                {actionGroup ? (
-                                  <Group spacing="xs" position="right">
-                                    {addButton ? (
-                                      <PrimaryButton
-                                        leftIcon={<IconPlus size="20px" />}
-                                        {...addButton}
-                                      />
-                                    ) : null}
-                                    {deleteButton ? (
-                                      <PrimaryButton
-                                        color="red.5"
-                                        variant="light"
-                                        styles={(theme) => ({
-                                          root: {
-                                            border: `1px solid ${theme.colors.red[3]}`,
-                                          },
-                                        })}
-                                        {...deleteButton}
-                                      />
-                                    ) : null}
-                                  </Group>
-                                ) : null}
-                              </SimpleGrid>
-                            ) : null}
-                            <Grid gutter="md">
-                              {formControllers.map(
-                                ({ colSpan = 12, name, ...rest }, index) => {
-                                  return (
-                                    <Grid.Col span={colSpan} key={index}>
-                                      <FormController name={name} {...rest} />
-                                    </Grid.Col>
-                                  );
-                                }
+                              </Grid>
+                              {groupCheckbox && (
+                                <Checkbox
+                                  styles={(theme) => ({
+                                    label: {
+                                      paddingLeft: theme.spacing.xs,
+                                    },
+                                  })}
+                                  size="xs"
+                                  fz={14}
+                                  fw={400}
+                                  radius={2}
+                                  mt={22}
+                                  {...groupCheckbox}
+                                />
                               )}
-                            </Grid>
-                            {groupCheckbox && (
-                              <Checkbox
-                                styles={(theme) => ({
-                                  label: {
-                                    paddingLeft: theme.spacing.xs,
-                                  },
-                                })}
-                                size="xs"
-                                fz={14}
-                                fw={400}
-                                radius={2}
-                                mt={22}
-                                {...groupCheckbox}
-                              />
-                            )}
-                          </Stack>
-                        </Paper>
+                            </Stack>
+                          </Paper>
+                        </Flex>
                       );
                     }
                   )}
