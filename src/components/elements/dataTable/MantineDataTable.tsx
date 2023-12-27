@@ -93,6 +93,8 @@ export default function MantineDataTable<T>({
             ? minHeight
             : fetching
             ? 280
+            : minHeight !== 520
+            ? minHeight
             : 140
         }
         defaultColumnProps={{

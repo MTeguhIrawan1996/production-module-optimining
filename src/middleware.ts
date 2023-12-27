@@ -96,7 +96,7 @@ export async function middleware(request: NextRequest) {
     },
     {
       path: '/input-data/quality-control-management/stockpile-monitoring',
-      allowedPermissions: ['create-monitoring-stockpile'],
+      allowedPermissions: ['update-monitoring-stockpile'],
     },
     {
       path: '/input-data/quality-control-management/sample-house-lab',

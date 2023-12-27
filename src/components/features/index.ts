@@ -38,6 +38,7 @@ import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityCon
 import ReadSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/read/common';
 import UpdateSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/update/common';
 import StockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/common';
+import ReadStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/read/common';
 import UpdateStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/update/common';
 import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
 import CreateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/create/common';
@@ -195,6 +196,7 @@ export {
   ReadSampleHouseLabPage,
   ReadShiftMasterPage,
   ReadStockpileMasterPage,
+  ReadStockpileMonitoringPage,
   ReadWorkingHoursPlanMasterPage,
   SampleHouseLabPage,
   ShiftMasterPage,

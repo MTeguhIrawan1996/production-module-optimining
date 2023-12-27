@@ -73,7 +73,25 @@ export const READ_ONE_STOCKPILE_MONITORING = gql`
   }
 `;
 
-interface IReadOneStockpileMonitoring {
+export type ISampleReadOneStockpileMonitoring = {
+  id: string;
+  date: string | null;
+  isCreatedAfterDetermine: boolean;
+  sampleNumber: string | null;
+  sampleType: {
+    id: string;
+    name: string | null;
+  };
+  elements: {
+    element: {
+      id: string;
+      name: string | null;
+    };
+    value: number | null;
+  }[];
+};
+
+export interface IReadOneStockpileMonitoring {
   id: string;
   dome: IReadOneStockpileDomeMaster | null;
   material: {
@@ -106,23 +124,7 @@ interface IReadOneStockpileMonitoring {
     | null;
   desc: string | null;
   photo: Omit<IFile, 'mime' | 'path'> | null;
-  samples: {
-    id: string;
-    date: string | null;
-    isCreatedAfterDetermine: boolean;
-    sampleNumber: string | null;
-    sampleType: {
-      id: string;
-      name: string | null;
-    };
-    elements: {
-      element: {
-        id: string;
-        name: string | null;
-      };
-      value: number | null;
-    }[];
-  }[];
+  samples: ISampleReadOneStockpileMonitoring[];
   status: IStatus | null;
   statusMessage: string | null;
   createdAt: string | null;
