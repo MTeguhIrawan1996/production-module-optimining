@@ -262,10 +262,10 @@ const SteperFormGroup: React.FC<ISteperFormGroupProps> = ({
               </Stepper.Step>
             );
           })}
-          {modalConfirmation ? (
-            <ModalConfirmation {...modalConfirmation} />
-          ) : null}
         </Stepper>
+        {modalConfirmation ? (
+          <ModalConfirmation {...modalConfirmation} />
+        ) : null}
       </form>
     </FormProvider>
   );

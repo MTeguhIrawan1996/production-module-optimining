@@ -46,14 +46,14 @@ const UpdateSampleHousePlan = async ({
           );
           bodyFormData.append(
             `gradeControlElements[${index}][value]`,
-            value.value
+            `${value.value}`
           );
         });
       }
       if (name === 'elements') {
         (value as IElementRhf[]).forEach((value, index: number) => {
           bodyFormData.append(`elements[${index}][elementId]`, value.elementId);
-          bodyFormData.append(`elements[${index}][value]`, value.value);
+          bodyFormData.append(`elements[${index}][value]`, `${value.value}`);
         });
       }
       if (!exclude.includes(name) && typeof value === 'string') {

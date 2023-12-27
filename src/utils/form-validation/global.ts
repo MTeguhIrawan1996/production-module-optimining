@@ -45,6 +45,13 @@ export const zPasswordValidation = z
     message: 'Format kata sandi salah',
   });
 
+export const zTimeValidation = z
+  .string()
+  .regex(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/, {
+    message: 'Format salah',
+  })
+  .or(z.literal(''));
+
 export const zEmailValidation = z
   .string()
   .min(1, { message: 'Kolom tidak boleh kosong' })
