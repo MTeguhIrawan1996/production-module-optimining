@@ -25,6 +25,7 @@ type reopens = {
 type samples = {
   date?: Date | null;
   sampleTypeId: string | null;
+  isCreatedAfterDetermine: boolean;
   sampleNumber: string;
   elements: IElementRhf[];
 };

@@ -56,6 +56,7 @@ export const stockpileMonitoringMutationValidation: z.ZodType<IMutationStockpile
         date: zDateOptionalValidation,
         sampleTypeId: zOptionalString.nullable(),
         sampleNumber: zOptionalString,
+        isCreatedAfterDetermine: z.boolean(),
         elements: z
           .object({
             elementId: zRequiredString,

@@ -101,6 +101,7 @@ const UpdateStockpileMonitoringBook = () => {
           date: undefined,
           sampleTypeId: '',
           sampleNumber: '',
+          isCreatedAfterDetermine: false,
           elements: [
             {
               elementId: '',
@@ -156,14 +157,6 @@ const UpdateStockpileMonitoringBook = () => {
           value: '',
         };
       });
-      replace([
-        {
-          date: undefined,
-          sampleTypeId: '',
-          sampleNumber: '',
-          elements: other,
-        },
-      ]);
       setOtherElements(other);
     },
   });
@@ -176,6 +169,7 @@ const UpdateStockpileMonitoringBook = () => {
       methods.setValue('handbookId', data.dome.handBookId);
     },
   });
+
   const { monitoringStockpile, monitoringStockpileLoading } =
     useReadOneStockpileMonitoring({
       variables: {
@@ -183,29 +177,23 @@ const UpdateStockpileMonitoringBook = () => {
       },
       skip: !router.isReady,
       onCompleted: ({ monitoringStockpile }) => {
-        sampleFields.map((o, index: number) => {
-          o.elements.map((v, k) => {
-            const element = monitoringStockpile.currentSample.elements.find(
-              (val) => val.element.id === v.elementId
-            );
-            methods.setValue(
-              `samples.${index}.elements.${k}.value`,
-              element?.value ?? ''
-            );
+        const samples = monitoringStockpile.samples.map((val) => {
+          const elemntsValue = val.elements.map((o) => {
+            return {
+              elementId: o.element.id,
+              name: o.element.name ?? '',
+              value: o.value ?? '',
+            };
           });
-          const date = stringToDate(
-            monitoringStockpile.currentSample.date ?? null
-          );
-          methods.setValue(`samples.${index}.date`, date);
-          methods.setValue(
-            `samples.${index}.sampleTypeId`,
-            monitoringStockpile.currentSample.sampleType.id ?? ''
-          );
-          methods.setValue(
-            `samples.${index}.sampleNumber`,
-            monitoringStockpile.currentSample.sampleNumber ?? ''
-          );
+          return {
+            date: stringToDate(val.date ?? null),
+            sampleTypeId: val.sampleType.id ?? '',
+            sampleNumber: val.sampleNumber ?? '',
+            isCreatedAfterDetermine: val.isCreatedAfterDetermine ? true : false,
+            elements: elemntsValue,
+          };
         });
+        replace(samples);
         const surveys = monitoringStockpile.tonSurveys?.map((val) => {
           const date = stringToDate(val.date ?? null);
           return {
@@ -495,6 +483,91 @@ const UpdateStockpileMonitoringBook = () => {
   );
   const reopenGroupItem = reopenFields.map(reopenGroup);
 
+  const sampleGroup = React.useCallback(
+    (_, index: number) => {
+      const elementItem = elementsData?.map((val, i) => {
+        const value = methods.watch(`samples.${index}.elements.${i}.value`);
+        const elementInput = globalNumberInput({
+          name: `samples.${index}.elements.${i}.value`,
+          label: `${t('commonTypography.rate')} ${val.name}`,
+          colSpan: 6,
+          withAsterisk: false,
+          labelWithTranslate: false,
+          value: value !== '' ? Number(value) : '',
+          onChange: (value) => {
+            methods.setValue(`samples.${index}.elements.${i}.value`, value);
+          },
+        });
+        return elementInput;
+      });
+      const date = globalDate({
+        name: `samples.${index}.date`,
+        label: 'sampleDate2',
+        withAsterisk: false,
+        clearable: true,
+        colSpan: 12,
+        value: methods.watch(`samples.${index}.date`),
+      });
+      const sampleTypesItem = sampleTypeSelect({
+        colSpan: 6,
+        withAsterisk: false,
+        label: 'sampleType2',
+        name: `samples.${index}.sampleTypeId`,
+        value: methods.watch(`samples.${index}.sampleTypeId`),
+      });
+      const sampleNumber = globalText({
+        name: `samples.${index}.sampleNumber`,
+        label: 'sampleNumber',
+        colSpan: 6,
+        withAsterisk: false,
+        value: methods.watch(`samples.${index}.sampleNumber`),
+      });
+      const isDelete = methods.watch(
+        `samples.${index}.isCreatedAfterDetermine`
+      );
+      const group: ControllerGroup = {
+        group: t('commonTypography.sampleInformation'),
+        enableGroupLabel: true,
+        actionGroup: {
+          deleteButton: {
+            label: t('commonTypography.delete'),
+            onClick: () => {
+              sampleFields.length > 1 ? remove(index) : null;
+            },
+            disabled: isDelete ? false : true,
+          },
+        },
+        actionOuterGroup: {
+          addButton:
+            index === 0
+              ? {
+                  label: t('commonTypography.createSample'),
+                  onClick: () =>
+                    append({
+                      date: undefined,
+                      sampleTypeId: '',
+                      sampleNumber: '',
+                      isCreatedAfterDetermine: true,
+                      elements: otherElements,
+                    }),
+                }
+              : undefined,
+        },
+        formControllers: [
+          date,
+          sampleTypesItem,
+          sampleNumber,
+          ...(elementItem ?? []),
+        ],
+      };
+
+      return group;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [reopenFields]
+  );
+  const sampleGroupItem = sampleFields.map(sampleGroup);
+
   const fieldItemStepOne = React.useMemo(() => {
     const stockpileNameItem = stockpileNameSelect({
       colSpan: 6,
@@ -675,83 +748,6 @@ const UpdateStockpileMonitoringBook = () => {
     serverPhoto,
   ]);
 
-  const fieldItemStepTwo = React.useMemo(
-    () => {
-      const fieldArray = sampleFields.map((_, index: number) => {
-        const elementItem = elementsData?.map((val, i) => {
-          const elementInput = globalNumberInput({
-            name: `samples.${index}.elements.${i}.value`,
-            label: `${t('commonTypography.rate')} ${val.name}`,
-            colSpan: 6,
-            withAsterisk: false,
-            labelWithTranslate: false,
-            onChange: (value) => {
-              methods.setValue(`samples.${index}.elements.${i}.value`, value);
-            },
-          });
-
-          return elementInput;
-        });
-        const date = globalDate({
-          name: `samples.${index}.date`,
-          label: 'sampleDate2',
-          withAsterisk: false,
-          clearable: true,
-          colSpan: 12,
-        });
-        const sampleTypesItem = sampleTypeSelect({
-          colSpan: 6,
-          withAsterisk: false,
-          label: 'sampleType2',
-          name: `samples.${index}.sampleTypeId`,
-        });
-        const sampleNumber = globalText({
-          name: `samples.${index}.sampleNumber`,
-          label: 'sampleNumber',
-          colSpan: 6,
-          withAsterisk: false,
-        });
-
-        const field: ControllerGroup = {
-          group: t('commonTypography.sampleInformation'),
-          enableGroupLabel: true,
-          actionGroup: {
-            deleteButton: {
-              label: t('commonTypography.delete'),
-              onClick: () => {
-                sampleFields.length > 1 ? remove(index) : null;
-              },
-            },
-          },
-          actionOuterGroup: {
-            addButton:
-              index === 0
-                ? {
-                    label: t('commonTypography.createSample'),
-                    onClick: () =>
-                      append({
-                        date: undefined,
-                        sampleTypeId: '',
-                        sampleNumber: '',
-                        elements: otherElements,
-                      }),
-                  }
-                : undefined,
-          },
-          formControllers: [
-            date,
-            sampleTypesItem,
-            sampleNumber,
-            ...(elementItem ?? []),
-          ],
-        };
-        return field;
-      });
-      return fieldArray;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [sampleFields, elementsData, otherElements]
-  );
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
@@ -826,7 +822,7 @@ const UpdateStockpileMonitoringBook = () => {
           },
           {
             name: 'Input Data Sample',
-            fields: fieldItemStepTwo,
+            fields: sampleGroupItem,
             prevButton: {
               onClick: prevStep,
             },

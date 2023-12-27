@@ -2,7 +2,7 @@ import { ApolloError, gql, useQuery } from '@apollo/client';
 
 import { IReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 
-import { IFile } from '@/types/global';
+import { IFile, IStatus } from '@/types/global';
 
 export const READ_ONE_STOCKPILE_MONITORING = gql`
   query ReadOneStockpileMonitoring($id: String!) {
@@ -24,6 +24,7 @@ export const READ_ONE_STOCKPILE_MONITORING = gql`
       openAt
       closeAt
       tonSurveys {
+        id
         date
         ton
       }
@@ -45,10 +46,11 @@ export const READ_ONE_STOCKPILE_MONITORING = gql`
         url
         fileName
       }
-      currentSample {
+      samples {
         id
         date
         sampleNumber
+        isCreatedAfterDetermine
         sampleType {
           id
           name
@@ -61,6 +63,12 @@ export const READ_ONE_STOCKPILE_MONITORING = gql`
           value
         }
       }
+      status {
+        id
+        name
+      }
+      statusMessage
+      createdAt
     }
   }
 `;
@@ -76,6 +84,7 @@ interface IReadOneStockpileMonitoring {
   closeAt: string | null;
   tonSurveys:
     | {
+        id: string;
         date: string | null;
         ton: number | null;
       }[]
@@ -97,9 +106,10 @@ interface IReadOneStockpileMonitoring {
     | null;
   desc: string | null;
   photo: Omit<IFile, 'mime' | 'path'> | null;
-  currentSample: {
+  samples: {
     id: string;
     date: string | null;
+    isCreatedAfterDetermine: boolean;
     sampleNumber: string | null;
     sampleType: {
       id: string;
@@ -112,7 +122,10 @@ interface IReadOneStockpileMonitoring {
       };
       value: number | null;
     }[];
-  };
+  }[];
+  status: IStatus | null;
+  statusMessage: string | null;
+  createdAt: string | null;
 }
 
 interface IReadOneStockpileMonitoringResponse {
