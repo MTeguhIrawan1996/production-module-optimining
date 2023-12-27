@@ -625,7 +625,11 @@
     "formStockpileMonitoring": "$t(commonTypography.form) $t(commonTypography.stockpileMonitoring)",
     "formUpdateStockpileMonitoring": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.stockpileMonitoring)",
     "successCreateMessage": "$t(commonTypography.stockpileMonitoring) berhasil dibuat",
-    "successUpdateMessage": "$t(commonTypography.stockpileMonitoring) berhasil diubah"
+    "successUpdateMessage": "$t(commonTypography.stockpileMonitoring) berhasil diubah",
+    "successIsValidateMessage": "$t(stockpileMonitoring.stockpileMonitoringTitle) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(stockpileMonitoring.stockpileMonitoringTitle) Tidak Valid",
+    "successIsDeterminedMessage": "$t(stockpileMonitoring.stockpileMonitoringTitle) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(stockpileMonitoring.stockpileMonitoringTitle) berhasil $t(commonTypography.reject)"
   },
   "sampleHouseLab": {
     "sampleHouseLabTitle": "Data $t(commonTypography.sampleHouseLab)",

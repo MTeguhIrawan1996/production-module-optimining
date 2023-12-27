@@ -279,7 +279,7 @@ const ReadRitageTopsoilBook = () => {
               description={topsoilRitage?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           {topsoilRitage?.status?.id ===
@@ -288,7 +288,7 @@ const ReadRitageTopsoilBook = () => {
               description={topsoilRitage?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           <Stack spacing="sm" mt="md">

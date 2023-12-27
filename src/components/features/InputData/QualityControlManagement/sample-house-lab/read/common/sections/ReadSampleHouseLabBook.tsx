@@ -336,7 +336,7 @@ const ReadSampleHouseLabBook = () => {
               description={houseSampleAndLab?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           {houseSampleAndLab?.status?.id ===
@@ -345,7 +345,7 @@ const ReadSampleHouseLabBook = () => {
               description={houseSampleAndLab?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           {!houseSampleAndLabLoading && houseSampleAndLab ? (

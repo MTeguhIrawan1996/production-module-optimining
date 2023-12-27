@@ -295,7 +295,7 @@ const ReadRitageOreBook = () => {
               description={oreRitage?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           {oreRitage?.status?.id === '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
@@ -303,7 +303,7 @@ const ReadRitageOreBook = () => {
               description={oreRitage?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           <Stack spacing="sm" mt="md">

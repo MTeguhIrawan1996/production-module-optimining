@@ -11,8 +11,8 @@ import { DashboardCard, GlobalTabs } from '@/components/elements';
 import DetailSampleData from '@/components/features/InputData/QualityControlManagement/stockpile/read/common/elements/DetailSampleData';
 import DetailStockpileData from '@/components/features/InputData/QualityControlManagement/stockpile/read/common/elements/DetailStockpileData';
 
-import { useUpdateIsDeterminedOreRitage } from '@/services/graphql/mutation/ore-ritage/useIsDeterminedOreRitage';
-import { useUpdateIsValidateOreRitage } from '@/services/graphql/mutation/ore-ritage/useIsValidateOreRitage';
+import { useUpdateIsDeterminedStockpileMonitoring } from '@/services/graphql/mutation/stockpile-monitoring/useIsDeterminedStockpileMonitoring';
+import { useUpdateIsValidateStockpileMonitoring } from '@/services/graphql/mutation/stockpile-monitoring/useIsValidateStockpileMonitoring';
 import { useReadOneStockpileMonitoring } from '@/services/graphql/query/stockpile-monitoring/useReadOneStockpileMonitoring';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 
@@ -40,56 +40,61 @@ const ReadStockpileMonitoringBook = () => {
       skip: !router.isReady,
     });
 
-  const [executeUpdateStatus, { loading }] = useUpdateIsValidateOreRitage({
-    onCompleted: (data) => {
-      const message = {
-        '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
-          'ritageOre.successIsValidateMessage'
-        ),
-        'af06163a-2ba3-45ee-a724-ab3af0c97cc9': t(
-          'ritageOre.successIsNotValidateMessage'
-        ),
-        default: t('commonTypography.dataRitageOre'),
-      };
-      notifications.show({
-        color: 'green',
-        title: 'Selamat',
-        message: message[data.validateOreRitage.status.id],
-        icon: <IconCheck />,
-      });
-      router.push('/input-data/production/data-ritage?tabs=ore');
-    },
-    onError: (error) => {
-      if (error.graphQLErrors) {
-        notifications.show({
-          color: 'red',
-          title: 'Gagal',
-          message: error.message,
-          icon: <IconX />,
-        });
-      }
-    },
-  });
-
-  const [executeUpdateStatusDetermiend, { loading: determinedLoading }] =
-    useUpdateIsDeterminedOreRitage({
+  const [executeUpdateStatus, { loading }] =
+    useUpdateIsValidateStockpileMonitoring({
       onCompleted: (data) => {
         const message = {
-          'f5f644d9-8810-44f7-8d42-36b5222b97d1': t(
-            'ritageOre.successIsDeterminedMessage'
+          '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
+            'stockpileMonitoring.successIsValidateMessage'
           ),
-          '7848a063-ae40-4a80-af86-dfc532cbb688': t(
-            'ritageOre.successIsRejectMessage'
+          'af06163a-2ba3-45ee-a724-ab3af0c97cc9': t(
+            'stockpileMonitoring.successIsNotValidateMessage'
           ),
-          default: t('commonTypography.dataRitageOre'),
+          default: t('commonTypography.stockpileData'),
         };
         notifications.show({
           color: 'green',
           title: 'Selamat',
-          message: message[data.determineOreRitage.status.id],
+          message: message[data.validateMonitoringStockpile.status.id],
           icon: <IconCheck />,
         });
-        router.push('/input-data/production/data-ritage?tabs=ore');
+        router.push(
+          '/input-data/quality-control-management/stockpile-monitoring'
+        );
+      },
+      onError: (error) => {
+        if (error.graphQLErrors) {
+          notifications.show({
+            color: 'red',
+            title: 'Gagal',
+            message: error.message,
+            icon: <IconX />,
+          });
+        }
+      },
+    });
+
+  const [executeUpdateStatusDetermiend, { loading: determinedLoading }] =
+    useUpdateIsDeterminedStockpileMonitoring({
+      onCompleted: (data) => {
+        const message = {
+          'f5f644d9-8810-44f7-8d42-36b5222b97d1': t(
+            'stockpileMonitoring.successIsDeterminedMessage'
+          ),
+          '7848a063-ae40-4a80-af86-dfc532cbb688': t(
+            'stockpileMonitoring.successIsRejectMessage'
+          ),
+          default: t('commonTypography.stockpileData'),
+        };
+        notifications.show({
+          color: 'green',
+          title: 'Selamat',
+          message: message[data.determineMonitoringStockpile.status.id],
+          icon: <IconCheck />,
+        });
+        router.push(
+          '/input-data/quality-control-management/stockpile-monitoring'
+        );
       },
       onError: (error) => {
         if (error.graphQLErrors) {

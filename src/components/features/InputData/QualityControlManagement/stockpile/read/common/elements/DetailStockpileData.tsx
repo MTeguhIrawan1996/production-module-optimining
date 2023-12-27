@@ -43,7 +43,7 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
           description={monitoringStockpile?.statusMessage ?? ''}
           title={t('commonTypography.invalidData')}
           color="red"
-          mt="md"
+          mt="xs"
         />
       ) : null}
       {monitoringStockpile?.status?.id ===
@@ -52,7 +52,7 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
           description={monitoringStockpile?.statusMessage ?? ''}
           title={t('commonTypography.rejectedData')}
           color="red"
-          mt="md"
+          mt="xs"
         />
       ) : null}
       <Stack spacing="sm" mt="md">

@@ -279,7 +279,7 @@ const ReadRitageObBook = () => {
               description={overburdenRitage?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           {overburdenRitage?.status?.id ===
@@ -288,7 +288,7 @@ const ReadRitageObBook = () => {
               description={overburdenRitage?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           <Stack spacing="sm" mt="md">
