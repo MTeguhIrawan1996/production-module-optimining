@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -27,6 +28,7 @@ import {
   domeNameSelect,
   stockpileNameSelect,
 } from '@/utils/constants/Field/stockpile-field';
+import { stockpileMonitoringMutationValidation } from '@/utils/form-validation/stockpile-monitoring/stockpile-monitoring-validation';
 import { formatDate2 } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
@@ -56,7 +58,7 @@ const UpdateStockpileMonitoringBook = () => {
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationStockpile>({
-    // resolver: zodResolver(stockpileMonitoringMutationValidation),
+    resolver: zodResolver(stockpileMonitoringMutationValidation),
     defaultValues: {
       stockpileId: '',
       domeId: '',
