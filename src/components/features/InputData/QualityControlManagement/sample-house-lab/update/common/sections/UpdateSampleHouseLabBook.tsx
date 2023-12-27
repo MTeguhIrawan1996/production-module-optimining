@@ -10,10 +10,7 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import { useReadOneSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadOneSampleHouseLab';
-import {
-  IElementRhf,
-  IMutationSampleHousePlanValues,
-} from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
+import { IMutationSampleHousePlanValues } from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
 import { useUpdateSampleHousePlan } from '@/services/restapi/sample-house-plan/useUpdateSampleHousePlan';
 import {
   employeeSelect,
@@ -36,7 +33,12 @@ import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
-import { ControllerGroup, ControllerProps, IFile } from '@/types/global';
+import {
+  ControllerGroup,
+  ControllerProps,
+  IElementRhf,
+  IFile,
+} from '@/types/global';
 
 const UpdateSampleHouseLabPage = () => {
   const { t } = useTranslation('default');

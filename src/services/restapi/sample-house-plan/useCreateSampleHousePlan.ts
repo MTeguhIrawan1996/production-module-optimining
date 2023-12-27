@@ -3,13 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import axiosClient from '@/services/restapi/axiosClient';
 
-import { AxiosRestErrorResponse } from '@/types/global';
-
-export type IElementRhf = {
-  elementId: string;
-  name: string;
-  value: string;
-};
+import { AxiosRestErrorResponse, IElementRhf } from '@/types/global';
 
 export interface IMutationSampleHousePlanValues {
   laboratoriumName: string;

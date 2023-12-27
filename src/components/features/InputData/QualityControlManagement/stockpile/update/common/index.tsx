@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import CreateStockpileBook from '@/components/features/InputData/QualityControlManagement/stockpile/create/common/sections/CreateStockpileBook';
+import UpdateStockpileMonitoringBook from '@/components/features/InputData/QualityControlManagement/stockpile/update/common/sections/UpdateStockpileMonitoringBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const CreateStockpilePage = () => {
+const UpdateStockpileMonitoringPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -23,7 +23,7 @@ const CreateStockpilePage = () => {
         path: '/input-data/quality-control-management/stockpile-monitoring',
       },
       {
-        label: t('stockpileMonitoring.createDome'),
+        label: t('stockpileMonitoring.updateStockpileMonitoring'),
         path: router.asPath,
       },
     ]);
@@ -34,14 +34,14 @@ const CreateStockpilePage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('stockpileMonitoring.formStockpileMonitoring'),
+          title: t('stockpileMonitoring.formUpdateStockpileMonitoring'),
           mb: 'xs',
         }}
       >
-        <CreateStockpileBook />
+        <UpdateStockpileMonitoringBook />
       </InnerWrapper>
     </RootWrapper>
   );
 };
 
-export default CreateStockpilePage;
+export default UpdateStockpileMonitoringPage;
