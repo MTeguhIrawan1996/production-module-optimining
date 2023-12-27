@@ -110,7 +110,6 @@ const CreateRitageBargingBook = () => {
     },
   });
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
   const { mutate, isLoading } = useCreateRitageBarging({
     onError: (err) => {
       if (err.response) {

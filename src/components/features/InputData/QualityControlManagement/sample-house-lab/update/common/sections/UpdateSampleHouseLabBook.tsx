@@ -487,6 +487,7 @@ const UpdateSampleHouseLabPage = () => {
       onDrop: (value) => {
         methods.setValue('photo', value);
         methods.clearErrors('photo');
+        setServerPhoto([]);
       },
       onReject: (files) =>
         handleRejectFile<IMutationSampleHousePlanValues>({
@@ -583,7 +584,6 @@ const UpdateSampleHouseLabPage = () => {
   ) => {
     methods.clearErrors('gradeControlElements');
     methods.clearErrors('elements');
-
     const values = objectToArrayValue(data);
     const dateValue = [
       'sampleDate',
@@ -594,7 +594,6 @@ const UpdateSampleHouseLabPage = () => {
       'analysisFinishDate',
     ];
     const numberValue = ['density'];
-
     const valuesWithDateString = values.map((val) => {
       if (dateValue.includes(val.name)) {
         const date = dateToString(val.value);

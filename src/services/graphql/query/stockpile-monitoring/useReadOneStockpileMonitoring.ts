@@ -2,7 +2,7 @@ import { ApolloError, gql, useQuery } from '@apollo/client';
 
 import { IReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 
-import { IFile, IReadOneRitage } from '@/types/global';
+import { IFile } from '@/types/global';
 
 export const READ_ONE_STOCKPILE_MONITORING = gql`
   query ReadOneStockpileMonitoring($id: String!) {
@@ -96,7 +96,7 @@ interface IReadOneStockpileMonitoring {
       }[]
     | null;
   desc: string | null;
-  photos: Omit<IFile, 'mime' | 'path'>[] | null;
+  photo: Omit<IFile, 'mime' | 'path'> | null;
   currentSample: {
     id: string;
     date: string | null;
@@ -116,7 +116,7 @@ interface IReadOneStockpileMonitoring {
 }
 
 interface IReadOneStockpileMonitoringResponse {
-  monitoringStockpile: IReadOneRitage<IReadOneStockpileMonitoring>;
+  monitoringStockpile: IReadOneStockpileMonitoring;
 }
 
 interface IReadOneStockpileMonitoringRequest {

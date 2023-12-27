@@ -2,8 +2,32 @@ import { FileWithPath } from '@mantine/dropzone';
 import { useMutation } from '@tanstack/react-query';
 
 import axiosClient from '@/services/restapi/axiosClient';
+import { dateToString } from '@/utils/helper/dateToString';
 
 import { AxiosRestErrorResponse, IElementRhf } from '@/types/global';
+
+type tonBySurveys = {
+  date?: Date | null;
+  ton: string | number;
+};
+type movings = {
+  startDate?: Date | null;
+  startTime: string;
+  finishDate?: Date | null;
+  finishTime: string;
+};
+type reopens = {
+  openDate?: Date | null;
+  openTime: string;
+  closeDate?: Date | null;
+  closeTime: string;
+};
+type samples = {
+  date?: Date | null;
+  sampleTypeId: string | null;
+  sampleNumber: string;
+  elements: IElementRhf[];
+};
 
 export interface IMutationStockpileStepOne {
   stockpileId: string | null;
@@ -14,38 +38,20 @@ export interface IMutationStockpileStepOne {
   openTime: string;
   closeDate?: Date | null;
   closeTime: string;
-  tonSurveys: {
-    date?: Date | null;
-    ton: string | number;
-  }[];
+  tonSurveys: tonBySurveys[];
   tonByRitage: string | number | null;
   bargingStartDate?: Date | null;
   bargingStartTime: string;
   bargingFinishDate?: Date | null;
   bargingFinishTime: string;
-  movings: {
-    startDate?: Date | null;
-    startTime: string;
-    finishDate?: Date | null;
-    finishTime: string;
-  }[];
-  reopens: {
-    openDate?: Date | null;
-    openTime: string;
-    closeDate?: Date | null;
-    closeTime: string;
-  }[];
+  movings: movings[];
+  reopens: reopens[];
   desc: string;
   photo: FileWithPath[] | null;
 }
 
 export interface IMutationStockpileStepTwo {
-  samples: {
-    date?: Date | null;
-    sampleTypeId: string | null;
-    sampleNumber: string;
-    elements: IElementRhf[];
-  }[];
+  samples: samples[];
 }
 
 export type IMutationStockpile = IMutationStockpileStepOne &
@@ -59,20 +65,95 @@ type IPropsRequest = {
   id: string;
   data: {
     name: keyof IMutationStockpile;
-    value: string | null | FileWithPath[] | IElementRhf[];
+    value:
+      | string
+      | null
+      | FileWithPath[]
+      | IElementRhf[]
+      | tonBySurveys[]
+      | movings[]
+      | samples[]
+      | reopens[];
   }[];
-  deletePhoto: boolean | null;
 };
 
 const UpdateStockpileMonitoring = async ({ data, id }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
-  const exclude = ['handbookId', 'stockpileId'];
+  const exclude = ['handbookId', 'stockpileId', 'tonByRitage'];
+  bodyFormData.append('id', id);
   data.forEach(({ name, value }) => {
     if (value) {
+      if (name === 'tonSurveys') {
+        (value as tonBySurveys[]).forEach((value, index: number) => {
+          const date = dateToString(value.date ?? null);
+          if (date) bodyFormData.append(`tonSurveys[${index}][date]`, date);
+          bodyFormData.append(`tonSurveys[${index}][ton]`, `${value.ton}`);
+        });
+      }
+      if (name === 'movings') {
+        (value as movings[]).forEach((value, index: number) => {
+          const startDate = dateToString(value.startDate ?? null);
+          const finishDate = dateToString(value.finishDate ?? null);
+          if (startDate)
+            bodyFormData.append(`movings[${index}][startDate]`, startDate);
+          bodyFormData.append(
+            `movings[${index}][startTime]`,
+            `${value.startTime}`
+          );
+          if (finishDate)
+            bodyFormData.append(`movings[${index}][finishDate]`, finishDate);
+          bodyFormData.append(
+            `movings[${index}][finishTime]`,
+            `${value.finishTime}`
+          );
+        });
+      }
+      if (name === 'reopens') {
+        (value as reopens[]).forEach((value, index: number) => {
+          const openDate = dateToString(value.openDate ?? null);
+          const closeDate = dateToString(value.closeDate ?? null);
+          if (openDate)
+            bodyFormData.append(`reopens[${index}][openDate]`, openDate);
+          bodyFormData.append(
+            `reopens[${index}][startTime]`,
+            `${value.openTime}`
+          );
+          if (closeDate)
+            bodyFormData.append(`reopens[${index}][closeDate]`, closeDate);
+          bodyFormData.append(
+            `reopens[${index}][closeDate]`,
+            `${value.closeTime}`
+          );
+        });
+      }
+      if (name === 'samples') {
+        (value as samples[]).forEach((value, index: number) => {
+          const date = dateToString(value.date ?? null);
+          if (date) bodyFormData.append(`samples[${index}][date]`, date);
+          bodyFormData.append(
+            `samples[${index}][sampleTypeId]`,
+            value.sampleTypeId ?? ''
+          );
+          bodyFormData.append(
+            `samples[${index}][sampleNumber]`,
+            value.sampleNumber ?? ''
+          );
+          value.elements.forEach((obj, i) => {
+            bodyFormData.append(
+              `samples[${index}][elements][${i}][elementId]`,
+              obj.elementId
+            );
+            bodyFormData.append(
+              `samples[${index}][elements][${i}][value]`,
+              `${obj.value ?? ''}`
+            );
+          });
+        });
+      }
       if (name === 'photo' && typeof value !== 'string') {
         (value as FileWithPath[]).forEach((image) => {
-          bodyFormData.append('photos', image);
+          bodyFormData.append('photo', image);
         });
       }
       if (!exclude.includes(name) && typeof value === 'string') {
@@ -84,7 +165,7 @@ const UpdateStockpileMonitoring = async ({ data, id }: IPropsRequest) => {
   });
 
   const response = await axiosAuth.patch(
-    `/house-sample-and-labs/${id}`,
+    `/monitoring-stockpiles/${id}`,
     bodyFormData
   );
   return response?.data;

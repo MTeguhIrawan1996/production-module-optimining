@@ -13,6 +13,7 @@ import { CommonProps } from '@/types/global';
 export type INumberInputProps = {
   control: 'number-input';
   name: string;
+  labelWithTranslate?: boolean;
 } & Omit<NumberInputProps, 'name'> &
   CommonProps;
 
@@ -20,6 +21,7 @@ const NumberInputRhf: React.FC<INumberInputProps> = ({
   name,
   control,
   label,
+  labelWithTranslate = true,
   precision = 2,
   ...rest
 }) => {
@@ -35,7 +37,13 @@ const NumberInputRhf: React.FC<INumberInputProps> = ({
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
       data-control={control}
-      label={label ? t(`components.field.${label}`) : null}
+      label={
+        labelWithTranslate
+          ? label
+            ? t(`components.field.${label}`)
+            : null
+          : label
+      }
       // parser={(value: string) => value.replace(/[^0-9]/g, '')}
       // step={0.05}
       precision={precision}
