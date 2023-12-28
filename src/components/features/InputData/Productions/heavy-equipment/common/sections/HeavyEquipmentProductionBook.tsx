@@ -1,7 +1,6 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { DataTableColumn } from 'mantine-datatable';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -14,59 +13,55 @@ import {
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
+  SelectionButtonModal,
 } from '@/components/elements';
 
-import { useDeleteSampleHouseLab } from '@/services/graphql/mutation/sample-house-lab/useDeleteSampleHouseLab';
-import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
-import {
-  IHouseSampleAndLabsData,
-  useReadAllSampleHouseLab,
-} from '@/services/graphql/query/sample-house-lab/useReadAllSampleHouseLab';
-import { formatDate } from '@/utils/helper/dateFormat';
+import { useDeleteHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useDeleteHeavyEquipmentProduction';
+import { useReadAllHeavyEquipmentProduction } from '@/services/graphql/query/heavy-equipment-production/useReadAllHeavyEquipmentProduction';
+import { globalDateNative } from '@/utils/constants/Field/native-field';
+import { formatDate, formatDate2 } from '@/utils/helper/dateFormat';
 
-import { IElementsData } from '@/types/global';
+import { InputControllerNativeProps } from '@/types/global';
 
-const SampleHouseLabBook = () => {
+const HeavyEquipmentProductionBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
-  const url = `/input-data/quality-control-management/sample-house-lab?page=1`;
+  const url = `/input-data/production/heavy-equipment?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
+  const [date, setDate] = React.useState('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+  const [isOpenSelectionModal, setIsOpenSelectionModal] =
+    React.useState<boolean>(false);
 
   /* #   /**=========== Query =========== */
-  const { elementsData } = useReadAllElementMaster({
-    variables: {
-      limit: null,
-    },
-  });
-
   const {
-    houseSampleAndLabsData,
-    houseSampleAndLabsDataLoading,
-    houseSampleAndLabsDataMeta,
-    refetchHouseSampleAndLabs,
-  } = useReadAllSampleHouseLab({
+    heavyEquipmentData,
+    heavyEquipmentDataLoading,
+    heavyEquipmentDataMeta,
+    refetchHeavyEquipmentData,
+  } = useReadAllHeavyEquipmentProduction({
     variables: {
       limit: 10,
       page: page,
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
+      date: date === '' ? null : date,
     },
   });
 
-  const [executeDelete, { loading }] = useDeleteSampleHouseLab({
+  const [executeDelete, { loading }] = useDeleteHeavyEquipmentProduction({
     onCompleted: () => {
-      refetchHouseSampleAndLabs();
+      refetchHeavyEquipmentData();
       setIsOpenDeleteConfirmation((prev) => !prev);
       router.push(url, undefined, { shallow: true });
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('sampleHouseLab.successDeleteMessage'),
+        message: t('heavyEquipmentProd.successDeleteMessage'),
         icon: <IconCheck />,
       });
     },
@@ -90,128 +85,79 @@ const SampleHouseLabBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    router.push({
-      href: router.asPath,
-      query: {
-        page: page,
-      },
-    });
+    const urlSet = `/input-data/production/heavy-equipment?page=${page}`;
+    router.push(urlSet, undefined, { shallow: true });
   };
 
-  const renderOtherColumnCallback = React.useCallback(
-    (element: IElementsData) => {
-      const column: DataTableColumn<IHouseSampleAndLabsData> = {
-        accessor: `${element.name}${t('commonTypography.estimationGC')}`,
-        title: `${element.name} ${t('commonTypography.estimationGC')}`,
-        render: ({ gradeControlElements }) => {
-          const value = gradeControlElements?.find(
-            (val) => val.element?.name === element.name
-          );
-          return value?.value ?? '-';
-        },
-      };
-      return column;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-  const renderOtherColumn = elementsData?.map(renderOtherColumnCallback);
+  const filter = React.useMemo(() => {
+    const dateItem = globalDateNative({
+      label: 'date',
+      placeholder: 'chooseDate',
+      radius: 'lg',
+      clearable: true,
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        const date = formatDate2(value, 'YYYY-MM-DD');
+        setDate(date ?? '');
+      },
+    });
 
-  const renderOtherPrcentageLabColumnCallback = React.useCallback(
-    (element: IElementsData) => {
-      const column: DataTableColumn<IHouseSampleAndLabsData> = {
-        accessor: `${element.name}${t('commonTypography.percentageLab')}`,
-        title: `${element.name} ${t('commonTypography.percentageLab')}`,
-        render: ({ elements }) => {
-          const value = elements?.find(
-            (val) => val.element?.name === element.name
-          );
-          return value?.value ?? '-';
-        },
-      };
-      return column;
-    },
+    const item: InputControllerNativeProps[] = [dateItem];
+    return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-  const renderOtherColumnPercentageLab = elementsData?.map(
-    renderOtherPrcentageLabColumnCallback
-  );
+  }, [url]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
     return (
       <MantineDataTable
         tableProps={{
-          records: houseSampleAndLabsData,
-          fetching: houseSampleAndLabsDataLoading,
+          records: heavyEquipmentData,
+          fetching: heavyEquipmentDataLoading,
           highlightOnHover: true,
           columns: [
             {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                houseSampleAndLabsData &&
-                houseSampleAndLabsData.indexOf(record) + 1,
+                heavyEquipmentData && heavyEquipmentData.indexOf(record) + 1,
               width: 60,
             },
             {
-              accessor: 'laboratoriumName',
-              title: t('commonTypography.laboratoriumName'),
+              accessor: 'date',
+              title: t('commonTypography.date'),
+              width: 160,
+              render: ({ date }) => formatDate(date),
             },
             {
-              accessor: 'sampleDate',
-              title: t('commonTypography.sampleDate'),
-              render: ({ sampleDate }) => formatDate(sampleDate),
+              accessor: 'heavyEquipmentType',
+              title: t('commonTypography.heavyEquipmentType'),
+              render: ({ companyHeavyEquipment }) =>
+                companyHeavyEquipment.heavyEquipment.reference.type.name,
+            },
+            {
+              accessor: 'heavyEquipmentCode',
+              title: t('commonTypography.heavyEquipmentCode'),
+              render: ({ companyHeavyEquipment }) =>
+                companyHeavyEquipment.hullNumber,
+            },
+            {
+              accessor: 'operator',
+              title: t('commonTypography.operator'),
+              width: 150,
+              render: ({ operator }) => operator.humanResource.name,
             },
             {
               accessor: 'shift',
               title: t('commonTypography.shift'),
-              width: 120,
               render: ({ shift }) => shift?.name,
             },
             {
-              accessor: 'sampleNumber',
-              title: t('commonTypography.sampleNumber'),
+              accessor: 'foreman',
+              title: t('commonTypography.foreman'),
+              width: 150,
+              render: ({ foreman }) => foreman.humanResource.name,
             },
-            {
-              accessor: 'sampleName',
-              title: t('commonTypography.sampleName'),
-            },
-            {
-              accessor: 'sampleType',
-              title: t('commonTypography.sampleType'),
-              render: ({ sampleType }) => sampleType?.name,
-            },
-            {
-              accessor: 'samplerName',
-              width: 160,
-              title: t('commonTypography.samplerName'),
-              render: ({ sampler }) => sampler?.humanResource?.name,
-            },
-            {
-              accessor: 'gcName',
-              title: t('commonTypography.gcName'),
-              render: ({ gradeControl }) =>
-                gradeControl?.humanResource?.name ?? '-',
-            },
-            {
-              accessor: 'location',
-              width: 160,
-              title: t('commonTypography.location'),
-              render: (value) => {
-                return value.locationName
-                  ? value.locationName ?? '-'
-                  : value.location?.name ?? '-';
-              },
-            },
-            {
-              accessor: 'sampleEnterLabAt',
-              title: t('commonTypography.sampleEnterLabAt'),
-              render: ({ sampleEnterLabAt }) => formatDate(sampleEnterLabAt),
-            },
-            ...(renderOtherColumn ?? []),
-            ...(renderOtherColumnPercentageLab ?? []),
             {
               accessor: 'status',
               title: t('commonTypography.status'),
@@ -235,7 +181,7 @@ const SampleHouseLabBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/input-data/quality-control-management/sample-house-lab/read/${id}`
+                          `/input-data/production/heavy-equipment/read/${id}`
                         );
                       },
                     }}
@@ -246,7 +192,7 @@ const SampleHouseLabBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/quality-control-management/sample-house-lab/update/${id}`
+                                `/input-data/production/heavy-equipment/update/${id}`
                               );
                             },
                           }
@@ -273,42 +219,36 @@ const SampleHouseLabBook = () => {
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
           actionButton: {
-            label: t('sampleHouseLab.createSample'),
+            label: t('heavyEquipmentProd.createHeavyEquipmentProd'),
             onClick: () =>
-              router.push(
-                '/input-data/quality-control-management/sample-house-lab/create'
-              ),
+              router.push('/input-data/production/heavy-equipment/create'),
           },
         }}
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: houseSampleAndLabsDataMeta?.totalAllData ?? 0,
-          totalData: houseSampleAndLabsDataMeta?.totalData ?? 0,
-          totalPage: houseSampleAndLabsDataMeta?.totalPage ?? 0,
+          totalAllData: heavyEquipmentDataMeta?.totalAllData ?? 0,
+          totalData: heavyEquipmentDataMeta?.totalData ?? 0,
+          totalPage: heavyEquipmentDataMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    houseSampleAndLabsData,
-    renderOtherColumn,
-    renderOtherColumnPercentageLab,
-    houseSampleAndLabsDataLoading,
-  ]);
+  }, [heavyEquipmentData, heavyEquipmentDataLoading]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
       addButton={{
-        label: t('sampleHouseLab.createSample'),
-        onClick: () =>
-          router.push(
-            '/input-data/quality-control-management/sample-house-lab/create'
-          ),
+        label: t('heavyEquipmentProd.createHeavyEquipmentProd'),
+        onClick: () => setIsOpenSelectionModal((prev) => !prev),
+      }}
+      filterDateWithSelect={{
+        colSpan: 3,
+        items: filter,
       }}
       searchBar={{
-        placeholder: t('sampleHouseLab.searchPlaceholder'),
+        placeholder: t('heavyEquipmentProd.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
@@ -340,8 +280,22 @@ const SampleHouseLabBook = () => {
         }}
         withDivider
       />
+      <SelectionButtonModal
+        isOpenSelectionModal={isOpenSelectionModal}
+        actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
+        firstButton={{
+          label: t('commonTypography.inputDataProductionHeavyEquipment'),
+          onClick: () =>
+            router.push('/input-data/production/heavy-equipment/create'),
+        }}
+        secondButton={{
+          label: t('commonTypography.uploadFile'),
+          onClick: () =>
+            router.push('/input-data/production/heavy-equipment/upload'),
+        }}
+      />
     </DashboardCard>
   );
 };
 
-export default SampleHouseLabBook;
+export default HeavyEquipmentProductionBook;

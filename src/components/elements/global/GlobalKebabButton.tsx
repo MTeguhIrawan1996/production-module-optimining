@@ -7,14 +7,20 @@ interface IGlobalKebabButtonProps {
   actionRead?: MenuItemProps & React.ComponentPropsWithoutRef<'button'>;
   actionDelete?: MenuItemProps & React.ComponentPropsWithoutRef<'button'>;
   actionUpdate?: MenuItemProps & React.ComponentPropsWithoutRef<'button'>;
+  actionOther?: {
+    label: string;
+  } & MenuItemProps &
+    React.ComponentPropsWithoutRef<'button'>;
 }
 
 const GlobalKebabButton: React.FC<IGlobalKebabButtonProps> = ({
   actionRead,
   actionDelete,
   actionUpdate,
+  actionOther,
 }) => {
   const { t } = useTranslation('default');
+  const { label, ...restActionOther } = actionOther || {};
   return (
     <Center>
       <Menu shadow="md" width={150} position="left">
@@ -32,6 +38,11 @@ const GlobalKebabButton: React.FC<IGlobalKebabButtonProps> = ({
         <Menu.Dropdown>
           {actionRead ? (
             <Menu.Item {...actionRead}>{t('commonTypography.read')}</Menu.Item>
+          ) : null}
+          {actionOther ? (
+            <Menu.Item {...restActionOther}>
+              {t(`commonTypography.${label}`)}
+            </Menu.Item>
           ) : null}
           {actionUpdate ? (
             <Menu.Item {...actionUpdate}>

@@ -166,6 +166,7 @@
     "disableIt": "Nonaktifkan",
     "reference": "Referensi",
     "heavyEquipment": "Alat Berat",
+    "heavyEquipmentData": "Data Alat Berat",
     "heavyEquipmentClass": "Kelas Alat Berat",
     "user": "Pengguna",
     "form": "Formulir",
@@ -298,6 +299,7 @@
     "totalRitage": "Jumlah Ritase",
     "operatorName": "Nama Operator",
     "inputDataRitage": "Input Data Ritase",
+    "inputDataProductionHeavyEquipment": "Input Data Produksi Alat Berat",
     "upload": "Unggah",
     "uploadFile": "Unggah File",
     "checkerInformation": "Informasi Checker",
@@ -337,7 +339,9 @@
     "reopenStartTime": "Jam Dibuka Kembali",
     "reopenCloseTime": "Jam Ditutup",
     "stockpileData": "Data Stockpile",
-    "sampleData": "Data Sampel"
+    "sampleData": "Data Sampel",
+    "operator": "Operator",
+    "foreman": "Mandor"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -365,7 +369,8 @@
     "block": "$t(commonTypography.block)",
     "stockpile": "$t(commonTypography.stockpile)",
     "production": "$t(commonTypography.production)",
-    "dataRitage": "$t(commonTypography.dataRitage)"
+    "dataRitage": "$t(commonTypography.dataRitage)",
+    "heavyEquipmentProduction": "$t(commonTypography.heavyEquipment)"
   },
   "auth": {
     "button": {
@@ -756,5 +761,23 @@
     "successIsNotValidateMessage": "Status $t(ritageTopsoil.ritageTopsoilTitle) Tidak Valid",
     "successIsDeterminedMessage": "$t(ritageTopsoil.ritageTopsoilTitle) berhasil ditetapkan",
     "successIsRejectMessage": "$t(ritageTopsoil.ritageTopsoilTitle) berhasil $t(commonTypography.reject)"
+  },
+  "heavyEquipmentProd": {
+    "heavyEquipmentProdTitle": "$t(commonTypography.heavyEquipmentData)",
+    "createHeavyEquipmentProd": "$t(commonTypography.create) $t(commonTypography.heavyEquipmentData)",
+    "uploadHeavyEquipmentProd": "$t(commonTypography.upload) $t(commonTypography.heavyEquipmentData)",
+    "readHeavyEquipmentProd": "$t(commonTypography.detail) $t(commonTypography.heavyEquipmentData)",
+    "updateHeavyEquipmentProd": "$t(commonTypography.edit) $t(commonTypography.heavyEquipmentData)",
+    "successDeleteMessage": "$t(commonTypography.heavyEquipmentData) berhasil dihapus",
+    "formHeavyEquipmentProd": "$t(commonTypography.form) $t(heavyEquipmentProd.heavyEquipmentProdTitle)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.heavyEquipmentType), $t(commonTypography.heavyEquipmentCode), $t(commonTypography.operator) dan $t(commonTypography.shift)",
+    "formUploadHeavyEquipmentProd": "$t(commonTypography.form) $t(commonTypography.upload) $t(heavyEquipmentProd.heavyEquipmentProdTitle)",
+    "formUpdateHeavyEquipmentProd": "$t(commonTypography.form) $t(commonTypography.edit) $t(heavyEquipmentProd.heavyEquipmentProdTitle)",
+    "successCreateMessage": "$t(commonTypography.heavyEquipmentData) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.heavyEquipmentData) berhasil diubah",
+    "successIsValidateMessage": "$t(heavyEquipmentProd.heavyEquipmentProdTitle) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(heavyEquipmentProd.heavyEquipmentProdTitle) Tidak Valid",
+    "successIsDeterminedMessage": "$t(heavyEquipmentProd.heavyEquipmentProdTitle) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(heavyEquipmentProd.heavyEquipmentProdTitle) berhasil $t(commonTypography.reject)"
   }
 }
