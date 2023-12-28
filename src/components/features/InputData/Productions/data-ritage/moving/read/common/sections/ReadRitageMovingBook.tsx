@@ -297,7 +297,7 @@ const ReadRitageMovingBook = () => {
               description={movingRitage?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           {movingRitage?.status?.id ===
@@ -306,7 +306,7 @@ const ReadRitageMovingBook = () => {
               description={movingRitage?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           <Stack spacing="sm" mt="md">

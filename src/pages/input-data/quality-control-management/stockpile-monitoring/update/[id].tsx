@@ -1,12 +1,14 @@
 import { UpdateStockpileMonitoringPage } from '@/components/features';
 import { DashboardLayout } from '@/components/layouts';
 
-const UpdateStockpile = () => {
+const UpdateStockpileMonitoring = () => {
   return <UpdateStockpileMonitoringPage />;
 };
 
-export default UpdateStockpile;
+export default UpdateStockpileMonitoring;
 
-UpdateStockpile.getLayout = function getLayout(page: React.ReactElement) {
+UpdateStockpileMonitoring.getLayout = function getLayout(
+  page: React.ReactElement
+) {
   return <DashboardLayout>{page}</DashboardLayout>;
 };

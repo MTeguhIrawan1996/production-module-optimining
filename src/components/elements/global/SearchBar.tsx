@@ -18,7 +18,7 @@ const SearchBar: React.FC<ISerachBar> = ({
 }) => {
   const router = useRouter();
   React.useEffect(() => {
-    if (searchQuery) {
+    if (searchQuery !== '') {
       onSearch
         ? onSearch()
         : router.push({

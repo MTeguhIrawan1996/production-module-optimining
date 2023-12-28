@@ -65,7 +65,7 @@ export type CommonProps = {
 export type IElementRhf = {
   elementId: string;
   name: string;
-  value: string;
+  value: string | number;
 };
 
 export type IDate = Date | undefined | string | null;

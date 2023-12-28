@@ -1,3 +1,6 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
@@ -11,6 +14,7 @@ import { useReadOneStockpileMonitoring } from '@/services/graphql/query/stockpil
 import {
   IMutationStockpile,
   IMutationStockpileStepOne,
+  useUpdateStockpileMonitoring,
 } from '@/services/restapi/stockpile-monitoring/useUpdateStockpileMonitoring';
 import {
   globalDate,
@@ -24,12 +28,19 @@ import {
   domeNameSelect,
   stockpileNameSelect,
 } from '@/utils/constants/Field/stockpile-field';
+import { stockpileMonitoringMutationValidation } from '@/utils/form-validation/stockpile-monitoring/stockpile-monitoring-validation';
 import { formatDate2 } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
+import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
-import { ControllerGroup, ControllerProps, IElementRhf } from '@/types/global';
+import {
+  ControllerGroup,
+  ControllerProps,
+  IElementRhf,
+  IFile,
+} from '@/types/global';
 
 type fieldName = keyof IMutationStockpileStepOne;
 
@@ -39,10 +50,15 @@ const UpdateStockpileMonitoringBook = () => {
   const id = router.query.id as string;
   const [active, setActive] = React.useState(0);
   const [otherElements, setOtherElements] = React.useState<IElementRhf[]>([]);
+  const [serverPhoto, setServerPhoto] = React.useState<
+    Omit<IFile, 'mime' | 'path'>[] | null
+  >([]);
+  const [isOpenConfirmation, setIsOpenConfirmation] =
+    React.useState<boolean>(false);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationStockpile>({
-    // resolver: zodResolver(stockpileMonitoringMutationValidation),
+    resolver: zodResolver(stockpileMonitoringMutationValidation),
     defaultValues: {
       stockpileId: '',
       domeId: '',
@@ -85,6 +101,7 @@ const UpdateStockpileMonitoringBook = () => {
           date: undefined,
           sampleTypeId: '',
           sampleNumber: '',
+          isCreatedAfterDetermine: false,
           elements: [
             {
               elementId: '',
@@ -121,7 +138,10 @@ const UpdateStockpileMonitoringBook = () => {
     name: 'movings',
     control: methods.control,
   });
-
+  const { fields: reopenFields, replace: replaceReopenFields } = useFieldArray({
+    name: 'reopens',
+    control: methods.control,
+  });
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
@@ -137,14 +157,6 @@ const UpdateStockpileMonitoringBook = () => {
           value: '',
         };
       });
-      replace([
-        {
-          date: undefined,
-          sampleTypeId: '',
-          sampleNumber: '',
-          elements: other,
-        },
-      ]);
       setOtherElements(other);
     },
   });
@@ -157,6 +169,7 @@ const UpdateStockpileMonitoringBook = () => {
       methods.setValue('handbookId', data.dome.handBookId);
     },
   });
+
   const { monitoringStockpile, monitoringStockpileLoading } =
     useReadOneStockpileMonitoring({
       variables: {
@@ -164,12 +177,28 @@ const UpdateStockpileMonitoringBook = () => {
       },
       skip: !router.isReady,
       onCompleted: ({ monitoringStockpile }) => {
-        // console.log(monitoringStockpile);
+        const samples = monitoringStockpile.samples.map((val) => {
+          const elemntsValue = val.elements.map((o) => {
+            return {
+              elementId: o.element.id,
+              name: o.element.name ?? '',
+              value: o.value ?? '',
+            };
+          });
+          return {
+            date: stringToDate(val.date ?? null),
+            sampleTypeId: val.sampleType.id ?? '',
+            sampleNumber: val.sampleNumber ?? '',
+            isCreatedAfterDetermine: val.isCreatedAfterDetermine ? true : false,
+            elements: elemntsValue,
+          };
+        });
+        replace(samples);
         const surveys = monitoringStockpile.tonSurveys?.map((val) => {
           const date = stringToDate(val.date ?? null);
           return {
             date: date,
-            ton: `${val.ton ?? ''}`,
+            ton: val.ton ?? '',
           };
         });
         const movings = monitoringStockpile.movings?.map((val) => {
@@ -184,6 +213,18 @@ const UpdateStockpileMonitoringBook = () => {
             finishTime: finishTime ?? '',
           };
         });
+        const reopens = monitoringStockpile.reopens?.map((val) => {
+          const openDate = stringToDate(val.openAt ?? null);
+          const openTime = formatDate2(val.openAt, 'HH:mm:ss');
+          const closeDate = stringToDate(val.closeAt ?? null);
+          const closeTime = formatDate2(val.closeAt, 'HH:mm:ss');
+          return {
+            openDate: openDate,
+            openTime: openTime ?? '',
+            closeDate: closeDate,
+            closeTime: closeTime ?? '',
+          };
+        });
         replaceSurveyFields(
           surveys && surveys.length > 0 ? surveys : { date: undefined, ton: '' }
         );
@@ -195,6 +236,16 @@ const UpdateStockpileMonitoringBook = () => {
                 startTime: '',
                 finishDate: undefined,
                 finishTime: '',
+              }
+        );
+        replaceReopenFields(
+          reopens && reopens.length > 0
+            ? reopens
+            : {
+                openDate: undefined,
+                openTime: '',
+                closeDate: undefined,
+                closeTime: '',
               }
         );
         const openDate = stringToDate(monitoringStockpile.openAt ?? null);
@@ -234,9 +285,43 @@ const UpdateStockpileMonitoringBook = () => {
         methods.setValue('bargingStartTime', bargingStartTime ?? '');
         methods.setValue('bargingFinishTime', bargingFinishTime ?? '');
         methods.setValue('desc', monitoringStockpile.desc ?? '');
-        // setServerPhotos(quarryRitage.photos ?? []);
+        if (monitoringStockpile.photo) {
+          setServerPhoto([monitoringStockpile.photo]);
+        }
       },
     });
+
+  const { mutate, isLoading } = useUpdateStockpileMonitoring({
+    onError: (err) => {
+      if (err.response) {
+        const errorArry = errorRestBadRequestField(err);
+        if (errorArry?.length) {
+          errorArry?.forEach(({ name, type, message }) => {
+            methods.setError(name, { type, message });
+          });
+          return;
+        }
+        notifications.show({
+          color: 'red',
+          title: 'Gagal',
+          message: err.response.data.message,
+          icon: <IconX />,
+        });
+      }
+    },
+    onSuccess: () => {
+      notifications.show({
+        color: 'green',
+        title: 'Selamat',
+        message: t('stockpileMonitoring.successUpdateMessage'),
+        icon: <IconCheck />,
+      });
+      setIsOpenConfirmation((prev) => !prev);
+      router.push(
+        '/input-data/quality-control-management/stockpile-monitoring'
+      );
+    },
+  });
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
@@ -348,6 +433,140 @@ const UpdateStockpileMonitoringBook = () => {
     [movingFields]
   );
   const movingGroupItem = movingFields.map(movingGroup);
+  const reopenGroup = React.useCallback(
+    (_, index: number) => {
+      const reopenStartDateItem = globalDate({
+        name: `reopens.${index}.openDate`,
+        label: 'reopenStartDate',
+        value: methods.watch(`reopens.${index}.openDate`),
+        withAsterisk: false,
+        clearable: true,
+        colSpan: 6,
+      });
+      const reopenFinishDateItem = globalDate({
+        name: `reopens.${index}.closeDate`,
+        label: 'reopenCloseDate',
+        value: methods.watch(`reopens.${index}.closeDate`),
+        withAsterisk: false,
+        clearable: true,
+        colSpan: 6,
+      });
+      const reopenStartTimeItem = globalTimeInput({
+        name: `reopens.${index}.openTime`,
+        label: 'reopenStartTime',
+        value: methods.watch(`reopens.${index}.openTime`),
+        withAsterisk: false,
+        colSpan: 6,
+      });
+      const reopenFinishTimeItem = globalTimeInput({
+        name: `reopens.${index}.closeTime`,
+        label: 'reopenCloseTime',
+        value: methods.watch(`reopens.${index}.closeTime`),
+        withAsterisk: false,
+        colSpan: 6,
+      });
+
+      const group: ControllerGroup = {
+        group: t('commonTypography.reopen'),
+        enableGroupLabel: true,
+        formControllers: [
+          reopenStartDateItem,
+          reopenFinishDateItem,
+          reopenStartTimeItem,
+          reopenFinishTimeItem,
+        ],
+      };
+      return group;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [reopenFields]
+  );
+  const reopenGroupItem = reopenFields.map(reopenGroup);
+
+  const sampleGroup = React.useCallback(
+    (_, index: number) => {
+      const elementItem = elementsData?.map((val, i) => {
+        const value = methods.watch(`samples.${index}.elements.${i}.value`);
+        const elementInput = globalNumberInput({
+          name: `samples.${index}.elements.${i}.value`,
+          label: `${t('commonTypography.rate')} ${val.name}`,
+          colSpan: 6,
+          withAsterisk: false,
+          labelWithTranslate: false,
+          value: value !== '' ? Number(value) : '',
+          onChange: (value) => {
+            methods.setValue(`samples.${index}.elements.${i}.value`, value);
+          },
+        });
+        return elementInput;
+      });
+      const date = globalDate({
+        name: `samples.${index}.date`,
+        label: 'sampleDate2',
+        withAsterisk: false,
+        clearable: true,
+        colSpan: 12,
+        value: methods.watch(`samples.${index}.date`),
+      });
+      const sampleTypesItem = sampleTypeSelect({
+        colSpan: 6,
+        withAsterisk: false,
+        label: 'sampleType2',
+        name: `samples.${index}.sampleTypeId`,
+        value: methods.watch(`samples.${index}.sampleTypeId`),
+      });
+      const sampleNumber = globalText({
+        name: `samples.${index}.sampleNumber`,
+        label: 'sampleNumber',
+        colSpan: 6,
+        withAsterisk: false,
+        value: methods.watch(`samples.${index}.sampleNumber`),
+      });
+      const isDelete = methods.watch(
+        `samples.${index}.isCreatedAfterDetermine`
+      );
+      const group: ControllerGroup = {
+        group: t('commonTypography.sampleInformation'),
+        enableGroupLabel: true,
+        actionGroup: {
+          deleteButton: {
+            label: t('commonTypography.delete'),
+            onClick: () => {
+              sampleFields.length > 1 ? remove(index) : null;
+            },
+            disabled: isDelete ? false : true,
+          },
+        },
+        actionOuterGroup: {
+          addButton:
+            index === 0
+              ? {
+                  label: t('commonTypography.createSample'),
+                  onClick: () =>
+                    append({
+                      date: undefined,
+                      sampleTypeId: '',
+                      sampleNumber: '',
+                      isCreatedAfterDetermine: true,
+                      elements: otherElements,
+                    }),
+                }
+              : undefined,
+        },
+        formControllers: [
+          date,
+          sampleTypesItem,
+          sampleNumber,
+          ...(elementItem ?? []),
+        ],
+      };
+
+      return group;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [reopenFields]
+  );
+  const sampleGroupItem = sampleFields.map(sampleGroup);
 
   const fieldItemStepOne = React.useMemo(() => {
     const stockpileNameItem = stockpileNameSelect({
@@ -361,6 +580,7 @@ const UpdateStockpileMonitoringBook = () => {
     const domeNameItem = domeNameSelect({
       colSpan: 6,
       onChange: (value) => {
+        methods.clearErrors('domeId');
         methods.setValue('domeId', value ?? '');
         methods.setValue('handbookId', '');
       },
@@ -390,7 +610,7 @@ const UpdateStockpileMonitoringBook = () => {
     const closeDateItem = globalDate({
       name: 'closeDate',
       label: 'endOpen',
-      withAsterisk: true,
+      withAsterisk: false,
       clearable: true,
       colSpan: 6,
     });
@@ -453,9 +673,14 @@ const UpdateStockpileMonitoringBook = () => {
       maxSize: 10 * 1024 ** 2 /* 10MB */,
       multiple: false,
       enableDeletePhoto: true,
+      serverPhotos: serverPhoto,
+      handleDeleteServerPhotos: () => {
+        setServerPhoto([]);
+      },
       onDrop: (value) => {
         methods.setValue('photo', value);
         methods.clearErrors('photo');
+        setServerPhoto([]);
       },
       onReject: (files) =>
         handleRejectFile<IMutationStockpile>({
@@ -502,6 +727,7 @@ const UpdateStockpileMonitoringBook = () => {
         ],
       },
       ...movingGroupItem,
+      ...reopenGroupItem,
       {
         group: t('commonTypography.desc'),
         formControllers: [desc],
@@ -514,95 +740,17 @@ const UpdateStockpileMonitoringBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monitoringStockpile, surveyGroupItem]);
-
-  const fieldItemStepTwo = React.useMemo(
-    () => {
-      const fieldArray = sampleFields.map((_, index: number) => {
-        const elementItem = elementsData?.map((val, i) => {
-          const elementInput = globalText({
-            name: `samples.${index}.elements.${i}.value`,
-            label: `${t('commonTypography.rate')} ${
-              val.name
-            } samples.${index}.elements.${i}.value`,
-            colSpan: 6,
-            withAsterisk: false,
-            labelWithTranslate: false,
-            onChange: (e) => {
-              methods.setValue(
-                `samples.${index}.elements.${i}.value`,
-                e.currentTarget.value
-              );
-            },
-          });
-
-          return elementInput;
-        });
-        const date = globalDate({
-          name: `samples.${index}.date`,
-          label: 'sampleDate2',
-          withAsterisk: false,
-          clearable: true,
-          colSpan: 12,
-        });
-        const sampleTypesItem = sampleTypeSelect({
-          colSpan: 6,
-          withAsterisk: false,
-          label: 'sampleType2',
-          name: `samples.${index}.sampleTypeId`,
-        });
-        const sampleNumber = globalText({
-          name: `samples.${index}.sampleNumber`,
-          label: 'sampleNumber',
-          colSpan: 6,
-          withAsterisk: false,
-        });
-
-        const field: ControllerGroup = {
-          group: t('commonTypography.dome'),
-          enableGroupLabel: true,
-          actionGroup: {
-            deleteButton: {
-              label: t('commonTypography.delete'),
-              onClick: () => {
-                sampleFields.length > 1 ? remove(index) : null;
-              },
-            },
-          },
-          actionOuterGroup: {
-            addButton:
-              index === 0
-                ? {
-                    label: t('commonTypography.createSample'),
-                    onClick: () =>
-                      append({
-                        date: undefined,
-                        sampleTypeId: '',
-                        sampleNumber: '',
-                        elements: otherElements,
-                      }),
-                  }
-                : undefined,
-          },
-          formControllers: [
-            date,
-            sampleTypesItem,
-            sampleNumber,
-            ...(elementItem ?? []),
-          ],
-        };
-        return field;
-      });
-      return fieldArray;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [sampleFields, elementsData, otherElements]
-  );
+  }, [
+    monitoringStockpile,
+    surveyGroupItem,
+    movingGroupItem,
+    reopenGroupItem,
+    serverPhoto,
+  ]);
 
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
-
   const nextStep = async () => {
     const fieldStepOneName: fieldName[] = [
       'closeDate',
@@ -629,8 +777,12 @@ const UpdateStockpileMonitoringBook = () => {
 
   const handleSubmitForm: SubmitHandler<IMutationStockpile> = async (data) => {
     const values = objectToArrayValue(data);
-    const dateValue = ['openDate', 'closeDate'];
-    // eslint-disable-next-line unused-imports/no-unused-vars
+    const dateValue = [
+      'openDate',
+      'closeDate',
+      'bargingStartDate',
+      'bargingFinishDate',
+    ];
     const manipulateValue = values.map((val) => {
       if (dateValue.includes(val.name)) {
         const date = dateToString(val.value);
@@ -644,16 +796,14 @@ const UpdateStockpileMonitoringBook = () => {
         value: val.value,
       };
     });
-
-    // await executeCreate({
-    //   variables: {
-    //     name: data.name,
-    //     startHour: data.startHour,
-    //     endHour: data.endHour,
-    //   },
-    // });
+    mutate({
+      id,
+      data: manipulateValue,
+    });
   };
-
+  const handleConfirmation = () => {
+    methods.handleSubmit(handleSubmitForm)();
+  };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
@@ -672,24 +822,37 @@ const UpdateStockpileMonitoringBook = () => {
           },
           {
             name: 'Input Data Sample',
-            fields: fieldItemStepTwo,
+            fields: sampleGroupItem,
             prevButton: {
               onClick: prevStep,
             },
             submitButton: {
               label: t('commonTypography.save'),
-              // loading: isLoading,
+              type: 'button',
+              onClick: () => setIsOpenConfirmation((prev) => !prev),
             },
-
-            // nextButton: { onClick: () => console.log('next') },
-            // backButton: {
-            //   label: t('commonTypography.prev'),
-            //   onClick: () => console.log('prev'),
-            // },
           },
         ]}
         methods={methods}
         submitForm={handleSubmitForm}
+        modalConfirmation={{
+          isOpenModalConfirmation: isOpenConfirmation,
+          actionModalConfirmation: () => setIsOpenConfirmation((prev) => !prev),
+          actionButton: {
+            label: t('commonTypography.yes'),
+            type: 'button',
+            onClick: handleConfirmation,
+            loading: isLoading,
+          },
+          backButton: {
+            label: 'Batal',
+          },
+          modalType: {
+            type: 'default',
+            title: t('commonTypography.alertTitleConfirmUpdate'),
+          },
+          withDivider: true,
+        }}
       />
     </DashboardCard>
   );

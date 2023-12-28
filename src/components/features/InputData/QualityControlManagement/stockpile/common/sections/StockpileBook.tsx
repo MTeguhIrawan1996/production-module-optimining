@@ -16,7 +16,7 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteStockpileMonitoring } from '@/services/graphql/mutation/stockpile-monitoring/useDeleteOreRitage';
+import { useDeleteStockpileMonitoring } from '@/services/graphql/mutation/stockpile-monitoring/useDeleteStockpileMonitoring';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import { useReadAllLocationselect } from '@/services/graphql/query/global-select/useReadAllLocationSelect';
 import {
