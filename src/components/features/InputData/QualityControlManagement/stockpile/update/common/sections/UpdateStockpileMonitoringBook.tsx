@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-vars */
 import { zodResolver } from '@hookform/resolvers/zod';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -8,6 +9,10 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, SteperFormGroup } from '@/components/elements';
 
+import {
+  IMutationUpdateSampleMonitoringStockpileValues,
+  useUpdateSampleStockpileMonitoring,
+} from '@/services/graphql/mutation/stockpile-monitoring/useUpdateSampleStockpileMonitoring';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import { useReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 import { useReadOneStockpileMonitoring } from '@/services/graphql/query/stockpile-monitoring/useReadOneStockpileMonitoring';
@@ -31,7 +36,10 @@ import {
 import { stockpileMonitoringMutationValidation } from '@/utils/form-validation/stockpile-monitoring/stockpile-monitoring-validation';
 import { formatDate2 } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
-import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
+import {
+  errorBadRequestField,
+  errorRestBadRequestField,
+} from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
@@ -322,6 +330,42 @@ const UpdateStockpileMonitoringBook = () => {
       );
     },
   });
+
+  const [executeUpdate, { loading }] = useUpdateSampleStockpileMonitoring({
+    onCompleted: () => {
+      notifications.show({
+        color: 'green',
+        title: 'Selamat',
+        message: t('stockpileMonitoring.successUpdateMessage'),
+        icon: <IconCheck />,
+      });
+      setIsOpenConfirmation((prev) => !prev);
+      router.push(
+        '/input-data/quality-control-management/stockpile-monitoring'
+      );
+    },
+    onError: (error) => {
+      if (error.graphQLErrors) {
+        const errorArry = errorBadRequestField<IMutationStockpile>(error);
+        if (errorArry.length) {
+          errorArry.forEach(({ name, type, message }) => {
+            methods.setError(name, { type, message });
+          });
+          return;
+        }
+        notifications.show({
+          color: 'red',
+          title: 'Gagal',
+          message: error.message,
+          icon: <IconX />,
+        });
+      }
+    },
+  });
+
+  const isDetermination =
+    monitoringStockpile?.status?.id ===
+    process.env.NEXT_PUBLIC_STATUS_DETERMINED;
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
@@ -525,6 +569,7 @@ const UpdateStockpileMonitoringBook = () => {
       const isDelete = methods.watch(
         `samples.${index}.isCreatedAfterDetermine`
       );
+
       const group: ControllerGroup = {
         group: t('commonTypography.sampleInformation'),
         enableGroupLabel: true,
@@ -534,7 +579,7 @@ const UpdateStockpileMonitoringBook = () => {
             onClick: () => {
               sampleFields.length > 1 ? remove(index) : null;
             },
-            disabled: isDelete ? false : true,
+            disabled: isDetermination ? (isDelete ? false : true) : false,
           },
         },
         actionOuterGroup: {
@@ -564,7 +609,7 @@ const UpdateStockpileMonitoringBook = () => {
       return group;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [reopenFields]
+    [reopenFields, isDetermination]
   );
   const sampleGroupItem = sampleFields.map(sampleGroup);
 
@@ -796,6 +841,34 @@ const UpdateStockpileMonitoringBook = () => {
         value: val.value,
       };
     });
+
+    const dataSamples: IMutationUpdateSampleMonitoringStockpileValues[] =
+      data.samples.map((val) => {
+        const { isCreatedAfterDetermine, date, elements, ...rest } = val;
+        const dateString = dateToString(date ?? null);
+        const elementsManipulate = elements.map((obj) => {
+          const { name, ...restElement } = obj;
+          return {
+            ...restElement,
+          };
+        });
+        return {
+          ...rest,
+          date: dateString,
+          elements: elementsManipulate,
+        };
+      });
+
+    if (isDetermination) {
+      await executeUpdate({
+        variables: {
+          id,
+          samples: dataSamples,
+        },
+      });
+      return;
+    }
+
     mutate({
       id,
       data: manipulateValue,
@@ -809,7 +882,7 @@ const UpdateStockpileMonitoringBook = () => {
   return (
     <DashboardCard p={0} isLoading={monitoringStockpileLoading}>
       <SteperFormGroup
-        active={active}
+        active={isDetermination ? 1 : active}
         setActive={setActive}
         steps={[
           {
@@ -817,15 +890,28 @@ const UpdateStockpileMonitoringBook = () => {
             fields: fieldItemStepOne,
             nextButton: { onClick: nextStep },
             backButton: {
-              onClick: () => router.back(),
+              onClick: () =>
+                router.push(
+                  '/input-data/quality-control-management/stockpile-monitoring'
+                ),
             },
           },
           {
             name: 'Input Data Sample',
             fields: sampleGroupItem,
-            prevButton: {
-              onClick: prevStep,
-            },
+            prevButton: isDetermination
+              ? undefined
+              : {
+                  onClick: prevStep,
+                },
+            backButton: isDetermination
+              ? {
+                  onClick: () =>
+                    router.push(
+                      '/input-data/quality-control-management/stockpile-monitoring'
+                    ),
+                }
+              : undefined,
             submitButton: {
               label: t('commonTypography.save'),
               type: 'button',
@@ -842,7 +928,7 @@ const UpdateStockpileMonitoringBook = () => {
             label: t('commonTypography.yes'),
             type: 'button',
             onClick: handleConfirmation,
-            loading: isLoading,
+            loading: isDetermination ? loading : isLoading,
           },
           backButton: {
             label: 'Batal',
