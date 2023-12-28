@@ -67,7 +67,7 @@ const DetailSampleData: React.FC<IDetailSampleDataProps> = ({
               },
               cellsStyle: {
                 border: 'none',
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: 400,
                 color: theme.colors.dark[3],
               },

@@ -159,13 +159,13 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
                 paddingTop: 0,
                 backgroundColor: 'transparent',
                 border: 'none',
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: 600,
                 color: theme.colors.dark[5],
               },
               cellsStyle: {
                 border: 'none',
-                fontSize: 20,
+                fontSize: 16,
                 fontWeight: 400,
                 color: theme.colors.dark[3],
               },
@@ -275,13 +275,13 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
                 paddingTop: 0,
                 backgroundColor: 'transparent',
                 border: 'none',
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: 600,
                 color: theme.colors.dark[5],
               },
               cellsStyle: {
                 border: 'none',
-                fontSize: 20,
+                fontSize: 16,
                 fontWeight: 400,
                 color: theme.colors.dark[3],
               },
@@ -304,8 +304,8 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
                 render: ({ startAt }) => formatDate(startAt, 'hh:mm:ss A'),
               },
               {
-                accessor: 'reopenCloseTime',
-                title: t('commonTypography.reopenCloseTime'),
+                accessor: 'movingFinishTime',
+                title: t('commonTypography.movingFinishTime'),
                 render: ({ finishAt }) => formatDate(finishAt, 'hh:mm:ss A'),
               },
             ],
@@ -334,19 +334,25 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
         <MantineDataTable
           tableProps={{
             records: monitoringStockpile?.reopens ?? [],
+            idAccessor: (record) => {
+              const key =
+                monitoringStockpile?.reopens &&
+                monitoringStockpile?.reopens.indexOf(record) + 1;
+              return `${key}`;
+            },
             defaultColumnProps: {
               textAlignment: 'left',
               titleStyle: {
                 paddingTop: 0,
                 backgroundColor: 'transparent',
                 border: 'none',
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: 600,
                 color: theme.colors.dark[5],
               },
               cellsStyle: {
                 border: 'none',
-                fontSize: 20,
+                fontSize: 16,
                 fontWeight: 400,
                 color: theme.colors.dark[3],
               },
@@ -369,8 +375,8 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
                 render: ({ openAt }) => formatDate(openAt, 'hh:mm:ss A'),
               },
               {
-                accessor: 'movingFinishTime',
-                title: t('commonTypography.movingFinishTime'),
+                accessor: 'reopenCloseTime',
+                title: t('commonTypography.reopenCloseTime'),
                 render: ({ closeAt }) => formatDate(closeAt, 'hh:mm:ss A'),
               },
             ],
