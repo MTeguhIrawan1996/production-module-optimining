@@ -114,6 +114,10 @@ export async function middleware(request: NextRequest) {
       ],
     },
     {
+      path: '/input-data/production/heavy-equipment',
+      allowedPermissions: ['create-heavy-equipment-data'],
+    },
+    {
       path: '/setting/management-role',
       allowedPermissions: ['create-role'],
     },

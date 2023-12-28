@@ -113,6 +113,11 @@ export const linksDashboard: IMenuItem[] = [
               'create-topsoil-ritage',
             ],
           },
+          {
+            label: 'heavyEquipmentProduction',
+            href: '/input-data/production/heavy-equipment',
+            access: ['create-heavy-equipment-data'],
+          },
         ],
       },
       {
