@@ -28,8 +28,9 @@ import {
   heavyEquipmentSelect,
 } from '@/utils/constants/Field/global-field';
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
+import { secondsDuration } from '@/utils/helper/dateFormat';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
-import { hourDiff } from '@/utils/helper/hourDiff';
+import { hourDiff, timeToSecond } from '@/utils/helper/hourDiff';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -64,6 +65,8 @@ const CreateHeavyEquipmentProductionBook = () => {
         {
           workingHourPlanId: '',
           name: '',
+          amountHour: '',
+          details: [],
         },
       ],
       details: [
@@ -71,7 +74,6 @@ const CreateHeavyEquipmentProductionBook = () => {
           workingHourPlanId: '',
           startTime: '',
           finishTime: '',
-          amountHour: '',
         },
       ],
     },
@@ -99,6 +101,21 @@ const CreateHeavyEquipmentProductionBook = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newWorkStartTime, newWorkFinishTime]);
 
+  React.useEffect(() => {
+    const totalSeconds = detailFields.reduce((acc, curr) => {
+      const durationInSeconds =
+        timeToSecond(curr.startTime, curr.finishTime) || 0;
+
+      return acc + durationInSeconds;
+    }, 0);
+
+    methods.setValue(
+      'loseTimes.0.amountHour',
+      `${totalSeconds === 0 ? '' : secondsDuration(totalSeconds)}`
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [detailFields]);
+
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
@@ -111,6 +128,8 @@ const CreateHeavyEquipmentProductionBook = () => {
         return {
           workingHourPlanId: val.id,
           name: val.activityName,
+          amountHour: '',
+          details: [],
         };
       });
       const otherDetails = data.workingHourPlans.data.map((val) => {
@@ -118,7 +137,6 @@ const CreateHeavyEquipmentProductionBook = () => {
           workingHourPlanId: val.id,
           startTime: '',
           finishTime: '',
-          amountHour: '',
         };
       });
       lostTimeReplace(otherLostTime);
@@ -180,30 +198,59 @@ const CreateHeavyEquipmentProductionBook = () => {
         'loseTimes',
         'id'
       >,
-
       index: number
     ) => {
       const label = val.name?.replace(/\b(?:Jam|jam|hour|Hour)\b/g, '');
-
-      detailFields.map(() => {});
-
-      const indexOfId = detailFields.findIndex(
-        (o) => o.workingHourPlanId === val.workingHourPlanId
+      const filteredDetail = detailFields.filter(
+        (obj) => obj.workingHourPlanId === val.workingHourPlanId
       );
 
-      const startTimeItem = globalTimeInput({
-        name: `details.${indexOfId}.startTime`,
-        label: `${t('commonTypography.startHour')} ${label ?? ''} ${indexOfId}`,
-        labelWithTranslate: false,
-        withAsterisk: false,
-        colSpan: 6,
+      const returnItem = filteredDetail.map((value) => {
+        const indexOfId = detailFields.findIndex((val) => value.id === val.id);
+        const startTimeItem = globalTimeInput({
+          name: `details.${indexOfId}.startTime`,
+          label: `${t('commonTypography.startHour')} ${label ?? ''}`,
+          labelWithTranslate: false,
+          withAsterisk: false,
+          colSpan: 6,
+          onChange: (e) => {
+            methods.setValue(
+              `details.${indexOfId}.startTime`,
+              e.currentTarget.value
+            );
+            // setNewWorkStartTime(e.currentTarget.value);
+            methods.trigger(`details.${indexOfId}.startTime`);
+          },
+        });
+        const finishTimeItem = globalTimeInput({
+          name: `details.${indexOfId}.finishTime`,
+          label: `${t('commonTypography.endHour')} ${label ?? ''}`,
+          labelWithTranslate: false,
+          withAsterisk: false,
+          colSpan: 6,
+          onChange: (e) => {
+            methods.setValue(
+              `details.${indexOfId}.finishTime`,
+              e.currentTarget.value
+            );
+            // setNewWorkStartTime(e.currentTarget.value);
+            methods.trigger(`details.${indexOfId}.finishTime`);
+          },
+        });
+        return { startTimeItem, finishTimeItem };
       });
-      const finishTimeItem = globalTimeInput({
-        name: `details.${indexOfId}.finishTime`,
-        label: `${t('commonTypography.endHour')} ${label ?? ''} ${indexOfId}`,
-        labelWithTranslate: false,
+
+      const itemController = returnItem.flatMap(
+        ({ startTimeItem, finishTimeItem }) => [startTimeItem, finishTimeItem]
+      );
+
+      const amountHourItem = globalText({
+        colSpan: 12,
+        name: `loseTimes.${index}.amountHour`,
+        label: `${t('commonTypography.hourAmount')} ${label ?? ''}`,
         withAsterisk: false,
-        colSpan: 6,
+        disabled: true,
+        labelWithTranslate: false,
       });
 
       const group: ControllerGroup = {
@@ -214,10 +261,9 @@ const CreateHeavyEquipmentProductionBook = () => {
             label: `${t('commonTypography.create')} ${val.name}`,
             onClick: () => {
               append({
-                workingHourPlanId: val.id,
+                workingHourPlanId: val.workingHourPlanId,
                 startTime: '',
                 finishTime: '',
-                amountHour: '',
               });
             },
           },
@@ -226,7 +272,7 @@ const CreateHeavyEquipmentProductionBook = () => {
             onClick: () => {},
           },
         },
-        formControllers: [startTimeItem, finishTimeItem],
+        formControllers: [...itemController, amountHourItem],
       };
       return group;
     },

@@ -19,3 +19,13 @@ export const hourDiff = (startTime: string, endTime: string) => {
   }
   return null;
 };
+
+export const timeToSecond = (startTime: string, endTime: string) => {
+  if (startTime !== '' && endTime !== '') {
+    const start = dayjs(startTime, 'HH:mm:ss');
+    const end = dayjs(endTime, 'HH:mm:ss');
+    const durationInSeconds = end.diff(start, 'second');
+    return durationInSeconds;
+  }
+  return null;
+};

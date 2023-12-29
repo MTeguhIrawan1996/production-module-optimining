@@ -33,10 +33,10 @@ export const CREATE_HEAVY_EQUIPMENT_PRODUCTION = gql`
 export type IloseTimes = {
   workingHourPlanId: string;
   name?: string;
-  details?: {
+  amountHour?: string;
+  details: {
     startTime: string;
     finishTime: string;
-    amountHour?: string;
   }[];
 };
 
@@ -57,7 +57,6 @@ export interface IMutationCreateHeavyEquipmentDataValues {
     workingHourPlanId: string;
     startTime: string;
     finishTime: string;
-    amountHour?: string;
   }[];
 }
 
