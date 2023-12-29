@@ -8,14 +8,14 @@ import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
 import { CommonProps } from '@/types/global';
 
-export type ITimeInputRhfProps = {
-  control: 'time-input';
+export type ITimeInputDynamicRhfProps = {
+  control: 'time-dynamic-input';
   name: string;
   labelWithTranslate?: boolean;
 } & Omit<TimeInputProps, 'name'> &
   CommonProps;
 
-const TimeInputRhf: React.FC<ITimeInputRhfProps> = ({
+const TimeInputDynamicRhf: React.FC<ITimeInputDynamicRhfProps> = ({
   name,
   control,
   label,
@@ -58,4 +58,4 @@ const TimeInputRhf: React.FC<ITimeInputRhfProps> = ({
   );
 };
 
-export default TimeInputRhf;
+export default TimeInputDynamicRhf;

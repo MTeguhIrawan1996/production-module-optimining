@@ -39,7 +39,7 @@ interface IUpdateIsDeterminedHeavyEquipmentProductionResponse {
   };
 }
 
-export const useUpdateIsDeterminedHeavyEquipmentProduction = ({
+export const useDeterminedHeavyEquipmentProduction = ({
   onError,
   onCompleted,
 }: {

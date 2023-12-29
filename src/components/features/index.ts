@@ -34,6 +34,7 @@ import ReadDTTopsoilRitagePage from '@/components/features/InputData/Productions
 import UpdateRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/update/common';
 import UploadRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/upload/common';
 import HeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/common';
+import CreateHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/create/common';
 import ReadHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/read/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
 import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/create/common';
@@ -139,6 +140,7 @@ export {
   CreateHeavyEquipmentClassPage,
   CreateHeavyEquipmentMasterPage,
   CreateHeavyEquipmentPage,
+  CreateHeavyEquipmentProductionPage,
   CreateHumanResourcesAvailablePage,
   CreateHumanResourcesPage,
   CreateLocationMasterPage,

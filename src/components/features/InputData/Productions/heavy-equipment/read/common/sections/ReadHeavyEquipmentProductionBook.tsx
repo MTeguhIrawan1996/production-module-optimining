@@ -14,8 +14,8 @@ import {
   KeyValueList,
 } from '@/components/elements';
 
-import { useUpdateIsDeterminedHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useIsDeterminedHeavyEquipmentproduction';
-import { useUpdateIsValidateHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useIsValidateHeavyEquipmentproduction';
+import { useDeterminedHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useDeterminedHeavyEquipmentProduction';
+import { useValidateHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useValidateHeavyEquipmentProduction';
 import { useReadOneHeavyEquipmentProduction } from '@/services/graphql/query/heavy-equipment-production/useReadOneHeavyEquipmentProduction';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
@@ -45,7 +45,7 @@ const ReadHeavyEquipmentProductionBook = () => {
     });
 
   const [executeUpdateStatus, { loading }] =
-    useUpdateIsValidateHeavyEquipmentProduction({
+    useValidateHeavyEquipmentProduction({
       onCompleted: (data) => {
         const message = {
           '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
@@ -77,7 +77,7 @@ const ReadHeavyEquipmentProductionBook = () => {
     });
 
   const [executeUpdateStatusDetermiend, { loading: determinedLoading }] =
-    useUpdateIsDeterminedHeavyEquipmentProduction({
+    useDeterminedHeavyEquipmentProduction({
       onCompleted: (data) => {
         const message = {
           'f5f644d9-8810-44f7-8d42-36b5222b97d1': t(

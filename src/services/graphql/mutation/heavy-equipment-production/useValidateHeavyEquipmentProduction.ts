@@ -39,7 +39,7 @@ interface IUpdateIsValidateHeavyEquipmentProductionResponse {
   };
 }
 
-export const useUpdateIsValidateHeavyEquipmentProduction = ({
+export const useValidateHeavyEquipmentProduction = ({
   onError,
   onCompleted,
 }: {
