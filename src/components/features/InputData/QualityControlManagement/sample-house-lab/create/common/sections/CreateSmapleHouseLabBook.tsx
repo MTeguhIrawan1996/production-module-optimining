@@ -152,7 +152,7 @@ const CreateSmapleHouseLabBook = () => {
 
   const fieldGradeControlElements = React.useCallback(
     (val, index: number) => {
-      const elementItem = globalText({
+      const elementItem = globalNumberInput({
         name: `gradeControlElements.${index}.value`,
         label: `${val.name} ${t('commonTypography.estimationGC')}`,
         colSpan: 6,
@@ -169,7 +169,7 @@ const CreateSmapleHouseLabBook = () => {
 
   const fieldElements = React.useCallback(
     (val, index: number) => {
-      const elementItem = globalText({
+      const elementItem = globalNumberInput({
         name: `elements.${index}.value`,
         label: `${val.name} ${t('commonTypography.percentageLab')}`,
         colSpan: 6,
