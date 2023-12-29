@@ -264,7 +264,7 @@ const StockpileBook = () => {
               accessor: 'action',
               title: t('commonTypography.action'),
               width: 100,
-              render: ({ id }) => {
+              render: ({ id, status }) => {
                 return (
                   <GlobalKebabButton
                     actionRead={{
@@ -275,21 +275,45 @@ const StockpileBook = () => {
                         );
                       },
                     }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/quality-control-management/stockpile-monitoring/update/${id}`
-                        );
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionOther={
+                      status?.id ===
+                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                        ? {
+                            label: 'createSample',
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/quality-control-management/stockpile-monitoring/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      status?.id !==
+                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/quality-control-management/stockpile-monitoring/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      status?.id !==
+                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -320,6 +344,9 @@ const StockpileBook = () => {
           setSearchQuery(e.currentTarget.value);
         },
         searchQuery: searchQuery,
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
+        },
       }}
       filterDateWithSelect={{
         items: filter,
