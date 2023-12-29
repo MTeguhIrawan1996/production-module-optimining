@@ -14,8 +14,8 @@ import {
   KeyValueList,
 } from '@/components/elements';
 
-import { useUpdateIsDeterminedMovingRitage } from '@/services/graphql/mutation/moving-ritage/useIsDeterminedMovingRitage';
-import { useUpdateIsValidateMovingRitage } from '@/services/graphql/mutation/moving-ritage/useIsValidateMovingRitage';
+import { useUpdateIsDeterminedHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useIsDeterminedHeavyEquipmentproduction';
+import { useUpdateIsValidateHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useIsValidateHeavyEquipmentproduction';
 import { useReadOneHeavyEquipmentProduction } from '@/services/graphql/query/heavy-equipment-production/useReadOneHeavyEquipmentProduction';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
@@ -44,56 +44,57 @@ const ReadHeavyEquipmentProductionBook = () => {
       skip: !router.isReady,
     });
 
-  const [executeUpdateStatus, { loading }] = useUpdateIsValidateMovingRitage({
-    onCompleted: (data) => {
-      const message = {
-        '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
-          'ritageMoving.successIsValidateMessage'
-        ),
-        'af06163a-2ba3-45ee-a724-ab3af0c97cc9': t(
-          'ritageMoving.successIsNotValidateMessage'
-        ),
-        default: t('commonTypography.dataRitageMoving'),
-      };
-      notifications.show({
-        color: 'green',
-        title: 'Selamat',
-        message: message[data.validateMovingRitage.status.id],
-        icon: <IconCheck />,
-      });
-      router.push('/input-data/production/data-ritage?tabs=moving');
-    },
-    onError: (error) => {
-      if (error.graphQLErrors) {
-        notifications.show({
-          color: 'red',
-          title: 'Gagal',
-          message: error.message,
-          icon: <IconX />,
-        });
-      }
-    },
-  });
-
-  const [executeUpdateStatusDetermiend, { loading: determinedLoading }] =
-    useUpdateIsDeterminedMovingRitage({
+  const [executeUpdateStatus, { loading }] =
+    useUpdateIsValidateHeavyEquipmentProduction({
       onCompleted: (data) => {
         const message = {
-          'f5f644d9-8810-44f7-8d42-36b5222b97d1': t(
-            'ritageMoving.successIsDeterminedMessage'
+          '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
+            'heavyEquipmentProd.successIsValidateMessage'
           ),
-          '7848a063-ae40-4a80-af86-dfc532cbb688': t(
-            'ritageMoving.successIsRejectMessage'
+          'af06163a-2ba3-45ee-a724-ab3af0c97cc9': t(
+            'heavyEquipmentProd.successIsNotValidateMessage'
           ),
-          default: t('commonTypography.dataRitageMoving'),
+          default: t('commonTypography.heavyEquipment'),
         };
         notifications.show({
           color: 'green',
           title: 'Selamat',
-          message: message[data.determineMovingRitage.status.id],
+          message: message[data.validateHeavyEquipmentData.status.id],
           icon: <IconCheck />,
         });
-        router.push('/input-data/production/data-ritage?tabs=moving');
+        router.push('/input-data/production/heavy-equipment');
+      },
+      onError: (error) => {
+        if (error.graphQLErrors) {
+          notifications.show({
+            color: 'red',
+            title: 'Gagal',
+            message: error.message,
+            icon: <IconX />,
+          });
+        }
+      },
+    });
+
+  const [executeUpdateStatusDetermiend, { loading: determinedLoading }] =
+    useUpdateIsDeterminedHeavyEquipmentProduction({
+      onCompleted: (data) => {
+        const message = {
+          'f5f644d9-8810-44f7-8d42-36b5222b97d1': t(
+            'heavyEquipmentProd.successIsDeterminedMessage'
+          ),
+          '7848a063-ae40-4a80-af86-dfc532cbb688': t(
+            'heavyEquipmentProd.successIsRejectMessage'
+          ),
+          default: t('commonTypography.heavyEquipment'),
+        };
+        notifications.show({
+          color: 'green',
+          title: 'Selamat',
+          message: message[data.determineHeavyEquipmentData.status.id],
+          icon: <IconCheck />,
+        });
+        router.push('/input-data/production/heavy-equipment');
       },
       onError: (error) => {
         if (error.graphQLErrors) {
