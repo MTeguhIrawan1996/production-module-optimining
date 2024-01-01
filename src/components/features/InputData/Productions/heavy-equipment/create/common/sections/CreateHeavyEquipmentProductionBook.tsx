@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-vars */
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -14,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import {
+  IloseTimes,
   IMutationCreateHeavyEquipmentDataValues,
   useCreateHeavyEquipmentProduction,
 } from '@/services/graphql/mutation/heavy-equipment-production/useCreateHeavyEquipmentProduction';
@@ -27,7 +30,9 @@ import {
   heavyEquipmentSelect,
 } from '@/utils/constants/Field/global-field';
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
+import { heavyEquipmentProductionMutationValidation } from '@/utils/form-validation/heavy-equipment-production/heavy-equipment-production-validation';
 import { secondsDuration } from '@/utils/helper/dateFormat';
+import { dateToString } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { hourDiff, timeToSecond } from '@/utils/helper/hourDiff';
 
@@ -47,7 +52,7 @@ const CreateHeavyEquipmentProductionBook = () => {
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationCreateHeavyEquipmentDataValues>({
-    // resolver: zodResolver(ritageMovingMutationValidation),
+    resolver: zodResolver(heavyEquipmentProductionMutationValidation),
     defaultValues: {
       date: undefined,
       foremanId: '',
@@ -60,34 +65,20 @@ const CreateHeavyEquipmentProductionBook = () => {
       desc: '',
       heavyEquipmentType: '',
       amountEffectiveWorkingHours: '',
-      loseTimes: [
-        {
-          workingHourPlanId: '',
-          name: '',
-          amountHour: '',
-          details: [],
-        },
-      ],
-      details: [
-        {
-          workingHourPlanId: '',
-          startTime: '',
-          finishTime: '',
-        },
-      ],
+      loseTimes: [],
+      details: [],
     },
     mode: 'onBlur',
   });
 
   const companyHeavyEquipmentId = methods.watch('companyHeavyEquipmentId');
 
-  const { fields: lostTimeFields, replace: lostTimeReplace } = useFieldArray({
+  const { fields: lostTimeFields, replace: lostTimeReplaces } = useFieldArray({
     name: 'loseTimes',
     control: methods.control,
   });
   const {
     fields: detailFields,
-    replace: detailReplace,
     append,
     update: updateDetailFields,
     remove: removeDetailFIelds,
@@ -114,24 +105,15 @@ const CreateHeavyEquipmentProductionBook = () => {
           workingHourPlanId: val.id,
           name: val.activityName,
           amountHour: '',
-          details: [],
         };
       });
-      const otherDetails = data.workingHourPlans.data.map((val) => {
-        return {
-          workingHourPlanId: val.id,
-          startTime: '',
-          finishTime: '',
-        };
-      });
-      lostTimeReplace(otherLostTime);
-      detailReplace(otherDetails);
+      lostTimeReplaces(otherLostTime);
     },
   });
 
   useReadOneHeavyEquipmentCompany({
     variables: {
-      id: companyHeavyEquipmentId,
+      id: companyHeavyEquipmentId as string,
     },
     skip: companyHeavyEquipmentId === '' || !companyHeavyEquipmentId,
     onCompleted: ({ companyHeavyEquipment }) => {
@@ -142,7 +124,6 @@ const CreateHeavyEquipmentProductionBook = () => {
     },
   });
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
   const [executeCreate, { loading }] = useCreateHeavyEquipmentProduction({
     onCompleted: () => {
       notifications.show({
@@ -204,7 +185,7 @@ const CreateHeavyEquipmentProductionBook = () => {
           name: `details.${indexOfId}.startTime`,
           label: `${t('commonTypography.startHour')} ${label ?? ''}`,
           labelWithTranslate: false,
-          withAsterisk: false,
+          withAsterisk: true,
           colSpan: 6,
           onChange: (e) => {
             methods.setValue(
@@ -223,7 +204,7 @@ const CreateHeavyEquipmentProductionBook = () => {
           name: `details.${indexOfId}.finishTime`,
           label: `${t('commonTypography.endHour')} ${label ?? ''}`,
           labelWithTranslate: false,
-          withAsterisk: false,
+          withAsterisk: true,
           colSpan: 6,
           onChange: (e) => {
             methods.setValue(
@@ -256,7 +237,7 @@ const CreateHeavyEquipmentProductionBook = () => {
 
       const lastIndexFilter = filteredDetail[filteredDetail.length - 1];
       const deleteIndexOf = detailFields.findIndex(
-        (val) => val.id === lastIndexFilter.id
+        (val) => val.id === lastIndexFilter?.id
       );
 
       const group: ControllerGroup = {
@@ -276,9 +257,7 @@ const CreateHeavyEquipmentProductionBook = () => {
           deleteButton: {
             label: t('commonTypography.delete'),
             onClick: () => {
-              filteredDetail.length > 1
-                ? removeDetailFIelds(deleteIndexOf)
-                : null;
+              removeDetailFIelds(deleteIndexOf);
             },
           },
         },
@@ -420,12 +399,37 @@ const CreateHeavyEquipmentProductionBook = () => {
   /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<
     IMutationCreateHeavyEquipmentDataValues
-    // eslint-disable-next-line unused-imports/no-unused-vars
-  > = (data) => {
-    // executeCreate({
-    //   data: manipulateValue,
-    // });
-    // console.log(data);
+  > = async (data) => {
+    const lostTimes = data.loseTimes
+      ?.map(({ workingHourPlanId }) => {
+        const details = data.details
+          ?.filter((value) => value.workingHourPlanId === workingHourPlanId)
+          .map(({ startTime, finishTime }) => ({ startTime, finishTime }));
+
+        const lostTimeValues: IloseTimes = {
+          workingHourPlanId: workingHourPlanId,
+          details: details,
+        };
+        return lostTimeValues;
+      })
+      .filter((obj) => obj.details && obj.details.length >= 1);
+
+    const {
+      details,
+      heavyEquipmentType,
+      amountWorkTime,
+      amountEffectiveWorkingHours,
+      loseTimes,
+      date,
+      ...restValue
+    } = data;
+    await executeCreate({
+      variables: {
+        loseTimes: lostTimes,
+        date: dateToString(date ?? null),
+        ...restValue,
+      },
+    });
   };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
