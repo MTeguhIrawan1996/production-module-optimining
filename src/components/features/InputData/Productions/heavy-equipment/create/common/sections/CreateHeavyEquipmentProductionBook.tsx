@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-vars */
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -90,6 +89,8 @@ const CreateHeavyEquipmentProductionBook = () => {
     fields: detailFields,
     replace: detailReplace,
     append,
+    update: updateDetailFields,
+    remove: removeDetailFIelds,
   } = useFieldArray({
     name: 'details',
     control: methods.control,
@@ -100,26 +101,10 @@ const CreateHeavyEquipmentProductionBook = () => {
     methods.setValue('amountWorkTime', amountWorkTime ?? '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newWorkStartTime, newWorkFinishTime]);
-
-  React.useEffect(() => {
-    const totalSeconds = detailFields.reduce((acc, curr) => {
-      const durationInSeconds =
-        timeToSecond(curr.startTime, curr.finishTime) || 0;
-
-      return acc + durationInSeconds;
-    }, 0);
-
-    methods.setValue(
-      'loseTimes.0.amountHour',
-      `${totalSeconds === 0 ? '' : secondsDuration(totalSeconds)}`
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [detailFields]);
-
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  const { workingHourPlansDataLoading } = useReadAllWHPsMaster({
+  useReadAllWHPsMaster({
     variables: {
       limit: null,
     },
@@ -157,6 +142,7 @@ const CreateHeavyEquipmentProductionBook = () => {
     },
   });
 
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const [executeCreate, { loading }] = useCreateHeavyEquipmentProduction({
     onCompleted: () => {
       notifications.show({
@@ -190,7 +176,6 @@ const CreateHeavyEquipmentProductionBook = () => {
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
-
   const lostTimeGroup = React.useCallback(
     (
       val: FieldArrayWithId<
@@ -205,6 +190,14 @@ const CreateHeavyEquipmentProductionBook = () => {
         (obj) => obj.workingHourPlanId === val.workingHourPlanId
       );
 
+      const totalSeconds = filteredDetail.reduce((acc, curr) => {
+        const durationInSeconds =
+          timeToSecond(curr.startTime, curr.finishTime) || 0;
+        const currentValue = acc + durationInSeconds;
+
+        return currentValue;
+      }, 0);
+
       const returnItem = filteredDetail.map((value) => {
         const indexOfId = detailFields.findIndex((val) => value.id === val.id);
         const startTimeItem = globalTimeInput({
@@ -218,7 +211,11 @@ const CreateHeavyEquipmentProductionBook = () => {
               `details.${indexOfId}.startTime`,
               e.currentTarget.value
             );
-            // setNewWorkStartTime(e.currentTarget.value);
+            updateDetailFields(indexOfId, {
+              workingHourPlanId: value.workingHourPlanId,
+              startTime: e.currentTarget.value,
+              finishTime: value.finishTime,
+            });
             methods.trigger(`details.${indexOfId}.startTime`);
           },
         });
@@ -233,7 +230,11 @@ const CreateHeavyEquipmentProductionBook = () => {
               `details.${indexOfId}.finishTime`,
               e.currentTarget.value
             );
-            // setNewWorkStartTime(e.currentTarget.value);
+            updateDetailFields(indexOfId, {
+              workingHourPlanId: value.workingHourPlanId,
+              startTime: value.startTime,
+              finishTime: e.currentTarget.value,
+            });
             methods.trigger(`details.${indexOfId}.finishTime`);
           },
         });
@@ -243,7 +244,6 @@ const CreateHeavyEquipmentProductionBook = () => {
       const itemController = returnItem.flatMap(
         ({ startTimeItem, finishTimeItem }) => [startTimeItem, finishTimeItem]
       );
-
       const amountHourItem = globalText({
         colSpan: 12,
         name: `loseTimes.${index}.amountHour`,
@@ -251,7 +251,13 @@ const CreateHeavyEquipmentProductionBook = () => {
         withAsterisk: false,
         disabled: true,
         labelWithTranslate: false,
+        value: `${totalSeconds === 0 ? '' : secondsDuration(totalSeconds)}`,
       });
+
+      const lastIndexFilter = filteredDetail[filteredDetail.length - 1];
+      const deleteIndexOf = detailFields.findIndex(
+        (val) => val.id === lastIndexFilter.id
+      );
 
       const group: ControllerGroup = {
         group: val.name ?? '',
@@ -269,7 +275,11 @@ const CreateHeavyEquipmentProductionBook = () => {
           },
           deleteButton: {
             label: t('commonTypography.delete'),
-            onClick: () => {},
+            onClick: () => {
+              filteredDetail.length > 1
+                ? removeDetailFIelds(deleteIndexOf)
+                : null;
+            },
           },
         },
         formControllers: [...itemController, amountHourItem],
@@ -410,10 +420,12 @@ const CreateHeavyEquipmentProductionBook = () => {
   /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<
     IMutationCreateHeavyEquipmentDataValues
+    // eslint-disable-next-line unused-imports/no-unused-vars
   > = (data) => {
     // executeCreate({
     //   data: manipulateValue,
     // });
+    // console.log(data);
   };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
