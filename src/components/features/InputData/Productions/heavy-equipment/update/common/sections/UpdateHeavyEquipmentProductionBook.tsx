@@ -62,7 +62,6 @@ const UpdateHeavyEquipmentProductionBook = () => {
       amountWorkTime: '',
       desc: '',
       heavyEquipmentType: '',
-      amountEffectiveWorkingHours: '',
       loseTimes: [],
     },
     mode: 'onBlur',
@@ -427,7 +426,6 @@ const UpdateHeavyEquipmentProductionBook = () => {
     const {
       heavyEquipmentType,
       amountWorkTime,
-      amountEffectiveWorkingHours,
       loseTimes,
       date,
       ...restValue

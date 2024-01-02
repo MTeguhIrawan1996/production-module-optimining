@@ -20,7 +20,6 @@ export const heavyEquipmentProductionMutationValidation: z.ZodType<IMutationHeav
     amountWorkTime: zOptionalString,
     desc: zOptionalString,
     heavyEquipmentType: zOptionalString,
-    amountEffectiveWorkingHours: zOptionalString,
     loseTimes: z
       .object({
         workingHourPlanId: zOptionalString,
@@ -35,18 +34,3 @@ export const heavyEquipmentProductionMutationValidation: z.ZodType<IMutationHeav
       })
       .array(),
   });
-
-// .superRefine((arg, ctx) => {
-//   const detailsLength = arg.details.length >= 1
-//   if (detailsLength) {
-//     if (arg.details) {
-//       ctx.addIssue({
-//         code: z.ZodIssueCode.custom, // customize your issue
-//         path: ['companyHeavyEquipmentChangeId'],
-//         message: 'Kolom tidak boleh kosong',
-//       });
-//     }
-
-//     return z.NEVER; // The return value is not used, but we need to return something to satisfy the typing
-//   }
-// });

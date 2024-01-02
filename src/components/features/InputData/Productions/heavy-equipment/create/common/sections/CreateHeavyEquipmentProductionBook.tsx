@@ -63,7 +63,6 @@ const CreateHeavyEquipmentProductionBook = () => {
       amountWorkTime: '',
       desc: '',
       heavyEquipmentType: '',
-      amountEffectiveWorkingHours: '',
       loseTimes: [],
     },
     mode: 'onBlur',
@@ -344,13 +343,6 @@ const CreateHeavyEquipmentProductionBook = () => {
       withAsterisk: false,
       disabled: true,
     });
-    const amountEffectiveWorkingHoursItem = globalText({
-      colSpan: 12,
-      name: 'amountEffectiveWorkingHours',
-      label: 'amountEffectiveWorkingHours',
-      withAsterisk: false,
-      disabled: true,
-    });
 
     const field: ControllerGroup[] = [
       {
@@ -376,11 +368,6 @@ const CreateHeavyEquipmentProductionBook = () => {
       },
       ...sampleGroupItem,
       {
-        group: t('commonTypography.amountEffectiveWorkingHours'),
-        enableGroupLabel: false,
-        formControllers: [amountEffectiveWorkingHoursItem],
-      },
-      {
         group: t('commonTypography.desc'),
         enableGroupLabel: false,
         formControllers: [desc],
@@ -399,7 +386,6 @@ const CreateHeavyEquipmentProductionBook = () => {
     const {
       heavyEquipmentType,
       amountWorkTime,
-      amountEffectiveWorkingHours,
       loseTimes,
       date,
       ...restValue

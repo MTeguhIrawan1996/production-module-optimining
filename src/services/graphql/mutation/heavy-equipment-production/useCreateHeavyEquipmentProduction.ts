@@ -53,7 +53,6 @@ export interface IMutationHeavyEquipmentDataProdValues {
   amountWorkTime: string;
   desc: string;
   heavyEquipmentType: string;
-  amountEffectiveWorkingHours: string;
   loseTimes: IloseTimes[];
 }
 
