@@ -27,6 +27,7 @@ const HeavyEquipmentMasterBook = () => {
   const { t } = useTranslation('default');
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
+  const url = `/master-data/heavy-equipment?page=1`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -351,6 +352,9 @@ const HeavyEquipmentMasterBook = () => {
         placeholder: t('heavyEquipment.searchPlaceholderMaster'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
+        },
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
         },
         searchQuery: searchQuery,
       }}

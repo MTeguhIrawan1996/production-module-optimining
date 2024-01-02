@@ -20,6 +20,7 @@ const BlockBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
+  const url = `/master-data/block?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -167,6 +168,9 @@ const BlockBook = () => {
         placeholder: t('block.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
+        },
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
         },
         searchQuery: searchQuery,
       }}

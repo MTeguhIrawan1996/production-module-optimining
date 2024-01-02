@@ -21,6 +21,7 @@ const HeavyEquipmentClassBook = () => {
   const { t } = useTranslation('default');
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
+  const url = `/reference/heavy-equipment-class?page=1`;
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -179,6 +180,9 @@ const HeavyEquipmentClassBook = () => {
           setSearchQuery(e.currentTarget.value);
         },
         searchQuery,
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
+        },
         placeholder: t('heavyEquipmentClass.searchPlaceholder'),
       }}
     >
