@@ -47,6 +47,8 @@ const UpdateHeavyEquipmentProductionBook = () => {
     '',
     400
   );
+  const [isOpenConfirmation, setIsOpenConfirmation] =
+    React.useState<boolean>(false);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationHeavyEquipmentDataProdValues>({
@@ -446,6 +448,9 @@ const UpdateHeavyEquipmentProductionBook = () => {
       },
     });
   };
+  const handleConfirmation = () => {
+    methods.handleSubmit(handleSubmitForm)();
+  };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
@@ -456,10 +461,29 @@ const UpdateHeavyEquipmentProductionBook = () => {
         submitForm={handleSubmitForm}
         submitButton={{
           label: t('commonTypography.save'),
-          loading: loading,
+          type: 'button',
+          onClick: () => setIsOpenConfirmation((prev) => !prev),
         }}
         backButton={{
           onClick: () => router.push('/input-data/production/heavy-equipment'),
+        }}
+        modalConfirmation={{
+          isOpenModalConfirmation: isOpenConfirmation,
+          actionModalConfirmation: () => setIsOpenConfirmation((prev) => !prev),
+          actionButton: {
+            label: t('commonTypography.yes'),
+            type: 'button',
+            onClick: handleConfirmation,
+            loading: loading,
+          },
+          backButton: {
+            label: 'Batal',
+          },
+          modalType: {
+            type: 'default',
+            title: t('commonTypography.alertTitleConfirmUpdate'),
+          },
+          withDivider: true,
         }}
       />
     </DashboardCard>
