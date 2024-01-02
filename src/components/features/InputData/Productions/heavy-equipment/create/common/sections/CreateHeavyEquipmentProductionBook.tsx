@@ -16,7 +16,6 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import {
-  IloseTimes,
   IMutationCreateHeavyEquipmentDataValues,
   useCreateHeavyEquipmentProduction,
 } from '@/services/graphql/mutation/heavy-equipment-production/useCreateHeavyEquipmentProduction';
@@ -66,24 +65,19 @@ const CreateHeavyEquipmentProductionBook = () => {
       heavyEquipmentType: '',
       amountEffectiveWorkingHours: '',
       loseTimes: [],
-      details: [],
     },
     mode: 'onBlur',
   });
 
   const companyHeavyEquipmentId = methods.watch('companyHeavyEquipmentId');
+  const loseTimeWatch = methods.watch('loseTimes');
 
-  const { fields: lostTimeFields, replace: lostTimeReplaces } = useFieldArray({
-    name: 'loseTimes',
-    control: methods.control,
-  });
   const {
-    fields: detailFields,
-    append,
-    update: updateDetailFields,
-    remove: removeDetailFIelds,
+    fields: loseTimeFields,
+    replace: loseTimeReplaces,
+    update: loseTimeUpdate,
   } = useFieldArray({
-    name: 'details',
+    name: 'loseTimes',
     control: methods.control,
   });
 
@@ -100,14 +94,15 @@ const CreateHeavyEquipmentProductionBook = () => {
       limit: null,
     },
     onCompleted: (data) => {
-      const otherLostTime = data.workingHourPlans.data.map((val) => {
+      const otherloseTime = data.workingHourPlans.data.map((val) => {
         return {
           workingHourPlanId: val.id,
           name: val.activityName,
           amountHour: '',
+          details: [],
         };
       });
-      lostTimeReplaces(otherLostTime);
+      loseTimeReplaces(otherloseTime);
     },
   });
 
@@ -157,7 +152,7 @@ const CreateHeavyEquipmentProductionBook = () => {
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
-  const lostTimeGroup = React.useCallback(
+  const loseTimeGroup = React.useCallback(
     (
       val: FieldArrayWithId<
         IMutationCreateHeavyEquipmentDataValues,
@@ -167,62 +162,50 @@ const CreateHeavyEquipmentProductionBook = () => {
       index: number
     ) => {
       const label = val.name?.replace(/\b(?:Jam|jam|hour|Hour)\b/g, '');
-      const filteredDetail = detailFields.filter(
-        (obj) => obj.workingHourPlanId === val.workingHourPlanId
+      const totalSeconds = loseTimeWatch?.[index].details?.reduce(
+        (acc, curr) => {
+          const durationInSeconds =
+            timeToSecond(curr.startTime, curr.finishTime) || 0;
+          const currentValue = acc + durationInSeconds;
+
+          return currentValue;
+        },
+        0
       );
 
-      const totalSeconds = filteredDetail.reduce((acc, curr) => {
-        const durationInSeconds =
-          timeToSecond(curr.startTime, curr.finishTime) || 0;
-        const currentValue = acc + durationInSeconds;
-
-        return currentValue;
-      }, 0);
-
-      const returnItem = filteredDetail.map((value) => {
-        const indexOfId = detailFields.findIndex((val) => value.id === val.id);
+      const returnItem = val.details?.map((_, i: number) => {
         const startTimeItem = globalTimeInput({
-          name: `details.${indexOfId}.startTime`,
+          name: `loseTimes.${index}.details.${i}.startTime`,
           label: `${t('commonTypography.startHour')} ${label ?? ''}`,
           labelWithTranslate: false,
           withAsterisk: true,
           colSpan: 6,
           onChange: (e) => {
             methods.setValue(
-              `details.${indexOfId}.startTime`,
+              `loseTimes.${index}.details.${i}.startTime`,
               e.currentTarget.value
             );
-            updateDetailFields(indexOfId, {
-              workingHourPlanId: value.workingHourPlanId,
-              startTime: e.currentTarget.value,
-              finishTime: value.finishTime,
-            });
-            methods.trigger(`details.${indexOfId}.startTime`);
+            methods.trigger(`loseTimes.${index}.details.${i}.startTime`);
           },
         });
         const finishTimeItem = globalTimeInput({
-          name: `details.${indexOfId}.finishTime`,
+          name: `loseTimes.${index}.details.${i}.finishTime`,
           label: `${t('commonTypography.endHour')} ${label ?? ''}`,
           labelWithTranslate: false,
           withAsterisk: true,
           colSpan: 6,
           onChange: (e) => {
             methods.setValue(
-              `details.${indexOfId}.finishTime`,
+              `loseTimes.${index}.details.${i}.finishTime`,
               e.currentTarget.value
             );
-            updateDetailFields(indexOfId, {
-              workingHourPlanId: value.workingHourPlanId,
-              startTime: value.startTime,
-              finishTime: e.currentTarget.value,
-            });
-            methods.trigger(`details.${indexOfId}.finishTime`);
+            methods.trigger(`loseTimes.${index}.details.${i}.finishTime`);
           },
         });
         return { startTimeItem, finishTimeItem };
       });
 
-      const itemController = returnItem.flatMap(
+      const itemController = returnItem?.flatMap(
         ({ startTimeItem, finishTimeItem }) => [startTimeItem, finishTimeItem]
       );
       const amountHourItem = globalText({
@@ -232,13 +215,12 @@ const CreateHeavyEquipmentProductionBook = () => {
         withAsterisk: false,
         disabled: true,
         labelWithTranslate: false,
-        value: `${totalSeconds === 0 ? '' : secondsDuration(totalSeconds)}`,
+        value: `${
+          !totalSeconds || totalSeconds === 0
+            ? ''
+            : secondsDuration(totalSeconds ?? null)
+        }`,
       });
-
-      const lastIndexFilter = filteredDetail[filteredDetail.length - 1];
-      const deleteIndexOf = detailFields.findIndex(
-        (val) => val.id === lastIndexFilter?.id
-      );
 
       const group: ControllerGroup = {
         group: val.name ?? '',
@@ -247,29 +229,43 @@ const CreateHeavyEquipmentProductionBook = () => {
           addButton: {
             label: `${t('commonTypography.create')} ${val.name}`,
             onClick: () => {
-              append({
+              loseTimeUpdate(index, {
                 workingHourPlanId: val.workingHourPlanId,
-                startTime: '',
-                finishTime: '',
+                name: val.name,
+                amountHour: val.amountHour,
+                details: [
+                  ...(val.details ?? []),
+                  {
+                    startTime: '',
+                    finishTime: '',
+                  },
+                ],
               });
             },
           },
           deleteButton: {
             label: t('commonTypography.delete'),
             onClick: () => {
-              removeDetailFIelds(deleteIndexOf);
+              const copyArray = val.details?.slice();
+              copyArray?.pop();
+              loseTimeUpdate(index, {
+                workingHourPlanId: val.workingHourPlanId,
+                name: val.name,
+                amountHour: val.amountHour,
+                details: copyArray ?? [],
+              });
             },
           },
         },
-        formControllers: [...itemController, amountHourItem],
+        formControllers: [...(itemController ?? []), amountHourItem],
       };
       return group;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [detailFields]
+    [loseTimeWatch]
   );
 
-  const sampleGroupItem = lostTimeFields.map(lostTimeGroup);
+  const sampleGroupItem = loseTimeFields.map(loseTimeGroup);
 
   const fieldRhf = React.useMemo(() => {
     const date = globalDate({
@@ -400,22 +396,7 @@ const CreateHeavyEquipmentProductionBook = () => {
   const handleSubmitForm: SubmitHandler<
     IMutationCreateHeavyEquipmentDataValues
   > = async (data) => {
-    const lostTimes = data.loseTimes
-      ?.map(({ workingHourPlanId }) => {
-        const details = data.details
-          ?.filter((value) => value.workingHourPlanId === workingHourPlanId)
-          .map(({ startTime, finishTime }) => ({ startTime, finishTime }));
-
-        const lostTimeValues: IloseTimes = {
-          workingHourPlanId: workingHourPlanId,
-          details: details,
-        };
-        return lostTimeValues;
-      })
-      .filter((obj) => obj.details && obj.details.length >= 1);
-
     const {
-      details,
       heavyEquipmentType,
       amountWorkTime,
       amountEffectiveWorkingHours,
@@ -423,9 +404,14 @@ const CreateHeavyEquipmentProductionBook = () => {
       date,
       ...restValue
     } = data;
+    const newLoseTimes = loseTimes.map(({ workingHourPlanId, details }) => ({
+      workingHourPlanId,
+      details,
+    }));
+
     await executeCreate({
       variables: {
-        loseTimes: lostTimes,
+        loseTimes: newLoseTimes,
         date: dateToString(date ?? null),
         ...restValue,
       },

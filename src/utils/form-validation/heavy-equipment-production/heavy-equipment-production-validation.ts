@@ -26,16 +26,16 @@ export const heavyEquipmentProductionMutationValidation: z.ZodType<IMutationCrea
         workingHourPlanId: zOptionalString,
         name: zOptionalString,
         amountHour: zOptionalString,
-      })
-      .array(),
-    details: z
-      .object({
-        workingHourPlanId: zOptionalString,
-        startTime: zRequiredString,
-        finishTime: zRequiredString,
+        details: z
+          .object({
+            startTime: zRequiredString,
+            finishTime: zRequiredString,
+          })
+          .array(),
       })
       .array(),
   });
+
 // .superRefine((arg, ctx) => {
 //   const detailsLength = arg.details.length >= 1
 //   if (detailsLength) {
