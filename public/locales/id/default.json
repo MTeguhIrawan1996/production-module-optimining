@@ -35,6 +35,10 @@
     "workingHourFinish": "Jam Berakhir Kerja",
     "workingHourAmount": "Total Jam Kerja",
     "hourAmount": "Total Jam",
+    "hourAmountRain": "Total Jam Hujan",
+    "hourAmountSlippery": "Total Jam Licin",
+    "loseTime": "Waktu yang Hilang",
+    "availabilityHoursOrDays": "Ketersediaan Jam/Hari",
     "amountEffectiveWorkingHours": "Total Jam Kerja Efektif",
     "equipmentPerformance": "Equipment Performance",
     "activity": "Kegiatan",
@@ -119,6 +123,7 @@
     "arrive": "Tujuan",
     "ritageDuration": "Waktu Ritase",
     "weather": "Cuaca",
+    "weatherData": "Data Cuaca",
     "fromLocation": "Lokasi Asal",
     "level": "Level",
     "fromLevel": "Dari Level",
@@ -379,7 +384,8 @@
     "stockpile": "$t(commonTypography.stockpile)",
     "production": "$t(commonTypography.production)",
     "dataRitage": "$t(commonTypography.dataRitage)",
-    "heavyEquipmentProduction": "$t(commonTypography.heavyEquipment)"
+    "heavyEquipmentProduction": "$t(commonTypography.heavyEquipment)",
+    "weatherProduction": "$t(commonTypography.weatherData)"
   },
   "auth": {
     "button": {
@@ -788,5 +794,23 @@
     "successIsNotValidateMessage": "Status $t(heavyEquipmentProd.heavyEquipmentProdTitle) Tidak Valid",
     "successIsDeterminedMessage": "$t(heavyEquipmentProd.heavyEquipmentProdTitle) berhasil ditetapkan",
     "successIsRejectMessage": "$t(heavyEquipmentProd.heavyEquipmentProdTitle) berhasil $t(commonTypography.reject)"
+  },
+  "weatherProd": {
+    "weatherProdTitle": "$t(commonTypography.weatherData)",
+    "createWeatherProd": "$t(commonTypography.create) $t(commonTypography.weatherData)",
+    "uploadWeatherProd": "$t(commonTypography.upload) $t(commonTypography.weatherData)",
+    "readWeatherProd": "$t(commonTypography.detail) $t(commonTypography.weatherData)",
+    "updateWeatherProd": "$t(commonTypography.edit) $t(commonTypography.weatherData)",
+    "successDeleteMessage": "$t(commonTypography.weatherData) berhasil dihapus",
+    "formWeatherProd": "$t(commonTypography.form) $t(weatherProd.weatherProdTitle)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.date), $t(commonTypography.hourAmountRain), $t(commonTypography.hourAmountSlippery) dan $t(commonTypography.loseTime)",
+    "formUploadWeatherProd": "$t(commonTypography.form) $t(commonTypography.upload) $t(weatherProd.weatherProdTitle)",
+    "formUpdateWeatherProd": "$t(commonTypography.form) $t(commonTypography.edit) $t(weatherProd.weatherProdTitle)",
+    "successCreateMessage": "$t(commonTypography.weatherData) berhasil dibuat",
+    "successUpdateMessage": "$t(commonTypography.weatherData) berhasil diubah",
+    "successIsValidateMessage": "$t(weatherProd.weatherProdTitle) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(weatherProd.weatherProdTitle) Tidak Valid",
+    "successIsDeterminedMessage": "$t(weatherProd.weatherProdTitle) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(weatherProd.weatherProdTitle) berhasil $t(commonTypography.reject)"
   }
 }
