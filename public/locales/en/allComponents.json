@@ -156,6 +156,7 @@
       "arriveTime": "Waktu Sampai Tujuan",
       "weather": "Cuaca",
       "ritageDuration": "Waktu Ritase",
+      "duration": "Durasi",
       "toBarging": "Ke Barging",
       "bargingStartDate": "Start Barging",
       "bargingFinishDate": "Finish Barging",
@@ -187,7 +188,13 @@
       "startOpen": "Mulai Buka",
       "endOpen": "Selesai Buka",
       "openTime": "Jam Buka",
-      "closeTime": "Jam Tutup"
+      "closeTime": "Jam Tutup",
+      "operator": "Operator",
+      "foreman": "Nama Mandor",
+      "workingHourStart": "Jam Mulai Kerja",
+      "workingHourFinish": "Jam Berakhir Kerja",
+      "workingHourAmount": "Total Jam Kerja",
+      "amountEffectiveWorkingHours": "Total Jam Kerja Efektif"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",

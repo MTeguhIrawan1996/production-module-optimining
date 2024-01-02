@@ -30,6 +30,13 @@
     "subMaterialType": "Sub Jenis Material",
     "subMaterialTypeBy": "Sub Jenis Material Dari",
     "workingHoursPlan": "Rencana Waktu Hilang",
+    "workingHour": "Waktu Kerja",
+    "workingHourStart": "Jam Mulai Kerja",
+    "workingHourFinish": "Jam Berakhir Kerja",
+    "workingHourAmount": "Total Jam Kerja",
+    "hourAmount": "Total Jam",
+    "amountEffectiveWorkingHours": "Total Jam Kerja Efektif",
+    "equipmentPerformance": "Equipment Performance",
     "activity": "Kegiatan",
     "activityPlan": "Rencana Aktivitas",
     "element": "Unsur Kandungan",
@@ -341,7 +348,8 @@
     "stockpileData": "Data Stockpile",
     "sampleData": "Data Sampel",
     "operator": "Operator",
-    "foreman": "Mandor"
+    "foreman": "Nama Mandor",
+    "heavyEquipmentInformation": "Informasi Alat Berat"
   },
   "sideBar": {
     "dashboard": "Dashboard",

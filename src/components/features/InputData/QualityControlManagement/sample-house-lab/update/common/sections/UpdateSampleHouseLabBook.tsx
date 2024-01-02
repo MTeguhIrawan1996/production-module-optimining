@@ -148,13 +148,11 @@ const UpdateSampleHouseLabPage = () => {
         );
         methods.setValue(
           `gradeControlElements.${i}.value`,
-          valueGCElements && valueGCElements.value
-            ? `${valueGCElements.value}`
-            : ''
+          valueGCElements && valueGCElements.value ? valueGCElements.value : ''
         );
         methods.setValue(
           `elements.${i}.value`,
-          valueElements && valueElements.value ? `${valueElements.value}` : ''
+          valueElements && valueElements.value ? valueElements.value : ''
         );
       });
       const sampleDate = stringToDate(houseSampleAndLab.sampleDate ?? null);
@@ -270,7 +268,7 @@ const UpdateSampleHouseLabPage = () => {
   /* #   /**=========== Field =========== */
   const fieldGradeControlElements = React.useCallback(
     (val: IElementRhf, index: number) => {
-      const elementItem = globalText({
+      const elementItem = globalNumberInput({
         name: `gradeControlElements.${index}.value`,
         label: `${val.name} ${t('commonTypography.estimationGC')}`,
         colSpan: 6,
@@ -287,7 +285,7 @@ const UpdateSampleHouseLabPage = () => {
 
   const fieldElements = React.useCallback(
     (val: IElementRhf, index: number) => {
-      const elementItem = globalText({
+      const elementItem = globalNumberInput({
         name: `elements.${index}.value`,
         label: `${val.name} ${t('commonTypography.percentageLab')}`,
         colSpan: 6,
