@@ -15,12 +15,10 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import {
-  IMutationHeavyEquipmentDataProdValues,
-  useCreateHeavyEquipmentProduction,
-} from '@/services/graphql/mutation/heavy-equipment-production/useCreateHeavyEquipmentProduction';
+import { IMutationHeavyEquipmentDataProdValues } from '@/services/graphql/mutation/heavy-equipment-production/useCreateHeavyEquipmentProduction';
+import { useUpdateHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useUpdateHeavyEquipmentProduction';
 import { useReadOneHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentCompany';
-import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
+import { useReadOneHeavyEquipmentProduction } from '@/services/graphql/query/heavy-equipment-production/useReadOneHeavyEquipmentProduction';
 import {
   employeeSelect,
   globalDate,
@@ -30,16 +28,17 @@ import {
 } from '@/utils/constants/Field/global-field';
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { heavyEquipmentProductionMutationValidation } from '@/utils/form-validation/heavy-equipment-production/heavy-equipment-production-validation';
-import { secondsDuration } from '@/utils/helper/dateFormat';
-import { dateToString } from '@/utils/helper/dateToString';
+import { formatDate2, secondsDuration } from '@/utils/helper/dateFormat';
+import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { hourDiff, timeToSecond } from '@/utils/helper/hourDiff';
 
 import { ControllerGroup } from '@/types/global';
 
-const CreateHeavyEquipmentProductionBook = () => {
+const UpdateHeavyEquipmentProductionBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
   const [newWorkStartTime, setNewWorkStartTime] = useDebouncedState<string>(
     '',
     400
@@ -48,6 +47,8 @@ const CreateHeavyEquipmentProductionBook = () => {
     '',
     400
   );
+  const [isOpenConfirmation, setIsOpenConfirmation] =
+    React.useState<boolean>(false);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationHeavyEquipmentDataProdValues>({
@@ -88,22 +89,57 @@ const CreateHeavyEquipmentProductionBook = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  useReadAllWHPsMaster({
-    variables: {
-      limit: null,
-    },
-    onCompleted: (data) => {
-      const otherloseTime = data.workingHourPlans.data.map((val) => {
-        return {
-          workingHourPlanId: val.id,
-          name: val.activityName,
-          amountHour: '',
-          details: [],
-        };
-      });
-      loseTimeReplaces(otherloseTime);
-    },
-  });
+  const { heavyEquipmentData, heavyEquipmentDataLoading } =
+    useReadOneHeavyEquipmentProduction({
+      variables: {
+        id,
+      },
+      skip: !router.isReady,
+      onCompleted: ({ heavyEquipmentData }) => {
+        const otherLoseTime = heavyEquipmentData.loseTimes?.map((val) => {
+          const details = val.details?.map(({ startAt, finishAt }) => {
+            const newStartTime = formatDate2(startAt, 'HH:mm:ss');
+            const newFinishTime = formatDate2(finishAt, 'HH:mm:ss');
+            return {
+              startTime: newStartTime ?? '',
+              finishTime: newFinishTime ?? '',
+            };
+          });
+
+          return {
+            workingHourPlanId: val.workingHourPlan?.id ?? '',
+            name: val.workingHourPlan?.activityName ?? '',
+            amountHour: '',
+            details: details ?? [],
+          };
+        });
+        if (otherLoseTime) {
+          loseTimeReplaces(otherLoseTime);
+        }
+        const date = stringToDate(heavyEquipmentData.date ?? null);
+        const newWorkStartTime = formatDate2(
+          heavyEquipmentData.workStartAt,
+          'HH:mm:ss'
+        );
+        const newWorkFinishTime = formatDate2(
+          heavyEquipmentData.workFinishAt,
+          'HH:mm:ss'
+        );
+        methods.setValue('date', date);
+        methods.setValue('foremanId', heavyEquipmentData.foreman.id);
+        methods.setValue('operatorId', heavyEquipmentData.operator.id);
+        methods.setValue('shiftId', heavyEquipmentData.shift?.id ?? '');
+        methods.setValue(
+          'companyHeavyEquipmentId',
+          heavyEquipmentData.companyHeavyEquipment?.id ?? ''
+        );
+        methods.setValue('workStartTime', newWorkStartTime ?? '');
+        setNewWorkStartTime(newWorkStartTime ?? '');
+        methods.setValue('workFinishTime', newWorkFinishTime ?? '');
+        setNewWorkFinishTime(newWorkFinishTime ?? '');
+        methods.setValue('desc', heavyEquipmentData.desc ?? '');
+      },
+    });
 
   useReadOneHeavyEquipmentCompany({
     variables: {
@@ -118,12 +154,12 @@ const CreateHeavyEquipmentProductionBook = () => {
     },
   });
 
-  const [executeCreate, { loading }] = useCreateHeavyEquipmentProduction({
+  const [executeUpdate, { loading }] = useUpdateHeavyEquipmentProduction({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('heavyEquipmentProd.successCreateMessage'),
+        message: t('heavyEquipmentProd.successUpdateMessage'),
         icon: <IconCheck />,
       });
       methods.reset();
@@ -279,18 +315,24 @@ const CreateHeavyEquipmentProductionBook = () => {
       name: 'foremanId',
       label: 'foreman',
       withAsterisk: true,
+      defaultValue: heavyEquipmentData?.foreman?.id,
+      labelValue: heavyEquipmentData?.foreman?.humanResource?.name,
     });
     const operatorItem = employeeSelect({
       colSpan: 6,
       name: 'operatorId',
       label: 'operator',
       withAsterisk: true,
+      defaultValue: heavyEquipmentData?.operator?.id,
+      labelValue: heavyEquipmentData?.operator?.humanResource?.name,
     });
     const heavyEquipmantCodeItem = heavyEquipmentSelect({
       colSpan: 6,
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
       withAsterisk: true,
+      defaultValue: heavyEquipmentData?.companyHeavyEquipment?.id,
+      labelValue: heavyEquipmentData?.companyHeavyEquipment?.hullNumber ?? '',
       onChange: (value) => {
         methods.setValue('companyHeavyEquipmentId', value ?? '');
         methods.setValue('heavyEquipmentType', '');
@@ -376,7 +418,7 @@ const CreateHeavyEquipmentProductionBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sampleGroupItem]);
+  }, [sampleGroupItem, heavyEquipmentData]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
@@ -390,37 +432,62 @@ const CreateHeavyEquipmentProductionBook = () => {
       date,
       ...restValue
     } = data;
-    const newLoseTimes = loseTimes.map(({ workingHourPlanId, details }) => ({
-      workingHourPlanId,
-      details,
-    }));
+    const newLoseTimes = loseTimes
+      .map(({ workingHourPlanId, details }) => ({
+        workingHourPlanId,
+        details,
+      }))
+      .filter((obj) => obj.details && obj.details.length >= 1);
 
-    await executeCreate({
+    await executeUpdate({
       variables: {
+        id,
         loseTimes: newLoseTimes,
         date: dateToString(date ?? null),
         ...restValue,
       },
     });
   };
+  const handleConfirmation = () => {
+    methods.handleSubmit(handleSubmitForm)();
+  };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={heavyEquipmentDataLoading}>
       <GlobalFormGroup
         field={fieldRhf}
         methods={methods}
         submitForm={handleSubmitForm}
         submitButton={{
           label: t('commonTypography.save'),
-          loading: loading,
+          type: 'button',
+          onClick: () => setIsOpenConfirmation((prev) => !prev),
         }}
         backButton={{
           onClick: () => router.push('/input-data/production/heavy-equipment'),
+        }}
+        modalConfirmation={{
+          isOpenModalConfirmation: isOpenConfirmation,
+          actionModalConfirmation: () => setIsOpenConfirmation((prev) => !prev),
+          actionButton: {
+            label: t('commonTypography.yes'),
+            type: 'button',
+            onClick: handleConfirmation,
+            loading: loading,
+          },
+          backButton: {
+            label: 'Batal',
+          },
+          modalType: {
+            type: 'default',
+            title: t('commonTypography.alertTitleConfirmUpdate'),
+          },
+          withDivider: true,
         }}
       />
     </DashboardCard>
   );
 };
 
-export default CreateHeavyEquipmentProductionBook;
+export default UpdateHeavyEquipmentProductionBook;

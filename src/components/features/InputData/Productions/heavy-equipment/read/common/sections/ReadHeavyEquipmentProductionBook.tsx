@@ -175,6 +175,10 @@ const ReadHeavyEquipmentProductionBook = () => {
   );
 
   const loseTimeItem = heavyEquipmentData?.loseTimes?.map((val, i) => {
+    const label = val.workingHourPlan?.activityName.replace(
+      /\b(?:Jam|jam|hour|Hour)\b/g,
+      ''
+    );
     return (
       <React.Fragment key={`${val.id}${i}`}>
         {val.details && val.details.length ? (
@@ -186,10 +190,7 @@ const ReadHeavyEquipmentProductionBook = () => {
               {val.details.map((obj, index) => {
                 const numberOfLabel =
                   val.details && val.details.length > 1 ? index + 1 : '';
-                const label = val.workingHourPlan?.activityName.replace(
-                  /\b(?:Jam|jam|hour|Hour)\b/g,
-                  ''
-                );
+
                 return (
                   <KeyValueList
                     data={[
@@ -205,12 +206,6 @@ const ReadHeavyEquipmentProductionBook = () => {
                         )} ${label}  ${numberOfLabel}`,
                         value: formatDate(obj.finishAt, 'hh:mm:ss A'),
                       },
-                      {
-                        dataKey: `${t(
-                          'commonTypography.hourAmount'
-                        )} ${label}  ${numberOfLabel}`,
-                        value: secondsDuration(obj.duration ?? null),
-                      },
                     ]}
                     type="grid"
                     keyStyleText={{
@@ -225,6 +220,23 @@ const ReadHeavyEquipmentProductionBook = () => {
                   />
                 );
               })}
+              <KeyValueList
+                data={[
+                  {
+                    dataKey: `${t('commonTypography.hourAmount')} ${label}`,
+                    value: secondsDuration(val.totalDuration ?? null),
+                  },
+                ]}
+                type="grid"
+                keyStyleText={{
+                  fw: 400,
+                  fz: 20,
+                }}
+                valueStyleText={{
+                  fw: 600,
+                  fz: 20,
+                }}
+              />
             </Stack>
             <Divider my="md" />
           </>

@@ -89,7 +89,7 @@ export const READ_ALL_HEAVY_EQUIPMENT_PRODUCTION = gql`
 
 interface IReadAllHeavyEquipmentProductionData {
   id: string;
-  date: Date | string | null;
+  date: string | null;
   companyHeavyEquipment: {
     id: string;
     hullNumber: string | null;

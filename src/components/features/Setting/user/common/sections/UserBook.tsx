@@ -18,6 +18,7 @@ const UserBook = () => {
   const { t } = useTranslation('default');
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
+  const url = `/setting/user?page=1`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
 
   const { usersData, usersLoading, usersMeta } = useReadAllUser({
@@ -112,6 +113,9 @@ const UserBook = () => {
           setSearchQuery(e.currentTarget.value);
         },
         searchQuery: searchQuery,
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
+        },
         placeholder: t('user.searchPlaceholder'),
       }}
     >

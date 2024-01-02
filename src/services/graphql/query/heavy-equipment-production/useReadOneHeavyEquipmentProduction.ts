@@ -48,6 +48,7 @@ export const READ_ONE_HEAVY_EQUIPMENT_PRODUCTION = gql`
       workStartAt
       workFinishAt
       loseTimes {
+        id
         totalDuration
         workingHourPlan {
           id
@@ -72,7 +73,7 @@ export const READ_ONE_HEAVY_EQUIPMENT_PRODUCTION = gql`
 
 interface IReadOneHeavyEquipmentProduction {
   id: string;
-  date: Date | string | null;
+  date: string | null;
   companyHeavyEquipment: {
     id: string;
     hullNumber: string | null;
@@ -106,8 +107,8 @@ interface IReadOneHeavyEquipmentProduction {
   };
   status: IStatus | null;
   statusMessage: string | null;
-  workStartAt: Date | string | null;
-  workFinishAt: Date | string | null;
+  workStartAt: string | null;
+  workFinishAt: string | null;
   workDuration: number | null;
   loseTimes:
     | {
@@ -121,8 +122,8 @@ interface IReadOneHeavyEquipmentProduction {
         details:
           | {
               duration: number | null;
-              startAt: Date | string | null;
-              finishAt: Date | string | null;
+              startAt: string | null;
+              finishAt: string | null;
             }[]
           | null;
       }[]

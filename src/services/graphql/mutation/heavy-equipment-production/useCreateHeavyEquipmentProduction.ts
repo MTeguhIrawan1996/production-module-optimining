@@ -30,42 +30,35 @@ export const CREATE_HEAVY_EQUIPMENT_PRODUCTION = gql`
   }
 `;
 
+type Idetails = {
+  startTime: string;
+  finishTime: string;
+};
+
 export type IloseTimes = {
   workingHourPlanId: string;
   name?: string;
   amountHour?: string;
-  details: {
-    startTime: string;
-    finishTime: string;
-  }[];
+  details: Idetails[];
 };
 
-export interface IMutationCreateHeavyEquipmentDataValues {
+export interface IMutationHeavyEquipmentDataProdValues {
   date?: Date | string | null;
-  foremanId: string;
-  operatorId: string;
-  companyHeavyEquipmentId: string;
-  shiftId: string;
+  foremanId: string | null;
+  operatorId: string | null;
+  companyHeavyEquipmentId: string | null;
+  shiftId: string | null;
   workStartTime: string;
   workFinishTime: string;
   amountWorkTime: string;
   desc: string;
   heavyEquipmentType: string;
-  amountEffectiveWorkingHours: string;
   loseTimes: IloseTimes[];
-  details: {
-    workingHourPlanId: string;
-    startTime: string;
-    finishTime: string;
-  }[];
 }
 
 type ICreateHeavyEquipmentProductionRequest = Omit<
-  IMutationCreateHeavyEquipmentDataValues,
-  | 'heavyEquipmentType'
-  | 'amountEffectiveWorkingHours'
-  | 'amountWorkTime'
-  | 'details'
+  IMutationHeavyEquipmentDataProdValues,
+  'heavyEquipmentType' | 'amountEffectiveWorkingHours' | 'amountWorkTime'
 >;
 
 interface ICreateHeavyEquipmentProductionResponse {
