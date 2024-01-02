@@ -88,6 +88,7 @@
       "vehicleDocument": "Surat Kendaraan",
       "heavyEquipmentCode": "Nomor Lambung",
       "bargeName": "Nama Tongkang",
+      "bargeCode": "Nomor Lambung Tongkang",
       "heavyEquipmentCodeSubstitution": "Nomor Lambung Pengganti",
       "startDate": "Tanggal Mulai",
       "endDate": "Tanggal Selesai",

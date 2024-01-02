@@ -447,7 +447,7 @@ const ReadRitageBargingBook = () => {
                   value: bargingRitage?.barging?.name,
                 },
                 {
-                  dataKey: t('commonTypography.bargeName'),
+                  dataKey: t('commonTypography.bargeCode'),
                   value: bargingRitage?.bargeCompanyHeavyEquipment?.hullNumber,
                 },
               ]}
