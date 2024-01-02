@@ -430,8 +430,7 @@ const CreateHeavyEquipmentProductionBook = () => {
           loading: loading,
         }}
         backButton={{
-          onClick: () =>
-            router.push('/input-data/production/data-ritage?tabs=moving'),
+          onClick: () => router.push('/input-data/production/heavy-equipment'),
         }}
       />
     </DashboardCard>
