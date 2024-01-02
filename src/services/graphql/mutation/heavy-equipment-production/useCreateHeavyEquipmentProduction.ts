@@ -42,7 +42,7 @@ export type IloseTimes = {
   details: Idetails[];
 };
 
-export interface IMutationCreateHeavyEquipmentDataValues {
+export interface IMutationHeavyEquipmentDataProdValues {
   date?: Date | string | null;
   foremanId: string | null;
   operatorId: string | null;
@@ -58,11 +58,8 @@ export interface IMutationCreateHeavyEquipmentDataValues {
 }
 
 type ICreateHeavyEquipmentProductionRequest = Omit<
-  IMutationCreateHeavyEquipmentDataValues,
-  | 'heavyEquipmentType'
-  | 'amountEffectiveWorkingHours'
-  | 'amountWorkTime'
-  | 'details'
+  IMutationHeavyEquipmentDataProdValues,
+  'heavyEquipmentType' | 'amountEffectiveWorkingHours' | 'amountWorkTime'
 >;
 
 interface ICreateHeavyEquipmentProductionResponse {

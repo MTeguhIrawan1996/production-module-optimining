@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { IMutationCreateHeavyEquipmentDataValues } from '@/services/graphql/mutation/heavy-equipment-production/useCreateHeavyEquipmentProduction';
+import { IMutationHeavyEquipmentDataProdValues } from '@/services/graphql/mutation/heavy-equipment-production/useCreateHeavyEquipmentProduction';
 import {
   zDateValidation,
   zOptionalString,
@@ -8,7 +8,7 @@ import {
   zRequiredString,
 } from '@/utils/form-validation/global';
 
-export const heavyEquipmentProductionMutationValidation: z.ZodType<IMutationCreateHeavyEquipmentDataValues> =
+export const heavyEquipmentProductionMutationValidation: z.ZodType<IMutationHeavyEquipmentDataProdValues> =
   z.object({
     date: zDateValidation,
     foremanId: zRequiredSelectInput,
