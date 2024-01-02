@@ -25,6 +25,7 @@ const HeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
+  const url = `/reference/heavy-equipment?page=1`;
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -256,6 +257,9 @@ const HeavyEquipmentBook = () => {
           setSearchQuery(e.currentTarget.value);
         },
         searchQuery,
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
+        },
         placeholder: t('heavyEquipment.searchPlaceholder'),
       }}
       MultipleFilter={{
