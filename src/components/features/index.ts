@@ -40,6 +40,7 @@ import UpdateHeavyEquipmentProductionPage from '@/components/features/InputData/
 import WeatherProductionProductionPage from '@/components/features/InputData/Productions/weather/common';
 import CreateWeatherProductionPage from '@/components/features/InputData/Productions/weather/create/common';
 import ReadWeatherProductionPage from '@/components/features/InputData/Productions/weather/read/common';
+import UpdateWeatherProductionPage from '@/components/features/InputData/Productions/weather/update/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
 import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/create/common';
 import ReadSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/read/common';
@@ -242,6 +243,7 @@ export {
   UpdateStockpileMasterPage,
   UpdateStockpileMonitoringPage,
   UpdateUserPage,
+  UpdateWeatherProductionPage,
   UpdateWorkingHoursPlanMasterPage,
   UploadRitageBargingPage,
   UploadRitageMovingPage,

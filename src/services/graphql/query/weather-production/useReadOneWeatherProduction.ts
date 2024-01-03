@@ -1,5 +1,6 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
+import { ILocationCategoriesData } from '@/services/graphql/query/global-select/useReadAllLocationCategory ';
 import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
 
 import { IStatus } from '@/types/global';
@@ -16,6 +17,10 @@ export const READ_ONE_WEATHER_PRODUCTION = gql`
           id
           name
         }
+      }
+      locationCategory {
+        id
+        name
       }
       location {
         id
@@ -56,6 +61,7 @@ type IWeatherConditions = {
 interface IReadOneWeatherProduction {
   id: string;
   date: string | null;
+  locationCategory: Pick<ILocationCategoriesData, 'id' | 'name'> | null;
   location: Pick<ILocationsData, 'id' | 'name'> | null;
   checker: {
     id: string;

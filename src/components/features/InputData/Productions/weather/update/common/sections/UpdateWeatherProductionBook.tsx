@@ -8,10 +8,9 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import {
-  IMutationWeatherProductionValues,
-  useCreateWeatherProduction,
-} from '@/services/graphql/mutation/weather-production/useCreateWeatherProduction';
+import { IMutationWeatherProductionValues } from '@/services/graphql/mutation/weather-production/useCreateWeatherProduction';
+import { useUpdateWeatherProduction } from '@/services/graphql/mutation/weather-production/useUpdateWeatherProduction';
+import { useReadOneWeatherProduction } from '@/services/graphql/query/weather-production/useReadOneWeatherProduction';
 import {
   employeeSelect,
   globalDate,
@@ -23,14 +22,18 @@ import {
   weatherConditionSelect,
 } from '@/utils/constants/Field/global-field';
 import { weatherProductionMutationValidation } from '@/utils/form-validation/weather-production/weather-production-validation';
-import { dateToString } from '@/utils/helper/dateToString';
+import { formatDate2 } from '@/utils/helper/dateFormat';
+import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
-const CreateWeatherProductionBook = () => {
+const UpdateWeatherProductionBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
+  const [isOpenConfirmation, setIsOpenConfirmation] =
+    React.useState<boolean>(false);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationWeatherProductionValues>({
@@ -56,6 +59,7 @@ const CreateWeatherProductionBook = () => {
 
   const {
     fields: weatherConditionFields,
+    replace: replaceWeatherConditionFields,
     remove: removeWeatherConditionFields,
     append: appendWeatherConditionFields,
   } = useFieldArray({
@@ -66,12 +70,43 @@ const CreateWeatherProductionBook = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  const [executeCreate, { loading }] = useCreateWeatherProduction({
+  const { weatherData, weatherDataLoading } = useReadOneWeatherProduction({
+    variables: {
+      id,
+    },
+    skip: !router.isReady,
+    onCompleted: ({ weatherData }) => {
+      const date = stringToDate(weatherData.date ?? null);
+      const weatherDataConditions = weatherData.weatherDataConditions.map(
+        (val) => {
+          const startTime = formatDate2(val.startAt, 'HH:mm:ss');
+          const finishTime = formatDate2(val.finishAt, 'HH:mm:ss');
+          return {
+            conditionId: val.condition?.id ?? '',
+            startTime: startTime ?? '',
+            finishTime: finishTime ?? '',
+            rainfall: val.rainfall,
+          };
+        }
+      );
+      replaceWeatherConditionFields(weatherDataConditions);
+      methods.setValue('date', date);
+      methods.setValue('checkerId', weatherData.checker?.id ?? '');
+      methods.setValue(
+        'locationCategoryId',
+        weatherData.locationCategory?.id ?? ''
+      );
+      methods.setValue('locationId', weatherData.location?.id ?? '');
+      methods.setValue('desc', weatherData.desc ?? '');
+    },
+  });
+
+  const [executeUpdate, { loading }] = useUpdateWeatherProduction({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('weatherProd.successCreateMessage'),
+        message: t('weatherProd.successUpdateMessage'),
         icon: <IconCheck />,
       });
       methods.reset();
@@ -198,12 +233,16 @@ const CreateWeatherProductionBook = () => {
       name: 'checkerId',
       label: 'checkerName',
       withAsterisk: true,
+      defaultValue: weatherData?.checker?.id,
+      labelValue: weatherData?.checker?.humanResource.name,
       // positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
     });
     const locationCategoryItem = locationCategorySelect({
       clearable: true,
       withAsterisk: true,
       name: 'locationCategoryId',
+      defaultValue: weatherData?.locationCategory?.id,
+      labelValue: weatherData?.locationCategory?.name,
       onChange: (value) => {
         methods.setValue('locationCategoryId', value ?? '');
         methods.setValue('locationId', '');
@@ -219,6 +258,8 @@ const CreateWeatherProductionBook = () => {
       withAsterisk: true,
       disabled: !newLocationCategoryId,
       categoryId: locationCategoryId,
+      defaultValue: weatherData?.location?.id,
+      labelValue: weatherData?.location?.name,
     });
 
     const desc = globalText({
@@ -247,7 +288,7 @@ const CreateWeatherProductionBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationCategoryId, weatherGroupItem]);
+  }, [locationCategoryId, weatherGroupItem, weatherData]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
@@ -256,8 +297,9 @@ const CreateWeatherProductionBook = () => {
   > = async (data) => {
     const date = dateToString(data.date ?? null);
 
-    await executeCreate({
+    await executeUpdate({
       variables: {
+        id,
         date,
         checkerId: data.checkerId,
         locationCategoryId: data.locationCategoryId,
@@ -267,24 +309,46 @@ const CreateWeatherProductionBook = () => {
       },
     });
   };
+  const handleConfirmation = () => {
+    methods.handleSubmit(handleSubmitForm)();
+  };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={weatherDataLoading}>
       <GlobalFormGroup
         field={fieldRhf}
         methods={methods}
         submitForm={handleSubmitForm}
         submitButton={{
           label: t('commonTypography.save'),
-          loading: loading,
+          type: 'button',
+          onClick: () => setIsOpenConfirmation((prev) => !prev),
         }}
         backButton={{
           onClick: () => router.push('/input-data/production/weather'),
+        }}
+        modalConfirmation={{
+          isOpenModalConfirmation: isOpenConfirmation,
+          actionModalConfirmation: () => setIsOpenConfirmation((prev) => !prev),
+          actionButton: {
+            label: t('commonTypography.yes'),
+            type: 'button',
+            onClick: handleConfirmation,
+            loading: loading,
+          },
+          backButton: {
+            label: 'Batal',
+          },
+          modalType: {
+            type: 'default',
+            title: t('commonTypography.alertTitleConfirmUpdate'),
+          },
+          withDivider: true,
         }}
       />
     </DashboardCard>
   );
 };
 
-export default CreateWeatherProductionBook;
+export default UpdateWeatherProductionBook;
