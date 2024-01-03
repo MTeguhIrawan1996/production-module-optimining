@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-vars */
 import { Select, SelectProps } from '@mantine/core';
 import * as React from 'react';
 import { useController } from 'react-hook-form';
@@ -14,7 +13,6 @@ import { CommonProps } from '@/types/global';
 export type IShiftSelectInputRhfProps = {
   control: 'shift-select-input';
   name: string;
-  labelValue?: string;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
@@ -25,7 +23,6 @@ const ShiftSelectInputRhf: React.FC<IShiftSelectInputRhfProps> = ({
   name,
   control,
   label,
-  labelValue,
   defaultValue,
   ...rest
 }) => {

@@ -49,6 +49,7 @@ import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
 import { ITimeInputRhfProps } from '@/components/elements/input/TimeInputRhf';
 import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelectInputRhf';
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
+import { IWeatherConditionSelectInputRhfProps } from '@/components/elements/input/WeatherConditionSelectInputRhf';
 import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
 
 import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
@@ -111,7 +112,8 @@ export type ControllerProps =
   | IHeavyEquipmentSelectInputRhfProps
   | IWeatherSelectInputRhfProps
   | ILocationSelectInputRhfProps
-  | IPitSelectInputRhfProps;
+  | IPitSelectInputRhfProps
+  | IWeatherConditionSelectInputRhfProps;
 
 export type InputControllerNativeProps =
   | IDateInputNativeProps

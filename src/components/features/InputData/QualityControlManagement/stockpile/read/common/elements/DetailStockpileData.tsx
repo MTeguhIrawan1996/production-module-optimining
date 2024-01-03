@@ -398,6 +398,25 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
         />
       </Stack>
       <Divider my="md" />
+      <Stack spacing="sm">
+        <KeyValueList
+          data={[
+            {
+              dataKey: t('commonTypography.desc'),
+              value: monitoringStockpile?.desc,
+            },
+          ]}
+          type="grid"
+          keyStyleText={{
+            fw: 400,
+            fz: 20,
+          }}
+          valueStyleText={{
+            fw: 600,
+            fz: 20,
+          }}
+        />
+      </Stack>
     </>
   );
 };

@@ -51,7 +51,7 @@ const InnerWrapper: React.FC<IInnerWrapperProps> = ({
     ...restAlertProps
   } = alertProps || {};
   return (
-    <Box component="section" w="100%" px={32}>
+    <Box component="section" w="100%" px={22}>
       <Container size={size} pt={pt} pb={pb} px={px} {...restContainerProps}>
         {titleProps && (
           <Title order={order} size={sizeTitle} fw={fw} {...rest}>

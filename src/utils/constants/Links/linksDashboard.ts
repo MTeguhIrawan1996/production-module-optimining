@@ -118,6 +118,11 @@ export const linksDashboard: IMenuItem[] = [
             href: '/input-data/production/heavy-equipment',
             access: ['create-heavy-equipment-data'],
           },
+          {
+            label: 'weatherProduction',
+            href: '/input-data/production/weather',
+            access: ['create-weather-data'],
+          },
         ],
       },
       {

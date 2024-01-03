@@ -31,9 +31,11 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
   const renderName = React.useMemo(() => {
     return (
       <Group spacing="xs">
-        <Text component="span">{authUser?.name}</Text>
-        <ActionIcon color="brand.5" variant="filled" radius={4} size="lg">
-          <IconUser size="1.625rem" />
+        <Text component="span" fz={14}>
+          {authUser?.name}
+        </Text>
+        <ActionIcon color="brand.5" variant="filled" radius={4} size="md">
+          <IconUser size="1.2rem" />
         </ActionIcon>
       </Group>
     );
@@ -41,14 +43,21 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
 
   return (
     <Box top={0} p={0} pos="sticky" w="100%" sx={{ zIndex: 10 }}>
-      <Group position="apart" h={64} px={26} bg="#FFFFFF" className="shadow">
+      <Group
+        position="apart"
+        h={64}
+        pr={26}
+        pl={12}
+        bg="#FFFFFF"
+        className="shadow"
+      >
         <ActionIcon
-          color="dark"
-          size="lg"
-          className="primaryHover"
+          variant="light"
+          color="brand.6"
+          radius={4}
           onClick={onHandleExpand}
         >
-          <IconMenu2 size="1.5rem" />
+          <IconMenu2 size="1rem" />
         </ActionIcon>
         <Menu shadow="md" width={350} position="bottom-end">
           <Menu.Target>{renderName}</Menu.Target>

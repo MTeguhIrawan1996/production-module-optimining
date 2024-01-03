@@ -1,5 +1,10 @@
 import { Icon } from '@iconify/react';
-import { Navbar as MantineNavbar, Stack, Tooltip } from '@mantine/core';
+import {
+  ActionIcon,
+  Navbar as MantineNavbar,
+  Stack,
+  Tooltip,
+} from '@mantine/core';
 import { IconAB } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -33,13 +38,17 @@ const NavbarCollapse: React.FC<IProps> = ({ menuItems, styles }) => {
           position="right"
           key={i}
         >
-          <Link
-            className={cx(classes.link, classes.linkButtonIcon, {
-              [classes.linkActive]: item.href === cleanedPath,
-            })}
-            href={item.href ?? '/'}
-          >
-            <Icon icon={item.icon ?? ''} fontSize={20} />
+          <Link href={item.href ?? '/'}>
+            <ActionIcon
+              radius="md"
+              w={40}
+              h={40}
+              className={cx(classes.link, {
+                [classes.linkActive]: item.href === cleanedPath,
+              })}
+            >
+              <Icon icon={item.icon ?? ''} style={{ fontSize: '18px' }} />
+            </ActionIcon>
           </Link>
         </Tooltip.Floating>
       );
@@ -53,7 +62,7 @@ const NavbarCollapse: React.FC<IProps> = ({ menuItems, styles }) => {
   return (
     <MantineNavbar
       height="100%"
-      width={{ base: 90 }}
+      width={{ base: 70 }}
       py="xs"
       px={0}
       style={styles}
