@@ -5,40 +5,39 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllShiftMaster } from '@/services/graphql/query/shift/useReadAllShiftMaster';
+import { useReadAllWeatherCondition } from '@/services/graphql/query/global-select/useReadAllWeatherCondition';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
-export type IShiftSelectInputRhfProps = {
-  control: 'shift-select-input';
+export type IWeatherConditionSelectInputRhfProps = {
+  control: 'weather-condition-select-input';
   name: string;
 } & Omit<
   SelectProps,
-  'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
+  | 'name'
+  | 'data'
+  | 'onSearchChange'
+  | 'searchValue'
+  | 'searchable'
+  | 'placeholder'
 > &
   CommonProps;
 
-const ShiftSelectInputRhf: React.FC<IShiftSelectInputRhfProps> = ({
-  name,
-  control,
-  label,
-  defaultValue,
-  ...rest
-}) => {
+const WeatherConditionSelectInputRhf: React.FC<
+  IWeatherConditionSelectInputRhfProps
+> = ({ name, control, label, defaultValue, ...rest }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
 
-  const { shiftsData } = useReadAllShiftMaster({
+  const { weatherConditionsdata } = useReadAllWeatherCondition({
     variables: {
       limit: null,
-      orderDir: 'desc',
-      orderBy: 'createdAt',
     },
   });
 
   const { uncombinedItem } = useFilterItems({
-    data: shiftsData ?? [],
+    data: weatherConditionsdata ?? [],
   });
 
   return (
@@ -58,7 +57,7 @@ const ShiftSelectInputRhf: React.FC<IShiftSelectInputRhfProps> = ({
         },
       })}
       data-control={control}
-      placeholder={t('commonTypography.chooseShift', {
+      placeholder={t('commonTypography.chooseCondition', {
         ns: 'default',
       })}
       label={label ? t(`components.field.${label}`) : null}
@@ -73,4 +72,4 @@ const ShiftSelectInputRhf: React.FC<IShiftSelectInputRhfProps> = ({
   );
 };
 
-export default ShiftSelectInputRhf;
+export default WeatherConditionSelectInputRhf;

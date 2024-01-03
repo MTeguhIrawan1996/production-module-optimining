@@ -38,6 +38,7 @@ import CreateHeavyEquipmentProductionPage from '@/components/features/InputData/
 import ReadHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/read/common';
 import UpdateHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/update/common';
 import WeatherProductionProductionPage from '@/components/features/InputData/Productions/weather/common';
+import CreateWeatherProductionPage from '@/components/features/InputData/Productions/weather/create/common';
 import ReadWeatherProductionPage from '@/components/features/InputData/Productions/weather/read/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
 import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/create/common';
@@ -160,6 +161,7 @@ export {
   CreateStockpileDomeMasterPage,
   CreateStockpileMasterPage,
   CreateUserPage,
+  CreateWeatherProductionPage,
   CreateWorkingHoursPlanMasterPage,
   DashboardPage,
   DataRitagePage,

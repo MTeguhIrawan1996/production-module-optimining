@@ -41,6 +41,7 @@ import {
   TimeInputRhf,
   TypeSelectInputRhf,
   VillageSelectInputRhf,
+  WeatherConditionSelectInputRhf,
   WeatherSelectInputRhf,
 } from '@/components/elements';
 
@@ -130,6 +131,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <PitSelectInputRhf {...props} />;
     case 'location-select-input':
       return <LocationSelectInputRhf {...props} />;
+    case 'weather-condition-select-input':
+      return <WeatherConditionSelectInputRhf {...props} />;
     default:
       return null;
   }

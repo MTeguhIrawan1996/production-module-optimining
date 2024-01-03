@@ -251,6 +251,7 @@
     "chooseShift": "$t(commonTypography.choose) $t(commonTypography.shift)",
     "chooseSampleType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.sampleType)",
     "chooseEmployee": "$t(commonTypography.choose) / Ketikan $t(commonTypography.employee)",
+    "chooseCondition": "$t(commonTypography.choose) $t(commonTypography.condition)",
     "complete": "Lengkap",
     "unComplete": "Tidak Lengkap",
     "engineNumber": "Nomor Mesin",
