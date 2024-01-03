@@ -44,6 +44,7 @@ const NavbarLinksGroupLevel2: React.FC<INavbarLinksGroupLevel2Props> = ({
         href={item.href ?? ''}
         key={`${item.label} + ${i}`}
         label={t(`sideBar.${item.label}`)}
+        fz="sm"
       />
     );
   });
@@ -57,7 +58,9 @@ const NavbarLinksGroupLevel2: React.FC<INavbarLinksGroupLevel2Props> = ({
           className={classes.controlSubLinksGroup}
         >
           <Group spacing={0}>
-            <Text component="span">{t(`sideBar.${label}`)}</Text>
+            <Text component="span" fz="sm">
+              {t(`sideBar.${label}`)}
+            </Text>
           </Group>
           <IconChevronRight
             className={classes.chevron}

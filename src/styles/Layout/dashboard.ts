@@ -2,14 +2,6 @@ import { createStyles, rem } from '@mantine/core';
 
 const useDashboardLayoutStyle = createStyles((theme) => ({
   // Component
-  linkButtonIcon: {
-    width: 50,
-    height: 50,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 0,
-  },
 
   // Layout dashboard (Links/Menu)
   link: {

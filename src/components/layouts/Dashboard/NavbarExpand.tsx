@@ -64,9 +64,11 @@ const NavbarExpand: React.FC<IProps> = ({
           <Icon
             icon={item.icon || ''}
             className={classes.linkIcon}
-            style={{ fontSize: '20px' }}
+            style={{ fontSize: '18px' }}
           />
-          <Text component="span">{t(`sideBar.${item.label}`)}</Text>
+          <Text component="span" fz="sm">
+            {t(`sideBar.${item.label}`)}
+          </Text>
         </Link>
       );
     },
@@ -79,9 +81,9 @@ const NavbarExpand: React.FC<IProps> = ({
   return (
     <MantineNavbar
       height="100%"
-      pt="sm"
-      px="sm"
-      width={{ base: '100%', sm: 360 }}
+      pt={2}
+      px={4}
+      width={{ base: '100%', sm: 300 }}
       bg="white"
       style={styles}
       className="shadow-xl"
@@ -105,7 +107,7 @@ const NavbarExpand: React.FC<IProps> = ({
           </ActionIcon>
         </Group>
       </MantineNavbar.Section>
-      <MantineNavbar.Section p="xs" grow component={ScrollArea}>
+      <MantineNavbar.Section p="xs" pt={2} grow component={ScrollArea}>
         <Stack spacing={0}>{linkRender}</Stack>
       </MantineNavbar.Section>
     </MantineNavbar>

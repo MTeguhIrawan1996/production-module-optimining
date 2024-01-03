@@ -31,8 +31,11 @@ const NavbarCollapseLinksGroupLevel2: React.FC<IMenuItem> = ({
           className={cx(classes.item, {
             [classes.linkActive]: isActiveSubMenu,
           })}
+          py={8}
         >
-          <Text component="span">{t(`sideBar.${item.label}`)}</Text>
+          <Text component="span" fz="sm">
+            {t(`sideBar.${item.label}`)}
+          </Text>
         </Menu.Item>
       </Link>
     );
@@ -53,9 +56,9 @@ const NavbarCollapseLinksGroupLevel2: React.FC<IMenuItem> = ({
               color: theme.colors.brand[4],
             },
           })}
-          py={12}
+          py={8}
           px={16}
-          fz={14}
+          fz="sm"
           fw={500}
         >
           <Text component="span">{t(`sideBar.${label}`)}</Text>

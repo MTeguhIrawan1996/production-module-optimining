@@ -59,6 +59,7 @@ const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
           href={item.href ?? ''}
           key={`${item.label} + ${i}`}
           label={t(`sideBar.${item.label}`)}
+          fz="sm"
         />
       );
     },
@@ -76,9 +77,11 @@ const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
             <Icon
               icon={icon || ''}
               className={cx(classes.linkIcon)}
-              style={{ fontSize: '20px' }}
+              style={{ fontSize: '18px' }}
             />
-            <Text component="span">{t(`sideBar.${label}`)}</Text>
+            <Text component="span" fz="sm">
+              {t(`sideBar.${label}`)}
+            </Text>
           </Group>
           <IconChevronRight
             className={classes.chevron}
