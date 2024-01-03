@@ -85,7 +85,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(submitForm)}>
-        <Flex gap={32} direction="column" align="flex-end" p={32}>
+        <Flex gap={32} direction="column" align="flex-end" p={22}>
           {switchProps ? (
             <Stack justify="flex-start" align="flex-start" w="100%" spacing={8}>
               <Text component="label" fw={400} fz={16}>

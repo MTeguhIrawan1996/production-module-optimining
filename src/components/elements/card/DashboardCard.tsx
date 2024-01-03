@@ -90,7 +90,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
   bg = 'none',
   shadow = 'none',
   withBorder,
-  p = 'md',
+  p = 'xs',
   titleStyle,
   downloadButton,
   filterDateWithSelect,

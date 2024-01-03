@@ -15,9 +15,12 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useDeleteHeavyEquipmentProduction';
-import { useReadAllHeavyEquipmentProduction } from '@/services/graphql/query/heavy-equipment-production/useReadAllHeavyEquipmentProduction';
-import { globalSelectWeekNative } from '@/utils/constants/Field/native-field';
+import { useDeleteWeatherProduction } from '@/services/graphql/mutation/weather-production/useDeleteWeatherProduction';
+import { useReadAllWeatherProduction } from '@/services/graphql/query/weather-production/useReadAllWeatherProduction';
+import {
+  globalSelectWeekNative,
+  globalSelectYearNative,
+} from '@/utils/constants/Field/native-field';
 import { formatDate } from '@/utils/helper/dateFormat';
 
 import { InputControllerNativeProps } from '@/types/global';
@@ -30,27 +33,31 @@ const WeatherProductionProductionBook = () => {
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [year, setYear] = React.useState<number | null>(null);
+  const [week, setWeek] = React.useState<number | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
   /* #   /**=========== Query =========== */
   const {
-    heavyEquipmentData,
-    heavyEquipmentDataLoading,
-    heavyEquipmentDataMeta,
-    refetchHeavyEquipmentData,
-  } = useReadAllHeavyEquipmentProduction({
+    weatherData,
+    weatherDataLoading,
+    weatherDataMeta,
+    refetchWeatherData,
+  } = useReadAllWeatherProduction({
     variables: {
       limit: 10,
       page: page,
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
+      year,
+      week,
     },
   });
 
-  const [executeDelete, { loading }] = useDeleteHeavyEquipmentProduction({
+  const [executeDelete, { loading }] = useDeleteWeatherProduction({
     onCompleted: () => {
-      refetchHeavyEquipmentData();
+      refetchWeatherData();
       setIsOpenDeleteConfirmation((prev) => !prev);
       router.push(url, undefined, { shallow: true });
       notifications.show({
@@ -80,40 +87,47 @@ const WeatherProductionProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/heavy-equipment?page=${page}`;
+    const urlSet = `/input-data/production/weather?page=${page}`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
   const filter = React.useMemo(() => {
+    const selectYearItem = globalSelectYearNative({
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setYear(value ? Number(value) : null);
+        setWeek(null);
+      },
+    });
     const selectWeekItem = globalSelectWeekNative({
-      // disabled: !year,
-      // value: `${week}`,
-      // year: year,
-      // onChange: (value) => {
-      //   router.push(url, undefined, { shallow: true });
-      //   setWeek(value ? Number(value) : null);
-      // },
+      disabled: !year,
+      value: `${week}`,
+      year: year,
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setWeek(value ? Number(value) : null);
+      },
     });
 
-    const item: InputControllerNativeProps[] = [selectWeekItem];
+    const item: InputControllerNativeProps[] = [selectYearItem, selectWeekItem];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+  }, [url, year, week]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
     return (
       <MantineDataTable
         tableProps={{
-          records: heavyEquipmentData,
-          fetching: heavyEquipmentDataLoading,
+          records: weatherData,
+          fetching: weatherDataLoading,
           highlightOnHover: true,
           columns: [
             {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                heavyEquipmentData && heavyEquipmentData.indexOf(record) + 1,
+                weatherData && weatherData.indexOf(record) + 1,
               width: 60,
             },
             {
@@ -125,29 +139,27 @@ const WeatherProductionProductionBook = () => {
             {
               accessor: 'location',
               title: t('commonTypography.location'),
-              render: ({ companyHeavyEquipment }) =>
-                companyHeavyEquipment.heavyEquipment.reference.type.name,
+              render: ({ location }) => location?.name,
             },
             {
               accessor: 'hourAmountRain',
               title: t('commonTypography.hourAmountRain'),
-              render: ({ companyHeavyEquipment }) =>
-                companyHeavyEquipment.hullNumber,
+              render: () => '-',
             },
             {
               accessor: 'hourAmountSlippery',
               title: t('commonTypography.hourAmountSlippery'),
-              render: ({ operator }) => operator.humanResource.name,
+              render: () => '-',
             },
             {
               accessor: 'loseTime',
               title: t('commonTypography.loseTime'),
-              render: ({ operator }) => operator.humanResource.name,
+              render: () => '-',
             },
             {
               accessor: 'availabilityHoursOrDays',
               title: t('commonTypography.availabilityHoursOrDays'),
-              render: ({ shift }) => shift?.name,
+              render: () => '-',
             },
             {
               accessor: 'status',
@@ -172,7 +184,7 @@ const WeatherProductionProductionBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/input-data/production/heavy-equipment/read/${id}`
+                          `/input-data/production/weather/read/${id}`
                         );
                       },
                     }}
@@ -183,7 +195,7 @@ const WeatherProductionProductionBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/production/heavy-equipment/update/${id}`
+                                `/input-data/production/weather/update/${id}`
                               );
                             },
                           }
@@ -217,14 +229,14 @@ const WeatherProductionProductionBook = () => {
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: heavyEquipmentDataMeta?.totalAllData ?? 0,
-          totalData: heavyEquipmentDataMeta?.totalData ?? 0,
-          totalPage: heavyEquipmentDataMeta?.totalPage ?? 0,
+          totalAllData: weatherDataMeta?.totalAllData ?? 0,
+          totalData: weatherDataMeta?.totalData ?? 0,
+          totalPage: weatherDataMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [heavyEquipmentData, heavyEquipmentDataLoading]);
+  }, [weatherData, weatherDataLoading]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
