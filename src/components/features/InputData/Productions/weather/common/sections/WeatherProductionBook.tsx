@@ -25,7 +25,7 @@ import { formatDate } from '@/utils/helper/dateFormat';
 
 import { InputControllerNativeProps } from '@/types/global';
 
-const WeatherProductionProductionBook = () => {
+const WeatherProductionBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
@@ -286,4 +286,4 @@ const WeatherProductionProductionBook = () => {
   );
 };
 
-export default WeatherProductionProductionBook;
+export default WeatherProductionBook;

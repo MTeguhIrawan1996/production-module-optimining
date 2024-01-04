@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import WeatherProductionProductionBook from '@/components/features/InputData/Productions/weather/common/sections/WeatherProductionProductionBook';
+import WeatherProductionBook from '@/components/features/InputData/Productions/weather/common/sections/WeatherProductionBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const WeatherProductionProductionPage = () => {
+const WeatherProductionPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -34,10 +34,10 @@ const WeatherProductionProductionPage = () => {
           mb: 'md',
         }}
       >
-        <WeatherProductionProductionBook />
+        <WeatherProductionBook />
       </InnerWrapper>
     </RootWrapper>
   );
 };
 
-export default WeatherProductionProductionPage;
+export default WeatherProductionPage;

@@ -37,7 +37,7 @@ import HeavyEquipmentProductionPage from '@/components/features/InputData/Produc
 import CreateHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/create/common';
 import ReadHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/read/common';
 import UpdateHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/update/common';
-import WeatherProductionProductionPage from '@/components/features/InputData/Productions/weather/common';
+import WeatherProductionPage from '@/components/features/InputData/Productions/weather/common';
 import CreateWeatherProductionPage from '@/components/features/InputData/Productions/weather/create/common';
 import ReadWeatherProductionPage from '@/components/features/InputData/Productions/weather/read/common';
 import UpdateWeatherProductionPage from '@/components/features/InputData/Productions/weather/update/common';
@@ -252,6 +252,6 @@ export {
   UploadRitageQuarryPage,
   UploadRitageTopsoilPage,
   UserPage,
-  WeatherProductionProductionPage,
+  WeatherProductionPage,
   WorkingHoursPlanMasterPage,
 };
