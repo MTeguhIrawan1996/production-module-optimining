@@ -114,13 +114,13 @@ export const linksDashboard: IMenuItem[] = [
             ],
           },
           {
-            label: 'heavyEquipmentProduction',
-            href: '/input-data/production/heavy-equipment',
+            label: 'dataHeavyEquipment',
+            href: '/input-data/production/data-heavy-equipment',
             access: ['create-heavy-equipment-data'],
           },
           {
-            label: 'weatherProduction',
-            href: '/input-data/production/weather',
+            label: 'dataWeather',
+            href: '/input-data/production/data-weather',
             access: ['create-weather-data'],
           },
         ],
@@ -132,6 +132,11 @@ export const linksDashboard: IMenuItem[] = [
             label: 'stockpileMonitoring',
             href: '/input-data/quality-control-management/stockpile-monitoring',
             access: ['create-monitoring-stockpile'],
+          },
+          {
+            label: 'sampleHouseLab',
+            href: '/input-data/quality-control-management/sample-house-lab',
+            access: ['create-house-sample-and-lab'],
           },
           {
             label: 'sampleHouseLab',

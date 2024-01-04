@@ -103,6 +103,10 @@ export async function middleware(request: NextRequest) {
       allowedPermissions: ['create-house-sample-and-lab'],
     },
     {
+      path: '/input-data/quality-control-management/shipping-monitoring',
+      allowedPermissions: ['create-monitoring-barging'],
+    },
+    {
       path: '/input-data/production/data-ritage',
       allowedPermissions: [
         'create-ore-ritage',
@@ -114,11 +118,11 @@ export async function middleware(request: NextRequest) {
       ],
     },
     {
-      path: '/input-data/production/heavy-equipment',
+      path: '/input-data/production/data-heavy-equipment',
       allowedPermissions: ['create-heavy-equipment-data'],
     },
     {
-      path: '/input-data/production/weather',
+      path: '/input-data/production/data-weather',
       allowedPermissions: ['create-weather-data'],
     },
     {
