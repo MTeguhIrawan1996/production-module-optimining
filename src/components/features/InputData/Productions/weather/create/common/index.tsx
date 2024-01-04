@@ -21,7 +21,7 @@ const CreateWeatherProductionPage = () => {
     setBreadcrumbs([
       {
         label: t('commonTypography.weatherData'),
-        path: '/input-data/production/weather',
+        path: '/input-data/production/data-weather',
       },
       {
         label: t('weatherProd.createWeatherProd'),

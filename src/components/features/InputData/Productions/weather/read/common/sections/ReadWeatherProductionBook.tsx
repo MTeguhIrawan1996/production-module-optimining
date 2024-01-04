@@ -63,7 +63,7 @@ const ReadWeatherProductionBook = () => {
           message: message[data.validateWeatherData.status.id],
           icon: <IconCheck />,
         });
-        router.push('/input-data/production/weather');
+        router.push('/input-data/production/data-weather');
       },
       onError: (error) => {
         if (error.graphQLErrors) {
@@ -95,7 +95,7 @@ const ReadWeatherProductionBook = () => {
           message: message[data.determineWeatherData.status.id],
           icon: <IconCheck />,
         });
-        router.push('/input-data/production/weather');
+        router.push('/input-data/production/data-weather');
       },
       onError: (error) => {
         if (error.graphQLErrors) {
@@ -184,7 +184,7 @@ const ReadWeatherProductionBook = () => {
           : {
               label: 'Edit',
               onClick: () =>
-                router.push(`/input-data/production/weather/update/${id}`),
+                router.push(`/input-data/production/data-weather/update/${id}`),
             }
       }
       validationButton={
@@ -231,7 +231,7 @@ const ReadWeatherProductionBook = () => {
       }}
       withBorder
       enebleBackBottomOuter={{
-        onClick: () => router.push('/input-data/production/weather'),
+        onClick: () => router.push('/input-data/production/data-weather'),
       }}
       shadow="xs"
       isLoading={weatherDataLoading}

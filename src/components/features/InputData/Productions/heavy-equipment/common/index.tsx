@@ -19,7 +19,7 @@ const HeavyEquipmentProductionPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.heavyEquipment'),
+        label: t('commonTypography.heavyEquipmentData'),
         path: router.asPath,
       },
     ]);

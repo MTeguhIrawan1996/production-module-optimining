@@ -1,4 +1,6 @@
 import { IDateInputNativeProps } from '@/components/elements/input/DateInputNative';
+import { IArriveBargeNativeProps } from '@/components/elements/input/SelectArriveBargeNative';
+import { ISelectHeavyEquipmentNativeProps } from '@/components/elements/input/SelectHeavyEquipmentNative';
 import { ISelectInputNativeProps } from '@/components/elements/input/SelectInputNative';
 import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
 import { ISelectWeekNativeProps } from '@/components/elements/input/SelectWeekNative';
@@ -80,6 +82,42 @@ export const globalDateNative = ({
   const field: InputControllerNativeProps = {
     control: 'date-input-native',
     label,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectArriveBargeNative = ({
+  name = 'arrive',
+  searchable = false,
+  clearable = true,
+  ...rest
+}: Partial<IArriveBargeNativeProps>) => {
+  const field: InputControllerNativeProps = {
+    control: 'select-arrive-barge-native',
+    name,
+    searchable,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectHeavyEquipmentNative = ({
+  name = 'bargeCode',
+  label = 'bargeCode',
+  searchable = true,
+  clearable = true,
+  withAsterisk = false,
+  ...rest
+}: Partial<ISelectHeavyEquipmentNativeProps>) => {
+  const field: InputControllerNativeProps = {
+    control: 'select-heavy-equipment-native',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
     ...rest,
   };
   return field;
