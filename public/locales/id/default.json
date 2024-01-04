@@ -833,7 +833,7 @@
     "uploadShippingMonitoring": "$t(commonTypography.upload) $t(shippingMonitoring.shippingMonitoringTitle)",
     "readShippingMonitoring": "$t(commonTypography.detail) $t(shippingMonitoring.shippingMonitoringTitle)",
     "updateShippingMonitoring": "$t(commonTypography.edit) $t(shippingMonitoring.shippingMonitoringTitle)",
-    "successDeleteMessage": "$t(commonTypography.shippingMonitoringTitle) berhasil dihapus",
+    "successDeleteMessage": "$t(shippingMonitoring.shippingMonitoringTitle) berhasil dihapus",
     "formShippingMonitoring": "$t(commonTypography.form) $t(shippingMonitoring.shippingMonitoringTitle)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.VeselNameOreFactoryName)",
     "formUploadShippingMonitoring": "$t(commonTypography.form) $t(commonTypography.upload) $t(shippingMonitoring.shippingMonitoringTitle)",

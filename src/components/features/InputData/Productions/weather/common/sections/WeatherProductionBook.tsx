@@ -101,7 +101,7 @@ const WeatherProductionBook = () => {
     });
     const selectWeekItem = globalSelectWeekNative({
       disabled: !year,
-      value: `${week}`,
+      value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });

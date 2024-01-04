@@ -15,7 +15,7 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteWeatherProduction } from '@/services/graphql/mutation/weather-production/useDeleteWeatherProduction';
+import { useDeleteShippingMonitoring } from '@/services/graphql/mutation/shipping-monitoring/useDeleteShippingMonitoring';
 import { useReadAllShippingMonitoring } from '@/services/graphql/query/shipping-monitoring/useReadAllShippingMonitoring';
 import {
   globalSelectArriveBargeNative,
@@ -68,7 +68,7 @@ const ShippingMonitoringBook = () => {
     },
   });
 
-  const [executeDelete, { loading }] = useDeleteWeatherProduction({
+  const [executeDelete, { loading }] = useDeleteShippingMonitoring({
     onCompleted: () => {
       refetchMonitoringBargingData();
       setIsOpenDeleteConfirmation((prev) => !prev);
@@ -76,7 +76,7 @@ const ShippingMonitoringBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('weatherProd.successDeleteMessage'),
+        message: t('shippingMonitoring.successDeleteMessage'),
         icon: <IconCheck />,
       });
     },
@@ -128,7 +128,7 @@ const ShippingMonitoringBook = () => {
     });
     const selectMonthItem = globalSelectMonthNative({
       disabled: !year,
-      value: `${month}`,
+      value: month ? `${month}` : null,
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });
         setMonth(value ? Number(value) : null);
@@ -136,7 +136,7 @@ const ShippingMonitoringBook = () => {
     });
     const selectWeekItem = globalSelectWeekNative({
       disabled: !year,
-      value: `${week}`,
+      value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });
@@ -234,7 +234,7 @@ const ShippingMonitoringBook = () => {
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
           actionButton: {
-            label: t('weatherProd.createWeatherProd'),
+            label: t('shippingMonitoring.createShippingMonitoring'),
             onClick: () =>
               router.push(
                 '/input-data/quality-control-management/shipping-monitoring/create'
