@@ -62,7 +62,7 @@ const ReadHeavyEquipmentProductionBook = () => {
           message: message[data.validateHeavyEquipmentData.status.id],
           icon: <IconCheck />,
         });
-        router.push('/input-data/production/heavy-equipment');
+        router.push('/input-data/production/data-heavy-equipment');
       },
       onError: (error) => {
         if (error.graphQLErrors) {
@@ -94,7 +94,7 @@ const ReadHeavyEquipmentProductionBook = () => {
           message: message[data.determineHeavyEquipmentData.status.id],
           icon: <IconCheck />,
         });
-        router.push('/input-data/production/heavy-equipment');
+        router.push('/input-data/production/data-heavy-equipment');
       },
       onError: (error) => {
         if (error.graphQLErrors) {
@@ -255,7 +255,7 @@ const ReadHeavyEquipmentProductionBook = () => {
               label: 'Edit',
               onClick: () =>
                 router.push(
-                  `/input-data/production/heavy-equipment/update/${id}`
+                  `/input-data/production/data-heavy-equipment/update/${id}`
                 ),
             }
       }
@@ -303,7 +303,8 @@ const ReadHeavyEquipmentProductionBook = () => {
       }}
       withBorder
       enebleBackBottomOuter={{
-        onClick: () => router.push('/input-data/production/heavy-equipment'),
+        onClick: () =>
+          router.push('/input-data/production/data-heavy-equipment'),
       }}
       shadow="xs"
       isLoading={heavyEquipmentDataLoading}

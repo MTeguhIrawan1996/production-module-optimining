@@ -110,7 +110,7 @@ const UpdateWeatherProductionBook = () => {
         icon: <IconCheck />,
       });
       methods.reset();
-      router.push('/input-data/production/weather');
+      router.push('/input-data/production/data-weather');
     },
     onError: (error) => {
       if (error.graphQLErrors) {
@@ -326,7 +326,7 @@ const UpdateWeatherProductionBook = () => {
           onClick: () => setIsOpenConfirmation((prev) => !prev),
         }}
         backButton={{
-          onClick: () => router.push('/input-data/production/weather'),
+          onClick: () => router.push('/input-data/production/data-weather'),
         }}
         modalConfirmation={{
           isOpenModalConfirmation: isOpenConfirmation,

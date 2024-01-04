@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import HeavyEquipmentProductionBook from '@/components/features/InputData/Productions/heavy-equipment/common/sections/HeavyEquipmentProductionBook';
+import ShippingMonitoringBook from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/common/sections/ShippingMonitoringBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const HeavyEquipmentProductionPage = () => {
+const ShippingMonitoringPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -19,7 +19,7 @@ const HeavyEquipmentProductionPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.heavyEquipmentData'),
+        label: t('commonTypography.shippingMonitoring'),
         path: router.asPath,
       },
     ]);
@@ -30,14 +30,14 @@ const HeavyEquipmentProductionPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('heavyEquipmentProd.heavyEquipmentProdTitle'),
+          title: t('shippingMonitoring.shippingMonitoringTitle'),
           mb: 'md',
         }}
       >
-        <HeavyEquipmentProductionBook />
+        <ShippingMonitoringBook />
       </InnerWrapper>
     </RootWrapper>
   );
 };
 
-export default HeavyEquipmentProductionPage;
+export default ShippingMonitoringPage;

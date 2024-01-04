@@ -29,7 +29,7 @@ const WeatherProductionBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
-  const url = `/input-data/production/weather?page=1`;
+  const url = `/input-data/production/data-weather?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -87,7 +87,7 @@ const WeatherProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/weather?page=${page}`;
+    const urlSet = `/input-data/production/data-weather?page=${page}`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
@@ -184,7 +184,7 @@ const WeatherProductionBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/input-data/production/weather/read/${id}`
+                          `/input-data/production/data-weather/read/${id}`
                         );
                       },
                     }}
@@ -195,7 +195,7 @@ const WeatherProductionBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/production/weather/update/${id}`
+                                `/input-data/production/data-weather/update/${id}`
                               );
                             },
                           }
@@ -223,7 +223,8 @@ const WeatherProductionBook = () => {
           title: t('commonTypography.dataNotfound'),
           actionButton: {
             label: t('weatherProd.createWeatherProd'),
-            onClick: () => router.push('/input-data/production/weather/create'),
+            onClick: () =>
+              router.push('/input-data/production/data-weather/create'),
           },
         }}
         paginationProps={{
@@ -243,7 +244,8 @@ const WeatherProductionBook = () => {
     <DashboardCard
       addButton={{
         label: t('weatherProd.createWeatherProd'),
-        onClick: () => router.push('/input-data/production/weather/create'),
+        onClick: () =>
+          router.push('/input-data/production/data-weather/create'),
       }}
       filterDateWithSelect={{
         colSpan: 3,

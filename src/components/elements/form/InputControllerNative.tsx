@@ -3,6 +3,8 @@ import 'dayjs/locale/id';
 
 import {
   DateInputNative,
+  SelectArriveBargeNative,
+  SelectHeavyEquipmentNative,
   SelectInputNative,
   SelectMonthNative,
   SelectWeekNative,
@@ -25,6 +27,10 @@ const InputControllerNative: React.FC<InputControllerNativeProps> = (props) => {
       return <SelectMonthNative {...props} />;
     case 'select-week-native':
       return <SelectWeekNative {...props} />;
+    case 'select-arrive-barge-native':
+      return <SelectArriveBargeNative {...props} />;
+    case 'select-heavy-equipment-native':
+      return <SelectHeavyEquipmentNative {...props} />;
     default:
       return null;
   }

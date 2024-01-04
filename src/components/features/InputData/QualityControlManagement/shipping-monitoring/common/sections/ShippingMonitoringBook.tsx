@@ -13,55 +13,70 @@ import {
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
-  SelectionButtonModal,
 } from '@/components/elements';
 
-import { useDeleteHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useDeleteHeavyEquipmentProduction';
-import { useReadAllHeavyEquipmentProduction } from '@/services/graphql/query/heavy-equipment-production/useReadAllHeavyEquipmentProduction';
-import { globalDateNative } from '@/utils/constants/Field/native-field';
-import { formatDate, formatDate2 } from '@/utils/helper/dateFormat';
+import { useDeleteWeatherProduction } from '@/services/graphql/mutation/weather-production/useDeleteWeatherProduction';
+import { useReadAllShippingMonitoring } from '@/services/graphql/query/shipping-monitoring/useReadAllShippingMonitoring';
+import {
+  globalSelectArriveBargeNative,
+  globalSelectHeavyEquipmentNative,
+  globalSelectMonthNative,
+  globalSelectWeekNative,
+  globalSelectYearNative,
+} from '@/utils/constants/Field/native-field';
 
 import { InputControllerNativeProps } from '@/types/global';
 
-const HeavyEquipmentProductionBook = () => {
+const ShippingMonitoringBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
-  const url = `/input-data/production/data-heavy-equipment?page=1`;
+  const url = `/input-data/quality-control-management/shipping-monitoring?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [date, setDate] = React.useState('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [destinationTypeId, setDestinationTypeId] = React.useState<
+    string | null
+  >(null);
+  const [bargeHeavyEquipmentId, setBargeHeavyEquipmentId] = React.useState<
+    string | null
+  >(null);
+  const [year, setYear] = React.useState<number | null>(null);
+  const [month, setMonth] = React.useState<number | null>(null);
+  const [week, setWeek] = React.useState<number | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
-    React.useState<boolean>(false);
-  const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
 
   /* #   /**=========== Query =========== */
   const {
-    heavyEquipmentData,
-    heavyEquipmentDataLoading,
-    heavyEquipmentDataMeta,
-    refetchHeavyEquipmentData,
-  } = useReadAllHeavyEquipmentProduction({
+    monitoringBargingData,
+    monitoringBargingOtherColumn,
+    monitoringBargingDataLoading,
+    monitoringBargingDataMeta,
+    refetchMonitoringBargingData,
+  } = useReadAllShippingMonitoring({
     variables: {
       limit: 10,
       page: page,
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
-      date: date === '' ? null : date,
+      destinationTypeId,
+      bargeHeavyEquipmentId,
+      year,
+      month,
+      week,
     },
   });
 
-  const [executeDelete, { loading }] = useDeleteHeavyEquipmentProduction({
+  const [executeDelete, { loading }] = useDeleteWeatherProduction({
     onCompleted: () => {
-      refetchHeavyEquipmentData();
+      refetchMonitoringBargingData();
       setIsOpenDeleteConfirmation((prev) => !prev);
       router.push(url, undefined, { shallow: true });
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('heavyEquipmentProd.successDeleteMessage'),
+        message: t('weatherProd.successDeleteMessage'),
         icon: <IconCheck />,
       });
     },
@@ -85,79 +100,79 @@ const HeavyEquipmentProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/data-heavy-equipment?page=${page}`;
+    const urlSet = `/input-data/quality-control-management/shipping-monitoring?page=${page}`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
   const filter = React.useMemo(() => {
-    const dateItem = globalDateNative({
-      label: 'date',
-      placeholder: 'chooseDate',
-      radius: 'lg',
-      clearable: true,
+    const bargeCodeItem = globalSelectHeavyEquipmentNative({
+      categoryId: `${process.env.NEXT_PUBLIC_BARGE_ID}`,
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });
-        const date = formatDate2(value, 'YYYY-MM-DD');
-        setDate(date ?? '');
+        setBargeHeavyEquipmentId(value === '' ? null : value);
+      },
+    });
+    const arriveItem = globalSelectArriveBargeNative({
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setDestinationTypeId(value);
+      },
+    });
+    const selectYearItem = globalSelectYearNative({
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setYear(value ? Number(value) : null);
+        setMonth(null);
+        setWeek(null);
+      },
+    });
+    const selectMonthItem = globalSelectMonthNative({
+      disabled: !year,
+      value: `${month}`,
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setMonth(value ? Number(value) : null);
+      },
+    });
+    const selectWeekItem = globalSelectWeekNative({
+      disabled: !year,
+      value: `${week}`,
+      year: year,
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setWeek(value ? Number(value) : null);
       },
     });
 
-    const item: InputControllerNativeProps[] = [dateItem];
+    const item: InputControllerNativeProps[] = [
+      bargeCodeItem,
+      arriveItem,
+      selectYearItem,
+      selectMonthItem,
+      selectWeekItem,
+    ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+  }, [url, year, month, week]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
     return (
       <MantineDataTable
         tableProps={{
-          records: heavyEquipmentData,
-          fetching: heavyEquipmentDataLoading,
+          records: monitoringBargingData,
+          fetching: monitoringBargingDataLoading,
           highlightOnHover: true,
           columns: [
             {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                heavyEquipmentData && heavyEquipmentData.indexOf(record) + 1,
+                monitoringBargingData &&
+                monitoringBargingData.indexOf(record) + 1,
               width: 60,
             },
-            {
-              accessor: 'date',
-              title: t('commonTypography.date'),
-              width: 160,
-              render: ({ date }) => formatDate(date),
-            },
-            {
-              accessor: 'heavyEquipmentType',
-              title: t('commonTypography.heavyEquipmentType'),
-              render: ({ companyHeavyEquipment }) =>
-                companyHeavyEquipment.heavyEquipment.reference.type.name,
-            },
-            {
-              accessor: 'heavyEquipmentCode',
-              title: t('commonTypography.heavyEquipmentCode'),
-              render: ({ companyHeavyEquipment }) =>
-                companyHeavyEquipment.hullNumber,
-            },
-            {
-              accessor: 'operator',
-              title: t('commonTypography.operator'),
-              width: 150,
-              render: ({ operator }) => operator.humanResource.name,
-            },
-            {
-              accessor: 'shift',
-              title: t('commonTypography.shift'),
-              render: ({ shift }) => shift?.name,
-            },
-            {
-              accessor: 'foreman',
-              title: t('commonTypography.foreman'),
-              width: 150,
-              render: ({ foreman }) => foreman.humanResource.name,
-            },
+            ...(monitoringBargingOtherColumn ?? []),
             {
               accessor: 'status',
               title: t('commonTypography.status'),
@@ -181,7 +196,7 @@ const HeavyEquipmentProductionBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/input-data/production/data-heavy-equipment/read/${id}`
+                          `/input-data/quality-control-management/shipping-monitoring/read/${id}`
                         );
                       },
                     }}
@@ -192,7 +207,7 @@ const HeavyEquipmentProductionBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/production/data-heavy-equipment/update/${id}`
+                                `/input-data/quality-control-management/shipping-monitoring/update/${id}`
                               );
                             },
                           }
@@ -219,36 +234,41 @@ const HeavyEquipmentProductionBook = () => {
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
           actionButton: {
-            label: t('heavyEquipmentProd.createHeavyEquipmentProd'),
+            label: t('weatherProd.createWeatherProd'),
             onClick: () =>
-              router.push('/input-data/production/data-heavy-equipment/create'),
+              router.push(
+                '/input-data/quality-control-management/shipping-monitoring/create'
+              ),
           },
         }}
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: heavyEquipmentDataMeta?.totalAllData ?? 0,
-          totalData: heavyEquipmentDataMeta?.totalData ?? 0,
-          totalPage: heavyEquipmentDataMeta?.totalPage ?? 0,
+          totalAllData: monitoringBargingDataMeta?.totalAllData ?? 0,
+          totalData: monitoringBargingDataMeta?.totalData ?? 0,
+          totalPage: monitoringBargingDataMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [heavyEquipmentData, heavyEquipmentDataLoading]);
+  }, [monitoringBargingData, monitoringBargingDataLoading]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
       addButton={{
-        label: t('heavyEquipmentProd.createHeavyEquipmentProd'),
-        onClick: () => setIsOpenSelectionModal((prev) => !prev),
+        label: t('shippingMonitoring.createShippingMonitoring'),
+        onClick: () =>
+          router.push(
+            '/input-data/quality-control-management/shipping-monitoring/create'
+          ),
       }}
       filterDateWithSelect={{
-        colSpan: 3,
+        colSpan: 5,
         items: filter,
       }}
       searchBar={{
-        placeholder: t('heavyEquipmentProd.searchPlaceholder'),
+        placeholder: t('shippingMonitoring.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
@@ -280,22 +300,8 @@ const HeavyEquipmentProductionBook = () => {
         }}
         withDivider
       />
-      <SelectionButtonModal
-        isOpenSelectionModal={isOpenSelectionModal}
-        actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
-        firstButton={{
-          label: t('commonTypography.inputDataProductionHeavyEquipment'),
-          onClick: () =>
-            router.push('/input-data/production/data-heavy-equipment/create'),
-        }}
-        secondButton={{
-          label: t('commonTypography.uploadFile'),
-          onClick: () =>
-            router.push('/input-data/production/data-heavy-equipment/upload'),
-        }}
-      />
     </DashboardCard>
   );
 };
 
-export default HeavyEquipmentProductionBook;
+export default ShippingMonitoringBook;

@@ -129,19 +129,19 @@ export const linksDashboard: IMenuItem[] = [
         label: 'qualityControlManagement',
         subMenu: [
           {
+            label: 'sampleHouseLab',
+            href: '/input-data/quality-control-management/sample-house-lab',
+            access: ['create-house-sample-and-lab'],
+          },
+          {
             label: 'stockpileMonitoring',
             href: '/input-data/quality-control-management/stockpile-monitoring',
             access: ['create-monitoring-stockpile'],
           },
           {
-            label: 'sampleHouseLab',
-            href: '/input-data/quality-control-management/sample-house-lab',
-            access: ['create-house-sample-and-lab'],
-          },
-          {
-            label: 'sampleHouseLab',
-            href: '/input-data/quality-control-management/sample-house-lab',
-            access: ['create-house-sample-and-lab'],
+            label: 'shippingMonitoring',
+            href: '/input-data/quality-control-management/shipping-monitoring',
+            access: ['create-monitoring-barging'],
           },
         ],
       },

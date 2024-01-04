@@ -35,6 +35,8 @@ import { IRadioInputProps } from '@/components/elements/input/RadioInputRhf';
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
 import { ISampleTypesSelectnputRhfProps } from '@/components/elements/input/SampleTypeSelectInputRhf';
+import { IArriveBargeNativeProps } from '@/components/elements/input/SelectArriveBargeNative';
+import { ISelectHeavyEquipmentNativeProps } from '@/components/elements/input/SelectHeavyEquipmentNative';
 import { ISelectHeavyEquipmentReferenceInputProps } from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
 import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import { ISelectInputNativeProps } from '@/components/elements/input/SelectInputNative';
@@ -120,6 +122,8 @@ export type InputControllerNativeProps =
   | ISelectInputNativeProps
   | ISelectYearNativeProps
   | ISelectMonthNativeProps
+  | IArriveBargeNativeProps
+  | ISelectHeavyEquipmentNativeProps
   | ISelectWeekNativeProps;
 
 export type ControllerGroup = {

@@ -20,8 +20,8 @@ const UpdateHeavyEquipmentProductionPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.dataRitage'),
-        path: '/input-data/production/heavy-equipment',
+        label: t('commonTypography.heavyEquipmentData'),
+        path: '/input-data/production/data-heavy-equipment',
       },
       {
         label: t('heavyEquipmentProd.createHeavyEquipmentProd'),
