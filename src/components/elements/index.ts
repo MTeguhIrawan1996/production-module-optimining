@@ -60,6 +60,8 @@ import RegencySelectInputRhf from '@/components/elements/input/RegencySelectInpu
 import RelegionSelectInputRhf from '@/components/elements/input/RelegionSelectInputRhf';
 import SampleTypeSelectInput from '@/components/elements/input/SampleTypeSelectInputRhf';
 import SelectArriveBargeNative from '@/components/elements/input/SelectArriveBargeNative';
+import SelectArriveBargeRhf from '@/components/elements/input/SelectArriveBargeRhf';
+import SelectFactoryRhf from '@/components/elements/input/SelectFactoryRhf';
 import SelectHeavyEquipmentNative from '@/components/elements/input/SelectHeavyEquipmentNative';
 import SelectHeavyEquipmentReferenceInput from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
 import SelectHeavyEquipmentTypesInput from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
@@ -164,6 +166,8 @@ export {
   SampleTypeSelectInput,
   SearchBar,
   SelectArriveBargeNative,
+  SelectArriveBargeRhf,
+  SelectFactoryRhf,
   SelectHeavyEquipmentNative,
   SelectHeavyEquipmentReferenceInput,
   SelectHeavyEquipmentTypesInput,

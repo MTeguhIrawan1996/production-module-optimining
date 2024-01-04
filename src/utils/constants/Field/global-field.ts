@@ -17,6 +17,8 @@ import { IPositionSelectInputRhfProps } from '@/components/elements/input/Positi
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
+import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
+import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
@@ -859,6 +861,44 @@ export const locationSelect = ({
 }: Partial<ILocationSelectInputRhfProps>) => {
   const field: ControllerProps = {
     control: 'location-select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectArriveBargeRhf = ({
+  name = 'destinationTypeId',
+  searchable = false,
+  clearable = true,
+  ...rest
+}: Partial<IArriveBargeRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-arrive-barge-rhf',
+    name,
+    searchable,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectFactoryRhf = ({
+  name = 'factoryId',
+  label = 'factoryName',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectFactoryRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-factory-rhf',
     name,
     label,
     searchable,

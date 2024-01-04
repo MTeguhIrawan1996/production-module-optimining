@@ -36,6 +36,8 @@ import { IRegencySelectInputRhfProps } from '@/components/elements/input/Regency
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
 import { ISampleTypesSelectnputRhfProps } from '@/components/elements/input/SampleTypeSelectInputRhf';
 import { IArriveBargeNativeProps } from '@/components/elements/input/SelectArriveBargeNative';
+import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
+import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
 import { ISelectHeavyEquipmentNativeProps } from '@/components/elements/input/SelectHeavyEquipmentNative';
 import { ISelectHeavyEquipmentReferenceInputProps } from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
 import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
@@ -115,6 +117,8 @@ export type ControllerProps =
   | IWeatherSelectInputRhfProps
   | ILocationSelectInputRhfProps
   | IPitSelectInputRhfProps
+  | IArriveBargeRhfProps
+  | ISelectFactoryRhfProps
   | IWeatherConditionSelectInputRhfProps;
 
 export type InputControllerNativeProps =

@@ -105,7 +105,7 @@ export const useReadOneShippingMonitoring = ({
           value: null,
         },
         {
-          name: 'tugboatName',
+          name: 'tugboatCode',
           value:
             monitoringBarging?.monitoringBarging.tugboatHeavyEquipment
               ?.hullNumber,

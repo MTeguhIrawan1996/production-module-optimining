@@ -107,7 +107,7 @@ interface ISimpleKeyType {
   closePalka: string | null;
   closePalkaHour: string | null;
   arrive: string | null;
-  veselNameOreFactoryName: string | null;
+  vesselNameOreFactoryName: string | null;
   status: IStatus | null;
 }
 
@@ -146,7 +146,7 @@ export const useReadAllShippingMonitoring = ({
       closePalka: formatDate(item.palkaCloseAt),
       closePalkaHour: formatDate(item.palkaOpenAt, 'hh:mm:ss A'),
       arrive: item.destinationType?.name ?? null,
-      veselNameOreFactoryName: item.factory?.name ?? null,
+      vesselNameOreFactoryName: item.factory?.name ?? null,
       status: item.status,
     }));
   const excludeAccessor = ['status', 'id'];

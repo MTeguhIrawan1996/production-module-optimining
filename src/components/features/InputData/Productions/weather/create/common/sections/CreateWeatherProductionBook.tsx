@@ -98,8 +98,6 @@ const CreateWeatherProductionBook = () => {
   });
   /* #endregion  /**======== Query =========== */
 
-  // console.log(methods.watch());
-
   /* #   /**=========== Field =========== */
   const weatherGroup = React.useCallback(
     (_, index: number) => {
