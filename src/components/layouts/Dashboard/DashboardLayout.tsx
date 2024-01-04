@@ -74,7 +74,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
   const renderBreadcrumb = React.useMemo(() => {
     if (breadcrumbs.length)
       return (
-        <Box px={32} py={8} sx={{ zIndex: 1 }}>
+        <Box px={22} py={8} sx={{ zIndex: 1 }}>
           <Breadcrumb breadcrumbs={breadcrumbs} />
         </Box>
       );

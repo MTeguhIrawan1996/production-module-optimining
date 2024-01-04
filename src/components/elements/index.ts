@@ -74,6 +74,7 @@ import TextInputRhf from '@/components/elements/input/TextInputRhf';
 import TimeInputRhf from '@/components/elements/input/TimeInputRhf';
 import TypeSelectInputRhf from '@/components/elements/input/TypeSelectInputRhf';
 import VillageSelectInputRhf from '@/components/elements/input/VillageSelectInputRhf';
+import WeatherConditionSelectInputRhf from '@/components/elements/input/WeatherConditionSelectInputRhf';
 import WeatherSelectInputRhf from '@/components/elements/input/WeatherSelectInputRhf';
 import LinkButton from '@/components/elements/link/LinkButton';
 import PrimaryLink from '@/components/elements/link/PrimaryLink';
@@ -181,5 +182,6 @@ export {
   UserProfileForm,
   ValidationButton,
   VillageSelectInputRhf,
+  WeatherConditionSelectInputRhf,
   WeatherSelectInputRhf,
 };

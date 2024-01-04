@@ -273,7 +273,7 @@ const CreateRitageBargingBook = () => {
     const bargeCodeItem = heavyEquipmentSelect({
       colSpan: 6,
       name: 'bargeCompanyHeavyEquipmentId',
-      label: 'bargeName',
+      label: 'bargeCode',
       withAsterisk: false,
       categoryId: `${process.env.NEXT_PUBLIC_BARGE_ID}`,
     });

@@ -23,6 +23,7 @@ import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
 import { ITimeInputRhfProps } from '@/components/elements/input/TimeInputRhf';
 import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelectInputRhf';
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
+import { IWeatherConditionSelectInputRhfProps } from '@/components/elements/input/WeatherConditionSelectInputRhf';
 import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
 
 import { ControllerProps } from '@/types/global';
@@ -678,6 +679,25 @@ export const locationCategorySelect = ({
     name,
     label,
     searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const weatherConditionSelect = ({
+  name = 'conditionId',
+  label = 'condition',
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IWeatherConditionSelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'weather-condition-select-input',
+    name,
+    label,
     clearable,
     withAsterisk,
     colSpan,

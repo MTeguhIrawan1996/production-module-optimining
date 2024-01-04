@@ -88,6 +88,7 @@
       "vehicleDocument": "Surat Kendaraan",
       "heavyEquipmentCode": "Nomor Lambung",
       "bargeName": "Nama Tongkang",
+      "bargeCode": "Nomor Lambung Tongkang",
       "heavyEquipmentCodeSubstitution": "Nomor Lambung Pengganti",
       "startDate": "Tanggal Mulai",
       "endDate": "Tanggal Selesai",
@@ -194,7 +195,10 @@
       "workingHourStart": "Jam Mulai Kerja",
       "workingHourFinish": "Jam Berakhir Kerja",
       "workingHourAmount": "Total Jam Kerja",
-      "amountEffectiveWorkingHours": "Total Jam Kerja Efektif"
+      "amountEffectiveWorkingHours": "Total Jam Kerja Efektif",
+      "hourAmountRain": "Total Jam Hujan",
+      "hourAmountSlippery": "Total Jam Licin",
+      "lostTime": "Waktu yang Hilang"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",

@@ -88,6 +88,7 @@
       "vehicleDocument": "Surat Kendaraan",
       "heavyEquipmentCode": "Nomor Lambung",
       "bargeName": "Nama Tongkang",
+      "bargeCode": "Nomor Lambung Tongkang",
       "heavyEquipmentCodeSubstitution": "Nomor Lambung Pengganti",
       "startDate": "Tanggal Mulai",
       "endDate": "Tanggal Selesai",
@@ -107,6 +108,8 @@
       "factoryName": "Nama Pabrik",
       "shift": "Shift",
       "startHour": "Jam Mulai",
+      "startTime": "Waktu Mulai",
+      "endTime": "Waktu Berakhir",
       "endHour": "Jam Selesai",
       "stockpileName": "Nama Stockpile",
       "fromStockpile": "Dari Stockpile",
@@ -149,6 +152,7 @@
       "pitName": "Nama PIT",
       "problemRitage": "Ritase Bermasalah",
       "fromCheckerName": "Nama Checker Asal",
+      "checkerName": "Nama Checker",
       "fromCheckerPosition": "Posisi Checker Asal",
       "toCheckerName": "Nama Checker Tujuan",
       "toCheckerPosition": "Posisi Checker Tujuan",
@@ -194,7 +198,12 @@
       "workingHourStart": "Jam Mulai Kerja",
       "workingHourFinish": "Jam Berakhir Kerja",
       "workingHourAmount": "Total Jam Kerja",
-      "amountEffectiveWorkingHours": "Total Jam Kerja Efektif"
+      "amountEffectiveWorkingHours": "Total Jam Kerja Efektif",
+      "hourAmountRain": "Total Jam Hujan",
+      "hourAmountSlippery": "Total Jam Licin",
+      "lostTime": "Waktu yang Hilang",
+      "rainfall": "Curah Hujan",
+      "condition": "Kondisi"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",
