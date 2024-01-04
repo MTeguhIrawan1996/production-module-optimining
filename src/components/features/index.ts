@@ -46,6 +46,7 @@ import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityCon
 import ReadSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/read/common';
 import UpdateSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/update/common';
 import ShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/common';
+import ReadShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/read/common';
 import StockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/common';
 import ReadStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/read/common';
 import UpdateStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/update/common';
@@ -208,6 +209,7 @@ export {
   ReadRitageTopsoilPage,
   ReadSampleHouseLabPage,
   ReadShiftMasterPage,
+  ReadShippingMonitoringPage,
   ReadStockpileMasterPage,
   ReadStockpileMonitoringPage,
   ReadWeatherProductionPage,

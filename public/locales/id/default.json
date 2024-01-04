@@ -346,6 +346,8 @@
     "bargeCode": "Nomor Lambung Tongkang",
     "sampleInformation": "Informasi Sampel",
     "shipping": "Pengapalan",
+    "shippingInformation": "Informasi Pengapalan",
+    "tugboatName": "Nama Kapal Tunda",
     "shippingMonitoring": "Monitoring Pengapalan",
     "shippingStartDate": "Mulai Pengapalan",
     "shippingStartTime": "Jam Mulai Pengapalan",
@@ -364,11 +366,13 @@
     "operator": "Operator",
     "foreman": "Nama Mandor",
     "heavyEquipmentInformation": "Informasi Alat Berat",
+    "palkaTime": "Waktu Palka",
     "openPalka": "Buka Palka",
     "openPalkaHour": "Jam Buka Palka",
     "closePalka": "Tutup Palka",
     "closePalkaHour": "Jam Tutup Palka",
-    "VeselNameOreFactoryName": "Nama Vesel / Pabrik"
+    "veselNameOreFactoryName": "Nama Vesel / Pabrik",
+    "destination": "Destinasi"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -835,7 +839,7 @@
     "updateShippingMonitoring": "$t(commonTypography.edit) $t(shippingMonitoring.shippingMonitoringTitle)",
     "successDeleteMessage": "$t(shippingMonitoring.shippingMonitoringTitle) berhasil dihapus",
     "formShippingMonitoring": "$t(commonTypography.form) $t(shippingMonitoring.shippingMonitoringTitle)",
-    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.VeselNameOreFactoryName)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.veselNameOreFactoryName)",
     "formUploadShippingMonitoring": "$t(commonTypography.form) $t(commonTypography.upload) $t(shippingMonitoring.shippingMonitoringTitle)",
     "formUpdateShippingMonitoring": "$t(commonTypography.form) $t(commonTypography.edit) $t(shippingMonitoring.shippingMonitoringTitle)",
     "successCreateMessage": "$t(shippingMonitoring.shippingMonitoringTitle) berhasil dibuat",

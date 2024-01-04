@@ -393,3 +393,17 @@ export type IReadOneRitage<T = unknown> = {
 } & T;
 
 /* #endregion  /**======== Common Ritages =========== */
+
+/* #   /**=========== GroupingDetail =========== */
+
+export interface IGroupingDetail {
+  group: string;
+  enableTitle?: boolean;
+  withDivider?: boolean;
+  itemValue: {
+    name: string;
+    value?: string | null;
+  }[];
+}
+
+/* #endregion  /**======== GroupingDetail =========== */

@@ -2,14 +2,14 @@ import { ApolloError, gql, useMutation } from '@apollo/client';
 
 import { IUpdateStatusValues } from '@/types/global';
 
-export const UPDATE_ISDETERMINED_WEATHER_PRODUCTION = gql`
-  mutation UpdateIsDeterminedWeatherProduction(
+export const UPDATE_ISVALID_SHIPPING_MONITORING = gql`
+  mutation UpdateIsValidateShippingMonitoring(
     $id: String!
     $status: Boolean
     $statusMessage: String
   ) {
-    determineWeatherData(
-      determineWeatherDataInput: {
+    validateMonitoringBarging(
+      validateMonitoringBargingInput: {
         id: $id
         status: $status
         statusMessage: $statusMessage
@@ -24,14 +24,14 @@ export const UPDATE_ISDETERMINED_WEATHER_PRODUCTION = gql`
   }
 `;
 
-export interface IUpdateIsDeterminedWeatherProductionRequest
+export interface IUpdateIsValidateShippingMonitoringRequest
   extends IUpdateStatusValues {
   id: string;
   status: boolean;
 }
 
-interface IUpdateIsDeterminedWeatherProductionResponse {
-  determineWeatherData: {
+interface IUpdateIsValidateShippingMonitoringResponse {
+  validateMonitoringBarging: {
     id: string;
     status: {
       id: string;
@@ -39,17 +39,17 @@ interface IUpdateIsDeterminedWeatherProductionResponse {
   };
 }
 
-export const useUpdateIsDeterminedWeatherProduction = ({
+export const useUpdateIsValidateShippingMonitoring = ({
   onError,
   onCompleted,
 }: {
   onError?: ({ graphQLErrors }: ApolloError) => void;
-  onCompleted?: (data: IUpdateIsDeterminedWeatherProductionResponse) => void;
+  onCompleted?: (data: IUpdateIsValidateShippingMonitoringResponse) => void;
 }) => {
   return useMutation<
-    IUpdateIsDeterminedWeatherProductionResponse,
-    IUpdateIsDeterminedWeatherProductionRequest
-  >(UPDATE_ISDETERMINED_WEATHER_PRODUCTION, {
+    IUpdateIsValidateShippingMonitoringResponse,
+    IUpdateIsValidateShippingMonitoringRequest
+  >(UPDATE_ISVALID_SHIPPING_MONITORING, {
     onError,
     onCompleted,
   });
