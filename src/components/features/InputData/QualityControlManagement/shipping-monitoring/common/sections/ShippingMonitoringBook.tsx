@@ -15,55 +15,68 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteWeatherProduction } from '@/services/graphql/mutation/weather-production/useDeleteWeatherProduction';
-import { useReadAllWeatherProduction } from '@/services/graphql/query/weather-production/useReadAllWeatherProduction';
+import { useDeleteShippingMonitoring } from '@/services/graphql/mutation/shipping-monitoring/useDeleteShippingMonitoring';
+import { useReadAllShippingMonitoring } from '@/services/graphql/query/shipping-monitoring/useReadAllShippingMonitoring';
 import {
+  globalSelectArriveBargeNative,
+  globalSelectHeavyEquipmentNative,
+  globalSelectMonthNative,
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
-import { formatDate } from '@/utils/helper/dateFormat';
 
 import { InputControllerNativeProps } from '@/types/global';
 
-const WeatherProductionProductionBook = () => {
+const ShippingMonitoringBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
-  const url = `/input-data/production/weather?page=1`;
+  const url = `/input-data/quality-control-management/shipping-monitoring?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [destinationTypeId, setDestinationTypeId] = React.useState<
+    string | null
+  >(null);
+  const [bargeHeavyEquipmentId, setBargeHeavyEquipmentId] = React.useState<
+    string | null
+  >(null);
   const [year, setYear] = React.useState<number | null>(null);
+  const [month, setMonth] = React.useState<number | null>(null);
   const [week, setWeek] = React.useState<number | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
   /* #   /**=========== Query =========== */
   const {
-    weatherData,
-    weatherDataLoading,
-    weatherDataMeta,
-    refetchWeatherData,
-  } = useReadAllWeatherProduction({
+    monitoringBargingData,
+    monitoringBargingOtherColumn,
+    monitoringBargingDataLoading,
+    monitoringBargingDataMeta,
+    refetchMonitoringBargingData,
+  } = useReadAllShippingMonitoring({
     variables: {
       limit: 10,
       page: page,
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
+      destinationTypeId,
+      bargeHeavyEquipmentId,
       year,
+      month,
       week,
     },
   });
 
-  const [executeDelete, { loading }] = useDeleteWeatherProduction({
+  const [executeDelete, { loading }] = useDeleteShippingMonitoring({
     onCompleted: () => {
-      refetchWeatherData();
+      refetchMonitoringBargingData();
       setIsOpenDeleteConfirmation((prev) => !prev);
       router.push(url, undefined, { shallow: true });
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('weatherProd.successDeleteMessage'),
+        message: t('shippingMonitoring.successDeleteMessage'),
         icon: <IconCheck />,
       });
     },
@@ -87,21 +100,43 @@ const WeatherProductionProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/weather?page=${page}`;
+    const urlSet = `/input-data/quality-control-management/shipping-monitoring?page=${page}`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
   const filter = React.useMemo(() => {
+    const bargeCodeItem = globalSelectHeavyEquipmentNative({
+      categoryId: `${process.env.NEXT_PUBLIC_BARGE_ID}`,
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setBargeHeavyEquipmentId(value === '' ? null : value);
+      },
+    });
+    const arriveItem = globalSelectArriveBargeNative({
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setDestinationTypeId(value);
+      },
+    });
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });
         setYear(value ? Number(value) : null);
+        setMonth(null);
         setWeek(null);
+      },
+    });
+    const selectMonthItem = globalSelectMonthNative({
+      disabled: !year,
+      value: month ? `${month}` : null,
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setMonth(value ? Number(value) : null);
       },
     });
     const selectWeekItem = globalSelectWeekNative({
       disabled: !year,
-      value: `${week}`,
+      value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });
@@ -109,58 +144,35 @@ const WeatherProductionProductionBook = () => {
       },
     });
 
-    const item: InputControllerNativeProps[] = [selectYearItem, selectWeekItem];
+    const item: InputControllerNativeProps[] = [
+      bargeCodeItem,
+      arriveItem,
+      selectYearItem,
+      selectMonthItem,
+      selectWeekItem,
+    ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url, year, week]);
+  }, [url, year, month, week]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
     return (
       <MantineDataTable
         tableProps={{
-          records: weatherData,
-          fetching: weatherDataLoading,
+          records: monitoringBargingData,
+          fetching: monitoringBargingDataLoading,
           highlightOnHover: true,
           columns: [
             {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                weatherData && weatherData.indexOf(record) + 1,
+                monitoringBargingData &&
+                monitoringBargingData.indexOf(record) + 1,
               width: 60,
             },
-            {
-              accessor: 'date',
-              title: t('commonTypography.date'),
-              width: 160,
-              render: ({ date }) => formatDate(date),
-            },
-            {
-              accessor: 'location',
-              title: t('commonTypography.location'),
-              render: ({ location }) => location?.name,
-            },
-            {
-              accessor: 'hourAmountRain',
-              title: t('commonTypography.hourAmountRain'),
-              render: () => '-',
-            },
-            {
-              accessor: 'hourAmountSlippery',
-              title: t('commonTypography.hourAmountSlippery'),
-              render: () => '-',
-            },
-            {
-              accessor: 'loseTime',
-              title: t('commonTypography.loseTime'),
-              render: () => '-',
-            },
-            {
-              accessor: 'availabilityHoursOrDays',
-              title: t('commonTypography.availabilityHoursOrDays'),
-              render: () => '-',
-            },
+            ...(monitoringBargingOtherColumn ?? []),
             {
               accessor: 'status',
               title: t('commonTypography.status'),
@@ -184,7 +196,7 @@ const WeatherProductionProductionBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/input-data/production/weather/read/${id}`
+                          `/input-data/quality-control-management/shipping-monitoring/read/${id}`
                         );
                       },
                     }}
@@ -195,7 +207,7 @@ const WeatherProductionProductionBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/production/weather/update/${id}`
+                                `/input-data/quality-control-management/shipping-monitoring/update/${id}`
                               );
                             },
                           }
@@ -222,35 +234,41 @@ const WeatherProductionProductionBook = () => {
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
           actionButton: {
-            label: t('weatherProd.createWeatherProd'),
-            onClick: () => router.push('/input-data/production/weather/create'),
+            label: t('shippingMonitoring.createShippingMonitoring'),
+            onClick: () =>
+              router.push(
+                '/input-data/quality-control-management/shipping-monitoring/create'
+              ),
           },
         }}
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: weatherDataMeta?.totalAllData ?? 0,
-          totalData: weatherDataMeta?.totalData ?? 0,
-          totalPage: weatherDataMeta?.totalPage ?? 0,
+          totalAllData: monitoringBargingDataMeta?.totalAllData ?? 0,
+          totalData: monitoringBargingDataMeta?.totalData ?? 0,
+          totalPage: monitoringBargingDataMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [weatherData, weatherDataLoading]);
+  }, [monitoringBargingData, monitoringBargingDataLoading]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
       addButton={{
-        label: t('weatherProd.createWeatherProd'),
-        onClick: () => router.push('/input-data/production/weather/create'),
+        label: t('shippingMonitoring.createShippingMonitoring'),
+        onClick: () =>
+          router.push(
+            '/input-data/quality-control-management/shipping-monitoring/create'
+          ),
       }}
       filterDateWithSelect={{
-        colSpan: 3,
+        colSpan: 5,
         items: filter,
       }}
       searchBar={{
-        placeholder: t('weatherProd.searchPlaceholder'),
+        placeholder: t('shippingMonitoring.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
@@ -286,4 +304,4 @@ const WeatherProductionProductionBook = () => {
   );
 };
 
-export default WeatherProductionProductionBook;
+export default ShippingMonitoringBook;

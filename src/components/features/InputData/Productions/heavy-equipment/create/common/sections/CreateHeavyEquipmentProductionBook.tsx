@@ -127,7 +127,7 @@ const CreateHeavyEquipmentProductionBook = () => {
         icon: <IconCheck />,
       });
       methods.reset();
-      router.push('/input-data/production/heavy-equipment');
+      router.push('/input-data/production/data-heavy-equipment');
     },
     onError: (error) => {
       if (error.graphQLErrors) {
@@ -416,7 +416,8 @@ const CreateHeavyEquipmentProductionBook = () => {
           loading: loading,
         }}
         backButton={{
-          onClick: () => router.push('/input-data/production/heavy-equipment'),
+          onClick: () =>
+            router.push('/input-data/production/data-heavy-equipment'),
         }}
       />
     </DashboardCard>

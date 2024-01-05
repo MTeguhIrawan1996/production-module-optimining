@@ -203,7 +203,16 @@
       "hourAmountSlippery": "Total Jam Licin",
       "lostTime": "Waktu yang Hilang",
       "rainfall": "Curah Hujan",
-      "condition": "Kondisi"
+      "condition": "Kondisi",
+      "tugboatCode": "No Lambung Kapal Tunda",
+      "openPalka": "Buka Palka",
+      "openPalkaHour": "Jam Buka Palka",
+      "closePalka": "Tutup Palka",
+      "closePalkaHour": "Jam Tutup Palka",
+      "openVessel": "Buka Vessel",
+      "openVesselHour": "Jam Buka Vessel",
+      "closeVessel": "Tutup Vessel",
+      "closeVesselHour": "Jam Tutup Vessel"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",

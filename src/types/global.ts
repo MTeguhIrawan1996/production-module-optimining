@@ -35,6 +35,10 @@ import { IRadioInputProps } from '@/components/elements/input/RadioInputRhf';
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
 import { ISampleTypesSelectnputRhfProps } from '@/components/elements/input/SampleTypeSelectInputRhf';
+import { IArriveBargeNativeProps } from '@/components/elements/input/SelectArriveBargeNative';
+import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
+import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
+import { ISelectHeavyEquipmentNativeProps } from '@/components/elements/input/SelectHeavyEquipmentNative';
 import { ISelectHeavyEquipmentReferenceInputProps } from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
 import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import { ISelectInputNativeProps } from '@/components/elements/input/SelectInputNative';
@@ -113,6 +117,8 @@ export type ControllerProps =
   | IWeatherSelectInputRhfProps
   | ILocationSelectInputRhfProps
   | IPitSelectInputRhfProps
+  | IArriveBargeRhfProps
+  | ISelectFactoryRhfProps
   | IWeatherConditionSelectInputRhfProps;
 
 export type InputControllerNativeProps =
@@ -120,6 +126,8 @@ export type InputControllerNativeProps =
   | ISelectInputNativeProps
   | ISelectYearNativeProps
   | ISelectMonthNativeProps
+  | IArriveBargeNativeProps
+  | ISelectHeavyEquipmentNativeProps
   | ISelectWeekNativeProps;
 
 export type ControllerGroup = {
@@ -389,3 +397,17 @@ export type IReadOneRitage<T = unknown> = {
 } & T;
 
 /* #endregion  /**======== Common Ritages =========== */
+
+/* #   /**=========== GroupingDetail =========== */
+
+export interface IGroupingDetail {
+  group: string;
+  enableTitle?: boolean;
+  withDivider?: boolean;
+  itemValue: {
+    name: string;
+    value?: string | null;
+  }[];
+}
+
+/* #endregion  /**======== GroupingDetail =========== */

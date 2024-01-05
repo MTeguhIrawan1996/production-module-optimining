@@ -138,7 +138,7 @@ const StockpileBook = () => {
     });
     const selectMonthItem = globalSelectMonthNative({
       disabled: !year,
-      value: `${month}`,
+      value: month ? `${month}` : null,
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });
         setMonth(value ? Number(value) : null);
@@ -146,7 +146,7 @@ const StockpileBook = () => {
     });
     const selectWeekItem = globalSelectWeekNative({
       disabled: !year,
-      value: `${week}`,
+      value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });

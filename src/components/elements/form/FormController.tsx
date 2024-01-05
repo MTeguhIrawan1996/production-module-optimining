@@ -31,6 +31,8 @@ import {
   RegencySelectInputRhf,
   RelegionSelectInputRhf,
   SampleTypeSelectInput,
+  SelectArriveBargeRhf,
+  SelectFactoryRhf,
   SelectHeavyEquipmentReferenceInput,
   SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
@@ -133,6 +135,10 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <LocationSelectInputRhf {...props} />;
     case 'weather-condition-select-input':
       return <WeatherConditionSelectInputRhf {...props} />;
+    case 'select-arrive-barge-rhf':
+      return <SelectArriveBargeRhf {...props} />;
+    case 'select-factory-rhf':
+      return <SelectFactoryRhf {...props} />;
     default:
       return null;
   }

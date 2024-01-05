@@ -27,7 +27,7 @@ const HeavyEquipmentProductionBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
-  const url = `/input-data/production/heavy-equipment?page=1`;
+  const url = `/input-data/production/data-heavy-equipment?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [date, setDate] = React.useState('');
@@ -85,7 +85,7 @@ const HeavyEquipmentProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/heavy-equipment?page=${page}`;
+    const urlSet = `/input-data/production/data-heavy-equipment?page=${page}`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
@@ -181,7 +181,7 @@ const HeavyEquipmentProductionBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/input-data/production/heavy-equipment/read/${id}`
+                          `/input-data/production/data-heavy-equipment/read/${id}`
                         );
                       },
                     }}
@@ -192,7 +192,7 @@ const HeavyEquipmentProductionBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/production/heavy-equipment/update/${id}`
+                                `/input-data/production/data-heavy-equipment/update/${id}`
                               );
                             },
                           }
@@ -221,7 +221,7 @@ const HeavyEquipmentProductionBook = () => {
           actionButton: {
             label: t('heavyEquipmentProd.createHeavyEquipmentProd'),
             onClick: () =>
-              router.push('/input-data/production/heavy-equipment/create'),
+              router.push('/input-data/production/data-heavy-equipment/create'),
           },
         }}
         paginationProps={{
@@ -286,12 +286,12 @@ const HeavyEquipmentProductionBook = () => {
         firstButton={{
           label: t('commonTypography.inputDataProductionHeavyEquipment'),
           onClick: () =>
-            router.push('/input-data/production/heavy-equipment/create'),
+            router.push('/input-data/production/data-heavy-equipment/create'),
         }}
         secondButton={{
           label: t('commonTypography.uploadFile'),
           onClick: () =>
-            router.push('/input-data/production/heavy-equipment/upload'),
+            router.push('/input-data/production/data-heavy-equipment/upload'),
         }}
       />
     </DashboardCard>

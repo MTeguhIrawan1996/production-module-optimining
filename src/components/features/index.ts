@@ -37,7 +37,7 @@ import HeavyEquipmentProductionPage from '@/components/features/InputData/Produc
 import CreateHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/create/common';
 import ReadHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/read/common';
 import UpdateHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/update/common';
-import WeatherProductionProductionPage from '@/components/features/InputData/Productions/weather/common';
+import WeatherProductionPage from '@/components/features/InputData/Productions/weather/common';
 import CreateWeatherProductionPage from '@/components/features/InputData/Productions/weather/create/common';
 import ReadWeatherProductionPage from '@/components/features/InputData/Productions/weather/read/common';
 import UpdateWeatherProductionPage from '@/components/features/InputData/Productions/weather/update/common';
@@ -45,6 +45,9 @@ import SampleHouseLabPage from '@/components/features/InputData/QualityControlMa
 import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/create/common';
 import ReadSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/read/common';
 import UpdateSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/update/common';
+import ShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/common';
+import CreateShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/create/common';
+import ReadShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/read/common';
 import StockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/common';
 import ReadStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/read/common';
 import UpdateStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/update/common';
@@ -158,6 +161,7 @@ export {
   CreateRitageQuarryPage,
   CreateRitageTopsoilPage,
   CreateShiftMasterPage,
+  CreateShippingMonitoringPage,
   CreateSmapleHouseLabPage,
   CreateStockpileDomeMasterPage,
   CreateStockpileMasterPage,
@@ -207,12 +211,14 @@ export {
   ReadRitageTopsoilPage,
   ReadSampleHouseLabPage,
   ReadShiftMasterPage,
+  ReadShippingMonitoringPage,
   ReadStockpileMasterPage,
   ReadStockpileMonitoringPage,
   ReadWeatherProductionPage,
   ReadWorkingHoursPlanMasterPage,
   SampleHouseLabPage,
   ShiftMasterPage,
+  ShippingMonitoringPage,
   StockpileMasterPage,
   StockpilePage,
   UpdateActivityPlanMasterPage,
@@ -252,6 +258,6 @@ export {
   UploadRitageQuarryPage,
   UploadRitageTopsoilPage,
   UserPage,
-  WeatherProductionProductionPage,
+  WeatherProductionPage,
   WorkingHoursPlanMasterPage,
 };

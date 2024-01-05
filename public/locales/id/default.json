@@ -221,6 +221,7 @@
     "checkboxAddressDomicile": "Alamat Domisili sesuai dengan Kartu Identitas (KTP/KTA/Paspor)",
     "bloodType": "Golongan Darah",
     "resus": "Resus Darah",
+    "chooseArrive": "Pilih Tujuan",
     "chooseDivision": "Pilih / Ketikan Divisi",
     "choosePosition": "Pilih / Ketikan Posisi",
     "chooseEmployeStatus": "Pilih Status Pegawai",
@@ -239,6 +240,7 @@
     "chooseWeather": "Pilih Cuaca",
     "chooseRitageStatus": "Pilih Status Ritase",
     "chooseHeavyEquipmentCode": "Pilih / Ketikan Nomor Lambung",
+    "chooseFactoryName": "Pilih / Ketikan Nama Pabrik",
     "chooseType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.type)",
     "chooseBrand": "$t(commonTypography.choose) / Ketikan $t(commonTypography.brand)",
     "chooseModel": "$t(commonTypography.choose) / Ketikan $t(commonTypography.model)",
@@ -345,6 +347,9 @@
     "bargeCode": "Nomor Lambung Tongkang",
     "sampleInformation": "Informasi Sampel",
     "shipping": "Pengapalan",
+    "shippingInformation": "Informasi Pengapalan",
+    "tugboatCode": "No Lambung Kapal Tunda",
+    "shippingMonitoring": "Monitoring Pengapalan",
     "shippingStartDate": "Mulai Pengapalan",
     "shippingStartTime": "Jam Mulai Pengapalan",
     "shippingFinishDate": "Selesai Pengapalan",
@@ -361,7 +366,19 @@
     "sampleData": "Data Sampel",
     "operator": "Operator",
     "foreman": "Nama Mandor",
-    "heavyEquipmentInformation": "Informasi Alat Berat"
+    "heavyEquipmentInformation": "Informasi Alat Berat",
+    "palkaTime": "Waktu Palka",
+    "openPalka": "Buka Palka",
+    "openPalkaHour": "Jam Buka Palka",
+    "closePalka": "Tutup Palka",
+    "closePalkaHour": "Jam Tutup Palka",
+    "openVessel": "Buka Vessel",
+    "openVesselHour": "Jam Buka Vessel",
+    "closeVessel": "Tutup Vessel",
+    "closeVesselHour": "Jam Tutup Vessel",
+    "vesselNameOreFactoryName": "Nama Vessel / Pabrik",
+    "destination": "Destinasi",
+    "timeVesselGate": "Waktu Gate Vessel"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -390,8 +407,9 @@
     "stockpile": "$t(commonTypography.stockpile)",
     "production": "$t(commonTypography.production)",
     "dataRitage": "$t(commonTypography.dataRitage)",
-    "heavyEquipmentProduction": "$t(commonTypography.heavyEquipment)",
-    "weatherProduction": "$t(commonTypography.weatherData)"
+    "dataHeavyEquipment": "$t(commonTypography.heavyEquipmentData)",
+    "dataWeather": "$t(commonTypography.weatherData)",
+    "shippingMonitoring": "$t(commonTypography.shippingMonitoring)"
   },
   "auth": {
     "button": {
@@ -818,5 +836,23 @@
     "successIsNotValidateMessage": "Status $t(weatherProd.weatherProdTitle) Tidak Valid",
     "successIsDeterminedMessage": "$t(weatherProd.weatherProdTitle) berhasil ditetapkan",
     "successIsRejectMessage": "$t(weatherProd.weatherProdTitle) berhasil $t(commonTypography.reject)"
+  },
+  "shippingMonitoring": {
+    "shippingMonitoringTitle": "Data $t(commonTypography.shippingMonitoring)",
+    "createShippingMonitoring": "$t(commonTypography.create) $t(shippingMonitoring.shippingMonitoringTitle)",
+    "uploadShippingMonitoring": "$t(commonTypography.upload) $t(shippingMonitoring.shippingMonitoringTitle)",
+    "readShippingMonitoring": "$t(commonTypography.detail) $t(shippingMonitoring.shippingMonitoringTitle)",
+    "updateShippingMonitoring": "$t(commonTypography.edit) $t(shippingMonitoring.shippingMonitoringTitle)",
+    "successDeleteMessage": "$t(shippingMonitoring.shippingMonitoringTitle) berhasil dihapus",
+    "formShippingMonitoring": "$t(commonTypography.form) $t(shippingMonitoring.shippingMonitoringTitle)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.vesselNameOreFactoryName)",
+    "formUploadShippingMonitoring": "$t(commonTypography.form) $t(commonTypography.upload) $t(shippingMonitoring.shippingMonitoringTitle)",
+    "formUpdateShippingMonitoring": "$t(commonTypography.form) $t(commonTypography.edit) $t(shippingMonitoring.shippingMonitoringTitle)",
+    "successCreateMessage": "$t(shippingMonitoring.shippingMonitoringTitle) berhasil dibuat",
+    "successUpdateMessage": "$t(shippingMonitoring.shippingMonitoringTitle) berhasil diubah",
+    "successIsValidateMessage": "$t(shippingMonitoring.shippingMonitoringTitle) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(shippingMonitoring.shippingMonitoringTitle) Tidak Valid",
+    "successIsDeterminedMessage": "$t(shippingMonitoring.shippingMonitoringTitle) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(shippingMonitoring.shippingMonitoringTitle) berhasil $t(commonTypography.reject)"
   }
 }
