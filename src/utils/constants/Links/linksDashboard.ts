@@ -123,6 +123,11 @@ export const linksDashboard: IMenuItem[] = [
             href: '/input-data/production/data-weather',
             access: ['create-weather-data'],
           },
+          {
+            label: 'dataFront',
+            href: '/input-data/production/data-front',
+            access: ['create-front-data'],
+          },
         ],
       },
       {

@@ -76,13 +76,21 @@ type IPropsRequest = {
       | samples[]
       | reopens[];
   }[];
+  deletePhoto: boolean | null;
 };
 
-const UpdateStockpileMonitoring = async ({ data, id }: IPropsRequest) => {
+const UpdateStockpileMonitoring = async ({
+  data,
+  id,
+  deletePhoto,
+}: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
   const exclude = ['handbookId', 'stockpileId', 'tonByRitage'];
   bodyFormData.append('id', id);
+  if (deletePhoto) {
+    bodyFormData.append('deletePhoto', 'true');
+  }
   data.forEach(({ name, value }) => {
     if (value) {
       if (name === 'tonSurveys') {
@@ -140,16 +148,18 @@ const UpdateStockpileMonitoring = async ({ data, id }: IPropsRequest) => {
             `samples[${index}][sampleNumber]`,
             value.sampleNumber ?? ''
           );
-          value.elements.forEach((obj, i) => {
-            bodyFormData.append(
-              `samples[${index}][elements][${i}][elementId]`,
-              obj.elementId
-            );
-            bodyFormData.append(
-              `samples[${index}][elements][${i}][value]`,
-              `${obj.value ?? ''}`
-            );
-          });
+          value.elements
+            .filter((v) => v.value !== '')
+            .forEach((obj, i) => {
+              bodyFormData.append(
+                `samples[${index}][elements][${i}][elementId]`,
+                obj.elementId
+              );
+              bodyFormData.append(
+                `samples[${index}][elements][${i}][value]`,
+                `${obj.value ?? ''}`
+              );
+            });
         });
       }
       if (name === 'photo' && typeof value !== 'string') {

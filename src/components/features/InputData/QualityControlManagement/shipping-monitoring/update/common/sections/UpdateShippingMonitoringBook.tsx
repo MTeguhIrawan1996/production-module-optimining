@@ -8,10 +8,13 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadOneShippingMonitoring } from '@/services/graphql/query/shipping-monitoring/useReadOneShippingMonitoring';
 import {
   IMutationShippingMonitoringValues,
-  useCreateShippingMonitoring,
+  IShippingMonitoringNameProps,
+  IShippingMonitoringValueProps,
 } from '@/services/restapi/shipping-monitoring/useCreateShippingMonitoring';
+import { useUpdateShippingMonitoring } from '@/services/restapi/shipping-monitoring/useUpdateShippingMonitoring';
 import {
   globalDate,
   globalSelectArriveBargeRhf,
@@ -21,16 +24,28 @@ import {
   heavyEquipmentSelect,
 } from '@/utils/constants/Field/global-field';
 import { shippingMonitoringMutationValidation } from '@/utils/form-validation/shipping-monitoring/shipping-monitoring-mutation-validation';
-import { dateToString } from '@/utils/helper/dateToString';
+import { formatDate2 } from '@/utils/helper/dateFormat';
+import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
-import { ControllerGroup, ControllerProps } from '@/types/global';
+import {
+  ControllerGroup,
+  ControllerProps,
+  IFile,
+  IReadOneValueMapping,
+} from '@/types/global';
 
-const CreateShippingMonitoringBook = () => {
+const UpdateShippingMonitoringBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
+  const [serverPhoto, setServerPhoto] = React.useState<
+    Omit<IFile, 'mime' | 'path'>[] | null
+  >([]);
+  const [isOpenConfirmation, setIsOpenConfirmation] =
+    React.useState<boolean>(false);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationShippingMonitoringValues>({
@@ -57,7 +72,65 @@ const CreateShippingMonitoringBook = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  const { mutate, isLoading } = useCreateShippingMonitoring({
+  const { monitoringBarging, monitoringBargingLoading } =
+    useReadOneShippingMonitoring({
+      variables: {
+        id,
+      },
+      skip: !router.isReady,
+      onCompleted: ({ monitoringBarging }) => {
+        const dateFields = [
+          'palkaOpenAt',
+          'palkaCloseAt',
+          'vesselOpenAt',
+          'vesselCloseAt',
+        ];
+        const valueMappings: IReadOneValueMapping<
+          IShippingMonitoringNameProps,
+          IShippingMonitoringValueProps
+        >[] = [
+          {
+            key: 'bargeHeavyEquipmentId',
+            value: monitoringBarging.bargeHeavyEquipment?.id ?? '',
+          },
+          {
+            key: 'tugboatHeavyEquipmentId',
+            value: monitoringBarging.tugboatHeavyEquipment?.id ?? '',
+          },
+          {
+            key: 'factoryCategoryId',
+            value: monitoringBarging.factory?.category?.id ?? '',
+          },
+          { key: 'factoryId', value: monitoringBarging.factory?.id ?? '' },
+          { key: 'desc', value: monitoringBarging.desc ?? '' },
+        ];
+
+        const setValue = (
+          key: IShippingMonitoringNameProps,
+          value: IShippingMonitoringValueProps
+        ) => methods.setValue(key, value ?? '');
+
+        dateFields.forEach((field) => {
+          const date = stringToDate(monitoringBarging[field] ?? null);
+          const time = formatDate2(monitoringBarging[field], 'HH:mm:ss');
+          setValue(
+            `${field.slice(0, -2)}Date` as IShippingMonitoringNameProps,
+            date ?? null
+          );
+          setValue(
+            `${field.slice(0, -2)}Time` as IShippingMonitoringNameProps,
+            time ?? ''
+          );
+        });
+        valueMappings.forEach((mapping) => {
+          setValue(mapping.key, mapping.value);
+        });
+        if (monitoringBarging.photo) {
+          setServerPhoto([monitoringBarging.photo]);
+        }
+      },
+    });
+  const { mutate, isLoading } = useUpdateShippingMonitoring({
     onError: (err) => {
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
@@ -97,6 +170,8 @@ const CreateShippingMonitoringBook = () => {
       label: 'bargeCode',
       withAsterisk: true,
       categoryId: `${process.env.NEXT_PUBLIC_BARGE_ID}`,
+      labelValue: monitoringBarging?.bargeHeavyEquipment?.hullNumber,
+      defaultValue: monitoringBarging?.bargeHeavyEquipment?.id,
     });
     const tugBoatCodeItem = heavyEquipmentSelect({
       colSpan: 6,
@@ -104,6 +179,8 @@ const CreateShippingMonitoringBook = () => {
       label: 'tugboatCode',
       withAsterisk: true,
       categoryId: `${process.env.NEXT_PUBLIC_TUGBOAT_ID}`,
+      labelValue: monitoringBarging?.tugboatHeavyEquipment?.hullNumber,
+      defaultValue: monitoringBarging?.tugboatHeavyEquipment?.id,
     });
     const palkaOpenDate = globalDate({
       name: 'palkaOpenDate',
@@ -174,7 +251,6 @@ const CreateShippingMonitoringBook = () => {
         methods.trigger('factoryCategoryId');
       },
     });
-
     const newFactoryCategoryId =
       factoryCategoryId === '' ? null : factoryCategoryId;
     const factoryItem = globalSelectFactoryRhf({
@@ -184,6 +260,8 @@ const CreateShippingMonitoringBook = () => {
       withAsterisk: false,
       disabled: !newFactoryCategoryId,
       categoryId: newFactoryCategoryId,
+      labelValue: monitoringBarging?.factory?.name,
+      defaultValue: monitoringBarging?.factory?.id,
     });
 
     const photo: ControllerProps = {
@@ -194,9 +272,14 @@ const CreateShippingMonitoringBook = () => {
       maxSize: 10 * 1024 ** 2 /* 10MB */,
       multiple: false,
       enableDeletePhoto: true,
+      serverPhotos: serverPhoto,
+      handleDeleteServerPhotos: () => {
+        setServerPhoto([]);
+      },
       onDrop: (value) => {
         methods.setValue('photo', value);
         methods.clearErrors('photo');
+        setServerPhoto([]);
       },
       onReject: (files) =>
         handleRejectFile<IMutationShippingMonitoringValues>({
@@ -250,7 +333,7 @@ const CreateShippingMonitoringBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [factoryCategoryId]);
+  }, [monitoringBarging, serverPhoto, factoryCategoryId]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
@@ -278,22 +361,29 @@ const CreateShippingMonitoringBook = () => {
         value: val.value,
       };
     });
+    const deletePhoto = serverPhoto && serverPhoto.length === 0;
 
     mutate({
+      id,
       data: manipulateValue,
+      deletePhoto,
     });
+  };
+  const handleConfirmation = () => {
+    methods.handleSubmit(handleSubmitForm)();
   };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={monitoringBargingLoading}>
       <GlobalFormGroup
         field={fieldRhf}
         methods={methods}
         submitForm={handleSubmitForm}
         submitButton={{
           label: t('commonTypography.save'),
-          loading: isLoading,
+          type: 'button',
+          onClick: () => setIsOpenConfirmation((prev) => !prev),
         }}
         backButton={{
           onClick: () =>
@@ -301,9 +391,27 @@ const CreateShippingMonitoringBook = () => {
               '/input-data/quality-control-management/shipping-monitoring'
             ),
         }}
+        modalConfirmation={{
+          isOpenModalConfirmation: isOpenConfirmation,
+          actionModalConfirmation: () => setIsOpenConfirmation((prev) => !prev),
+          actionButton: {
+            label: t('commonTypography.yes'),
+            type: 'button',
+            onClick: handleConfirmation,
+            loading: isLoading,
+          },
+          backButton: {
+            label: 'Batal',
+          },
+          modalType: {
+            type: 'default',
+            title: t('commonTypography.alertTitleConfirmUpdate'),
+          },
+          withDivider: true,
+        }}
       />
     </DashboardCard>
   );
 };
 
-export default CreateShippingMonitoringBook;
+export default UpdateShippingMonitoringBook;

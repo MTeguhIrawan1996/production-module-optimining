@@ -15,68 +15,47 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteShippingMonitoring } from '@/services/graphql/mutation/shipping-monitoring/useDeleteShippingMonitoring';
-import { useReadAllShippingMonitoring } from '@/services/graphql/query/shipping-monitoring/useReadAllShippingMonitoring';
-import {
-  globalSelectArriveBargeNative,
-  globalSelectHeavyEquipmentNative,
-  globalSelectMonthNative,
-  globalSelectWeekNative,
-  globalSelectYearNative,
-} from '@/utils/constants/Field/native-field';
+import { useDeleteFrontProduction } from '@/services/graphql/mutation/front-production/useDeleteFrontProduction';
+import { useReadAllFrontProduction } from '@/services/graphql/query/front-production/useReadAllFrontProduction';
 
-import { InputControllerNativeProps } from '@/types/global';
-
-const ShippingMonitoringBook = () => {
+const FrontProductionBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
-  const url = `/input-data/quality-control-management/shipping-monitoring?page=1`;
+  const url = `/input-data/production/data-front?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
-  const [factoryCategoryId, setFactoryCategoryId] = React.useState<
-    string | null
-  >(null);
-  const [bargeHeavyEquipmentId, setBargeHeavyEquipmentId] = React.useState<
-    string | null
-  >(null);
-  const [year, setYear] = React.useState<number | null>(null);
-  const [month, setMonth] = React.useState<number | null>(null);
-  const [week, setWeek] = React.useState<number | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+  const [segmented, setSegmented] = React.useState<string>('pit');
 
   /* #   /**=========== Query =========== */
   const {
-    monitoringBargingData,
-    monitoringBargingOtherColumn,
-    monitoringBargingDataLoading,
-    monitoringBargingDataMeta,
-    refetchMonitoringBargingData,
-  } = useReadAllShippingMonitoring({
+    frontProductionData,
+    frontProductionOtherColumn,
+    frontProductionDataLoading,
+    frontProductionDataMeta,
+    refetchfrontProductionData,
+  } = useReadAllFrontProduction({
     variables: {
       limit: 10,
       page: page,
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
-      factoryCategoryId,
-      bargeHeavyEquipmentId,
-      year,
-      month,
-      week,
+      type: segmented,
     },
   });
 
-  const [executeDelete, { loading }] = useDeleteShippingMonitoring({
+  const [executeDelete, { loading }] = useDeleteFrontProduction({
     onCompleted: () => {
-      refetchMonitoringBargingData();
+      refetchfrontProductionData();
       setIsOpenDeleteConfirmation((prev) => !prev);
       router.push(url, undefined, { shallow: true });
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('shippingMonitoring.successDeleteMessage'),
+        message: t('frontProduction.successDeleteMessage'),
         icon: <IconCheck />,
       });
     },
@@ -100,79 +79,27 @@ const ShippingMonitoringBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/quality-control-management/shipping-monitoring?page=${page}`;
+    const urlSet = `/input-data/production/data-front?page=${page}`;
     router.push(urlSet, undefined, { shallow: true });
   };
-
-  const filter = React.useMemo(() => {
-    const bargeCodeItem = globalSelectHeavyEquipmentNative({
-      categoryId: `${process.env.NEXT_PUBLIC_BARGE_ID}`,
-      onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
-        setBargeHeavyEquipmentId(value === '' ? null : value);
-      },
-    });
-    const arriveItem = globalSelectArriveBargeNative({
-      onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
-        setFactoryCategoryId(value);
-      },
-    });
-    const selectYearItem = globalSelectYearNative({
-      onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
-        setYear(value ? Number(value) : null);
-        setMonth(null);
-        setWeek(null);
-      },
-    });
-    const selectMonthItem = globalSelectMonthNative({
-      disabled: !year,
-      value: month ? `${month}` : null,
-      onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
-        setMonth(value ? Number(value) : null);
-      },
-    });
-    const selectWeekItem = globalSelectWeekNative({
-      disabled: !year,
-      value: week ? `${week}` : null,
-      year: year,
-      onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
-        setWeek(value ? Number(value) : null);
-      },
-    });
-
-    const item: InputControllerNativeProps[] = [
-      bargeCodeItem,
-      arriveItem,
-      selectYearItem,
-      selectMonthItem,
-      selectWeekItem,
-    ];
-    return item;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url, year, month, week]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
     return (
       <MantineDataTable
         tableProps={{
-          records: monitoringBargingData,
-          fetching: monitoringBargingDataLoading,
+          records: frontProductionData,
+          fetching: frontProductionDataLoading,
           highlightOnHover: true,
           columns: [
             {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                monitoringBargingData &&
-                monitoringBargingData.indexOf(record) + 1,
+                frontProductionData && frontProductionData.indexOf(record) + 1,
               width: 60,
             },
-            ...(monitoringBargingOtherColumn ?? []),
+            ...(frontProductionOtherColumn ?? []),
             {
               accessor: 'status',
               title: t('commonTypography.status'),
@@ -196,7 +123,7 @@ const ShippingMonitoringBook = () => {
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/input-data/quality-control-management/shipping-monitoring/read/${id}`
+                          `/input-data/production/data-front/read/${id}`
                         );
                       },
                     }}
@@ -207,7 +134,7 @@ const ShippingMonitoringBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/quality-control-management/shipping-monitoring/update/${id}`
+                                `/input-data/production/data-front/update/${id}`
                               );
                             },
                           }
@@ -234,41 +161,32 @@ const ShippingMonitoringBook = () => {
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
           actionButton: {
-            label: t('shippingMonitoring.createShippingMonitoring'),
+            label: t('frontProduction.createFrontProduction'),
             onClick: () =>
-              router.push(
-                '/input-data/quality-control-management/shipping-monitoring/create'
-              ),
+              router.push('/input-data/production/data-front/create'),
           },
         }}
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: monitoringBargingDataMeta?.totalAllData ?? 0,
-          totalData: monitoringBargingDataMeta?.totalData ?? 0,
-          totalPage: monitoringBargingDataMeta?.totalPage ?? 0,
+          totalAllData: frontProductionDataMeta?.totalAllData ?? 0,
+          totalData: frontProductionDataMeta?.totalData ?? 0,
+          totalPage: frontProductionDataMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monitoringBargingData, monitoringBargingDataLoading]);
+  }, [frontProductionData, frontProductionDataLoading]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
       addButton={{
-        label: t('shippingMonitoring.createShippingMonitoring'),
-        onClick: () =>
-          router.push(
-            '/input-data/quality-control-management/shipping-monitoring/create'
-          ),
-      }}
-      filterDateWithSelect={{
-        colSpan: 5,
-        items: filter,
+        label: t('frontProduction.createFrontProduction'),
+        onClick: () => router.push('/input-data/production/data-front/create'),
       }}
       searchBar={{
-        placeholder: t('shippingMonitoring.searchPlaceholder'),
+        placeholder: t('frontProduction.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
@@ -276,6 +194,20 @@ const ShippingMonitoringBook = () => {
         onSearch: () => {
           router.push(url, undefined, { shallow: true });
         },
+      }}
+      segmentedControl={{
+        value: segmented,
+        onChange: setSegmented,
+        data: [
+          {
+            label: 'PIT',
+            value: 'pit',
+          },
+          {
+            label: 'DOME',
+            value: 'dome',
+          },
+        ],
       }}
     >
       {renderTable}
@@ -304,4 +236,4 @@ const ShippingMonitoringBook = () => {
   );
 };
 
-export default ShippingMonitoringBook;
+export default FrontProductionBook;

@@ -19,7 +19,7 @@ export const zArrayOfString = z.string().array();
 
 export const zRequiredNumber = z.number({
   required_error: 'Kolom tidak boleh kosong',
-  invalid_type_error: 'Harus angka',
+  invalid_type_error: 'Kolom tidak boleh kosong',
 });
 
 export const zOptionalNumber = z.number().or(z.literal(''));
