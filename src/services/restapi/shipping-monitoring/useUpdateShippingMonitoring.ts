@@ -2,40 +2,35 @@ import { FileWithPath } from '@mantine/dropzone';
 import { useMutation } from '@tanstack/react-query';
 
 import axiosClient from '@/services/restapi/axiosClient';
+import { IMutationShippingMonitoringValues } from '@/services/restapi/shipping-monitoring/useCreateShippingMonitoring';
 
 import { AxiosRestErrorResponse } from '@/types/global';
 
-export interface IMutationShippingMonitoringValues {
-  bargeHeavyEquipmentId: string | null;
-  tugboatHeavyEquipmentId: string | null;
-  palkaOpenDate?: Date | null;
-  palkaOpenTime: string;
-  palkaCloseDate?: Date | null;
-  palkaCloseTime: string;
-  factoryCategoryId: string | null;
-  factoryId: string | null;
-  vesselOpenDate?: Date | null;
-  vesselOpenTime: string;
-  vesselCloseDate?: Date | null;
-  vesselCloseTime: string;
-  desc: string;
-  photo: FileWithPath[] | null;
-}
-interface ICreateShippingMonitoringResponse {
+interface IUpdateShippingMonitoringResponse {
   message: string;
 }
 
 type IPropsRequest = {
+  id: string;
   data: {
     name: keyof IMutationShippingMonitoringValues;
     value: string | FileWithPath[] | Date | null;
   }[];
+  deletePhoto: boolean | null;
 };
 
-const CreateShippingMonitoring = async ({ data }: IPropsRequest) => {
+const UpdateShippingMonitoring = async ({
+  id,
+  data,
+  deletePhoto,
+}: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
   const exclude = [''];
+  bodyFormData.append('id', id);
+  if (deletePhoto) {
+    bodyFormData.append('deletePhoto', 'true');
+  }
   data.forEach(({ name, value }) => {
     if (value) {
       if (name === 'photo') {
@@ -51,26 +46,29 @@ const CreateShippingMonitoring = async ({ data }: IPropsRequest) => {
     }
   });
 
-  const response = await axiosAuth.post(`/monitoring-bargings`, bodyFormData);
+  const response = await axiosAuth.patch(
+    `/monitoring-bargings/${id}`,
+    bodyFormData
+  );
   return response?.data;
 };
 
-export const useCreateShippingMonitoring = ({
+export const useUpdateShippingMonitoring = ({
   onError,
   onSuccess,
 }: {
-  onSuccess?: (success: ICreateShippingMonitoringResponse) => void;
+  onSuccess?: (success: IUpdateShippingMonitoringResponse) => void;
   onError?: (
     error: AxiosRestErrorResponse<IMutationShippingMonitoringValues>
   ) => unknown;
 }) => {
   return useMutation<
-    ICreateShippingMonitoringResponse,
+    IUpdateShippingMonitoringResponse,
     AxiosRestErrorResponse<IMutationShippingMonitoringValues>,
     IPropsRequest
   >({
     mutationFn: async (value) => {
-      const data = await CreateShippingMonitoring(value);
+      const data = await UpdateShippingMonitoring(value);
       return data;
     },
     onError: onError,

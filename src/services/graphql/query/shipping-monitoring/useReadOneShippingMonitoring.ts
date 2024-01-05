@@ -20,13 +20,15 @@ export const READ_ONE_SHIPPING_MONITORING = gql`
       }
       palkaOpenAt
       palkaCloseAt
-      destinationType {
-        id
-        name
-      }
+      vesselOpenAt
+      vesselCloseAt
       factory {
         id
         name
+        category {
+          id
+          name
+        }
       }
       photo {
         id
@@ -148,7 +150,7 @@ export const useReadOneShippingMonitoring = ({
       itemValue: [
         {
           name: 'destination',
-          value: monitoringBarging?.monitoringBarging.destinationType?.name,
+          value: monitoringBarging?.monitoringBarging.factory?.category.name,
         },
         {
           name: 'factoryName',

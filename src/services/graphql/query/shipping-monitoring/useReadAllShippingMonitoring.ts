@@ -13,7 +13,7 @@ export const READ_ALL_SHIPPING_MONITORING = gql`
     $orderBy: String
     $orderDir: String
     $bargeHeavyEquipmentId: String
-    $destinationTypeId: String
+    $factoryCategoryId: String
     $year: Float
     $month: Float
     $week: Float
@@ -26,7 +26,7 @@ export const READ_ALL_SHIPPING_MONITORING = gql`
         orderBy: $orderBy
         orderDir: $orderDir
         bargeHeavyEquipmentId: $bargeHeavyEquipmentId
-        destinationTypeId: $destinationTypeId
+        factoryCategoryId: $factoryCategoryId
         year: $year
         month: $month
         week: $week
@@ -48,13 +48,13 @@ export const READ_ALL_SHIPPING_MONITORING = gql`
         palkaCloseAt
         vesselOpenAt
         vesselCloseAt
-        destinationType {
-          id
-          name
-        }
         factory {
           id
           name
+          category {
+            id
+            name
+          }
         }
         status {
           id
@@ -76,13 +76,13 @@ export interface IReadAllShippingMonitoringData {
   palkaCloseAt: string | null;
   vesselOpenAt: string | null;
   vesselCloseAt: string | null;
-  destinationType: {
-    id: string;
-    name: string;
-  } | null;
   factory: {
     id: string;
     name: string;
+    category: {
+      id: string;
+      name: string;
+    };
   } | null;
   status: IStatus | null;
 }
@@ -95,7 +95,7 @@ interface IReadAllShippingMonitoringRequest extends IGlobalMetaRequest {
   year: number | null;
   month: number | null;
   week: number | null;
-  destinationTypeId: string | null;
+  factoryCategoryId: string | null;
   bargeHeavyEquipmentId: string | null;
 }
 
@@ -145,7 +145,7 @@ export const useReadAllShippingMonitoring = ({
       openPalkaHour: formatDate(item.palkaOpenAt, 'hh:mm:ss A'),
       closePalka: formatDate(item.palkaCloseAt),
       closePalkaHour: formatDate(item.palkaOpenAt, 'hh:mm:ss A'),
-      arrive: item.destinationType?.name ?? null,
+      arrive: item.factory?.category?.name ?? null,
       vesselNameOreFactoryName: item.factory?.name ?? null,
       status: item.status,
     }));

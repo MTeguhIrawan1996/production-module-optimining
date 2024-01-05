@@ -9,6 +9,7 @@ export const READ_ALL_FACTORY_MASTER = gql`
     $search: String
     $orderBy: String
     $orderDir: String
+    $categoryId: String
   ) {
     factories(
       findAllFactoryInput: {
@@ -17,6 +18,7 @@ export const READ_ALL_FACTORY_MASTER = gql`
         search: $search
         orderBy: $orderBy
         orderDir: $orderDir
+        categoryId: $categoryId
       }
     ) {
       meta {
@@ -42,12 +44,16 @@ interface IFactoriesResponse {
   factories: GResponse<IFactoriesData>;
 }
 
+interface IFactoriesRequest extends Partial<IGlobalMetaRequest> {
+  categoryId?: string | null;
+}
+
 export const useReadAllFactoryMaster = ({
   variables,
   onCompleted,
   skip,
 }: {
-  variables?: Partial<IGlobalMetaRequest>;
+  variables?: IFactoriesRequest;
   onCompleted?: (data: IFactoriesResponse) => void;
   skip?: boolean;
 }) => {
@@ -55,18 +61,15 @@ export const useReadAllFactoryMaster = ({
     data: factoriesData,
     loading: factoriesDataLoading,
     refetch,
-  } = useQuery<IFactoriesResponse, Partial<IGlobalMetaRequest>>(
-    READ_ALL_FACTORY_MASTER,
-    {
-      variables: variables,
-      skip: skip,
-      onError: (err: ApolloError) => {
-        return err;
-      },
-      onCompleted,
-      fetchPolicy: 'cache-and-network',
-    }
-  );
+  } = useQuery<IFactoriesResponse, IFactoriesRequest>(READ_ALL_FACTORY_MASTER, {
+    variables: variables,
+    skip: skip,
+    onError: (err: ApolloError) => {
+      return err;
+    },
+    onCompleted,
+    fetchPolicy: 'cache-and-network',
+  });
 
   return {
     factoriesData: factoriesData?.factories.data,

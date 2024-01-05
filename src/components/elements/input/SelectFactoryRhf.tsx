@@ -15,7 +15,7 @@ export type ISelectFactoryRhfProps = {
   control: 'select-factory-rhf';
   name: string;
   labelValue?: string;
-  // categoryId?: string | null;
+  categoryId?: string | null;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
@@ -28,7 +28,7 @@ const SelectFactoryRhf: React.FC<ISelectFactoryRhfProps> = ({
   label,
   labelValue,
   defaultValue,
-  // categoryId = null,
+  categoryId = null,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -41,7 +41,7 @@ const SelectFactoryRhf: React.FC<ISelectFactoryRhfProps> = ({
     variables: {
       limit: 15,
       search: searchQuery === '' ? null : searchQuery,
-      // categoryId: categoryId === '' ? null : categoryId,
+      categoryId: categoryId === '' ? null : categoryId,
     },
   });
 

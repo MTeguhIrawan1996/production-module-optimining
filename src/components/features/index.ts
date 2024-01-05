@@ -48,6 +48,7 @@ import UpdateSampleHouseLabPage from '@/components/features/InputData/QualityCon
 import ShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/common';
 import CreateShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/create/common';
 import ReadShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/read/common';
+import UpdateShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/update/common';
 import StockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/common';
 import ReadStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/read/common';
 import UpdateStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/update/common';
@@ -245,6 +246,7 @@ export {
   UpdateRitageTopsoilPage,
   UpdateSampleHouseLabPage,
   UpdateShiftMasterPage,
+  UpdateShippingMonitoringPage,
   UpdateStockpileDomeMasterPage,
   UpdateStockpileMasterPage,
   UpdateStockpileMonitoringPage,

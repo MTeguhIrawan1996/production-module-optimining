@@ -35,7 +35,7 @@ const ShippingMonitoringBook = () => {
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
-  const [destinationTypeId, setDestinationTypeId] = React.useState<
+  const [factoryCategoryId, setFactoryCategoryId] = React.useState<
     string | null
   >(null);
   const [bargeHeavyEquipmentId, setBargeHeavyEquipmentId] = React.useState<
@@ -60,7 +60,7 @@ const ShippingMonitoringBook = () => {
       page: page,
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
-      destinationTypeId,
+      factoryCategoryId,
       bargeHeavyEquipmentId,
       year,
       month,
@@ -115,7 +115,7 @@ const ShippingMonitoringBook = () => {
     const arriveItem = globalSelectArriveBargeNative({
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });
-        setDestinationTypeId(value);
+        setFactoryCategoryId(value);
       },
     });
     const selectYearItem = globalSelectYearNative({
