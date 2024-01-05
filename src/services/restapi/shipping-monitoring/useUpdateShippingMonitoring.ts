@@ -2,19 +2,22 @@ import { FileWithPath } from '@mantine/dropzone';
 import { useMutation } from '@tanstack/react-query';
 
 import axiosClient from '@/services/restapi/axiosClient';
-import { IMutationShippingMonitoringValues } from '@/services/restapi/shipping-monitoring/useCreateShippingMonitoring';
+import {
+  IMutationShippingMonitoringValues,
+  IShippingMonitoringNameProps,
+  IShippingMonitoringValueProps,
+} from '@/services/restapi/shipping-monitoring/useCreateShippingMonitoring';
 
 import { AxiosRestErrorResponse } from '@/types/global';
 
 interface IUpdateShippingMonitoringResponse {
   message: string;
 }
-
 type IPropsRequest = {
   id: string;
   data: {
-    name: keyof IMutationShippingMonitoringValues;
-    value: string | FileWithPath[] | Date | null;
+    name: IShippingMonitoringNameProps;
+    value: IShippingMonitoringValueProps;
   }[];
   deletePhoto: boolean | null;
 };

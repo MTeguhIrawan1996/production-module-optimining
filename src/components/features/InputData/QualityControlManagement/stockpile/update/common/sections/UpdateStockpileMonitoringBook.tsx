@@ -178,19 +178,23 @@ const UpdateStockpileMonitoringBook = () => {
     },
   });
 
+  const isOwnElemntsData =
+    elementsData && elementsData.length > 0 ? true : false;
+
   const { monitoringStockpile, monitoringStockpileLoading } =
     useReadOneStockpileMonitoring({
       variables: {
         id,
       },
-      skip: !router.isReady,
+      skip: !router.isReady || !isOwnElemntsData,
       onCompleted: ({ monitoringStockpile }) => {
         const samples = monitoringStockpile.samples.map((val) => {
-          const elemntsValue = val.elements.map((o) => {
+          const elemntsValue = elementsData?.map((o) => {
+            const value = val.elements.find((obj) => obj.element.id === o.id);
             return {
-              elementId: o.element.id,
-              name: o.element.name ?? '',
-              value: o.value ?? '',
+              elementId: o.id,
+              name: o.name ?? '',
+              value: value?.value ?? '',
             };
           });
           return {
@@ -198,10 +202,11 @@ const UpdateStockpileMonitoringBook = () => {
             sampleTypeId: val.sampleType.id ?? '',
             sampleNumber: val.sampleNumber ?? '',
             isCreatedAfterDetermine: val.isCreatedAfterDetermine ? true : false,
-            elements: elemntsValue,
+            elements: elemntsValue ?? [],
           };
         });
         replace(samples);
+
         const surveys = monitoringStockpile.tonSurveys?.map((val) => {
           const date = stringToDate(val.date ?? null);
           return {
@@ -374,7 +379,7 @@ const UpdateStockpileMonitoringBook = () => {
       const surveyDateItem = globalDate({
         name: `tonSurveys.${index}.date`,
         label: 'surveyDate',
-        withAsterisk: false,
+        withAsterisk: true,
         clearable: true,
         colSpan: 6,
         value: methods.watch(`tonSurveys.${index}.date`),
@@ -387,7 +392,7 @@ const UpdateStockpileMonitoringBook = () => {
         colSpan: 6,
         name: `tonSurveys.${index}.ton`,
         label: 'tonBySurvey',
-        withAsterisk: false,
+        withAsterisk: true,
         value: ton !== '' ? Number(ton) : '',
         onChange: (value) => {
           methods.setValue(`tonSurveys.${index}.ton`, value);
@@ -609,7 +614,7 @@ const UpdateStockpileMonitoringBook = () => {
       return group;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [reopenFields, isDetermination]
+    [sampleFields, isDetermination]
   );
   const sampleGroupItem = sampleFields.map(sampleGroup);
 
@@ -808,6 +813,7 @@ const UpdateStockpileMonitoringBook = () => {
       'oreSubMaterialId',
       'photo',
       'stockpileId',
+      'tonSurveys',
     ];
     const output = await methods.trigger(fieldStepOneName, {
       shouldFocus: true,
@@ -846,18 +852,21 @@ const UpdateStockpileMonitoringBook = () => {
       data.samples.map((val) => {
         const { isCreatedAfterDetermine, date, elements, ...rest } = val;
         const dateString = dateToString(date ?? null);
-        const elementsManipulate = elements.map((obj) => {
-          const { name, ...restElement } = obj;
-          return {
-            ...restElement,
-          };
-        });
+        const elementsManipulate = elements
+          .filter((v) => v.value !== '')
+          .map((obj) => {
+            const { name, ...restElement } = obj;
+            return {
+              ...restElement,
+            };
+          });
         return {
           ...rest,
           date: dateString,
           elements: elementsManipulate,
         };
       });
+    const deletePhoto = serverPhoto && serverPhoto.length === 0;
 
     if (isDetermination) {
       await executeUpdate({
@@ -872,6 +881,7 @@ const UpdateStockpileMonitoringBook = () => {
     mutate({
       id,
       data: manipulateValue,
+      deletePhoto,
     });
   };
   const handleConfirmation = () => {

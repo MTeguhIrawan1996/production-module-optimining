@@ -7,6 +7,7 @@ import {
   zImageArrayOptional,
   zOptionalNumber,
   zOptionalString,
+  zRequiredNumber,
   zRequiredSelectInput,
   zRequiredString,
   zTimeValidation,
@@ -27,8 +28,8 @@ export const stockpileMonitoringMutationValidation: z.ZodType<IMutationStockpile
     photo: zImageArrayOptional,
     tonSurveys: z
       .object({
-        ton: zOptionalNumber,
-        date: zDateOptionalValidation,
+        ton: zRequiredNumber,
+        date: zDateValidation,
       })
       .array(),
     bargingStartDate: zDateOptionalValidation,
