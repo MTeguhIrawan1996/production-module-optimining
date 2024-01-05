@@ -3,6 +3,8 @@ import {
   LoadingOverlay,
   Paper,
   PaperProps,
+  SegmentedControl,
+  SegmentedControlProps,
   SimpleGrid,
   Stack,
   StackProps,
@@ -68,6 +70,7 @@ interface IDashboardCardProps extends PaperProps {
   childrenStackProps?: StackProps;
   titleStyle?: TitleProps;
   downloadButton?: IDownloadButtonProps[];
+  segmentedControl?: SegmentedControlProps;
 }
 
 const DashboardCard: React.FC<IDashboardCardProps> = ({
@@ -94,6 +97,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
   titleStyle,
   downloadButton,
   filterDateWithSelect,
+  segmentedControl,
   ...restPaper
 }) => {
   const router = useRouter();
@@ -159,6 +163,14 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
                 )}
               </Group>
             </Group>
+          ) : null}
+          {segmentedControl ? (
+            <SegmentedControl
+              w="15%"
+              size="sm"
+              radius={4}
+              {...segmentedControl}
+            />
           ) : null}
           {searchBar && <SearchBar {...searchBar} />}
           <Stack {...childrenStackProps}>

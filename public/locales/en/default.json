@@ -326,6 +326,8 @@
     "fromPit": "Dari PIT",
     "fromBlock": "Dari Block",
     "fromFront": "Dari Front",
+    "front": "Front",
+    "frontName": "Nama Front",
     "fromGrid": "Dari Grid",
     "fromSequence": "Dari Sequence",
     "fromElevasi": "Dari Elevasi",
@@ -378,7 +380,9 @@
     "closeVesselHour": "Jam Tutup Vessel",
     "vesselNameOreFactoryName": "Nama Vessel / Pabrik",
     "destination": "Destinasi",
-    "timeVesselGate": "Waktu Gate Vessel"
+    "timeVesselGate": "Waktu Gate Vessel",
+    "coordinateX": "Koordinat X",
+    "coordinateY": "Koordinat Y"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -409,7 +413,8 @@
     "dataRitage": "$t(commonTypography.dataRitage)",
     "dataHeavyEquipment": "$t(commonTypography.heavyEquipmentData)",
     "dataWeather": "$t(commonTypography.weatherData)",
-    "shippingMonitoring": "$t(commonTypography.shippingMonitoring)"
+    "shippingMonitoring": "$t(commonTypography.shippingMonitoring)",
+    "dataFront": "$t(commonTypography.front)"
   },
   "auth": {
     "button": {
@@ -853,5 +858,22 @@
     "successIsNotValidateMessage": "Status $t(shippingMonitoring.shippingMonitoringTitle) Tidak Valid",
     "successIsDeterminedMessage": "$t(shippingMonitoring.shippingMonitoringTitle) berhasil ditetapkan",
     "successIsRejectMessage": "$t(shippingMonitoring.shippingMonitoringTitle) berhasil $t(commonTypography.reject)"
+  },
+  "frontProduction": {
+    "frontProductionTitle": "Data $t(commonTypography.front)",
+    "createFrontProduction": "$t(commonTypography.create) $t(frontProduction.frontProductionTitle)",
+    "uploadFrontProduction": "$t(commonTypography.upload) $t(frontProduction.frontProductionTitle)",
+    "readFrontProduction": "$t(commonTypography.detail) $t(frontProduction.frontProductionTitle)",
+    "updateFrontProduction": "$t(commonTypography.edit) $t(frontProduction.frontProductionTitle)",
+    "successDeleteMessage": "$t(frontProduction.frontProductionTitle) berhasil dihapus",
+    "formFrontProduction": "$t(commonTypography.form) $t(frontProduction.frontProductionTitle)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.frontName), $t(commonTypography.heavyEquipmentCode) dan $t(commonTypography.pit)",
+    "formUpdateFrontProduction": "$t(commonTypography.form) $t(commonTypography.edit) $t(frontProduction.frontProductionTitle)",
+    "successCreateMessage": "$t(frontProduction.frontProductionTitle) berhasil dibuat",
+    "successUpdateMessage": "$t(frontProduction.frontProductionTitle) berhasil diubah",
+    "successIsValidateMessage": "$t(frontProduction.frontProductionTitle) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(frontProduction.frontProductionTitle) Tidak Valid",
+    "successIsDeterminedMessage": "$t(frontProduction.frontProductionTitle) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(frontProduction.frontProductionTitle) berhasil $t(commonTypography.reject)"
   }
 }
