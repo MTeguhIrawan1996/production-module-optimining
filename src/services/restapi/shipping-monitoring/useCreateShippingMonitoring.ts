@@ -21,14 +21,22 @@ export interface IMutationShippingMonitoringValues {
   desc: string;
   photo: FileWithPath[] | null;
 }
+export type IShippingMonitoringNameProps =
+  keyof IMutationShippingMonitoringValues;
+export type IShippingMonitoringValueProps =
+  | string
+  | FileWithPath[]
+  | Date
+  | null;
+
 interface ICreateShippingMonitoringResponse {
   message: string;
 }
 
 type IPropsRequest = {
   data: {
-    name: keyof IMutationShippingMonitoringValues;
-    value: string | FileWithPath[] | Date | null;
+    name: IShippingMonitoringNameProps;
+    value: IShippingMonitoringValueProps;
   }[];
 };
 

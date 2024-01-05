@@ -9,7 +9,11 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { useReadOneShippingMonitoring } from '@/services/graphql/query/shipping-monitoring/useReadOneShippingMonitoring';
-import { IMutationShippingMonitoringValues } from '@/services/restapi/shipping-monitoring/useCreateShippingMonitoring';
+import {
+  IMutationShippingMonitoringValues,
+  IShippingMonitoringNameProps,
+  IShippingMonitoringValueProps,
+} from '@/services/restapi/shipping-monitoring/useCreateShippingMonitoring';
 import { useUpdateShippingMonitoring } from '@/services/restapi/shipping-monitoring/useUpdateShippingMonitoring';
 import {
   globalDate,
@@ -26,7 +30,12 @@ import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
-import { ControllerGroup, ControllerProps, IFile } from '@/types/global';
+import {
+  ControllerGroup,
+  ControllerProps,
+  IFile,
+  IReadOneValueMapping,
+} from '@/types/global';
 
 const UpdateShippingMonitoringBook = () => {
   const { t } = useTranslation('default');
@@ -70,56 +79,52 @@ const UpdateShippingMonitoringBook = () => {
       },
       skip: !router.isReady,
       onCompleted: ({ monitoringBarging }) => {
-        const palkaOpenDate = stringToDate(
-          monitoringBarging.palkaOpenAt ?? null
-        );
-        const palkaOpenTime = formatDate2(
-          monitoringBarging.palkaOpenAt,
-          'HH:mm:ss'
-        );
-        const palkaCloseDate = stringToDate(
-          monitoringBarging.palkaCloseAt ?? null
-        );
-        const palkaCloseTime = formatDate2(
-          monitoringBarging.palkaCloseAt,
-          'HH:mm:ss'
-        );
-        const vesselOpenDate = stringToDate(
-          monitoringBarging.vesselOpenAt ?? null
-        );
-        const vesselOpenTime = formatDate2(
-          monitoringBarging.vesselOpenAt,
-          'HH:mm:ss'
-        );
-        const vesselCloseDate = stringToDate(
-          monitoringBarging.vesselCloseAt ?? null
-        );
-        const vesselCloseTime = formatDate2(
-          monitoringBarging.vesselCloseAt,
-          'HH:mm:ss'
-        );
-        methods.setValue(
-          'bargeHeavyEquipmentId',
-          monitoringBarging.bargeHeavyEquipment?.id ?? ''
-        );
-        methods.setValue(
-          'tugboatHeavyEquipmentId',
-          monitoringBarging.tugboatHeavyEquipment?.id ?? ''
-        );
-        methods.setValue('palkaOpenDate', palkaOpenDate);
-        methods.setValue('palkaOpenTime', palkaOpenTime ?? '');
-        methods.setValue('palkaCloseDate', palkaCloseDate);
-        methods.setValue('palkaCloseTime', palkaCloseTime ?? '');
-        methods.setValue(
-          'factoryCategoryId',
-          monitoringBarging.factory?.category?.id ?? ''
-        );
-        methods.setValue('factoryId', monitoringBarging.factory?.id ?? '');
-        methods.setValue('vesselOpenDate', vesselOpenDate);
-        methods.setValue('vesselOpenTime', vesselOpenTime ?? '');
-        methods.setValue('vesselCloseDate', vesselCloseDate);
-        methods.setValue('vesselCloseTime', vesselCloseTime ?? '');
-        methods.setValue('desc', monitoringBarging.desc ?? '');
+        const dateFields = [
+          'palkaOpenAt',
+          'palkaCloseAt',
+          'vesselOpenAt',
+          'vesselCloseAt',
+        ];
+        const valueMappings: IReadOneValueMapping<
+          IShippingMonitoringNameProps,
+          IShippingMonitoringValueProps
+        >[] = [
+          {
+            key: 'bargeHeavyEquipmentId',
+            value: monitoringBarging.bargeHeavyEquipment?.id ?? '',
+          },
+          {
+            key: 'tugboatHeavyEquipmentId',
+            value: monitoringBarging.tugboatHeavyEquipment?.id ?? '',
+          },
+          {
+            key: 'factoryCategoryId',
+            value: monitoringBarging.factory?.category?.id ?? '',
+          },
+          { key: 'factoryId', value: monitoringBarging.factory?.id ?? '' },
+          { key: 'desc', value: monitoringBarging.desc ?? '' },
+        ];
+
+        const setValue = (
+          key: IShippingMonitoringNameProps,
+          value: IShippingMonitoringValueProps
+        ) => methods.setValue(key, value ?? '');
+
+        dateFields.forEach((field) => {
+          const date = stringToDate(monitoringBarging[field] ?? null);
+          const time = formatDate2(monitoringBarging[field], 'HH:mm:ss');
+          setValue(
+            `${field.slice(0, -2)}Date` as IShippingMonitoringNameProps,
+            date ?? null
+          );
+          setValue(
+            `${field.slice(0, -2)}Time` as IShippingMonitoringNameProps,
+            time ?? ''
+          );
+        });
+        valueMappings.forEach((mapping) => {
+          setValue(mapping.key, mapping.value);
+        });
         if (monitoringBarging.photo) {
           setServerPhoto([monitoringBarging.photo]);
         }

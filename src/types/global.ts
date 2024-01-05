@@ -411,3 +411,12 @@ export interface IGroupingDetail {
 }
 
 /* #endregion  /**======== GroupingDetail =========== */
+
+/* #   /**=========== ReadOneType =========== */
+
+export type IReadOneValueMapping<K, V> = {
+  key: K;
+  value: V;
+};
+
+/* #endregion  /**======== ReadOneType =========== */
