@@ -3,6 +3,7 @@ import DashboardPage from '@/components/features/Dashboard/common';
 import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
 import FrontProductionPage from '@/components/features/InputData/Productions/data-front/common';
+import ReadFrontProductionPage from '@/components/features/InputData/Productions/data-front/read/common';
 import CreateRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/create/common';
 import ReadRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/read/common';
 import ReadDTBargingRitagePage from '@/components/features/InputData/Productions/data-ritage/barging/read/read-dump-truck/common';
@@ -198,6 +199,7 @@ export {
   ReadDTTopsoilRitagePage,
   ReadElementMasterPage,
   ReadFactoryMasterPage,
+  ReadFrontProductionPage,
   ReadHeavyEquipmentClassPage,
   ReadHeavyEquipmentMasterPage,
   ReadHeavyEquipmentPage,
