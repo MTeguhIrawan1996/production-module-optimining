@@ -47,9 +47,13 @@ async function refreshToken(token: JWT) {
   client.setHeaders({
     authorization,
   });
-  const { refreshToken } = await client.request<IRefreshToken>(REFRESH_TOKEN);
 
-  return refreshToken;
+  try {
+    const { refreshToken } = await client.request<IRefreshToken>(REFRESH_TOKEN);
+    return refreshToken;
+  } catch (err) {
+    return null;
+  }
 }
 // async function permission(token: JWT) {
 //   const authorization = token ? `Bearer ${token.login.accessToken.token}` : '';
