@@ -184,7 +184,7 @@ const StockpileBook = () => {
         title: element.name,
         render: ({ currentSample }) => {
           const value = currentSample?.elements?.find(
-            (val) => val.element?.name === element.name
+            (val) => val.element?.id === element.id
           );
           return value?.value ?? '-';
         },

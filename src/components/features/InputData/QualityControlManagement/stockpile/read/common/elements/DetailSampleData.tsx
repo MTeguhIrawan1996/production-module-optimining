@@ -35,9 +35,7 @@ const DetailSampleData: React.FC<IDetailSampleDataProps> = ({
         accessor: element.name,
         title: `${t('commonTypography.rate')} ${element.name}`,
         render: ({ elements }) => {
-          const value = elements?.find(
-            (val) => val.element?.name === element.name
-          );
+          const value = elements?.find((val) => val.element?.id === element.id);
           return value?.value ?? '-';
         },
       };

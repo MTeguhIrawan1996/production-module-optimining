@@ -105,7 +105,7 @@ const SampleHouseLabBook = () => {
         title: `${element.name} ${t('commonTypography.estimationGC')}`,
         render: ({ gradeControlElements }) => {
           const value = gradeControlElements?.find(
-            (val) => val.element?.name === element.name
+            (val) => val.element?.id === element.id
           );
           return value?.value ?? '-';
         },
@@ -123,9 +123,7 @@ const SampleHouseLabBook = () => {
         accessor: `${element.name}${t('commonTypography.percentageLab')}`,
         title: `${element.name} ${t('commonTypography.percentageLab')}`,
         render: ({ elements }) => {
-          const value = elements?.find(
-            (val) => val.element?.name === element.name
-          );
+          const value = elements?.find((val) => val.element?.id === element.id);
           return value?.value ?? '-';
         },
       };

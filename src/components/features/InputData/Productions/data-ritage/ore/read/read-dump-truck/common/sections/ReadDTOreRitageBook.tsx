@@ -62,7 +62,7 @@ const ReadDTOreRitageBook = () => {
         title: `${element.name}`,
         render: ({ houseSampleAndLab }) => {
           const value = houseSampleAndLab?.elements?.find(
-            (val) => val.element?.name === element.name
+            (val) => val.element?.id === element.id
           );
           return value?.value ?? '-';
         },
