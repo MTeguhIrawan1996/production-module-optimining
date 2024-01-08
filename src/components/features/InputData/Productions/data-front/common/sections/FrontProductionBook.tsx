@@ -143,7 +143,7 @@ const FrontProductionBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/production/data-front/update/${id}`
+                                `/input-data/production/data-front/update/${id}?segment=${segment}`
                               );
                             },
                           }

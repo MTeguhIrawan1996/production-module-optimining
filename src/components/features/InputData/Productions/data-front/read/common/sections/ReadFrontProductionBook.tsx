@@ -184,7 +184,9 @@ const ReadFrontProductionBook = () => {
           : {
               label: 'Edit',
               onClick: () =>
-                router.push(`/input-data/production/data-front/update/${id}`),
+                router.push(
+                  `/input-data/production/data-front/update/${id}?segment=${frontData?.type}`
+                ),
             }
       }
       validationButton={
