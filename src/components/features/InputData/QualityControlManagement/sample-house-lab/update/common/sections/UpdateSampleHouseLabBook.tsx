@@ -139,7 +139,7 @@ const UpdateSampleHouseLabPage = () => {
     skip: !router.isReady || !isOwnElemntsData,
     onCompleted: ({ houseSampleAndLab }) => {
       const isOwnSubMaterial = houseSampleAndLab.subMaterial !== null;
-      fields.map((o, i) => {
+      fields.forEach((o, i) => {
         const valueGCElements = houseSampleAndLab?.gradeControlElements?.find(
           (val) => val.element?.id === o.elementId
         );

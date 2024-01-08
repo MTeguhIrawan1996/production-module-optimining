@@ -306,6 +306,7 @@ export interface IDumpTruckRitagesData {
     id: string;
     name: string;
   } | null;
+  operators: string[];
   ritageCount: number | null;
   tonByRitage: number | null;
 }
@@ -332,6 +333,18 @@ export type IListDetailRitageDTData<T = unknown> = {
   desc: string | null;
 } & T;
 
+export interface IReadOneRitageDTOperators {
+  date: Date | string | null;
+  companyHeavyEquipment: {
+    id: string;
+    hullNumber: string;
+  } | null;
+  shift: {
+    id: string;
+    name: string;
+  } | null;
+  operators: string[] | null;
+}
 /* #endregion  /**======== Ritage DT =========== */
 
 export type ITabs = 'ore' | 'ob' | 'quarry' | 'barging' | 'moving' | 'topsoil';

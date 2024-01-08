@@ -2,14 +2,14 @@ import { ApolloError, gql, useMutation } from '@apollo/client';
 
 import { IUpdateStatusValues } from '@/types/global';
 
-export const UPDATE_ISDETERMINED_WEATHER_PRODUCTION = gql`
-  mutation UpdateIsDeterminedWeatherProduction(
+export const UPDATE_ISDETERMINED_FRONT_PRODUCTION = gql`
+  mutation UpdateIsDeterminedFrontProduction(
     $id: String!
     $status: Boolean
     $statusMessage: String
   ) {
-    determineWeatherData(
-      determineWeatherDataInput: {
+    determineFrontData(
+      determineFrontDataInput: {
         id: $id
         status: $status
         statusMessage: $statusMessage
@@ -24,14 +24,14 @@ export const UPDATE_ISDETERMINED_WEATHER_PRODUCTION = gql`
   }
 `;
 
-export interface IUpdateIsDeterminedWeatherProductionRequest
+export interface IUpdateIsDeterminedFrontProductionRequest
   extends IUpdateStatusValues {
   id: string;
   status: boolean;
 }
 
-interface IUpdateIsDeterminedWeatherProductionResponse {
-  determineWeatherData: {
+interface IUpdateIsDeterminedFrontProductionResponse {
+  determineFrontData: {
     id: string;
     status: {
       id: string;
@@ -39,17 +39,17 @@ interface IUpdateIsDeterminedWeatherProductionResponse {
   };
 }
 
-export const useUpdateIsDeterminedWeatherProduction = ({
+export const useUpdateIsDeterminedFrontProduction = ({
   onError,
   onCompleted,
 }: {
   onError?: ({ graphQLErrors }: ApolloError) => void;
-  onCompleted?: (data: IUpdateIsDeterminedWeatherProductionResponse) => void;
+  onCompleted?: (data: IUpdateIsDeterminedFrontProductionResponse) => void;
 }) => {
   return useMutation<
-    IUpdateIsDeterminedWeatherProductionResponse,
-    IUpdateIsDeterminedWeatherProductionRequest
-  >(UPDATE_ISDETERMINED_WEATHER_PRODUCTION, {
+    IUpdateIsDeterminedFrontProductionResponse,
+    IUpdateIsDeterminedFrontProductionRequest
+  >(UPDATE_ISDETERMINED_FRONT_PRODUCTION, {
     onError,
     onCompleted,
   });

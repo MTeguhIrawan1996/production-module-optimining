@@ -328,8 +328,10 @@
     "fromFront": "Dari Front",
     "front": "Front",
     "frontName": "Nama Front",
+    "grid": "Grid",
     "fromGrid": "Dari Grid",
     "fromSequence": "Dari Sequence",
+    "elevation": "Elevasi",
     "fromElevasi": "Dari Elevasi",
     "fromDome": "Dari Dome",
     "bulkSamplingDensity": "Massa Jenis Bulk Sampling",
@@ -381,8 +383,10 @@
     "vesselNameOreFactoryName": "Nama Vessel / Pabrik",
     "destination": "Destinasi",
     "timeVesselGate": "Waktu Gate Vessel",
+    "coordinate": "Koordinat",
     "coordinateX": "Koordinat X",
-    "coordinateY": "Koordinat Y"
+    "coordinateY": "Koordinat Y",
+    "frontInformation": "Informasi Front"
   },
   "sideBar": {
     "dashboard": "Dashboard",

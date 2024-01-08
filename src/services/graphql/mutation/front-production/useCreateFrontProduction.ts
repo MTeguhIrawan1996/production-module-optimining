@@ -1,22 +1,32 @@
 import { ApolloError, gql, useMutation } from '@apollo/client';
 
-export const CREATE_WEATHER_PRODUCTION = gql`
-  mutation CreateWeatherProduction(
+export const CREATE_FRONT_PRODUCTION = gql`
+  mutation CreateFrontProduction(
     $date: String
-    $checkerId: String
-    $locationCategoryId: String
-    $locationId: String
-    $desc: String
-    $weatherDataConditions: [CreateWeatherDataConditionDto!]
+    $companyHeavyEquipmentId: String
+    $frontId: String
+    $materialId: String
+    $type: String
+    $pitId: String
+    $gridId: String
+    $elevationId: String
+    $domeId: String
+    $x: Float
+    $y: Float
   ) {
-    createWeatherData(
-      createWeatherDataInput: {
+    createFrontData(
+      createFrontDataInput: {
         date: $date
-        checkerId: $checkerId
-        locationCategoryId: $locationCategoryId
-        locationId: $locationId
-        desc: $desc
-        weatherDataConditions: $weatherDataConditions
+        companyHeavyEquipmentId: $companyHeavyEquipmentId
+        frontId: $frontId
+        materialId: $materialId
+        type: $type
+        pitId: $pitId
+        gridId: $gridId
+        elevationId: $elevationId
+        domeId: $domeId
+        x: $x
+        y: $y
       }
     ) {
       id
@@ -24,39 +34,43 @@ export const CREATE_WEATHER_PRODUCTION = gql`
   }
 `;
 
-export interface IMutationWeatherProductionValues {
+export interface IMutationFrontProductionValues {
   date?: Date | string | null;
-  checkerId: string | null;
-  locationCategoryId: string | null;
-  locationId: string | null;
-  desc: string;
-  weatherDataConditions: {
-    conditionId: string | null;
-    startTime: string;
-    finishTime: string;
-    rainfall: number | '';
-  }[];
+  companyHeavyEquipmentId: string | null;
+  frontId: string | null;
+  materialId: string | null;
+  type: string;
+  pitId: string | null;
+  block: string | null;
+  gridId: string | null;
+  elevationId: string | null;
+  domeId: string | null;
+  x: number | '';
+  y: number | '';
 }
 
-type ICreateWeatherProductionRequest = IMutationWeatherProductionValues;
+type ICreateFrontProductionRequest = Omit<
+  IMutationFrontProductionValues,
+  'block'
+>;
 
-interface ICreateWeatherProductionResponse {
-  createWeatherData: {
+interface ICreateFrontProductionResponse {
+  createFrontData: {
     id: string;
   };
 }
 
-export const useCreateWeatherProduction = ({
+export const useCreateFrontProduction = ({
   onError,
   onCompleted,
 }: {
   onError?: ({ graphQLErrors }: ApolloError) => void;
-  onCompleted?: (data: ICreateWeatherProductionResponse) => void;
+  onCompleted?: (data: ICreateFrontProductionResponse) => void;
 }) => {
   return useMutation<
-    ICreateWeatherProductionResponse,
-    ICreateWeatherProductionRequest
-  >(CREATE_WEATHER_PRODUCTION, {
+    ICreateFrontProductionResponse,
+    ICreateFrontProductionRequest
+  >(CREATE_FRONT_PRODUCTION, {
     onError,
     onCompleted,
   });

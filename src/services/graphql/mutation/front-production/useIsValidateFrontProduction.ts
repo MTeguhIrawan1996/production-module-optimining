@@ -2,14 +2,14 @@ import { ApolloError, gql, useMutation } from '@apollo/client';
 
 import { IUpdateStatusValues } from '@/types/global';
 
-export const UPDATE_ISVALID_WEATHER_PRODUCTION = gql`
-  mutation UpdateIsValidateWeatherProduction(
+export const UPDATE_ISVALID_FRONT_PRODUCTION = gql`
+  mutation UpdateIsValidateFrontProduction(
     $id: String!
     $status: Boolean
     $statusMessage: String
   ) {
-    validateWeatherData(
-      validateWeatherDataInput: {
+    validateFrontData(
+      validateFrontDataInput: {
         id: $id
         status: $status
         statusMessage: $statusMessage
@@ -24,14 +24,14 @@ export const UPDATE_ISVALID_WEATHER_PRODUCTION = gql`
   }
 `;
 
-export interface IUpdateIsValidateWeatherProductionRequest
+export interface IUpdateIsValidateFrontProductionRequest
   extends IUpdateStatusValues {
   id: string;
   status: boolean;
 }
 
-interface IUpdateIsValidateWeatherProductionResponse {
-  validateWeatherData: {
+interface IUpdateIsValidateFrontProductionResponse {
+  validateFrontData: {
     id: string;
     status: {
       id: string;
@@ -39,17 +39,17 @@ interface IUpdateIsValidateWeatherProductionResponse {
   };
 }
 
-export const useUpdateIsValidateWeatherProduction = ({
+export const useUpdateIsValidateFrontProduction = ({
   onError,
   onCompleted,
 }: {
   onError?: ({ graphQLErrors }: ApolloError) => void;
-  onCompleted?: (data: IUpdateIsValidateWeatherProductionResponse) => void;
+  onCompleted?: (data: IUpdateIsValidateFrontProductionResponse) => void;
 }) => {
   return useMutation<
-    IUpdateIsValidateWeatherProductionResponse,
-    IUpdateIsValidateWeatherProductionRequest
-  >(UPDATE_ISVALID_WEATHER_PRODUCTION, {
+    IUpdateIsValidateFrontProductionResponse,
+    IUpdateIsValidateFrontProductionRequest
+  >(UPDATE_ISVALID_FRONT_PRODUCTION, {
     onError,
     onCompleted,
   });

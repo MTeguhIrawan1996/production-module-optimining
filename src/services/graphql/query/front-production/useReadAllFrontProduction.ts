@@ -2,6 +2,7 @@ import { ApolloError, gql, useQuery } from '@apollo/client';
 
 import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
 import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
+import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { simpleOtherColumn } from '@/utils/helper/simpleOtherColumn';
 
@@ -37,6 +38,10 @@ export const READ_ALL_FRONT_PRODUCTION = gql`
       data {
         id
         date
+        material {
+          id
+          name
+        }
         front {
           id
           name
@@ -74,6 +79,7 @@ export const READ_ALL_FRONT_PRODUCTION = gql`
 export interface IReadAllFrontProductionData {
   id: string;
   date: string | null;
+  material: Pick<IMaterialsData, 'id' | 'name'> | null;
   front: Pick<ILocationsData, 'id' | 'name'> | null;
   companyHeavyEquipment: IHeavyEquipmentCompany | null;
   pit: {
@@ -101,7 +107,8 @@ interface IReadAllFrontProductionRequest extends IGlobalMetaRequest {
 interface ISimpleKeyType {
   id: string;
   date: string | null;
-  front: string | null;
+  material: string | null;
+  frontName: string | null;
   heavyEquipmentCode: string | null;
   class: string | null;
   coordinateX: number | null;
@@ -141,9 +148,10 @@ export const useReadAllFrontProduction = ({
     frontProductionData?.frontDatas.data.map((item) => ({
       id: item.id,
       date: formatDate(item.date),
-      heavyEquipmentCode: item.companyHeavyEquipment?.hullNumber ?? null,
+      material: item.material?.name ?? null,
+      frontName: item.front?.name ?? null,
       class: item.companyHeavyEquipment?.heavyEquipment?.class?.name ?? null,
-      front: item.front?.name ?? null,
+      heavyEquipmentCode: item.companyHeavyEquipment?.hullNumber ?? null,
       dome: item.dome?.name ?? null,
       pit: item.pit?.name ?? null,
       coordinateX: item.x ?? null,

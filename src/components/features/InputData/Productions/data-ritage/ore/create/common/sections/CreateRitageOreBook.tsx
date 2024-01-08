@@ -118,6 +118,7 @@ const CreateRitageOreBook = () => {
     onCompleted: ({ pit }) => {
       methods.setValue('block', pit.block.name);
     },
+    fetchPolicy: 'cache-first',
   });
 
   // eslint-disable-next-line unused-imports/no-unused-vars

@@ -11,6 +11,7 @@ import {
   useReadDetailsBargingRitageDT,
 } from '@/services/graphql/query/barging-ritage/useReadDetailsBargingRitageDT';
 import { useReadOneFotoBargingRitageDT } from '@/services/graphql/query/barging-ritage/useReadOneBargingRitageDT';
+import { useReadOneBargingRitageDTOperators } from '@/services/graphql/query/barging-ritage/useReadOneBargingRitageDTOperators';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 
 import { IElementsData, IListDetailRitageDTData } from '@/types/global';
@@ -43,6 +44,16 @@ const ReadDTBargingRitageBook = () => {
     skip: !router.isReady,
   });
 
+  const { bargingDumpTruckRitageDetail, bargingDumpTruckRitageDetailLoading } =
+    useReadOneBargingRitageDTOperators({
+      variables: {
+        date: date,
+        shiftId: shiftId,
+        companyHeavyEquipmentId: companyHeavyEquipmentId,
+      },
+      skip: !router.isReady,
+    });
+
   const { getData, bargingRitage, bargingRitageLoading } =
     useReadOneFotoBargingRitageDT({});
 
@@ -61,7 +72,7 @@ const ReadDTBargingRitageBook = () => {
         title: `${element.name}`,
         render: ({ houseSampleAndLab }) => {
           const value = houseSampleAndLab?.elements?.find(
-            (val) => val.element?.name === element.name
+            (val) => val.element?.id === element.id
           );
           return value?.value ?? '-';
         },
@@ -92,9 +103,11 @@ const ReadDTBargingRitageBook = () => {
       childrenStackProps={{
         spacing: 'xl',
       }}
+      isLoading={bargingDumpTruckRitageDetailLoading}
     >
       <ListDetailsRitageDT
         data={detailsBargingRitagesDT}
+        operatorDetail={bargingDumpTruckRitageDetail}
         columns={[
           {
             accessor: 'fromStockpile',

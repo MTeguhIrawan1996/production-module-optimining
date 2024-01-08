@@ -104,7 +104,13 @@ export default function ListDataRitageDumptruckBook<
             {
               accessor: 'operatorName',
               title: t('commonTypography.operatorName'),
-              // render: ({ checkerTo }) => checkerTo?.humanResource?.name ?? '-',
+              width: 250,
+              render: ({ operators }) => {
+                const operator = operators?.map((val) => val);
+                const value =
+                  operators && operators.length ? operator.join(', ') : '-';
+                return value;
+              },
             },
             {
               accessor: 'shift',
@@ -133,7 +139,7 @@ export default function ListDataRitageDumptruckBook<
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `${urlDetail}/${date}/${shift?.id}/${companyHeavyEquipment?.id}?p=1&op=OperatorName&shift=${shift?.name}&c=${companyHeavyEquipment?.hullNumber}&tabs=${tabs}`
+                          `${urlDetail}/${date}/${shift?.id}/${companyHeavyEquipment?.id}?p=1&tabs=${tabs}`
                         );
                       },
                     }}
