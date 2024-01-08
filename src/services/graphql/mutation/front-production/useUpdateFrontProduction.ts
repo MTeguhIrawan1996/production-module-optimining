@@ -1,26 +1,36 @@
 import { ApolloError, gql, useMutation } from '@apollo/client';
 
-import { IMutationWeatherProductionValues } from '@/services/graphql/mutation/weather-production/useCreateWeatherProduction';
+import { IMutationFrontProductionValues } from '@/services/graphql/mutation/front-production/useCreateFrontProduction';
 
-export const UPDATE_WEATHER_PRODUCTION = gql`
-  mutation UpdateWeatherProduction(
+export const UPDATE_FRONT_PRODUCTION = gql`
+  mutation UpdateFrontProduction(
     $id: String!
     $date: String
-    $checkerId: String
-    $locationCategoryId: String
-    $locationId: String
-    $desc: String
-    $weatherDataConditions: [CreateWeatherDataConditionDto!]
+    $companyHeavyEquipmentId: String
+    $frontId: String
+    $materialId: String
+    $type: String
+    $pitId: String
+    $gridId: String
+    $elevationId: String
+    $domeId: String
+    $x: Float
+    $y: Float
   ) {
-    updateWeatherData(
-      updateWeatherDataInput: {
+    updateFrontData(
+      updateFrontDataInput: {
         id: $id
         date: $date
-        checkerId: $checkerId
-        locationCategoryId: $locationCategoryId
-        locationId: $locationId
-        desc: $desc
-        weatherDataConditions: $weatherDataConditions
+        companyHeavyEquipmentId: $companyHeavyEquipmentId
+        frontId: $frontId
+        materialId: $materialId
+        type: $type
+        pitId: $pitId
+        gridId: $gridId
+        elevationId: $elevationId
+        domeId: $domeId
+        x: $x
+        y: $y
       }
     ) {
       id
@@ -28,27 +38,33 @@ export const UPDATE_WEATHER_PRODUCTION = gql`
   }
 `;
 
-type IUpdateWeatherProductionRequest = {
+type IUpdateFrontProductionRequest = {
   id: string;
-} & IMutationWeatherProductionValues;
+} & Omit<IMutationFrontProductionValues, 'block'>;
 
-interface IUpdateWeatherProductionResponse {
-  updateWeatherData: {
+export type IFrontProductionNameProps = keyof Omit<
+  IMutationFrontProductionValues,
+  'block'
+>;
+export type IFrontProductionValueProps = string | Date | number | null;
+
+interface IUpdateFrontProductionResponse {
+  updateFrontData: {
     id: string;
   };
 }
 
-export const useUpdateWeatherProduction = ({
+export const useUpdateFrontProduction = ({
   onError,
   onCompleted,
 }: {
   onError?: ({ graphQLErrors }: ApolloError) => void;
-  onCompleted?: (data: IUpdateWeatherProductionResponse) => void;
+  onCompleted?: (data: IUpdateFrontProductionResponse) => void;
 }) => {
   return useMutation<
-    IUpdateWeatherProductionResponse,
-    IUpdateWeatherProductionRequest
-  >(UPDATE_WEATHER_PRODUCTION, {
+    IUpdateFrontProductionResponse,
+    IUpdateFrontProductionRequest
+  >(UPDATE_FRONT_PRODUCTION, {
     onError,
     onCompleted,
   });

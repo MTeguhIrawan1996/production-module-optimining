@@ -5,6 +5,7 @@ import DataTablePage from '@/components/features/Example/datatable/common';
 import FrontProductionPage from '@/components/features/InputData/Productions/data-front/common';
 import CreateFrontProductionPage from '@/components/features/InputData/Productions/data-front/create/common';
 import ReadFrontProductionPage from '@/components/features/InputData/Productions/data-front/read/common';
+import UpdateFrontProductionPage from '@/components/features/InputData/Productions/data-front/update/common';
 import CreateRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/create/common';
 import ReadRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/read/common';
 import ReadDTBargingRitagePage from '@/components/features/InputData/Productions/data-ritage/barging/read/read-dump-truck/common';
@@ -236,6 +237,7 @@ export {
   UpdateCompanyPage,
   UpdateElementMasterPage,
   UpdateFactoryMasterPage,
+  UpdateFrontProductionPage,
   UpdateHeavyEquipmentClassPage,
   UpdateHeavyEquipmentMasterPage,
   UpdateHeavyEquipmentPage,
