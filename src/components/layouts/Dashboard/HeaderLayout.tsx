@@ -1,5 +1,6 @@
 import { ActionIcon, Box, Group, Menu, Stack, Text } from '@mantine/core';
 import { IconMenu2, IconUser } from '@tabler/icons-react';
+import i18n from 'i18n';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import * as React from 'react';
@@ -27,6 +28,9 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
       setAUthUser(data.authUser);
     },
   });
+  React.useEffect(() => {
+    i18n.init();
+  }, []);
 
   const renderName = React.useMemo(() => {
     return (

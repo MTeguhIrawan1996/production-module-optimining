@@ -2,6 +2,7 @@ import AuthPage from '@/components/features/Auth/common';
 import DashboardPage from '@/components/features/Dashboard/common';
 import ComponentsPage from '@/components/features/Example/components/common';
 import DataTablePage from '@/components/features/Example/datatable/common';
+import FrontProductionPage from '@/components/features/InputData/Productions/data-front/common';
 import CreateRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/create/common';
 import ReadRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/read/common';
 import ReadDTBargingRitagePage from '@/components/features/InputData/Productions/data-ritage/barging/read/read-dump-truck/common';
@@ -48,6 +49,7 @@ import UpdateSampleHouseLabPage from '@/components/features/InputData/QualityCon
 import ShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/common';
 import CreateShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/create/common';
 import ReadShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/read/common';
+import UpdateShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/update/common';
 import StockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/common';
 import ReadStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/read/common';
 import UpdateStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/update/common';
@@ -173,6 +175,7 @@ export {
   DataTablePage,
   ElementMasterPage,
   FactoryMasterPage,
+  FrontProductionPage,
   HeavyEquipmentClassPage,
   HeavyEquipmentMasterPage,
   HeavyEquipmentPage,
@@ -245,6 +248,7 @@ export {
   UpdateRitageTopsoilPage,
   UpdateSampleHouseLabPage,
   UpdateShiftMasterPage,
+  UpdateShippingMonitoringPage,
   UpdateStockpileDomeMasterPage,
   UpdateStockpileMasterPage,
   UpdateStockpileMonitoringPage,

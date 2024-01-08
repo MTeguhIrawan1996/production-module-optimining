@@ -10,8 +10,8 @@ export const READ_ALL_ARRIVE_BARGE_SELECT = gql`
     $orderBy: String
     $orderDir: String
   ) {
-    monitoringBargingDestinationTypes(
-      findAllMonitoringBargingDestinationTypeInput: {
+    factoryCategories(
+      findAllFactoryCategoryInput: {
         page: $page
         limit: $limit
         search: $search
@@ -39,7 +39,7 @@ export interface IReadAllArriveBargeSelectData {
 }
 
 interface IReadAllArriveBargeSelectResponse {
-  monitoringBargingDestinationTypes: GResponse<IReadAllArriveBargeSelectData>;
+  factoryCategories: GResponse<IReadAllArriveBargeSelectData>;
 }
 
 export const useReadAllArriveBargeSelect = ({
@@ -69,9 +69,8 @@ export const useReadAllArriveBargeSelect = ({
   );
 
   return {
-    arriveBargeData: arriveBargeData?.monitoringBargingDestinationTypes.data,
-    arriveBargeDataMeta:
-      arriveBargeData?.monitoringBargingDestinationTypes.meta,
+    arriveBargeData: arriveBargeData?.factoryCategories.data,
+    arriveBargeDataMeta: arriveBargeData?.factoryCategories.meta,
     arriveBargeDataLoading,
     refetcharriveBargeData: refetch,
   };

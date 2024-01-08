@@ -126,6 +126,10 @@ export async function middleware(request: NextRequest) {
       allowedPermissions: ['create-weather-data'],
     },
     {
+      path: '/input-data/production/data-front',
+      allowedPermissions: ['create-front-data'],
+    },
+    {
       path: '/setting/management-role',
       allowedPermissions: ['create-role'],
     },

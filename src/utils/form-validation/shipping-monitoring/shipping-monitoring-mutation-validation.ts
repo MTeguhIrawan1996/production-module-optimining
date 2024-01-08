@@ -16,7 +16,7 @@ export const shippingMonitoringMutationValidation: z.ZodType<IMutationShippingMo
     palkaOpenTime: zOptionalString,
     palkaCloseDate: zDateOptionalValidation,
     palkaCloseTime: zOptionalString,
-    destinationTypeId: zRequiredSelectInput,
+    factoryCategoryId: zRequiredSelectInput,
     factoryId: zOptionalString.nullable(),
     vesselOpenDate: zDateOptionalValidation,
     vesselOpenTime: zOptionalString,
