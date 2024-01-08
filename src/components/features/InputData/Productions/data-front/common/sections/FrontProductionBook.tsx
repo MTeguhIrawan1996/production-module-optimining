@@ -13,6 +13,7 @@ import {
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
+  SelectionButtonModal,
 } from '@/components/elements';
 
 import { useDeleteFrontProduction } from '@/services/graphql/mutation/front-production/useDeleteFrontProduction';
@@ -22,13 +23,16 @@ const FrontProductionBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
-  const url = `/input-data/production/data-front?page=1`;
+  const segment = pageParams.get('segment') || 'pit';
+  const url = `/input-data/production/data-front?page=1&segment=${segment}`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
-  const [segmented, setSegmented] = React.useState<string>('pit');
+  // const [segmented, setSegmented] = React.useState<string>('pit');
+  const [isOpenSelectionModal, setIsOpenSelectionModal] =
+    React.useState<boolean>(false);
 
   /* #   /**=========== Query =========== */
   const {
@@ -43,7 +47,7 @@ const FrontProductionBook = () => {
       page: page,
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
-      type: segmented,
+      type: segment,
     },
   });
 
@@ -79,7 +83,12 @@ const FrontProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/data-front?page=${page}`;
+    const urlSet = `/input-data/production/data-front?page=${page}&segment=${segment}`;
+    router.push(urlSet, undefined, { shallow: true });
+  };
+
+  const handleChangeSegement = (value: string) => {
+    const urlSet = `/input-data/production/data-front?page=1&segment=${value}`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
@@ -183,7 +192,7 @@ const FrontProductionBook = () => {
     <DashboardCard
       addButton={{
         label: t('frontProduction.createFrontProduction'),
-        onClick: () => router.push('/input-data/production/data-front/create'),
+        onClick: () => setIsOpenSelectionModal((prev) => !prev),
       }}
       searchBar={{
         placeholder: t('frontProduction.searchPlaceholder'),
@@ -196,8 +205,8 @@ const FrontProductionBook = () => {
         },
       }}
       segmentedControl={{
-        value: segmented,
-        onChange: setSegmented,
+        value: segment,
+        onChange: handleChangeSegement,
         data: [
           {
             label: 'PIT',
@@ -231,6 +240,22 @@ const FrontProductionBook = () => {
           description: t('commonTypography.alertDescConfirmDelete'),
         }}
         withDivider
+      />
+      <SelectionButtonModal
+        isOpenSelectionModal={isOpenSelectionModal}
+        actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
+        firstButton={{
+          label: t('commonTypography.fromPit'),
+          onClick: () =>
+            router.push(`/input-data/production/data-front/create?segment=pit`),
+        }}
+        secondButton={{
+          label: t('commonTypography.fromDome'),
+          onClick: () =>
+            router.push(
+              `/input-data/production/data-front/create?segment=dome`
+            ),
+        }}
       />
     </DashboardCard>
   );
