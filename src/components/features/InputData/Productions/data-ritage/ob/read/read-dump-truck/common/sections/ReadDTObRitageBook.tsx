@@ -7,6 +7,7 @@ import { DashboardCard, ListDetailsRitageDT } from '@/components/elements';
 
 import { useReadDetailsObRitageDT } from '@/services/graphql/query/ob-ritage/useReadDetailsObRitageDT';
 import { useReadOneFotoObRitageDT } from '@/services/graphql/query/ob-ritage/useReadOneObRitageDT';
+import { useReadOneObRitageDTOperators } from '@/services/graphql/query/ob-ritage/useReadOneOreRitageDTOperators';
 
 const ReadDTObRitageBook = () => {
   const { t } = useTranslation('default');
@@ -36,6 +37,18 @@ const ReadDTObRitageBook = () => {
     skip: !router.isReady,
   });
 
+  const {
+    overburdenDumpTruckRitageDetail,
+    overburdenDumpTruckRitageDetailLoading,
+  } = useReadOneObRitageDTOperators({
+    variables: {
+      date: date,
+      shiftId: shiftId,
+      companyHeavyEquipmentId: companyHeavyEquipmentId,
+    },
+    skip: !router.isReady,
+  });
+
   const { getData, overburdenRitage, overburdenRitageLoading } =
     useReadOneFotoObRitageDT({});
 
@@ -58,9 +71,11 @@ const ReadDTObRitageBook = () => {
       childrenStackProps={{
         spacing: 'xl',
       }}
+      isLoading={overburdenDumpTruckRitageDetailLoading}
     >
       <ListDetailsRitageDT
         data={detailsObRitageDTData}
+        operatorDetail={overburdenDumpTruckRitageDetail}
         columns={[
           {
             accessor: 'fromPit',
