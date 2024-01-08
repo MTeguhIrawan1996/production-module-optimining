@@ -7,6 +7,7 @@ import { DashboardCard, ListDetailsRitageDT } from '@/components/elements';
 
 import { useReadDetailsQuarryRitageDT } from '@/services/graphql/query/quarry-ritage/useReadDetailsQuarryRitageDT';
 import { useReadOneFotoQuarryRitageDT } from '@/services/graphql/query/quarry-ritage/useReadOneQuarryRitageDT';
+import { useReadOneQuarryRitageDTOperators } from '@/services/graphql/query/quarry-ritage/useReadOnequarryRitageDTOperators';
 
 const ReadDTQuarryRitageBook = () => {
   const { t } = useTranslation('default');
@@ -36,6 +37,16 @@ const ReadDTQuarryRitageBook = () => {
     skip: !router.isReady,
   });
 
+  const { quarryDumpTruckRitageDetail, quarryDumpTruckRitageDetailLoading } =
+    useReadOneQuarryRitageDTOperators({
+      variables: {
+        date: date,
+        shiftId: shiftId,
+        companyHeavyEquipmentId: companyHeavyEquipmentId,
+      },
+      skip: !router.isReady,
+    });
+
   const { getData, quarryRitage, quarryRitageLoading } =
     useReadOneFotoQuarryRitageDT({});
 
@@ -58,9 +69,11 @@ const ReadDTQuarryRitageBook = () => {
       childrenStackProps={{
         spacing: 'xl',
       }}
+      isLoading={quarryDumpTruckRitageDetailLoading}
     >
       <ListDetailsRitageDT
         data={quarryRitagesDTData}
+        operatorDetail={quarryDumpTruckRitageDetail}
         columns={[
           {
             accessor: 'fromPit',
