@@ -7,6 +7,7 @@ import { DashboardCard, ListDetailsRitageDT } from '@/components/elements';
 
 import { useReadDetailsTopsoilRitageDT } from '@/services/graphql/query/topsoil-ritage/useReadDetailsTopsoilRitageDT';
 import { useReadOneFotoTopsoilRitageDT } from '@/services/graphql/query/topsoil-ritage/useReadOneTopsoilRitageDT';
+import { useReadOneTopsoilRitageDTOperators } from '@/services/graphql/query/topsoil-ritage/useReadOneTopsoilRitageDTOperators';
 
 const ReadDTTopsoilRitageBook = () => {
   const { t } = useTranslation('default');
@@ -36,6 +37,16 @@ const ReadDTTopsoilRitageBook = () => {
     skip: !router.isReady,
   });
 
+  const { topsoilDumpTruckRitageDetail, topsoilDumpTruckRitageDetailLoading } =
+    useReadOneTopsoilRitageDTOperators({
+      variables: {
+        date: date,
+        shiftId: shiftId,
+        companyHeavyEquipmentId: companyHeavyEquipmentId,
+      },
+      skip: !router.isReady,
+    });
+
   const { getData, topsoilRitage, topsoilRitageLoading } =
     useReadOneFotoTopsoilRitageDT({});
 
@@ -58,9 +69,11 @@ const ReadDTTopsoilRitageBook = () => {
       childrenStackProps={{
         spacing: 'xl',
       }}
+      isLoading={topsoilDumpTruckRitageDetailLoading}
     >
       <ListDetailsRitageDT
         data={topsoilRitagesDTData}
+        operatorDetail={topsoilDumpTruckRitageDetail}
         columns={[
           {
             accessor: 'fromPit',

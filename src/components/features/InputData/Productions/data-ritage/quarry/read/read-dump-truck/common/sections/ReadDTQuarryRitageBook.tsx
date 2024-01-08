@@ -7,7 +7,7 @@ import { DashboardCard, ListDetailsRitageDT } from '@/components/elements';
 
 import { useReadDetailsQuarryRitageDT } from '@/services/graphql/query/quarry-ritage/useReadDetailsQuarryRitageDT';
 import { useReadOneFotoQuarryRitageDT } from '@/services/graphql/query/quarry-ritage/useReadOneQuarryRitageDT';
-import { useReadOneQuarryRitageDTOperators } from '@/services/graphql/query/quarry-ritage/useReadOneQuarryRitageDTOperator';
+import { useReadOneQuarryRitageDTOperators } from '@/services/graphql/query/quarry-ritage/useReadOneQuarryRitageDTOperators';
 
 const ReadDTQuarryRitageBook = () => {
   const { t } = useTranslation('default');

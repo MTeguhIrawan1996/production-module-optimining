@@ -343,7 +343,7 @@ export interface IReadOneRitageDTOperators {
     id: string;
     name: string;
   } | null;
-  operators: string[];
+  operators: string[] | null;
 }
 /* #endregion  /**======== Ritage DT =========== */
 

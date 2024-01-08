@@ -148,7 +148,7 @@ export default function ListDetailsRitageDT<
 
   const operator = operatorDetail?.operators?.map((val) => val);
   const newOperatorName =
-    operatorDetail && operatorDetail.operators.length
+    operatorDetail && operatorDetail.operators?.length
       ? operator?.join(', ')
       : '-';
 
