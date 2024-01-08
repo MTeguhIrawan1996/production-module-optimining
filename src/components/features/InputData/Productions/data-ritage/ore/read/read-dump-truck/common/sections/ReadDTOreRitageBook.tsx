@@ -12,6 +12,7 @@ import {
   useReadDetailsOreRitageDT,
 } from '@/services/graphql/query/ore-ritage/useReadDetailsOreritageDT';
 import { useReadOneFotoOreRitageDT } from '@/services/graphql/query/ore-ritage/useReadOneOreRitageDT';
+import { useReadOneOreRitageDTOperators } from '@/services/graphql/query/ore-ritage/useReadOneOreRitageDTOperators';
 
 import { IElementsData, IListDetailRitageDTData } from '@/types/global';
 
@@ -42,6 +43,16 @@ const ReadDTOreRitageBook = () => {
     },
     skip: !router.isReady,
   });
+
+  const { oreDumpTruckRitageDetail, oreDumpTruckRitageDetailLoading } =
+    useReadOneOreRitageDTOperators({
+      variables: {
+        date: date,
+        shiftId: shiftId,
+        companyHeavyEquipmentId: companyHeavyEquipmentId,
+      },
+      skip: !router.isReady,
+    });
 
   const { getData, oreRitage, oreRitageLoading } = useReadOneFotoOreRitageDT(
     {}
@@ -93,9 +104,11 @@ const ReadDTOreRitageBook = () => {
       childrenStackProps={{
         spacing: 'xl',
       }}
+      isLoading={oreDumpTruckRitageDetailLoading}
     >
       <ListDetailsRitageDT
         data={detailsOreRitageDTData}
+        operatorDetail={oreDumpTruckRitageDetail}
         columns={[
           {
             accessor: 'fromLevel',
