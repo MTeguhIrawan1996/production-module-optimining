@@ -166,7 +166,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
           ) : null}
           {segmentedControl ? (
             <SegmentedControl
-              w="15%"
+              w={220}
               size="sm"
               radius={4}
               {...segmentedControl}

@@ -94,6 +94,7 @@ const MaterialSelectInput: React.FC<IMaterialSelectnputRhfProps> = ({
             ns: 'default',
           })}
           label={label ? t(`components.field.${label}`) : null}
+          error={fieldState && fieldState.error ? true : false}
           {...rest}
         />
         {deleteButtonField ? (

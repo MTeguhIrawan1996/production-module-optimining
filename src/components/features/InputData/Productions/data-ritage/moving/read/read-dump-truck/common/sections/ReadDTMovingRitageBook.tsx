@@ -12,6 +12,7 @@ import {
   useReadDetailsMovingRitageDT,
 } from '@/services/graphql/query/moving-ritage/useReadDetailsMovingRitageDT';
 import { useReadOneFotoMovingRitageDT } from '@/services/graphql/query/moving-ritage/useReadOneMovingRitageDT';
+import { useReadOneMovingRitageDTOperators } from '@/services/graphql/query/moving-ritage/useReadOneMovingRitageDTOperators';
 
 import { IElementsData, IListDetailRitageDTData } from '@/types/global';
 
@@ -43,6 +44,16 @@ const ReadDTMovingRitageBook = () => {
     skip: !router.isReady,
   });
 
+  const { movingDumpTruckRitageDetail, movingDumpTruckRitageDetailLoading } =
+    useReadOneMovingRitageDTOperators({
+      variables: {
+        date: date,
+        shiftId: shiftId,
+        companyHeavyEquipmentId: companyHeavyEquipmentId,
+      },
+      skip: !router.isReady,
+    });
+
   const { getData, movingRitage, movingRitageLoading } =
     useReadOneFotoMovingRitageDT({});
 
@@ -61,7 +72,7 @@ const ReadDTMovingRitageBook = () => {
         title: `${element.name}`,
         render: ({ houseSampleAndLab }) => {
           const value = houseSampleAndLab?.elements?.find(
-            (val) => val.element?.name === element.name
+            (val) => val.element?.id === element.id
           );
           return value?.value ?? '-';
         },
@@ -92,9 +103,11 @@ const ReadDTMovingRitageBook = () => {
       childrenStackProps={{
         spacing: 'xl',
       }}
+      isLoading={movingDumpTruckRitageDetailLoading}
     >
       <ListDetailsRitageDT
         data={detailsMovingRitageDT}
+        operatorDetail={movingDumpTruckRitageDetail}
         columns={[
           {
             accessor: 'fromDome',

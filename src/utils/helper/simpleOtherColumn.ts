@@ -23,6 +23,7 @@ export const simpleOtherColumn = <T extends object>({
       const column: DataTableColumn<T> = {
         accessor: `${val.accessor}`,
         title: t(`commonTypography.${val.accessor}`),
+        width: val.accessor === 'date' ? 160 : undefined,
       };
       return column;
     });

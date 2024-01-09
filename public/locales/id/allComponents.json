@@ -115,6 +115,7 @@
       "fromStockpile": "Dari Stockpile",
       "stockpileId": "ID Stockpile",
       "domeName": "Nama Dome",
+      "dome": "Dome",
       "domeId": "ID Dome",
       "toDome": "Ke Dome",
       "fromDome": "Dari Dome",
@@ -149,6 +150,7 @@
       "block": "Block",
       "blockName": "Nama Block",
       "pitId": "ID PIT",
+      "pit": "PIT",
       "pitName": "Nama PIT",
       "problemRitage": "Ritase Bermasalah",
       "fromCheckerName": "Nama Checker Asal",
@@ -176,8 +178,11 @@
       "reopenCloseTime": "Jam ditutup",
       "fromPit": "Dari Pit",
       "fromFront": "Dari Front",
+      "front": "Front",
       "fromGrid": "Dari Grid",
+      "grid": "Grid",
       "fromSequence": "Dari Sequence",
+      "elevation": "Elevasi",
       "fromElevasi": "Dari Elevasi",
       "fromLevel": "Dari Level",
       "toLevel": "Ke Level",
@@ -212,7 +217,9 @@
       "openVessel": "Buka Vessel",
       "openVesselHour": "Jam Buka Vessel",
       "closeVessel": "Tutup Vessel",
-      "closeVesselHour": "Jam Tutup Vessel"
+      "closeVesselHour": "Jam Tutup Vessel",
+      "coordinateX": "Koordinat X",
+      "coordinateY": "Koordinat Y"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",

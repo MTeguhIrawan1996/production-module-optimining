@@ -181,6 +181,7 @@ const UpdateRitageOreBook = () => {
     onCompleted: ({ pit }) => {
       methods.setValue('block', pit.block.name);
     },
+    fetchPolicy: 'cache-first',
   });
 
   const { mutate, isLoading } = useUpdateRitageOre({

@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 export const READ_ONE_BLOCK_PIT_MASTER = gql`
   query ReadOneBlockPitMaster($id: String!) {
@@ -35,10 +40,12 @@ export interface IReadOneBlockPitMasterRequest {
 export const useReadOneBlockPitMaster = ({
   variables,
   skip,
+  fetchPolicy = 'cache-and-network',
   onCompleted,
 }: {
   variables: IReadOneBlockPitMasterRequest;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
   onCompleted?: (data: IReadOneBlockPitMasterResponse) => void;
 }) => {
   const { data: blockPitMaster, loading: blockPitMasterLoading } = useQuery<
@@ -51,7 +58,7 @@ export const useReadOneBlockPitMaster = ({
     },
     onCompleted: onCompleted,
     skip,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: fetchPolicy,
   });
 
   return {
