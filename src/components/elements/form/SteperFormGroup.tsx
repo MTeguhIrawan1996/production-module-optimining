@@ -173,11 +173,15 @@ const SteperFormGroup: React.FC<ISteperFormGroupProps> = ({
                               ) : null}
                               <Grid gutter="md">
                                 {formControllers.map(
-                                  ({ colSpan = 12, name, ...rest }, index) => {
+                                  (
+                                    { colSpan = 12, key, name, ...rest },
+                                    index
+                                  ) => {
+                                    const indexName = `${index + 1}.${name}`;
                                     return (
                                       <Grid.Col
                                         span={colSpan}
-                                        key={`${index}${name}`}
+                                        key={key ? `${key}` : indexName}
                                       >
                                         <FormController name={name} {...rest} />
                                       </Grid.Col>

@@ -178,28 +178,16 @@ const CreateHeavyEquipmentProductionBook = () => {
           label: `${t('commonTypography.startHour')} ${label ?? ''}`,
           labelWithTranslate: false,
           withAsterisk: true,
+          key: `loseTimes.${val.id}.details.${i}.startTime`,
           colSpan: 6,
-          onChange: (e) => {
-            methods.setValue(
-              `loseTimes.${index}.details.${i}.startTime`,
-              e.currentTarget.value
-            );
-            methods.trigger(`loseTimes.${index}.details.${i}.startTime`);
-          },
         });
         const finishTimeItem = globalTimeInput({
           name: `loseTimes.${index}.details.${i}.finishTime`,
           label: `${t('commonTypography.endHour')} ${label ?? ''}`,
           labelWithTranslate: false,
           withAsterisk: true,
+          key: `loseTimes.${val.id}.details.${i}.finishTime`,
           colSpan: 6,
-          onChange: (e) => {
-            methods.setValue(
-              `loseTimes.${index}.details.${i}.finishTime`,
-              e.currentTarget.value
-            );
-            methods.trigger(`loseTimes.${index}.details.${i}.finishTime`);
-          },
         });
         return { startTimeItem, finishTimeItem };
       });
@@ -214,6 +202,7 @@ const CreateHeavyEquipmentProductionBook = () => {
         withAsterisk: false,
         disabled: true,
         labelWithTranslate: false,
+        key: `loseTimes.${val.id}.amountHour`,
         value: `${
           !totalSeconds || totalSeconds === 0
             ? ''
