@@ -57,6 +57,7 @@ import StockpilePage from '@/components/features/InputData/QualityControlManagem
 import ReadStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/read/common';
 import UpdateStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/update/common';
 import ActivityCategoryMasterPage from '@/components/features/MasterData/activity-category/common';
+import ReadLoseTimeCategoryPage from '@/components/features/MasterData/activity-category/lose-time-category/read/common';
 import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
 import CreateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/create/common';
 import ReadActivityPlanPage from '@/components/features/MasterData/activity-plan/read/common';
@@ -211,6 +212,7 @@ export {
   ReadHeavyEquipmentProductionPage,
   ReadHumanResourcesPage,
   ReadLocationMasterPage,
+  ReadLoseTimeCategoryPage,
   ReadManagementRolePage,
   ReadMaterialMasterPage,
   ReadRitageBargingPage,
