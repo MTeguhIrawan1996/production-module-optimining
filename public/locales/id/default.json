@@ -22,6 +22,7 @@
     "blockName": "Nama Block",
     "pitId": "ID PIT",
     "pitName": "Nama PIT",
+    "category": "Kategori",
     "locationCategory": "Kategori Lokasi",
     "locationName": "Nama Lokasi",
     "material": "Material",
@@ -38,10 +39,12 @@
     "hourAmountRain": "Total Jam Hujan",
     "hourAmountSlippery": "Total Jam Licin",
     "loseTime": "Waktu yang Hilang",
+    "loseTimeCategory": "Kategori Waktu Hilang",
     "availabilityHoursOrDays": "Ketersediaan Jam/Hari",
     "amountEffectiveWorkingHours": "Total Jam Kerja Efektif",
     "equipmentPerformance": "Equipment Performance",
     "activity": "Kegiatan",
+    "activityCategory": "Kategori Kegiatan",
     "activityPlan": "Rencana Aktivitas",
     "element": "Unsur Kandungan",
     "shift": "Shift",
@@ -418,7 +421,8 @@
     "dataHeavyEquipment": "$t(commonTypography.heavyEquipmentData)",
     "dataWeather": "$t(commonTypography.weatherData)",
     "shippingMonitoring": "$t(commonTypography.shippingMonitoring)",
-    "dataFront": "$t(commonTypography.front)"
+    "dataFront": "$t(commonTypography.front)",
+    "activityCategory": "$t(commonTypography.activityCategory)"
   },
   "auth": {
     "button": {
