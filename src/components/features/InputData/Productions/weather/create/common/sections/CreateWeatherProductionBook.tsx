@@ -196,7 +196,7 @@ const CreateWeatherProductionBook = () => {
       name: 'checkerId',
       label: 'checkerName',
       withAsterisk: true,
-      // positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
+      positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
     });
     const locationCategoryItem = locationCategorySelect({
       clearable: true,

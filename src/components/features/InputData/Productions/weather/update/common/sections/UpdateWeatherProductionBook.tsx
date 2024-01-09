@@ -233,7 +233,7 @@ const UpdateWeatherProductionBook = () => {
       withAsterisk: true,
       defaultValue: weatherData?.checker?.id,
       labelValue: weatherData?.checker?.humanResource.name,
-      // positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
+      positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
     });
     const locationCategoryItem = locationCategorySelect({
       clearable: true,
