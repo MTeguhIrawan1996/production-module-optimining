@@ -45,7 +45,7 @@ const UpdateCompanyPositionHistoryBook = () => {
         },
       ],
     },
-    mode: 'onBlur',
+    mode: 'onSubmit',
   });
 
   const { fields, append, remove, update } = useFieldArray({
