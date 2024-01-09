@@ -247,29 +247,31 @@ const ReadHeavyEquipmentBook = () => {
               accessor: 'brand',
               title: t('commonTypography.brand'),
               render: ({ heavyEquipment }) =>
-                heavyEquipment?.reference?.type?.brand?.name,
+                heavyEquipment?.reference?.type?.brand?.name ?? '-',
             },
             {
               accessor: 'type',
               title: t('commonTypography.heavyEquipmentType'),
               render: ({ heavyEquipment }) =>
-                heavyEquipment?.reference?.type?.name,
+                heavyEquipment?.reference?.type?.name ?? '-',
             },
             {
               accessor: 'model',
               title: t('commonTypography.model'),
               render: ({ heavyEquipment }) =>
-                heavyEquipment?.reference?.modelName,
+                heavyEquipment?.reference?.modelName ?? '-',
             },
             {
               accessor: 'specification',
               title: t('commonTypography.specification'),
-              render: ({ heavyEquipment }) => heavyEquipment?.reference?.spec,
+              render: ({ heavyEquipment }) =>
+                heavyEquipment?.reference?.spec ?? '-',
             },
             {
               accessor: 'class',
               title: t('commonTypography.class'),
-              render: ({ heavyEquipment }) => heavyEquipment?.class?.name,
+              render: ({ heavyEquipment }) =>
+                heavyEquipment?.class?.name ?? '-',
             },
             {
               accessor: 'formStatus',

@@ -4,7 +4,12 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import {
+  FieldArrayWithId,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, SteperFormGroup } from '@/components/elements';
@@ -375,28 +380,24 @@ const UpdateStockpileMonitoringBook = () => {
 
   /* #   /**=========== Field =========== */
   const surveyGroup = React.useCallback(
-    (_, index: number) => {
+    (
+      val: FieldArrayWithId<IMutationStockpile, 'tonSurveys', 'id'>,
+      index: number
+    ) => {
       const surveyDateItem = globalDate({
         name: `tonSurveys.${index}.date`,
         label: 'surveyDate',
         withAsterisk: true,
         clearable: true,
         colSpan: 6,
-        value: methods.watch(`tonSurveys.${index}.date`),
-        onChange: (value) => {
-          methods.setValue(`tonSurveys.${index}.date`, value);
-        },
+        key: `tonSurveys.${index}.date.${val.id}`,
       });
-      const ton = methods.watch(`tonSurveys.${index}.ton`);
       const tonBySurveyItem = globalNumberInput({
         colSpan: 6,
         name: `tonSurveys.${index}.ton`,
         label: 'tonBySurvey',
         withAsterisk: true,
-        value: ton !== '' ? Number(ton) : '',
-        onChange: (value) => {
-          methods.setValue(`tonSurveys.${index}.ton`, value);
-        },
+        key: `tonSurveys.${index}.ton.${val.id}`,
       });
 
       const group: ControllerGroup = {
@@ -434,36 +435,39 @@ const UpdateStockpileMonitoringBook = () => {
   const surveyGroupItem = surveyFields.map(surveyGroup);
 
   const movingGroup = React.useCallback(
-    (_, index: number) => {
+    (
+      val: FieldArrayWithId<IMutationStockpile, 'movings', 'id'>,
+      index: number
+    ) => {
       const movingStartDateItem = globalDate({
         name: `movings.${index}.startDate`,
         label: 'movingStartDate',
-        value: methods.watch(`movings.${index}.startDate`),
         withAsterisk: false,
         clearable: true,
         colSpan: 6,
+        key: `movings.${index}.startDate.${val.id}`,
       });
       const movingFinishDateItem = globalDate({
         name: `movings.${index}.finishDate`,
         label: 'movingFinishDate',
-        value: methods.watch(`movings.${index}.finishDate`),
         withAsterisk: false,
         clearable: true,
         colSpan: 6,
+        key: `movings.${index}.finishDate.${val.id}`,
       });
       const movingStartTimeItem = globalTimeInput({
         name: `movings.${index}.startTime`,
         label: 'movingStartTime',
-        value: methods.watch(`movings.${index}.startTime`),
         withAsterisk: false,
         colSpan: 6,
+        key: `movings.${index}.startTime.${val.id}`,
       });
       const movingFinishTimeItem = globalTimeInput({
         name: `movings.${index}.finishTime`,
         label: 'movingFinishTime',
-        value: methods.watch(`movings.${index}.finishTime`),
         withAsterisk: false,
         colSpan: 6,
+        key: `movings.${index}.finishTime.${val.id}`,
       });
 
       const group: ControllerGroup = {
@@ -479,40 +483,44 @@ const UpdateStockpileMonitoringBook = () => {
       return group;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [movingFields]
+    []
   );
   const movingGroupItem = movingFields.map(movingGroup);
+
   const reopenGroup = React.useCallback(
-    (_, index: number) => {
+    (
+      val: FieldArrayWithId<IMutationStockpile, 'reopens', 'id'>,
+      index: number
+    ) => {
       const reopenStartDateItem = globalDate({
         name: `reopens.${index}.openDate`,
         label: 'reopenStartDate',
-        value: methods.watch(`reopens.${index}.openDate`),
         withAsterisk: false,
         clearable: true,
         colSpan: 6,
+        key: `reopens.${index}.openDate.${val.id}`,
       });
       const reopenFinishDateItem = globalDate({
         name: `reopens.${index}.closeDate`,
         label: 'reopenCloseDate',
-        value: methods.watch(`reopens.${index}.closeDate`),
         withAsterisk: false,
         clearable: true,
         colSpan: 6,
+        key: `reopens.${index}.closeDate.${val.id}`,
       });
       const reopenStartTimeItem = globalTimeInput({
         name: `reopens.${index}.openTime`,
         label: 'reopenStartTime',
-        value: methods.watch(`reopens.${index}.openTime`),
         withAsterisk: false,
         colSpan: 6,
+        key: `reopens.${index}.openTime.${val.id}`,
       });
       const reopenFinishTimeItem = globalTimeInput({
         name: `reopens.${index}.closeTime`,
         label: 'reopenCloseTime',
-        value: methods.watch(`reopens.${index}.closeTime`),
         withAsterisk: false,
         colSpan: 6,
+        key: `reopens.${index}.closeTime.${val.id}`,
       });
 
       const group: ControllerGroup = {
@@ -528,24 +536,23 @@ const UpdateStockpileMonitoringBook = () => {
       return group;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [reopenFields]
+    []
   );
   const reopenGroupItem = reopenFields.map(reopenGroup);
 
   const sampleGroup = React.useCallback(
-    (_, index: number) => {
-      const elementItem = elementsData?.map((val, i) => {
-        const value = methods.watch(`samples.${index}.elements.${i}.value`);
+    (
+      val: FieldArrayWithId<IMutationStockpile, 'samples', 'id'>,
+      index: number
+    ) => {
+      const elementItem = elementsData?.map((obj, i) => {
         const elementInput = globalNumberInput({
           name: `samples.${index}.elements.${i}.value`,
-          label: `${t('commonTypography.rate')} ${val.name}`,
+          label: `${t('commonTypography.rate')} ${obj.name}`,
           colSpan: 6,
           withAsterisk: false,
           labelWithTranslate: false,
-          value: value !== '' ? Number(value) : '',
-          onChange: (value) => {
-            methods.setValue(`samples.${index}.elements.${i}.value`, value);
-          },
+          key: `samples.${index}.elements.${i}.value.${val.id}`,
         });
         return elementInput;
       });
@@ -555,21 +562,21 @@ const UpdateStockpileMonitoringBook = () => {
         withAsterisk: false,
         clearable: true,
         colSpan: 12,
-        value: methods.watch(`samples.${index}.date`),
+        key: `samples.${index}.date.${val.id}`,
       });
       const sampleTypesItem = sampleTypeSelect({
         colSpan: 6,
         withAsterisk: false,
         label: 'sampleType2',
         name: `samples.${index}.sampleTypeId`,
-        value: methods.watch(`samples.${index}.sampleTypeId`),
+        key: `samples.${index}.sampleTypeId.${val.id}`,
       });
       const sampleNumber = globalText({
         name: `samples.${index}.sampleNumber`,
         label: 'sampleNumber',
         colSpan: 6,
         withAsterisk: false,
-        value: methods.watch(`samples.${index}.sampleNumber`),
+        key: `samples.${index}.sampleNumber.${val.id}`,
       });
       const isDelete = methods.watch(
         `samples.${index}.isCreatedAfterDetermine`

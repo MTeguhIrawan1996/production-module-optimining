@@ -3,7 +3,12 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import {
+  FieldArrayWithId,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
@@ -72,11 +77,15 @@ const CreateMaterialMasterBook = () => {
 
   /* #   /**=========== Field =========== */
   const fieldsSubMaterial = React.useCallback(
-    (_, index: number) => {
+    (
+      val: FieldArrayWithId<IMutationMaterialValues, 'subMaterials', 'id'>,
+      index: number
+    ) => {
       const materialSubItem = globalText({
         colSpan: 12,
         name: `subMaterials.${index}.name`,
-        label: 'subMaterialType',
+        label: `subMaterialType`,
+        key: val.id,
         withAsterisk: true,
         deleteButtonField: {
           onClick: () => {

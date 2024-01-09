@@ -3,7 +3,12 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import {
+  FieldArrayWithId,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
@@ -100,44 +105,38 @@ const CreateWeatherProductionBook = () => {
 
   /* #   /**=========== Field =========== */
   const weatherGroup = React.useCallback(
-    (_, index: number) => {
-      const startTimeValue = methods.watch(
-        `weatherDataConditions.${index}.startTime`
-      );
-      const endTimeValue = methods.watch(
-        `weatherDataConditions.${index}.finishTime`
-      );
-      const rainfallValue = methods.watch(
-        `weatherDataConditions.${index}.rainfall`
-      );
-      const weatherConditionId = methods.watch(
-        `weatherDataConditions.${index}.conditionId`
-      );
-
+    (
+      val: FieldArrayWithId<
+        IMutationWeatherProductionValues,
+        'weatherDataConditions',
+        'id'
+      >,
+      index: number
+    ) => {
       const startTimeItem = globalTimeInput({
         name: `weatherDataConditions.${index}.startTime`,
         label: 'startTime',
         withAsterisk: true,
-        value: startTimeValue,
         colSpan: 6,
+        key: `weatherDataConditions.${index}.startTime.${val.id}`,
       });
       const endTimeItem = globalTimeInput({
         name: `weatherDataConditions.${index}.finishTime`,
         label: 'endTime',
         withAsterisk: true,
-        value: endTimeValue,
         colSpan: 6,
+        key: `weatherDataConditions.${index}.finishTime.${val.id}`,
       });
       const rainfallItem = globalNumberInput({
         name: `weatherDataConditions.${index}.rainfall`,
         label: 'rainfall',
-        value: rainfallValue,
         colSpan: 6,
         withAsterisk: false,
+        key: `weatherDataConditions.${index}.rainfall.${val.id}`,
       });
       const weatherConditionItem = weatherConditionSelect({
         name: `weatherDataConditions.${index}.conditionId`,
-        value: weatherConditionId,
+        key: `weatherDataConditions.${index}.conditionId.${val.id}`,
       });
       const group: ControllerGroup = {
         group: t('commonTypography.weather'),
@@ -196,7 +195,7 @@ const CreateWeatherProductionBook = () => {
       name: 'checkerId',
       label: 'checkerName',
       withAsterisk: true,
-      // positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
+      positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
     });
     const locationCategoryItem = locationCategorySelect({
       clearable: true,

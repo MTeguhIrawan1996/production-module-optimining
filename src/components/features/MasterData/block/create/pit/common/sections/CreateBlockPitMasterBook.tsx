@@ -3,7 +3,12 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import {
+  FieldArrayWithId,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
@@ -76,16 +81,21 @@ const CreateBlockPitMasterBook = () => {
 
   /* #   /**=========== Field =========== */
   const fieldItem = React.useCallback(
-    (_, index: number) => {
+    (
+      val: FieldArrayWithId<IMutationBlockPitValues, 'pits', 'id'>,
+      index: number
+    ) => {
       const pitId = globalText({
         name: `pits.${index}.handBookId`,
         label: 'pitId',
         colSpan: 6,
+        key: `pits.${index}.handBookId.${val.id}`,
       });
       const pitName = globalText({
         name: `pits.${index}.name`,
         label: 'pitName',
         colSpan: 6,
+        key: `pits.${index}.name.${val.id}`,
       });
 
       const field: ControllerGroup = {

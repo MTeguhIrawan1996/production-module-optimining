@@ -83,6 +83,10 @@ export async function middleware(request: NextRequest) {
       allowedPermissions: ['create-factory'],
     },
     {
+      path: '/master-data/activity-category',
+      allowedPermissions: ['all'],
+    },
+    {
       path: '/reference/company-type',
       allowedPermissions: ['create-company-type'],
     },

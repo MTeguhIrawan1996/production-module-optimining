@@ -71,6 +71,11 @@ export const linksDashboard: IMenuItem[] = [
         href: '/master-data/factory',
         access: ['create-factory'],
       },
+      {
+        label: 'activityCategory',
+        href: '/master-data/activity-category',
+        access: ['all'],
+      },
     ],
   },
   {

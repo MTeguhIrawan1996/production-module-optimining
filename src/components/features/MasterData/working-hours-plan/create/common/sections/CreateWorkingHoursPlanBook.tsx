@@ -3,7 +3,12 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import {
+  FieldArrayWithId,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
@@ -80,12 +85,16 @@ const CreateWorkingHoursPlanBook = () => {
 
   /* #   /**=========== Field =========== */
   const fieldItem = React.useCallback(
-    (_, index: number) => {
+    (
+      val: FieldArrayWithId<IMutationWHPValues, 'createWorkingHourPlans', 'id'>,
+      index: number
+    ) => {
       const activityItem = globalText({
         name: `createWorkingHourPlans.${index}.activityName`,
         label: 'activity',
         colSpan: 12,
         withAsterisk: true,
+        key: `createWorkingHourPlans.${index}.activityName.${val.id}`,
         deleteButtonField: {
           onClick: () => {
             fields.length > 1 ? remove(index) : null;
