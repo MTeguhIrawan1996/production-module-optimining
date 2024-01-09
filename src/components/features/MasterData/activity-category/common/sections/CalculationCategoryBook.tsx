@@ -1,3 +1,4 @@
+import { useDebouncedState } from '@mantine/hooks';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -11,18 +12,20 @@ import {
 
 import { useReadAllActivityCategory } from '@/services/graphql/query/activity-category/useReadAllActivityCategoryMaster';
 
-interface ILoseTimeCategoryProps {
+interface ICalculationCategoryBookProps {
   tabs?: string;
 }
 
-const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
+const CalculationCategoryBook: React.FC<ICalculationCategoryBookProps> = ({
   tabs: tabsProps,
 }) => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
-  const tabs = pageParams.get('tabs') || 'lose-time-category';
+  const tabs = pageParams.get('tabs') || 'calculation-category';
+  const url = `/master-data/activity-category?page=1&tabs=${tabsProps}`;
   const { t } = useTranslation('default');
+  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
 
   /* #   /**=========== Query =========== */
   const {
@@ -35,7 +38,8 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
       limit: 10,
       page: page,
       orderDir: 'desc',
-      type: 'default',
+      type: 'count_formula',
+      search: searchQuery === '' ? null : searchQuery,
     },
     skip: tabs !== tabsProps,
   });
@@ -74,7 +78,7 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/master-data/activity-category/lose-time-category/read/${id}`
+                          `/master-data/activity-category/calculation-category/read/${id}`
                         );
                       },
                     }}
@@ -100,7 +104,26 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
   }, [ReadAllActivityCategoryData, ReadAllActivityCategoryDataLoading]);
   /* #endregion  /**======== RenderTable =========== */
 
-  return <DashboardCard>{renderTable}</DashboardCard>;
+  return (
+    <DashboardCard
+      addButton={{
+        label: t('activityCategory.createActivityCategory'),
+        onClick: () => router.push('/master-data/activity-plan/create'),
+      }}
+      searchBar={{
+        placeholder: t('activityCategory.searchPlaceholderCalculation'),
+        onChange: (e) => {
+          setSearchQuery(e.currentTarget.value);
+        },
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
+        },
+        searchQuery: searchQuery,
+      }}
+    >
+      {renderTable}
+    </DashboardCard>
+  );
 };
 
-export default LoseTimeCategoryBook;
+export default CalculationCategoryBook;

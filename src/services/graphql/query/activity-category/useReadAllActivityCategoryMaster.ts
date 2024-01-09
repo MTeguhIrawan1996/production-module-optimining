@@ -49,7 +49,7 @@ interface IReadAllActivityCategoryResponse {
 }
 
 interface IReadAllActivityCategoryRequest extends IGlobalMetaRequest {
-  type: string | null;
+  type: 'default' | 'count_formula' | null;
 }
 
 interface ISimpleKeyType {

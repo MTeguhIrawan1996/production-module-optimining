@@ -45,6 +45,7 @@
     "equipmentPerformance": "Equipment Performance",
     "activity": "Kegiatan",
     "activityCategory": "Kategori Kegiatan",
+    "calculationCategory": "Kategori Peritungan",
     "activityPlan": "Rencana Aktivitas",
     "element": "Unsur Kandungan",
     "shift": "Shift",
@@ -883,5 +884,9 @@
     "successIsNotValidateMessage": "Status $t(frontProduction.frontProductionTitle) Tidak Valid",
     "successIsDeterminedMessage": "$t(frontProduction.frontProductionTitle) berhasil ditetapkan",
     "successIsRejectMessage": "$t(frontProduction.frontProductionTitle) berhasil $t(commonTypography.reject)"
+  },
+  "activityCategory": {
+    "createActivityCategory": "$t(commonTypography.create) $t(commonTypography.activityCategory)",
+    "searchPlaceholderCalculation": "$t(commonTypography.search) berdasarkan $t(commonTypography.activityCategory)"
   }
 }

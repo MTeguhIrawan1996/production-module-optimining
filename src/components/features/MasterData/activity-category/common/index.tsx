@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { GlobalTabs, InnerWrapper, RootWrapper } from '@/components/elements';
+import CalculationCategoryBook from '@/components/features/MasterData/activity-category/common/sections/CalculationCategoryBook';
 import LoseTimeCategoryBook from '@/components/features/MasterData/activity-category/common/sections/LoseTimeCategoryBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
@@ -47,6 +48,14 @@ const ActivityCategoryMasterPage = () => {
               label: t('commonTypography.loseTimeCategory'),
               value: 'lose-time-category',
               component: <LoseTimeCategoryBook tabs="lose-time-category" />,
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.calculationCategory'),
+              value: 'calculation-category',
+              component: (
+                <CalculationCategoryBook tabs="calculation-category" />
+              ),
               isShowItem: true,
             },
           ]}
