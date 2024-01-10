@@ -20,7 +20,7 @@ const ReadLoseTimeCategoryPage = () => {
     setBreadcrumbs([
       {
         label: t('commonTypography.activityCategory'),
-        path: '/master-data/activity-category?tabs=lose-time-category',
+        path: '/master-data/activity-category?tab=lose-time-category',
       },
       {
         label: t('activityCategory.readLoseTimeCategory'),
@@ -33,7 +33,7 @@ const ReadLoseTimeCategoryPage = () => {
   return (
     <RootWrapper>
       <InnerWrapper>
-        <ReadLoseTimeCategoryBook tabs="lose-time-category" />
+        <ReadLoseTimeCategoryBook tab="lose-time-category" />
       </InnerWrapper>
     </RootWrapper>
   );

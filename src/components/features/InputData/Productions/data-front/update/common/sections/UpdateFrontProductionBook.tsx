@@ -16,7 +16,7 @@ import {
   useUpdateFrontProduction,
 } from '@/services/graphql/mutation/front-production/useUpdateFrontProduction';
 import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
-import { useReadOneFrontProduction } from '@/services/graphql/query/front-production/useReadOneShippingMonitoring';
+import { useReadOneFrontProduction } from '@/services/graphql/query/front-production/useReadOneFrontProduction';
 import {
   globalDate,
   globalNumberInput,

@@ -67,7 +67,7 @@ const ReadMaterialMasterBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          <Stack spacing="sm" mt="lg">
+          <Stack spacing="sm" mt="sm">
             <Text fz={24} fw={600} color="brand">
               {t('material.readMaterial')}
             </Text>

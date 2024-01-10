@@ -12,24 +12,24 @@ import {
 import { useReadAllActivityCategory } from '@/services/graphql/query/activity-category/useReadAllActivityCategoryMaster';
 
 interface ILoseTimeCategoryProps {
-  tabs?: string;
+  tab?: string;
 }
 
 const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
-  tabs: tabsProps,
+  tab: tabProps,
 }) => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
-  const tabs = pageParams.get('tabs') || 'lose-time-category';
+  const tab = pageParams.get('tab') || 'lose-time-category';
   const { t } = useTranslation('default');
 
   /* #   /**=========== Query =========== */
   const {
-    ReadAllActivityCategoryData,
-    ReadAllActivityCategoryDataColumn,
-    ReadAllActivityCategoryDataLoading,
-    ReadAllActivityCategoryDataMeta,
+    readAllActivityCategoryData,
+    readAllActivityCategoryDataColumn,
+    readAllActivityCategoryDataLoading,
+    readAllActivityCategoryDataMeta,
   } = useReadAllActivityCategory({
     variables: {
       limit: 10,
@@ -37,11 +37,11 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
       orderDir: 'desc',
       type: 'default',
     },
-    skip: tabs !== tabsProps,
+    skip: tab !== tabProps,
   });
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/master-data/activity-category?page=${page}&tabs=${tabsProps}`;
+    const urlSet = `/master-data/activity-category?page=${page}&tab=${tabProps}`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
@@ -50,19 +50,19 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
     return (
       <MantineDataTable
         tableProps={{
-          records: ReadAllActivityCategoryData,
-          fetching: ReadAllActivityCategoryDataLoading,
+          records: readAllActivityCategoryData,
+          fetching: readAllActivityCategoryDataLoading,
           highlightOnHover: true,
           columns: [
             {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                ReadAllActivityCategoryData &&
-                ReadAllActivityCategoryData.indexOf(record) + 1,
+                readAllActivityCategoryData &&
+                readAllActivityCategoryData.indexOf(record) + 1,
               width: 60,
             },
-            ...(ReadAllActivityCategoryDataColumn ?? []),
+            ...(readAllActivityCategoryDataColumn ?? []),
             {
               accessor: 'action',
               title: t('commonTypography.action'),
@@ -78,6 +78,14 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
                         );
                       },
                     }}
+                    actionUpdate={{
+                      onClick: (e) => {
+                        e.stopPropagation();
+                        router.push(
+                          `/master-data/activity-category/lose-time-category/update/${id}`
+                        );
+                      },
+                    }}
                   />
                 );
               },
@@ -90,14 +98,14 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: ReadAllActivityCategoryDataMeta?.totalAllData ?? 0,
-          totalData: ReadAllActivityCategoryDataMeta?.totalData ?? 0,
-          totalPage: ReadAllActivityCategoryDataMeta?.totalPage ?? 0,
+          totalAllData: readAllActivityCategoryDataMeta?.totalAllData ?? 0,
+          totalData: readAllActivityCategoryDataMeta?.totalData ?? 0,
+          totalPage: readAllActivityCategoryDataMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ReadAllActivityCategoryData, ReadAllActivityCategoryDataLoading]);
+  }, [readAllActivityCategoryData, readAllActivityCategoryDataLoading]);
   /* #endregion  /**======== RenderTable =========== */
 
   return <DashboardCard>{renderTable}</DashboardCard>;

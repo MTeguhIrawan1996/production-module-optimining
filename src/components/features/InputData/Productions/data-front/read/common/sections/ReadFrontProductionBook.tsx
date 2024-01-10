@@ -17,7 +17,7 @@ import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
 import { useUpdateIsDeterminedFrontProduction } from '@/services/graphql/mutation/front-production/useIsDeterminedFrontProduction';
 import { useUpdateIsValidateFrontProduction } from '@/services/graphql/mutation/front-production/useIsValidateFrontProduction';
-import { useReadOneFrontProduction } from '@/services/graphql/query/front-production/useReadOneShippingMonitoring';
+import { useReadOneFrontProduction } from '@/services/graphql/query/front-production/useReadOneFrontProduction';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 
 import { IUpdateStatusValues } from '@/types/global';
@@ -286,8 +286,8 @@ const ReadFrontProductionBook = () => {
               <React.Fragment key={i}>
                 <Stack
                   spacing="sm"
-                  mt={i === 0 ? 'md' : undefined}
-                  mb={i === 0 ? 'md' : undefined}
+                  mt={i === 0 ? 'sm' : undefined}
+                  mb={i === 0 ? 'sm' : undefined}
                 >
                   {val.enableTitle && (
                     <Text fz={24} fw={600} color="brand">

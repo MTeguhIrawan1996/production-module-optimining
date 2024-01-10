@@ -15,7 +15,7 @@ const ReadCompanyEmployeBook: React.FC<IProps> = ({ employe }) => {
   const { t } = useTranslation('default');
 
   return (
-    <Stack spacing="sm" mt="md">
+    <Stack spacing="sm" mt="sm">
       <Text fz={24} fw={600} color="brand">
         {t('commonTypography.employeDetail')}
       </Text>

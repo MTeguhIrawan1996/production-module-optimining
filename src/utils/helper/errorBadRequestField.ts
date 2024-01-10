@@ -27,34 +27,59 @@ export const errorBadRequestField = <T>(err: ApolloError) => {
                 }) => {
                   if (children2.length > 0) {
                     children2.forEach(
-                      ({ property: property3, children: children3 }) => {
-                        children3.forEach(
-                          ({
-                            constraints: constraints4,
-                            property: property4,
-                          }) => {
-                            for (const key in constraints4) {
-                              if (
-                                Object.prototype.hasOwnProperty.call(
-                                  constraints4,
-                                  key
-                                )
-                              ) {
-                                const message = constraints4[key];
-                                const name = `${property as string}.${
-                                  property1 as string
-                                }.${property2 as string}.${
-                                  property3 as string
-                                }.${property4 as string}`;
-                                acc.push({
-                                  type: 'manual',
-                                  name: name as any,
-                                  message,
-                                });
+                      ({
+                        property: property3,
+                        children: children3,
+                        constraints: constraints3,
+                      }) => {
+                        if (children3.length > 0) {
+                          children3.forEach(
+                            ({
+                              constraints: constraints4,
+                              property: property4,
+                            }) => {
+                              for (const key in constraints4) {
+                                if (
+                                  Object.prototype.hasOwnProperty.call(
+                                    constraints4,
+                                    key
+                                  )
+                                ) {
+                                  const message = constraints4[key];
+                                  const name = `${property as string}.${
+                                    property1 as string
+                                  }.${property2 as string}.${
+                                    property3 as string
+                                  }.${property4 as string}`;
+                                  acc.push({
+                                    type: 'manual',
+                                    name: name as any,
+                                    message,
+                                  });
+                                }
                               }
                             }
+                          );
+                          return;
+                        }
+                        for (const key in constraints3) {
+                          if (
+                            Object.prototype.hasOwnProperty.call(
+                              constraints3,
+                              key
+                            )
+                          ) {
+                            const message = constraints3[key];
+                            const name = `${property as string}.${
+                              property1 as string
+                            }.${property2 as string}.${property3 as string}`;
+                            acc.push({
+                              type: 'manual',
+                              name: name as any,
+                              message,
+                            });
                           }
-                        );
+                        }
                       }
                     );
                     return;

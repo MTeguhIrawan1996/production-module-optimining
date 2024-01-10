@@ -65,6 +65,7 @@ const TextInputRhf: React.FC<ITextInputProps> = ({
                 : null
               : label
           }
+          error={fieldState && fieldState.error ? true : false}
           {...rest}
         />
         {deleteButtonField ? (

@@ -49,7 +49,7 @@ const DetailSampleData: React.FC<IDetailSampleDataProps> = ({
 
   return (
     <>
-      <Stack spacing="sm" mt="md">
+      <Stack spacing="sm" mt="sm">
         <MantineDataTable
           tableProps={{
             records: monitoringStockpile?.samples ?? [],

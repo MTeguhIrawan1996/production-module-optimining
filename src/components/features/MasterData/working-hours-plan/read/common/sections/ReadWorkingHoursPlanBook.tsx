@@ -59,7 +59,7 @@ const ReadWorkingHoursPlanBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          <Stack spacing="sm" mt="lg">
+          <Stack spacing="sm" mt="sm">
             <KeyValueList
               data={[
                 {
