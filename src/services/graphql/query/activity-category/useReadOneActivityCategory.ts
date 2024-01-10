@@ -155,9 +155,42 @@ export const useReadOneActivityCategory = ({
     },
   ];
 
+  const valueFormulas =
+    readOneActivityCategoryData?.workingHourPlanCategory.countFormula
+      ?.parameters;
+  const sentence = valueFormulas
+    ?.map((item) => `${item.operator ?? ''} ${item.category.name}`)
+    .join(' ');
+
+  const groupingCalculation: IGroupingDetail[] = [
+    {
+      group: 'category',
+      withDivider: false,
+      enableTitle: false,
+      itemValue: [
+        {
+          name: 'category',
+          value: readOneActivityCategoryData?.workingHourPlanCategory.name,
+        },
+      ],
+    },
+    {
+      group: 'calculation',
+      withDivider: false,
+      enableTitle: true,
+      itemValue: [
+        {
+          name: 'calculation',
+          value: sentence,
+        },
+      ],
+    },
+  ];
+
   return {
     readOneActivityCategoryDataPure: readOneActivityCategoryData,
     readOneActivityCategoryDataGrouping: grouping,
+    readOneActivityCategoryDataGroupingCalculation: groupingCalculation,
     readOneActivityCategoryData: simplifiedData,
     readOneActivityCategoryDataColumn: otherColumn,
     readOneActivityCategoryDataMeta:

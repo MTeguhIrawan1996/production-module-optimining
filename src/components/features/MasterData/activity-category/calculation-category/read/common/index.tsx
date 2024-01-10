@@ -20,10 +20,10 @@ const ReadCalculationCategoryPage = () => {
     setBreadcrumbs([
       {
         label: t('commonTypography.activityCategory'),
-        path: '/master-data/activity-category?tab=lose-time-category',
+        path: '/master-data/activity-category?tab=calculation-category',
       },
       {
-        label: t('activityCategory.readLoseTimeCategory'),
+        label: t('activityCategory.readCalculationCategory'),
         path: router.asPath,
       },
     ]);
@@ -33,7 +33,7 @@ const ReadCalculationCategoryPage = () => {
   return (
     <RootWrapper>
       <InnerWrapper>
-        <ReadCalculationCategoryBook tab="lose-time-category" />
+        <ReadCalculationCategoryBook tab="calculation-category" />
       </InnerWrapper>
     </RootWrapper>
   );

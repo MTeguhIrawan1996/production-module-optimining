@@ -215,6 +215,8 @@ const CreateCalculationCategoryBook: React.FC<
                               name={`countFormula.parameters.${i}.categoryId`}
                               label="variable"
                               withAsterisk
+                              clearable
+                              searchable
                             />
                             {i === fields.length - 1 && fields.length !== 1 ? (
                               <ActionIcon

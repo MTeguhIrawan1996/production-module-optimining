@@ -1,11 +1,10 @@
-import { Divider, Stack, Tabs, Text } from '@mantine/core';
+import { Badge, Group, ScrollArea, Stack, Tabs, Text } from '@mantine/core';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, KeyValueList } from '@/components/elements';
-import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
 import { useReadOneActivityCategory } from '@/services/graphql/query/activity-category/useReadOneActivityCategory';
 
@@ -19,12 +18,12 @@ const ReadCalculationCategoryBook: React.FC<
   const router = useRouter();
   const id = router.query.id as string;
   const pageParams = useSearchParams();
-  const tab = pageParams.get('tab') || 'lose-time-category';
+  const tab = pageParams.get('tab') || 'calculation-category';
   const { t } = useTranslation('default');
 
   /* #   /**=========== Query =========== */
   const {
-    readOneActivityCategoryDataGrouping,
+    readOneActivityCategoryDataPure,
     readOneActivityCategoryDataLoading,
   } = useReadOneActivityCategory({
     variables: {
@@ -33,14 +32,27 @@ const ReadCalculationCategoryBook: React.FC<
     skip: !router.isReady || tab !== tabProps,
   });
 
+  const valueFormulas =
+    readOneActivityCategoryDataPure?.workingHourPlanCategory.countFormula
+      ?.parameters;
+  const newArray = valueFormulas?.reduce((acc: string[], item) => {
+    if (item.operator !== null) {
+      acc.push(`${item.operator}`);
+      acc.push(`${item.category.name}`);
+    } else {
+      acc.push(item.category.name);
+    }
+    return acc;
+  }, []);
+
   return (
     <DashboardCard
-      title={t('activityCategory.readLoseTimeCategory')}
+      title={t('activityCategory.readCalculationCategory')}
       updateButton={{
         label: 'Edit',
         onClick: () =>
           router.push(
-            `/master-data/activity-category/lose-time-category/update/${id}`
+            `/master-data/activity-category/calculation-category/update/${id}`
           ),
       }}
       enebleBackBottomOuter={{
@@ -72,45 +84,41 @@ const ReadCalculationCategoryBook: React.FC<
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          {readOneActivityCategoryDataGrouping.map((val, i) => {
-            const keyValueData: Pick<
-              IKeyValueItemProps,
-              'value' | 'dataKey'
-            >[] = val.itemValue.map((obj) => {
-              return {
-                dataKey: t(`commonTypography.${obj.name}`),
-                value: obj.value,
-              };
-            });
-            return (
-              <React.Fragment key={i}>
-                <Stack
-                  spacing="sm"
-                  mt={i === 0 ? 'sm' : undefined}
-                  mb={i === 0 ? 'sm' : undefined}
-                >
-                  {val.enableTitle && (
-                    <Text fz={24} fw={600} color="brand">
-                      {t(`commonTypography.${val.group}`)}
-                    </Text>
-                  )}
-                  <KeyValueList
-                    data={keyValueData}
-                    type="grid"
-                    keyStyleText={{
-                      fw: 400,
-                      fz: 20,
-                    }}
-                    valueStyleText={{
-                      fw: 600,
-                      fz: 20,
-                    }}
-                  />
-                </Stack>
-                {val.withDivider && <Divider my="md" />}
-              </React.Fragment>
-            );
-          })}
+          <Stack spacing="sm" mt="sm">
+            <KeyValueList
+              data={[
+                {
+                  dataKey: t('commonTypography.category'),
+                  value:
+                    readOneActivityCategoryDataPure?.workingHourPlanCategory
+                      .name,
+                },
+              ]}
+              type="grid"
+              keyStyleText={{
+                fw: 400,
+                fz: 20,
+              }}
+              valueStyleText={{
+                fw: 600,
+                fz: 20,
+              }}
+            />
+          </Stack>
+          <Stack spacing="sm" mt="sm">
+            <Text fz={24} fw={600} color="brand">
+              {t('commonTypography.calculation')}
+            </Text>
+            <ScrollArea>
+              <Group spacing="xs" noWrap pb="sm">
+                {newArray?.map((val, i) => (
+                  <Badge key={i} radius={4} size="lg">
+                    {val}
+                  </Badge>
+                ))}
+              </Group>
+            </ScrollArea>
+          </Stack>
         </Tabs.Panel>
       </Tabs>
     </DashboardCard>
