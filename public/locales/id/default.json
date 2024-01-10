@@ -22,6 +22,7 @@
     "blockName": "Nama Block",
     "pitId": "ID PIT",
     "pitName": "Nama PIT",
+    "category": "Kategori",
     "locationCategory": "Kategori Lokasi",
     "locationName": "Nama Lokasi",
     "material": "Material",
@@ -38,10 +39,13 @@
     "hourAmountRain": "Total Jam Hujan",
     "hourAmountSlippery": "Total Jam Licin",
     "loseTime": "Waktu yang Hilang",
+    "loseTimeCategory": "Kategori Waktu Hilang",
     "availabilityHoursOrDays": "Ketersediaan Jam/Hari",
     "amountEffectiveWorkingHours": "Total Jam Kerja Efektif",
     "equipmentPerformance": "Equipment Performance",
     "activity": "Kegiatan",
+    "activityCategory": "Kategori Kegiatan",
+    "calculationCategory": "Kategori Peritungan",
     "activityPlan": "Rencana Aktivitas",
     "element": "Unsur Kandungan",
     "shift": "Shift",
@@ -56,7 +60,7 @@
     "createActivity": "Tambah Kegiatan",
     "createSample": "Tambah Sampel",
     "createSurvey": "Tambah Survey",
-    "createWeather": "Tambah Survey",
+    "createWeather": "Tambah Cuaca",
     "number": "Nomor",
     "date": "Tanggal",
     "identity": "Identitas",
@@ -418,7 +422,8 @@
     "dataHeavyEquipment": "$t(commonTypography.heavyEquipmentData)",
     "dataWeather": "$t(commonTypography.weatherData)",
     "shippingMonitoring": "$t(commonTypography.shippingMonitoring)",
-    "dataFront": "$t(commonTypography.front)"
+    "dataFront": "$t(commonTypography.front)",
+    "activityCategory": "$t(commonTypography.activityCategory)"
   },
   "auth": {
     "button": {
@@ -879,5 +884,11 @@
     "successIsNotValidateMessage": "Status $t(frontProduction.frontProductionTitle) Tidak Valid",
     "successIsDeterminedMessage": "$t(frontProduction.frontProductionTitle) berhasil ditetapkan",
     "successIsRejectMessage": "$t(frontProduction.frontProductionTitle) berhasil $t(commonTypography.reject)"
+  },
+  "activityCategory": {
+    "createActivityCategory": "$t(commonTypography.create) $t(commonTypography.activityCategory)",
+    "searchPlaceholderCalculation": "$t(commonTypography.search) berdasarkan $t(commonTypography.activityCategory)",
+    "searchPlaceholderLoseTime": "$t(commonTypography.search) berdasarkan $t(commonTypography.activity)",
+    "readLoseTimeCategory": "$t(commonTypography.detail) $t(commonTypography.loseTimeCategory)"
   }
 }

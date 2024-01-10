@@ -3,7 +3,12 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import {
+  FieldArrayWithId,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
@@ -77,16 +82,21 @@ const CreateStockpileDomeMasterBook = () => {
 
   /* #   /**=========== Field =========== */
   const fieldItem = React.useCallback(
-    (_, index: number) => {
+    (
+      val: FieldArrayWithId<IMutationStockpileDomeValues, 'domes', 'id'>,
+      index: number
+    ) => {
       const domeId = globalText({
         name: `domes.${index}.handBookId`,
         label: 'domeId',
         colSpan: 6,
+        key: `domes.${index}.handBookId.${val.id}`,
       });
       const domeName = globalText({
         name: `domes.${index}.name`,
         label: 'domeName',
         colSpan: 6,
+        key: `domes.${index}.name.${val.id}`,
       });
 
       const field: ControllerGroup = {

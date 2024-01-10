@@ -219,7 +219,7 @@ const ReadCompanyHumanResourceBook = () => {
             {
               accessor: 'name',
               title: t('commonTypography.name'),
-              render: ({ humanResource }) => humanResource?.name,
+              render: ({ humanResource }) => humanResource?.name ?? '-',
             },
             {
               accessor: 'nip',
@@ -228,17 +228,17 @@ const ReadCompanyHumanResourceBook = () => {
             {
               accessor: 'divison',
               title: t('commonTypography.division'),
-              render: ({ division }) => division?.name,
+              render: ({ division }) => division?.name ?? '-',
             },
             {
               accessor: 'position',
               title: t('commonTypography.position'),
-              render: ({ position }) => position?.name,
+              render: ({ position }) => position?.name ?? '-',
             },
             {
               accessor: 'status',
               title: t('commonTypography.employeStatus'),
-              render: ({ status }) => status?.name,
+              render: ({ status }) => status?.name ?? '-',
             },
             {
               accessor: 'formStatus',

@@ -215,13 +215,7 @@ const UpdateHeavyEquipmentProductionBook = () => {
           labelWithTranslate: false,
           withAsterisk: true,
           colSpan: 6,
-          onChange: (e) => {
-            methods.setValue(
-              `loseTimes.${index}.details.${i}.startTime`,
-              e.currentTarget.value
-            );
-            methods.trigger(`loseTimes.${index}.details.${i}.startTime`);
-          },
+          key: `loseTimes.${val.id}.details.${i}.startTime`,
         });
         const finishTimeItem = globalTimeInput({
           name: `loseTimes.${index}.details.${i}.finishTime`,
@@ -229,13 +223,7 @@ const UpdateHeavyEquipmentProductionBook = () => {
           labelWithTranslate: false,
           withAsterisk: true,
           colSpan: 6,
-          onChange: (e) => {
-            methods.setValue(
-              `loseTimes.${index}.details.${i}.finishTime`,
-              e.currentTarget.value
-            );
-            methods.trigger(`loseTimes.${index}.details.${i}.finishTime`);
-          },
+          key: `loseTimes.${val.id}.details.${i}.finishTime`,
         });
         return { startTimeItem, finishTimeItem };
       });
@@ -246,6 +234,7 @@ const UpdateHeavyEquipmentProductionBook = () => {
       const amountHourItem = globalText({
         colSpan: 12,
         name: `loseTimes.${index}.amountHour`,
+        key: `loseTimes.${val.id}.amountHour`,
         label: `${t('commonTypography.hourAmount')} ${label ?? ''}`,
         withAsterisk: false,
         disabled: true,

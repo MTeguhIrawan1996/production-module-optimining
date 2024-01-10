@@ -3,7 +3,12 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import {
+  FieldArrayWithId,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
@@ -151,13 +156,21 @@ const CreateSmapleHouseLabBook = () => {
   /* #   /**=========== Field =========== */
 
   const fieldGradeControlElements = React.useCallback(
-    (val, index: number) => {
+    (
+      val: FieldArrayWithId<
+        IMutationSampleHousePlanValues,
+        'gradeControlElements',
+        'id'
+      >,
+      index: number
+    ) => {
       const elementItem = globalNumberInput({
         name: `gradeControlElements.${index}.value`,
         label: `${val.name} ${t('commonTypography.estimationGC')}`,
         colSpan: 6,
         withAsterisk: false,
         labelWithTranslate: false,
+        key: `gradeControlElements.${index}.value.${val.id}`,
       });
 
       return elementItem;
@@ -168,13 +181,17 @@ const CreateSmapleHouseLabBook = () => {
   const fieldGradeControlElementsItem = fields.map(fieldGradeControlElements);
 
   const fieldElements = React.useCallback(
-    (val, index: number) => {
+    (
+      val: FieldArrayWithId<IMutationSampleHousePlanValues, 'elements', 'id'>,
+      index: number
+    ) => {
       const elementItem = globalNumberInput({
         name: `elements.${index}.value`,
         label: `${val.name} ${t('commonTypography.percentageLab')}`,
         colSpan: 6,
         withAsterisk: false,
         labelWithTranslate: false,
+        key: `elements.${index}.value.${val.id}`,
       });
 
       return elementItem;
