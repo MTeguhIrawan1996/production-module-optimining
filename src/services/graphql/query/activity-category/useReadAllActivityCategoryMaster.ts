@@ -97,6 +97,8 @@ export const useReadAllActivityCategory = ({
 
   return {
     readAllActivityCategoryData: simplifiedData,
+    readAllActivityCategoryDataPure:
+      readAllActivityCategoryData?.workingHourPlanCategories.data,
     readAllActivityCategoryDataColumn: otherColumn,
     readAllActivityCategoryDataMeta:
       readAllActivityCategoryData?.workingHourPlanCategories.meta,

@@ -59,6 +59,7 @@ import RadioInputRhf from '@/components/elements/input/RadioInputRhf';
 import RegencySelectInputRhf from '@/components/elements/input/RegencySelectInputRhf';
 import RelegionSelectInputRhf from '@/components/elements/input/RelegionSelectInputRhf';
 import SampleTypeSelectInput from '@/components/elements/input/SampleTypeSelectInputRhf';
+import SelectActivityCategoryRhf from '@/components/elements/input/SelectActivityCategoryRhf';
 import SelectArriveBargeNative from '@/components/elements/input/SelectArriveBargeNative';
 import SelectArriveBargeRhf from '@/components/elements/input/SelectArriveBargeRhf';
 import SelectFactoryRhf from '@/components/elements/input/SelectFactoryRhf';
@@ -166,6 +167,7 @@ export {
   RootWrapper,
   SampleTypeSelectInput,
   SearchBar,
+  SelectActivityCategoryRhf,
   SelectArriveBargeNative,
   SelectArriveBargeRhf,
   SelectFactoryRhf,

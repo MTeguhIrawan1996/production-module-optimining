@@ -30,11 +30,12 @@ export interface IMutationLoseTimeValues {
   activities?: IActivityIds[];
 }
 export interface IMutationCalculationValues {
+  name?: string;
   countFormula?: {
     parameters: {
       categoryId: string;
-      operator: string;
-      order: number;
+      operator?: string | null;
+      order?: number | '';
     }[];
   } | null;
 }
@@ -42,7 +43,6 @@ export interface IMutationCalculationValues {
 type IUpdateActivityCategoryRequest = {
   id: string;
   type: 'default' | 'count_formula' | null;
-  name?: string;
 } & IMutationLoseTimeValues &
   IMutationCalculationValues;
 

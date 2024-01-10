@@ -35,6 +35,7 @@ import { IRadioInputProps } from '@/components/elements/input/RadioInputRhf';
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
 import { ISampleTypesSelectnputRhfProps } from '@/components/elements/input/SampleTypeSelectInputRhf';
+import { ISelectActivityCategoryRhfProps } from '@/components/elements/input/SelectActivityCategoryRhf';
 import { IArriveBargeNativeProps } from '@/components/elements/input/SelectArriveBargeNative';
 import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
@@ -121,6 +122,7 @@ export type ControllerProps =
   | IArriveBargeRhfProps
   | ISelectFactoryRhfProps
   | ISelectWorkingHoursPlanRhfProps
+  | ISelectActivityCategoryRhfProps
   | IWeatherConditionSelectInputRhfProps;
 
 export type InputControllerNativeProps =

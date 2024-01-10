@@ -31,6 +31,7 @@ import {
   RegencySelectInputRhf,
   RelegionSelectInputRhf,
   SampleTypeSelectInput,
+  SelectActivityCategoryRhf,
   SelectArriveBargeRhf,
   SelectFactoryRhf,
   SelectHeavyEquipmentReferenceInput,
@@ -142,6 +143,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <SelectFactoryRhf {...props} />;
     case 'select-working-hours-plan-rhf':
       return <SelectWorkingHoursPlanRhf {...props} />;
+    case 'select-activity-category-rhf':
+      return <SelectActivityCategoryRhf {...props} />;
     default:
       return null;
   }

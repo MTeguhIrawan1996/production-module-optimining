@@ -107,8 +107,11 @@ const CalculationCategoryBook: React.FC<ICalculationCategoryBookProps> = ({
   return (
     <DashboardCard
       addButton={{
-        label: t('activityCategory.createActivityCategory'),
-        onClick: () => router.push('/master-data/activity-plan/create'),
+        label: t('activityCategory.createCalculationCategory'),
+        onClick: () =>
+          router.push(
+            `/master-data/activity-category/calculation-category/create`
+          ),
       }}
       searchBar={{
         placeholder: t('activityCategory.searchPlaceholderCalculation'),

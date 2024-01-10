@@ -17,6 +17,7 @@ import { IPositionSelectInputRhfProps } from '@/components/elements/input/Positi
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
+import { ISelectActivityCategoryRhfProps } from '@/components/elements/input/SelectActivityCategoryRhf';
 import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
@@ -922,6 +923,28 @@ export const globalSelectWorkingHoursPlanRhf = ({
 }: Partial<ISelectWorkingHoursPlanRhfProps>) => {
   const field: ControllerProps = {
     control: 'select-working-hours-plan-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectActivityCategoryRhf = ({
+  name = 'categoryId',
+  label,
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectActivityCategoryRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-activity-category-rhf',
     name,
     label,
     searchable,

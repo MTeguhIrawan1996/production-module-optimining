@@ -59,6 +59,7 @@ import UpdateStockpileMonitoringPage from '@/components/features/InputData/Quali
 import ActivityCategoryMasterPage from '@/components/features/MasterData/activity-category/common';
 import ReadLoseTimeCategoryPage from '@/components/features/MasterData/activity-category/lose-time-category/read/common';
 import UpdateLoseTimeActivityPage from '@/components/features/MasterData/activity-category/lose-time-category/update/common';
+import CreateCalculationCategoryPage from '@/components/features/MasterData/activity-category/lose-time-category/update/common';
 import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
 import CreateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/create/common';
 import ReadActivityPlanPage from '@/components/features/MasterData/activity-plan/read/common';
@@ -148,6 +149,7 @@ export {
   CreateActivityPlanMasterPage,
   CreateBlockMasterPage,
   CreateBlockPitMasterPage,
+  CreateCalculationCategoryPage,
   CreateCompanyHeavyEquipmentPage,
   CreateCompanyHumanResourcesPage,
   CreateCompanyPage,

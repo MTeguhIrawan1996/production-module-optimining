@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import CreateCalculationCategoryBook from '@/components/features/MasterData/activity-category/lose-time-category/update/common/sections/CreateCalculationCategoryBook';
+import UpdateLoseTimeActivityBook from '@/components/features/MasterData/activity-category/lose-time-category/update/common/sections/CreateCalculationCategoryBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const CreateCalculationCategoryPage = () => {
+const UpdateLoseTimeActivityPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -21,10 +21,10 @@ const CreateCalculationCategoryPage = () => {
     setBreadcrumbs([
       {
         label: t('commonTypography.activityCategory'),
-        path: '/master-data/activity-category?tab=calculation-category',
+        path: '/master-data/activity-category?tab=lose-time-category',
       },
       {
-        label: t('activityCategory.createCalculationCategory'),
+        label: t('activityCategory.updateLoseTimeCategory'),
         path: router.asPath,
       },
     ]);
@@ -35,7 +35,7 @@ const CreateCalculationCategoryPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('activityCategory.formCalculationCategory'),
+          title: t('activityCategory.formUpdateLoseTimeCategory'),
           mb: 'md',
         }}
       >
@@ -46,7 +46,7 @@ const CreateCalculationCategoryPage = () => {
             </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="information">
-            <CreateCalculationCategoryBook tab="calculation-category" />
+            <UpdateLoseTimeActivityBook tab="lose-time-category" />
           </Tabs.Panel>
         </Tabs>
       </InnerWrapper>
@@ -54,4 +54,4 @@ const CreateCalculationCategoryPage = () => {
   );
 };
 
-export default CreateCalculationCategoryPage;
+export default UpdateLoseTimeActivityPage;
