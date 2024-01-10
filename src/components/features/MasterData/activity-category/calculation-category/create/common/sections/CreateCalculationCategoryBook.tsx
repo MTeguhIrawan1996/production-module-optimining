@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   ActionIcon,
   Flex,
@@ -37,23 +38,24 @@ import {
 
 import { useCreateActivityCategory } from '@/services/graphql/mutation/activity-category/useCreateActivityCategory';
 import { IMutationCalculationValues } from '@/services/graphql/mutation/activity-category/useUpdateActivityCategory';
+import { calculationMutationValidation } from '@/utils/form-validation/activity-category/activity-category-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ITab } from '@/types/global';
 
-interface IUpdateLoseTimeCategoryBookProps {
+interface ICreateCalculationCategoryBookProps {
   tab?: ITab;
 }
 
 const CreateCalculationCategoryBook: React.FC<
-  IUpdateLoseTimeCategoryBookProps
+  ICreateCalculationCategoryBookProps
 > = ({ tab: tabProps }) => {
   const { t } = useTranslation('default');
   const router = useRouter();
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationCalculationValues>({
-    // resolver: zodResolver(loseTimeMutationValidation),
+    resolver: zodResolver(calculationMutationValidation),
     defaultValues: {
       name: '',
       countFormula: {

@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import UpdateLoseTimeActivityBook from '@/components/features/MasterData/activity-category/lose-time-category/update/common/sections/CreateCalculationCategoryBook';
+import CreateCalculationCategoryBook from '@/components/features/MasterData/activity-category/calculation-category/create/common/sections/CreateCalculationCategoryBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const UpdateLoseTimeActivityPage = () => {
+const CreateCalculationCategoryPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -21,10 +21,10 @@ const UpdateLoseTimeActivityPage = () => {
     setBreadcrumbs([
       {
         label: t('commonTypography.activityCategory'),
-        path: '/master-data/activity-category?tab=lose-time-category',
+        path: '/master-data/activity-category?tab=calculation-category',
       },
       {
-        label: t('activityCategory.updateLoseTimeCategory'),
+        label: t('activityCategory.createCalculationCategory'),
         path: router.asPath,
       },
     ]);
@@ -35,7 +35,7 @@ const UpdateLoseTimeActivityPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('activityCategory.formUpdateLoseTimeCategory'),
+          title: t('activityCategory.formCalculationCategory'),
           mb: 'md',
         }}
       >
@@ -46,7 +46,7 @@ const UpdateLoseTimeActivityPage = () => {
             </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="information">
-            <UpdateLoseTimeActivityBook tab="lose-time-category" />
+            <CreateCalculationCategoryBook tab="calculation-category" />
           </Tabs.Panel>
         </Tabs>
       </InnerWrapper>
@@ -54,4 +54,4 @@ const UpdateLoseTimeActivityPage = () => {
   );
 };
 
-export default UpdateLoseTimeActivityPage;
+export default CreateCalculationCategoryPage;

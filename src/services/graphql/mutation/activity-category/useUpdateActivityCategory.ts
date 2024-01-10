@@ -33,7 +33,7 @@ export interface IMutationCalculationValues {
   name?: string;
   countFormula?: {
     parameters: {
-      categoryId: string;
+      categoryId: string | null;
       operator?: string | null;
       order?: number | '';
     }[];

@@ -56,10 +56,11 @@ import UpdateShippingMonitoringPage from '@/components/features/InputData/Qualit
 import StockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/common';
 import ReadStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/read/common';
 import UpdateStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/update/common';
+import CreateCalculationCategoryPage from '@/components/features/MasterData/activity-category/calculation-category/create/common';
+import ReadCalculationCategoryPage from '@/components/features/MasterData/activity-category/calculation-category/read/common';
 import ActivityCategoryMasterPage from '@/components/features/MasterData/activity-category/common';
 import ReadLoseTimeCategoryPage from '@/components/features/MasterData/activity-category/lose-time-category/read/common';
 import UpdateLoseTimeActivityPage from '@/components/features/MasterData/activity-category/lose-time-category/update/common';
-import CreateCalculationCategoryPage from '@/components/features/MasterData/activity-category/lose-time-category/update/common';
 import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
 import CreateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/create/common';
 import ReadActivityPlanPage from '@/components/features/MasterData/activity-plan/read/common';
@@ -197,6 +198,7 @@ export {
   ProfilePage,
   ReadActivityPlanPage,
   ReadBlockMasterPage,
+  ReadCalculationCategoryPage,
   ReadCompanyHeavyEquipmentPage,
   ReadCompanyHumanResourcesPage,
   ReadCompanyPage,
