@@ -1,14 +1,11 @@
-import { useDebouncedState } from '@mantine/hooks';
+import { Divider, Stack, Tabs, Text } from '@mantine/core';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  DashboardCard,
-  GlobalKebabButton,
-  MantineDataTable,
-} from '@/components/elements';
+import { DashboardCard, KeyValueList } from '@/components/elements';
+import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
 import { useReadOneActivityCategory } from '@/services/graphql/query/activity-category/useReadOneActivityCategory';
 
@@ -22,126 +19,100 @@ const ReadLoseTimeCategoryBook: React.FC<IReadLoseTimeCategoryBookProps> = ({
   const router = useRouter();
   const id = router.query.id as string;
   const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
   const tab = pageParams.get('tab') || 'lose-time-category';
-  const url = `/master-data/activity-category/lose-time-category/read/${id}?page=1`;
   const { t } = useTranslation('default');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
 
   /* #   /**=========== Query =========== */
   const {
-    readOneActivityCategoryDataPure,
-    readOneActivityCategoryData,
-    readOneActivityCategoryDataColumn,
+    readOneActivityCategoryDataGrouping,
     readOneActivityCategoryDataLoading,
-    readOneActivityCategoryDataMeta,
   } = useReadOneActivityCategory({
     variables: {
       id: id,
-      limit: 10,
-      page: page,
-      orderDir: 'desc',
-      search: searchQuery === '' ? null : searchQuery,
     },
     skip: !router.isReady || tab !== tabProps,
   });
 
-  const handleSetPage = (page: number) => {
-    const urlSet = `/master-data/activity-category/lose-time-category/read/${id}?page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
-  };
-
-  /* #   /**=========== RenderTable =========== */
-  const renderTable = React.useMemo(() => {
-    return (
-      <MantineDataTable
-        tableProps={{
-          records: readOneActivityCategoryData,
-          highlightOnHover: true,
-          columns: [
-            {
-              accessor: 'index',
-              title: 'No',
-              render: (record) =>
-                readOneActivityCategoryData &&
-                readOneActivityCategoryData.indexOf(record) + 1,
-              width: 60,
-            },
-            ...(readOneActivityCategoryDataColumn ?? []),
-            {
-              accessor: 'action',
-              title: t('commonTypography.action'),
-              width: 100,
-              render: ({ id }) => {
-                return (
-                  <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/master-data/activity-category/calculation-category/read/${id}`
-                        );
-                      },
-                    }}
-                  />
-                );
-              },
-            },
-          ],
-        }}
-        emptyStateProps={{
-          title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('commonTypography.createActivity'),
-            onClick: () =>
-              router.push(
-                `/master-data/activity-category/lose-time-category/create/${id}`
-              ),
-          },
-        }}
-        paginationProps={{
-          setPage: handleSetPage,
-          currentPage: page,
-          totalAllData: readOneActivityCategoryDataMeta?.totalAllData ?? 0,
-          totalData: readOneActivityCategoryDataMeta?.totalData ?? 0,
-          totalPage: readOneActivityCategoryDataMeta?.totalPage ?? 0,
-        }}
-      />
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [readOneActivityCategoryData, readOneActivityCategoryDataLoading]);
-  /* #endregion  /**======== RenderTable =========== */
-
   return (
     <DashboardCard
-      title={readOneActivityCategoryDataPure?.workingHourPlanCategory.name}
-      addButton={{
-        label: t('commonTypography.createActivity'),
+      title={t('activityCategory.readLoseTimeCategory')}
+      updateButton={{
+        label: 'Edit',
         onClick: () =>
           router.push(
-            `/master-data/activity-category/lose-time-category/create/${id}`
+            `/master-data/activity-category/lose-time-category/update/${id}`
           ),
       }}
-      searchBar={{
-        placeholder: t('activityCategory.searchPlaceholderLoseTime'),
-        onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
-        },
-        onSearch: () => {
-          router.push(url, undefined, { shallow: true });
-        },
-        searchQuery: searchQuery,
-      }}
-      enebleBackBottomInner={{
+      enebleBackBottomOuter={{
         onClick: () =>
           router.push(`/master-data/activity-category?tab=${tabProps}`),
       }}
       paperStackProps={{
         spacing: 'md',
       }}
+      withBorder
       isLoading={readOneActivityCategoryDataLoading}
+      titleStyle={{
+        fw: 700,
+        fz: 30,
+      }}
     >
-      {renderTable}
+      <Tabs
+        defaultValue="information"
+        radius={4}
+        styles={{
+          tabsList: {
+            flexWrap: 'nowrap',
+          },
+        }}
+      >
+        <Tabs.List mb="md">
+          <Tabs.Tab value="information" fz={14} fw={500}>
+            {t('commonTypography.information')}
+          </Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="information">
+          {readOneActivityCategoryDataGrouping.map((val, i) => {
+            const keyValueData: Pick<
+              IKeyValueItemProps,
+              'value' | 'dataKey'
+            >[] = val.itemValue.map((obj) => {
+              return {
+                dataKey: t(`commonTypography.${obj.name}`),
+                value: obj.value,
+              };
+            });
+            return (
+              <React.Fragment key={i}>
+                <Stack
+                  spacing="sm"
+                  mt={i === 0 ? 'sm' : undefined}
+                  mb={i === 0 ? 'sm' : undefined}
+                >
+                  {val.enableTitle && (
+                    <Text fz={24} fw={600} color="brand">
+                      {t(`commonTypography.${val.group}`)}
+                    </Text>
+                  )}
+                  <KeyValueList
+                    data={keyValueData}
+                    type="grid"
+                    keyStyleText={{
+                      fw: 400,
+                      fz: 20,
+                    }}
+                    valueStyleText={{
+                      fw: 600,
+                      fz: 20,
+                    }}
+                  />
+                </Stack>
+                {val.withDivider && <Divider my="md" />}
+              </React.Fragment>
+            );
+          })}
+        </Tabs.Panel>
+      </Tabs>
     </DashboardCard>
   );
 };

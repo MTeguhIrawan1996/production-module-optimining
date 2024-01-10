@@ -2,7 +2,7 @@ import { ApolloError, gql, useQuery } from '@apollo/client';
 
 import { simpleOtherColumn } from '@/utils/helper/simpleOtherColumn';
 
-import { GResponse, IGlobalMetaRequest } from '@/types/global';
+import { GResponse, IGlobalMetaRequest, IGroupingDetail } from '@/types/global';
 
 export const READ_ONE_ACTIVITY_CATEGORY_MASTER = gql`
   query ReadOneActivityCategory(
@@ -127,8 +127,37 @@ export const useReadOneActivityCategory = ({
     exclude: excludeAccessor,
   });
 
+  const arrayNameValue =
+    readOneActivityCategoryData?.workingHourPlanCategory.activities?.data.map(
+      (val) => ({
+        name: 'activity',
+        value: val.activityName,
+      })
+    );
+
+  const grouping: IGroupingDetail[] = [
+    {
+      group: 'category',
+      withDivider: false,
+      enableTitle: false,
+      itemValue: [
+        {
+          name: 'category',
+          value: readOneActivityCategoryData?.workingHourPlanCategory.name,
+        },
+      ],
+    },
+    {
+      group: 'activity',
+      withDivider: false,
+      enableTitle: true,
+      itemValue: [...(arrayNameValue ?? [])],
+    },
+  ];
+
   return {
     readOneActivityCategoryDataPure: readOneActivityCategoryData,
+    readOneActivityCategoryDataGrouping: grouping,
     readOneActivityCategoryData: simplifiedData,
     readOneActivityCategoryDataColumn: otherColumn,
     readOneActivityCategoryDataMeta:

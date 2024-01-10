@@ -309,7 +309,7 @@ const ReadRitageBargingBook = () => {
               mt="xs"
             />
           ) : null}
-          <Stack spacing="sm" mt="md">
+          <Stack spacing="sm" mt="sm">
             <KeyValueList
               data={[
                 {
