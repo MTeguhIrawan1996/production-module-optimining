@@ -9,7 +9,7 @@ import { IIdentityTypesRadioInputProps } from '@/components/elements/input/Ident
 import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
 import { ILocationSelectInputRhfProps } from '@/components/elements/input/LocationSelectInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
-import { IMaterialSelectnputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
+import { IMaterialSelectInputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { IPitSelectInputRhfProps } from '@/components/elements/input/PitSelectInputRhf';
@@ -20,6 +20,7 @@ import { IRelegionSelectInputRhfProps } from '@/components/elements/input/Relegi
 import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
+import { ISelectWorkingHoursPlanRhfProps } from '@/components/elements/input/SelectWorkingHoursPlanRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
 import { ITimeInputRhfProps } from '@/components/elements/input/TimeInputRhf';
@@ -753,7 +754,7 @@ export const materialSelect = ({
   withAsterisk = true,
   colSpan = 6,
   ...rest
-}: Partial<IMaterialSelectnputRhfProps>) => {
+}: Partial<IMaterialSelectInputRhfProps>) => {
   const field: ControllerProps = {
     control: 'material-select-input',
     name,
@@ -899,6 +900,28 @@ export const globalSelectFactoryRhf = ({
 }: Partial<ISelectFactoryRhfProps>) => {
   const field: ControllerProps = {
     control: 'select-factory-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectWorkingHoursPlanRhf = ({
+  name = 'whpId',
+  label,
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectWorkingHoursPlanRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-working-hours-plan-rhf',
     name,
     label,
     searchable,

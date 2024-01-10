@@ -23,7 +23,7 @@ import { IImageInputDropzoneRhfProps } from '@/components/elements/input/ImageIn
 import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
 import { ILocationSelectInputRhfProps } from '@/components/elements/input/LocationSelectInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
-import { IMaterialSelectnputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
+import { IMaterialSelectInputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { IPasswordInputProps } from '@/components/elements/input/PasswordInputRhf';
@@ -45,6 +45,7 @@ import { ISelectInputNativeProps } from '@/components/elements/input/SelectInput
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
 import { ISelectWeekNativeProps } from '@/components/elements/input/SelectWeekNative';
+import { ISelectWorkingHoursPlanRhfProps } from '@/components/elements/input/SelectWorkingHoursPlanRhf';
 import { ISelectYearNativeProps } from '@/components/elements/input/SelectYearNative';
 import { IShiftSelectInputRhfProps } from '@/components/elements/input/ShiftSelectInputRhf';
 import { IStockpileNameSelectInputRhfProps } from '@/components/elements/input/StockpileNameSelectInputRhf';
@@ -110,7 +111,7 @@ export type ControllerProps =
   | IDomeNameSelectInputRhfProps
   | IShiftSelectInputRhfProps
   | ISampleTypesSelectnputRhfProps
-  | IMaterialSelectnputRhfProps
+  | IMaterialSelectInputRhfProps
   | IEmployeeSelectInputRhfProps
   | IDateInputProps
   | IHeavyEquipmentSelectInputRhfProps
@@ -119,6 +120,7 @@ export type ControllerProps =
   | IPitSelectInputRhfProps
   | IArriveBargeRhfProps
   | ISelectFactoryRhfProps
+  | ISelectWorkingHoursPlanRhfProps
   | IWeatherConditionSelectInputRhfProps;
 
 export type InputControllerNativeProps =
@@ -348,6 +350,8 @@ export interface IReadOneRitageDTOperators {
 /* #endregion  /**======== Ritage DT =========== */
 
 export type ITabs = 'ore' | 'ob' | 'quarry' | 'barging' | 'moving' | 'topsoil';
+
+export type ITab = string;
 
 export interface ICreateFileProps {
   file: FileWithPath[] | null;

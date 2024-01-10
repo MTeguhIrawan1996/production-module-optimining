@@ -164,7 +164,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                   <Paper p={24} withBorder w="100%">
                     <Stack spacing={8}>
                       {enableGroupLabel || actionGroup ? (
-                        <SimpleGrid cols={2} mb="sm">
+                        <SimpleGrid cols={enableGroupLabel ? 2 : 1} mb="sm">
                           {enableGroupLabel && (
                             <Text
                               component="span"

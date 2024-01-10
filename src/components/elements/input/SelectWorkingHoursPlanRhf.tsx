@@ -1,5 +1,6 @@
 /* eslint-disable unused-imports/no-unused-vars */
 import { Flex, Select, SelectProps, Stack } from '@mantine/core';
+import { useDebouncedValue } from '@mantine/hooks';
 import * as React from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -9,63 +10,55 @@ import PrimaryButton, {
 } from '@/components/elements/button/PrimaryButton';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
-import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
+import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
-export type IMaterialSelectInputRhfProps = {
-  control: 'material-select-input';
+export type ISelectWorkingHoursPlanRhfProps = {
+  control: 'select-working-hours-plan-rhf';
   name: string;
   labelValue?: string;
   deleteButtonField?: Omit<IPrimaryButtonProps, 'label'>;
-  parentId?: string | null;
-  includeIds?: string[];
-  isHaveParent?: boolean | null;
 } & Omit<
   SelectProps,
-  | 'name'
-  | 'data'
-  | 'onSearchChange'
-  | 'searchValue'
-  | 'placeholder'
-  | 'searchable'
+  'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
 > &
   CommonProps;
 
-const MaterialSelectInput: React.FC<IMaterialSelectInputRhfProps> = ({
+const SelectWorkingHoursPlanRhf: React.FC<ISelectWorkingHoursPlanRhfProps> = ({
   name,
   control,
   label,
   labelValue,
   defaultValue,
   deleteButtonField,
-  isHaveParent = false,
-  parentId = null,
-  includeIds = null,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
+  const [searchTerm, setSearchTerm] = React.useState<string>('');
+  const [searchQuery] = useDebouncedValue<string>(searchTerm, 400);
+  const currentValue = field.value === '' ? null : field.value;
+
   const {
     variant = 'light',
     color = 'red',
     ...restDeleteButtonField
   } = deleteButtonField || {};
 
-  const { materialsData } = useReadAllMaterialsMaster({
+  const { workingHoursPlansModified } = useReadAllWHPsMaster({
     variables: {
-      limit: null,
+      limit: 15,
       orderDir: 'desc',
-      orderBy: 'createdAt',
-      isHaveParent: isHaveParent,
-      parentId: parentId === '' ? null : parentId,
-      includeIds: includeIds ? includeIds : null,
+      search: searchQuery === '' ? null : searchQuery,
     },
   });
 
-  const { uncombinedItem } = useFilterItems({
-    data: materialsData ?? [],
+  const { combinedItems, uncombinedItem } = useCombineFilterItems({
+    data: workingHoursPlansModified ?? [],
+    combinedId: defaultValue ?? '',
+    combinedName: labelValue,
   });
 
   return (
@@ -75,7 +68,7 @@ const MaterialSelectInput: React.FC<IMaterialSelectInputRhfProps> = ({
           {...field}
           radius={8}
           w="100%"
-          data={uncombinedItem}
+          data={!currentValue || !defaultValue ? uncombinedItem : combinedItems}
           defaultValue={defaultValue}
           labelProps={{
             style: { fontWeight: 400, fontSize: 16, marginBottom: 8 },
@@ -89,8 +82,10 @@ const MaterialSelectInput: React.FC<IMaterialSelectInputRhfProps> = ({
               borderRadius: theme.spacing.xs,
             },
           })}
+          onSearchChange={setSearchTerm}
+          searchValue={searchTerm}
           data-control={control}
-          placeholder={t('commonTypography.chooseMaterial', {
+          placeholder={t('commonTypography.chooseActivity', {
             ns: 'default',
           })}
           label={label ? t(`components.field.${label}`) : null}
@@ -115,4 +110,4 @@ const MaterialSelectInput: React.FC<IMaterialSelectInputRhfProps> = ({
   );
 };
 
-export default MaterialSelectInput;
+export default SelectWorkingHoursPlanRhf;

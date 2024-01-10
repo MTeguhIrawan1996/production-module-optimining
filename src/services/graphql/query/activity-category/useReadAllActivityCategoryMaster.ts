@@ -67,8 +67,8 @@ export const useReadAllActivityCategory = ({
   skip?: boolean;
 }) => {
   const {
-    data: ReadAllActivityCategoryData,
-    loading: ReadAllActivityCategoryDataLoading,
+    data: readAllActivityCategoryData,
+    loading: readAllActivityCategoryDataLoading,
     refetch,
   } = useQuery<
     IReadAllActivityCategoryResponse,
@@ -84,7 +84,7 @@ export const useReadAllActivityCategory = ({
   });
 
   const simplifiedData: ISimpleKeyType[] | undefined =
-    ReadAllActivityCategoryData?.workingHourPlanCategories.data.map((item) => ({
+    readAllActivityCategoryData?.workingHourPlanCategories.data.map((item) => ({
       id: item.id,
       category: item.name ?? null,
     }));
@@ -96,11 +96,11 @@ export const useReadAllActivityCategory = ({
   });
 
   return {
-    ReadAllActivityCategoryData: simplifiedData,
-    ReadAllActivityCategoryDataColumn: otherColumn,
-    ReadAllActivityCategoryDataMeta:
-      ReadAllActivityCategoryData?.workingHourPlanCategories.meta,
-    ReadAllActivityCategoryDataLoading,
+    readAllActivityCategoryData: simplifiedData,
+    readAllActivityCategoryDataColumn: otherColumn,
+    readAllActivityCategoryDataMeta:
+      readAllActivityCategoryData?.workingHourPlanCategories.meta,
+    readAllActivityCategoryDataLoading,
     refetchReadAllActivityCategoryData: refetch,
   };
 };

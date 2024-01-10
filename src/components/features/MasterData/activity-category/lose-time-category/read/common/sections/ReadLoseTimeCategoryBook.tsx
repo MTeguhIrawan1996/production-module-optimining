@@ -13,17 +13,17 @@ import {
 import { useReadOneActivityCategory } from '@/services/graphql/query/activity-category/useReadOneActivityCategory';
 
 interface IReadLoseTimeCategoryBookProps {
-  tabs?: string;
+  tab?: string;
 }
 
 const ReadLoseTimeCategoryBook: React.FC<IReadLoseTimeCategoryBookProps> = ({
-  tabs: tabsProps,
+  tab: tabProps,
 }) => {
   const router = useRouter();
   const id = router.query.id as string;
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
-  const tabs = pageParams.get('tabs') || 'lose-time-category';
+  const tab = pageParams.get('tab') || 'lose-time-category';
   const url = `/master-data/activity-category/lose-time-category/read/${id}?page=1`;
   const { t } = useTranslation('default');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -43,7 +43,7 @@ const ReadLoseTimeCategoryBook: React.FC<IReadLoseTimeCategoryBookProps> = ({
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
     },
-    skip: !router.isReady || tabs !== tabsProps,
+    skip: !router.isReady || tab !== tabProps,
   });
 
   const handleSetPage = (page: number) => {
@@ -91,6 +91,13 @@ const ReadLoseTimeCategoryBook: React.FC<IReadLoseTimeCategoryBookProps> = ({
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
+          actionButton: {
+            label: t('commonTypography.createActivity'),
+            onClick: () =>
+              router.push(
+                `/master-data/activity-category/lose-time-category/create/${id}`
+              ),
+          },
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -111,7 +118,9 @@ const ReadLoseTimeCategoryBook: React.FC<IReadLoseTimeCategoryBookProps> = ({
       addButton={{
         label: t('commonTypography.createActivity'),
         onClick: () =>
-          router.push('/master-data/activity-plan/lose-time-category/create'),
+          router.push(
+            `/master-data/activity-category/lose-time-category/create/${id}`
+          ),
       }}
       searchBar={{
         placeholder: t('activityCategory.searchPlaceholderLoseTime'),
@@ -125,7 +134,7 @@ const ReadLoseTimeCategoryBook: React.FC<IReadLoseTimeCategoryBookProps> = ({
       }}
       enebleBackBottomInner={{
         onClick: () =>
-          router.push(`/master-data/activity-category?tabs=${tabsProps}`),
+          router.push(`/master-data/activity-category?tab=${tabProps}`),
       }}
       paperStackProps={{
         spacing: 'md',

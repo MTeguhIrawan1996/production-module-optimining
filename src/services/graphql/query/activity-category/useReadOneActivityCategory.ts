@@ -70,8 +70,8 @@ export interface IReadOneActivityCategoryData {
   type: string;
   countFormula: {
     parameters: ICountFormula[];
-  };
-  activities: GResponse<IActivityDatas>;
+  } | null;
+  activities: GResponse<IActivityDatas> | null;
 }
 
 interface IReadOneActivityCategoryResponse {
@@ -114,7 +114,7 @@ export const useReadOneActivityCategory = ({
   });
 
   const simplifiedData: ISimpleKeyType[] | undefined =
-    readOneActivityCategoryData?.workingHourPlanCategory.activities.data.map(
+    readOneActivityCategoryData?.workingHourPlanCategory?.activities?.data.map(
       (item) => ({
         id: item.id,
         activity: item.activityName ?? null,
@@ -132,7 +132,7 @@ export const useReadOneActivityCategory = ({
     readOneActivityCategoryData: simplifiedData,
     readOneActivityCategoryDataColumn: otherColumn,
     readOneActivityCategoryDataMeta:
-      readOneActivityCategoryData?.workingHourPlanCategory.activities.meta,
+      readOneActivityCategoryData?.workingHourPlanCategory?.activities?.meta,
     readOneActivityCategoryDataLoading,
     refetchReadOneActivityCategoryData: refetch,
   };

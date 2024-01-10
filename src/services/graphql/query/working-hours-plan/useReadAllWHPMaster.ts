@@ -68,7 +68,16 @@ export const useReadAllWHPsMaster = ({
     }
   );
 
+  const workingHoursPlansModified =
+    workingHourPlansData?.workingHourPlans.data.map((val) => {
+      return {
+        name: val.activityName ?? '',
+        id: val.id ?? '',
+      };
+    });
+
   return {
+    workingHoursPlansModified,
     workingHourPlansData: workingHourPlansData?.workingHourPlans.data,
     workingHourPlansDataMeta: workingHourPlansData?.workingHourPlans.meta,
     workingHourPlansDataLoading,

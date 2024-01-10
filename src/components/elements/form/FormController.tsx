@@ -36,6 +36,7 @@ import {
   SelectHeavyEquipmentReferenceInput,
   SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
+  SelectWorkingHoursPlanRhf,
   ShiftSelectInputRhf,
   StockpileNameSelectInputRhf,
   SubDistrictSelectInputRhf,
@@ -139,6 +140,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <SelectArriveBargeRhf {...props} />;
     case 'select-factory-rhf':
       return <SelectFactoryRhf {...props} />;
+    case 'select-working-hours-plan-rhf':
+      return <SelectWorkingHoursPlanRhf {...props} />;
     default:
       return null;
   }

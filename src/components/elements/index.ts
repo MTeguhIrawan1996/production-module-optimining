@@ -69,6 +69,7 @@ import SelectInputNative from '@/components/elements/input/SelectInputNative';
 import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
 import SelectMonthNative from '@/components/elements/input/SelectMonthNative';
 import SelectWeekNative from '@/components/elements/input/SelectWeekNative';
+import SelectWorkingHoursPlanRhf from '@/components/elements/input/SelectWorkingHoursPlanRhf';
 import SelectYearNative from '@/components/elements/input/SelectYearNative';
 import ShiftSelectInputRhf from '@/components/elements/input/ShiftSelectInputRhf';
 import StockpileNameSelectInputRhf from '@/components/elements/input/StockpileNameSelectInputRhf';
@@ -176,6 +177,7 @@ export {
   SelectionButtonModal,
   SelectMonthNative,
   SelectWeekNative,
+  SelectWorkingHoursPlanRhf,
   SelectYearNative,
   ShiftSelectInputRhf,
   SteperFormGroup,

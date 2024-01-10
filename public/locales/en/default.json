@@ -889,6 +889,8 @@
     "createActivityCategory": "$t(commonTypography.create) $t(commonTypography.activityCategory)",
     "searchPlaceholderCalculation": "$t(commonTypography.search) berdasarkan $t(commonTypography.activityCategory)",
     "searchPlaceholderLoseTime": "$t(commonTypography.search) berdasarkan $t(commonTypography.activity)",
-    "readLoseTimeCategory": "$t(commonTypography.detail) $t(commonTypography.loseTimeCategory)"
+    "readLoseTimeCategory": "$t(commonTypography.detail) $t(commonTypography.loseTimeCategory)",
+    "createLoseTimeCategory": "$t(commonTypography.create) $t(commonTypography.loseTimeCategory)",
+    "formLoseTimeCategory": "$t(commonTypography.form) $t(commonTypography.loseTimeCategory)"
   }
 }
