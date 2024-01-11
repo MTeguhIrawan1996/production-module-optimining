@@ -246,6 +246,7 @@ const UpdateCalculationCategoryBook: React.FC<
                               withAsterisk
                               clearable
                               searchable
+                              types={['default', 'system']}
                             />
                             {i === fields.length - 1 && fields.length !== 1 ? (
                               <ActionIcon

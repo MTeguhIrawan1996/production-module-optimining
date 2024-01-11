@@ -905,6 +905,7 @@
     "formCalculationCategory": "$t(commonTypography.form) $t(commonTypography.calculationCategory)",
     "formUpdateCalculationCategory": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.calculationCategory)",
     "calculationSuccessCreateMessage": "$t(commonTypography.calculationCategory) berhasil dibuat",
+    "calculationSuccessUpdateMessage": "$t(commonTypography.calculationCategory) berhasil diubah",
     "calculationSuccessDeleteMessage": "$t(commonTypography.calculationCategory) berhasil dihapus",
     "readCalculationCategory": "$t(commonTypography.detail) $t(commonTypography.calculationCategory)"
   }

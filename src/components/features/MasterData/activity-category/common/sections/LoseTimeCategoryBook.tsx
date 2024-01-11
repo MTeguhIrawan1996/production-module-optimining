@@ -35,7 +35,7 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
       limit: 10,
       page: page,
       orderDir: 'desc',
-      type: 'default',
+      types: ['default'],
     },
     skip: tab !== tabProps,
   });

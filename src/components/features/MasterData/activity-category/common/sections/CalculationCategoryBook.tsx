@@ -46,7 +46,7 @@ const CalculationCategoryBook: React.FC<ICalculationCategoryBookProps> = ({
       limit: 10,
       page: page,
       orderDir: 'desc',
-      type: 'count_formula',
+      types: ['count_formula'],
       search: searchQuery === '' ? null : searchQuery,
     },
     skip: tab !== tabProps,
