@@ -109,15 +109,19 @@ const ReadCalculationCategoryBook: React.FC<
             <Text fz={24} fw={600} color="brand">
               {t('commonTypography.calculation')}
             </Text>
-            <ScrollArea>
-              <Group spacing="xs" noWrap pb="sm">
-                {newArray?.map((val, i) => (
-                  <Badge key={i} radius={4} size="lg">
-                    {val}
-                  </Badge>
-                ))}
-              </Group>
-            </ScrollArea>
+            {newArray ? (
+              <ScrollArea>
+                <Group spacing="xs" noWrap pb="sm">
+                  {newArray?.map((val, i) => (
+                    <Badge key={i} radius={4} size="lg">
+                      {val}
+                    </Badge>
+                  ))}
+                </Group>
+              </ScrollArea>
+            ) : (
+              <Text color="gray.6">{t(`commonTypography.rumusNotFound`)}</Text>
+            )}
           </Stack>
         </Tabs.Panel>
       </Tabs>

@@ -222,7 +222,8 @@
       "coordinateX": "Koordinat X",
       "coordinateY": "Koordinat Y",
       "operation": "Operasi",
-      "variable": "Variable"
+      "variable": "Variable",
+      "formula": "Rumus"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",

@@ -10,7 +10,10 @@ import PrimaryButton, {
 } from '@/components/elements/button/PrimaryButton';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllActivityCategory } from '@/services/graphql/query/activity-category/useReadAllActivityCategoryMaster';
+import {
+  ITypes,
+  useReadAllActivityCategory,
+} from '@/services/graphql/query/activity-category/useReadAllActivityCategoryMaster';
 import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
@@ -20,6 +23,7 @@ export type ISelectActivityCategoryRhfProps = {
   name: string;
   labelValue?: string;
   deleteButtonField?: Omit<IPrimaryButtonProps, 'label'>;
+  types?: ITypes[] | null;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
@@ -33,6 +37,7 @@ const SelectActivityCategoryRhf: React.FC<ISelectActivityCategoryRhfProps> = ({
   labelValue,
   defaultValue,
   deleteButtonField,
+  types = null,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -50,7 +55,7 @@ const SelectActivityCategoryRhf: React.FC<ISelectActivityCategoryRhfProps> = ({
   const { readAllActivityCategoryDataPure } = useReadAllActivityCategory({
     variables: {
       limit: 20,
-      type: null,
+      types: types,
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
     },
