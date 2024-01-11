@@ -60,6 +60,7 @@ import CreateCalculationCategoryPage from '@/components/features/MasterData/acti
 import ReadCalculationCategoryPage from '@/components/features/MasterData/activity-category/calculation-category/read/common';
 import UpdateCalculationCategoryPage from '@/components/features/MasterData/activity-category/calculation-category/update/common';
 import ActivityCategoryMasterPage from '@/components/features/MasterData/activity-category/common';
+import UpdateHeavyEquipmentFormulaPage from '@/components/features/MasterData/activity-category/heavy-equipment-formula/update/common';
 import ReadLoseTimeCategoryPage from '@/components/features/MasterData/activity-category/lose-time-category/read/common';
 import UpdateLoseTimeActivityPage from '@/components/features/MasterData/activity-category/lose-time-category/update/common';
 import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
@@ -250,6 +251,7 @@ export {
   UpdateFactoryMasterPage,
   UpdateFrontProductionPage,
   UpdateHeavyEquipmentClassPage,
+  UpdateHeavyEquipmentFormulaPage,
   UpdateHeavyEquipmentMasterPage,
   UpdateHeavyEquipmentPage,
   UpdateHeavyEquipmentProductionPage,

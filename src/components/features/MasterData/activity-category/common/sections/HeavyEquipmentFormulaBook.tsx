@@ -11,13 +11,13 @@ import {
 
 import { useReadAllHeavyEquipmentFormula } from '@/services/graphql/query/heavy-equipment-formula/useReadAllHeavyEquipmentFormula';
 
-interface IHeavyEquipmentPreformanceFormulaBookProps {
+interface IHeavyEquipmentFormulaBookProps {
   tab?: string;
 }
 
-const HeavyEquipmentPreformanceFormulaBook: React.FC<
-  IHeavyEquipmentPreformanceFormulaBookProps
-> = ({ tab: tabProps }) => {
+const HeavyEquipmentFormulaBook: React.FC<IHeavyEquipmentFormulaBookProps> = ({
+  tab: tabProps,
+}) => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
@@ -73,7 +73,7 @@ const HeavyEquipmentPreformanceFormulaBook: React.FC<
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/master-data/activity-category/lose-time-category/read/${id}`
+                          `/master-data/activity-category/heavy-equipment-performance-formula/read/${id}`
                         );
                       },
                     }}
@@ -81,7 +81,7 @@ const HeavyEquipmentPreformanceFormulaBook: React.FC<
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/master-data/activity-category/lose-time-category/update/${id}`
+                          `/master-data/activity-category/heavy-equipment-performance-formula/update/${id}`
                         );
                       },
                     }}
@@ -113,4 +113,4 @@ const HeavyEquipmentPreformanceFormulaBook: React.FC<
   return <DashboardCard>{renderTable}</DashboardCard>;
 };
 
-export default HeavyEquipmentPreformanceFormulaBook;
+export default HeavyEquipmentFormulaBook;

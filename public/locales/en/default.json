@@ -395,7 +395,9 @@
     "coordinateY": "Koordinat Y",
     "frontInformation": "Informasi Front",
     "operation": "Operasi",
-    "calculation": "Perhitungan"
+    "calculation": "Perhitungan",
+    "heavyEquipmentFormula": "Rumus Kinerja Alat",
+    "formula": "Rumus"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -907,6 +909,9 @@
     "calculationSuccessCreateMessage": "$t(commonTypography.calculationCategory) berhasil dibuat",
     "calculationSuccessUpdateMessage": "$t(commonTypography.calculationCategory) berhasil diubah",
     "calculationSuccessDeleteMessage": "$t(commonTypography.calculationCategory) berhasil dihapus",
-    "readCalculationCategory": "$t(commonTypography.detail) $t(commonTypography.calculationCategory)"
+    "readCalculationCategory": "$t(commonTypography.detail) $t(commonTypography.calculationCategory)",
+    "formHeavyEquipmentFormula": "$t(commonTypography.form) $t(commonTypography.heavyEquipmentFormula)",
+    "updateHeavyEquipmentFormula": "$t(commonTypography.edit) $t(commonTypography.heavyEquipmentFormula)",
+    "heavyEquipmentFormulaSuccessUpdateMessage": "$t(commonTypography.heavyEquipmentFormula) berhasil diubah"
   }
 }

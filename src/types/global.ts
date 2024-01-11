@@ -439,3 +439,21 @@ export type IReadOneValueMapping<K, V> = {
 };
 
 /* #endregion  /**======== ReadOneType =========== */
+
+export interface IMutationCountFormula {
+  parameters: {
+    categoryId: string | null;
+    operator?: string | null;
+    order?: number | '';
+  }[];
+}
+
+export interface IReadFormulaParameter {
+  id: string;
+  order: number;
+  operator: string | null;
+  category: {
+    id: string;
+    name: string;
+  };
+}

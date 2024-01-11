@@ -157,9 +157,7 @@ export const useReadAllHeavyEquipmentFormula = ({
     readAllHeavyEquipmentFormulaData?.heavyEquipmentDataFormulas.data.map(
       (item) => ({
         id: item.id,
-        formula: `${item.desc ?? ''} ${
-          item.desc ? `(${item.name ?? null})` : item.name
-        }`,
+        formula: item.name,
       })
     );
   const excludeAccessor = ['id'];

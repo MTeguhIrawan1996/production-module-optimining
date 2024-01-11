@@ -2,7 +2,12 @@ import { ApolloError, gql, useQuery } from '@apollo/client';
 
 import { simpleOtherColumn } from '@/utils/helper/simpleOtherColumn';
 
-import { GResponse, IGlobalMetaRequest, IGroupingDetail } from '@/types/global';
+import {
+  GResponse,
+  IGlobalMetaRequest,
+  IGroupingDetail,
+  IReadFormulaParameter,
+} from '@/types/global';
 
 export const READ_ONE_ACTIVITY_CATEGORY_MASTER = gql`
   query ReadOneActivityCategory(
@@ -19,6 +24,7 @@ export const READ_ONE_ACTIVITY_CATEGORY_MASTER = gql`
       type
       countFormula {
         parameters {
+          id
           order
           operator
           category {
@@ -51,15 +57,6 @@ export const READ_ONE_ACTIVITY_CATEGORY_MASTER = gql`
   }
 `;
 
-interface ICountFormula {
-  order: number;
-  operator: string | null;
-  category: {
-    id: string;
-    name: string;
-  };
-}
-
 interface IActivityDatas {
   id: string;
   activityName: string;
@@ -70,7 +67,7 @@ export interface IReadOneActivityCategoryData {
   name: string;
   type: string;
   countFormula: {
-    parameters: ICountFormula[];
+    parameters: IReadFormulaParameter[];
   } | null;
   activities: GResponse<IActivityDatas> | null;
 }
