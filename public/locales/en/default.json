@@ -912,6 +912,7 @@
     "readCalculationCategory": "$t(commonTypography.detail) $t(commonTypography.calculationCategory)",
     "formHeavyEquipmentFormula": "$t(commonTypography.form) $t(commonTypography.heavyEquipmentFormula)",
     "updateHeavyEquipmentFormula": "$t(commonTypography.edit) $t(commonTypography.heavyEquipmentFormula)",
-    "heavyEquipmentFormulaSuccessUpdateMessage": "$t(commonTypography.heavyEquipmentFormula) berhasil diubah"
+    "heavyEquipmentFormulaSuccessUpdateMessage": "$t(commonTypography.heavyEquipmentFormula) berhasil diubah",
+    "readHeavyEquipmentFormula": "$t(commonTypography.detail) $t(commonTypography.heavyEquipmentFormula)"
   }
 }

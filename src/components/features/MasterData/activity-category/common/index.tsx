@@ -10,13 +10,22 @@ import HeavyEquipmentFormulaBook from '@/components/features/MasterData/activity
 import LoseTimeCategoryBook from '@/components/features/MasterData/activity-category/common/sections/LoseTimeCategoryBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
+import { usePermissions } from '@/utils/store/usePermissions';
 
 const ActivityCategoryMasterPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
+  const [permission] = usePermissions((state) => [state.permissions], shallow);
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
     shallow
+  );
+
+  const isPremissionActivityCategory = permission.includes(
+    'create-working-hour-plan-category'
+  );
+  const isPremissionHeavyEquipmentFormula = permission.includes(
+    'create-heavy-equipment-data-formula'
   );
 
   React.useEffect(() => {
@@ -49,13 +58,13 @@ const ActivityCategoryMasterPage = () => {
               label: t('commonTypography.loseTimeCategory'),
               value: 'lose-time-category',
               component: <LoseTimeCategoryBook tab="lose-time-category" />,
-              isShowItem: true,
+              isShowItem: isPremissionActivityCategory,
             },
             {
               label: t('commonTypography.calculationCategory'),
               value: 'calculation-category',
               component: <CalculationCategoryBook tab="calculation-category" />,
-              isShowItem: true,
+              isShowItem: isPremissionActivityCategory,
             },
             {
               label: t('commonTypography.heavyEquipmentFormula'),
@@ -63,7 +72,7 @@ const ActivityCategoryMasterPage = () => {
               component: (
                 <HeavyEquipmentFormulaBook tab="heavy-equipment-formula" />
               ),
-              isShowItem: true,
+              isShowItem: isPremissionHeavyEquipmentFormula,
             },
           ]}
         />

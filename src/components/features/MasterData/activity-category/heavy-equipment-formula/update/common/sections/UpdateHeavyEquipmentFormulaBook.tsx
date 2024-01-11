@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   ActionIcon,
   Divider,
@@ -40,6 +41,7 @@ import {
   useUpdateHeavyEquipmentFormula,
 } from '@/services/graphql/mutation/heavy-equipment-formula/useUpdateHeavyEquipmentFormula';
 import { useReadOneHeavyEquipmentFormula } from '@/services/graphql/query/heavy-equipment-formula/useReadOneHeavyEquipmentFormula';
+import { heavyEquipmentFormulaMutationValidation } from '@/utils/form-validation/activity-category/activity-category-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ITab } from '@/types/global';
@@ -59,7 +61,7 @@ const UpdateHeavyEquipmentFormulaBook: React.FC<
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationHeavyEquipmentFormulaValues>({
-    // resolver: zodResolver(calculationMutationValidation),
+    resolver: zodResolver(heavyEquipmentFormulaMutationValidation),
     defaultValues: {
       name: '',
       topFormula: {
@@ -205,6 +207,7 @@ const UpdateHeavyEquipmentFormulaBook: React.FC<
                     control="text-input"
                     name="name"
                     label="formula"
+                    disabled
                   />
                   <Text fz={22} fw="xl" component="span">
                     =
