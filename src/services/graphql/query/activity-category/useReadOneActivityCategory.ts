@@ -2,7 +2,7 @@ import { ApolloError, gql, useQuery } from '@apollo/client';
 
 import { simpleOtherColumn } from '@/utils/helper/simpleOtherColumn';
 
-import { GResponse, IGlobalMetaRequest } from '@/types/global';
+import { GResponse, IGlobalMetaRequest, IGroupingDetail } from '@/types/global';
 
 export const READ_ONE_ACTIVITY_CATEGORY_MASTER = gql`
   query ReadOneActivityCategory(
@@ -70,8 +70,8 @@ export interface IReadOneActivityCategoryData {
   type: string;
   countFormula: {
     parameters: ICountFormula[];
-  };
-  activities: GResponse<IActivityDatas>;
+  } | null;
+  activities: GResponse<IActivityDatas> | null;
 }
 
 interface IReadOneActivityCategoryResponse {
@@ -114,7 +114,7 @@ export const useReadOneActivityCategory = ({
   });
 
   const simplifiedData: ISimpleKeyType[] | undefined =
-    readOneActivityCategoryData?.workingHourPlanCategory.activities.data.map(
+    readOneActivityCategoryData?.workingHourPlanCategory?.activities?.data.map(
       (item) => ({
         id: item.id,
         activity: item.activityName ?? null,
@@ -127,12 +127,74 @@ export const useReadOneActivityCategory = ({
     exclude: excludeAccessor,
   });
 
+  const arrayNameValue =
+    readOneActivityCategoryData?.workingHourPlanCategory.activities?.data.map(
+      (val) => ({
+        name: 'activity',
+        value: val.activityName,
+      })
+    );
+
+  const grouping: IGroupingDetail[] = [
+    {
+      group: 'category',
+      withDivider: false,
+      enableTitle: false,
+      itemValue: [
+        {
+          name: 'category',
+          value: readOneActivityCategoryData?.workingHourPlanCategory.name,
+        },
+      ],
+    },
+    {
+      group: 'activity',
+      withDivider: false,
+      enableTitle: true,
+      itemValue: [...(arrayNameValue ?? [])],
+    },
+  ];
+
+  const valueFormulas =
+    readOneActivityCategoryData?.workingHourPlanCategory.countFormula
+      ?.parameters;
+  const sentence = valueFormulas
+    ?.map((item) => `${item.operator ?? ''} ${item.category.name}`)
+    .join(' ');
+
+  const groupingCalculation: IGroupingDetail[] = [
+    {
+      group: 'category',
+      withDivider: false,
+      enableTitle: false,
+      itemValue: [
+        {
+          name: 'category',
+          value: readOneActivityCategoryData?.workingHourPlanCategory.name,
+        },
+      ],
+    },
+    {
+      group: 'calculation',
+      withDivider: false,
+      enableTitle: true,
+      itemValue: [
+        {
+          name: 'calculation',
+          value: sentence,
+        },
+      ],
+    },
+  ];
+
   return {
     readOneActivityCategoryDataPure: readOneActivityCategoryData,
+    readOneActivityCategoryDataGrouping: grouping,
+    readOneActivityCategoryDataGroupingCalculation: groupingCalculation,
     readOneActivityCategoryData: simplifiedData,
     readOneActivityCategoryDataColumn: otherColumn,
     readOneActivityCategoryDataMeta:
-      readOneActivityCategoryData?.workingHourPlanCategory.activities.meta,
+      readOneActivityCategoryData?.workingHourPlanCategory?.activities?.meta,
     readOneActivityCategoryDataLoading,
     refetchReadOneActivityCategoryData: refetch,
   };

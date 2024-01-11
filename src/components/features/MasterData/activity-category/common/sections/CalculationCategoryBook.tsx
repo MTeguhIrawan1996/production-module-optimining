@@ -13,26 +13,26 @@ import {
 import { useReadAllActivityCategory } from '@/services/graphql/query/activity-category/useReadAllActivityCategoryMaster';
 
 interface ICalculationCategoryBookProps {
-  tabs?: string;
+  tab?: string;
 }
 
 const CalculationCategoryBook: React.FC<ICalculationCategoryBookProps> = ({
-  tabs: tabsProps,
+  tab: tabProps,
 }) => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
-  const tabs = pageParams.get('tabs') || 'calculation-category';
-  const url = `/master-data/activity-category?page=1&tabs=${tabsProps}`;
+  const tab = pageParams.get('tab') || 'calculation-category';
+  const url = `/master-data/activity-category?page=1&tab=${tabProps}`;
   const { t } = useTranslation('default');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
 
   /* #   /**=========== Query =========== */
   const {
-    ReadAllActivityCategoryData,
-    ReadAllActivityCategoryDataColumn,
-    ReadAllActivityCategoryDataLoading,
-    ReadAllActivityCategoryDataMeta,
+    readAllActivityCategoryData,
+    readAllActivityCategoryDataColumn,
+    readAllActivityCategoryDataLoading,
+    readAllActivityCategoryDataMeta,
   } = useReadAllActivityCategory({
     variables: {
       limit: 10,
@@ -41,11 +41,11 @@ const CalculationCategoryBook: React.FC<ICalculationCategoryBookProps> = ({
       type: 'count_formula',
       search: searchQuery === '' ? null : searchQuery,
     },
-    skip: tabs !== tabsProps,
+    skip: tab !== tabProps,
   });
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/master-data/activity-category?page=${page}&tabs=${tabsProps}`;
+    const urlSet = `/master-data/activity-category?page=${page}&tab=${tabProps}`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
@@ -54,19 +54,19 @@ const CalculationCategoryBook: React.FC<ICalculationCategoryBookProps> = ({
     return (
       <MantineDataTable
         tableProps={{
-          records: ReadAllActivityCategoryData,
-          fetching: ReadAllActivityCategoryDataLoading,
+          records: readAllActivityCategoryData,
+          fetching: readAllActivityCategoryDataLoading,
           highlightOnHover: true,
           columns: [
             {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                ReadAllActivityCategoryData &&
-                ReadAllActivityCategoryData.indexOf(record) + 1,
+                readAllActivityCategoryData &&
+                readAllActivityCategoryData.indexOf(record) + 1,
               width: 60,
             },
-            ...(ReadAllActivityCategoryDataColumn ?? []),
+            ...(readAllActivityCategoryDataColumn ?? []),
             {
               accessor: 'action',
               title: t('commonTypography.action'),
@@ -94,21 +94,24 @@ const CalculationCategoryBook: React.FC<ICalculationCategoryBookProps> = ({
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: ReadAllActivityCategoryDataMeta?.totalAllData ?? 0,
-          totalData: ReadAllActivityCategoryDataMeta?.totalData ?? 0,
-          totalPage: ReadAllActivityCategoryDataMeta?.totalPage ?? 0,
+          totalAllData: readAllActivityCategoryDataMeta?.totalAllData ?? 0,
+          totalData: readAllActivityCategoryDataMeta?.totalData ?? 0,
+          totalPage: readAllActivityCategoryDataMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ReadAllActivityCategoryData, ReadAllActivityCategoryDataLoading]);
+  }, [readAllActivityCategoryData, readAllActivityCategoryDataLoading]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
       addButton={{
-        label: t('activityCategory.createActivityCategory'),
-        onClick: () => router.push('/master-data/activity-plan/create'),
+        label: t('activityCategory.createCalculationCategory'),
+        onClick: () =>
+          router.push(
+            `/master-data/activity-category/calculation-category/create`
+          ),
       }}
       searchBar={{
         placeholder: t('activityCategory.searchPlaceholderCalculation'),

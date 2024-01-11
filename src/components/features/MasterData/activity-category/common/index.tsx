@@ -29,7 +29,7 @@ const ActivityCategoryMasterPage = () => {
   }, [router]);
 
   const handleChangeTab = (tabs: TabsValue) => {
-    const url = `/master-data/activity-category?tabs=${tabs}`;
+    const url = `/master-data/activity-category?tab=${tabs}`;
     router.push(url, undefined, { shallow: true });
   };
 
@@ -40,22 +40,20 @@ const ActivityCategoryMasterPage = () => {
       >
         <GlobalTabs
           tabs={{
-            value: router.query.tabs as string,
+            value: router.query.tab as string,
             onTabChange: (value) => handleChangeTab(value),
           }}
           tabsData={[
             {
               label: t('commonTypography.loseTimeCategory'),
               value: 'lose-time-category',
-              component: <LoseTimeCategoryBook tabs="lose-time-category" />,
+              component: <LoseTimeCategoryBook tab="lose-time-category" />,
               isShowItem: true,
             },
             {
               label: t('commonTypography.calculationCategory'),
               value: 'calculation-category',
-              component: (
-                <CalculationCategoryBook tabs="calculation-category" />
-              ),
+              component: <CalculationCategoryBook tab="calculation-category" />,
               isShowItem: true,
             },
           ]}

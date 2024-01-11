@@ -2,6 +2,7 @@
   "components": {
     "field": {
       "name": "Nama",
+      "category": "Kategori",
       "fullname": "Nama Lengkap",
       "username": "Username",
       "usernameOrEmail": "Username/Email",
@@ -219,7 +220,9 @@
       "closeVessel": "Tutup Vessel",
       "closeVesselHour": "Jam Tutup Vessel",
       "coordinateX": "Koordinat X",
-      "coordinateY": "Koordinat Y"
+      "coordinateY": "Koordinat Y",
+      "operation": "Operasi",
+      "variable": "Variable"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",

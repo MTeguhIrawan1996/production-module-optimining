@@ -59,6 +59,7 @@ import RadioInputRhf from '@/components/elements/input/RadioInputRhf';
 import RegencySelectInputRhf from '@/components/elements/input/RegencySelectInputRhf';
 import RelegionSelectInputRhf from '@/components/elements/input/RelegionSelectInputRhf';
 import SampleTypeSelectInput from '@/components/elements/input/SampleTypeSelectInputRhf';
+import SelectActivityCategoryRhf from '@/components/elements/input/SelectActivityCategoryRhf';
 import SelectArriveBargeNative from '@/components/elements/input/SelectArriveBargeNative';
 import SelectArriveBargeRhf from '@/components/elements/input/SelectArriveBargeRhf';
 import SelectFactoryRhf from '@/components/elements/input/SelectFactoryRhf';
@@ -69,6 +70,7 @@ import SelectInputNative from '@/components/elements/input/SelectInputNative';
 import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
 import SelectMonthNative from '@/components/elements/input/SelectMonthNative';
 import SelectWeekNative from '@/components/elements/input/SelectWeekNative';
+import SelectWorkingHoursPlanRhf from '@/components/elements/input/SelectWorkingHoursPlanRhf';
 import SelectYearNative from '@/components/elements/input/SelectYearNative';
 import ShiftSelectInputRhf from '@/components/elements/input/ShiftSelectInputRhf';
 import StockpileNameSelectInputRhf from '@/components/elements/input/StockpileNameSelectInputRhf';
@@ -165,6 +167,7 @@ export {
   RootWrapper,
   SampleTypeSelectInput,
   SearchBar,
+  SelectActivityCategoryRhf,
   SelectArriveBargeNative,
   SelectArriveBargeRhf,
   SelectFactoryRhf,
@@ -176,6 +179,7 @@ export {
   SelectionButtonModal,
   SelectMonthNative,
   SelectWeekNative,
+  SelectWorkingHoursPlanRhf,
   SelectYearNative,
   ShiftSelectInputRhf,
   SteperFormGroup,

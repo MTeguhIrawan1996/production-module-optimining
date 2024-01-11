@@ -14,7 +14,7 @@ import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
-export type IMaterialSelectnputRhfProps = {
+export type IMaterialSelectInputRhfProps = {
   control: 'material-select-input';
   name: string;
   labelValue?: string;
@@ -33,7 +33,7 @@ export type IMaterialSelectnputRhfProps = {
 > &
   CommonProps;
 
-const MaterialSelectInput: React.FC<IMaterialSelectnputRhfProps> = ({
+const MaterialSelectInput: React.FC<IMaterialSelectInputRhfProps> = ({
   name,
   control,
   label,

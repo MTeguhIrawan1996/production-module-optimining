@@ -345,7 +345,7 @@ const ReadHeavyEquipmentProductionBook = () => {
               mt="xs"
             />
           ) : null}
-          <Stack spacing="sm" mt="md">
+          <Stack spacing="sm" mt="sm">
             <Text fz={24} fw={600} color="brand">
               {t('commonTypography.checkerInformation')}
             </Text>
