@@ -22,6 +22,7 @@ export const READ_ONE_ACTIVITY_CATEGORY_MASTER = gql`
           order
           operator
           category {
+            id
             name
           }
         }

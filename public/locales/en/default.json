@@ -901,7 +901,9 @@
     "formUpdateLoseTimeCategory": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.loseTimeCategory)",
     "loseTimeSuccessUpdateMessage": "$t(commonTypography.loseTimeCategory) berhasil diubah",
     "createCalculationCategory": "$t(commonTypography.create) $t(commonTypography.calculationCategory)",
+    "updateCalculationCategory": "$t(commonTypography.edit) $t(commonTypography.calculationCategory)",
     "formCalculationCategory": "$t(commonTypography.form) $t(commonTypography.calculationCategory)",
+    "formUpdateCalculationCategory": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.calculationCategory)",
     "calculationSuccessCreateMessage": "$t(commonTypography.calculationCategory) berhasil dibuat",
     "calculationSuccessDeleteMessage": "$t(commonTypography.calculationCategory) berhasil dihapus",
     "readCalculationCategory": "$t(commonTypography.detail) $t(commonTypography.calculationCategory)"
