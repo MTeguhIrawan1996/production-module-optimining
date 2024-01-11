@@ -168,6 +168,7 @@
     "specification": "Spesifikasi",
     "documentNotFound": "Dokumen tidak ditemukan...",
     "rateNotFound": "Kadar tidak ditemukan...",
+    "rumusNotFound": "Rumush tidak ditemukan...",
     "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG atau .PNG",
     "modalNonActiveTitle": "Kamu yakin ingin nonaktifkan pengguna?",
     "modalActiveTitle": "Aktifkan Pengguna?",
@@ -902,6 +903,7 @@
     "createCalculationCategory": "$t(commonTypography.create) $t(commonTypography.calculationCategory)",
     "formCalculationCategory": "$t(commonTypography.form) $t(commonTypography.calculationCategory)",
     "calculationSuccessCreateMessage": "$t(commonTypography.calculationCategory) berhasil dibuat",
+    "calculationSuccessDeleteMessage": "$t(commonTypography.calculationCategory) berhasil dihapus",
     "readCalculationCategory": "$t(commonTypography.detail) $t(commonTypography.calculationCategory)"
   }
 }
