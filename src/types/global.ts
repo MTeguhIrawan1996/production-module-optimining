@@ -198,7 +198,7 @@ export interface IGlobalMetaRequest {
   orderDir: string | null;
 }
 
-type IChildren<T> = {
+export type IChildren<T> = {
   property: keyof T;
   children: IChildren<T>[];
   constraints: {

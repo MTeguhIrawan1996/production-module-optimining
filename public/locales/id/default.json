@@ -395,7 +395,9 @@
     "coordinateY": "Koordinat Y",
     "frontInformation": "Informasi Front",
     "operation": "Operasi",
-    "calculation": "Perhitungan"
+    "calculation": "Perhitungan",
+    "heavyEquipmentPerformanceFormula": "Rumus Kinerja Alat",
+    "formula": "Rumus"
   },
   "sideBar": {
     "dashboard": "Dashboard",

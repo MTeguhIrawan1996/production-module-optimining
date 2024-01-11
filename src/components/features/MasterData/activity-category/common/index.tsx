@@ -6,6 +6,7 @@ import { shallow } from 'zustand/shallow';
 
 import { GlobalTabs, InnerWrapper, RootWrapper } from '@/components/elements';
 import CalculationCategoryBook from '@/components/features/MasterData/activity-category/common/sections/CalculationCategoryBook';
+import HeavyEquipmentPreformanceFormulaBook from '@/components/features/MasterData/activity-category/common/sections/HeavyEquipmentPreformanceFormulaBook';
 import LoseTimeCategoryBook from '@/components/features/MasterData/activity-category/common/sections/LoseTimeCategoryBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
@@ -54,6 +55,14 @@ const ActivityCategoryMasterPage = () => {
               label: t('commonTypography.calculationCategory'),
               value: 'calculation-category',
               component: <CalculationCategoryBook tab="calculation-category" />,
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.heavyEquipmentPerformanceFormula'),
+              value: 'heavy-equipment-formula',
+              component: (
+                <HeavyEquipmentPreformanceFormulaBook tab="heavy-equipment-formula" />
+              ),
               isShowItem: true,
             },
           ]}
