@@ -9,13 +9,13 @@ import {
   MantineDataTable,
 } from '@/components/elements';
 
-import { useReadAllActivityCategory } from '@/services/graphql/query/activity-category/useReadAllActivityCategoryMaster';
+import { useReadAllHeavyEquipmentFormula } from '@/services/graphql/query/heavy-equipment-formula/useReadAllHeavyEquipmentFormula';
 
-interface ILoseTimeCategoryProps {
+interface IHeavyEquipmentFormulaBookProps {
   tab?: string;
 }
 
-const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
+const HeavyEquipmentFormulaBook: React.FC<IHeavyEquipmentFormulaBookProps> = ({
   tab: tabProps,
 }) => {
   const router = useRouter();
@@ -26,16 +26,15 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
 
   /* #   /**=========== Query =========== */
   const {
-    readAllActivityCategoryData,
-    readAllActivityCategoryDataColumn,
-    readAllActivityCategoryDataLoading,
-    readAllActivityCategoryDataMeta,
-  } = useReadAllActivityCategory({
+    readAllHeavyEquipmentFormulaData,
+    readAllHeavyEquipmentFormulaDataColumn,
+    readAllHeavyEquipmentFormulaDataLoading,
+    readAllHeavyEquipmentFormulaDataMeta,
+  } = useReadAllHeavyEquipmentFormula({
     variables: {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      types: ['default'],
     },
     skip: tab !== tabProps,
   });
@@ -50,19 +49,19 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
     return (
       <MantineDataTable
         tableProps={{
-          records: readAllActivityCategoryData,
-          fetching: readAllActivityCategoryDataLoading,
+          records: readAllHeavyEquipmentFormulaData,
+          fetching: readAllHeavyEquipmentFormulaDataLoading,
           highlightOnHover: true,
           columns: [
             {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                readAllActivityCategoryData &&
-                readAllActivityCategoryData.indexOf(record) + 1,
+                readAllHeavyEquipmentFormulaData &&
+                readAllHeavyEquipmentFormulaData.indexOf(record) + 1,
               width: 60,
             },
-            ...(readAllActivityCategoryDataColumn ?? []),
+            ...(readAllHeavyEquipmentFormulaDataColumn ?? []),
             {
               accessor: 'action',
               title: t('commonTypography.action'),
@@ -74,7 +73,7 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/master-data/activity-category/lose-time-category/read/${id}`
+                          `/master-data/activity-category/heavy-equipment-performance-formula/read/${id}`
                         );
                       },
                     }}
@@ -82,7 +81,7 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `/master-data/activity-category/lose-time-category/update/${id}`
+                          `/master-data/activity-category/heavy-equipment-performance-formula/update/${id}`
                         );
                       },
                     }}
@@ -98,17 +97,20 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: readAllActivityCategoryDataMeta?.totalAllData ?? 0,
-          totalData: readAllActivityCategoryDataMeta?.totalData ?? 0,
-          totalPage: readAllActivityCategoryDataMeta?.totalPage ?? 0,
+          totalAllData: readAllHeavyEquipmentFormulaDataMeta?.totalAllData ?? 0,
+          totalData: readAllHeavyEquipmentFormulaDataMeta?.totalData ?? 0,
+          totalPage: readAllHeavyEquipmentFormulaDataMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [readAllActivityCategoryData, readAllActivityCategoryDataLoading]);
+  }, [
+    readAllHeavyEquipmentFormulaData,
+    readAllHeavyEquipmentFormulaDataLoading,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return <DashboardCard>{renderTable}</DashboardCard>;
 };
 
-export default LoseTimeCategoryBook;
+export default HeavyEquipmentFormulaBook;

@@ -168,6 +168,7 @@
     "specification": "Spesifikasi",
     "documentNotFound": "Dokumen tidak ditemukan...",
     "rateNotFound": "Kadar tidak ditemukan...",
+    "rumusNotFound": "Rumush tidak ditemukan...",
     "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan extention .JPEG .JPG atau .PNG",
     "modalNonActiveTitle": "Kamu yakin ingin nonaktifkan pengguna?",
     "modalActiveTitle": "Aktifkan Pengguna?",
@@ -394,7 +395,9 @@
     "coordinateY": "Koordinat Y",
     "frontInformation": "Informasi Front",
     "operation": "Operasi",
-    "calculation": "Perhitungan"
+    "calculation": "Perhitungan",
+    "heavyEquipmentFormula": "Rumus Kinerja Alat",
+    "formula": "Rumus"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -682,7 +685,7 @@
     "createDome": "$t(commonTypography.create) $t(commonTypography.dome)",
     "readStockpileMonitoring": "$t(commonTypography.detail) $t(commonTypography.stockpileMonitoring)",
     "updateStockpileMonitoring": "$t(commonTypography.edit) $t(commonTypography.stockpileMonitoring)",
-    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.domeId), $t(commonTypography.domeName) dan $t(commonTypography.tonByRitage)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.domeId) dan $t(commonTypography.domeName)",
     "successDeleteMessage": "$t(commonTypography.stockpileMonitoring) berhasil dihapus",
     "formStockpileMonitoring": "$t(commonTypography.form) $t(commonTypography.stockpileMonitoring)",
     "formUpdateStockpileMonitoring": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.stockpileMonitoring)",
@@ -900,8 +903,16 @@
     "formUpdateLoseTimeCategory": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.loseTimeCategory)",
     "loseTimeSuccessUpdateMessage": "$t(commonTypography.loseTimeCategory) berhasil diubah",
     "createCalculationCategory": "$t(commonTypography.create) $t(commonTypography.calculationCategory)",
+    "updateCalculationCategory": "$t(commonTypography.edit) $t(commonTypography.calculationCategory)",
     "formCalculationCategory": "$t(commonTypography.form) $t(commonTypography.calculationCategory)",
+    "formUpdateCalculationCategory": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.calculationCategory)",
     "calculationSuccessCreateMessage": "$t(commonTypography.calculationCategory) berhasil dibuat",
-    "readCalculationCategory": "$t(commonTypography.detail) $t(commonTypography.calculationCategory)"
+    "calculationSuccessUpdateMessage": "$t(commonTypography.calculationCategory) berhasil diubah",
+    "calculationSuccessDeleteMessage": "$t(commonTypography.calculationCategory) berhasil dihapus",
+    "readCalculationCategory": "$t(commonTypography.detail) $t(commonTypography.calculationCategory)",
+    "formHeavyEquipmentFormula": "$t(commonTypography.form) $t(commonTypography.heavyEquipmentFormula)",
+    "updateHeavyEquipmentFormula": "$t(commonTypography.edit) $t(commonTypography.heavyEquipmentFormula)",
+    "heavyEquipmentFormulaSuccessUpdateMessage": "$t(commonTypography.heavyEquipmentFormula) berhasil diubah",
+    "readHeavyEquipmentFormula": "$t(commonTypography.detail) $t(commonTypography.heavyEquipmentFormula)"
   }
 }

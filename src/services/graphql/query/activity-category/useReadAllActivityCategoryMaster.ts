@@ -11,7 +11,7 @@ export const READ_ALL_ACTIVITY_CATEGORY_MASTER = gql`
     $search: String
     $orderBy: String
     $orderDir: String
-    $type: String
+    $types: [String!]
   ) {
     workingHourPlanCategories(
       findAllWorkingHourPlanCategoryInput: {
@@ -20,7 +20,7 @@ export const READ_ALL_ACTIVITY_CATEGORY_MASTER = gql`
         search: $search
         orderBy: $orderBy
         orderDir: $orderDir
-        type: $type
+        types: $types
       }
     ) {
       meta {
@@ -48,8 +48,10 @@ interface IReadAllActivityCategoryResponse {
   workingHourPlanCategories: GResponse<IReadAllActivityCategoryData>;
 }
 
+export type ITypes = 'default' | 'count_formula' | 'system';
+
 interface IReadAllActivityCategoryRequest extends IGlobalMetaRequest {
-  type: 'default' | 'count_formula' | null;
+  types: ITypes[] | null;
 }
 
 interface ISimpleKeyType {

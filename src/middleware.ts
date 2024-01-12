@@ -84,7 +84,10 @@ export async function middleware(request: NextRequest) {
     },
     {
       path: '/master-data/activity-category',
-      allowedPermissions: ['all'],
+      allowedPermissions: [
+        'create-working-hour-plan-category',
+        'create-heavy-equipment-data-formula',
+      ],
     },
     {
       path: '/reference/company-type',

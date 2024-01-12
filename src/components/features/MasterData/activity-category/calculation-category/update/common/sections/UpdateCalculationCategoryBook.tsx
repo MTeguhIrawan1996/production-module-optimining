@@ -30,28 +30,35 @@ import { useTranslation } from 'react-i18next';
 
 import {
   DashboardCard,
+  ModalConfirmation,
   PrimaryButton,
   SelectActivityCategoryRhf,
   SelectInputRhf,
   TextInputRhf,
 } from '@/components/elements';
 
-import { useCreateActivityCategory } from '@/services/graphql/mutation/activity-category/useCreateActivityCategory';
-import { IMutationCalculationValues } from '@/services/graphql/mutation/activity-category/useUpdateActivityCategory';
+import {
+  IMutationCalculationValues,
+  useUpdateActivityCategory,
+} from '@/services/graphql/mutation/activity-category/useUpdateActivityCategory';
+import { useReadOneActivityCategory } from '@/services/graphql/query/activity-category/useReadOneActivityCategory';
 import { calculationMutationValidation } from '@/utils/form-validation/activity-category/activity-category-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ITab } from '@/types/global';
 
-interface ICreateCalculationCategoryBookProps {
+interface IUpdateCalculationCategoryBookProps {
   tab?: ITab;
 }
 
-const CreateCalculationCategoryBook: React.FC<
-  ICreateCalculationCategoryBookProps
+const UpdateCalculationCategoryBook: React.FC<
+  IUpdateCalculationCategoryBookProps
 > = ({ tab: tabProps }) => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
+  const [isOpenConfirmation, setIsOpenConfirmation] =
+    React.useState<boolean>(false);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationCalculationValues>({
@@ -70,20 +77,37 @@ const CreateCalculationCategoryBook: React.FC<
     },
     mode: 'onBlur',
   });
-  const { fields, remove, append } = useFieldArray({
+  const { fields, remove, append, replace } = useFieldArray({
     name: 'countFormula.parameters',
     control: methods.control,
   });
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-
-  const [executeCreate, { loading }] = useCreateActivityCategory({
+  const { readOneActivityCategoryDataLoading } = useReadOneActivityCategory({
+    variables: {
+      id: id,
+    },
+    skip: !router.isReady,
+    onCompleted: ({ workingHourPlanCategory }) => {
+      const countFormulaParameterValue =
+        workingHourPlanCategory.countFormula?.parameters.map((val) => ({
+          categoryId: val.category.id,
+          operator: val.operator,
+          order: val.order,
+        }));
+      methods.setValue('name', workingHourPlanCategory.name);
+      if (countFormulaParameterValue) {
+        replace(countFormulaParameterValue);
+      }
+    },
+  });
+  const [executeUpdate, { loading }] = useUpdateActivityCategory({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('activityCategory.calculationSuccessCreateMessage'),
+        message: t('activityCategory.calculationSuccessUpdateMessage'),
         icon: <IconCheck />,
       });
       methods.reset();
@@ -91,6 +115,7 @@ const CreateCalculationCategoryBook: React.FC<
     },
     onError: (error) => {
       if (error.graphQLErrors) {
+        setIsOpenConfirmation((prev) => !prev);
         const errorArry =
           errorBadRequestField<IMutationCalculationValues>(error);
         if (errorArry.length) {
@@ -114,18 +139,22 @@ const CreateCalculationCategoryBook: React.FC<
   const handleSubmitForm: SubmitHandler<IMutationCalculationValues> = async (
     data
   ) => {
-    await executeCreate({
+    await executeUpdate({
       variables: {
+        id,
         type: 'count_formula',
         name: data.name,
         countFormula: data.countFormula,
       },
     });
   };
+  const handleConfirmation = () => {
+    methods.handleSubmit(handleSubmitForm)();
+  };
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={readOneActivityCategoryDataLoading}>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(handleSubmitForm)}>
           <Flex gap={32} direction="column" align="flex-end" p={22}>
@@ -251,15 +280,35 @@ const CreateCalculationCategoryBook: React.FC<
               />
               <PrimaryButton
                 label={t('commonTypography.save')}
-                type="submit"
-                loading={loading}
+                type="button"
+                onClick={() => setIsOpenConfirmation((prev) => !prev)}
               />
             </Group>
           </Flex>
+          <ModalConfirmation
+            isOpenModalConfirmation={isOpenConfirmation}
+            actionModalConfirmation={() =>
+              setIsOpenConfirmation((prev) => !prev)
+            }
+            actionButton={{
+              label: t('commonTypography.yes'),
+              type: 'button',
+              onClick: handleConfirmation,
+              loading: loading,
+            }}
+            backButton={{
+              label: 'Batal',
+            }}
+            modalType={{
+              type: 'default',
+              title: t('commonTypography.alertTitleConfirmUpdate'),
+            }}
+            withDivider={true}
+          />
         </form>
       </FormProvider>
     </DashboardCard>
   );
 };
 
-export default CreateCalculationCategoryBook;
+export default UpdateCalculationCategoryBook;

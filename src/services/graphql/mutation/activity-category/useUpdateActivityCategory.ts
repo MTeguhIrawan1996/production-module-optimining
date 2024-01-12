@@ -1,5 +1,7 @@
 import { ApolloError, gql, useMutation } from '@apollo/client';
 
+import { IMutationCountFormula } from '@/types/global';
+
 export const UPDATE_ACTIVITY_CATEGORY = gql`
   mutation UpdateActivityCategory(
     $id: String!
@@ -31,13 +33,7 @@ export interface IMutationLoseTimeValues {
 }
 export interface IMutationCalculationValues {
   name?: string;
-  countFormula?: {
-    parameters: {
-      categoryId: string | null;
-      operator?: string | null;
-      order?: number | '';
-    }[];
-  } | null;
+  countFormula?: IMutationCountFormula | null;
 }
 
 type IUpdateActivityCategoryRequest = {
