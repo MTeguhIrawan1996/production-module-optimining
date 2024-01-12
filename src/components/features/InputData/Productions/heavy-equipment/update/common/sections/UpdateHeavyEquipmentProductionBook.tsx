@@ -28,7 +28,7 @@ import {
 } from '@/utils/constants/Field/global-field';
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { heavyEquipmentProductionMutationValidation } from '@/utils/form-validation/heavy-equipment-production/heavy-equipment-production-validation';
-import { formatDate2, secondsDuration } from '@/utils/helper/dateFormat';
+import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { hourDiff, timeToSecond } from '@/utils/helper/hourDiff';
@@ -98,8 +98,8 @@ const UpdateHeavyEquipmentProductionBook = () => {
       onCompleted: ({ heavyEquipmentData }) => {
         const otherLoseTime = heavyEquipmentData.loseTimes?.map((val) => {
           const details = val.details?.map(({ startAt, finishAt }) => {
-            const newStartTime = formatDate2(startAt, 'HH:mm:ss');
-            const newFinishTime = formatDate2(finishAt, 'HH:mm:ss');
+            const newStartTime = formatDate(startAt, 'HH:mm:ss');
+            const newFinishTime = formatDate(finishAt, 'HH:mm:ss');
             return {
               startTime: newStartTime ?? '',
               finishTime: newFinishTime ?? '',
@@ -117,11 +117,11 @@ const UpdateHeavyEquipmentProductionBook = () => {
           loseTimeReplaces(otherLoseTime);
         }
         const date = stringToDate(heavyEquipmentData.date ?? null);
-        const newWorkStartTime = formatDate2(
+        const newWorkStartTime = formatDate(
           heavyEquipmentData.workStartAt,
           'HH:mm:ss'
         );
-        const newWorkFinishTime = formatDate2(
+        const newWorkFinishTime = formatDate(
           heavyEquipmentData.workFinishAt,
           'HH:mm:ss'
         );

@@ -314,7 +314,7 @@ const ReadRitageBargingBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.date'),
-                  value: formatDate(bargingRitage?.date),
+                  value: formatDate(bargingRitage?.date) ?? '-',
                 },
               ]}
               type="grid"
@@ -405,11 +405,12 @@ const ReadRitageBargingBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.fromAt'),
-                  value: formatDate(bargingRitage?.fromAt, 'hh:mm:ss A'),
+                  value: formatDate(bargingRitage?.fromAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.arriveAt'),
-                  value: formatDate(bargingRitage?.arriveAt, 'hh:mm:ss A'),
+                  value:
+                    formatDate(bargingRitage?.arriveAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.ritageDuration'),

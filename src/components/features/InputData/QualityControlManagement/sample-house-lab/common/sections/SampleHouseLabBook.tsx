@@ -160,7 +160,7 @@ const SampleHouseLabBook = () => {
             {
               accessor: 'sampleDate',
               title: t('commonTypography.sampleDate'),
-              render: ({ sampleDate }) => formatDate(sampleDate),
+              render: ({ sampleDate }) => formatDate(sampleDate) ?? '-',
             },
             {
               accessor: 'shift',
@@ -206,7 +206,8 @@ const SampleHouseLabBook = () => {
             {
               accessor: 'sampleEnterLabAt',
               title: t('commonTypography.sampleEnterLabAt'),
-              render: ({ sampleEnterLabAt }) => formatDate(sampleEnterLabAt),
+              render: ({ sampleEnterLabAt }) =>
+                formatDate(sampleEnterLabAt) ?? '-',
             },
             ...(renderOtherColumn ?? []),
             ...(renderOtherColumnPercentageLab ?? []),

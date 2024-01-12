@@ -86,7 +86,7 @@ const ReadCompanyBook = () => {
                 dataKey: `${t('commonTypography.date')} ${
                   companyData?.permissionType?.name
                 }`,
-                value: formatDate(companyData?.permissionTypeDate) ?? '',
+                value: formatDate(companyData?.permissionTypeDate) ?? '-',
               },
             ]}
             type="grid"
@@ -130,7 +130,7 @@ const ReadCompanyBook = () => {
               {
                 dataKey: t('commonTypography.dateOfOffice'),
                 value:
-                  formatDate(companyData?.presidentDirector?.startDate) ?? '',
+                  formatDate(companyData?.presidentDirector?.startDate) ?? '-',
               },
             ]}
             type="grid"

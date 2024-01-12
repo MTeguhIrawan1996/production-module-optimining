@@ -131,7 +131,7 @@ const ReadHumanResourceBook = () => {
                 },
                 {
                   dataKey: t('commonTypography.dob'),
-                  value: formatDate(humanResourceData?.dob ?? ''),
+                  value: formatDate(humanResourceData?.dob ?? '-'),
                 },
                 {
                   dataKey: t('commonTypography.gender'),

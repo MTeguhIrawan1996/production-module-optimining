@@ -28,7 +28,7 @@ import {
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { ritageObMutationValidation } from '@/utils/form-validation/ritage/ritage-ob-validation';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
-import { formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -114,8 +114,8 @@ const UpdateRitageObBook = () => {
     skip: !router.isReady,
     onCompleted: ({ overburdenRitage }) => {
       const ritageDate = stringToDate(overburdenRitage.date ?? null);
-      const fromTime = formatDate2(overburdenRitage.fromAt, 'HH:mm:ss');
-      const arriveTime = formatDate2(overburdenRitage.arriveAt, 'HH:mm:ss');
+      const fromTime = formatDate(overburdenRitage.fromAt, 'HH:mm:ss');
+      const arriveTime = formatDate(overburdenRitage.arriveAt, 'HH:mm:ss');
       methods.setValue(
         'isRitageProblematic',
         overburdenRitage.isRitageProblematic

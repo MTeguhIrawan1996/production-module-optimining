@@ -32,7 +32,7 @@ import {
 } from '@/utils/constants/Field/stockpile-field';
 import { ritageOreMutationValidation } from '@/utils/form-validation/ritage/ritage-ore-validation';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
-import { formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -124,8 +124,8 @@ const UpdateRitageOreBook = () => {
     skip: !router.isReady,
     onCompleted: ({ oreRitage }) => {
       const ritageDate = stringToDate(oreRitage.date ?? null);
-      const fromTime = formatDate2(oreRitage.fromAt, 'HH:mm:ss');
-      const arriveTime = formatDate2(oreRitage.arriveAt, 'HH:mm:ss');
+      const fromTime = formatDate(oreRitage.fromAt, 'HH:mm:ss');
+      const arriveTime = formatDate(oreRitage.arriveAt, 'HH:mm:ss');
       methods.setValue('isRitageProblematic', oreRitage.isRitageProblematic);
       methods.setValue('date', ritageDate);
       methods.setValue('checkerFromId', oreRitage.checkerFrom?.id ?? '');

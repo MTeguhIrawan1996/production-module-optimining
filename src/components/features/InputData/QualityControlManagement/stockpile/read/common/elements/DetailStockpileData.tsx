@@ -60,7 +60,7 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
           data={[
             {
               dataKey: t('commonTypography.date'),
-              value: formatDate(monitoringStockpile?.createdAt),
+              value: formatDate(monitoringStockpile?.createdAt) ?? '-',
             },
           ]}
           type="grid"
@@ -119,19 +119,21 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
           data={[
             {
               dataKey: t('commonTypography.startOpen'),
-              value: formatDate(monitoringStockpile?.openAt),
+              value: formatDate(monitoringStockpile?.openAt) ?? '-',
             },
             {
               dataKey: t('commonTypography.endOpen'),
-              value: formatDate(monitoringStockpile?.closeAt),
+              value: formatDate(monitoringStockpile?.closeAt) ?? '-',
             },
             {
               dataKey: t('commonTypography.openTime'),
-              value: formatDate(monitoringStockpile?.openAt, 'hh:mm:ss A'),
+              value:
+                formatDate(monitoringStockpile?.openAt, 'hh:mm:ss A') ?? '-',
             },
             {
               dataKey: t('commonTypography.closeTime'),
-              value: formatDate(monitoringStockpile?.closeAt, 'hh:mm:ss A'),
+              value:
+                formatDate(monitoringStockpile?.closeAt, 'hh:mm:ss A') ?? '-',
             },
           ]}
           type="grid"
@@ -175,7 +177,7 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
               {
                 accessor: 'date',
                 title: t('commonTypography.date'),
-                render: ({ date }) => formatDate(date),
+                render: ({ date }) => formatDate(date) ?? '-',
               },
               {
                 accessor: 'tonBySurvey',
@@ -229,25 +231,25 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
           data={[
             {
               dataKey: t('commonTypography.shippingStartDate'),
-              value: formatDate(monitoringStockpile?.bargingStartAt),
+              value: formatDate(monitoringStockpile?.bargingStartAt) ?? '-',
             },
             {
               dataKey: t('commonTypography.shippingFinishDate'),
-              value: formatDate(monitoringStockpile?.bargingFinishAt),
+              value: formatDate(monitoringStockpile?.bargingFinishAt) ?? '-',
             },
             {
               dataKey: t('commonTypography.shippingStartTime'),
-              value: formatDate(
-                monitoringStockpile?.bargingStartAt,
-                'hh:mm:ss A'
-              ),
+              value:
+                formatDate(monitoringStockpile?.bargingStartAt, 'hh:mm:ss A') ??
+                '-',
             },
             {
               dataKey: t('commonTypography.shippingFinishTime'),
-              value: formatDate(
-                monitoringStockpile?.bargingFinishAt,
-                'hh:mm:ss A'
-              ),
+              value:
+                formatDate(
+                  monitoringStockpile?.bargingFinishAt,
+                  'hh:mm:ss A'
+                ) ?? '-',
             },
           ]}
           type="grid"
@@ -291,22 +293,24 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
               {
                 accessor: 'movingStartDate',
                 title: t('commonTypography.movingStartDate'),
-                render: ({ startAt }) => formatDate(startAt),
+                render: ({ startAt }) => formatDate(startAt) ?? '-',
               },
               {
                 accessor: 'movingFinishDate',
                 title: t('commonTypography.movingFinishDate'),
-                render: ({ finishAt }) => formatDate(finishAt),
+                render: ({ finishAt }) => formatDate(finishAt) ?? '-',
               },
               {
                 accessor: 'movingStartTime',
                 title: t('commonTypography.movingStartTime'),
-                render: ({ startAt }) => formatDate(startAt, 'hh:mm:ss A'),
+                render: ({ startAt }) =>
+                  formatDate(startAt, 'hh:mm:ss A') ?? '-',
               },
               {
                 accessor: 'movingFinishTime',
                 title: t('commonTypography.movingFinishTime'),
-                render: ({ finishAt }) => formatDate(finishAt, 'hh:mm:ss A'),
+                render: ({ finishAt }) =>
+                  formatDate(finishAt, 'hh:mm:ss A') ?? '-',
               },
             ],
             horizontalSpacing: 0,
@@ -362,22 +366,23 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
               {
                 accessor: 'reopenStartDate',
                 title: t('commonTypography.reopenStartDate'),
-                render: ({ openAt }) => formatDate(openAt),
+                render: ({ openAt }) => formatDate(openAt) ?? '-',
               },
               {
                 accessor: 'reopenCloseDate',
                 title: t('commonTypography.reopenCloseDate'),
-                render: ({ closeAt }) => formatDate(closeAt),
+                render: ({ closeAt }) => formatDate(closeAt) ?? '-',
               },
               {
                 accessor: 'reopenStartTime',
                 title: t('commonTypography.reopenStartTime'),
-                render: ({ openAt }) => formatDate(openAt, 'hh:mm:ss A'),
+                render: ({ openAt }) => formatDate(openAt, 'hh:mm:ss A') ?? '-',
               },
               {
                 accessor: 'reopenCloseTime',
                 title: t('commonTypography.reopenCloseTime'),
-                render: ({ closeAt }) => formatDate(closeAt, 'hh:mm:ss A'),
+                render: ({ closeAt }) =>
+                  formatDate(closeAt, 'hh:mm:ss A') ?? '-',
               },
             ],
             horizontalSpacing: 0,

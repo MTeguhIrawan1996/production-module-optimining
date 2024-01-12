@@ -162,7 +162,7 @@ export const useReadOneFrontProduction = ({
       itemValue: [
         {
           name: 'date',
-          value: formatDate(frontData?.frontData.date),
+          value: formatDate(frontData?.frontData.date) ?? '-',
         },
       ],
     },

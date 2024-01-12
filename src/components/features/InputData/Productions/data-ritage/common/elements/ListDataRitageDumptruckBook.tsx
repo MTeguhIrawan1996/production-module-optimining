@@ -11,7 +11,7 @@ import {
 } from '@/components/elements';
 
 import { globalDateNative } from '@/utils/constants/Field/native-field';
-import { formatDate, formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 
 import {
   IDumpTruckRitagesData,
@@ -61,7 +61,7 @@ export default function ListDataRitageDumptruckBook<
       clearable: true,
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });
-        const date = formatDate2(value, 'YYYY-MM-DD');
+        const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
     });
@@ -93,7 +93,7 @@ export default function ListDataRitageDumptruckBook<
               accessor: 'date',
               title: t('commonTypography.date'),
               width: 160,
-              render: ({ date }) => formatDate(date),
+              render: ({ date }) => formatDate(date) ?? '-',
             },
             {
               accessor: 'hullNumber',
