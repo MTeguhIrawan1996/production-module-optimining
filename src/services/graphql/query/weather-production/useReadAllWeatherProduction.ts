@@ -38,6 +38,9 @@ export const READ_ALL_WEATHER_PRODUCTION = gql`
           id
           name
         }
+        detailWeatherData {
+          availabilityHourPerDay
+        }
         status {
           id
           name
@@ -52,6 +55,9 @@ export interface IReadAllWeatherProductionData {
   id: string;
   date: string | null;
   location: Pick<ILocationsData, 'id' | 'name'> | null;
+  detailWeatherData: {
+    availabilityHourPerDay: number | null;
+  };
   status: IStatus | null;
 }
 

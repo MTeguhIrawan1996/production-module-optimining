@@ -159,7 +159,8 @@ const WeatherProductionBook = () => {
             {
               accessor: 'availabilityHoursOrDays',
               title: t('commonTypography.availabilityHoursOrDays'),
-              render: () => '-',
+              render: ({ detailWeatherData }) =>
+                detailWeatherData.availabilityHourPerDay ?? '-',
             },
             {
               accessor: 'status',
