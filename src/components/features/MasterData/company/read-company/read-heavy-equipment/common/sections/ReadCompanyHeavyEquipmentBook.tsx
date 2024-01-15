@@ -181,12 +181,6 @@ const ReadCompanyHeavyEquipmentBook = () => {
                     '-',
                 },
                 {
-                  dataKey: t('heavyEquipment.productionYear'),
-                  value:
-                    heavyEquipmentCompanyData?.heavyEquipment?.createdYear ??
-                    '-',
-                },
-                {
                   dataKey: t('commonTypography.startDate'),
                   value:
                     formatDate(heavyEquipmentCompanyData?.startDate ?? '') ??

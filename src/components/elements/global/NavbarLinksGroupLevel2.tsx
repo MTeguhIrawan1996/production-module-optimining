@@ -36,8 +36,10 @@ const NavbarLinksGroupLevel2: React.FC<INavbarLinksGroupLevel2Props> = ({
     .join('/');
 
   React.useEffect(() => {
-    setOpened(initiallyOpened ?? false);
-  }, [initiallyOpened]);
+    const currentOpen =
+      subMenu?.some((val) => val.href === cleanedPathSubMenuLevel2) || false;
+    setOpened(initiallyOpened || currentOpen);
+  }, [initiallyOpened, subMenu, cleanedPathSubMenuLevel2]);
 
   const renderItems = subMenu?.map((item, i) => {
     return (

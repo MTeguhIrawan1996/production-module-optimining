@@ -417,7 +417,7 @@
     "activityPlan": "$t(commonTypography.activityPlan)",
     "element": "$t(commonTypography.element)",
     "shift": "$t(commonTypography.shift)",
-    "factory": "$t(commonTypography.factory)",
+    "factory": "$t(commonTypography.factory)/Vessel",
     "inputData": "$t(commonTypography.inputData)",
     "qualityControlManagement": "$t(commonTypography.qualityControlManagement)",
     "stockpileMonitoring": "$t(commonTypography.stockpileMonitoring)",
