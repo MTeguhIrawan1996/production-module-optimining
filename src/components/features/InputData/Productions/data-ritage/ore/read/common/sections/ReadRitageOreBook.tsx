@@ -311,7 +311,7 @@ const ReadRitageOreBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.date'),
-                  value: formatDate(oreRitage?.date),
+                  value: formatDate(oreRitage?.date) ?? '-',
                 },
               ]}
               type="grid"
@@ -402,11 +402,11 @@ const ReadRitageOreBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.fromAt'),
-                  value: formatDate(oreRitage?.fromAt, 'hh:mm:ss A'),
+                  value: formatDate(oreRitage?.fromAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.arriveAt'),
-                  value: formatDate(oreRitage?.arriveAt, 'hh:mm:ss A'),
+                  value: formatDate(oreRitage?.arriveAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.ritageDuration'),

@@ -32,7 +32,7 @@ import {
   shiftSelect,
 } from '@/utils/constants/Field/sample-house-field';
 import { sampleHouseLabMutationValidation } from '@/utils/form-validation/sample-house-lab/sample-house-lab-mutation-validation';
-import { formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -159,35 +159,35 @@ const UpdateSampleHouseLabPage = () => {
       const sampleEnterLabDate = stringToDate(
         houseSampleAndLab.sampleEnterLabAt ?? null
       );
-      const sampleEnterLabTime = formatDate2(
+      const sampleEnterLabTime = formatDate(
         houseSampleAndLab.sampleEnterLabAt,
         'HH:mm:ss'
       );
       const preparationStartDate = stringToDate(
         houseSampleAndLab.preparationStartAt ?? null
       );
-      const preparationStartTime = formatDate2(
+      const preparationStartTime = formatDate(
         houseSampleAndLab.preparationStartAt,
         'HH:mm:ss'
       );
       const preparationFinishDate = stringToDate(
         houseSampleAndLab.preparationFinishAt ?? null
       );
-      const preparationFinishTime = formatDate2(
+      const preparationFinishTime = formatDate(
         houseSampleAndLab.preparationFinishAt,
         'HH:mm:ss'
       );
       const analysisStartDate = stringToDate(
         houseSampleAndLab.analysisStartAt ?? null
       );
-      const analysisStartTime = formatDate2(
+      const analysisStartTime = formatDate(
         houseSampleAndLab.analysisStartAt,
         'HH:mm:ss'
       );
       const analysisFinishDate = stringToDate(
         houseSampleAndLab.analysisFinishAt ?? null
       );
-      const analysisFinishTime = formatDate2(
+      const analysisFinishTime = formatDate(
         houseSampleAndLab.analysisFinishAt,
         'HH:mm:ss'
       );

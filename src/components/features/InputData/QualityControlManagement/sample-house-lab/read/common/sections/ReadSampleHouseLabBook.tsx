@@ -370,7 +370,7 @@ const ReadSampleHouseLabBook = () => {
                 },
                 {
                   dataKey: t('commonTypography.sampleDate'),
-                  value: formatDate(houseSampleAndLab?.sampleDate),
+                  value: formatDate(houseSampleAndLab?.sampleDate) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.shift'),
@@ -407,14 +407,15 @@ const ReadSampleHouseLabBook = () => {
                 },
                 {
                   dataKey: t('commonTypography.sampleEnterLabAt'),
-                  value: formatDate(houseSampleAndLab?.sampleEnterLabAt),
+                  value: formatDate(houseSampleAndLab?.sampleEnterLabAt) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.sampleEnterLabHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.sampleEnterLabAt,
-                    'hh:mm A'
-                  ),
+                  value:
+                    formatDate(
+                      houseSampleAndLab?.sampleEnterLabAt,
+                      'hh:mm A'
+                    ) ?? '-',
                 },
               ]}
               type="grid"
@@ -479,25 +480,29 @@ const ReadSampleHouseLabBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.preparationStartDate'),
-                  value: formatDate(houseSampleAndLab?.preparationStartAt),
+                  value:
+                    formatDate(houseSampleAndLab?.preparationStartAt) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.preparationStartHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.preparationStartAt,
-                    'hh:mm A'
-                  ),
+                  value:
+                    formatDate(
+                      houseSampleAndLab?.preparationStartAt,
+                      'hh:mm A'
+                    ) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.preparationEndDate'),
-                  value: formatDate(houseSampleAndLab?.preparationFinishAt),
+                  value:
+                    formatDate(houseSampleAndLab?.preparationFinishAt) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.preparationEndHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.preparationFinishAt,
-                    'hh:mm A'
-                  ),
+                  value:
+                    formatDate(
+                      houseSampleAndLab?.preparationFinishAt,
+                      'hh:mm A'
+                    ) ?? '-',
                 },
               ]}
               type="grid"
@@ -520,25 +525,25 @@ const ReadSampleHouseLabBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.analysisStartDate'),
-                  value: formatDate(houseSampleAndLab?.analysisStartAt),
+                  value: formatDate(houseSampleAndLab?.analysisStartAt) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.analysisStartHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.analysisStartAt,
-                    'hh:mm A'
-                  ),
+                  value:
+                    formatDate(houseSampleAndLab?.analysisStartAt, 'hh:mm A') ??
+                    '-',
                 },
                 {
                   dataKey: t('commonTypography.analysisEndDate'),
-                  value: formatDate(houseSampleAndLab?.analysisFinishAt),
+                  value: formatDate(houseSampleAndLab?.analysisFinishAt) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.analysisEndHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.analysisFinishAt,
-                    'hh:mm A'
-                  ),
+                  value:
+                    formatDate(
+                      houseSampleAndLab?.analysisFinishAt,
+                      'hh:mm A'
+                    ) ?? '-',
                 },
               ]}
               type="grid"

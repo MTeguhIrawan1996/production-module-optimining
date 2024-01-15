@@ -29,7 +29,7 @@ import {
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { ritageQuarryMutationValidation } from '@/utils/form-validation/ritage/ritage-quarry-validation';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
-import { formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -115,8 +115,8 @@ const UpdateRitageQuarryBook = () => {
     skip: !router.isReady,
     onCompleted: ({ quarryRitage }) => {
       const ritageDate = stringToDate(quarryRitage.date ?? null);
-      const fromTime = formatDate2(quarryRitage.fromAt, 'HH:mm:ss');
-      const arriveTime = formatDate2(quarryRitage.arriveAt, 'HH:mm:ss');
+      const fromTime = formatDate(quarryRitage.fromAt, 'HH:mm:ss');
+      const arriveTime = formatDate(quarryRitage.arriveAt, 'HH:mm:ss');
       methods.setValue('isRitageProblematic', quarryRitage.isRitageProblematic);
       methods.setValue('date', ritageDate);
       methods.setValue('checkerFromId', quarryRitage.checkerFrom?.id ?? '');

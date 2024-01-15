@@ -94,12 +94,13 @@ export default function ListDetailsRitageDT<
             {
               accessor: 'fromAt',
               title: t('commonTypography.fromAt'),
-              render: ({ fromAt }) => formatDate(fromAt, 'hh:mm:ss A'),
+              render: ({ fromAt }) => formatDate(fromAt, 'hh:mm:ss A') ?? '-',
             },
             {
               accessor: 'arriveAt',
               title: t('commonTypography.arriveAt'),
-              render: ({ arriveAt }) => formatDate(arriveAt, 'hh:mm:ss A'),
+              render: ({ arriveAt }) =>
+                formatDate(arriveAt, 'hh:mm:ss A') ?? '-',
             },
             {
               accessor: 'ritageDuration',

@@ -20,7 +20,7 @@ import MantineDataTable from '@/components/elements/dataTable/MantineDataTable';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 import GlobalBadgeStatus from '@/components/elements/global/GlobalBadgeStatus';
 
-import { formatDate, formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { hourFromat } from '@/utils/helper/hourFromat';
 
 import { CommonProps } from '@/types/global';
@@ -63,7 +63,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
         if ('close_dome' in item) {
           return {
             ...item,
-            date: formatDate2(item.date, 'YYYY-MM-DD'),
+            date: formatDate(item.date, 'YYYY-MM-DD'),
             is_ritage_problematic: item.is_ritage_problematic
               ? 'TRUE'
               : 'FALSE',
@@ -72,7 +72,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
         }
         return {
           ...item,
-          date: formatDate2(item.date, 'YYYY-MM-DD'),
+          date: formatDate(item.date, 'YYYY-MM-DD'),
           is_ritage_problematic: item.is_ritage_problematic ? 'TRUE' : 'FALSE',
         };
       });
@@ -184,7 +184,8 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
                   return hourFromat(data, 'hh:mm:ss A');
                 }
                 if (accesor === 'date') {
-                  return formatDate(data);
+                  const date = formatDate(data);
+                  return date ?? '-';
                 }
                 if (accesor === 'close_dome') {
                   return (
@@ -253,7 +254,8 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
                 );
               }
               if (accesor === 'date') {
-                return formatDate(rowData);
+                const date = formatDate(rowData);
+                return date ?? '-';
               }
               if (accesor === 'from_time') {
                 return hourFromat(rowData, 'hh:mm:ss A');

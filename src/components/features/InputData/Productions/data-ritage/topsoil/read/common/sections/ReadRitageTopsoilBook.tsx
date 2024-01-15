@@ -296,7 +296,7 @@ const ReadRitageTopsoilBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.date'),
-                  value: formatDate(topsoilRitage?.date),
+                  value: formatDate(topsoilRitage?.date) ?? '-',
                 },
               ]}
               type="grid"
@@ -383,11 +383,12 @@ const ReadRitageTopsoilBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.fromAt'),
-                  value: formatDate(topsoilRitage?.fromAt, 'hh:mm:ss A'),
+                  value: formatDate(topsoilRitage?.fromAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.arriveAt'),
-                  value: formatDate(topsoilRitage?.arriveAt, 'hh:mm:ss A'),
+                  value:
+                    formatDate(topsoilRitage?.arriveAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.ritageDuration'),

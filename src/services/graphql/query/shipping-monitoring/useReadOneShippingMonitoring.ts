@@ -121,25 +121,30 @@ export const useReadOneShippingMonitoring = ({
       itemValue: [
         {
           name: 'openPalka',
-          value: formatDate(monitoringBarging?.monitoringBarging.palkaOpenAt),
+          value:
+            formatDate(monitoringBarging?.monitoringBarging.palkaOpenAt) ?? '-',
         },
         {
           name: 'closePalka',
-          value: formatDate(monitoringBarging?.monitoringBarging.palkaCloseAt),
+          value:
+            formatDate(monitoringBarging?.monitoringBarging.palkaCloseAt) ??
+            '-',
         },
         {
           name: 'openPalkaHour',
-          value: formatDate(
-            monitoringBarging?.monitoringBarging.palkaOpenAt,
-            'hh:mm:ss A'
-          ),
+          value:
+            formatDate(
+              monitoringBarging?.monitoringBarging.palkaOpenAt,
+              'hh:mm:ss A'
+            ) ?? '-',
         },
         {
           name: 'closePalkaHour',
-          value: formatDate(
-            monitoringBarging?.monitoringBarging.palkaCloseAt,
-            'hh:mm:ss A'
-          ),
+          value:
+            formatDate(
+              monitoringBarging?.monitoringBarging.palkaCloseAt,
+              'hh:mm:ss A'
+            ) ?? '-',
         },
       ],
     },

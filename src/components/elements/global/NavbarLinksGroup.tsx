@@ -32,12 +32,16 @@ const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
   const router = useRouter();
   const { t } = useTranslation('default');
   const { classes, cx } = useDashboardLayoutStyle();
-  const [opened, setOpened] = React.useState(initiallyOpened || false);
+  const [opened, setOpened] = React.useState(false);
   const itemLabel = React.useMemo(() => {
     const pathname = router.pathname.split('/');
     return pathname;
   }, [router]);
   const cleanedPath = router.pathname.split('/').slice(0, 3).join('/');
+
+  React.useEffect(() => {
+    setOpened(initiallyOpened ?? false);
+  }, [initiallyOpened]);
 
   const linksItem = React.useCallback(
     (item: IMenuItem, i) => {

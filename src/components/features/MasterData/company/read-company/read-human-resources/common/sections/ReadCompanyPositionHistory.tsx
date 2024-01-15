@@ -49,13 +49,13 @@ const ReadCompanyPositionHistoryBook: React.FC<IProps> = ({ employe }) => {
             {
               accessor: 'startdate',
               title: t('commonTypography.dateOfOffice'),
-              render: ({ startDate }) => formatDate(startDate),
+              render: ({ startDate }) => formatDate(startDate) ?? '-',
               width: '30%',
             },
             {
               accessor: 'endDate',
               title: t('commonTypography.dateComplateOffice'),
-              render: ({ endDate }) => formatDate(endDate),
+              render: ({ endDate }) => formatDate(endDate) ?? '-',
               width: '30%',
             },
           ],
