@@ -39,6 +39,9 @@ export const READ_ALL_WEATHER_PRODUCTION = gql`
           name
         }
         detailWeatherData {
+          slipperyTotal
+          rainTotal
+          loseTotal
           availabilityHourPerDay
         }
         status {
@@ -56,6 +59,9 @@ export interface IReadAllWeatherProductionData {
   date: string | null;
   location: Pick<ILocationsData, 'id' | 'name'> | null;
   detailWeatherData: {
+    slipperyTotal: number | null;
+    rainTotal: number | null;
+    loseTotal: number | null;
     availabilityHourPerDay: number | null;
   };
   status: IStatus | null;
