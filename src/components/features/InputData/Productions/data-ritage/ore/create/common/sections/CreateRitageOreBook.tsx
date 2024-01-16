@@ -323,14 +323,22 @@ const CreateRitageOreBook = () => {
       colSpan: 6,
       name: 'stockpileId',
       label: 'stockpileName',
-      withAsterisk: false,
+      withAsterisk: true,
+      onChange: (value) => {
+        methods.setValue('stockpileId', value ?? '');
+        methods.setValue('domeId', '');
+        methods.trigger('stockpileId');
+        methods.trigger('domeId');
+      },
     });
+    const newStockpileId = stockpileId || null;
     const domeItem = domeNameSelect({
       colSpan: 6,
       name: 'domeId',
       label: 'domeName',
       stockpileId: stockpileId,
-      withAsterisk: false,
+      withAsterisk: true,
+      disabled: !newStockpileId,
     });
     const bulkSamplingDensityItem = globalNumberInput({
       colSpan: 6,

@@ -98,6 +98,7 @@ const UpdateRitageOreBook = () => {
       companyHeavyEquipmentChangeId: '',
     },
     mode: 'onBlur',
+    shouldFocusError: true,
   });
   const fromPitId = methods.watch('fromPitId');
   const stockpileId = methods.watch('stockpileId');
@@ -395,20 +396,28 @@ const UpdateRitageOreBook = () => {
       label: 'toLevel',
       withAsterisk: false,
     });
+    const newStockpileId = stockpileId || null;
     const stockpileItem = stockpileNameSelect({
       colSpan: 6,
       name: 'stockpileId',
       label: 'stockpileName',
-      withAsterisk: false,
+      withAsterisk: true,
       defaultValue: oreRitage?.stockpile?.id,
       labelValue: oreRitage?.stockpile?.name,
+      onChange: (value) => {
+        methods.setValue('stockpileId', value ?? '');
+        methods.setValue('domeId', '');
+        methods.trigger('stockpileId');
+        methods.trigger('domeId');
+      },
     });
     const domeItem = domeNameSelect({
       colSpan: 6,
       name: 'domeId',
       label: 'domeName',
       stockpileId: stockpileId,
-      withAsterisk: false,
+      withAsterisk: true,
+      disabled: !newStockpileId,
       defaultValue: oreRitage?.dome?.id,
       labelValue: oreRitage?.dome?.name,
     });
@@ -647,7 +656,12 @@ const UpdateRitageOreBook = () => {
         submitButton={{
           label: t('commonTypography.save'),
           type: 'button',
-          onClick: () => setIsOpenConfirmation((prev) => !prev),
+          onClick: async () => {
+            const output = await methods.trigger(undefined, {
+              shouldFocus: true,
+            });
+            if (output) setIsOpenConfirmation((prev) => !prev);
+          },
         }}
         backButton={{
           onClick: () =>
