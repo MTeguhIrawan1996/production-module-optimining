@@ -108,7 +108,7 @@ const UpdateShippingMonitoringBook = () => {
         const setValue = (
           key: IShippingMonitoringNameProps,
           value: IShippingMonitoringValueProps
-        ) => methods.setValue(key, value ?? '');
+        ) => methods.setValue(key, value);
 
         dateFields.forEach((field) => {
           const date = stringToDate(monitoringBarging[field] ?? null);
@@ -383,7 +383,12 @@ const UpdateShippingMonitoringBook = () => {
         submitButton={{
           label: t('commonTypography.save'),
           type: 'button',
-          onClick: () => setIsOpenConfirmation((prev) => !prev),
+          onClick: async () => {
+            const output = await methods.trigger(undefined, {
+              shouldFocus: true,
+            });
+            if (output) setIsOpenConfirmation((prev) => !prev);
+          },
         }}
         backButton={{
           onClick: () =>

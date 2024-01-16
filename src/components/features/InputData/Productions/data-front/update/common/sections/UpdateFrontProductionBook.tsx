@@ -119,7 +119,7 @@ const UpdateFrontProductionBook = () => {
       const setValue = (
         key: IFrontProductionNameProps,
         value: IFrontProductionValueProps
-      ) => methods.setValue(key, value ?? '');
+      ) => methods.setValue(key, value);
       dateFields.forEach((field) => {
         const date = stringToDate(frontData[field] ?? null);
         setValue(field, date ?? null);
