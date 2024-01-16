@@ -73,7 +73,7 @@ const CreateCompanyBook = () => {
       permissionTypeDate: undefined,
       permissionTypeDocument: [],
     },
-    mode: 'onBlur',
+    mode: 'all',
   });
   const permissionTypeId = methods.watch('permissionTypeId');
   const provinceId = methods.watch('provinceId');
