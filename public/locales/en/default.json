@@ -702,7 +702,7 @@
     "createSampleHouseLab": "$t(commonTypography.create) $t(sampleHouseLab.sampleHouseLabTitle)",
     "readSampleHouseLab": "$t(commonTypography.detail) $t(commonTypography.sampleHouseLab)",
     "updateSampleHouseLab": "$t(commonTypography.edit) $t(commonTypography.sampleHouseLab)",
-    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.laboratoriumName), $t(commonTypography.sampleDate), $t(commonTypography.shift), $t(commonTypography.sampleNumber), $t(commonTypography.sampleName) dan $t(commonTypography.sampleType)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.shift), $t(commonTypography.sampleNumber) dan $t(commonTypography.sampleType)",
     "successDeleteMessage": "Data $t(commonTypography.sampleHouseLab) berhasil dihapus",
     "formSampleHouseLab": "$t(commonTypography.form) $t(sampleHouseLab.sampleHouseLabTitle)",
     "formUpdateSampleHouseLab": "$t(commonTypography.form) $t(commonTypography.edit) $t(sampleHouseLab.sampleHouseLabTitle)",
