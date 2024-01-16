@@ -139,7 +139,7 @@ const WeatherProductionBook = () => {
             {
               accessor: 'location',
               title: t('commonTypography.location'),
-              render: ({ location }) => location?.name,
+              render: ({ location }) => location?.name ?? '-',
             },
             {
               accessor: 'hourAmountRain',
