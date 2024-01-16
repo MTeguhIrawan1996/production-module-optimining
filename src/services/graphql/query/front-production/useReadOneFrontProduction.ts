@@ -25,6 +25,7 @@ export const READ_ONE_FRONT_PRODUCTION = gql`
         id
         hullNumber
         heavyEquipment {
+          id
           class {
             id
             name
