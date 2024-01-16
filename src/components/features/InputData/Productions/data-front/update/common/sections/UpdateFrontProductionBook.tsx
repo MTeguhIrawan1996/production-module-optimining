@@ -119,7 +119,7 @@ const UpdateFrontProductionBook = () => {
       const setValue = (
         key: IFrontProductionNameProps,
         value: IFrontProductionValueProps
-      ) => methods.setValue(key, value ?? '');
+      ) => methods.setValue(key, value);
       dateFields.forEach((field) => {
         const date = stringToDate(frontData[field] ?? null);
         setValue(field, date ?? null);
@@ -337,7 +337,12 @@ const UpdateFrontProductionBook = () => {
         submitButton={{
           label: t('commonTypography.save'),
           type: 'button',
-          onClick: () => setIsOpenConfirmation((prev) => !prev),
+          onClick: async () => {
+            const output = await methods.trigger(undefined, {
+              shouldFocus: true,
+            });
+            if (output) setIsOpenConfirmation((prev) => !prev);
+          },
         }}
         backButton={{
           onClick: () =>

@@ -129,6 +129,8 @@ const UpdateStockpileMonitoringBook = () => {
     mode: 'onBlur',
   });
   const domeId = methods.watch('domeId');
+  const stockpileId = methods.watch('stockpileId');
+
   const {
     fields: sampleFields,
     append,
@@ -626,20 +628,24 @@ const UpdateStockpileMonitoringBook = () => {
   const sampleGroupItem = sampleFields.map(sampleGroup);
 
   const fieldItemStepOne = React.useMemo(() => {
+    const newStockpileId = stockpileId || null;
     const stockpileNameItem = stockpileNameSelect({
       colSpan: 6,
       onChange: (value) => {
         methods.setValue('stockpileId', value ?? '');
         methods.setValue('domeId', '');
         methods.setValue('handbookId', '');
+        methods.trigger('stockpileId');
+        methods.trigger('domeId');
       },
     });
     const domeNameItem = domeNameSelect({
       colSpan: 6,
+      disabled: !newStockpileId,
       onChange: (value) => {
-        methods.clearErrors('domeId');
         methods.setValue('domeId', value ?? '');
         methods.setValue('handbookId', '');
+        methods.trigger('domeId');
       },
     });
     const domeIdItem = globalText({
@@ -803,6 +809,7 @@ const UpdateStockpileMonitoringBook = () => {
     movingGroupItem,
     reopenGroupItem,
     serverPhoto,
+    stockpileId,
   ]);
 
   /* #endregion  /**======== Field =========== */
@@ -813,6 +820,7 @@ const UpdateStockpileMonitoringBook = () => {
       'closeDate',
       'closeTime',
       'domeId',
+      'stockpileId',
       'handbookId',
       'desc',
       'openDate',
@@ -932,7 +940,12 @@ const UpdateStockpileMonitoringBook = () => {
             submitButton: {
               label: t('commonTypography.save'),
               type: 'button',
-              onClick: () => setIsOpenConfirmation((prev) => !prev),
+              onClick: async () => {
+                const output = await methods.trigger(undefined, {
+                  shouldFocus: true,
+                });
+                if (output) setIsOpenConfirmation((prev) => !prev);
+              },
             },
           },
         ]}

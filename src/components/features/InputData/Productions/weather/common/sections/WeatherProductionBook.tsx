@@ -139,22 +139,25 @@ const WeatherProductionBook = () => {
             {
               accessor: 'location',
               title: t('commonTypography.location'),
-              render: ({ location }) => location?.name,
+              render: ({ location }) => location?.name ?? '-',
             },
             {
               accessor: 'hourAmountRain',
               title: t('commonTypography.hourAmountRain'),
-              render: () => '-',
+              render: ({ detailWeatherData }) =>
+                detailWeatherData.rainTotal ?? '-',
             },
             {
               accessor: 'hourAmountSlippery',
               title: t('commonTypography.hourAmountSlippery'),
-              render: () => '-',
+              render: ({ detailWeatherData }) =>
+                detailWeatherData.slipperyTotal ?? '-',
             },
             {
               accessor: 'loseTime',
               title: t('commonTypography.loseTime'),
-              render: () => '-',
+              render: ({ detailWeatherData }) =>
+                detailWeatherData.loseTotal ?? '-',
             },
             {
               accessor: 'availabilityHoursOrDays',

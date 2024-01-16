@@ -62,7 +62,9 @@ const ReadFrontProductionBook = () => {
           message: message[data.validateFrontData.status.id],
           icon: <IconCheck />,
         });
-        router.push('/input-data/production/data-front');
+        router.push(
+          `/input-data/production/data-front?page=1&segment=${frontData?.type}`
+        );
       },
       onError: (error) => {
         if (error.graphQLErrors) {
@@ -95,7 +97,9 @@ const ReadFrontProductionBook = () => {
           message: message[data.determineFrontData.status.id],
           icon: <IconCheck />,
         });
-        router.push('/input-data/production/data-front');
+        router.push(
+          `/input-data/production/data-front?page=1&segment=${frontData?.type}`
+        );
       },
       onError: (error) => {
         if (error.graphQLErrors) {
@@ -233,7 +237,10 @@ const ReadFrontProductionBook = () => {
       }}
       withBorder
       enebleBackBottomOuter={{
-        onClick: () => router.push('/input-data/production/data-front'),
+        onClick: () =>
+          router.push(
+            `/input-data/production/data-front?page=1&segment=${frontData?.type}`
+          ),
       }}
       shadow="xs"
       isLoading={frontDataLoading}
