@@ -1,7 +1,6 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { DataTableColumn } from 'mantine-datatable';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -17,14 +16,8 @@ import {
 } from '@/components/elements';
 
 import { useDeleteSampleHouseLab } from '@/services/graphql/mutation/sample-house-lab/useDeleteSampleHouseLab';
-import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
-import {
-  IHouseSampleAndLabsData,
-  useReadAllSampleHouseLab,
-} from '@/services/graphql/query/sample-house-lab/useReadAllSampleHouseLab';
+import { useReadAllSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadAllSampleHouseLab';
 import { formatDate } from '@/utils/helper/dateFormat';
-
-import { IElementsData } from '@/types/global';
 
 const SampleHouseLabBook = () => {
   const router = useRouter();
@@ -38,11 +31,6 @@ const SampleHouseLabBook = () => {
     React.useState<boolean>(false);
 
   /* #   /**=========== Query =========== */
-  const { elementsData } = useReadAllElementMaster({
-    variables: {
-      limit: null,
-    },
-  });
 
   const {
     houseSampleAndLabsData,
@@ -98,44 +86,6 @@ const SampleHouseLabBook = () => {
     });
   };
 
-  const renderOtherColumnCallback = React.useCallback(
-    (element: IElementsData) => {
-      const column: DataTableColumn<IHouseSampleAndLabsData> = {
-        accessor: `${element.name}${t('commonTypography.estimationGC')}`,
-        title: `${element.name} ${t('commonTypography.estimationGC')}`,
-        render: ({ gradeControlElements }) => {
-          const value = gradeControlElements?.find(
-            (val) => val.element?.id === element.id
-          );
-          return value?.value ?? '-';
-        },
-      };
-      return column;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-  const renderOtherColumn = elementsData?.map(renderOtherColumnCallback);
-
-  const renderOtherPrcentageLabColumnCallback = React.useCallback(
-    (element: IElementsData) => {
-      const column: DataTableColumn<IHouseSampleAndLabsData> = {
-        accessor: `${element.name}${t('commonTypography.percentageLab')}`,
-        title: `${element.name} ${t('commonTypography.percentageLab')}`,
-        render: ({ elements }) => {
-          const value = elements?.find((val) => val.element?.id === element.id);
-          return value?.value ?? '-';
-        },
-      };
-      return column;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-  const renderOtherColumnPercentageLab = elementsData?.map(
-    renderOtherPrcentageLabColumnCallback
-  );
-
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
     return (
@@ -154,10 +104,6 @@ const SampleHouseLabBook = () => {
               width: 60,
             },
             {
-              accessor: 'laboratoriumName',
-              title: t('commonTypography.laboratoriumName'),
-            },
-            {
               accessor: 'sampleDate',
               title: t('commonTypography.sampleDate'),
               render: ({ sampleDate }) => formatDate(sampleDate) ?? '-',
@@ -173,35 +119,9 @@ const SampleHouseLabBook = () => {
               title: t('commonTypography.sampleNumber'),
             },
             {
-              accessor: 'sampleName',
-              title: t('commonTypography.sampleName'),
-            },
-            {
               accessor: 'sampleType',
               title: t('commonTypography.sampleType'),
               render: ({ sampleType }) => sampleType?.name,
-            },
-            {
-              accessor: 'samplerName',
-              width: 160,
-              title: t('commonTypography.samplerName'),
-              render: ({ sampler }) => sampler?.humanResource?.name,
-            },
-            {
-              accessor: 'gcName',
-              title: t('commonTypography.gcName'),
-              render: ({ gradeControl }) =>
-                gradeControl?.humanResource?.name ?? '-',
-            },
-            {
-              accessor: 'location',
-              width: 160,
-              title: t('commonTypography.location'),
-              render: (value) => {
-                return value.locationName
-                  ? value.locationName ?? '-'
-                  : value.location?.name ?? '-';
-              },
             },
             {
               accessor: 'sampleEnterLabAt',
@@ -209,8 +129,6 @@ const SampleHouseLabBook = () => {
               render: ({ sampleEnterLabAt }) =>
                 formatDate(sampleEnterLabAt) ?? '-',
             },
-            ...(renderOtherColumn ?? []),
-            ...(renderOtherColumnPercentageLab ?? []),
             {
               accessor: 'status',
               title: t('commonTypography.status'),
@@ -289,12 +207,7 @@ const SampleHouseLabBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    houseSampleAndLabsData,
-    renderOtherColumn,
-    renderOtherColumnPercentageLab,
-    houseSampleAndLabsDataLoading,
-  ]);
+  }, [houseSampleAndLabsData, houseSampleAndLabsDataLoading]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (

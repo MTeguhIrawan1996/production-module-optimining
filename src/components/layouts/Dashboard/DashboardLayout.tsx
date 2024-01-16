@@ -54,9 +54,9 @@ const DashboardLayout = ({ children }: LayoutProps) => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      if (sessionData && sessionData.user.permission) {
+      if (sessionData && sessionData.user?.permission) {
         const permissionSession = await decodeFc<string[]>(
-          sessionData.user.permission
+          sessionData.user?.permission
         );
         setPermissions(permissionSession);
         const filtered = filterMenuByPermission(
