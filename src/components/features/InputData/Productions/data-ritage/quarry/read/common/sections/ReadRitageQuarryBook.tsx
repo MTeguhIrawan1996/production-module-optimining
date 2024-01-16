@@ -296,7 +296,7 @@ const ReadRitageQuarryBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.date'),
-                  value: formatDate(quarryRitage?.date),
+                  value: formatDate(quarryRitage?.date) ?? '-',
                 },
               ]}
               type="grid"
@@ -383,11 +383,12 @@ const ReadRitageQuarryBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.fromAt'),
-                  value: formatDate(quarryRitage?.fromAt, 'hh:mm:ss A'),
+                  value: formatDate(quarryRitage?.fromAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.arriveAt'),
-                  value: formatDate(quarryRitage?.arriveAt, 'hh:mm:ss A'),
+                  value:
+                    formatDate(quarryRitage?.arriveAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.ritageDuration'),

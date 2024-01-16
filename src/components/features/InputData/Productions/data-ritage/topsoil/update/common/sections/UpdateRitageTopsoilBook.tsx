@@ -29,7 +29,7 @@ import {
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { ritageTopsoilMutationValidation } from '@/utils/form-validation/ritage/ritage-topsoil-validation';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
-import { formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -115,8 +115,8 @@ const UpdateRitageTopsoilBook = () => {
     skip: !router.isReady,
     onCompleted: ({ topsoilRitage }) => {
       const ritageDate = stringToDate(topsoilRitage.date ?? null);
-      const fromTime = formatDate2(topsoilRitage.fromAt, 'HH:mm:ss');
-      const arriveTime = formatDate2(topsoilRitage.arriveAt, 'HH:mm:ss');
+      const fromTime = formatDate(topsoilRitage.fromAt, 'HH:mm:ss');
+      const arriveTime = formatDate(topsoilRitage.arriveAt, 'HH:mm:ss');
       methods.setValue(
         'isRitageProblematic',
         topsoilRitage.isRitageProblematic

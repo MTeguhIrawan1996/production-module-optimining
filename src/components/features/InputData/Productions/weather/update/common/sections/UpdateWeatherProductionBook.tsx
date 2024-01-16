@@ -27,7 +27,7 @@ import {
   weatherConditionSelect,
 } from '@/utils/constants/Field/global-field';
 import { weatherProductionMutationValidation } from '@/utils/form-validation/weather-production/weather-production-validation';
-import { formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
@@ -84,8 +84,8 @@ const UpdateWeatherProductionBook = () => {
       const date = stringToDate(weatherData.date ?? null);
       const weatherDataConditions = weatherData.weatherDataConditions.map(
         (val) => {
-          const startTime = formatDate2(val.startAt, 'HH:mm:ss');
-          const finishTime = formatDate2(val.finishAt, 'HH:mm:ss');
+          const startTime = formatDate(val.startAt, 'HH:mm:ss');
+          const finishTime = formatDate(val.finishAt, 'HH:mm:ss');
           return {
             conditionId: val.condition?.id ?? '',
             startTime: startTime ?? '',
@@ -168,6 +168,8 @@ const UpdateWeatherProductionBook = () => {
         colSpan: 6,
         withAsterisk: false,
         key: `weatherDataConditions.${index}.rainfall.${val.id}`,
+        formatter: (value) =>
+          !Number.isNaN(parseFloat(value)) ? `${value} mm` : '',
       });
       const weatherConditionItem = weatherConditionSelect({
         name: `weatherDataConditions.${index}.conditionId`,

@@ -134,7 +134,7 @@ const ReadHeavyEquipmentFormulaBook: React.FC<
                       {t(`commonTypography.rumusNotFound`)}
                     </Text>
                   )}
-                  <Divider mt={4} size="sm" />
+                  <Divider my={4} size="sm" />
                   {newArrayBottomFormula ? (
                     <Group spacing="xs" align="flex-end" noWrap>
                       {newArrayBottomFormula?.map((val, i) => (

@@ -277,7 +277,7 @@ const ReadWeatherProductionBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.date'),
-                  value: formatDate(weatherData?.date),
+                  value: formatDate(weatherData?.date) ?? '-',
                 },
               ]}
               type="grid"
@@ -362,13 +362,14 @@ const ReadWeatherProductionBook = () => {
                   {
                     accessor: 'startTime',
                     title: t('commonTypography.startTime'),
-                    render: ({ startAt }) => formatDate(startAt, 'hh:mm:ss A'),
+                    render: ({ startAt }) =>
+                      formatDate(startAt, 'hh:mm:ss A') ?? '-',
                   },
                   {
                     accessor: 'endTime',
                     title: t('commonTypography.endTime'),
                     render: ({ finishAt }) =>
-                      formatDate(finishAt, 'hh:mm:ss A'),
+                      formatDate(finishAt, 'hh:mm:ss A') ?? '-',
                   },
                   {
                     accessor: 'rainfall',

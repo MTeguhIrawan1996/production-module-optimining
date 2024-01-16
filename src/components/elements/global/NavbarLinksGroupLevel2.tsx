@@ -29,11 +29,17 @@ const NavbarLinksGroupLevel2: React.FC<INavbarLinksGroupLevel2Props> = ({
   const router = useRouter();
   const { t } = useTranslation('default');
   const { classes, cx } = useDashboardLayoutStyle();
-  const [opened, setOpened] = React.useState(initiallyOpened || false);
+  const [opened, setOpened] = React.useState(false);
   const cleanedPathSubMenuLevel2 = router.pathname
     .split('/')
     .slice(0, 4)
     .join('/');
+
+  React.useEffect(() => {
+    const currentOpen =
+      subMenu?.some((val) => val.href === cleanedPathSubMenuLevel2) || false;
+    setOpened(initiallyOpened || currentOpen);
+  }, [initiallyOpened, subMenu, cleanedPathSubMenuLevel2]);
 
   const renderItems = subMenu?.map((item, i) => {
     return (

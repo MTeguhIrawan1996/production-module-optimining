@@ -314,7 +314,7 @@ const ReadRitageMovingBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.date'),
-                  value: formatDate(movingRitage?.date),
+                  value: formatDate(movingRitage?.date) ?? '-',
                 },
               ]}
               type="grid"
@@ -405,11 +405,12 @@ const ReadRitageMovingBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.fromAt'),
-                  value: formatDate(movingRitage?.fromAt, 'hh:mm:ss A'),
+                  value: formatDate(movingRitage?.fromAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.arriveAt'),
-                  value: formatDate(movingRitage?.arriveAt, 'hh:mm:ss A'),
+                  value:
+                    formatDate(movingRitage?.arriveAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.ritageDuration'),

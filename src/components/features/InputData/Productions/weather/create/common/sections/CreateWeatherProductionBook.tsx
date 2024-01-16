@@ -133,6 +133,8 @@ const CreateWeatherProductionBook = () => {
         colSpan: 6,
         withAsterisk: false,
         key: `weatherDataConditions.${index}.rainfall.${val.id}`,
+        formatter: (value) =>
+          !Number.isNaN(parseFloat(value)) ? `${value} mm` : '',
       });
       const weatherConditionItem = weatherConditionSelect({
         name: `weatherDataConditions.${index}.conditionId`,

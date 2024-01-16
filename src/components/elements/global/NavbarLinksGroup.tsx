@@ -33,22 +33,32 @@ const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
   const { t } = useTranslation('default');
   const { classes, cx } = useDashboardLayoutStyle();
   const [opened, setOpened] = React.useState(initiallyOpened || false);
-  const itemLabel = React.useMemo(() => {
-    const pathname = router.pathname.split('/');
-    return pathname;
-  }, [router]);
   const cleanedPath = router.pathname.split('/').slice(0, 3).join('/');
+  const cleanedPathSub = router.pathname.split('/').slice(0, 4).join('/');
+
+  React.useEffect(() => {
+    if (subMenu) {
+      const flattenedArray = subMenu.flatMap((item) =>
+        item.subMenu ? item.subMenu : []
+      );
+      const isOpen = subMenu.some((val) => {
+        if (val.subMenu && val.subMenu?.length > 0) {
+          const isOpenByFlatArray =
+            flattenedArray?.some((val) => val.href === cleanedPathSub) ?? false;
+          return isOpenByFlatArray;
+        }
+        return val.href === cleanedPath ?? false;
+      });
+      setOpened(isOpen);
+    }
+  }, [cleanedPath, cleanedPathSub, subMenu]);
 
   const linksItem = React.useCallback(
     (item: IMenuItem, i) => {
-      const initialOpen = itemLabel.some(
-        (items) =>
-          items.toLowerCase().replace(/-/g, '') === item.label.toLowerCase()
-      );
       return item.subMenu ? (
         <NavbarLinksGroupLevel2
           key={i}
-          initiallyOpened={initialOpen}
+          initiallyOpened={item.href === cleanedPath}
           {...item}
         />
       ) : (

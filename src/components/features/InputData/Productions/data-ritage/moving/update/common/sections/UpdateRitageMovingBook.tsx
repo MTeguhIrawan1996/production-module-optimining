@@ -26,7 +26,7 @@ import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { domeNameSelect } from '@/utils/constants/Field/stockpile-field';
 import { ritageMovingMutationValidation } from '@/utils/form-validation/ritage/ritage-moving-validation';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
-import { formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -106,8 +106,8 @@ const UpdateRitageMovingBook = () => {
     skip: !router.isReady,
     onCompleted: ({ movingRitage }) => {
       const ritageDate = stringToDate(movingRitage.date ?? null);
-      const fromTime = formatDate2(movingRitage.fromAt, 'HH:mm:ss');
-      const arriveTime = formatDate2(movingRitage.arriveAt, 'HH:mm:ss');
+      const fromTime = formatDate(movingRitage.fromAt, 'HH:mm:ss');
+      const arriveTime = formatDate(movingRitage.arriveAt, 'HH:mm:ss');
       methods.setValue('isRitageProblematic', movingRitage.isRitageProblematic);
       methods.setValue('date', ritageDate);
       methods.setValue('checkerFromId', movingRitage.checkerFrom?.id ?? '');

@@ -39,7 +39,7 @@ import {
   stockpileNameSelect,
 } from '@/utils/constants/Field/stockpile-field';
 import { stockpileMonitoringMutationValidation } from '@/utils/form-validation/stockpile-monitoring/stockpile-monitoring-validation';
-import { formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import {
   errorBadRequestField,
@@ -221,9 +221,9 @@ const UpdateStockpileMonitoringBook = () => {
         });
         const movings = monitoringStockpile.movings?.map((val) => {
           const startDate = stringToDate(val.startAt ?? null);
-          const startTime = formatDate2(val.startAt, 'HH:mm:ss');
+          const startTime = formatDate(val.startAt, 'HH:mm:ss');
           const finishDate = stringToDate(val.finishAt ?? null);
-          const finishTime = formatDate2(val.finishAt, 'HH:mm:ss');
+          const finishTime = formatDate(val.finishAt, 'HH:mm:ss');
           return {
             startDate: startDate,
             startTime: startTime ?? '',
@@ -233,9 +233,9 @@ const UpdateStockpileMonitoringBook = () => {
         });
         const reopens = monitoringStockpile.reopens?.map((val) => {
           const openDate = stringToDate(val.openAt ?? null);
-          const openTime = formatDate2(val.openAt, 'HH:mm:ss');
+          const openTime = formatDate(val.openAt, 'HH:mm:ss');
           const closeDate = stringToDate(val.closeAt ?? null);
-          const closeTime = formatDate2(val.closeAt, 'HH:mm:ss');
+          const closeTime = formatDate(val.closeAt, 'HH:mm:ss');
           return {
             openDate: openDate,
             openTime: openTime ?? '',
@@ -268,19 +268,19 @@ const UpdateStockpileMonitoringBook = () => {
         );
         const openDate = stringToDate(monitoringStockpile.openAt ?? null);
         const closeDate = stringToDate(monitoringStockpile.closeAt ?? null);
-        const openTime = formatDate2(monitoringStockpile.openAt, 'HH:mm:ss');
-        const closeTime = formatDate2(monitoringStockpile.closeAt, 'HH:mm:ss');
+        const openTime = formatDate(monitoringStockpile.openAt, 'HH:mm:ss');
+        const closeTime = formatDate(monitoringStockpile.closeAt, 'HH:mm:ss');
         const bargingStartDate = stringToDate(
           monitoringStockpile.bargingStartAt ?? null
         );
         const bargingFinishDate = stringToDate(
           monitoringStockpile.bargingFinishAt ?? null
         );
-        const bargingStartTime = formatDate2(
+        const bargingStartTime = formatDate(
           monitoringStockpile.bargingStartAt,
           'HH:mm:ss'
         );
-        const bargingFinishTime = formatDate2(
+        const bargingFinishTime = formatDate(
           monitoringStockpile.bargingFinishAt,
           'HH:mm:ss'
         );

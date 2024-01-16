@@ -198,13 +198,13 @@ const ReadHeavyEquipmentProductionBook = () => {
                         dataKey: `${t(
                           'commonTypography.startHour'
                         )} ${label} ${numberOfLabel}`,
-                        value: formatDate(obj.startAt, 'hh:mm:ss A'),
+                        value: formatDate(obj.startAt, 'hh:mm:ss A') ?? '-',
                       },
                       {
                         dataKey: `${t(
                           'commonTypography.endHour'
                         )} ${label}  ${numberOfLabel}`,
-                        value: formatDate(obj.finishAt, 'hh:mm:ss A'),
+                        value: formatDate(obj.finishAt, 'hh:mm:ss A') ?? '-',
                       },
                     ]}
                     type="grid"
@@ -357,7 +357,7 @@ const ReadHeavyEquipmentProductionBook = () => {
                 },
                 {
                   dataKey: t('commonTypography.date'),
-                  value: formatDate(heavyEquipmentData?.date),
+                  value: formatDate(heavyEquipmentData?.date) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.heavyEquipmentCode'),
@@ -398,17 +398,17 @@ const ReadHeavyEquipmentProductionBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.workingHourStart'),
-                  value: formatDate(
-                    heavyEquipmentData?.workStartAt,
-                    'hh:mm:ss A'
-                  ),
+                  value:
+                    formatDate(heavyEquipmentData?.workStartAt, 'hh:mm:ss A') ??
+                    '-',
                 },
                 {
                   dataKey: t('commonTypography.workingHourFinish'),
-                  value: formatDate(
-                    heavyEquipmentData?.workFinishAt,
-                    'hh:mm:ss A'
-                  ),
+                  value:
+                    formatDate(
+                      heavyEquipmentData?.workFinishAt,
+                      'hh:mm:ss A'
+                    ) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.workingHourAmount'),

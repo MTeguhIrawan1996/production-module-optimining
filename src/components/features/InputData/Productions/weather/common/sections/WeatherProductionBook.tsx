@@ -134,7 +134,7 @@ const WeatherProductionBook = () => {
               accessor: 'date',
               title: t('commonTypography.date'),
               width: 160,
-              render: ({ date }) => formatDate(date),
+              render: ({ date }) => formatDate(date) ?? '-',
             },
             {
               accessor: 'location',
@@ -159,7 +159,8 @@ const WeatherProductionBook = () => {
             {
               accessor: 'availabilityHoursOrDays',
               title: t('commonTypography.availabilityHoursOrDays'),
-              render: () => '-',
+              render: ({ detailWeatherData }) =>
+                detailWeatherData.availabilityHourPerDay ?? '-',
             },
             {
               accessor: 'status',

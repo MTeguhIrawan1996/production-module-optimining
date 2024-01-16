@@ -301,7 +301,7 @@ const ReadShippingMonitoringBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.date'),
-                  value: formatDate(monitoringBarging?.createdAt),
+                  value: formatDate(monitoringBarging?.createdAt) ?? '-',
                 },
               ]}
               type="grid"

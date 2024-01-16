@@ -24,7 +24,7 @@ import {
   heavyEquipmentSelect,
 } from '@/utils/constants/Field/global-field';
 import { shippingMonitoringMutationValidation } from '@/utils/form-validation/shipping-monitoring/shipping-monitoring-mutation-validation';
-import { formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -112,7 +112,7 @@ const UpdateShippingMonitoringBook = () => {
 
         dateFields.forEach((field) => {
           const date = stringToDate(monitoringBarging[field] ?? null);
-          const time = formatDate2(monitoringBarging[field], 'HH:mm:ss');
+          const time = formatDate(monitoringBarging[field], 'HH:mm:ss');
           setValue(
             `${field.slice(0, -2)}Date` as IShippingMonitoringNameProps,
             date ?? null
