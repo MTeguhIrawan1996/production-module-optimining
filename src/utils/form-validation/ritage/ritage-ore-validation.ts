@@ -39,7 +39,7 @@ export const ritageOreMutationValidation: z.ZodType<IMutationRitageOre> = z
     bulkSamplingDensity: zRequiredNumber,
     bucketVolume: zRequiredNumber,
     tonByRitage: zOptionalString,
-    sampleNumber: zOptionalString,
+    sampleNumber: zRequiredString,
     desc: zOptionalString,
     photos: zImageArrayOptional,
     isRitageProblematic: z.boolean(),

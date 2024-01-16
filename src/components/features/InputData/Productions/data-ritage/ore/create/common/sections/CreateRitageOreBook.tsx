@@ -373,7 +373,7 @@ const CreateRitageOreBook = () => {
       colSpan: 6,
       name: 'sampleNumber',
       label: 'sampleNumber',
-      withAsterisk: false,
+      withAsterisk: true,
     });
     const desc = globalText({
       colSpan: 12,
