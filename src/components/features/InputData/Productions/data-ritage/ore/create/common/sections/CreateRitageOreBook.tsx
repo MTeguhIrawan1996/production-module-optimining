@@ -323,7 +323,7 @@ const CreateRitageOreBook = () => {
       colSpan: 6,
       name: 'stockpileId',
       label: 'stockpileName',
-      withAsterisk: true,
+      withAsterisk: false,
       onChange: (value) => {
         methods.setValue('stockpileId', value ?? '');
         methods.setValue('domeId', '');
@@ -337,7 +337,7 @@ const CreateRitageOreBook = () => {
       name: 'domeId',
       label: 'domeName',
       stockpileId: stockpileId,
-      withAsterisk: true,
+      withAsterisk: false,
       disabled: !newStockpileId,
     });
     const bulkSamplingDensityItem = globalNumberInput({
@@ -373,7 +373,7 @@ const CreateRitageOreBook = () => {
       colSpan: 6,
       name: 'sampleNumber',
       label: 'sampleNumber',
-      withAsterisk: true,
+      withAsterisk: false,
     });
     const desc = globalText({
       colSpan: 12,
