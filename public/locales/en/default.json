@@ -883,7 +883,7 @@
     "updateFrontProduction": "$t(commonTypography.edit) $t(frontProduction.frontProductionTitle)",
     "successDeleteMessage": "$t(frontProduction.frontProductionTitle) berhasil dihapus",
     "formFrontProduction": "$t(commonTypography.form) $t(frontProduction.frontProductionTitle)",
-    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.frontName), $t(commonTypography.heavyEquipmentCode) dan $t(commonTypography.pit)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.frontName), $t(commonTypography.heavyEquipmentCode) dan",
     "formUpdateFrontProduction": "$t(commonTypography.form) $t(commonTypography.edit) $t(frontProduction.frontProductionTitle)",
     "successCreateMessage": "$t(frontProduction.frontProductionTitle) berhasil dibuat",
     "successUpdateMessage": "$t(frontProduction.frontProductionTitle) berhasil diubah",

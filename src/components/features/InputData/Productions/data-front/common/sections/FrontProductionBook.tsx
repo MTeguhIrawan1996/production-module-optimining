@@ -195,7 +195,9 @@ const FrontProductionBook = () => {
         onClick: () => setIsOpenSelectionModal((prev) => !prev),
       }}
       searchBar={{
-        placeholder: t('frontProduction.searchPlaceholder'),
+        placeholder: `${t(
+          'frontProduction.searchPlaceholder'
+        )} ${segment.toUpperCase()}`,
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },

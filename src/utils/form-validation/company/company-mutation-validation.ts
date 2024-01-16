@@ -18,8 +18,8 @@ export const companyMutationValidation: z.ZodType<ICompanyMutationValues> = z
   .object({
     name: zRequiredString,
     alias: zOptionalString,
-    typeId: zRequiredString,
-    businessTypeId: zRequiredString,
+    typeId: zRequiredSelectInput,
+    businessTypeId: zRequiredSelectInput,
     provinceId: zRequiredSelectInput,
     regencyId: zRequiredSelectInput,
     subdistrictId: zRequiredSelectInput,
