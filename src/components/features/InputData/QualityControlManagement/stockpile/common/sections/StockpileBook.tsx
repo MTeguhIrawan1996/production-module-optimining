@@ -219,11 +219,6 @@ const StockpileBook = () => {
               render: ({ dome }) => dome?.stockpile.name ?? '-',
             },
             {
-              accessor: 'domeId',
-              title: t('commonTypography.domeId'),
-              render: ({ dome }) => dome?.handBookId ?? '-',
-            },
-            {
               accessor: 'domeName',
               title: t('commonTypography.domeName'),
               render: ({ dome }) => dome?.name ?? '-',

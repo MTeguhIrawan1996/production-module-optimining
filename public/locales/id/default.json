@@ -685,7 +685,7 @@
     "createDome": "$t(commonTypography.create) $t(commonTypography.dome)",
     "readStockpileMonitoring": "$t(commonTypography.detail) $t(commonTypography.stockpileMonitoring)",
     "updateStockpileMonitoring": "$t(commonTypography.edit) $t(commonTypography.stockpileMonitoring)",
-    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.domeId) dan $t(commonTypography.domeName)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.domeName)",
     "successDeleteMessage": "$t(commonTypography.stockpileMonitoring) berhasil dihapus",
     "formStockpileMonitoring": "$t(commonTypography.form) $t(commonTypography.stockpileMonitoring)",
     "formUpdateStockpileMonitoring": "$t(commonTypography.form) $t(commonTypography.edit) $t(commonTypography.stockpileMonitoring)",
