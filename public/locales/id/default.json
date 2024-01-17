@@ -397,7 +397,10 @@
     "operation": "Operasi",
     "calculation": "Perhitungan",
     "heavyEquipmentFormula": "Rumus Kinerja Alat",
-    "formula": "Rumus"
+    "formula": "Rumus",
+    "hourMeter": "HM Per-Meter",
+    "hourMeterBefore": "HM Awal",
+    "hourMeterAfter": "HM Akhir"
   },
   "sideBar": {
     "dashboard": "Dashboard",
