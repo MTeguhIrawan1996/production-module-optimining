@@ -296,6 +296,11 @@ const UpdateWeatherProductionBook = () => {
   > = async (data) => {
     const date = dateToString(data.date ?? null);
 
+    const newWeatherConditions = data.weatherDataConditions.map((item) => ({
+      ...item,
+      rainfall: item.rainfall === '' ? null : item.rainfall,
+    }));
+
     await executeUpdate({
       variables: {
         id,
@@ -303,7 +308,7 @@ const UpdateWeatherProductionBook = () => {
         checkerId: data.checkerId,
         locationCategoryId: data.locationCategoryId,
         locationId: data.locationId,
-        weatherDataConditions: data.weatherDataConditions,
+        weatherDataConditions: newWeatherConditions,
         desc: data.desc,
       },
     });
