@@ -401,7 +401,7 @@ const UpdateRitageOreBook = () => {
       colSpan: 6,
       name: 'stockpileId',
       label: 'stockpileName',
-      withAsterisk: true,
+      withAsterisk: false,
       defaultValue: oreRitage?.stockpile?.id,
       labelValue: oreRitage?.stockpile?.name,
       onChange: (value) => {
@@ -416,7 +416,7 @@ const UpdateRitageOreBook = () => {
       name: 'domeId',
       label: 'domeName',
       stockpileId: stockpileId,
-      withAsterisk: true,
+      withAsterisk: false,
       disabled: !newStockpileId,
       defaultValue: oreRitage?.dome?.id,
       labelValue: oreRitage?.dome?.name,
@@ -454,7 +454,7 @@ const UpdateRitageOreBook = () => {
       colSpan: 6,
       name: 'sampleNumber',
       label: 'sampleNumber',
-      withAsterisk: true,
+      withAsterisk: false,
     });
     const desc = globalText({
       colSpan: 12,
