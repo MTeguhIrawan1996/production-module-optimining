@@ -372,7 +372,7 @@ const CreateHeavyEquipmentProductionBook = () => {
         methods.trigger('hourMeterAfter');
       },
     });
-    const AmountHourMeterItem = globalNumberInput({
+    const amountHourMeterItem = globalNumberInput({
       colSpan: 12,
       name: 'amountHourMeter',
       label: 'amountHourMeter',
@@ -410,7 +410,7 @@ const CreateHeavyEquipmentProductionBook = () => {
         formControllers: [
           hourMeterBeforeItem,
           hourMeterAfterItem,
-          AmountHourMeterItem,
+          amountHourMeterItem,
         ],
       },
       {
