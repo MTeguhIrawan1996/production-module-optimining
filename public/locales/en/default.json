@@ -852,7 +852,7 @@
     "updateWeatherProd": "$t(commonTypography.edit) $t(commonTypography.weatherData)",
     "successDeleteMessage": "$t(commonTypography.weatherData) berhasil dihapus",
     "formWeatherProd": "$t(commonTypography.form) $t(weatherProd.weatherProdTitle)",
-    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.date), $t(commonTypography.hourAmountRain), $t(commonTypography.hourAmountSlippery) dan $t(commonTypography.loseTime)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.location)",
     "formUploadWeatherProd": "$t(commonTypography.form) $t(commonTypography.upload) $t(weatherProd.weatherProdTitle)",
     "formUpdateWeatherProd": "$t(commonTypography.form) $t(commonTypography.edit) $t(weatherProd.weatherProdTitle)",
     "successCreateMessage": "$t(commonTypography.weatherData) berhasil dibuat",
