@@ -400,7 +400,8 @@
     "formula": "Rumus",
     "hourMeter": "HM Per-Meter",
     "hourMeterBefore": "HM Awal",
-    "hourMeterAfter": "HM Akhir"
+    "hourMeterAfter": "HM Akhir",
+    "amountHourMeter": "Total HM"
   },
   "sideBar": {
     "dashboard": "Dashboard",

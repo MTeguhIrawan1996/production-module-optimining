@@ -47,6 +47,16 @@ export const READ_ONE_HEAVY_EQUIPMENT_PRODUCTION = gql`
       workDuration
       workStartAt
       workFinishAt
+      hourMeterBefore
+      hourMeterAfter
+      hourMeterTotal
+      productiveIndicators {
+        formula {
+          id
+          name
+        }
+        value
+      }
       loseTimes {
         id
         totalDuration
@@ -70,6 +80,14 @@ export const READ_ONE_HEAVY_EQUIPMENT_PRODUCTION = gql`
     }
   }
 `;
+
+export interface IProductiveIndicator {
+  formula: {
+    id: string;
+    name: string | null;
+  };
+  value: number | null;
+}
 
 interface IReadOneHeavyEquipmentProduction {
   id: string;
@@ -110,6 +128,10 @@ interface IReadOneHeavyEquipmentProduction {
   workStartAt: string | null;
   workFinishAt: string | null;
   workDuration: number | null;
+  hourMeterBefore: number | null;
+  hourMeterAfter: number | null;
+  hourMeterTotal: number | null;
+  productiveIndicators: IProductiveIndicator[] | null;
   loseTimes:
     | {
         id: string;

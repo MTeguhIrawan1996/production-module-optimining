@@ -13,10 +13,14 @@ import {
   GlobalAlert,
   KeyValueList,
 } from '@/components/elements';
+import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
 import { useDeterminedHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useDeterminedHeavyEquipmentProduction';
 import { useValidateHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useValidateHeavyEquipmentProduction';
-import { useReadOneHeavyEquipmentProduction } from '@/services/graphql/query/heavy-equipment-production/useReadOneHeavyEquipmentProduction';
+import {
+  IProductiveIndicator,
+  useReadOneHeavyEquipmentProduction,
+} from '@/services/graphql/query/heavy-equipment-production/useReadOneHeavyEquipmentProduction';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
 
@@ -245,6 +249,23 @@ const ReadHeavyEquipmentProductionBook = () => {
     );
   });
 
+  const renderOtherHeavyEquipmentPreformanceCallback = React.useCallback(
+    (obj: IProductiveIndicator) => {
+      const column: Pick<IKeyValueItemProps, 'value' | 'dataKey'> = {
+        dataKey: `${obj.formula.name}`,
+        value: `${obj.value ?? '-'}`,
+      };
+      return column;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  const renderOtherHeavyEquipmentPreformance =
+    heavyEquipmentData?.productiveIndicators?.map(
+      renderOtherHeavyEquipmentPreformanceCallback
+    ) ?? [];
+
   return (
     <DashboardCard
       title={t('heavyEquipmentProd.readHeavyEquipmentProd')}
@@ -429,6 +450,37 @@ const ReadHeavyEquipmentProductionBook = () => {
             />
           </Stack>
           <Divider my="md" />
+          <Stack spacing="sm">
+            <Text fz={24} fw={600} color="brand">
+              {t('commonTypography.hourMeter')}
+            </Text>
+            <KeyValueList
+              data={[
+                {
+                  dataKey: t('commonTypography.hourMeterBefore'),
+                  value: `${heavyEquipmentData?.hourMeterBefore ?? '-'}`,
+                },
+                {
+                  dataKey: t('commonTypography.hourMeterAfter'),
+                  value: `${heavyEquipmentData?.hourMeterAfter ?? '-'}`,
+                },
+                {
+                  dataKey: t('commonTypography.amountHourMeter'),
+                  value: `${heavyEquipmentData?.hourMeterTotal ?? '-'}`,
+                },
+              ]}
+              type="grid"
+              keyStyleText={{
+                fw: 400,
+                fz: 20,
+              }}
+              valueStyleText={{
+                fw: 600,
+                fz: 20,
+              }}
+            />
+          </Stack>
+          <Divider my="md" />
           {loseTimeItem}
           <Stack spacing="sm">
             <KeyValueList
@@ -455,24 +507,7 @@ const ReadHeavyEquipmentProductionBook = () => {
               {t('commonTypography.equipmentPerformance')}
             </Text>
             <KeyValueList
-              data={[
-                {
-                  dataKey: 'MA',
-                  value: '-',
-                },
-                {
-                  dataKey: 'PA',
-                  value: '-',
-                },
-                {
-                  dataKey: 'UA',
-                  value: '-',
-                },
-                {
-                  dataKey: 'EU',
-                  value: '-',
-                },
-              ]}
+              data={[...renderOtherHeavyEquipmentPreformance]}
               type="grid"
               keyStyleText={{
                 fw: 400,
