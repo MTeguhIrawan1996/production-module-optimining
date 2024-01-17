@@ -34,7 +34,7 @@ export interface IMutationWeatherProductionValues {
     conditionId: string | null;
     startTime: string;
     finishTime: string;
-    rainfall: number | '';
+    rainfall: number | null | '';
   }[];
 }
 

@@ -223,7 +223,10 @@
       "coordinateY": "Koordinat Y",
       "operation": "Operasi",
       "variable": "Variable",
-      "formula": "Rumus"
+      "formula": "Rumus",
+      "hourMeterBefore": "HM Awal",
+      "hourMeterAfter": "HM Akhir",
+      "amountHourMeter": "Total HM"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",

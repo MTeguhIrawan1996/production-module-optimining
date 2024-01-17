@@ -181,14 +181,18 @@ const CreateFrontProductionBook = () => {
       label: 'coordinateX',
       colSpan: 6,
       withAsterisk: true,
-      precision: 0,
+      precision: 6,
+      step: 0.000001,
+      hideControls: false,
     });
     const coordinateY = globalNumberInput({
       name: 'y',
       label: 'coordinateY',
       colSpan: 6,
       withAsterisk: true,
-      precision: 0,
+      precision: 6,
+      step: 0.000001,
+      hideControls: false,
     });
 
     const fieldIsDome: ControllerGroup[] = [

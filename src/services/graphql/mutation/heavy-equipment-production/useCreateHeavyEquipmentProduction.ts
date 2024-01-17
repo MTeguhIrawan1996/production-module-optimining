@@ -10,6 +10,8 @@ export const CREATE_HEAVY_EQUIPMENT_PRODUCTION = gql`
     $workStartTime: String
     $workFinishTime: String
     $desc: String
+    $hourMeterBefore: Float
+    $hourMeterAfter: Float
     $loseTimes: [CreateLoseTime!]
   ) {
     createHeavyEquipmentData(
@@ -21,6 +23,8 @@ export const CREATE_HEAVY_EQUIPMENT_PRODUCTION = gql`
         shiftId: $shiftId
         workStartTime: $workStartTime
         workFinishTime: $workFinishTime
+        hourMeterBefore: $hourMeterBefore
+        hourMeterAfter: $hourMeterAfter
         desc: $desc
         loseTimes: $loseTimes
       }
@@ -53,12 +57,15 @@ export interface IMutationHeavyEquipmentDataProdValues {
   amountWorkTime: string;
   desc: string;
   heavyEquipmentType: string;
+  hourMeterBefore: number | '';
+  hourMeterAfter: number | '';
+  amountHourMeter: number | '';
   loseTimes: IloseTimes[];
 }
 
 type ICreateHeavyEquipmentProductionRequest = Omit<
   IMutationHeavyEquipmentDataProdValues,
-  'heavyEquipmentType' | 'amountEffectiveWorkingHours' | 'amountWorkTime'
+  'heavyEquipmentType' | 'amountHourMeter' | 'amountWorkTime'
 >;
 
 interface ICreateHeavyEquipmentProductionResponse {

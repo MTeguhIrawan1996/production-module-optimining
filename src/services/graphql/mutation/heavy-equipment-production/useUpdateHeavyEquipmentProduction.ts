@@ -13,6 +13,8 @@ export const UPDATE_HEAVY_EQUIPMENT_PRODUCTION = gql`
     $workStartTime: String
     $workFinishTime: String
     $desc: String
+    $hourMeterBefore: Float
+    $hourMeterAfter: Float
     $loseTimes: [CreateLoseTime!]
   ) {
     updateHeavyEquipmentData(
@@ -25,6 +27,8 @@ export const UPDATE_HEAVY_EQUIPMENT_PRODUCTION = gql`
         shiftId: $shiftId
         workStartTime: $workStartTime
         workFinishTime: $workFinishTime
+        hourMeterBefore: $hourMeterBefore
+        hourMeterAfter: $hourMeterAfter
         desc: $desc
         loseTimes: $loseTimes
       }
@@ -38,7 +42,7 @@ type IUpdateHeavyEquipmentProductionRequest = {
   id: string;
 } & Omit<
   IMutationHeavyEquipmentDataProdValues,
-  'heavyEquipmentType' | 'amountEffectiveWorkingHours' | 'amountWorkTime'
+  'heavyEquipmentType' | 'amountHourMeter' | 'amountWorkTime'
 >;
 
 interface IUpdateHeavyEquipmentProductionResponse {
