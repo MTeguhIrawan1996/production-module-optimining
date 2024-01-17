@@ -247,14 +247,16 @@ const UpdateFrontProductionBook = () => {
       label: 'coordinateX',
       colSpan: 6,
       withAsterisk: true,
-      precision: 0,
+      precision: 6,
+      step: 0.000001,
     });
     const coordinateY = globalNumberInput({
       name: 'y',
       label: 'coordinateY',
       colSpan: 6,
       withAsterisk: true,
-      precision: 0,
+      precision: 6,
+      step: 0.000001,
     });
 
     const fieldIsDome: ControllerGroup[] = [
