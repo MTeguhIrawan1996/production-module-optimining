@@ -24,6 +24,7 @@ import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-pla
 import {
   employeeSelect,
   globalDate,
+  globalNumberInput,
   globalText,
   globalTimeInput,
   heavyEquipmentSelect,
@@ -48,6 +49,12 @@ const CreateHeavyEquipmentProductionBook = () => {
     '',
     400
   );
+  const [newHourMeterBefore, setNewHourMeterBefore] = useDebouncedState<
+    number | ''
+  >('', 400);
+  const [newHourMeterAfter, setNewHourMeterAfter] = useDebouncedState<
+    number | ''
+  >('', 400);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationHeavyEquipmentDataProdValues>({
@@ -63,6 +70,9 @@ const CreateHeavyEquipmentProductionBook = () => {
       amountWorkTime: '',
       desc: '',
       heavyEquipmentType: '',
+      hourMeterBefore: '',
+      hourMeterAfter: '',
+      amountHourMeter: '',
       loseTimes: [],
     },
     mode: 'onBlur',
@@ -85,6 +95,13 @@ const CreateHeavyEquipmentProductionBook = () => {
     methods.setValue('amountWorkTime', amountWorkTime ?? '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newWorkStartTime, newWorkFinishTime]);
+  const amountHourMeter = React.useMemo(() => {
+    if (newHourMeterAfter && newHourMeterBefore) {
+      const amountHourMeterValue = newHourMeterAfter - newHourMeterBefore;
+      return amountHourMeterValue;
+    }
+    return '';
+  }, [newHourMeterAfter, newHourMeterBefore]);
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
@@ -332,6 +349,37 @@ const CreateHeavyEquipmentProductionBook = () => {
       withAsterisk: false,
       disabled: true,
     });
+    const hourMeterBeforeItem = globalNumberInput({
+      colSpan: 12,
+      name: 'hourMeterBefore',
+      label: 'hourMeterBefore',
+      withAsterisk: true,
+      onChange: (value) => {
+        methods.setValue('hourMeterBefore', value);
+        setNewHourMeterBefore(value);
+        methods.trigger('hourMeterBefore');
+      },
+    });
+    const hourMeterAfterItem = globalNumberInput({
+      colSpan: 12,
+      name: 'hourMeterAfter',
+      label: 'hourMeterAfter',
+      withAsterisk: true,
+      precision: undefined,
+      onChange: (value) => {
+        methods.setValue('hourMeterAfter', value);
+        setNewHourMeterAfter(value);
+        methods.trigger('hourMeterAfter');
+      },
+    });
+    const amountHourMeterItem = globalNumberInput({
+      colSpan: 12,
+      name: 'amountHourMeter',
+      label: 'amountHourMeter',
+      withAsterisk: false,
+      disabled: true,
+      value: amountHourMeter,
+    });
 
     const field: ControllerGroup[] = [
       {
@@ -357,6 +405,15 @@ const CreateHeavyEquipmentProductionBook = () => {
       },
       ...sampleGroupItem,
       {
+        group: t('commonTypography.hourMeter'),
+        enableGroupLabel: true,
+        formControllers: [
+          hourMeterBeforeItem,
+          hourMeterAfterItem,
+          amountHourMeterItem,
+        ],
+      },
+      {
         group: t('commonTypography.desc'),
         enableGroupLabel: false,
         formControllers: [desc],
@@ -365,7 +422,7 @@ const CreateHeavyEquipmentProductionBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sampleGroupItem]);
+  }, [sampleGroupItem, amountHourMeter]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
@@ -375,6 +432,7 @@ const CreateHeavyEquipmentProductionBook = () => {
     const {
       heavyEquipmentType,
       amountWorkTime,
+      amountHourMeter,
       loseTimes,
       date,
       ...restValue

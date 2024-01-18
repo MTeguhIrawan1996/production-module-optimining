@@ -23,6 +23,7 @@ const NumberInputRhf: React.FC<INumberInputProps> = ({
   label,
   labelWithTranslate = true,
   precision = 2,
+  hideControls = true,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -33,7 +34,7 @@ const NumberInputRhf: React.FC<INumberInputProps> = ({
     <MantineNumberInput
       {...field}
       radius={8}
-      hideControls
+      hideControls={hideControls}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
       data-control={control}
@@ -44,8 +45,7 @@ const NumberInputRhf: React.FC<INumberInputProps> = ({
             : null
           : label
       }
-      // parser={(value: string) => value.replace(/[^0-9]/g, '')}
-      // step={0.05}
+      parser={(value) => value.replace(/\s|,/g, '.')}
       precision={precision}
       error={
         fieldState &&

@@ -46,6 +46,7 @@ const AuthGlobalForm: React.FC<IAuthGlobalFormProps> = (props) => {
           type="submit"
           w={140}
           radius="sm"
+          color="brand"
           {...restSubmitButton}
         />
         {secondButton ? (

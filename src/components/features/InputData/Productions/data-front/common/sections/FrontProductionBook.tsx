@@ -171,8 +171,7 @@ const FrontProductionBook = () => {
           title: t('commonTypography.dataNotfound'),
           actionButton: {
             label: t('frontProduction.createFrontProduction'),
-            onClick: () =>
-              router.push('/input-data/production/data-front/create'),
+            onClick: () => setIsOpenSelectionModal((prev) => !prev),
           },
         }}
         paginationProps={{
