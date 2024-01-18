@@ -183,7 +183,6 @@ const CreateFrontProductionBook = () => {
       withAsterisk: true,
       precision: 6,
       step: 0.000001,
-      hideControls: false,
     });
     const coordinateY = globalNumberInput({
       name: 'y',
@@ -192,7 +191,6 @@ const CreateFrontProductionBook = () => {
       withAsterisk: true,
       precision: 6,
       step: 0.000001,
-      hideControls: false,
     });
 
     const fieldIsDome: ControllerGroup[] = [
