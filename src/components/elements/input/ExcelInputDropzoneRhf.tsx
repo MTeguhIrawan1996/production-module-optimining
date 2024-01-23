@@ -223,7 +223,9 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
               {
                 accessor: 'errors',
                 width: 300,
-                title: 'Errors Description',
+                title: t('commonTypography.errorDescription', {
+                  ns: 'default',
+                }),
                 render: ({ errors }: any) => {
                   return (
                     <Stack spacing={2}>

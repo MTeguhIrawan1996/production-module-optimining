@@ -401,7 +401,8 @@
     "hourMeter": "HM Per-Meter",
     "hourMeterBefore": "HM Awal",
     "hourMeterAfter": "HM Akhir",
-    "amountHourMeter": "Total HM"
+    "amountHourMeter": "Total HM",
+    "errorDescription": "Keterangan Error"
   },
   "sideBar": {
     "dashboard": "Dashboard",
