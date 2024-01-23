@@ -256,7 +256,7 @@ const UpdateShippingMonitoringBook = () => {
     const factoryItem = globalSelectFactoryRhf({
       colSpan: 6,
       name: 'factoryId',
-      label: 'factoryName',
+      label: 'vesselNameOrFactoryName',
       withAsterisk: false,
       disabled: !newFactoryCategoryId,
       categoryId: newFactoryCategoryId,
