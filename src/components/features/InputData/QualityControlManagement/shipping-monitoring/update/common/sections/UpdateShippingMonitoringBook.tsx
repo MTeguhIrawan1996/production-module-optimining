@@ -164,6 +164,7 @@ const UpdateShippingMonitoringBook = () => {
   /* #   /**=========== Field =========== */
 
   const fieldRhf = React.useMemo(() => {
+    const isVessel = factoryCategoryId === process.env.NEXT_PUBLIC_VESSEL_ID;
     const bargeCodeItem = heavyEquipmentSelect({
       colSpan: 6,
       name: 'bargeHeavyEquipmentId',
@@ -214,12 +215,14 @@ const UpdateShippingMonitoringBook = () => {
       clearable: true,
       withAsterisk: false,
       colSpan: 6,
+      disabled: !isVessel,
     });
     const vesselOpenTime = globalTimeInput({
       name: 'vesselOpenTime',
       label: 'openVesselHour',
       colSpan: 6,
       withAsterisk: false,
+      disabled: !isVessel,
     });
     const vesselCloseDate = globalDate({
       name: 'vesselCloseDate',
@@ -227,12 +230,14 @@ const UpdateShippingMonitoringBook = () => {
       clearable: true,
       withAsterisk: false,
       colSpan: 6,
+      disabled: !isVessel,
     });
     const vesselCloseTime = globalTimeInput({
       name: 'vesselCloseTime',
       label: 'closeVesselHour',
       colSpan: 6,
       withAsterisk: false,
+      disabled: !isVessel,
     });
     const desc = globalText({
       colSpan: 12,
