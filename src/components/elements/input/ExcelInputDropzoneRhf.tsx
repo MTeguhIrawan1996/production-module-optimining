@@ -32,6 +32,7 @@ export type IExcelInputDropzoneRhfProps = {
   description?: string;
   withAsterisk?: boolean;
   faildData?: unknown[];
+  usedWhere?: 'ritage' | 'heavy-equipment-prod';
 } & Omit<DropzoneProps, 'name' | 'children'> &
   CommonProps;
 
@@ -42,6 +43,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
   label,
   withAsterisk,
   faildData,
+  usedWhere = 'ritage',
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -60,21 +62,29 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
   const convertJSONtoExcel = () => {
     if (faildData) {
       const formattedData = (faildData as any).map((item: any) => {
-        if ('close_dome' in item) {
+        if (usedWhere === 'ritage') {
+          if ('close_dome' in item) {
+            return {
+              ...item,
+              date: formatDate(item.date, 'YYYY-MM-DD'),
+              is_ritage_problematic: item.is_ritage_problematic
+                ? 'TRUE'
+                : 'FALSE',
+              close_dome: item.close_dome ? 'TRUE' : 'FALSE',
+            };
+          }
           return {
             ...item,
             date: formatDate(item.date, 'YYYY-MM-DD'),
             is_ritage_problematic: item.is_ritage_problematic
               ? 'TRUE'
               : 'FALSE',
-            close_dome: item.close_dome ? 'TRUE' : 'FALSE',
           };
         }
-        return {
-          ...item,
-          date: formatDate(item.date, 'YYYY-MM-DD'),
-          is_ritage_problematic: item.is_ritage_problematic ? 'TRUE' : 'FALSE',
-        };
+        if (usedWhere === 'heavy-equipment-prod') {
+          return { ...item };
+        }
+        return { ...item };
       });
 
       const newData = formattedData.map((item: any) => {
@@ -93,7 +103,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
       const dataExcel = new Blob([excelBuffer], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       });
-      const excelFileName = 'faild_data.xlsx';
+      const excelFileName = 'fail_data.xlsx';
 
       if (typeof window !== 'undefined') {
         // Check if browser is running in the client-side

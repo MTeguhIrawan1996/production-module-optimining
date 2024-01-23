@@ -94,6 +94,7 @@ const UploadHeavyEquipmentProductionBook = () => {
       maxSize: 100 * 1024 ** 2 /* 10MB */,
       multiple: false,
       faildData: dataFiald,
+      usedWhere: 'heavy-equipment-prod',
       onDrop: (value) => {
         methods.setValue('file', value);
         setIsDirtyFile(true);
