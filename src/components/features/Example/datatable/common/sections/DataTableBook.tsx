@@ -1,92 +1,50 @@
+import { TextInput, Tooltip } from '@mantine/core';
 import * as React from 'react';
 
-import {
-  DashboardCard,
-  GlobalActionTable,
-  MantineDataTable,
-} from '@/components/elements';
+import { DashboardCard, MantineDataTable } from '@/components/elements';
 
 const tableExp = [
   {
     id: '9d7b6df5-aa1e-4203-bfa8-7d9464e331cb',
     name: 'Sipes Inc',
-    streetAddress: '280 Rigoberto Divide',
-    city: 'Twin Falls',
-    state: 'MT',
-    missionStatement:
-      'Strategize magnetic vortals. Strategize magnetic vortals. Strategize magnetic vortals.',
+    amount: 1,
+    unit: 'Jam/Hari',
   },
   {
     id: '3c147f0b-c63f-4830-8ced-f378aad9efc6',
     name: 'Runolfsdottir - Cummerata',
-    streetAddress: '102 Konopelski Greens',
-    city: 'Missouri City',
-    state: 'KY',
-    missionStatement: 'Leverage one-to-one methodologies.',
+    amount: 2,
+    unit: 'Jam',
   },
   {
     id: '331992e8-7144-49c4-a8fd-fae9a6921b13',
     name: 'Johnston LLC',
-    streetAddress: '230 Julie Lake',
-    city: 'Hartford',
-    state: 'KY',
-    missionStatement: 'Transition wireless initiatives.',
+    amount: 3,
+    unit: 'Jam',
   },
   {
     id: 'eb089974-a0ed-4ec2-84a3-4d7bd3935b63',
     name: 'Crist and Sons',
-    streetAddress: '3387 Blick Turnpike',
-    city: 'Attleboro',
-    state: 'WV',
-    missionStatement: 'Revolutionize out-of-the-box infomediaries.',
+    amount: 4,
+    unit: 'Jam',
   },
   {
     id: 'fc257801-7b32-41ca-a31b-57ae6739415b',
     name: 'Schmidt and Sons',
-    streetAddress: '286 Leif Lock',
-    city: 'Collierville',
-    state: 'AL',
-    missionStatement: 'Optimize bricks-and-clicks eyeballs.',
+    amount: 5,
+    unit: 'Jam',
   },
   {
     id: 'c942ac73-2c51-4bf1-b4a7-04419acf58c0',
     name: 'Nicolas Group',
-    streetAddress: '09622 Marcel Place',
-    city: 'Highland',
-    state: 'OR',
-    missionStatement: 'Transition vertical interfaces.',
+    amount: 6,
+    unit: 'Jam',
   },
   {
     id: 'ad36f2d0-b186-4f1e-9a04-57e59715dc8f',
     name: 'Kub and Sons',
-    streetAddress: '8699 Upton Fords',
-    city: 'East Providence',
-    state: 'IN',
-    missionStatement: 'Drive proactive models.',
-  },
-  {
-    id: 'e4a64ab6-4a9f-4f53-8f9e-dbf761fe9a69',
-    name: 'Jakubowski - Rolfson',
-    streetAddress: "191 O'Connell Greens",
-    city: 'San Rafael',
-    state: 'MA',
-    missionStatement: 'Streamline cutting-edge architectures.',
-  },
-  {
-    id: '996fdd92-a399-4bef-9188-b0458ecee682',
-    name: 'Welch - Tremblay',
-    streetAddress: '31622 Isobel Fall',
-    city: 'Olathe',
-    state: 'AR',
-    missionStatement: 'Deploy wireless solutions.',
-  },
-  {
-    id: 'd0d0f9b1-7bb9-4b1e-967d-3ea81de7dd59',
-    name: 'Mueller, Hodkiewicz and Beahan',
-    streetAddress: '21751 Elisa Village',
-    city: 'Grand Prairie',
-    state: 'WA',
-    missionStatement: 'Facilitate bleeding-edge web-readiness.',
+    amount: 7,
+    unit: 'Jam',
   },
 ];
 
@@ -94,49 +52,6 @@ const DataTableBook = () => {
   return (
     <DashboardCard
       title="Sumber Daya Manusia"
-      addButton={{
-        label: 'ExampleAdd',
-      }}
-      // searchBar={{
-      //   // eslint-disable-next-line no-console
-      //   onChange: () => console.log('onChnge'),
-      //   placeholder:
-      //     'Cari berdasarkan Nama Perusahaan, Nama Pegawai, NIP, Divisi dan Jabatan',
-      // }}
-      MultipleFilter={{
-        MultipleFilterData: [
-          {
-            data: [
-              {
-                label: 'react',
-                value: 'react',
-              },
-              {
-                label: 'mantine',
-                value: 'mantine',
-              },
-            ],
-            label: 'example',
-            placeholder: 'example',
-            searchable: true,
-            clearable: true,
-          },
-          {
-            data: [
-              {
-                label: 'react',
-                value: 'react',
-              },
-              {
-                label: 'mantine',
-                value: 'mantine',
-              },
-            ],
-            label: 'example1',
-            placeholder: 'example',
-          },
-        ],
-      }}
       enebleBack
       shadow="sm"
       withBorder
@@ -144,80 +59,235 @@ const DataTableBook = () => {
     >
       <MantineDataTable
         tableProps={{
-          onRowClick: ({ id }) => {
-            // eslint-disable-next-line no-console
-            console.log(id);
-          },
           highlightOnHover: true,
+          withColumnBorders: true,
           groups: [
             {
-              id: 'company',
-              title: 'Example',
+              id: 'no',
+              title: 'No',
+              style: { textAlign: 'center' },
               columns: [
-                { accessor: 'name' },
                 {
-                  accessor: 'missionStatement',
-                  width: 150,
-                  ellipsis: true,
-                  visibleMediaQuery: (theme) =>
-                    `(min-width: ${theme.breakpoints.md})`,
+                  accessor: 'index',
+                  title: '',
+                  render: (record) => {
+                    return tableExp && tableExp.indexOf(record) + 1;
+                  },
+                  width: 60,
                 },
               ],
             },
             {
-              id: 'contact-info',
-              title: <i>Contact info</i>,
-              columns: [
-                { accessor: 'streetAddress' },
-                { accessor: 'city' },
-                { accessor: 'state' },
-              ],
+              id: 'activity',
+              title: 'Kegiatan',
+              style: { textAlign: 'center' },
+              columns: [{ accessor: 'name', title: '' }],
             },
             {
-              id: 'aksi',
-              title: 'Aksi',
+              id: 'day',
+              title: 'Tanggal',
+              style: { textAlign: 'center' },
               columns: [
                 {
-                  accessor: 'action',
-                  title: '',
-                  render: () => {
+                  accessor: 'minggu',
+                  width: 100,
+                  render: ({ id, name }, index) => {
+                    if (id === '331992e8-7144-49c4-a8fd-fae9a6921b13') {
+                      return <div className="">Sistem</div>;
+                    }
                     return (
-                      <GlobalActionTable
-                        actionRead={{
-                          onClick: (e) => {
-                            e.stopPropagation();
-                            // router.push(`/dashboard/partners/update/${id}`);
-                          },
-                        }}
-                        actionUpdate={{
-                          onClick: (e) => {
-                            e.stopPropagation();
-                            // router.push(`/dashboard/partners/update/${id}`);
-                          },
-                        }}
-                        actionDelete={{
-                          onClick: (e) => {
-                            e.stopPropagation();
-                            // setIsOpenConfirmDelete((prev) => !prev), setId(id);
-                          },
-                        }}
-                      />
+                      <Tooltip
+                        label={`${index}+${name}`}
+                        hidden={false}
+                        color="red"
+                        position="right"
+                      >
+                        <TextInput
+                          // error="foo"
+                          width={50}
+                          radius={8}
+                        />
+                      </Tooltip>
+                    );
+                  },
+                },
+                {
+                  accessor: 'senin',
+                  width: 100,
+                  render: ({ name, id }, index) => {
+                    if (id === '331992e8-7144-49c4-a8fd-fae9a6921b13') {
+                      return <div className="">Sistem</div>;
+                    }
+                    return (
+                      <Tooltip
+                        label={`${index}+${name}`}
+                        hidden={false}
+                        color="red"
+                        position="right"
+                      >
+                        <TextInput
+                          // error="foo"
+                          width={50}
+                          radius={8}
+                        />
+                      </Tooltip>
+                    );
+                  },
+                },
+                {
+                  accessor: 'selasa',
+                  width: 100,
+                  render: ({ id, name }, index) => {
+                    if (id === '331992e8-7144-49c4-a8fd-fae9a6921b13') {
+                      return <div className="">Sistem</div>;
+                    }
+                    return (
+                      <Tooltip
+                        label={`${index}+${name}`}
+                        hidden={false}
+                        color="red"
+                        position="right"
+                      >
+                        <TextInput
+                          // error="foo"
+                          width={50}
+                          radius={8}
+                        />
+                      </Tooltip>
                     );
                   },
                 },
               ],
             },
+            {
+              id: 'amount',
+              title: 'Total',
+              style: { textAlign: 'center' },
+              columns: [{ accessor: 'amount', title: '', width: 100 }],
+            },
+            {
+              id: 'unit',
+              title: 'Unit',
+              style: { textAlign: 'center' },
+              columns: [{ accessor: 'unit', title: '', width: 100 }],
+            },
           ],
+          rowExpansion: {
+            allowMultiple: true,
+            expanded: {
+              recordIds: ['331992e8-7144-49c4-a8fd-fae9a6921b13'],
+            },
+            content: () => (
+              <MantineDataTable
+                tableProps={{
+                  noHeader: true,
+                  shadow: '0',
+                  withBorder: false,
+                  minHeight: 0,
+                  borderRadius: 0,
+                  groups: [
+                    {
+                      id: 'no',
+                      title: 'No',
+                      style: { textAlign: 'center' },
+                      columns: [
+                        {
+                          accessor: 'index',
+                          title: '',
+                          render: () => null,
+                          width: 60,
+                        },
+                      ],
+                    },
+                    {
+                      id: 'activity',
+                      title: 'Kegiatan',
+                      style: { textAlign: 'center' },
+                      columns: [{ accessor: 'name', title: '' }],
+                    },
+                    {
+                      id: 'day',
+                      title: 'Tanggal',
+                      style: { textAlign: 'center' },
+                      columns: [
+                        {
+                          accessor: 'minggu',
+                          width: 100,
+                          render: ({ name }, index) => {
+                            return (
+                              <Tooltip
+                                label={`${index}+${name}`}
+                                hidden={false}
+                                color="red"
+                                position="right"
+                              >
+                                <TextInput
+                                  // error="foo"
+                                  width={50}
+                                  radius={8}
+                                />
+                              </Tooltip>
+                            );
+                          },
+                        },
+                        {
+                          accessor: 'senin',
+                          width: 100,
+                          render: ({ name }, index) => {
+                            return (
+                              <Tooltip
+                                label={`${index}+${name}`}
+                                hidden={false}
+                                color="red"
+                                position="right"
+                              >
+                                <TextInput error={true} width={50} radius={8} />
+                              </Tooltip>
+                            );
+                          },
+                        },
+                        {
+                          accessor: 'selasa',
+                          width: 100,
+                          render: ({ name }, index) => {
+                            return (
+                              <Tooltip
+                                label={`${index}+${name}`}
+                                hidden={false}
+                                color="red"
+                                position="right"
+                              >
+                                <TextInput
+                                  // error="foo"
+                                  width={50}
+                                  radius={8}
+                                />
+                              </Tooltip>
+                            );
+                          },
+                        },
+                      ],
+                    },
+                    {
+                      id: 'amount',
+                      title: 'Total',
+                      style: { textAlign: 'center' },
+                      columns: [{ accessor: 'amount', title: '', width: 100 }],
+                    },
+                    {
+                      id: 'unit',
+                      title: 'Unit',
+                      style: { textAlign: 'center' },
+                      columns: [{ accessor: 'unit', title: '', width: 100 }],
+                    },
+                  ],
+                  records: tableExp,
+                }}
+              />
+            ),
+          },
           // fetching: true,
           records: tableExp,
-        }}
-        paginationProps={{
-          setPage: () => {},
-          currentPage: 1,
-          totalAllData: 100,
-          totalData: 10,
-          totalPage: 20,
-          // isFetching: true,
         }}
       />
     </DashboardCard>

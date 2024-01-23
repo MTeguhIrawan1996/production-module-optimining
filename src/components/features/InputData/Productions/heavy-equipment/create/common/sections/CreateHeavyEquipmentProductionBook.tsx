@@ -403,7 +403,6 @@ const CreateHeavyEquipmentProductionBook = () => {
           amountWorkTimeItem,
         ],
       },
-      ...sampleGroupItem,
       {
         group: t('commonTypography.hourMeter'),
         enableGroupLabel: true,
@@ -413,6 +412,7 @@ const CreateHeavyEquipmentProductionBook = () => {
           amountHourMeterItem,
         ],
       },
+      ...sampleGroupItem,
       {
         group: t('commonTypography.desc'),
         enableGroupLabel: false,

@@ -21,7 +21,7 @@ import {
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
-import { formatDate } from '@/utils/helper/dateFormat';
+import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -145,19 +145,19 @@ const WeatherProductionBook = () => {
               accessor: 'hourAmountRain',
               title: t('commonTypography.hourAmountRain'),
               render: ({ detailWeatherData }) =>
-                detailWeatherData.rainTotal ?? '-',
+                secondsDuration(detailWeatherData.rainTotal) ?? '-',
             },
             {
               accessor: 'hourAmountSlippery',
               title: t('commonTypography.hourAmountSlippery'),
               render: ({ detailWeatherData }) =>
-                detailWeatherData.slipperyTotal ?? '-',
+                secondsDuration(detailWeatherData.slipperyTotal) ?? '-',
             },
             {
               accessor: 'loseTime',
               title: t('commonTypography.loseTime'),
               render: ({ detailWeatherData }) =>
-                detailWeatherData.loseTotal ?? '-',
+                secondsDuration(detailWeatherData.loseTotal) ?? '-',
             },
             {
               accessor: 'availabilityHoursOrDays',

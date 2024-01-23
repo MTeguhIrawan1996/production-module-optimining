@@ -42,7 +42,9 @@ const client = new GraphQLClient(
 // );
 
 async function refreshToken(token: JWT) {
-  const authorization = token ? `Bearer ${token.login.refreshToken.token}` : '';
+  const authorization = token
+    ? `Bearer ${token.login?.refreshToken?.token}`
+    : '';
 
   client.setHeaders({
     authorization,

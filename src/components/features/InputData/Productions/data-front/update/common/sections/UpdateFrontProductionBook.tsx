@@ -246,7 +246,7 @@ const UpdateFrontProductionBook = () => {
       name: 'x',
       label: 'coordinateX',
       colSpan: 6,
-      withAsterisk: true,
+      withAsterisk: false,
       precision: 6,
       step: 0.000001,
     });
@@ -254,7 +254,7 @@ const UpdateFrontProductionBook = () => {
       name: 'y',
       label: 'coordinateY',
       colSpan: 6,
-      withAsterisk: true,
+      withAsterisk: false,
       precision: 6,
       step: 0.000001,
     });

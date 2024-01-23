@@ -1,7 +1,6 @@
 import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { DataTableColumn } from 'mantine-datatable';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -17,12 +16,8 @@ import {
 } from '@/components/elements';
 
 import { useDeleteStockpileMonitoring } from '@/services/graphql/mutation/stockpile-monitoring/useDeleteStockpileMonitoring';
-import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import { useReadAllLocationselect } from '@/services/graphql/query/global-select/useReadAllLocationSelect';
-import {
-  IMonitoringStockpilesData,
-  useReadAllStockpileMonitoring,
-} from '@/services/graphql/query/stockpile-monitoring/useReadAllStockpileMonitoring';
+import { useReadAllStockpileMonitoring } from '@/services/graphql/query/stockpile-monitoring/useReadAllStockpileMonitoring';
 import {
   globalSelectMonthNative,
   globalSelectNative,
@@ -31,7 +26,7 @@ import {
 } from '@/utils/constants/Field/native-field';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
-import { IElementsData, InputControllerNativeProps } from '@/types/global';
+import { InputControllerNativeProps } from '@/types/global';
 
 const StockpileBook = () => {
   const router = useRouter();
@@ -55,11 +50,11 @@ const StockpileBook = () => {
     React.useState<boolean>(false);
 
   /* #   /**=========== Query =========== */
-  const { elementsData } = useReadAllElementMaster({
-    variables: {
-      limit: null,
-    },
-  });
+  // const { elementsData } = useReadAllElementMaster({
+  //   variables: {
+  //     limit: null,
+  //   },
+  // });
 
   const { allLocationsData } = useReadAllLocationselect({
     variables: {
@@ -177,24 +172,24 @@ const StockpileBook = () => {
     router.push(urlSet, undefined, { shallow: true });
   };
 
-  const renderOtherColumnCallback = React.useCallback(
-    (element: IElementsData) => {
-      const column: DataTableColumn<IMonitoringStockpilesData> = {
-        accessor: element.name,
-        title: element.name,
-        render: ({ currentSample }) => {
-          const value = currentSample?.elements?.find(
-            (val) => val.element?.id === element.id
-          );
-          return value?.value ?? '-';
-        },
-      };
-      return column;
-    },
-    []
-  );
+  // const renderOtherColumnCallback = React.useCallback(
+  //   (element: IElementsData) => {
+  //     const column: DataTableColumn<IMonitoringStockpilesData> = {
+  //       accessor: element.name,
+  //       title: element.name,
+  //       render: ({ currentSample }) => {
+  //         const value = currentSample?.elements?.find(
+  //           (val) => val.element?.id === element.id
+  //         );
+  //         return value?.value ?? '-';
+  //       },
+  //     };
+  //     return column;
+  //   },
+  //   []
+  // );
 
-  const renderOtherColumn = elementsData?.map(renderOtherColumnCallback);
+  // const renderOtherColumn = elementsData?.map(renderOtherColumnCallback);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -237,7 +232,7 @@ const StockpileBook = () => {
               title: t('commonTypography.tonBySurvey'),
               render: ({ averageTonSurvey }) => averageTonSurvey ?? '-',
             },
-            ...(renderOtherColumn ?? []),
+            // ...(renderOtherColumn ?? []),
             {
               accessor: 'domeStatus',
               title: t('commonTypography.domeStatus'),
