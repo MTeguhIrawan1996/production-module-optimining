@@ -833,6 +833,7 @@
     "readHeavyEquipmentProd": "$t(commonTypography.detail) $t(commonTypography.heavyEquipmentData)",
     "updateHeavyEquipmentProd": "$t(commonTypography.edit) $t(commonTypography.heavyEquipmentData)",
     "successDeleteMessage": "$t(commonTypography.heavyEquipmentData) berhasil dihapus",
+    "downloadTemplate": "Unduh Tamplate $t(commonTypography.heavyEquipmentData)",
     "formHeavyEquipmentProd": "$t(commonTypography.form) $t(heavyEquipmentProd.heavyEquipmentProdTitle)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.heavyEquipmentType), $t(commonTypography.heavyEquipmentCode), $t(commonTypography.operator) dan $t(commonTypography.shift)",
     "formUploadHeavyEquipmentProd": "$t(commonTypography.form) $t(commonTypography.upload) $t(heavyEquipmentProd.heavyEquipmentProdTitle)",
