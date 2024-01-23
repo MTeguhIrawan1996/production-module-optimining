@@ -102,7 +102,7 @@ const CreateShippingMonitoringBook = () => {
       colSpan: 6,
       name: 'tugboatHeavyEquipmentId',
       label: 'tugboatCode',
-      withAsterisk: true,
+      withAsterisk: false,
       categoryId: `${process.env.NEXT_PUBLIC_TUGBOAT_ID}`,
     });
     const palkaOpenDate = globalDate({

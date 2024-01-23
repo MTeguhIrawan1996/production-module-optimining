@@ -177,7 +177,7 @@ const UpdateShippingMonitoringBook = () => {
       colSpan: 6,
       name: 'tugboatHeavyEquipmentId',
       label: 'tugboatCode',
-      withAsterisk: true,
+      withAsterisk: false,
       categoryId: `${process.env.NEXT_PUBLIC_TUGBOAT_ID}`,
       labelValue: monitoringBarging?.tugboatHeavyEquipment?.hullNumber,
       defaultValue: monitoringBarging?.tugboatHeavyEquipment?.id,
