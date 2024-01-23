@@ -19,6 +19,7 @@ interface IInnerWrapperProps {
   alertProps?: {
     description: string;
   } & Omit<AlertProps, 'children'>;
+  children?: React.ReactNode;
 }
 
 const InnerWrapper: React.FC<IInnerWrapperProps> = ({

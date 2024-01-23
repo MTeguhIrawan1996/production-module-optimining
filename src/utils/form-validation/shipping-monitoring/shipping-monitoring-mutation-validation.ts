@@ -11,7 +11,7 @@ import {
 export const shippingMonitoringMutationValidation: z.ZodType<IMutationShippingMonitoringValues> =
   z.object({
     bargeHeavyEquipmentId: zRequiredSelectInput,
-    tugboatHeavyEquipmentId: zRequiredSelectInput,
+    tugboatHeavyEquipmentId: zOptionalString.nullable(),
     palkaOpenDate: zDateOptionalValidation,
     palkaOpenTime: zOptionalString,
     palkaCloseDate: zDateOptionalValidation,

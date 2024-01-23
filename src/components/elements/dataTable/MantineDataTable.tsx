@@ -102,7 +102,7 @@ export default function MantineDataTable<T>({
           ...defaultColumnProps,
         }}
         defaultColumnRender={(row, _, accessor) => {
-          const data = row[accessor as keyof typeof row];
+          const data = row[accessor as keyof typeof row] as React.ReactNode;
           return data ? data : '-';
         }}
         noRecordsIcon={<></>}

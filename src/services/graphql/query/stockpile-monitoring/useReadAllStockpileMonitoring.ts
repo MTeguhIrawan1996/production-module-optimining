@@ -2,12 +2,7 @@ import { ApolloError, gql, useQuery } from '@apollo/client';
 
 import { IReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 
-import {
-  GResponse,
-  IElementWithValue,
-  IGlobalMetaRequest,
-  IStatus,
-} from '@/types/global';
+import { GResponse, IGlobalMetaRequest, IStatus } from '@/types/global';
 
 export const READ_ALL_STOCKPILE_MONITORING_MASTER = gql`
   query ReadAllStockpileMonitoring(
@@ -57,16 +52,16 @@ export const READ_ALL_STOCKPILE_MONITORING_MASTER = gql`
           id
           name
         }
-        currentSample {
-          id
-          elements {
-            element {
-              id
-              name
-            }
-            value
-          }
-        }
+        # currentSample {
+        #   id
+        #   elements {
+        #     element {
+        #       id
+        #       name
+        #     }
+        #     value
+        #   }
+        # }
         tonByRitage
         averageTonSurvey
         domeStatus
@@ -87,9 +82,9 @@ export interface IMonitoringStockpilesData {
     id: string;
     name: string;
   } | null;
-  currentSample: {
-    elements: IElementWithValue[] | null;
-  } | null;
+  // currentSample: {
+  //   elements: IElementWithValue[] | null;
+  // } | null;
   tonByRitage: number | null;
   domeStatus: string | null;
   averageTonSurvey: number | null;
