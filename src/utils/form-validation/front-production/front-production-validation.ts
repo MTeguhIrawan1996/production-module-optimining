@@ -3,8 +3,8 @@ import { z } from 'zod';
 import { IMutationFrontProductionValues } from '@/services/graphql/mutation/front-production/useCreateFrontProduction';
 import {
   zDateValidation,
+  zOptionalNumber,
   zOptionalString,
-  zRequiredNumber,
   zRequiredSelectInput,
   zRequiredString,
 } from '@/utils/form-validation/global';
@@ -22,8 +22,8 @@ export const frontProductionMutationValidation: z.ZodType<IMutationFrontProducti
       gridId: zOptionalString.nullable(),
       elevationId: zOptionalString.nullable(),
       domeId: zOptionalString.nullable(),
-      x: zRequiredNumber,
-      y: zRequiredNumber,
+      x: zOptionalNumber,
+      y: zOptionalNumber,
     })
     .superRefine((arg, ctx) => {
       if (arg.type === 'pit') {
