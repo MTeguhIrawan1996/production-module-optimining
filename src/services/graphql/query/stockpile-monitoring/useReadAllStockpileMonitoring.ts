@@ -52,16 +52,9 @@ export const READ_ALL_STOCKPILE_MONITORING_MASTER = gql`
           id
           name
         }
-        # currentSample {
-        #   id
-        #   elements {
-        #     element {
-        #       id
-        #       name
-        #     }
-        #     value
-        #   }
-        # }
+        ritageSamples {
+          additional
+        }
         tonByRitage
         averageTonSurvey
         domeStatus
@@ -82,9 +75,17 @@ export interface IMonitoringStockpilesData {
     id: string;
     name: string;
   } | null;
-  // currentSample: {
-  //   elements: IElementWithValue[] | null;
-  // } | null;
+  ritageSamples: {
+    additional: {
+      averageSamples: {
+        element: {
+          id: string;
+          name: string | null;
+        };
+        value: number | null;
+      }[];
+    };
+  };
   tonByRitage: number | null;
   domeStatus: string | null;
   averageTonSurvey: number | null;
