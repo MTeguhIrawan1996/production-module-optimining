@@ -197,7 +197,9 @@ const UpdateStockpileMonitoringBook = () => {
       onCompleted: ({ monitoringStockpile }) => {
         const samples = monitoringStockpile.samples.map((val) => {
           const elemntsValue = elementsData?.map((o) => {
-            const value = val.elements.find((obj) => obj.element.id === o.id);
+            const value = val.sample.elements.find(
+              (obj) => obj.element.id === o.id
+            );
             return {
               elementId: o.id,
               name: o.name ?? '',
@@ -205,9 +207,9 @@ const UpdateStockpileMonitoringBook = () => {
             };
           });
           return {
-            date: stringToDate(val.date ?? null),
-            sampleTypeId: val.sampleType.id ?? '',
-            sampleNumber: val.sampleNumber ?? '',
+            date: stringToDate(val.sample.sampleDate ?? null),
+            sampleTypeId: val.sample.sampleType.id ?? '',
+            sampleNumber: val.sample.sampleNumber ?? '',
             isCreatedAfterDetermine: val.isCreatedAfterDetermine ? true : false,
             elements: elemntsValue ?? [],
           };
@@ -272,20 +274,20 @@ const UpdateStockpileMonitoringBook = () => {
         const closeDate = stringToDate(monitoringStockpile.closeAt ?? null);
         const openTime = formatDate(monitoringStockpile.openAt, 'HH:mm:ss');
         const closeTime = formatDate(monitoringStockpile.closeAt, 'HH:mm:ss');
-        const bargingStartDate = stringToDate(
-          monitoringStockpile.bargingStartAt ?? null
-        );
-        const bargingFinishDate = stringToDate(
-          monitoringStockpile.bargingFinishAt ?? null
-        );
-        const bargingStartTime = formatDate(
-          monitoringStockpile.bargingStartAt,
-          'HH:mm:ss'
-        );
-        const bargingFinishTime = formatDate(
-          monitoringStockpile.bargingFinishAt,
-          'HH:mm:ss'
-        );
+        // const bargingStartDate = stringToDate(
+        //   monitoringStockpile.bargingStartAt ?? null
+        // );
+        // const bargingFinishDate = stringToDate(
+        //   monitoringStockpile.bargingFinishAt ?? null
+        // );
+        // const bargingStartTime = formatDate(
+        //   monitoringStockpile.bargingStartAt,
+        //   'HH:mm:ss'
+        // );
+        // const bargingFinishTime = formatDate(
+        //   monitoringStockpile.bargingFinishAt,
+        //   'HH:mm:ss'
+        // );
         methods.setValue(
           'stockpileId',
           monitoringStockpile.dome?.stockpile.id ?? ''
@@ -300,10 +302,10 @@ const UpdateStockpileMonitoringBook = () => {
         methods.setValue('openTime', openTime ?? '');
         methods.setValue('closeTime', closeTime ?? '');
         methods.setValue('tonByRitage', monitoringStockpile.tonByRitage ?? '');
-        methods.setValue('bargingStartDate', bargingStartDate);
-        methods.setValue('bargingFinishDate', bargingFinishDate);
-        methods.setValue('bargingStartTime', bargingStartTime ?? '');
-        methods.setValue('bargingFinishTime', bargingFinishTime ?? '');
+        // methods.setValue('bargingStartDate', bargingStartDate);
+        // methods.setValue('bargingFinishDate', bargingFinishDate);
+        // methods.setValue('bargingStartTime', bargingStartTime ?? '');
+        // methods.setValue('bargingFinishTime', bargingFinishTime ?? '');
         methods.setValue('desc', monitoringStockpile.desc ?? '');
         if (monitoringStockpile.photo) {
           setServerPhoto([monitoringStockpile.photo]);

@@ -2,10 +2,16 @@ import { ApolloError, gql, useQuery } from '@apollo/client';
 
 import { IReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 
-import { IFile, IStatus } from '@/types/global';
+import { GResponse, IFile, IStatus } from '@/types/global';
 
 export const READ_ONE_STOCKPILE_MONITORING = gql`
-  query ReadOneStockpileMonitoring($id: String!) {
+  query ReadOneStockpileMonitoring(
+    $id: String!
+    $page: Int
+    $limit: Int
+    $orderBy: String
+    $orderDir: String
+  ) {
     monitoringStockpile(id: $id) {
       id
       dome {
@@ -17,6 +23,7 @@ export const READ_ONE_STOCKPILE_MONITORING = gql`
           name
         }
       }
+      domeStatus
       material {
         id
         name
@@ -29,9 +36,11 @@ export const READ_ONE_STOCKPILE_MONITORING = gql`
         ton
       }
       tonByRitage
-      bargingStartAt
-      bargingFinishAt
       movings {
+        startAt
+        finishAt
+      }
+      bargings {
         startAt
         finishAt
       }
@@ -48,19 +57,69 @@ export const READ_ONE_STOCKPILE_MONITORING = gql`
       }
       samples {
         id
-        date
-        sampleNumber
-        isCreatedAfterDetermine
-        sampleType {
+        sample {
           id
-          name
-        }
-        elements {
-          element {
+          sampleNumber
+          sampleDate
+          sampleType {
             id
             name
           }
-          value
+          elements {
+            element {
+              id
+              name
+            }
+            value
+          }
+        }
+        sampleNumber
+        isCreatedAfterDetermine
+      }
+      ritageSamples {
+        additional
+        data {
+          id
+          sampleNumber
+          sampleDate
+          sampleType {
+            id
+            name
+          }
+          elements {
+            element {
+              id
+              name
+            }
+            value
+          }
+        }
+      }
+      ritages(
+        findAllOreRitageInput: {
+          page: $page
+          limit: $limit
+          orderBy: $orderBy
+          orderDir: $orderDir
+        }
+      ) {
+        meta {
+          currentPage
+          totalAllData
+          totalData
+          totalPage
+        }
+        data {
+          id
+          date
+          companyHeavyEquipment {
+            id
+            hullNumber
+          }
+          shift {
+            id
+            name
+          }
         }
       }
       status {
@@ -73,14 +132,13 @@ export const READ_ONE_STOCKPILE_MONITORING = gql`
   }
 `;
 
-export type ISampleReadOneStockpileMonitoring = {
+export type IRitageSampleReadOneStockpileMonitoring = {
   id: string;
-  date: string | null;
-  isCreatedAfterDetermine: boolean;
   sampleNumber: string | null;
+  sampleDate: string | null;
   sampleType: {
     id: string;
-    name: string | null;
+    name: string;
   };
   elements: {
     element: {
@@ -91,9 +149,44 @@ export type ISampleReadOneStockpileMonitoring = {
   }[];
 };
 
+export type ISampleReadOneStockpileMonitoring = {
+  id: string;
+  sample: {
+    id: string;
+    sampleNumber: string | null;
+    sampleDate: string | null;
+    sampleType: {
+      id: string;
+      name: string;
+    };
+    elements: {
+      element: {
+        id: string;
+        name: string | null;
+      };
+      value: number | null;
+    }[];
+  };
+  isCreatedAfterDetermine: boolean;
+};
+
+interface IRitageData {
+  id: string;
+  date: string | null;
+  companyHeavyEquipment: {
+    id: string;
+    hullNumber: string;
+  } | null;
+  shift: {
+    id: string;
+    name: string;
+  } | null;
+}
+
 export interface IReadOneStockpileMonitoring {
   id: string;
   dome: IReadOneStockpileDomeMaster | null;
+  domeStatus: string | null;
   material: {
     id: string;
     name: string;
@@ -108,9 +201,13 @@ export interface IReadOneStockpileMonitoring {
       }[]
     | null;
   tonByRitage: number | null;
-  bargingStartAt: string | null;
-  bargingFinishAt: string | null;
   movings:
+    | {
+        startAt: string | null;
+        finishAt: string | null;
+      }[]
+    | null;
+  bargings:
     | {
         startAt: string | null;
         finishAt: string | null;
@@ -125,6 +222,20 @@ export interface IReadOneStockpileMonitoring {
   desc: string | null;
   photo: Omit<IFile, 'mime' | 'path'> | null;
   samples: ISampleReadOneStockpileMonitoring[];
+  ritageSamples:
+    | ({
+        additional: {
+          averageSamples: {
+            element: {
+              id: string;
+              name: string | null;
+            };
+            value: number | null;
+          }[];
+        };
+      } & GResponse<IRitageSampleReadOneStockpileMonitoring>)
+    | null;
+  ritages: GResponse<IRitageData> | null;
   status: IStatus | null;
   statusMessage: string | null;
   createdAt: string | null;

@@ -342,6 +342,7 @@
     "fromElevasi": "Dari Elevasi",
     "fromDome": "Dari Dome",
     "bulkSamplingDensity": "Massa Jenis Bulk Sampling",
+    "listRitage": "List Ritase",
     "ritageStatus": "Status Ritase",
     "readRitageDT": "$t(commonTypography.detail) Data Ritase Dump Truck",
     "problem": "Bermasalah",
@@ -369,6 +370,10 @@
     "movingFinishDate": "Finish Moving",
     "movingStartTime": "Jam Mulai Moving",
     "movingFinishTime": "Jam Selesai Moving",
+    "bargingStartDate": "Start Barging",
+    "bargingFinishDate": "Finish Barging",
+    "bargingStartTime": "Jam Mulai Barging",
+    "bargingFinishTime": "Jam Selesai Barging",
     "reopenStartDate": "Start Re-open",
     "reopenCloseDate": "Close Re-open",
     "reopenStartTime": "Jam Dibuka Kembali",
@@ -402,7 +407,10 @@
     "hourMeterBefore": "HM Awal",
     "hourMeterAfter": "HM Akhir",
     "amountHourMeter": "Total HM",
-    "errorDescription": "Keterangan Error"
+    "errorDescription": "Keterangan Error",
+    "stockMaterial": "Stok Material",
+    "stockpileSample": "Sampel Stockpile",
+    "sampleByRitage": "Sampel Berdasarkan Ritase"
   },
   "sideBar": {
     "dashboard": "Dashboard",
