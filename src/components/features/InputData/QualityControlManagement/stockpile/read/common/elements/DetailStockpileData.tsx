@@ -23,6 +23,7 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
 }) => {
   const theme = useMantineTheme();
   const { t } = useTranslation('default');
+  const [page, setPage] = React.useState<number>(1);
 
   const photo = monitoringStockpile?.photo
     ? [
@@ -97,6 +98,18 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
             {
               dataKey: t('commonTypography.domeName'),
               value: monitoringStockpile?.dome?.name ?? '-',
+            },
+            {
+              dataKey: t('commonTypography.materialType'),
+              value: monitoringStockpile?.material?.name ?? '-',
+            },
+            {
+              dataKey: t('commonTypography.domeStatus'),
+              value: monitoringStockpile?.domeStatus ?? '-',
+            },
+            {
+              dataKey: t('commonTypography.stockMaterial'),
+              value: '-',
             },
           ]}
           type="grid"
@@ -204,11 +217,89 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
       </Stack>
       <Divider my="md" />
       <Stack spacing="sm">
+        <Text fz={24} fw={600} color="brand">
+          {t('commonTypography.listRitage')}
+        </Text>
+        <MantineDataTable
+          tableProps={{
+            records: monitoringStockpile?.ritages?.data ?? [],
+            defaultColumnProps: {
+              textAlignment: 'left',
+              titleStyle: {
+                paddingTop: 0,
+                backgroundColor: 'transparent',
+                border: 'none',
+                fontSize: 18,
+                fontWeight: 600,
+                color: theme.colors.dark[5],
+              },
+              cellsStyle: {
+                border: 'none',
+                fontSize: 16,
+                fontWeight: 400,
+                color: theme.colors.dark[3],
+              },
+              noWrap: false,
+            },
+            columns: [
+              {
+                accessor: 'heavyEquipmentCode',
+                title: t('commonTypography.heavyEquipmentCode'),
+                render: ({ companyHeavyEquipment }) =>
+                  companyHeavyEquipment?.hullNumber ?? '-',
+              },
+              {
+                accessor: 'date',
+                title: t('commonTypography.date'),
+                render: ({ date }) => formatDate(date) ?? '-',
+              },
+              {
+                accessor: 'shift',
+                title: t('commonTypography.shift'),
+                render: ({ shift }) => shift?.name ?? '-',
+              },
+              {
+                accessor: 'operatorName',
+                title: t('commonTypography.operatorName'),
+                render: () => '-',
+              },
+            ],
+            horizontalSpacing: 0,
+            highlightOnHover: false,
+            withBorder: false,
+            shadow: 'none',
+            minHeight:
+              monitoringStockpile?.ritages?.data &&
+              monitoringStockpile?.ritages?.data.length > 0
+                ? 0
+                : 320,
+            borderColor: 'none',
+            rowBorderColor: 'none',
+          }}
+          emptyStateProps={{
+            title: t('commonTypography.dataNotfound'),
+          }}
+          paginationProps={{
+            setPage: setPage,
+            currentPage: page,
+            totalAllData: monitoringStockpile?.ritages?.meta.totalAllData ?? 0,
+            totalData: monitoringStockpile?.ritages?.meta.totalData ?? 0,
+            totalPage: monitoringStockpile?.ritages?.meta.totalPage ?? 0,
+          }}
+        />
+      </Stack>
+      <Divider my="md" />
+      <Stack spacing="sm">
         <KeyValueList
           data={[
             {
               dataKey: t('commonTypography.tonByRitage'),
               value: `${monitoringStockpile?.tonByRitage}` ?? '-',
+            },
+            {
+              dataKey: t('commonTypography.totalRitage'),
+              value:
+                `${monitoringStockpile?.ritages?.meta.totalAllData}` ?? '-',
             },
           ]}
           type="grid"
@@ -225,41 +316,73 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
       <Divider my="md" />
       <Stack spacing="sm">
         <Text fz={24} fw={600} color="brand">
-          {t('commonTypography.shipping')}
+          {t('commonTypography.barging')}
         </Text>
-        <KeyValueList
-          data={[
-            {
-              dataKey: t('commonTypography.shippingStartDate'),
-              value: formatDate(monitoringStockpile?.bargingStartAt) ?? '-',
+        <MantineDataTable
+          tableProps={{
+            records: monitoringStockpile?.bargings ?? [],
+            idAccessor: (record) => {
+              const key =
+                monitoringStockpile?.bargings &&
+                monitoringStockpile?.bargings.indexOf(record) + 1;
+              return `${key}`;
             },
-            {
-              dataKey: t('commonTypography.shippingFinishDate'),
-              value: formatDate(monitoringStockpile?.bargingFinishAt) ?? '-',
+            defaultColumnProps: {
+              textAlignment: 'left',
+              titleStyle: {
+                paddingTop: 0,
+                backgroundColor: 'transparent',
+                border: 'none',
+                fontSize: 18,
+                fontWeight: 600,
+                color: theme.colors.dark[5],
+              },
+              cellsStyle: {
+                border: 'none',
+                fontSize: 16,
+                fontWeight: 400,
+                color: theme.colors.dark[3],
+              },
+              noWrap: false,
             },
-            {
-              dataKey: t('commonTypography.shippingStartTime'),
-              value:
-                formatDate(monitoringStockpile?.bargingStartAt, 'hh:mm:ss A') ??
-                '-',
-            },
-            {
-              dataKey: t('commonTypography.shippingFinishTime'),
-              value:
-                formatDate(
-                  monitoringStockpile?.bargingFinishAt,
-                  'hh:mm:ss A'
-                ) ?? '-',
-            },
-          ]}
-          type="grid"
-          keyStyleText={{
-            fw: 400,
-            fz: 20,
+            columns: [
+              {
+                accessor: 'bargingStartDate',
+                title: t('commonTypography.bargingStartDate'),
+                render: ({ startAt }) => formatDate(startAt) ?? '-',
+              },
+              {
+                accessor: 'bargingFinishDate',
+                title: t('commonTypography.bargingFinishDate'),
+                render: ({ finishAt }) => formatDate(finishAt) ?? '-',
+              },
+              {
+                accessor: 'bargingStartTime',
+                title: t('commonTypography.bargingStartTime'),
+                render: ({ startAt }) =>
+                  formatDate(startAt, 'hh:mm:ss A') ?? '-',
+              },
+              {
+                accessor: 'bargingFinishTime',
+                title: t('commonTypography.bargingFinishTime'),
+                render: ({ finishAt }) =>
+                  formatDate(finishAt, 'hh:mm:ss A') ?? '-',
+              },
+            ],
+            horizontalSpacing: 0,
+            highlightOnHover: false,
+            withBorder: false,
+            shadow: 'none',
+            minHeight:
+              monitoringStockpile?.bargings &&
+              monitoringStockpile?.bargings?.length > 0
+                ? 0
+                : 320,
+            borderColor: 'none',
+            rowBorderColor: 'none',
           }}
-          valueStyleText={{
-            fw: 600,
-            fz: 20,
+          emptyStateProps={{
+            title: t('commonTypography.dataNotfound'),
           }}
         />
       </Stack>
@@ -271,6 +394,12 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
         <MantineDataTable
           tableProps={{
             records: monitoringStockpile?.movings ?? [],
+            idAccessor: (record) => {
+              const key =
+                monitoringStockpile?.movings &&
+                monitoringStockpile?.movings.indexOf(record) + 1;
+              return `${key}`;
+            },
             defaultColumnProps: {
               textAlignment: 'left',
               titleStyle: {
