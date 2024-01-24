@@ -37,7 +37,7 @@ const DetailSampleData: React.FC<IDetailSampleDataProps> = ({
         accessor: element.name,
         title: `${t('commonTypography.rate')} ${element.name}`,
         render: ({ sample }) => {
-          const value = sample.elements?.find(
+          const value = sample?.elements?.find(
             (val) => val.element?.id === element.id
           );
           return value?.value ?? '-';
@@ -111,17 +111,17 @@ const DetailSampleData: React.FC<IDetailSampleDataProps> = ({
                 accessor: 'sampleType',
                 title: t('commonTypography.sampleType'),
                 width: 250,
-                render: ({ sample }) => sample.sampleType.name ?? '-',
+                render: ({ sample }) => sample?.sampleType.name ?? '-',
               },
               {
                 accessor: 'sampleNumber',
                 title: t('commonTypography.sampleNumber'),
-                render: ({ sample }) => sample.sampleNumber,
+                render: ({ sample }) => sample?.sampleNumber ?? '-',
               },
               {
                 accessor: 'sampleDate',
                 title: t('commonTypography.sampleDate'),
-                render: ({ sample }) => formatDate(sample.sampleDate) ?? '-',
+                render: ({ sample }) => formatDate(sample?.sampleDate) ?? '-',
               },
               ...(renderOtherColumn ?? []),
             ],

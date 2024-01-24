@@ -151,6 +151,7 @@ export type IRitageSampleReadOneStockpileMonitoring = {
 
 export type ISampleReadOneStockpileMonitoring = {
   id: string;
+  sampleNumber: string | null;
   sample: {
     id: string;
     sampleNumber: string | null;
@@ -166,7 +167,7 @@ export type ISampleReadOneStockpileMonitoring = {
       };
       value: number | null;
     }[];
-  };
+  } | null;
   isCreatedAfterDetermine: boolean;
 };
 

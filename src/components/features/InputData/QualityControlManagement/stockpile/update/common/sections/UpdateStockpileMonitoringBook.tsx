@@ -1,5 +1,5 @@
-/* eslint-disable unused-imports/no-unused-vars */
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -19,6 +19,7 @@ import {
   useUpdateSampleStockpileMonitoring,
 } from '@/services/graphql/mutation/stockpile-monitoring/useUpdateSampleStockpileMonitoring';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
+import { useReadOneSampleHouseLabByNumberSample } from '@/services/graphql/query/sample-house-lab/useReadOneSampleHouseLabByNoSample';
 import { useReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 import { useReadOneStockpileMonitoring } from '@/services/graphql/query/stockpile-monitoring/useReadOneStockpileMonitoring';
 import {
@@ -68,6 +69,11 @@ const UpdateStockpileMonitoringBook = () => {
   >([]);
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
+  const [indexOfSample, setIndexOfSample] = useDebouncedState<number | null>(
+    null,
+    500
+  );
+  const [sampleNumber, setSampleNumber] = useDebouncedState<string>('', 500);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationStockpile>({
@@ -88,10 +94,15 @@ const UpdateStockpileMonitoringBook = () => {
         },
       ],
       tonByRitage: '',
-      bargingStartDate: undefined,
-      bargingStartTime: '',
-      bargingFinishDate: undefined,
-      bargingFinishTime: '',
+      bargings: [
+        {
+          startDate: undefined,
+          startTime: '',
+          finishDate: undefined,
+          finishTime: '',
+        },
+      ],
+
       movings: [
         {
           startDate: undefined,
@@ -129,7 +140,6 @@ const UpdateStockpileMonitoringBook = () => {
     mode: 'onBlur',
   });
   const domeId = methods.watch('domeId');
-  const stockpileId = methods.watch('stockpileId');
 
   const {
     fields: sampleFields,
@@ -153,6 +163,11 @@ const UpdateStockpileMonitoringBook = () => {
     name: 'movings',
     control: methods.control,
   });
+  const { fields: bargingFields, replace: replaceBargingFields } =
+    useFieldArray({
+      name: 'bargings',
+      control: methods.control,
+    });
   const { fields: reopenFields, replace: replaceReopenFields } = useFieldArray({
     name: 'reopens',
     control: methods.control,
@@ -197,7 +212,7 @@ const UpdateStockpileMonitoringBook = () => {
       onCompleted: ({ monitoringStockpile }) => {
         const samples = monitoringStockpile.samples.map((val) => {
           const elemntsValue = elementsData?.map((o) => {
-            const value = val.sample.elements.find(
+            const value = val.sample?.elements.find(
               (obj) => obj.element.id === o.id
             );
             return {
@@ -207,14 +222,21 @@ const UpdateStockpileMonitoringBook = () => {
             };
           });
           return {
-            date: stringToDate(val.sample.sampleDate ?? null),
-            sampleTypeId: val.sample.sampleType.id ?? '',
-            sampleNumber: val.sample.sampleNumber ?? '',
+            date: stringToDate(val.sample?.sampleDate ?? null),
+            sampleTypeId: val.sample?.sampleType.id ?? '',
+            sampleNumber: val.sampleNumber ?? '',
             isCreatedAfterDetermine: val.isCreatedAfterDetermine ? true : false,
             elements: elemntsValue ?? [],
           };
         });
-        replace(samples);
+        const initialSamples = {
+          date: undefined,
+          sampleTypeId: '',
+          sampleNumber: '',
+          isCreatedAfterDetermine: false,
+          elements: otherElements,
+        };
+        samples.length > 0 ? replace(samples) : replace(initialSamples);
 
         const surveys = monitoringStockpile.tonSurveys?.map((val) => {
           const date = stringToDate(val.date ?? null);
@@ -224,6 +246,18 @@ const UpdateStockpileMonitoringBook = () => {
           };
         });
         const movings = monitoringStockpile.movings?.map((val) => {
+          const startDate = stringToDate(val.startAt ?? null);
+          const startTime = formatDate(val.startAt, 'HH:mm:ss');
+          const finishDate = stringToDate(val.finishAt ?? null);
+          const finishTime = formatDate(val.finishAt, 'HH:mm:ss');
+          return {
+            startDate: startDate,
+            startTime: startTime ?? '',
+            finishDate: finishDate,
+            finishTime: finishTime ?? '',
+          };
+        });
+        const bargings = monitoringStockpile.bargings?.map((val) => {
           const startDate = stringToDate(val.startAt ?? null);
           const startTime = formatDate(val.startAt, 'HH:mm:ss');
           const finishDate = stringToDate(val.finishAt ?? null);
@@ -260,6 +294,16 @@ const UpdateStockpileMonitoringBook = () => {
                 finishTime: '',
               }
         );
+        replaceBargingFields(
+          bargings && bargings.length > 0
+            ? bargings
+            : {
+                startDate: undefined,
+                startTime: '',
+                finishDate: undefined,
+                finishTime: '',
+              }
+        );
         replaceReopenFields(
           reopens && reopens.length > 0
             ? reopens
@@ -274,20 +318,6 @@ const UpdateStockpileMonitoringBook = () => {
         const closeDate = stringToDate(monitoringStockpile.closeAt ?? null);
         const openTime = formatDate(monitoringStockpile.openAt, 'HH:mm:ss');
         const closeTime = formatDate(monitoringStockpile.closeAt, 'HH:mm:ss');
-        // const bargingStartDate = stringToDate(
-        //   monitoringStockpile.bargingStartAt ?? null
-        // );
-        // const bargingFinishDate = stringToDate(
-        //   monitoringStockpile.bargingFinishAt ?? null
-        // );
-        // const bargingStartTime = formatDate(
-        //   monitoringStockpile.bargingStartAt,
-        //   'HH:mm:ss'
-        // );
-        // const bargingFinishTime = formatDate(
-        //   monitoringStockpile.bargingFinishAt,
-        //   'HH:mm:ss'
-        // );
         methods.setValue(
           'stockpileId',
           monitoringStockpile.dome?.stockpile.id ?? ''
@@ -302,16 +332,53 @@ const UpdateStockpileMonitoringBook = () => {
         methods.setValue('openTime', openTime ?? '');
         methods.setValue('closeTime', closeTime ?? '');
         methods.setValue('tonByRitage', monitoringStockpile.tonByRitage ?? '');
-        // methods.setValue('bargingStartDate', bargingStartDate);
-        // methods.setValue('bargingFinishDate', bargingFinishDate);
-        // methods.setValue('bargingStartTime', bargingStartTime ?? '');
-        // methods.setValue('bargingFinishTime', bargingFinishTime ?? '');
         methods.setValue('desc', monitoringStockpile.desc ?? '');
         if (monitoringStockpile.photo) {
           setServerPhoto([monitoringStockpile.photo]);
         }
       },
     });
+
+  useReadOneSampleHouseLabByNumberSample({
+    variables: {
+      sampleNumber: sampleNumber,
+    },
+    skip: indexOfSample === null || !isOwnElemntsData,
+    onCompleted: (data) => {
+      const date = stringToDate(
+        data.houseSampleAndLabBySampleNumber.sampleDate ?? null
+      );
+      const elemntsValue = elementsData?.map((o) => {
+        const value = data.houseSampleAndLabBySampleNumber?.elements?.find(
+          (obj) => obj.element?.id === o.id
+        );
+        return {
+          elementId: o.id,
+          name: o.name ?? '',
+          value: value?.value ?? '',
+        };
+      });
+      if (elemntsValue && elemntsValue?.length > 0) {
+        methods.setValue(
+          `samples.${indexOfSample as number}.elements`,
+          elemntsValue
+        );
+      }
+      methods.setValue(`samples.${indexOfSample as number}.date`, date);
+      methods.setValue(
+        `samples.${indexOfSample as number}.sampleTypeId`,
+        data.houseSampleAndLabBySampleNumber.sampleType?.id ?? ''
+      );
+    },
+    onError: () => {
+      methods.setValue(`samples.${indexOfSample as number}.sampleTypeId`, '');
+      methods.setValue(`samples.${indexOfSample as number}.date`, undefined);
+      methods.setValue(
+        `samples.${indexOfSample as number}.elements`,
+        otherElements
+      );
+    },
+  });
 
   const { mutate, isLoading } = useUpdateStockpileMonitoring({
     onError: (err) => {
@@ -438,6 +505,63 @@ const UpdateStockpileMonitoringBook = () => {
   );
   const surveyGroupItem = surveyFields.map(surveyGroup);
 
+  const bargingGroup = React.useCallback(
+    (
+      val: FieldArrayWithId<IMutationStockpile, 'bargings', 'id'>,
+      index: number
+    ) => {
+      const bargingStartDateItem = globalDate({
+        name: `bargings.${index}.startDate`,
+        label: 'bargingStartDate',
+        withAsterisk: false,
+        clearable: true,
+        colSpan: 6,
+        key: `bargings.${index}.startDate.${val.id}`,
+        disabled: true,
+      });
+      const bargingFinishDateItem = globalDate({
+        name: `bargings.${index}.finishDate`,
+        label: 'bargingFinishDate',
+        withAsterisk: false,
+        clearable: true,
+        colSpan: 6,
+        key: `bargings.${index}.finishDate.${val.id}`,
+        disabled: true,
+      });
+      const bargingStartTimeItem = globalTimeInput({
+        name: `bargings.${index}.startTime`,
+        label: 'bargingStartTime',
+        withAsterisk: false,
+        colSpan: 6,
+        key: `bargings.${index}.startTime.${val.id}`,
+        disabled: true,
+      });
+      const bargingFinishTimeItem = globalTimeInput({
+        name: `bargings.${index}.finishTime`,
+        label: 'bargingFinishTime',
+        withAsterisk: false,
+        colSpan: 6,
+        key: `bargings.${index}.finishTime.${val.id}`,
+        disabled: true,
+      });
+
+      const group: ControllerGroup = {
+        group: t('commonTypography.barging'),
+        enableGroupLabel: true,
+        formControllers: [
+          bargingStartDateItem,
+          bargingFinishDateItem,
+          bargingStartTimeItem,
+          bargingFinishTimeItem,
+        ],
+      };
+      return group;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+  const bargingGroupItem = bargingFields.map(bargingGroup);
+
   const movingGroup = React.useCallback(
     (
       val: FieldArrayWithId<IMutationStockpile, 'movings', 'id'>,
@@ -450,6 +574,7 @@ const UpdateStockpileMonitoringBook = () => {
         clearable: true,
         colSpan: 6,
         key: `movings.${index}.startDate.${val.id}`,
+        disabled: true,
       });
       const movingFinishDateItem = globalDate({
         name: `movings.${index}.finishDate`,
@@ -458,6 +583,7 @@ const UpdateStockpileMonitoringBook = () => {
         clearable: true,
         colSpan: 6,
         key: `movings.${index}.finishDate.${val.id}`,
+        disabled: true,
       });
       const movingStartTimeItem = globalTimeInput({
         name: `movings.${index}.startTime`,
@@ -465,6 +591,7 @@ const UpdateStockpileMonitoringBook = () => {
         withAsterisk: false,
         colSpan: 6,
         key: `movings.${index}.startTime.${val.id}`,
+        disabled: true,
       });
       const movingFinishTimeItem = globalTimeInput({
         name: `movings.${index}.finishTime`,
@@ -472,6 +599,7 @@ const UpdateStockpileMonitoringBook = () => {
         withAsterisk: false,
         colSpan: 6,
         key: `movings.${index}.finishTime.${val.id}`,
+        disabled: true,
       });
 
       const group: ControllerGroup = {
@@ -503,6 +631,7 @@ const UpdateStockpileMonitoringBook = () => {
         clearable: true,
         colSpan: 6,
         key: `reopens.${index}.openDate.${val.id}`,
+        disabled: true,
       });
       const reopenFinishDateItem = globalDate({
         name: `reopens.${index}.closeDate`,
@@ -511,6 +640,7 @@ const UpdateStockpileMonitoringBook = () => {
         clearable: true,
         colSpan: 6,
         key: `reopens.${index}.closeDate.${val.id}`,
+        disabled: true,
       });
       const reopenStartTimeItem = globalTimeInput({
         name: `reopens.${index}.openTime`,
@@ -518,6 +648,7 @@ const UpdateStockpileMonitoringBook = () => {
         withAsterisk: false,
         colSpan: 6,
         key: `reopens.${index}.openTime.${val.id}`,
+        disabled: true,
       });
       const reopenFinishTimeItem = globalTimeInput({
         name: `reopens.${index}.closeTime`,
@@ -525,6 +656,7 @@ const UpdateStockpileMonitoringBook = () => {
         withAsterisk: false,
         colSpan: 6,
         key: `reopens.${index}.closeTime.${val.id}`,
+        disabled: true,
       });
 
       const group: ControllerGroup = {
@@ -557,6 +689,7 @@ const UpdateStockpileMonitoringBook = () => {
           withAsterisk: false,
           labelWithTranslate: false,
           key: `samples.${index}.elements.${i}.value.${val.id}`,
+          disabled: true,
         });
         return elementInput;
       });
@@ -565,8 +698,9 @@ const UpdateStockpileMonitoringBook = () => {
         label: 'sampleDate2',
         withAsterisk: false,
         clearable: true,
-        colSpan: 12,
+        colSpan: 6,
         key: `samples.${index}.date.${val.id}`,
+        disabled: true,
       });
       const sampleTypesItem = sampleTypeSelect({
         colSpan: 6,
@@ -574,13 +708,22 @@ const UpdateStockpileMonitoringBook = () => {
         label: 'sampleType2',
         name: `samples.${index}.sampleTypeId`,
         key: `samples.${index}.sampleTypeId.${val.id}`,
+        disabled: true,
       });
       const sampleNumber = globalText({
         name: `samples.${index}.sampleNumber`,
         label: 'sampleNumber',
-        colSpan: 6,
+        colSpan: 12,
         withAsterisk: false,
         key: `samples.${index}.sampleNumber.${val.id}`,
+        onChange: (e) => {
+          setIndexOfSample(index);
+          setSampleNumber(e.currentTarget.value);
+          methods.setValue(
+            `samples.${index}.sampleNumber`,
+            e.currentTarget.value
+          );
+        },
       });
       const isDelete = methods.watch(
         `samples.${index}.isCreatedAfterDetermine`
@@ -615,9 +758,9 @@ const UpdateStockpileMonitoringBook = () => {
               : undefined,
         },
         formControllers: [
-          date,
-          sampleTypesItem,
           sampleNumber,
+          sampleTypesItem,
+          date,
           ...(elementItem ?? []),
         ],
       };
@@ -625,30 +768,22 @@ const UpdateStockpileMonitoringBook = () => {
       return group;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [sampleFields, isDetermination]
+    [sampleFields, isDetermination, indexOfSample]
   );
   const sampleGroupItem = sampleFields.map(sampleGroup);
 
   const fieldItemStepOne = React.useMemo(() => {
-    const newStockpileId = stockpileId || null;
     const stockpileNameItem = stockpileNameSelect({
       colSpan: 6,
-      onChange: (value) => {
-        methods.setValue('stockpileId', value ?? '');
-        methods.setValue('domeId', '');
-        methods.setValue('handbookId', '');
-        methods.trigger('stockpileId');
-        methods.trigger('domeId');
-      },
+      defaultValue: monitoringStockpile?.dome?.stockpile.id,
+      labelValue: monitoringStockpile?.dome?.stockpile.name,
+      disabled: true,
     });
     const domeNameItem = domeNameSelect({
       colSpan: 6,
-      disabled: !newStockpileId,
-      onChange: (value) => {
-        methods.setValue('domeId', value ?? '');
-        methods.setValue('handbookId', '');
-        methods.trigger('domeId');
-      },
+      disabled: true,
+      defaultValue: monitoringStockpile?.dome?.id,
+      labelValue: monitoringStockpile?.dome?.name,
     });
     const domeIdItem = globalText({
       name: 'handbookId',
@@ -671,6 +806,7 @@ const UpdateStockpileMonitoringBook = () => {
       withAsterisk: true,
       clearable: true,
       colSpan: 6,
+      disabled: true,
     });
     const closeDateItem = globalDate({
       name: 'closeDate',
@@ -678,18 +814,21 @@ const UpdateStockpileMonitoringBook = () => {
       withAsterisk: false,
       clearable: true,
       colSpan: 6,
+      disabled: true,
     });
     const openTimeItem = globalTimeInput({
       name: 'openTime',
       label: 'openTime',
       withAsterisk: false,
       colSpan: 6,
+      disabled: true,
     });
     const closeTimeItem = globalTimeInput({
       name: 'closeTime',
       label: 'closeTime',
       withAsterisk: false,
       colSpan: 6,
+      disabled: true,
     });
     const tonByRitageItem = globalNumberInput({
       colSpan: 12,
@@ -697,32 +836,6 @@ const UpdateStockpileMonitoringBook = () => {
       label: 'tonByRitage',
       withAsterisk: false,
       disabled: true,
-    });
-    const bargingStartDateItem = globalDate({
-      name: 'bargingStartDate',
-      label: 'bargingStartDate',
-      withAsterisk: false,
-      clearable: true,
-      colSpan: 6,
-    });
-    const bargingFinishDateItem = globalDate({
-      name: 'bargingFinishDate',
-      label: 'bargingFinishDate',
-      withAsterisk: false,
-      clearable: true,
-      colSpan: 6,
-    });
-    const bargingStartTimeItem = globalTimeInput({
-      name: 'bargingStartTime',
-      label: 'bargingStartTime',
-      withAsterisk: false,
-      colSpan: 6,
-    });
-    const bargingFinishTimeItem = globalTimeInput({
-      name: 'bargingFinishTime',
-      label: 'bargingFinishTime',
-      withAsterisk: false,
-      colSpan: 6,
     });
     const desc = globalText({
       colSpan: 12,
@@ -781,16 +894,7 @@ const UpdateStockpileMonitoringBook = () => {
         group: t('commonTypography.tonByRitage'),
         formControllers: [tonByRitageItem],
       },
-      {
-        group: t('commonTypography.barging'),
-        enableGroupLabel: true,
-        formControllers: [
-          bargingStartDateItem,
-          bargingFinishDateItem,
-          bargingStartTimeItem,
-          bargingFinishTimeItem,
-        ],
-      },
+      ...bargingGroupItem,
       ...movingGroupItem,
       ...reopenGroupItem,
       {
@@ -808,10 +912,10 @@ const UpdateStockpileMonitoringBook = () => {
   }, [
     monitoringStockpile,
     surveyGroupItem,
+    bargingGroupItem,
     movingGroupItem,
     reopenGroupItem,
     serverPhoto,
-    stockpileId,
   ]);
 
   /* #endregion  /**======== Field =========== */
@@ -867,11 +971,13 @@ const UpdateStockpileMonitoringBook = () => {
 
     const dataSamples: IMutationUpdateSampleMonitoringStockpileValues[] =
       data.samples.map((val) => {
+        // eslint-disable-next-line unused-imports/no-unused-vars
         const { isCreatedAfterDetermine, date, elements, ...rest } = val;
         const dateString = dateToString(date ?? null);
         const elementsManipulate = elements
           .filter((v) => v.value !== '')
           .map((obj) => {
+            // eslint-disable-next-line unused-imports/no-unused-vars
             const { name, ...restElement } = obj;
             return {
               ...restElement,
