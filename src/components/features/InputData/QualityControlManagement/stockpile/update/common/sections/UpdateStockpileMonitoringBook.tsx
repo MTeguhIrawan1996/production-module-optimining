@@ -342,6 +342,7 @@ const UpdateStockpileMonitoringBook = () => {
   useReadOneSampleHouseLabByNumberSample({
     variables: {
       sampleNumber: sampleNumber,
+      index: indexOfSample,
     },
     skip: indexOfSample === null || !isOwnElemntsData,
     onCompleted: (data) => {
