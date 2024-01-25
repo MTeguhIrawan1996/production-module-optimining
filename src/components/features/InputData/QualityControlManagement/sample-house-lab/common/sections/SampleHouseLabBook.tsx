@@ -5,7 +5,6 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import 'dayjs/locale/id';
 
 import {
   DashboardCard,

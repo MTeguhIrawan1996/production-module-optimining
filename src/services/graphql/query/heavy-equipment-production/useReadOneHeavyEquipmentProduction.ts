@@ -51,6 +51,7 @@ export const READ_ONE_HEAVY_EQUIPMENT_PRODUCTION = gql`
       hourMeterAfter
       hourMeterTotal
       effectiveHour
+      fuel
       productiveIndicators {
         formula {
           id
@@ -134,6 +135,7 @@ interface IReadOneHeavyEquipmentProduction {
   hourMeterTotal: number | null;
   effectiveHour: number | null;
   productiveIndicators: IProductiveIndicator[] | null;
+  fuel: number | null;
   loseTimes:
     | {
         id: string;

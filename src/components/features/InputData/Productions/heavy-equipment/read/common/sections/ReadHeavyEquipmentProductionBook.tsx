@@ -398,6 +398,10 @@ const ReadHeavyEquipmentProductionBook = () => {
                   dataKey: t('commonTypography.operator'),
                   value: heavyEquipmentData?.operator?.humanResource?.name,
                 },
+                {
+                  dataKey: t('commonTypography.amountFuel'),
+                  value: `${heavyEquipmentData?.fuel ?? '0'} Ltr`,
+                },
               ]}
               type="grid"
               keyStyleText={{

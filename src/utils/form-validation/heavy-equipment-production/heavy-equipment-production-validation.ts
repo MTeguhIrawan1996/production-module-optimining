@@ -26,6 +26,7 @@ export const heavyEquipmentProductionMutationValidation: z.ZodType<IMutationHeav
       hourMeterBefore: zRequiredNumber,
       hourMeterAfter: zRequiredNumber,
       amountHourMeter: zOptionalNumber,
+      fuel: zOptionalNumber,
       loseTimes: z
         .object({
           workingHourPlanId: zOptionalString,
