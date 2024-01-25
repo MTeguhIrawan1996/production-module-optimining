@@ -410,7 +410,8 @@
     "errorDescription": "Keterangan Error",
     "stockMaterial": "Stok Material",
     "stockpileSample": "Sampel Stockpile",
-    "sampleByRitage": "Sampel Berdasarkan Ritase"
+    "sampleByRitage": "Sampel Berdasarkan Ritase",
+    "amountFuel": "Jumlah pengisian BBM"
   },
   "sideBar": {
     "dashboard": "Dashboard",
