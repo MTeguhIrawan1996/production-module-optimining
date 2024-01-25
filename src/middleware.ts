@@ -137,6 +137,10 @@ export async function middleware(request: NextRequest) {
       allowedPermissions: ['create-front-data'],
     },
     {
+      path: '/plan/weekly',
+      allowedPermissions: ['create-weekly-plan'],
+    },
+    {
       path: '/setting/management-role',
       allowedPermissions: ['create-role'],
     },
@@ -196,6 +200,7 @@ export const config = {
     '/master-data/:path*',
     '/reference/:path*',
     '/input-data/:path*',
+    '/plan/:path*',
     '/setting/:path*',
   ],
 };

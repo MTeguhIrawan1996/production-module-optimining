@@ -411,7 +411,10 @@
     "stockMaterial": "Stok Material",
     "stockpileSample": "Sampel Stockpile",
     "sampleByRitage": "Sampel Berdasarkan Ritase",
-    "amountFuel": "Jumlah pengisian BBM"
+    "amountFuel": "Jumlah pengisian BBM",
+    "plan": "Rencana",
+    "weekly": "Mingguan",
+    "week": "Minggu"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -444,7 +447,9 @@
     "dataWeather": "$t(commonTypography.weatherData)",
     "shippingMonitoring": "$t(commonTypography.shippingMonitoring)",
     "dataFront": "$t(commonTypography.front)",
-    "activityCategory": "$t(commonTypography.activityCategory)"
+    "activityCategory": "$t(commonTypography.activityCategory)",
+    "plan": "$t(commonTypography.plan)",
+    "weekly": "$t(commonTypography.weekly)"
   },
   "auth": {
     "button": {
@@ -929,5 +934,10 @@
     "updateHeavyEquipmentFormula": "$t(commonTypography.edit) $t(commonTypography.heavyEquipmentFormula)",
     "heavyEquipmentFormulaSuccessUpdateMessage": "$t(commonTypography.heavyEquipmentFormula) berhasil diubah",
     "readHeavyEquipmentFormula": "$t(commonTypography.detail) $t(commonTypography.heavyEquipmentFormula)"
+  },
+  "weeklyPlan": {
+    "title": "Rencana Produksi Mingguan",
+    "create": "$t(commonTypography.create) $t(weeklyPlan.title)",
+    "successDeleteMessage": "$t(weeklyPlan.title) berhasil dihapus"
   }
 }

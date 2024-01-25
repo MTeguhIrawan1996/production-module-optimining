@@ -1,5 +1,4 @@
 import * as React from 'react';
-import 'dayjs/locale/id';
 
 import {
   BrandSelectInputRhf,

@@ -158,6 +158,17 @@ export const linksDashboard: IMenuItem[] = [
     ],
   },
   {
+    label: 'plan',
+    icon: 'tabler:calendar-event',
+    subMenu: [
+      {
+        label: 'weekly',
+        href: '/plan/weekly',
+        access: ['create-weekly-plan'],
+      },
+    ],
+  },
+  {
     label: 'setting',
     icon: 'bi:gear-fill',
     subMenu: [
