@@ -21,7 +21,7 @@ i18n
   .init({
     defaultNS: 'default',
     lng: 'id',
-    ns: ['default', 'allComponents', 'profile'],
+    ns: ['default', 'allComponents', 'profile', 'uploadFileConfig'],
     debug: process.env.NODE_ENV === 'development',
     interpolation: {
       escapeValue: false,
