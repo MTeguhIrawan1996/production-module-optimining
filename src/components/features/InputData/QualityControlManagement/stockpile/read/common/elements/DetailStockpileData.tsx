@@ -294,12 +294,13 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
           data={[
             {
               dataKey: t('commonTypography.tonByRitage'),
-              value: `${monitoringStockpile?.tonByRitage}` ?? '-',
+              value: `${monitoringStockpile?.tonByRitage || '-'}`,
             },
             {
               dataKey: t('commonTypography.totalRitage'),
-              value:
-                `${monitoringStockpile?.ritages?.meta.totalAllData}` ?? '-',
+              value: `${
+                monitoringStockpile?.ritages?.meta.totalAllData || '-'
+              }`,
             },
           ]}
           type="grid"

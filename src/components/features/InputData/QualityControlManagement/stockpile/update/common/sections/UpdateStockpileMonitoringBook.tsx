@@ -125,7 +125,7 @@ const UpdateStockpileMonitoringBook = () => {
           date: undefined,
           sampleTypeId: '',
           sampleNumber: '',
-          isCreatedAfterDetermine: false,
+          isCreatedAfterDetermine: true,
           elements: [
             {
               elementId: '',
@@ -175,6 +175,7 @@ const UpdateStockpileMonitoringBook = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
+
   const { elementsData } = useReadAllElementMaster({
     variables: {
       limit: null,
@@ -203,143 +204,7 @@ const UpdateStockpileMonitoringBook = () => {
   const isOwnElemntsData =
     elementsData && elementsData.length > 0 ? true : false;
 
-  const { monitoringStockpile, monitoringStockpileLoading } =
-    useReadOneStockpileMonitoring({
-      variables: {
-        id,
-      },
-      skip: !router.isReady || !isOwnElemntsData,
-      onCompleted: ({ monitoringStockpile }) => {
-        const samples = monitoringStockpile.samples.map((val) => {
-          const elemntsValue = elementsData?.map((o) => {
-            const value = val.sample?.elements.find(
-              (obj) => obj.element.id === o.id
-            );
-            return {
-              elementId: o.id,
-              name: o.name ?? '',
-              value: value?.value ?? '',
-            };
-          });
-          return {
-            date: stringToDate(val.sample?.sampleDate ?? null),
-            sampleTypeId: val.sample?.sampleType.id ?? '',
-            sampleNumber: val.sampleNumber ?? '',
-            isCreatedAfterDetermine: val.isCreatedAfterDetermine ? true : false,
-            elements: elemntsValue ?? [],
-          };
-        });
-        const initialSamples = {
-          date: undefined,
-          sampleTypeId: '',
-          sampleNumber: '',
-          isCreatedAfterDetermine: false,
-          elements: otherElements,
-        };
-        samples.length > 0 ? replace(samples) : replace(initialSamples);
-
-        const surveys = monitoringStockpile.tonSurveys?.map((val) => {
-          const date = stringToDate(val.date ?? null);
-          return {
-            date: date,
-            ton: val.ton ?? '',
-          };
-        });
-        const movings = monitoringStockpile.movings?.map((val) => {
-          const startDate = stringToDate(val.startAt ?? null);
-          const startTime = formatDate(val.startAt, 'HH:mm:ss');
-          const finishDate = stringToDate(val.finishAt ?? null);
-          const finishTime = formatDate(val.finishAt, 'HH:mm:ss');
-          return {
-            startDate: startDate,
-            startTime: startTime ?? '',
-            finishDate: finishDate,
-            finishTime: finishTime ?? '',
-          };
-        });
-        const bargings = monitoringStockpile.bargings?.map((val) => {
-          const startDate = stringToDate(val.startAt ?? null);
-          const startTime = formatDate(val.startAt, 'HH:mm:ss');
-          const finishDate = stringToDate(val.finishAt ?? null);
-          const finishTime = formatDate(val.finishAt, 'HH:mm:ss');
-          return {
-            startDate: startDate,
-            startTime: startTime ?? '',
-            finishDate: finishDate,
-            finishTime: finishTime ?? '',
-          };
-        });
-        const reopens = monitoringStockpile.reopens?.map((val) => {
-          const openDate = stringToDate(val.openAt ?? null);
-          const openTime = formatDate(val.openAt, 'HH:mm:ss');
-          const closeDate = stringToDate(val.closeAt ?? null);
-          const closeTime = formatDate(val.closeAt, 'HH:mm:ss');
-          return {
-            openDate: openDate,
-            openTime: openTime ?? '',
-            closeDate: closeDate,
-            closeTime: closeTime ?? '',
-          };
-        });
-        replaceSurveyFields(
-          surveys && surveys.length > 0 ? surveys : { date: undefined, ton: '' }
-        );
-        replaceMovingFields(
-          movings && movings.length > 0
-            ? movings
-            : {
-                startDate: undefined,
-                startTime: '',
-                finishDate: undefined,
-                finishTime: '',
-              }
-        );
-        replaceBargingFields(
-          bargings && bargings.length > 0
-            ? bargings
-            : {
-                startDate: undefined,
-                startTime: '',
-                finishDate: undefined,
-                finishTime: '',
-              }
-        );
-        replaceReopenFields(
-          reopens && reopens.length > 0
-            ? reopens
-            : {
-                openDate: undefined,
-                openTime: '',
-                closeDate: undefined,
-                closeTime: '',
-              }
-        );
-        const openDate = stringToDate(monitoringStockpile.openAt ?? null);
-        const closeDate = stringToDate(monitoringStockpile.closeAt ?? null);
-        const openTime = formatDate(monitoringStockpile.openAt, 'HH:mm:ss');
-        const closeTime = formatDate(monitoringStockpile.closeAt, 'HH:mm:ss');
-        methods.setValue(
-          'stockpileId',
-          monitoringStockpile.dome?.stockpile.id ?? ''
-        );
-        methods.setValue('domeId', monitoringStockpile.dome?.id ?? '');
-        methods.setValue(
-          'oreSubMaterialId',
-          monitoringStockpile.material?.id ?? ''
-        );
-        methods.setValue('openDate', openDate);
-        methods.setValue('closeDate', closeDate);
-        methods.setValue('openTime', openTime ?? '');
-        methods.setValue('closeTime', closeTime ?? '');
-        methods.setValue('tonByRitage', monitoringStockpile.tonByRitage ?? '');
-        methods.setValue('desc', monitoringStockpile.desc ?? '');
-        if (monitoringStockpile.photo) {
-          setServerPhoto([monitoringStockpile.photo]);
-        }
-      },
-    });
-
-  useReadOneSampleHouseLabByNumberSample({
+  const { called } = useReadOneSampleHouseLabByNumberSample({
     variables: {
       sampleNumber: sampleNumber,
       index: indexOfSample,
@@ -380,6 +245,151 @@ const UpdateStockpileMonitoringBook = () => {
       );
     },
   });
+
+  const { monitoringStockpile, monitoringStockpileLoading } =
+    useReadOneStockpileMonitoring({
+      variables: {
+        id,
+      },
+      skip: !router.isReady || !isOwnElemntsData,
+      onCompleted: ({ monitoringStockpile }) => {
+        if (!called) {
+          const samples = monitoringStockpile.samples.map((val) => {
+            const elemntsValue = elementsData?.map((o) => {
+              const value = val.sample?.elements.find(
+                (obj) => obj.element.id === o.id
+              );
+              return {
+                elementId: o.id,
+                name: o.name ?? '',
+                value: value?.value ?? '',
+              };
+            });
+            return {
+              date: stringToDate(val.sample?.sampleDate ?? null),
+              sampleTypeId: val.sample?.sampleType.id ?? '',
+              sampleNumber: val.sampleNumber ?? '',
+              isCreatedAfterDetermine: val.isCreatedAfterDetermine
+                ? true
+                : false,
+              elements: elemntsValue ?? [],
+            };
+          });
+          const initialSamples = {
+            date: undefined,
+            sampleTypeId: '',
+            sampleNumber: '',
+            isCreatedAfterDetermine: true,
+            elements: otherElements,
+          };
+          samples.length > 0 ? replace(samples) : replace(initialSamples);
+
+          const surveys = monitoringStockpile.tonSurveys?.map((val) => {
+            const date = stringToDate(val.date ?? null);
+            return {
+              date: date,
+              ton: val.ton ?? '',
+            };
+          });
+          const movings = monitoringStockpile.movings?.map((val) => {
+            const startDate = stringToDate(val.startAt ?? null);
+            const startTime = formatDate(val.startAt, 'HH:mm:ss');
+            const finishDate = stringToDate(val.finishAt ?? null);
+            const finishTime = formatDate(val.finishAt, 'HH:mm:ss');
+            return {
+              startDate: startDate,
+              startTime: startTime ?? '',
+              finishDate: finishDate,
+              finishTime: finishTime ?? '',
+            };
+          });
+          const bargings = monitoringStockpile.bargings?.map((val) => {
+            const startDate = stringToDate(val.startAt ?? null);
+            const startTime = formatDate(val.startAt, 'HH:mm:ss');
+            const finishDate = stringToDate(val.finishAt ?? null);
+            const finishTime = formatDate(val.finishAt, 'HH:mm:ss');
+            return {
+              startDate: startDate,
+              startTime: startTime ?? '',
+              finishDate: finishDate,
+              finishTime: finishTime ?? '',
+            };
+          });
+          const reopens = monitoringStockpile.reopens?.map((val) => {
+            const openDate = stringToDate(val.openAt ?? null);
+            const openTime = formatDate(val.openAt, 'HH:mm:ss');
+            const closeDate = stringToDate(val.closeAt ?? null);
+            const closeTime = formatDate(val.closeAt, 'HH:mm:ss');
+            return {
+              openDate: openDate,
+              openTime: openTime ?? '',
+              closeDate: closeDate,
+              closeTime: closeTime ?? '',
+            };
+          });
+          replaceSurveyFields(
+            surveys && surveys.length > 0
+              ? surveys
+              : { date: undefined, ton: '' }
+          );
+          replaceMovingFields(
+            movings && movings.length > 0
+              ? movings
+              : {
+                  startDate: undefined,
+                  startTime: '',
+                  finishDate: undefined,
+                  finishTime: '',
+                }
+          );
+          replaceBargingFields(
+            bargings && bargings.length > 0
+              ? bargings
+              : {
+                  startDate: undefined,
+                  startTime: '',
+                  finishDate: undefined,
+                  finishTime: '',
+                }
+          );
+          replaceReopenFields(
+            reopens && reopens.length > 0
+              ? reopens
+              : {
+                  openDate: undefined,
+                  openTime: '',
+                  closeDate: undefined,
+                  closeTime: '',
+                }
+          );
+          const openDate = stringToDate(monitoringStockpile.openAt ?? null);
+          const closeDate = stringToDate(monitoringStockpile.closeAt ?? null);
+          const openTime = formatDate(monitoringStockpile.openAt, 'HH:mm:ss');
+          const closeTime = formatDate(monitoringStockpile.closeAt, 'HH:mm:ss');
+          methods.setValue(
+            'stockpileId',
+            monitoringStockpile.dome?.stockpile.id ?? ''
+          );
+          methods.setValue('domeId', monitoringStockpile.dome?.id ?? '');
+          methods.setValue(
+            'oreSubMaterialId',
+            monitoringStockpile.material?.id ?? ''
+          );
+          methods.setValue('openDate', openDate);
+          methods.setValue('closeDate', closeDate);
+          methods.setValue('openTime', openTime ?? '');
+          methods.setValue('closeTime', closeTime ?? '');
+          methods.setValue(
+            'tonByRitage',
+            monitoringStockpile.tonByRitage ?? ''
+          );
+          methods.setValue('desc', monitoringStockpile.desc ?? '');
+          if (monitoringStockpile.photo) {
+            setServerPhoto([monitoringStockpile.photo]);
+          }
+        }
+      },
+    });
 
   const { mutate, isLoading } = useUpdateStockpileMonitoring({
     onError: (err) => {
@@ -769,7 +779,7 @@ const UpdateStockpileMonitoringBook = () => {
       return group;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [sampleFields, isDetermination, indexOfSample]
+    [sampleFields, isDetermination]
   );
   const sampleGroupItem = sampleFields.map(sampleGroup);
 
@@ -971,25 +981,15 @@ const UpdateStockpileMonitoringBook = () => {
     });
 
     const dataSamples: IMutationUpdateSampleMonitoringStockpileValues[] =
-      data.samples.map((val) => {
-        // eslint-disable-next-line unused-imports/no-unused-vars
-        const { isCreatedAfterDetermine, date, elements, ...rest } = val;
-        const dateString = dateToString(date ?? null);
-        const elementsManipulate = elements
-          .filter((v) => v.value !== '')
-          .map((obj) => {
-            // eslint-disable-next-line unused-imports/no-unused-vars
-            const { name, ...restElement } = obj;
-            return {
-              ...restElement,
-            };
-          });
-        return {
-          ...rest,
-          date: dateString,
-          elements: elementsManipulate,
-        };
-      });
+      data.samples
+        .filter((obj) => obj.isCreatedAfterDetermine)
+        .map((val) => {
+          const { sampleNumber } = val;
+          return {
+            sampleNumber,
+          };
+        });
+
     const deletePhoto = serverPhoto && serverPhoto.length === 0;
 
     if (isDetermination) {
