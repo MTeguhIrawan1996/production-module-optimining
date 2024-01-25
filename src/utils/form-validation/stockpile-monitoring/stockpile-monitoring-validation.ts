@@ -33,10 +33,14 @@ export const stockpileMonitoringMutationValidation: z.ZodType<IMutationStockpile
           date: zDateValidation,
         })
         .array(),
-      bargingStartDate: zDateOptionalValidation,
-      bargingStartTime: zTimeValidation,
-      bargingFinishDate: zDateOptionalValidation,
-      bargingFinishTime: zTimeValidation,
+      bargings: z
+        .object({
+          startDate: zDateOptionalValidation,
+          startTime: zTimeValidation,
+          finishDate: zDateOptionalValidation,
+          finishTime: zTimeValidation,
+        })
+        .array(),
       movings: z
         .object({
           startDate: zDateOptionalValidation,

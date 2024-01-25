@@ -10,6 +10,12 @@ type tonBySurveys = {
   date?: Date | null;
   ton: string | number;
 };
+type bargings = {
+  startDate?: Date | null;
+  startTime: string;
+  finishDate?: Date | null;
+  finishTime: string;
+};
 type movings = {
   startDate?: Date | null;
   startTime: string;
@@ -41,10 +47,7 @@ export interface IMutationStockpileStepOne {
   closeTime: string;
   tonSurveys: tonBySurveys[];
   tonByRitage: string | number | null;
-  bargingStartDate?: Date | null;
-  bargingStartTime: string;
-  bargingFinishDate?: Date | null;
-  bargingFinishTime: string;
+  bargings: bargings[];
   movings: movings[];
   reopens: reopens[];
   desc: string;
@@ -86,7 +89,16 @@ const UpdateStockpileMonitoring = async ({
 }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
-  const exclude = ['handbookId', 'stockpileId', 'tonByRitage'];
+  const exclude: (keyof IMutationStockpile)[] = [
+    'handbookId',
+    'stockpileId',
+    'tonByRitage',
+    'domeId',
+    'openDate',
+    'openTime',
+    'closeDate',
+    'closeTime',
+  ];
   bodyFormData.append('id', id);
   if (deletePhoto) {
     bodyFormData.append('deletePhoto', 'true');
@@ -100,66 +112,12 @@ const UpdateStockpileMonitoring = async ({
           bodyFormData.append(`tonSurveys[${index}][ton]`, `${value.ton}`);
         });
       }
-      if (name === 'movings') {
-        (value as movings[]).forEach((value, index: number) => {
-          const startDate = dateToString(value.startDate ?? null);
-          const finishDate = dateToString(value.finishDate ?? null);
-          if (startDate)
-            bodyFormData.append(`movings[${index}][startDate]`, startDate);
-          bodyFormData.append(
-            `movings[${index}][startTime]`,
-            `${value.startTime}`
-          );
-          if (finishDate)
-            bodyFormData.append(`movings[${index}][finishDate]`, finishDate);
-          bodyFormData.append(
-            `movings[${index}][finishTime]`,
-            `${value.finishTime}`
-          );
-        });
-      }
-      if (name === 'reopens') {
-        (value as reopens[]).forEach((value, index: number) => {
-          const openDate = dateToString(value.openDate ?? null);
-          const closeDate = dateToString(value.closeDate ?? null);
-          if (openDate)
-            bodyFormData.append(`reopens[${index}][openDate]`, openDate);
-          bodyFormData.append(
-            `reopens[${index}][startTime]`,
-            `${value.openTime}`
-          );
-          if (closeDate)
-            bodyFormData.append(`reopens[${index}][closeDate]`, closeDate);
-          bodyFormData.append(
-            `reopens[${index}][closeDate]`,
-            `${value.closeTime}`
-          );
-        });
-      }
       if (name === 'samples') {
         (value as samples[]).forEach((value, index: number) => {
-          const date = dateToString(value.date ?? null);
-          if (date) bodyFormData.append(`samples[${index}][date]`, date);
-          bodyFormData.append(
-            `samples[${index}][sampleTypeId]`,
-            value.sampleTypeId ?? ''
-          );
           bodyFormData.append(
             `samples[${index}][sampleNumber]`,
             value.sampleNumber ?? ''
           );
-          value.elements
-            .filter((v) => v.value !== '')
-            .forEach((obj, i) => {
-              bodyFormData.append(
-                `samples[${index}][elements][${i}][elementId]`,
-                obj.elementId
-              );
-              bodyFormData.append(
-                `samples[${index}][elements][${i}][value]`,
-                `${obj.value ?? ''}`
-              );
-            });
         });
       }
       if (name === 'photo' && typeof value !== 'string') {
