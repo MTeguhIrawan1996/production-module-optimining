@@ -953,6 +953,10 @@
     "read": "$t(commonTypography.read) $t(weeklyPlan.title2)",
     "successDeleteMessage": "$t(weeklyPlan.title2) berhasil dihapus",
     "successCreateMessage": "$t(weeklyPlan.title2) berhasil dibuat",
-    "formCreate": "$t(commonTypography.form) $t(weeklyPlan.title2)"
+    "formCreate": "$t(commonTypography.form) $t(weeklyPlan.title2)",
+    "successIsValidateMessage": "$t(weeklyPlan.title) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(weeklyPlan.title) Tidak Valid",
+    "successIsDeterminedMessage": "$t(weeklyPlan.title) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(weeklyPlan.title) berhasil $t(commonTypography.reject)"
   }
 }
