@@ -1,8 +1,8 @@
-import { CreateWeeklyPlanPage } from '@/components/features';
+import { CreateWeeklyPlanInformationPage } from '@/components/features';
 import { DashboardLayout } from '@/components/layouts';
 
 const CreateWeeklyPlan = () => {
-  return <CreateWeeklyPlanPage />;
+  return <CreateWeeklyPlanInformationPage />;
 };
 
 export default CreateWeeklyPlan;

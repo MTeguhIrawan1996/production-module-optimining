@@ -22,7 +22,7 @@ import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
-const CreateWeeklyPlanBook = () => {
+const CreateWeeklyPlanInformationBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
 
@@ -127,4 +127,4 @@ const CreateWeeklyPlanBook = () => {
   );
 };
 
-export default CreateWeeklyPlanBook;
+export default CreateWeeklyPlanInformationBook;

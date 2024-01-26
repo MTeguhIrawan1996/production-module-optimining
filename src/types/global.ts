@@ -153,6 +153,7 @@ export type ControllerGroup = {
   };
   actionOuterGroup?: {
     addButton?: IPrimaryButtonProps;
+    updateButton?: IPrimaryButtonProps;
     deleteButton?: IPrimaryButtonProps;
   };
 };

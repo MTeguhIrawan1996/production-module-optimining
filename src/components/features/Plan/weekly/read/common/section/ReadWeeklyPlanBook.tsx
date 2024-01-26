@@ -20,7 +20,7 @@ import { IUpdateStatusValues } from '@/types/global';
 const detailWeeklyPlanLink = [
   {
     label: 'weeklyPlanInformation',
-    href: '/',
+    href: '/plan/weekly/read/weekly-plan-information',
   },
   {
     label: 'workingTimePlan',
@@ -59,7 +59,6 @@ const detailWeeklyPlanLink = [
 const ReadWeeklyPlanBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-
   const id = router.query.id as string;
 
   const methods = useForm<IUpdateStatusValues>({
@@ -267,7 +266,7 @@ const ReadWeeklyPlanBook = () => {
         {detailWeeklyPlanLink.map((obj, i) => (
           <PaperLink
             label={t(`commonTypography.${obj.label}`)}
-            href={obj.href}
+            href={`${obj.href}/${id}`}
             key={i}
           />
         ))}

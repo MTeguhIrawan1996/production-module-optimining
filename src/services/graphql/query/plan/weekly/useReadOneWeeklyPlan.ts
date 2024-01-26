@@ -10,6 +10,8 @@ export const READ_ONE_WEEKLY_PLAN = gql`
         id
         name
       }
+      year
+      week
       statusMessage
       status {
         id
