@@ -17,7 +17,7 @@ import {
   globalSelectWeekRhf,
   globalSelectYearRhf,
 } from '@/utils/constants/Field/global-field';
-import { weatherProductionMutationValidation } from '@/utils/form-validation/weather-production/weather-production-validation';
+import { weeklyPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -27,8 +27,8 @@ const CreateWeeklyPlanBook = () => {
   const router = useRouter();
 
   /* #   /**=========== Methods =========== */
-  const methods = useForm<ICreateWeeklyPlanValues>({
-    resolver: zodResolver(weatherProductionMutationValidation),
+  const methods = useForm<ICreateWeeklyPlanValues<string>>({
+    resolver: zodResolver(weeklyPlanMutationValidation),
     defaultValues: {
       companyId: '',
       week: null,
@@ -36,6 +36,7 @@ const CreateWeeklyPlanBook = () => {
     },
     mode: 'onBlur',
   });
+  const year = methods.watch('year');
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
@@ -74,7 +75,10 @@ const CreateWeeklyPlanBook = () => {
   const fieldRhf = React.useMemo(() => {
     const companyItem = globalSelectCompanyRhf({});
     const yearItem = globalSelectYearRhf({});
-    const weekItem = globalSelectWeekRhf({});
+    const weekItem = globalSelectWeekRhf({
+      disabled: !year,
+      year: year ? Number(year) : null,
+    });
 
     const field: ControllerGroup[] = [
       {
@@ -86,7 +90,7 @@ const CreateWeeklyPlanBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [year]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
@@ -98,8 +102,8 @@ const CreateWeeklyPlanBook = () => {
     await executeCreate({
       variables: {
         companyId,
-        week,
-        year,
+        week: Number(week),
+        year: Number(year),
       },
     });
   };
