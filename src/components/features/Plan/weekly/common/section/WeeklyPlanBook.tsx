@@ -1,4 +1,3 @@
-import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useSearchParams } from 'next/navigation';
@@ -12,53 +11,50 @@ import {
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
-  SelectionButtonModal,
 } from '@/components/elements';
 
-import { useDeleteFrontProduction } from '@/services/graphql/mutation/front-production/useDeleteFrontProduction';
-import { useReadAllFrontProduction } from '@/services/graphql/query/front-production/useReadAllFrontProduction';
+import { useDeleteWeeklyPlan } from '@/services/graphql/mutation/plan/weekly/useDeleteWeeklyPlan';
+import { useReadAllWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadAllWeeklyPlan';
+import { globalSelectYearNative } from '@/utils/constants/Field/native-field';
 
-const FrontProductionBook = () => {
+import { InputControllerNativeProps } from '@/types/global';
+
+const WeeklyPlanBook = () => {
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
-  const segment = pageParams.get('segment') || 'pit';
-  const url = `/input-data/production/data-front?page=1&segment=${segment}`;
+  const url = `/plan/weekly?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [year, setYear] = React.useState<number | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
-    React.useState<boolean>(false);
-  // const [segmented, setSegmented] = React.useState<string>('pit');
-  const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
 
   /* #   /**=========== Query =========== */
   const {
-    frontProductionData,
-    frontProductionOtherColumn,
-    frontProductionDataLoading,
-    frontProductionDataMeta,
-    refetchfrontProductionData,
-  } = useReadAllFrontProduction({
+    weeklyPlanData,
+    weeklyPlanDataOtherColumn,
+    weeklyPlanDataLoading,
+    weeklyPlanDataMeta,
+    refetchWeeklyPlanData,
+  } = useReadAllWeeklyPlan({
     variables: {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      search: searchQuery === '' ? null : searchQuery,
-      type: segment,
+      year,
     },
   });
 
-  const [executeDelete, { loading }] = useDeleteFrontProduction({
+  const [executeDelete, { loading }] = useDeleteWeeklyPlan({
     onCompleted: () => {
-      refetchfrontProductionData();
+      refetchWeeklyPlanData();
       setIsOpenDeleteConfirmation((prev) => !prev);
       router.push(url, undefined, { shallow: true });
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('frontProduction.successDeleteMessage'),
+        message: t('weeklyPlan.successDeleteMessage'),
         icon: <IconCheck />,
       });
     },
@@ -82,32 +78,40 @@ const FrontProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/data-front?page=${page}&segment=${segment}`;
+    const urlSet = `/plan/weekly?page=${page}`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
-  const handleChangeSegement = (value: string) => {
-    const urlSet = `/input-data/production/data-front?page=1&segment=${value}`;
-    router.push(urlSet, undefined, { shallow: true });
-  };
+  const filter = React.useMemo(() => {
+    const selectYearItem = globalSelectYearNative({
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setYear(value ? Number(value) : null);
+      },
+    });
+
+    const item: InputControllerNativeProps[] = [selectYearItem];
+    return item;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url, year]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
     return (
       <MantineDataTable
         tableProps={{
-          records: frontProductionData,
-          fetching: frontProductionDataLoading,
+          records: weeklyPlanData,
+          fetching: weeklyPlanDataLoading,
           highlightOnHover: true,
           columns: [
             {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                frontProductionData && frontProductionData.indexOf(record) + 1,
+                weeklyPlanData && weeklyPlanData.indexOf(record) + 1,
               width: 60,
             },
-            ...(frontProductionOtherColumn ?? []),
+            ...(weeklyPlanDataOtherColumn ?? []),
             {
               accessor: 'status',
               title: t('commonTypography.status'),
@@ -130,9 +134,7 @@ const FrontProductionBook = () => {
                     actionRead={{
                       onClick: (e) => {
                         e.stopPropagation();
-                        router.push(
-                          `/input-data/production/data-front/read/${id}`
-                        );
+                        router.push(`/plan/weekly/read/${id}`);
                       },
                     }}
                     actionUpdate={
@@ -141,9 +143,7 @@ const FrontProductionBook = () => {
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
-                              router.push(
-                                `/input-data/production/data-front/update/${id}?segment=${segment}`
-                              );
+                              router.push(`/plan/weekly/update/${id}`);
                             },
                           }
                         : undefined
@@ -169,54 +169,35 @@ const FrontProductionBook = () => {
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
           actionButton: {
-            label: t('frontProduction.createFrontProduction'),
-            onClick: () => setIsOpenSelectionModal((prev) => !prev),
+            label: t('weeklyPlan.create'),
+            onClick: () => router.push('/plan/weekly/create'),
           },
         }}
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: frontProductionDataMeta?.totalAllData ?? 0,
-          totalData: frontProductionDataMeta?.totalData ?? 0,
-          totalPage: frontProductionDataMeta?.totalPage ?? 0,
+          totalAllData: weeklyPlanDataMeta?.totalAllData ?? 0,
+          totalData: weeklyPlanDataMeta?.totalData ?? 0,
+          totalPage: weeklyPlanDataMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [frontProductionData, frontProductionDataLoading]);
+  }, [weeklyPlanData, weeklyPlanDataLoading]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
       addButton={{
-        label: t('frontProduction.createFrontProduction'),
-        onClick: () => setIsOpenSelectionModal((prev) => !prev),
+        label: t('weeklyPlan.create'),
+        onClick: () => router.push('/plan/weekly/create'),
       }}
-      searchBar={{
-        placeholder: `${t(
-          'frontProduction.searchPlaceholder'
-        )} ${segment.toUpperCase()}`,
-        onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
-        },
-        searchQuery: searchQuery,
-        onSearch: () => {
-          router.push(url, undefined, { shallow: true });
-        },
+      paperStackProps={{
+        spacing: 'xs',
       }}
-      segmentedControl={{
-        value: segment,
-        onChange: handleChangeSegement,
-        data: [
-          {
-            label: 'PIT',
-            value: 'pit',
-          },
-          {
-            label: 'DOME',
-            value: 'dome',
-          },
-        ],
+      filterDateWithSelect={{
+        colSpan: 3,
+        items: filter,
       }}
     >
       {renderTable}
@@ -241,24 +222,8 @@ const FrontProductionBook = () => {
         }}
         withDivider
       />
-      <SelectionButtonModal
-        isOpenSelectionModal={isOpenSelectionModal}
-        actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
-        firstButton={{
-          label: t('commonTypography.fromPit'),
-          onClick: () =>
-            router.push(`/input-data/production/data-front/create?segment=pit`),
-        }}
-        secondButton={{
-          label: t('commonTypography.fromDome'),
-          onClick: () =>
-            router.push(
-              `/input-data/production/data-front/create?segment=dome`
-            ),
-        }}
-      />
     </DashboardCard>
   );
 };
 
-export default FrontProductionBook;
+export default WeeklyPlanBook;

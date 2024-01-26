@@ -15,6 +15,7 @@ export const UPDATE_HEAVY_EQUIPMENT_PRODUCTION = gql`
     $desc: String
     $hourMeterBefore: Float
     $hourMeterAfter: Float
+    $fuel: Float
     $loseTimes: [CreateLoseTime!]
   ) {
     updateHeavyEquipmentData(
@@ -29,6 +30,7 @@ export const UPDATE_HEAVY_EQUIPMENT_PRODUCTION = gql`
         workFinishTime: $workFinishTime
         hourMeterBefore: $hourMeterBefore
         hourMeterAfter: $hourMeterAfter
+        fuel: $fuel
         desc: $desc
         loseTimes: $loseTimes
       }

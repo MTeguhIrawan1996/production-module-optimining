@@ -125,6 +125,7 @@ import WorkingHoursPlanMasterPage from '@/components/features/MasterData/working
 import CreateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/create/common';
 import ReadWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/read/common';
 import UpdateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/update/common';
+import WeeklyPlanPage from '@/components/features/Plan/weekly/common';
 import ProfilePage from '@/components/features/Profile/common';
 import CompanyTypePage from '@/components/features/Reference/company-type/common';
 import HeavyEquipmentPage from '@/components/features/Reference/heavy-equipment/common';
@@ -287,5 +288,6 @@ export {
   UploadRitageTopsoilPage,
   UserPage,
   WeatherProductionPage,
+  WeeklyPlanPage,
   WorkingHoursPlanMasterPage,
 };

@@ -12,6 +12,7 @@ export const CREATE_HEAVY_EQUIPMENT_PRODUCTION = gql`
     $desc: String
     $hourMeterBefore: Float
     $hourMeterAfter: Float
+    $fuel: Float
     $loseTimes: [CreateLoseTime!]
   ) {
     createHeavyEquipmentData(
@@ -25,6 +26,7 @@ export const CREATE_HEAVY_EQUIPMENT_PRODUCTION = gql`
         workFinishTime: $workFinishTime
         hourMeterBefore: $hourMeterBefore
         hourMeterAfter: $hourMeterAfter
+        fuel: $fuel
         desc: $desc
         loseTimes: $loseTimes
       }
@@ -60,6 +62,7 @@ export interface IMutationHeavyEquipmentDataProdValues {
   hourMeterBefore: number | '';
   hourMeterAfter: number | '';
   amountHourMeter: number | '';
+  fuel: number | '';
   loseTimes: IloseTimes[];
 }
 

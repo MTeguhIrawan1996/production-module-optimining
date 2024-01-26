@@ -1,7 +1,5 @@
 import { ApolloError, gql, useMutation } from '@apollo/client';
 
-import { IElementRhf } from '@/types/global';
-
 export const UPDATE_SAMPLE_STOCKPILE_MONITORING = gql`
   mutation UpdateSampleStockpileMonitoring(
     $id: String!
@@ -16,10 +14,7 @@ export const UPDATE_SAMPLE_STOCKPILE_MONITORING = gql`
 `;
 
 export interface IMutationUpdateSampleMonitoringStockpileValues {
-  date?: Date | string | null;
-  sampleTypeId: string | null;
   sampleNumber: string;
-  elements: Omit<IElementRhf, 'name'>[];
 }
 
 type IUpdateSampleStockpileMonitoringRequest = {

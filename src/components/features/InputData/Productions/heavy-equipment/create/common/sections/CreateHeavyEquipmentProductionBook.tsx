@@ -73,6 +73,7 @@ const CreateHeavyEquipmentProductionBook = () => {
       hourMeterBefore: '',
       hourMeterAfter: '',
       amountHourMeter: '',
+      fuel: '',
       loseTimes: [],
     },
     mode: 'onBlur',
@@ -365,7 +366,6 @@ const CreateHeavyEquipmentProductionBook = () => {
       name: 'hourMeterAfter',
       label: 'hourMeterAfter',
       withAsterisk: true,
-      precision: undefined,
       onChange: (value) => {
         methods.setValue('hourMeterAfter', value);
         setNewHourMeterAfter(value);
@@ -380,6 +380,15 @@ const CreateHeavyEquipmentProductionBook = () => {
       disabled: true,
       value: amountHourMeter,
     });
+    const fuelItem = globalNumberInput({
+      colSpan: 6,
+      name: 'fuel',
+      label: 'amountFuel',
+      withAsterisk: false,
+      formatter: (value) =>
+        !Number.isNaN(parseFloat(value)) ? `${value} Ltr` : '',
+      precision: 0,
+    });
 
     const field: ControllerGroup[] = [
       {
@@ -392,6 +401,7 @@ const CreateHeavyEquipmentProductionBook = () => {
           heavyEquipmentTypeItem,
           shiftItem,
           operatorItem,
+          fuelItem,
         ],
       },
       {

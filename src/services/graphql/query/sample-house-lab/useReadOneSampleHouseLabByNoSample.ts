@@ -50,6 +50,7 @@ export const useReadOneSampleHouseLabByNumberSample = ({
   const {
     data: houseSampleAndLab,
     loading: houseSampleAndLabLoading,
+    called,
     refetch,
   } = useQuery<
     IReadOneSampleHouseLabByNumberSampleResponse,
@@ -66,5 +67,6 @@ export const useReadOneSampleHouseLabByNumberSample = ({
     houseSampleAndLab: houseSampleAndLab?.houseSampleAndLabBySampleNumber,
     houseSampleAndLabLoading,
     refetch,
+    called,
   };
 };
