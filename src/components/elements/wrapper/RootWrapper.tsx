@@ -13,7 +13,7 @@ const RootWrapper: React.FC<IRootWrapperProps> = ({ children, stackProps }) => {
       w="100%"
       pb={pb}
       spacing={spacing}
-      sx={{ overflow: 'hidden', position: 'relative' }}
+      sx={{ position: 'relative' }}
       {...stackProps}
     >
       {children}
