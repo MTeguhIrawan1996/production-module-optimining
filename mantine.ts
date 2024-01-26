@@ -80,6 +80,12 @@ export const theme: MantineProviderProps['theme'] = {
         fontWeight: 600,
       },
     },
+    '.hoverShadow': {
+      '&:hover': {
+        boxShadow:
+          '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+      },
+    },
     '.shadow': {
       boxShadow:
         '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
@@ -144,8 +150,10 @@ export const theme: MantineProviderProps['theme'] = {
     '.duration-700': {
       transitionDuration: '700ms',
     },
-    // '.mantine-1avyp1d': {
-    //   pointerEvents: 'auto',
-    // },
+    '.transition-all': {
+      transitionProperty: 'all',
+      transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+      transitionDuration: '150ms',
+    },
   }),
 };

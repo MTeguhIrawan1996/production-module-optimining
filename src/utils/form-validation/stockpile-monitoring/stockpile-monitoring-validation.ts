@@ -20,7 +20,7 @@ export const stockpileMonitoringMutationValidation: z.ZodType<IMutationStockpile
       domeId: zOptionalString.nullable(),
       handbookId: zOptionalString,
       oreSubMaterialId: zRequiredSelectInput,
-      openDate: zDateValidation,
+      openDate: zDateOptionalValidation,
       openTime: zTimeValidation,
       closeDate: zDateOptionalValidation,
       closeTime: zTimeValidation,

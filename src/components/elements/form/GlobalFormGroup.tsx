@@ -10,11 +10,7 @@ import {
   SwitchProps,
   Text,
 } from '@mantine/core';
-import {
-  IconChevronLeft,
-  IconChevronRight,
-  IconPlus,
-} from '@tabler/icons-react';
+import { IconPencil, IconPlus } from '@tabler/icons-react';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -130,21 +126,28 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
               const {
                 addButton: addButtonOuter,
                 deleteButton: deleteButtonOuter,
+                updateButton: updateButtonOuter,
               } = actionOuterGroup || {};
               return (
                 <Flex
                   key={`${i}${group}`}
-                  gap={32}
+                  gap={22}
                   direction="column"
                   align="flex-end"
                   w="100%"
                 >
-                  {addButtonOuter || deleteButtonOuter ? (
+                  {addButtonOuter || deleteButtonOuter || updateButtonOuter ? (
                     <Group spacing="xs" position="right">
                       {addButtonOuter ? (
                         <PrimaryButton
                           leftIcon={<IconPlus size="20px" />}
                           {...addButtonOuter}
+                        />
+                      ) : null}
+                      {updateButtonOuter ? (
+                        <PrimaryButton
+                          leftIcon={<IconPencil size="20px" />}
+                          {...updateButtonOuter}
                         />
                       ) : null}
                       {deleteButtonOuter ? (
@@ -247,7 +250,6 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                 label={backButtonLabel}
                 type="button"
                 variant="outline"
-                leftIcon={<IconChevronLeft size="1rem" />}
                 {...restBackButton}
               />
             ) : null}
@@ -265,7 +267,6 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                   label={nextButtonLabel}
                   type="button"
                   variant="outline"
-                  rightIcon={<IconChevronRight size="1rem" />}
                   {...restNextButton}
                 />
               ) : null}

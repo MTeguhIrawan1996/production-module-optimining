@@ -2,6 +2,7 @@
   "halloworld": "Hallo Dunia",
   "commonTypography": {
     "company": "Perusahaan",
+    "companyInformation": "Informasi Perusahaan",
     "employee": "Pegawai",
     "location": "Lokasi",
     "production": "Produksi",
@@ -157,6 +158,7 @@
     "chooseYear": "Pilih Tahun",
     "chooseMonth": "Pilih Bulan",
     "chooseWeek": "Pilih Minggu",
+    "chooseStatus": "Pilih Status",
     "entryDate": "Tanggal Masuk Bekerja",
     "startDate": "Tanggal Mulai",
     "endDate": "Tanggal Selesai",
@@ -251,6 +253,7 @@
     "chooseModel": "$t(commonTypography.choose) / Ketikan $t(commonTypography.model)",
     "chooseBusinessType": "$t(commonTypography.choose) $t(commonTypography.businessType)",
     "chooseCompanyType": "$t(commonTypography.choose) $t(commonTypography.companyType)",
+    "chooseCompany": "$t(commonTypography.choose) / Ketikan $t(commonTypography.company)",
     "chooseCompanyPermissionType": "$t(commonTypography.choose) $t(commonTypography.companyPermissionType)",
     "chooseLocationCategory": "$t(commonTypography.choose) $t(commonTypography.locationCategory)",
     "chooseMaterial": "$t(commonTypography.choose) $t(commonTypography.material)",
@@ -414,7 +417,15 @@
     "amountFuel": "Jumlah pengisian BBM",
     "plan": "Rencana",
     "weekly": "Mingguan",
-    "week": "Minggu"
+    "week": "Minggu",
+    "weeklyPlanInformation": "Informasi Rencana Mingguan",
+    "workingTimePlan": "Rencana Waktu Kerja",
+    "unitCapacityPlan": "Rencana Kapasitas Unit",
+    "heavyEquipmentRequirementsPlan": "Rencana Kebutuhan Alat Berat",
+    "heavyEquipmentAvailabilityPlan": "Rencana Ketersediaan Alat Berat",
+    "productionTargetPlan": "Rencana Target Produksi",
+    "miningPlanMap": "Peta Rencana Penambangan",
+    "bargingPlan": "Rencana Barging"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -937,7 +948,15 @@
   },
   "weeklyPlan": {
     "title": "Rencana Produksi Mingguan",
-    "create": "$t(commonTypography.create) $t(weeklyPlan.title)",
-    "successDeleteMessage": "$t(weeklyPlan.title) berhasil dihapus"
+    "title2": "Rencana Mingguan",
+    "create": "$t(commonTypography.create) $t(weeklyPlan.title2)",
+    "read": "$t(commonTypography.read) $t(weeklyPlan.title2)",
+    "successDeleteMessage": "$t(weeklyPlan.title2) berhasil dihapus",
+    "successCreateMessage": "$t(weeklyPlan.title2) berhasil dibuat",
+    "formCreate": "$t(commonTypography.form) $t(weeklyPlan.title2)",
+    "successIsValidateMessage": "$t(weeklyPlan.title) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(weeklyPlan.title) Tidak Valid",
+    "successIsDeterminedMessage": "$t(weeklyPlan.title) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(weeklyPlan.title) berhasil $t(commonTypography.reject)"
   }
 }

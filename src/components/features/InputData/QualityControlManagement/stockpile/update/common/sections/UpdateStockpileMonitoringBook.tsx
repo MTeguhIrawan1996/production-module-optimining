@@ -814,7 +814,7 @@ const UpdateStockpileMonitoringBook = () => {
     const openDateItem = globalDate({
       name: 'openDate',
       label: 'startOpen',
-      withAsterisk: true,
+      withAsterisk: false,
       clearable: true,
       colSpan: 6,
       disabled: true,

@@ -19,9 +19,12 @@ import { IRegencySelectInputRhfProps } from '@/components/elements/input/Regency
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
 import { ISelectActivityCategoryRhfProps } from '@/components/elements/input/SelectActivityCategoryRhf';
 import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
+import { ISelectCompanyRhfProps } from '@/components/elements/input/SelectCompanyRhf';
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
+import { ISelectWeekRhfProps } from '@/components/elements/input/SelectWeekRhf';
 import { ISelectWorkingHoursPlanRhfProps } from '@/components/elements/input/SelectWorkingHoursPlanRhf';
+import { ISelectYearRhfProps } from '@/components/elements/input/SelectYearRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
 import { ITimeInputRhfProps } from '@/components/elements/input/TimeInputRhf';
@@ -945,6 +948,69 @@ export const globalSelectActivityCategoryRhf = ({
 }: Partial<ISelectActivityCategoryRhfProps>) => {
   const field: ControllerProps = {
     control: 'select-activity-category-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectCompanyRhf = ({
+  name = 'companyId',
+  label,
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectCompanyRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-company-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectYearRhf = ({
+  name = 'year',
+  label,
+  searchable = false,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectYearRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-year-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectWeekRhf = ({
+  name = 'week',
+  label,
+  searchable = false,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectWeekRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-week-rhf',
     name,
     label,
     searchable,
