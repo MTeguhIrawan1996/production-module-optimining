@@ -39,6 +39,7 @@ import { ISelectActivityCategoryRhfProps } from '@/components/elements/input/Sel
 import { IArriveBargeNativeProps } from '@/components/elements/input/SelectArriveBargeNative';
 import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
 import { ICompanyNativeProps } from '@/components/elements/input/SelectCompanyNative';
+import { ISelectCompanyRhfProps } from '@/components/elements/input/SelectCompanyRhf';
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
 import { ISelectHeavyEquipmentNativeProps } from '@/components/elements/input/SelectHeavyEquipmentNative';
 import { ISelectHeavyEquipmentReferenceInputProps } from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
@@ -48,8 +49,10 @@ import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf
 import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
 import { IStatusNativeProps } from '@/components/elements/input/SelectStatusNative';
 import { ISelectWeekNativeProps } from '@/components/elements/input/SelectWeekNative';
+import { ISelectWeekRhfProps } from '@/components/elements/input/SelectWeekRhf';
 import { ISelectWorkingHoursPlanRhfProps } from '@/components/elements/input/SelectWorkingHoursPlanRhf';
 import { ISelectYearNativeProps } from '@/components/elements/input/SelectYearNative';
+import { ISelectYearRhfProps } from '@/components/elements/input/SelectYearRhf';
 import { IShiftSelectInputRhfProps } from '@/components/elements/input/ShiftSelectInputRhf';
 import { IStockpileNameSelectInputRhfProps } from '@/components/elements/input/StockpileNameSelectInputRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
@@ -64,8 +67,6 @@ import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment
 import { IEmployeesData } from '@/services/graphql/query/master-data-company/useReadAllEmploye';
 import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { IShiftsData } from '@/services/graphql/query/shift/useReadAllShiftMaster';
-
-// import { TablerIconsProps } from '@tabler/icons-react';
 
 export type CommonProps = {
   colSpan?: number;
@@ -125,6 +126,9 @@ export type ControllerProps =
   | ISelectFactoryRhfProps
   | ISelectWorkingHoursPlanRhfProps
   | ISelectActivityCategoryRhfProps
+  | ISelectCompanyRhfProps
+  | ISelectYearRhfProps
+  | ISelectWeekRhfProps
   | IWeatherConditionSelectInputRhfProps;
 
 export type InputControllerNativeProps =

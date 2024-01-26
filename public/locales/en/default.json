@@ -2,6 +2,7 @@
   "halloworld": "Hallo Dunia",
   "commonTypography": {
     "company": "Perusahaan",
+    "companyInformation": "Informasi Perusahaan",
     "employee": "Pegawai",
     "location": "Lokasi",
     "production": "Produksi",
@@ -940,6 +941,8 @@
   "weeklyPlan": {
     "title": "Rencana Produksi Mingguan",
     "create": "$t(commonTypography.create) $t(weeklyPlan.title)",
-    "successDeleteMessage": "$t(weeklyPlan.title) berhasil dihapus"
+    "successDeleteMessage": "$t(weeklyPlan.title) berhasil dihapus",
+    "successCreateMessage": "$t(weeklyPlan.title) berhasil dibuat",
+    "formCreate": "$t(commonTypography.form) $t(weeklyPlan.title)"
   }
 }

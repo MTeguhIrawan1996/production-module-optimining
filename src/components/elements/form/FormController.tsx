@@ -32,11 +32,14 @@ import {
   SampleTypeSelectInput,
   SelectActivityCategoryRhf,
   SelectArriveBargeRhf,
+  SelectCompanyRhf,
   SelectFactoryRhf,
   SelectHeavyEquipmentReferenceInput,
   SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
+  SelectWeekRhf,
   SelectWorkingHoursPlanRhf,
+  SelectYearRhf,
   ShiftSelectInputRhf,
   StockpileNameSelectInputRhf,
   SubDistrictSelectInputRhf,
@@ -144,6 +147,12 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <SelectWorkingHoursPlanRhf {...props} />;
     case 'select-activity-category-rhf':
       return <SelectActivityCategoryRhf {...props} />;
+    case 'select-company-rhf':
+      return <SelectCompanyRhf {...props} />;
+    case 'select-year-rhf':
+      return <SelectYearRhf {...props} />;
+    case 'select-week-rhf':
+      return <SelectWeekRhf {...props} />;
     default:
       return null;
   }
