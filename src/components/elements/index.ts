@@ -88,6 +88,7 @@ import VillageSelectInputRhf from '@/components/elements/input/VillageSelectInpu
 import WeatherConditionSelectInputRhf from '@/components/elements/input/WeatherConditionSelectInputRhf';
 import WeatherSelectInputRhf from '@/components/elements/input/WeatherSelectInputRhf';
 import LinkButton from '@/components/elements/link/LinkButton';
+import PaperLink from '@/components/elements/link/PaperLink';
 import PrimaryLink from '@/components/elements/link/PrimaryLink';
 import ImageModal from '@/components/elements/modal/ImageModal';
 import LogoutConfirmModal from '@/components/elements/modal/LogoutConfirmModal';
@@ -158,6 +159,7 @@ export {
   NotValidButton,
   NumberInputRhf,
   PaginationSkeleton,
+  PaperLink,
   PasswordInputRhf,
   PdfInputDropzoneRhf,
   PitSelectInputRhf,

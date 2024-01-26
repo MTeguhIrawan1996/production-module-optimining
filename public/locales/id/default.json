@@ -417,7 +417,15 @@
     "amountFuel": "Jumlah pengisian BBM",
     "plan": "Rencana",
     "weekly": "Mingguan",
-    "week": "Minggu"
+    "week": "Minggu",
+    "weeklyPlanInformation": "Informasi Rencana Mingguan",
+    "workingTimePlan": "Rencana Waktu Kerja",
+    "unitCapacityPlan": "Rencana Kapasitas Unit",
+    "heavyEquipmentRequirementsPlan": "Rencana Kebutuhan Alat Berat",
+    "heavyEquipmentAvailabilityPlan": "Rencana Ketersediaan Alat Berat",
+    "productionTargetPlan": "Rencana Target Produksi",
+    "miningPlanMap": "Peta Rencana Penambangan",
+    "bargingPlan": "Rencana Barging"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -940,9 +948,11 @@
   },
   "weeklyPlan": {
     "title": "Rencana Produksi Mingguan",
-    "create": "$t(commonTypography.create) $t(weeklyPlan.title)",
-    "successDeleteMessage": "$t(weeklyPlan.title) berhasil dihapus",
-    "successCreateMessage": "$t(weeklyPlan.title) berhasil dibuat",
-    "formCreate": "$t(commonTypography.form) $t(weeklyPlan.title)"
+    "title2": "Rencana Mingguan",
+    "create": "$t(commonTypography.create) $t(weeklyPlan.title2)",
+    "read": "$t(commonTypography.read) $t(weeklyPlan.title2)",
+    "successDeleteMessage": "$t(weeklyPlan.title2) berhasil dihapus",
+    "successCreateMessage": "$t(weeklyPlan.title2) berhasil dibuat",
+    "formCreate": "$t(commonTypography.form) $t(weeklyPlan.title2)"
   }
 }

@@ -127,6 +127,7 @@ import ReadWorkingHoursPlanMasterPage from '@/components/features/MasterData/wor
 import UpdateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/update/common';
 import WeeklyPlanPage from '@/components/features/Plan/weekly/common';
 import CreateWeeklyPlanPage from '@/components/features/Plan/weekly/create/common';
+import ReadWeeklyPlanPage from '@/components/features/Plan/weekly/read/common';
 import ProfilePage from '@/components/features/Profile/common';
 import CompanyTypePage from '@/components/features/Reference/company-type/common';
 import HeavyEquipmentPage from '@/components/features/Reference/heavy-equipment/common';
@@ -240,6 +241,7 @@ export {
   ReadStockpileMasterPage,
   ReadStockpileMonitoringPage,
   ReadWeatherProductionPage,
+  ReadWeeklyPlanPage,
   ReadWorkingHoursPlanMasterPage,
   SampleHouseLabPage,
   ShiftMasterPage,
