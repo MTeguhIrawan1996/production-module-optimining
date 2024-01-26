@@ -102,6 +102,7 @@ const getClient = (tokenServer?: ISessionServer | null) => {
       'ReadAllWeekSelect',
       'ReadAllWeatherCondition',
       'ReadAllArriveBargeSelect',
+      'ReadAllStatusSelect',
     ];
 
     if (blackList.includes(operation.operationName)) {

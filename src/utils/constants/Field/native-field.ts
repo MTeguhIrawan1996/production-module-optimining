@@ -1,8 +1,10 @@
 import { IDateInputNativeProps } from '@/components/elements/input/DateInputNative';
 import { IArriveBargeNativeProps } from '@/components/elements/input/SelectArriveBargeNative';
+import { ICompanyNativeProps } from '@/components/elements/input/SelectCompanyNative';
 import { ISelectHeavyEquipmentNativeProps } from '@/components/elements/input/SelectHeavyEquipmentNative';
 import { ISelectInputNativeProps } from '@/components/elements/input/SelectInputNative';
 import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
+import { IStatusNativeProps } from '@/components/elements/input/SelectStatusNative';
 import { ISelectWeekNativeProps } from '@/components/elements/input/SelectWeekNative';
 import { ISelectYearNativeProps } from '@/components/elements/input/SelectYearNative';
 
@@ -118,6 +120,37 @@ export const globalSelectHeavyEquipmentNative = ({
     searchable,
     clearable,
     withAsterisk,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectStatusNative = ({
+  name = 'status',
+  searchable = false,
+  clearable = true,
+  ...rest
+}: Partial<IStatusNativeProps>) => {
+  const field: InputControllerNativeProps = {
+    control: 'select-status-native',
+    name,
+    searchable,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectCompanyNative = ({
+  name = 'company',
+  searchable = true,
+  clearable = true,
+  ...rest
+}: Partial<ICompanyNativeProps>) => {
+  const field: InputControllerNativeProps = {
+    control: 'select-company-native',
+    name,
+    searchable,
+    clearable,
     ...rest,
   };
   return field;

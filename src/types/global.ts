@@ -38,6 +38,7 @@ import { ISampleTypesSelectnputRhfProps } from '@/components/elements/input/Samp
 import { ISelectActivityCategoryRhfProps } from '@/components/elements/input/SelectActivityCategoryRhf';
 import { IArriveBargeNativeProps } from '@/components/elements/input/SelectArriveBargeNative';
 import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
+import { ICompanyNativeProps } from '@/components/elements/input/SelectCompanyNative';
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
 import { ISelectHeavyEquipmentNativeProps } from '@/components/elements/input/SelectHeavyEquipmentNative';
 import { ISelectHeavyEquipmentReferenceInputProps } from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
@@ -45,6 +46,7 @@ import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/inpu
 import { ISelectInputNativeProps } from '@/components/elements/input/SelectInputNative';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
+import { IStatusNativeProps } from '@/components/elements/input/SelectStatusNative';
 import { ISelectWeekNativeProps } from '@/components/elements/input/SelectWeekNative';
 import { ISelectWorkingHoursPlanRhfProps } from '@/components/elements/input/SelectWorkingHoursPlanRhf';
 import { ISelectYearNativeProps } from '@/components/elements/input/SelectYearNative';
@@ -132,6 +134,8 @@ export type InputControllerNativeProps =
   | ISelectMonthNativeProps
   | IArriveBargeNativeProps
   | ISelectHeavyEquipmentNativeProps
+  | IStatusNativeProps
+  | ICompanyNativeProps
   | ISelectWeekNativeProps;
 
 export type ControllerGroup = {

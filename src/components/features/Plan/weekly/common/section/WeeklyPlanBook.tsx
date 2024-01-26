@@ -15,7 +15,12 @@ import {
 
 import { useDeleteWeeklyPlan } from '@/services/graphql/mutation/plan/weekly/useDeleteWeeklyPlan';
 import { useReadAllWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadAllWeeklyPlan';
-import { globalSelectYearNative } from '@/utils/constants/Field/native-field';
+import {
+  globalSelectCompanyNative,
+  globalSelectStatusNative,
+  globalSelectWeekNative,
+  globalSelectYearNative,
+} from '@/utils/constants/Field/native-field';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -29,6 +34,9 @@ const WeeklyPlanBook = () => {
   const [year, setYear] = React.useState<number | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+  const [week, setWeek] = React.useState<number | null>(null);
+  const [status, setStatus] = React.useState<string | null>(null);
+  const [companyId, setCompanyId] = React.useState<string | null>(null);
 
   /* #   /**=========== Query =========== */
   const {
@@ -42,7 +50,11 @@ const WeeklyPlanBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
+      orderBy: 'year',
       year,
+      week,
+      statusId: status,
+      companyId,
     },
   });
 
@@ -87,10 +99,35 @@ const WeeklyPlanBook = () => {
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });
         setYear(value ? Number(value) : null);
+        setWeek(null);
+      },
+    });
+    const selectWeekItem = globalSelectWeekNative({
+      disabled: !year,
+      value: week ? `${week}` : null,
+      year: year,
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setWeek(value ? Number(value) : null);
+      },
+    });
+    const selectStatusItem = globalSelectStatusNative({
+      onChange: (value) => {
+        setStatus(value);
+      },
+    });
+    const selectCompanyItem = globalSelectCompanyNative({
+      onChange: (value) => {
+        setCompanyId(value);
       },
     });
 
-    const item: InputControllerNativeProps[] = [selectYearItem];
+    const item: InputControllerNativeProps[] = [
+      selectYearItem,
+      selectWeekItem,
+      selectStatusItem,
+      selectCompanyItem,
+    ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url, year]);
@@ -192,11 +229,8 @@ const WeeklyPlanBook = () => {
         label: t('weeklyPlan.create'),
         onClick: () => router.push('/plan/weekly/create'),
       }}
-      paperStackProps={{
-        spacing: 'xs',
-      }}
       filterDateWithSelect={{
-        colSpan: 3,
+        colSpan: 4,
         items: filter,
       }}
     >

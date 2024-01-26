@@ -3,9 +3,11 @@ import * as React from 'react';
 import {
   DateInputNative,
   SelectArriveBargeNative,
+  SelectCompanyNative,
   SelectHeavyEquipmentNative,
   SelectInputNative,
   SelectMonthNative,
+  SelectStatusNative,
   SelectWeekNative,
   SelectYearNative,
 } from '@/components/elements';
@@ -30,6 +32,10 @@ const InputControllerNative: React.FC<InputControllerNativeProps> = (props) => {
       return <SelectArriveBargeNative {...props} />;
     case 'select-heavy-equipment-native':
       return <SelectHeavyEquipmentNative {...props} />;
+    case 'select-status-native':
+      return <SelectStatusNative {...props} />;
+    case 'select-company-native':
+      return <SelectCompanyNative {...props} />;
     default:
       return null;
   }

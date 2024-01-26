@@ -62,6 +62,7 @@ import SampleTypeSelectInput from '@/components/elements/input/SampleTypeSelectI
 import SelectActivityCategoryRhf from '@/components/elements/input/SelectActivityCategoryRhf';
 import SelectArriveBargeNative from '@/components/elements/input/SelectArriveBargeNative';
 import SelectArriveBargeRhf from '@/components/elements/input/SelectArriveBargeRhf';
+import SelectCompanyNative from '@/components/elements/input/SelectCompanyNative';
 import SelectFactoryRhf from '@/components/elements/input/SelectFactoryRhf';
 import SelectHeavyEquipmentNative from '@/components/elements/input/SelectHeavyEquipmentNative';
 import SelectHeavyEquipmentReferenceInput from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
@@ -69,6 +70,7 @@ import SelectHeavyEquipmentTypesInput from '@/components/elements/input/SelectHe
 import SelectInputNative from '@/components/elements/input/SelectInputNative';
 import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
 import SelectMonthNative from '@/components/elements/input/SelectMonthNative';
+import SelectStatusNative from '@/components/elements/input/SelectStatusNative';
 import SelectWeekNative from '@/components/elements/input/SelectWeekNative';
 import SelectWorkingHoursPlanRhf from '@/components/elements/input/SelectWorkingHoursPlanRhf';
 import SelectYearNative from '@/components/elements/input/SelectYearNative';
@@ -170,6 +172,7 @@ export {
   SelectActivityCategoryRhf,
   SelectArriveBargeNative,
   SelectArriveBargeRhf,
+  SelectCompanyNative,
   SelectFactoryRhf,
   SelectHeavyEquipmentNative,
   SelectHeavyEquipmentReferenceInput,
@@ -178,6 +181,7 @@ export {
   SelectInputRhf,
   SelectionButtonModal,
   SelectMonthNative,
+  SelectStatusNative,
   SelectWeekNative,
   SelectWorkingHoursPlanRhf,
   SelectYearNative,
