@@ -51,6 +51,7 @@ import MarriageSelectInputRhf from '@/components/elements/input/MarriageStatuses
 import MaterialSelectInput from '@/components/elements/input/MaterialSelectInputRhf';
 import ModelSelectInputRhf from '@/components/elements/input/ModelSelectInputRhf';
 import NumberInputRhf from '@/components/elements/input/NumberInputRhf';
+import NumberInputTableRhf from '@/components/elements/input/NumberInputTableRhf';
 import PasswordInputRhf from '@/components/elements/input/PasswordInputRhf';
 import PdfInputDropzoneRhf from '@/components/elements/input/PdfInputDropzoneRhf';
 import PitSelectInputRhf from '@/components/elements/input/PitSelectInputRhf';
@@ -161,6 +162,7 @@ export {
   NextImageFill,
   NotValidButton,
   NumberInputRhf,
+  NumberInputTableRhf,
   PaginationSkeleton,
   PaperLink,
   PasswordInputRhf,
