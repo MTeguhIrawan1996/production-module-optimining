@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import UpdateWeeklyPlanInformationBook from '@/components/features/Plan/weekly/update/common/weekly-plan-information/common/section/UpdateWeeklyPlanInformationBook';
+import UpdateWeeklyPlanInformationBook from '@/components/features/Plan/weekly/update/weekly-plan-information/common/section/UpdateWeeklyPlanInformationBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
