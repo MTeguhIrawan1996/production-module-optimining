@@ -99,6 +99,7 @@
       "locationCategory": "Kategori Lokasi",
       "locationName": "Nama Lokasi",
       "material": "Material",
+      "fleet": "Fleet",
       "subMaterial": "Sub Material",
       "materialType": "Jenis Material",
       "subMaterialType": "Sub Jenis Material",
@@ -231,7 +232,12 @@
       "vesselNameOrFactoryName": "Nama Vessel / Pabrik",
       "amountFuel": "Jumlah pengisian BBM",
       "status": "Status",
-      "company": "Perusahaan"
+      "company": "Perusahaan",
+      "physicalAvailability": "PA (Physical Availability)",
+      "useOfAvailability": "UA (Use Of Availability)",
+      "effectiveWorkingHour": "EWH (Effective Working Hour)",
+      "distance": "Jarak (M)",
+      "dumpTruckCount": "Jumlah Dump Truck"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",

@@ -100,6 +100,7 @@ import UpdatePasswordModal from '@/components/elements/modal/UpdatePasswordModal
 import GlobalPagination from '@/components/elements/pagination/GlobalPagination';
 import PaginationSkeleton from '@/components/elements/skeleton/PaginationSkeleton';
 import GlobalHeaderDetail from '@/components/elements/ui/GlobalHeaderDetail';
+import InputGroupMaterial from '@/components/elements/ui/InputGroupMaterial';
 import ListDetailsRitageDT from '@/components/elements/ui/ListDetailsRitageDT';
 import PlanGroupLink from '@/components/elements/ui/PlanGroupLink';
 import AuthWrapper from '@/components/elements/wrapper/AuthWrapper';
@@ -145,6 +146,7 @@ export {
   ImageInputDropzoneRhf,
   ImageModal,
   InnerWrapper,
+  InputGroupMaterial,
   KeyValueList,
   LinkButton,
   ListDetailsRitageDT,

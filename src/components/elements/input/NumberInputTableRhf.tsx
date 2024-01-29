@@ -1,6 +1,7 @@
 import {
   NumberInput as MantineNumberInput,
   NumberInputProps,
+  Tooltip,
 } from '@mantine/core';
 import * as React from 'react';
 import { useController } from 'react-hook-form';
@@ -29,25 +30,29 @@ const NumberInputTableRhf: React.FC<INumberInputTableRhfProps> = ({
   const { field, fieldState } = useController({ name });
 
   return (
-    <MantineNumberInput
-      {...field}
-      radius={8}
-      hideControls={hideControls}
-      labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
-      descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
-      data-control={control}
-      label={
-        labelWithTranslate
-          ? label
-            ? t(`components.field.${label}`)
-            : null
-          : label
-      }
-      parser={(value) => value.replace(/\s|,/g, '.')}
-      precision={precision}
-      error={fieldState && fieldState.error ? true : false}
-      {...rest}
-    />
+    <Tooltip label="tes" hidden={false} color="red" position="right">
+      <MantineNumberInput
+        {...field}
+        radius={8}
+        hideControls={hideControls}
+        labelProps={{
+          style: { fontWeight: 400, fontSize: 16, marginBottom: 8 },
+        }}
+        descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
+        data-control={control}
+        label={
+          labelWithTranslate
+            ? label
+              ? t(`components.field.${label}`)
+              : null
+            : label
+        }
+        parser={(value) => value.replace(/\s|,/g, '.')}
+        precision={precision}
+        error={fieldState && fieldState.error ? true : false}
+        {...rest}
+      />
+    </Tooltip>
   );
 };
 
