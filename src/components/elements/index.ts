@@ -1,3 +1,4 @@
+import CommonWeeklyPlanInformationBook from '@/components/elements/book/CommonWeeklyPlanInformationBook';
 import DeterminedButton from '@/components/elements/button/DeterminedButton';
 import DownloadButton from '@/components/elements/button/DownloadButton';
 import NotValidButton from '@/components/elements/button/NotValidButton';
@@ -99,6 +100,7 @@ import GlobalPagination from '@/components/elements/pagination/GlobalPagination'
 import PaginationSkeleton from '@/components/elements/skeleton/PaginationSkeleton';
 import GlobalHeaderDetail from '@/components/elements/ui/GlobalHeaderDetail';
 import ListDetailsRitageDT from '@/components/elements/ui/ListDetailsRitageDT';
+import PlanGroupLink from '@/components/elements/ui/PlanGroupLink';
 import AuthWrapper from '@/components/elements/wrapper/AuthWrapper';
 import InnerWrapper from '@/components/elements/wrapper/InnerWrapper';
 import RootWrapper from '@/components/elements/wrapper/RootWrapper';
@@ -113,6 +115,7 @@ export {
   CheckboxGroupAccess,
   CheckboxGroupRoleAccess,
   ClassSelectInputRhf,
+  CommonWeeklyPlanInformationBook,
   CompanyPermissionTypeSelectInputRhf,
   CompanyTypeSelectInputRhf,
   DashboardCard,
@@ -163,6 +166,7 @@ export {
   PasswordInputRhf,
   PdfInputDropzoneRhf,
   PitSelectInputRhf,
+  PlanGroupLink,
   PositionSelectInputRhf,
   PrimaryButton,
   PrimaryLink,

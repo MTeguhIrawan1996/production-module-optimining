@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Stack } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { IconX } from '@tabler/icons-react';
@@ -8,7 +7,11 @@ import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { DashboardCard, GlobalAlert, PaperLink } from '@/components/elements';
+import {
+  DashboardCard,
+  GlobalAlert,
+  PlanGroupLink,
+} from '@/components/elements';
 
 import { useUpdateIsDeterminedWeeklyPlan } from '@/services/graphql/mutation/plan/weekly/useIsDeterminedWeeklyPlan';
 import { useUpdateIsValidateWeeklyPlan } from '@/services/graphql/mutation/plan/weekly/useIsValidateWeeklyPlan';
@@ -16,45 +19,6 @@ import { useReadOneWeeklyPlan } from '@/services/graphql/query/plan/weekly/useRe
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 
 import { IUpdateStatusValues } from '@/types/global';
-
-const detailWeeklyPlanLink = [
-  {
-    label: 'weeklyPlanInformation',
-    href: '/plan/weekly/read/weekly-plan-information',
-  },
-  {
-    label: 'workingTimePlan',
-    href: '/',
-  },
-  {
-    label: 'unitCapacityPlan',
-    href: '/',
-  },
-  {
-    label: 'heavyEquipmentRequirementsPlan',
-    href: '/',
-  },
-  {
-    label: 'heavyEquipmentAvailabilityPlan',
-    href: '/',
-  },
-  {
-    label: 'heavyEquipmentAvailabilityPlan',
-    href: '/',
-  },
-  {
-    label: 'productionTargetPlan',
-    href: '/',
-  },
-  {
-    label: 'miningPlanMap',
-    href: '/',
-  },
-  {
-    label: 'bargingPlan',
-    href: '/',
-  },
-];
 
 const ReadWeeklyPlanBook = () => {
   const { t } = useTranslation('default');
@@ -262,15 +226,7 @@ const ReadWeeklyPlanBook = () => {
           mt="xs"
         />
       ) : null}
-      <Stack py="xs" spacing="lg">
-        {detailWeeklyPlanLink.map((obj, i) => (
-          <PaperLink
-            label={t(`commonTypography.${obj.label}`)}
-            href={`${obj.href}/${id}`}
-            key={i}
-          />
-        ))}
-      </Stack>
+      <PlanGroupLink type="read" />
     </DashboardCard>
   );
 };

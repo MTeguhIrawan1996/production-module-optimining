@@ -8,10 +8,9 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import {
-  ICreateWeeklyPlanInformationValues,
-  useCreateWeeklyPlanInformation,
-} from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyPlanInformation';
+import { ICreateWeeklyPlanInformationValues } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyPlanInformation';
+import { useUpdateWeeklyPlanInformation } from '@/services/graphql/mutation/plan/weekly/useUpdateWeeklyPlanInformation';
+import { useReadOneWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadOneWeeklyPlan';
 import {
   globalSelectCompanyRhf,
   globalSelectWeekRhf,
@@ -22,9 +21,16 @@ import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
-const CreateWeeklyPlanInformationBook = () => {
+interface ICommonWeeklyPlanInformationBook {
+  type: 'read' | 'update';
+}
+
+const CommonWeeklyPlanInformationBook: React.FC<
+  ICommonWeeklyPlanInformationBook
+> = ({ type }) => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateWeeklyPlanInformationValues<string>>({
@@ -40,12 +46,23 @@ const CreateWeeklyPlanInformationBook = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  const [executeCreate, { loading }] = useCreateWeeklyPlanInformation({
+  const { weeklyPlanData, weeklyPlanDataLoading } = useReadOneWeeklyPlan({
+    variables: {
+      id,
+    },
+    skip: !router.isReady,
+    onCompleted: (data) => {
+      methods.setValue('companyId', data.weeklyPlan.company?.id ?? '');
+      methods.setValue('week', `${data.weeklyPlan.week}`);
+      methods.setValue('year', `${data.weeklyPlan.year}`);
+    },
+  });
+  const [executeUpdate, { loading }] = useUpdateWeeklyPlanInformation({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('weeklyPlan.successCreateMessage'),
+        message: t('weeklyPlan.successUpdateMessage'),
         icon: <IconCheck />,
       });
       methods.reset();
@@ -74,10 +91,16 @@ const CreateWeeklyPlanInformationBook = () => {
 
   /* #   /**=========== Field =========== */
   const fieldRhf = React.useMemo(() => {
-    const companyItem = globalSelectCompanyRhf({});
-    const yearItem = globalSelectYearRhf({});
+    const companyItem = globalSelectCompanyRhf({
+      disabled: type === 'read' ? true : false,
+      defaultValue: weeklyPlanData?.company?.id ?? '',
+      labelValue: weeklyPlanData?.company?.name ?? '',
+    });
+    const yearItem = globalSelectYearRhf({
+      disabled: type === 'read' ? true : false,
+    });
     const weekItem = globalSelectWeekRhf({
-      disabled: !year,
+      disabled: type === 'read' ? true : !year,
       year: year ? Number(year) : null,
     });
 
@@ -85,21 +108,34 @@ const CreateWeeklyPlanInformationBook = () => {
       {
         group: t('commonTypography.companyInformation'),
         enableGroupLabel: true,
+        actionOuterGroup: {
+          updateButton:
+            type === 'read'
+              ? {
+                  label: 'Edit',
+                  onClick: () =>
+                    router.push(
+                      `/plan/weekly/update/weekly-plan-information/${id}`
+                    ),
+                }
+              : undefined,
+        },
         formControllers: [companyItem, yearItem, weekItem],
       },
     ];
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year]);
+  }, [year, weeklyPlanData, type]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<
     ICreateWeeklyPlanInformationValues
   > = async ({ companyId, week, year }) => {
-    await executeCreate({
+    await executeUpdate({
       variables: {
+        id,
         companyId,
         week: Number(week),
         year: Number(year),
@@ -109,15 +145,26 @@ const CreateWeeklyPlanInformationBook = () => {
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={weeklyPlanDataLoading}>
       <GlobalFormGroup
         field={fieldRhf}
         methods={methods}
         submitForm={handleSubmitForm}
-        submitButton={{
-          label: t('commonTypography.save'),
-          loading: loading,
-        }}
+        nextButton={
+          type === 'read'
+            ? {
+                onClick: () => router.push('/plan/weekly'),
+              }
+            : undefined
+        }
+        submitButton={
+          type === 'update'
+            ? {
+                label: t('commonTypography.save'),
+                loading: loading,
+              }
+            : undefined
+        }
         backButton={{
           onClick: () => router.push('/plan/weekly'),
         }}
@@ -126,4 +173,4 @@ const CreateWeeklyPlanInformationBook = () => {
   );
 };
 
-export default CreateWeeklyPlanInformationBook;
+export default CommonWeeklyPlanInformationBook;

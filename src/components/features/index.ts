@@ -129,6 +129,8 @@ import WeeklyPlanPage from '@/components/features/Plan/weekly/common';
 import CreateWeeklyPlanInformationPage from '@/components/features/Plan/weekly/create/common';
 import ReadWeeklyPlanPage from '@/components/features/Plan/weekly/read/common';
 import ReadWeeklyPlanInformationPage from '@/components/features/Plan/weekly/read/weekly-plan-information/common';
+import UpdateWeeklyPlanPage from '@/components/features/Plan/weekly/update/common';
+import UpdateWeeklyPlanInformationPage from '@/components/features/Plan/weekly/update/common/weekly-plan-information/common';
 import ProfilePage from '@/components/features/Profile/common';
 import CompanyTypePage from '@/components/features/Reference/company-type/common';
 import HeavyEquipmentPage from '@/components/features/Reference/heavy-equipment/common';
@@ -284,6 +286,8 @@ export {
   UpdateStockpileMonitoringPage,
   UpdateUserPage,
   UpdateWeatherProductionPage,
+  UpdateWeeklyPlanInformationPage,
+  UpdateWeeklyPlanPage,
   UpdateWorkingHoursPlanMasterPage,
   UploadHeavyEquipmentProductionPage,
   UploadRitageBargingPage,
