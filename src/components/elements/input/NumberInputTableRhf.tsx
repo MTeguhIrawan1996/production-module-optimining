@@ -30,7 +30,12 @@ const NumberInputTableRhf: React.FC<INumberInputTableRhfProps> = ({
   const { field, fieldState } = useController({ name });
 
   return (
-    <Tooltip label="tes" hidden={false} color="red" position="right">
+    <Tooltip
+      label={fieldState?.error?.message || ''}
+      hidden={fieldState && fieldState.error ? false : true}
+      color="red"
+      position="right"
+    >
       <MantineNumberInput
         {...field}
         radius={8}

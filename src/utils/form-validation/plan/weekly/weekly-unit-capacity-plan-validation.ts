@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { IUnitCapacityPlanValues } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyUnitcapacityPlan';
 import {
   zArrayOfString,
+  zOptionalNumber,
   zOptionalString,
   zRequiredNumber,
   zRequiredSelectInput,
@@ -34,8 +35,32 @@ export const weeklyUnitCapacityPlanMutationValidation: z.ZodType<IUnitCapacityPl
             targetPlans: z
               .object({
                 day: zRequiredNumber,
-                rate: zRequiredNumber,
-                ton: zRequiredNumber,
+                rate: zOptionalNumber,
+                ton: zOptionalNumber,
+              })
+              .superRefine((arg, ctx) => {
+                if (arg.rate !== '') {
+                  if (arg.ton === '') {
+                    ctx.addIssue({
+                      code: z.ZodIssueCode.custom, // customize your issue
+                      path: ['ton'],
+                      message: 'Kolom tidak boleh kosong',
+                    });
+                  }
+
+                  return z.NEVER; // The return value is not used, but we need to return something to satisfy the typing
+                }
+                if (arg.ton !== '') {
+                  if (arg.rate === '') {
+                    ctx.addIssue({
+                      code: z.ZodIssueCode.custom, // customize your issue
+                      path: ['rate'],
+                      message: 'Kolom tidak boleh kosong',
+                    });
+                  }
+
+                  return z.NEVER; // The return value is not used, but we need to return something to satisfy the typing
+                }
               })
               .array(),
           })
