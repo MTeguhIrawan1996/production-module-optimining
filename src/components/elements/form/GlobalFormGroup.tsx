@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 
 import {
   FormController,
+  InputGroupMaterial,
   ModalConfirmation,
   PrimaryButton,
 } from '@/components/elements';
@@ -119,6 +120,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                 enableGroupLabel,
                 actionGroup,
                 actionOuterGroup,
+                inputGroupMaterial,
               },
               i
             ) => {
@@ -216,6 +218,29 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                             );
                           }
                         )}
+                        {inputGroupMaterial
+                          ? inputGroupMaterial.map(
+                              ({
+                                materialIndex,
+                                unitCapacityPlanIndex,
+                                uniqKey,
+                                ...restMaterial
+                              }) => (
+                                <Grid.Col
+                                  span={12}
+                                  key={`${unitCapacityPlanIndex}.${materialIndex}.${uniqKey}`}
+                                >
+                                  <InputGroupMaterial
+                                    materialIndex={materialIndex}
+                                    unitCapacityPlanIndex={
+                                      unitCapacityPlanIndex
+                                    }
+                                    {...restMaterial}
+                                  />
+                                </Grid.Col>
+                              )
+                            )
+                          : null}
                       </Grid>
                       {groupCheckbox && (
                         <Checkbox

@@ -20,7 +20,9 @@ import {
   MarriageSelectInputRhf,
   MaterialSelectInput,
   ModelSelectInputRhf,
+  MultipleSelectLocationRhf,
   NumberInputRhf,
+  NumberInputTableRhf,
   PasswordInputRhf,
   PdfInputDropzoneRhf,
   PitSelectInputRhf,
@@ -153,6 +155,10 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <SelectYearRhf {...props} />;
     case 'select-week-rhf':
       return <SelectWeekRhf {...props} />;
+    case 'number-input-table-rhf':
+      return <NumberInputTableRhf {...props} />;
+    case 'multiple-select-location':
+      return <MultipleSelectLocationRhf {...props} />;
     default:
       return null;
   }

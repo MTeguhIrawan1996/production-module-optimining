@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
-import ReadWeeklyPlanBook from '@/components/features/Plan/weekly/read/common/section/ReadWeeklyPlanBook';
+import UpdateWeeklyPlanInformationBook from '@/components/features/Plan/weekly/update/weekly-plan-information/common/section/UpdateWeeklyPlanInformationBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-const ReadWeeklyPlanPage = () => {
+const UpdateWeeklyPlanInformationPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -23,7 +23,7 @@ const ReadWeeklyPlanPage = () => {
         path: '/plan/weekly',
       },
       {
-        label: t('weeklyPlan.detail'),
+        label: t('weeklyPlan.update'),
         path: router.asPath,
       },
     ]);
@@ -32,11 +32,13 @@ const ReadWeeklyPlanPage = () => {
 
   return (
     <RootWrapper>
-      <InnerWrapper titleProps={{ title: t('weeklyPlan.title2'), mb: 'xs' }}>
-        <ReadWeeklyPlanBook />
+      <InnerWrapper
+        titleProps={{ title: t('weeklyPlan.formCreate'), mb: 'xs' }}
+      >
+        <UpdateWeeklyPlanInformationBook />
       </InnerWrapper>
     </RootWrapper>
   );
 };
 
-export default ReadWeeklyPlanPage;
+export default UpdateWeeklyPlanInformationPage;
