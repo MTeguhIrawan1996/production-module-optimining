@@ -220,17 +220,15 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                         )}
                         {inputGroupMaterial
                           ? inputGroupMaterial.map(
-                              (
-                                {
-                                  materialIndex,
-                                  unitCapacityPlanIndex,
-                                  ...restMaterial
-                                },
-                                idx
-                              ) => (
+                              ({
+                                materialIndex,
+                                unitCapacityPlanIndex,
+                                uniqKey,
+                                ...restMaterial
+                              }) => (
                                 <Grid.Col
                                   span={12}
-                                  key={`${unitCapacityPlanIndex}.${materialIndex}.${idx}`}
+                                  key={`${unitCapacityPlanIndex}.${materialIndex}.${uniqKey}`}
                                 >
                                   <InputGroupMaterial
                                     materialIndex={materialIndex}

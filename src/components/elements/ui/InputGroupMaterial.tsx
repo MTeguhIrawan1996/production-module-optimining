@@ -33,6 +33,7 @@ export type IInputGroupMaterialProps = {
   methods: UseFormReturn<any, any, undefined>;
   unitCapacityPlanIndex: number;
   materialIndex: number;
+  uniqKey?: string | null;
 };
 
 const table = [
@@ -155,6 +156,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.materialId`}
                 label="material"
                 withAsterisk
+                clearable
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -171,6 +173,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.classId`}
                 label="heavyEquipmentClass"
                 withAsterisk
+                clearable
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -180,6 +183,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 label="front"
                 categoryId={`${process.env.NEXT_PUBLIC_FRONT_ID}`}
                 withAsterisk
+                clearable
               />
             </Grid.Col>
             <Grid.Col span={6}>

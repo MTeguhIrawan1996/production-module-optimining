@@ -1,4 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -27,7 +26,6 @@ import {
   globalSelectYearRhf,
   globalText,
 } from '@/utils/constants/Field/global-field';
-import { weeklyUnitCapacityPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-unit-capacity-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -87,7 +85,7 @@ const CreateWeeklyPlanGroupBook = () => {
   };
 
   const methods = useForm<IUnitCapacityPlanValues>({
-    resolver: zodResolver(weeklyUnitCapacityPlanMutationValidation),
+    // resolver: zodResolver(weeklyUnitCapacityPlanMutationValidation),
     defaultValues: {
       companyId: '',
       week: null,
@@ -107,6 +105,7 @@ const CreateWeeklyPlanGroupBook = () => {
     fields: unitCapacityFields,
     append: unitCapacityAppend,
     update: unitCapacityUpdate,
+    remove: unitCapacityRemove,
   } = useFieldArray({
     name: 'unitCapacityPlans',
     control: methods.control,
@@ -164,10 +163,18 @@ const CreateWeeklyPlanGroupBook = () => {
       >,
       index: number
     ) => {
+      const value = methods.watch(`unitCapacityPlans.${index}`);
+
       const activityNameItem = globalText({
         name: `unitCapacityPlans.${index}.activityName`,
         label: 'activityName',
         key: `${obj.unitCapacityPlanId}.activityName`,
+        onChange: (e) => {
+          methods.setValue(
+            `unitCapacityPlans.${index}.activityName`,
+            e.currentTarget.value
+          );
+        },
       });
       const multipleSelectLocationItem = globalMultipleSelectLocation({
         label: 'location',
@@ -204,29 +211,32 @@ const CreateWeeklyPlanGroupBook = () => {
           methods: methods,
           unitCapacityPlanIndex: index,
           materialIndex: i,
+          uniqKey: obj.unitCapacityPlanId,
           addButtonOuter:
             i === 0
               ? {
                   onClick: () => {
                     unitCapacityUpdate(index, {
-                      id: obj.id,
-                      activityName: obj.activityName,
-                      locationIds: obj.locationIds,
-                      materials: [...obj.materials, material],
+                      id: value.id ?? '',
+                      activityName: value.activityName,
+                      locationIds: value.locationIds,
+                      materials: [...value.materials, material],
                     });
                   },
                 }
               : undefined,
           deleteButtonInner: {
             onClick: () => {
-              const copyArray = obj.materials?.slice();
+              const copyArray = value.materials?.slice();
               copyArray.splice(i, 1);
-              unitCapacityUpdate(index, {
-                id: obj.id,
-                activityName: obj.activityName,
-                locationIds: obj.locationIds,
-                materials: copyArray ?? [],
-              });
+              unitCapacityFields?.[index].materials?.length > 1
+                ? unitCapacityUpdate(index, {
+                    id: value.id,
+                    activityName: value.activityName,
+                    locationIds: value.locationIds,
+                    materials: copyArray ?? [],
+                  })
+                : null;
             },
           },
         })
@@ -244,15 +254,24 @@ const CreateWeeklyPlanGroupBook = () => {
         ],
         inputGroupMaterial: materialGroup,
         actionOuterGroup: {
-          addButton: {
-            label: t('commonTypography.createLocation'),
+          addButton:
+            index === 0
+              ? {
+                  label: t('commonTypography.createLocation'),
+                  onClick: () =>
+                    unitCapacityAppend({
+                      locationIds: [],
+                      activityName: '',
+                      materials: [material],
+                    }),
+                }
+              : undefined,
+        },
+        actionGroup: {
+          deleteButton: {
+            label: t('commonTypography.delete'),
             onClick: () =>
-              unitCapacityAppend({
-                id: '',
-                locationIds: [],
-                activityName: '',
-                materials: [material],
-              }),
+              unitCapacityFields.length > 1 ? unitCapacityRemove(index) : null,
           },
         },
       };
@@ -260,7 +279,7 @@ const CreateWeeklyPlanGroupBook = () => {
       return group;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [material]
+    [unitCapacityFields]
   );
 
   const unitCapacityPlanGroup = unitCapacityFields.map(unitCpacityCallback);
