@@ -8,10 +8,9 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import {
-  ICreateWeeklyPlanInformationValues,
-  useCreateWeeklyPlanInformation,
-} from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyPlanInformation';
+import { ICreateWeeklyPlanInformationValues } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyPlanInformation';
+import { useUpdateWeeklyPlanInformation } from '@/services/graphql/mutation/plan/weekly/useUpdateWeeklyPlanInformation';
+import { useReadOneWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadOneWeeklyPlan';
 import {
   globalSelectCompanyRhf,
   globalSelectWeekRhf,
@@ -22,11 +21,11 @@ import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
-const CreateWeeklyPlanInformationBook = () => {
+const UpdateWeeklyPlanGroupBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
 
-  /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateWeeklyPlanInformationValues<string>>({
     resolver: zodResolver(weeklyPlanMutationValidation),
     defaultValues: {
@@ -37,21 +36,28 @@ const CreateWeeklyPlanInformationBook = () => {
     mode: 'onBlur',
   });
   const year = methods.watch('year');
-  /* #endregion  /**======== Methods =========== */
 
-  /* #   /**=========== Query =========== */
-  const [executeCreate, { loading }] = useCreateWeeklyPlanInformation({
-    onCompleted: ({ createWeeklyPlan }) => {
+  const { weeklyPlanData, weeklyPlanDataLoading } = useReadOneWeeklyPlan({
+    variables: {
+      id,
+    },
+    skip: !router.isReady,
+    onCompleted: (data) => {
+      methods.setValue('companyId', data.weeklyPlan.company?.id ?? '');
+      methods.setValue('week', `${data.weeklyPlan.week}`);
+      methods.setValue('year', `${data.weeklyPlan.year}`);
+    },
+  });
+  const [executeUpdate, { loading }] = useUpdateWeeklyPlanInformation({
+    onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('weeklyPlan.successCreateMessage'),
+        message: t('weeklyPlan.successUpdateMessage'),
         icon: <IconCheck />,
       });
       methods.reset();
-      router.push(
-        `/plan/weekly/create/weekly-plan-group/${createWeeklyPlan.id}`
-      );
+      // router.push('/input-data/production/data-weather');
     },
     onError: (error) => {
       if (error.graphQLErrors) {
@@ -72,14 +78,18 @@ const CreateWeeklyPlanInformationBook = () => {
       }
     },
   });
-  /* #endregion  /**======== Query =========== */
 
-  /* #   /**=========== Field =========== */
   const fieldRhf = React.useMemo(() => {
-    const companyItem = globalSelectCompanyRhf({});
-    const yearItem = globalSelectYearRhf({});
+    const companyItem = globalSelectCompanyRhf({
+      disabled: true,
+      defaultValue: weeklyPlanData?.company?.id ?? '',
+      labelValue: weeklyPlanData?.company?.name ?? '',
+    });
+    const yearItem = globalSelectYearRhf({
+      disabled: true,
+    });
     const weekItem = globalSelectWeekRhf({
-      disabled: !year,
+      disabled: true,
       year: year ? Number(year) : null,
     });
 
@@ -87,31 +97,29 @@ const CreateWeeklyPlanInformationBook = () => {
       {
         group: t('commonTypography.companyInformation'),
         enableGroupLabel: true,
+
         formControllers: [companyItem, yearItem, weekItem],
       },
     ];
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year]);
-  /* #endregion  /**======== Field =========== */
+  }, [year, weeklyPlanData]);
 
-  /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<
     ICreateWeeklyPlanInformationValues
   > = async ({ companyId, week, year }) => {
-    await executeCreate({
+    await executeUpdate({
       variables: {
+        id,
         companyId,
         week: Number(week),
         year: Number(year),
       },
     });
   };
-  /* #endregion  /**======== HandleSubmitFc =========== */
-
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={weeklyPlanDataLoading}>
       <GlobalFormGroup
         field={fieldRhf}
         methods={methods}
@@ -128,4 +136,4 @@ const CreateWeeklyPlanInformationBook = () => {
   );
 };
 
-export default CreateWeeklyPlanInformationBook;
+export default UpdateWeeklyPlanGroupBook;

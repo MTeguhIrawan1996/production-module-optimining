@@ -25,6 +25,7 @@ import { ILocationSelectInputRhfProps } from '@/components/elements/input/Locati
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import { IMaterialSelectInputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
+import { IMultipleSelectLocationRhfProps } from '@/components/elements/input/MultipleSelectLocationRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { INumberInputTableRhfProps } from '@/components/elements/input/NumberInputTableRhf';
 import { IPasswordInputProps } from '@/components/elements/input/PasswordInputRhf';
@@ -132,6 +133,7 @@ export type ControllerProps =
   | ISelectYearRhfProps
   | ISelectWeekRhfProps
   | INumberInputTableRhfProps
+  | IMultipleSelectLocationRhfProps
   | IWeatherConditionSelectInputRhfProps;
 
 export type InputControllerNativeProps =
@@ -159,7 +161,7 @@ export type ControllerGroup = {
     updateButton?: IPrimaryButtonProps;
     deleteButton?: IPrimaryButtonProps;
   };
-  inputGroupMaterial?: IInputGroupMaterialProps;
+  inputGroupMaterial?: IInputGroupMaterialProps[];
 };
 
 export type ControllerCheckBoxGroup<T> = {

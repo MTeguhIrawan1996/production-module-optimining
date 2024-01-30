@@ -50,6 +50,7 @@ import LocationSelectInputRhf from '@/components/elements/input/LocationSelectIn
 import MarriageSelectInputRhf from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import MaterialSelectInput from '@/components/elements/input/MaterialSelectInputRhf';
 import ModelSelectInputRhf from '@/components/elements/input/ModelSelectInputRhf';
+import MultipleSelectLocationRhf from '@/components/elements/input/MultipleSelectLocationRhf';
 import NumberInputRhf from '@/components/elements/input/NumberInputRhf';
 import NumberInputTableRhf from '@/components/elements/input/NumberInputTableRhf';
 import PasswordInputRhf from '@/components/elements/input/PasswordInputRhf';
@@ -159,6 +160,7 @@ export {
   ModalConfirmation,
   ModelSelectInputRhf,
   MultipleFilter,
+  MultipleSelectLocationRhf,
   NavbarCollapseLinksGroup,
   NavbarLinksGroup,
   NextImageFill,

@@ -4,7 +4,6 @@ import { shallow } from 'zustand/shallow';
 
 import { InnerWrapper, RootWrapper } from '@/components/elements';
 import EmptyStateTable from '@/components/features/Example/components/common/sections/EmptyStateTableBook';
-import InputGroupMaterial from '@/components/features/Example/components/common/sections/InputGroupMaterial';
 import ModalComponentsBook from '@/components/features/Example/components/common/sections/ModalComponentsBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
@@ -29,9 +28,6 @@ const ComponentsPage = () => {
       </InnerWrapper>
       <InnerWrapper titleProps={{ title: 'Komponen', mb: 'md' }}>
         <EmptyStateTable />
-      </InnerWrapper>
-      <InnerWrapper titleProps={{ title: 'Material Input', mb: 'md' }}>
-        <InputGroupMaterial />
       </InnerWrapper>
     </RootWrapper>
   );

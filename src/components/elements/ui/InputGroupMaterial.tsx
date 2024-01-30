@@ -22,14 +22,9 @@ import {
 } from '@/components/elements';
 import { IPrimaryButtonProps } from '@/components/elements/button/PrimaryButton';
 
-dayjs.extend(isoWeek);
+import { ICreateWeeklyPlanInformationValues } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyPlanInformation';
 
-interface ITargetPlan {
-  id: string;
-  day: number | '';
-  rate: number | '';
-  ton: number | '';
-}
+dayjs.extend(isoWeek);
 
 export type IInputGroupMaterialProps = {
   addButtonOuter?: Partial<IPrimaryButtonProps>;
@@ -38,8 +33,38 @@ export type IInputGroupMaterialProps = {
   methods: UseFormReturn<any, any, undefined>;
   unitCapacityPlanIndex: number;
   materialIndex: number;
-  name: string;
 };
+
+interface ITargetPlan {
+  id: string;
+  day: number | string | '';
+  rate: number | string | '';
+  ton: number | string | '';
+}
+
+export interface IMaterialsGroup {
+  id: string;
+  materialId: string;
+  fleet: number | string | '';
+  classId: string;
+  frontId: string;
+  physicalAvailability: number | string | '';
+  useOfAvailability: number | string | '';
+  effectiveWorkingHour: number | string | '';
+  distance: number | string | '';
+  dumpTruckCount: number | string | '';
+  targetPlans: ITargetPlan[];
+}
+
+export interface IUnitCapacityPlanProps
+  extends ICreateWeeklyPlanInformationValues<string> {
+  unitCapacityPlans: {
+    id: string;
+    locationIds: string[];
+    activityName: string;
+    materials: IMaterialsGroup[];
+  }[];
+}
 
 const table = [
   {
@@ -59,7 +84,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
   const { t } = useTranslation('default');
 
   const {
-    label: addButtonOuterLabel = t('commonTypography.create'),
+    label: addButtonOuterLabel = t('commonTypography.createMaterial'),
     ...restAddButtonOuter
   } = addButtonOuter || {};
   const {
@@ -67,7 +92,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
     ...restDeleteButtonOuter
   } = deleteButtonInner || {};
 
-  const data = useWatch({
+  const targetPlansData = useWatch({
     name: `unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.targetPlans`,
     control: methods.control,
   });
@@ -77,7 +102,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
       const group: DataTableColumnGroup<any> = {
         id: `${obj.day}`,
         title: dayjs()
-          .isoWeekday(obj.day || 0)
+          .isoWeekday(Number(obj.day || 0))
           .format('dddd'),
         style: { textAlign: 'center' },
         columns: [
@@ -114,16 +139,18 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
     [unitCapacityPlanIndex, materialIndex]
   );
 
-  const renderOtherGroup = data?.map(renderOtherColumnCallback);
+  const renderOtherGroup = targetPlansData?.map(renderOtherColumnCallback);
 
   return (
     <Flex gap={22} direction="column" align="flex-end" w="100%">
       <Group spacing="xs" position="right">
-        <PrimaryButton
-          leftIcon={<IconPlus size="20px" />}
-          label={addButtonOuterLabel}
-          {...restAddButtonOuter}
-        />
+        {addButtonOuter ? (
+          <PrimaryButton
+            leftIcon={<IconPlus size="20px" />}
+            label={addButtonOuterLabel}
+            {...restAddButtonOuter}
+          />
+        ) : null}
       </Group>
       <Paper p={24} withBorder w="100%">
         <Stack spacing={8}>
@@ -137,17 +164,19 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
               {t(`commonTypography.${label}`)}
             </Text>
             <Group spacing="xs" position="right">
-              <PrimaryButton
-                color="red.5"
-                variant="light"
-                styles={(theme) => ({
-                  root: {
-                    border: `1px solid ${theme.colors.red[3]}`,
-                  },
-                })}
-                label={deleteButtonOuterLabel}
-                {...restDeleteButtonOuter}
-              />
+              {deleteButtonInner ? (
+                <PrimaryButton
+                  color="red.5"
+                  variant="light"
+                  styles={(theme) => ({
+                    root: {
+                      border: `1px solid ${theme.colors.red[3]}`,
+                    },
+                  })}
+                  label={deleteButtonOuterLabel}
+                  {...restDeleteButtonOuter}
+                />
+              ) : null}
             </Group>
           </SimpleGrid>
           <Grid gutter="md">
@@ -156,6 +185,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 control="material-select-input"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.materialId`}
                 label="material"
+                withAsterisk
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -163,6 +193,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 control="text-input"
                 label="fleet"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.fleet`}
+                withAsterisk
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -170,6 +201,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 control="class-select-input"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.classId`}
                 label="heavyEquipmentClass"
+                withAsterisk
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -178,6 +210,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.frontId`}
                 label="front"
                 categoryId={`${process.env.NEXT_PUBLIC_FRONT_ID}`}
+                withAsterisk
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -185,6 +218,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 control="number-input"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.physicalAvailability`}
                 label="physicalAvailability"
+                withAsterisk
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -192,6 +226,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 control="number-input"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.useOfAvailability`}
                 label="useOfAvailability"
+                withAsterisk
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -199,6 +234,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 control="number-input"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.effectiveWorkingHour`}
                 label="effectiveWorkingHour"
+                withAsterisk
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -206,6 +242,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 control="number-input"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.distance`}
                 label="distance"
+                withAsterisk
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -213,6 +250,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 control="number-input"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.dumpTruckCount`}
                 label="dumpTruckCount"
+                withAsterisk
               />
             </Grid.Col>
             <Grid.Col span={12}>

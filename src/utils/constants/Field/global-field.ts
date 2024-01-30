@@ -11,6 +11,7 @@ import { ILocationSelectInputRhfProps } from '@/components/elements/input/Locati
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import { IMaterialSelectInputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
+import { IMultipleSelectLocationRhfProps } from '@/components/elements/input/MultipleSelectLocationRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { IPitSelectInputRhfProps } from '@/components/elements/input/PitSelectInputRhf';
 import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
@@ -866,6 +867,28 @@ export const locationSelect = ({
 }: Partial<ILocationSelectInputRhfProps>) => {
   const field: ControllerProps = {
     control: 'location-select-input',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalMultipleSelectLocation = ({
+  name = 'locationIds',
+  label = 'location',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IMultipleSelectLocationRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'multiple-select-location',
     name,
     label,
     searchable,

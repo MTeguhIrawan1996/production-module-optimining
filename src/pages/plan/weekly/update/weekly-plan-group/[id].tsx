@@ -1,7 +1,8 @@
+import { UpdateWeeklyPlanGroupPage } from '@/components/features';
 import { DashboardLayout } from '@/components/layouts';
 
 const UpdateWeeklyPlanGroup = () => {
-  return <div className="">foo</div>;
+  return <UpdateWeeklyPlanGroupPage />;
 };
 
 export default UpdateWeeklyPlanGroup;

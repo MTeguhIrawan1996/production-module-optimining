@@ -218,11 +218,31 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                             );
                           }
                         )}
-                        {inputGroupMaterial ? (
-                          <Grid.Col span={12}>
-                            <InputGroupMaterial {...inputGroupMaterial} />
-                          </Grid.Col>
-                        ) : null}
+                        {inputGroupMaterial
+                          ? inputGroupMaterial.map(
+                              (
+                                {
+                                  materialIndex,
+                                  unitCapacityPlanIndex,
+                                  ...restMaterial
+                                },
+                                idx
+                              ) => (
+                                <Grid.Col
+                                  span={12}
+                                  key={`${unitCapacityPlanIndex}.${materialIndex}.${idx}`}
+                                >
+                                  <InputGroupMaterial
+                                    materialIndex={materialIndex}
+                                    unitCapacityPlanIndex={
+                                      unitCapacityPlanIndex
+                                    }
+                                    {...restMaterial}
+                                  />
+                                </Grid.Col>
+                              )
+                            )
+                          : null}
                       </Grid>
                       {groupCheckbox && (
                         <Checkbox

@@ -80,7 +80,7 @@ export const useReadAllLocationselect = ({
         return err;
       },
       onCompleted,
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy: 'cache-first',
     }
   );
 

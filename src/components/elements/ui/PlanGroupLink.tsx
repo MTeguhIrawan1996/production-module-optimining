@@ -25,7 +25,7 @@ const PlanGroupLink: React.FC<IPlanGroupLinkProps> = ({ type }) => {
     },
     {
       label: 'unitCapacityPlan',
-      href: `/plan/weekly/${type}/weekly-plan-information`,
+      href: `/plan/weekly/${type}/weekly-plan-group`,
     },
     {
       label: 'heavyEquipmentRequirementsPlan',

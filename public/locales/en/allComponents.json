@@ -100,11 +100,13 @@
       "locationName": "Nama Lokasi",
       "material": "Material",
       "fleet": "Fleet",
+      "amountFleet": "Jumlah Fleet",
       "subMaterial": "Sub Material",
       "materialType": "Jenis Material",
       "subMaterialType": "Sub Jenis Material",
       "subMaterialTypeBy": "Sub Jenis Material Dari",
       "activity": "Kegiatan",
+      "activityName": "Nama Kegiatan",
       "activityPlan": "Rencana Aktivitas",
       "element": "Unsur Kandungan",
       "factoryName": "Nama Pabrik",
@@ -237,7 +239,9 @@
       "useOfAvailability": "UA (Use Of Availability)",
       "effectiveWorkingHour": "EWH (Effective Working Hour)",
       "distance": "Jarak (M)",
-      "dumpTruckCount": "Jumlah Dump Truck"
+      "avarageDistance": "Rata - rata Jarak (M)",
+      "dumpTruckCount": "Jumlah Dump Truck",
+      "dumpTruckTotal": "Jumlah Total Dump Truck"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",
