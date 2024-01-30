@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -11,12 +12,12 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
-import {
-  IInputGroupMaterialProps,
-  IUnitCapacityPlanProps,
-} from '@/components/elements/ui/InputGroupMaterial';
+import { IInputGroupMaterialProps } from '@/components/elements/ui/InputGroupMaterial';
 
-import { useUpdateWeeklyPlanInformation } from '@/services/graphql/mutation/plan/weekly/useUpdateWeeklyPlanInformation';
+import {
+  IUnitCapacityPlanValues,
+  useCreateWeeklyUnitCapacityPlan,
+} from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyUnitcapacityPlan';
 import { useReadOneWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadOneWeeklyPlan';
 import {
   globalMultipleSelectLocation,
@@ -26,6 +27,7 @@ import {
   globalSelectYearRhf,
   globalText,
 } from '@/utils/constants/Field/global-field';
+import { weeklyUnitCapacityPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-unit-capacity-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -36,7 +38,6 @@ const CreateWeeklyPlanGroupBook = () => {
   const id = router.query.id as string;
 
   const material = {
-    id: '',
     materialId: '',
     fleet: '',
     classId: '',
@@ -48,43 +49,36 @@ const CreateWeeklyPlanGroupBook = () => {
     dumpTruckCount: '',
     targetPlans: [
       {
-        id: '',
         day: 0,
         rate: '',
         ton: '',
       },
       {
-        id: '',
         day: 1,
         rate: '',
         ton: '',
       },
       {
-        id: '',
         day: 2,
         rate: '',
         ton: '',
       },
       {
-        id: '',
         day: 3,
         rate: '',
         ton: '',
       },
       {
-        id: '',
         day: 4,
         rate: '',
         ton: '',
       },
       {
-        id: '',
         day: 5,
         rate: '',
         ton: '',
       },
       {
-        id: '',
         day: 6,
         rate: '',
         ton: '',
@@ -92,15 +86,14 @@ const CreateWeeklyPlanGroupBook = () => {
     ],
   };
 
-  const methods = useForm<IUnitCapacityPlanProps>({
-    // resolver: zodResolver(weeklyPlanMutationValidation),
+  const methods = useForm<IUnitCapacityPlanValues>({
+    resolver: zodResolver(weeklyUnitCapacityPlanMutationValidation),
     defaultValues: {
       companyId: '',
       week: null,
       year: null,
       unitCapacityPlans: [
         {
-          id: '',
           locationIds: [],
           activityName: '',
           materials: [material],
@@ -131,21 +124,21 @@ const CreateWeeklyPlanGroupBook = () => {
       methods.setValue('year', `${data.weeklyPlan.year}`);
     },
   });
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const [executeUpdate, { loading }] = useUpdateWeeklyPlanInformation({
+
+  const [executeUpdate, { loading }] = useCreateWeeklyUnitCapacityPlan({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('weeklyPlan.successUpdateMessage'),
+        message: t('weeklyPlan.successCreateUnitCapacityPlanMessage'),
         icon: <IconCheck />,
       });
-      methods.reset();
+      // methods.reset();
       // router.push('/input-data/production/data-weather');
     },
     onError: (error) => {
       if (error.graphQLErrors) {
-        const errorArry = errorBadRequestField<IUnitCapacityPlanProps>(error);
+        const errorArry = errorBadRequestField<IUnitCapacityPlanValues>(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
             methods.setError(name, { type, message });
@@ -165,7 +158,7 @@ const CreateWeeklyPlanGroupBook = () => {
   const unitCpacityCallback = React.useCallback(
     (
       obj: FieldArrayWithId<
-        IUnitCapacityPlanProps,
+        IUnitCapacityPlanValues,
         'unitCapacityPlans',
         'unitCapacityPlanId'
       >,
@@ -299,18 +292,22 @@ const CreateWeeklyPlanGroupBook = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, weeklyPlanData, unitCapacityPlanGroup]);
 
-  const handleSubmitForm: SubmitHandler<IUnitCapacityPlanProps> = async (
-    // eslint-disable-next-line unused-imports/no-unused-vars
+  const handleSubmitForm: SubmitHandler<IUnitCapacityPlanValues> = async (
     data
   ) => {
-    // await executeUpdate({
-    //   variables: {
-    //     id,
-    //     companyId,
-    //     week: Number(week),
-    //     year: Number(year),
-    //   },
-    // });
+    const newUnitCapacityPlan = data.unitCapacityPlans.map(
+      ({ activityName, locationIds, materials }) => ({
+        activityName,
+        locationIds,
+        materials,
+      })
+    );
+    await executeUpdate({
+      variables: {
+        weeklyPlanId: id,
+        unitCapacityPlans: newUnitCapacityPlan,
+      },
+    });
   };
   return (
     <DashboardCard p={0} isLoading={weeklyPlanDataLoading}>

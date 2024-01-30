@@ -51,7 +51,6 @@ const MultipleSelectLocationRhf: React.FC<IMultipleSelectLocationRhfProps> = ({
       {...field}
       radius={8}
       data={uncombinedItem}
-      defaultValue={[]}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
       styles={(theme) => ({
@@ -60,6 +59,9 @@ const MultipleSelectLocationRhf: React.FC<IMultipleSelectLocationRhfProps> = ({
         },
         dropdown: {
           borderRadius: theme.spacing.xs,
+        },
+        value: {
+          backgroundColor: theme.colors.brand[3],
         },
       })}
       onSearchChange={setSearchTerm}

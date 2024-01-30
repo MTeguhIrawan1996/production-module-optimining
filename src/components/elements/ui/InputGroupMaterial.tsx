@@ -22,7 +22,7 @@ import {
 } from '@/components/elements';
 import { IPrimaryButtonProps } from '@/components/elements/button/PrimaryButton';
 
-import { ICreateWeeklyPlanInformationValues } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyPlanInformation';
+import { ITargetPlan } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyUnitcapacityPlan';
 
 dayjs.extend(isoWeek);
 
@@ -34,37 +34,6 @@ export type IInputGroupMaterialProps = {
   unitCapacityPlanIndex: number;
   materialIndex: number;
 };
-
-interface ITargetPlan {
-  id: string;
-  day: number | string | '';
-  rate: number | string | '';
-  ton: number | string | '';
-}
-
-export interface IMaterialsGroup {
-  id: string;
-  materialId: string;
-  fleet: number | string | '';
-  classId: string;
-  frontId: string;
-  physicalAvailability: number | string | '';
-  useOfAvailability: number | string | '';
-  effectiveWorkingHour: number | string | '';
-  distance: number | string | '';
-  dumpTruckCount: number | string | '';
-  targetPlans: ITargetPlan[];
-}
-
-export interface IUnitCapacityPlanProps
-  extends ICreateWeeklyPlanInformationValues<string> {
-  unitCapacityPlans: {
-    id: string;
-    locationIds: string[];
-    activityName: string;
-    materials: IMaterialsGroup[];
-  }[];
-}
 
 const table = [
   {
@@ -190,7 +159,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
             </Grid.Col>
             <Grid.Col span={6}>
               <FormController
-                control="text-input"
+                control="number-input"
                 label="fleet"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.fleet`}
                 withAsterisk
