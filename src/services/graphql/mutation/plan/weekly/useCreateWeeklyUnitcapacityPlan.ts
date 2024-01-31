@@ -39,7 +39,7 @@ export interface IMaterialsGroup {
   targetPlans: ITargetPlan[];
 }
 
-interface IUnitCapacityPlanProps {
+export interface IUnitCapacityPlanProps {
   id?: string;
   locationIds: string[];
   activityName: string;

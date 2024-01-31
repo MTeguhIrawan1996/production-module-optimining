@@ -171,6 +171,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 withAsterisk
                 clearable
                 searchable
+                limit={null}
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -182,6 +183,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 withAsterisk
                 clearable
                 searchable
+                limit={null}
               />
             </Grid.Col>
             <Grid.Col span={6}>

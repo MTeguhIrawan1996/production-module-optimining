@@ -15,9 +15,13 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 import { IInputGroupMaterialProps } from '@/components/elements/ui/InputGroupMaterial';
 
 import {
+  IMaterialsGroup,
+  ITargetPlan,
+  IUnitCapacityPlanProps,
   IUnitCapacityPlanValues,
   useCreateWeeklyUnitCapacityPlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyUnitcapacityPlan';
+import { useReadOneUnitCapacityPlan } from '@/services/graphql/query/plan/weekly/useReadOneUnitCapacityPlan';
 import { useReadOneWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadOneWeeklyPlan';
 import { material } from '@/utils/constants/DefaultValues/unit-capacity-plans';
 import {
@@ -47,6 +51,7 @@ const CreateWeeklyPlanGroupBook = () => {
       year: null,
       unitCapacityPlans: [
         {
+          id: '',
           locationIds: [],
           activityName: '',
           materials: [material],
@@ -61,6 +66,7 @@ const CreateWeeklyPlanGroupBook = () => {
     append: unitCapacityAppend,
     update: unitCapacityUpdate,
     remove: unitCapacityRemove,
+    replace: unitCapacityReplace,
   } = useFieldArray({
     name: 'unitCapacityPlans',
     control: methods.control,
@@ -76,6 +82,53 @@ const CreateWeeklyPlanGroupBook = () => {
       methods.setValue('companyId', data.weeklyPlan.company?.id ?? '');
       methods.setValue('week', `${data.weeklyPlan.week}`);
       methods.setValue('year', `${data.weeklyPlan.year}`);
+    },
+  });
+
+  useReadOneUnitCapacityPlan({
+    variables: {
+      weeklyPlanId: id,
+    },
+    skip: !router.isReady,
+    onCompleted: (data) => {
+      if (data.weeklyUnitCapacityPlans.length) {
+        const unitCapacityPlans = data.weeklyUnitCapacityPlans.map((obj) => {
+          const locationIds = obj.locations.map((val) => val.id);
+          const materials = obj.materials.map((val) => {
+            const targetPlans = val.targetPlans.map((tObj) => {
+              const targetPlanValue: ITargetPlan = {
+                id: tObj.id || '',
+                day: tObj.day,
+                rate: tObj.rate || '',
+                ton: tObj.ton || '',
+              };
+              return targetPlanValue;
+            });
+            const materialValue: IMaterialsGroup = {
+              id: val.id || '',
+              materialId: val.material.id,
+              fleet: val.fleet,
+              classId: val.class.id,
+              frontId: val.front.id,
+              physicalAvailability: val.physicalAvailability,
+              useOfAvailability: val.useOfAvailability,
+              effectiveWorkingHour: val.effectiveWorkingHour,
+              distance: val.distance,
+              dumpTruckCount: val.dumpTruckCount,
+              targetPlans: targetPlans,
+            };
+            return materialValue;
+          });
+          const returnValue: IUnitCapacityPlanProps = {
+            id: obj.id || '',
+            locationIds,
+            activityName: obj.activityName,
+            materials: materials,
+          };
+          return returnValue;
+        });
+        unitCapacityReplace(unitCapacityPlans);
+      }
     },
   });
 
@@ -211,6 +264,7 @@ const CreateWeeklyPlanGroupBook = () => {
                   label: t('commonTypography.createLocation'),
                   onClick: () =>
                     unitCapacityAppend({
+                      id: '',
                       locationIds: [],
                       activityName: '',
                       materials: [material],
@@ -262,24 +316,35 @@ const CreateWeeklyPlanGroupBook = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, weeklyPlanData, unitCapacityPlanGroup]);
 
-  const handleSubmitForm: SubmitHandler<IUnitCapacityPlanValues> = async (
-    data
-  ) => {
+  const handleSubmitForm: SubmitHandler<IUnitCapacityPlanValues> = async () => {
+    const data = methods.getValues();
     const newUnitCapacityPlan = data.unitCapacityPlans.map(
-      ({ activityName, locationIds, materials }) => {
+      ({ activityName, locationIds, materials, id }) => {
         const materialValues = materials.map(
-          ({ targetPlans, ...restMaterial }) => {
-            const targetPlansFilter = targetPlans.filter(
-              (val) => val.rate && val.ton
-            );
-            const materialObj = {
+          ({ targetPlans, id: idMaterial, ...restMaterial }) => {
+            const targetPlansFilter = targetPlans
+              .filter((val) => val.rate && val.ton)
+              .map((tObj) => {
+                const targetPlansValue: ITargetPlan = {
+                  id: tObj.id === '' ? undefined : tObj.id,
+                  day: tObj.day,
+                  rate: tObj.rate,
+                  ton: tObj.ton,
+                };
+                return targetPlansValue;
+              });
+
+            const materialObj: IMaterialsGroup = {
+              id: idMaterial === '' ? undefined : idMaterial,
               targetPlans: targetPlansFilter,
               ...restMaterial,
             };
             return materialObj;
           }
         );
-        const newUnitCapacityPlanObj = {
+
+        const newUnitCapacityPlanObj: IUnitCapacityPlanProps = {
+          id: id === '' ? undefined : id,
           activityName: activityName,
           locationIds: locationIds,
           materials: materialValues,
@@ -287,6 +352,7 @@ const CreateWeeklyPlanGroupBook = () => {
         return newUnitCapacityPlanObj;
       }
     );
+
     await executeUpdate({
       variables: {
         weeklyPlanId: id,
