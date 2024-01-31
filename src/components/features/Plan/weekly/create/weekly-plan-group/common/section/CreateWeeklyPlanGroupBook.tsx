@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -18,6 +19,7 @@ import {
   useCreateWeeklyUnitCapacityPlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyUnitcapacityPlan';
 import { useReadOneWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadOneWeeklyPlan';
+import { material } from '@/utils/constants/DefaultValues/unit-capacity-plans';
 import {
   globalMultipleSelectLocation,
   globalNumberInput,
@@ -26,6 +28,7 @@ import {
   globalSelectYearRhf,
   globalText,
 } from '@/utils/constants/Field/global-field';
+import { weeklyUnitCapacityPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-unit-capacity-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -35,57 +38,8 @@ const CreateWeeklyPlanGroupBook = () => {
   const router = useRouter();
   const id = router.query.id as string;
 
-  const material = {
-    materialId: '',
-    fleet: '',
-    classId: '',
-    frontId: '',
-    physicalAvailability: '',
-    useOfAvailability: '',
-    effectiveWorkingHour: '',
-    distance: '',
-    dumpTruckCount: '',
-    targetPlans: [
-      {
-        day: 0,
-        rate: '',
-        ton: '',
-      },
-      {
-        day: 1,
-        rate: '',
-        ton: '',
-      },
-      {
-        day: 2,
-        rate: '',
-        ton: '',
-      },
-      {
-        day: 3,
-        rate: '',
-        ton: '',
-      },
-      {
-        day: 4,
-        rate: '',
-        ton: '',
-      },
-      {
-        day: 5,
-        rate: '',
-        ton: '',
-      },
-      {
-        day: 6,
-        rate: '',
-        ton: '',
-      },
-    ],
-  };
-
   const methods = useForm<IUnitCapacityPlanValues>({
-    // resolver: zodResolver(weeklyUnitCapacityPlanMutationValidation),
+    resolver: zodResolver(weeklyUnitCapacityPlanMutationValidation),
     defaultValues: {
       companyId: '',
       week: null,
@@ -169,12 +123,6 @@ const CreateWeeklyPlanGroupBook = () => {
         name: `unitCapacityPlans.${index}.activityName`,
         label: 'activityName',
         key: `${obj.unitCapacityPlanId}.activityName`,
-        onChange: (e) => {
-          methods.setValue(
-            `unitCapacityPlans.${index}.activityName`,
-            e.currentTarget.value
-          );
-        },
       });
       const multipleSelectLocationItem = globalMultipleSelectLocation({
         label: 'location',

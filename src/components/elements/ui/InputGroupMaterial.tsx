@@ -174,6 +174,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 label="heavyEquipmentClass"
                 withAsterisk
                 clearable
+                searchable
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -184,6 +185,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 categoryId={`${process.env.NEXT_PUBLIC_FRONT_ID}`}
                 withAsterisk
                 clearable
+                searchable
               />
             </Grid.Col>
             <Grid.Col span={6}>
