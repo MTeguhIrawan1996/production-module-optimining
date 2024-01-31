@@ -38,10 +38,20 @@ import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
-const CreateWeeklyPlanGroupBook = () => {
+interface IMutationUnitCapacityPlanBook {
+  mutationType?: 'create' | 'update';
+  mutationSuccessMassage?: string;
+}
+
+const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
+  mutationType,
+  mutationSuccessMassage,
+}) => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const [isOpenConfirmation, setIsOpenConfirmation] =
+    React.useState<boolean>(false);
 
   const methods = useForm<IUnitCapacityPlanValues>({
     resolver: zodResolver(weeklyUnitCapacityPlanMutationValidation),
@@ -137,11 +147,15 @@ const CreateWeeklyPlanGroupBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('weeklyPlan.successCreateUnitCapacityPlanMessage'),
+        message: mutationSuccessMassage,
         icon: <IconCheck />,
       });
-      // methods.reset();
-      // router.push('/input-data/production/data-weather');
+      router.push(
+        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=next`
+      );
+      if (mutationType === 'update') {
+        setIsOpenConfirmation(false);
+      }
     },
     onError: (error) => {
       if (error.graphQLErrors) {
@@ -360,6 +374,11 @@ const CreateWeeklyPlanGroupBook = () => {
       },
     });
   };
+
+  const handleConfirmation = () => {
+    methods.handleSubmit(handleSubmitForm)();
+  };
+
   return (
     <DashboardCard p={0} isLoading={weeklyPlanDataLoading}>
       <GlobalFormGroup
@@ -368,14 +387,47 @@ const CreateWeeklyPlanGroupBook = () => {
         submitForm={handleSubmitForm}
         submitButton={{
           label: t('commonTypography.save'),
-          loading: loading,
+          loading: mutationType === 'create' ? loading : undefined,
+          type: mutationType === 'create' ? 'submit' : 'button',
+          onClick:
+            mutationType === 'update'
+              ? async () => {
+                  const output = await methods.trigger(undefined, {
+                    shouldFocus: true,
+                  });
+                  if (output) setIsOpenConfirmation((prev) => !prev);
+                }
+              : undefined,
         }}
         backButton={{
-          onClick: () => router.push('/plan/weekly'),
+          onClick: () =>
+            router.push(
+              mutationType === 'update'
+                ? `/plan/weekly/${mutationType}/${id}`
+                : `/plan/weekly`
+            ),
+        }}
+        modalConfirmation={{
+          isOpenModalConfirmation: isOpenConfirmation,
+          actionModalConfirmation: () => setIsOpenConfirmation((prev) => !prev),
+          actionButton: {
+            label: t('commonTypography.yes'),
+            type: 'button',
+            onClick: handleConfirmation,
+            loading: loading,
+          },
+          backButton: {
+            label: 'Batal',
+          },
+          modalType: {
+            type: 'default',
+            title: t('commonTypography.alertTitleConfirmUpdate'),
+          },
+          withDivider: true,
         }}
       />
     </DashboardCard>
   );
 };
 
-export default CreateWeeklyPlanGroupBook;
+export default MutationUnitCapacityPlanBook;

@@ -1,4 +1,5 @@
 import CommonWeeklyPlanInformationBook from '@/components/elements/book/CommonWeeklyPlanInformationBook';
+import MutationUnitCapacityPlanBook from '@/components/elements/book/MutationUnitCapacityPlanBook';
 import DeterminedButton from '@/components/elements/button/DeterminedButton';
 import DownloadButton from '@/components/elements/button/DownloadButton';
 import NotValidButton from '@/components/elements/button/NotValidButton';
@@ -165,6 +166,7 @@ export {
   ModelSelectInputRhf,
   MultipleFilter,
   MultipleSelectLocationRhf,
+  MutationUnitCapacityPlanBook,
   NavbarCollapseLinksGroup,
   NavbarLinksGroup,
   NextImageFill,

@@ -17,15 +17,15 @@ const PlanGroupLink: React.FC<IPlanGroupLinkProps> = ({ type }) => {
   const links = [
     {
       label: 'weeklyPlanInformation',
-      href: `/plan/weekly/${type}/weekly-plan-information`,
+      href: `/plan/weekly/${type}/weekly-plan-information/${id}`,
     },
     {
       label: 'workingTimePlan',
-      href: `/plan/weekly/${type}/weekly-plan-information`,
+      href: `/plan/weekly/${type}/weekly-plan-information/${id}`,
     },
     {
       label: 'unitCapacityPlan',
-      href: `/plan/weekly/${type}/weekly-plan-group`,
+      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=unitCapacityPlan`,
     },
     {
       label: 'heavyEquipmentRequirementsPlan',
@@ -57,7 +57,7 @@ const PlanGroupLink: React.FC<IPlanGroupLinkProps> = ({ type }) => {
       {links.map((obj, i) => (
         <PaperLink
           label={t(`commonTypography.${obj.label}`)}
-          href={`${obj.href}/${id}`}
+          href={`${obj.href}`}
           key={i}
         />
       ))}
