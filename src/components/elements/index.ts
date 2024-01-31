@@ -45,6 +45,8 @@ import ExcelInputDropzoneRhf from '@/components/elements/input/ExcelInputDropzon
 import HeavyEquipmentSelectInputRhf from '@/components/elements/input/HeavyEquipmentSelectInputRhf';
 import IdentityRadioInputRhf from '@/components/elements/input/IdentityRadioInputRhf';
 import ImageInputDropzoneRhf from '@/components/elements/input/ImageInputDropzoneRhf';
+import InputAvarageArray from '@/components/elements/input/InputAvarageArray';
+import InputSumArray from '@/components/elements/input/InputSumArray';
 import LocationCategorySelectInputRhf from '@/components/elements/input/LocationCategorySelectInputRhf';
 import LocationSelectInputRhf from '@/components/elements/input/LocationSelectInputRhf';
 import MarriageSelectInputRhf from '@/components/elements/input/MarriageStatusesSelectInputRhf';
@@ -147,7 +149,9 @@ export {
   ImageInputDropzoneRhf,
   ImageModal,
   InnerWrapper,
+  InputAvarageArray,
   InputGroupMaterial,
+  InputSumArray,
   KeyValueList,
   LinkButton,
   ListDetailsRitageDT,

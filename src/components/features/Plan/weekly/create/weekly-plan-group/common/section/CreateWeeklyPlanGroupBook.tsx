@@ -21,8 +21,9 @@ import {
 import { useReadOneWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadOneWeeklyPlan';
 import { material } from '@/utils/constants/DefaultValues/unit-capacity-plans';
 import {
+  globalInputAvarageArray,
+  globalInputSumArray,
   globalMultipleSelectLocation,
-  globalNumberInput,
   globalSelectCompanyRhf,
   globalSelectWeekRhf,
   globalSelectYearRhf,
@@ -117,8 +118,6 @@ const CreateWeeklyPlanGroupBook = () => {
       >,
       index: number
     ) => {
-      const value = methods.watch(`unitCapacityPlans.${index}`);
-
       const activityNameItem = globalText({
         name: `unitCapacityPlans.${index}.activityName`,
         label: 'activityName',
@@ -129,34 +128,34 @@ const CreateWeeklyPlanGroupBook = () => {
         name: `unitCapacityPlans.${index}.locationIds`,
         key: `${obj.unitCapacityPlanId}.locationIds`,
       });
-      const amountFleetItem = globalNumberInput({
-        precision: 0,
+      const amountFleetItem = globalInputSumArray({
         label: 'amountFleet',
-        name: `unitCapacityPlans.${index}.amountFleet`,
+        name: `unitCapacityPlans.${index}.materials`,
         withAsterisk: false,
         key: `${obj.unitCapacityPlanId}.amountFleet`,
         disabled: true,
+        keyObj: 'fleet',
       });
-      const avarageDistanceItem = globalNumberInput({
-        precision: 0,
+      const avarageDistanceItem = globalInputAvarageArray({
         label: 'avarageDistance',
-        name: `unitCapacityPlans.${index}.avarageDistance`,
+        name: `unitCapacityPlans.${index}.materials`,
         withAsterisk: false,
         key: `${obj.unitCapacityPlanId}.avarageDistance`,
         disabled: true,
+        keyObj: 'distance',
       });
-      const dumpTruckTotalItem = globalNumberInput({
-        precision: 0,
+      const dumpTruckTotalItem = globalInputSumArray({
         label: 'dumpTruckTotal',
         withAsterisk: false,
-        name: `unitCapacityPlans.${index}.dumpTruckTotal`,
+        name: `unitCapacityPlans.${index}.materials`,
         key: `${obj.unitCapacityPlanId}.dumpTruckTotal`,
         disabled: true,
+        keyObj: 'dumpTruckCount',
+        precision: 0,
       });
 
       const materialGroup: IInputGroupMaterialProps[] = obj.materials.map(
         (_, i) => ({
-          methods: methods,
           unitCapacityPlanIndex: index,
           materialIndex: i,
           uniqKey: obj.unitCapacityPlanId,
@@ -164,8 +163,11 @@ const CreateWeeklyPlanGroupBook = () => {
             i === 0
               ? {
                   onClick: () => {
+                    const value = methods.getValues(
+                      `unitCapacityPlans.${index}`
+                    );
                     unitCapacityUpdate(index, {
-                      id: value.id ?? '',
+                      id: value.id || '',
                       activityName: value.activityName,
                       locationIds: value.locationIds,
                       materials: [...value.materials, material],
@@ -175,11 +177,12 @@ const CreateWeeklyPlanGroupBook = () => {
               : undefined,
           deleteButtonInner: {
             onClick: () => {
+              const value = methods.getValues(`unitCapacityPlans.${index}`);
               const copyArray = value.materials?.slice();
               copyArray.splice(i, 1);
               unitCapacityFields?.[index].materials?.length > 1
                 ? unitCapacityUpdate(index, {
-                    id: value.id,
+                    id: value.id || '',
                     activityName: value.activityName,
                     locationIds: value.locationIds,
                     materials: copyArray ?? [],
@@ -263,11 +266,26 @@ const CreateWeeklyPlanGroupBook = () => {
     data
   ) => {
     const newUnitCapacityPlan = data.unitCapacityPlans.map(
-      ({ activityName, locationIds, materials }) => ({
-        activityName,
-        locationIds,
-        materials,
-      })
+      ({ activityName, locationIds, materials }) => {
+        const materialValues = materials.map(
+          ({ targetPlans, ...restMaterial }) => {
+            const targetPlansFilter = targetPlans.filter(
+              (val) => val.rate && val.ton
+            );
+            const materialObj = {
+              targetPlans: targetPlansFilter,
+              ...restMaterial,
+            };
+            return materialObj;
+          }
+        );
+        const newUnitCapacityPlanObj = {
+          activityName: activityName,
+          locationIds: locationIds,
+          materials: materialValues,
+        };
+        return newUnitCapacityPlanObj;
+      }
     );
     await executeUpdate({
       variables: {

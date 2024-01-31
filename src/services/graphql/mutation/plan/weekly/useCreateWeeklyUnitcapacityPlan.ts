@@ -46,18 +46,9 @@ interface IUnitCapacityPlanProps {
   materials: IMaterialsGroup[];
 }
 
-interface IOtherValueUnitActivityPlan {
-  amountFleet?: number | string | '';
-  avarageDistance?: number | string | '';
-  dumpTruckTotal?: number | string | '';
-}
-
-type IMargeUnitCapacityPlan = IUnitCapacityPlanProps &
-  IOtherValueUnitActivityPlan;
-
 export interface IUnitCapacityPlanValues
   extends ICreateWeeklyPlanInformationValues<string> {
-  unitCapacityPlans: IMargeUnitCapacityPlan[];
+  unitCapacityPlans: IUnitCapacityPlanProps[];
 }
 
 type ICreateWeeklyUnitCapacityPlanRequest = {
