@@ -4,8 +4,12 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
-import { GlobalTabs, InnerWrapper, RootWrapper } from '@/components/elements';
-import CreateWeeklyPlanGroupBook from '@/components/features/Plan/weekly/create/weekly-plan-group/common/section/CreateWeeklyPlanGroupBook';
+import {
+  GlobalTabs,
+  InnerWrapper,
+  MutationUnitCapacityPlanBook,
+  RootWrapper,
+} from '@/components/elements';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
@@ -51,7 +55,14 @@ const CreateWeeklyPlanGroupPage = () => {
             {
               label: t('commonTypography.unitCapacityPlan'),
               value: 'unitCapacityPlan',
-              component: <CreateWeeklyPlanGroupBook />,
+              component: (
+                <MutationUnitCapacityPlanBook
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successCreateUnitCapacityPlanMessage'
+                  )}
+                  mutationType="create"
+                />
+              ),
               isShowItem: true,
             },
           ]}

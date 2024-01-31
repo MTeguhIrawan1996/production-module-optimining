@@ -15,6 +15,8 @@ import {
   HeavyEquipmentSelectInputRhf,
   IdentityRadioInputRhf,
   ImageInputDropzoneRhf,
+  InputAvarageArray,
+  InputSumArray,
   LocationCategorySelectInputRhf,
   LocationSelectInputRhf,
   MarriageSelectInputRhf,
@@ -159,6 +161,10 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <NumberInputTableRhf {...props} />;
     case 'multiple-select-location':
       return <MultipleSelectLocationRhf {...props} />;
+    case 'input-sum-array':
+      return <InputSumArray {...props} />;
+    case 'input-avarage-array':
+      return <InputAvarageArray {...props} />;
     default:
       return null;
   }

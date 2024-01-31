@@ -20,6 +20,8 @@ import { IExcelInputDropzoneRhfProps } from '@/components/elements/input/ExcelIn
 import { IHeavyEquipmentSelectInputRhfProps } from '@/components/elements/input/HeavyEquipmentSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
 import { IImageInputDropzoneRhfProps } from '@/components/elements/input/ImageInputDropzoneRhf';
+import { IInputAvarageArrayProps } from '@/components/elements/input/InputAvarageArray';
+import { IInputSumArrayProps } from '@/components/elements/input/InputSumArray';
 import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
 import { ILocationSelectInputRhfProps } from '@/components/elements/input/LocationSelectInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
@@ -134,6 +136,8 @@ export type ControllerProps =
   | ISelectWeekRhfProps
   | INumberInputTableRhfProps
   | IMultipleSelectLocationRhfProps
+  | IInputSumArrayProps
+  | IInputAvarageArrayProps
   | IWeatherConditionSelectInputRhfProps;
 
 export type InputControllerNativeProps =

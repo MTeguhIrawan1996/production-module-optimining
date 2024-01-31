@@ -4,13 +4,18 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
-import { GlobalTabs, InnerWrapper, RootWrapper } from '@/components/elements';
-import UpdateWeeklyPlanGroupBook from '@/components/features/Plan/weekly/update/weekly-plan-group/common/section/UpdateWeeklyPlanGroupBook';
+import {
+  GlobalTabs,
+  InnerWrapper,
+  MutationUnitCapacityPlanBook,
+  RootWrapper,
+} from '@/components/elements';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
 const UpdateWeeklyPlanGroupPage = () => {
   const router = useRouter();
+  const id = router.query.id as string;
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
@@ -32,7 +37,7 @@ const UpdateWeeklyPlanGroupPage = () => {
   }, [router]);
 
   const handleChangeTab = (tabs: TabsValue) => {
-    const url = `/input-data/production/data-ritage?tabs=${tabs}`;
+    const url = `/plan/weekly/update/weekly-plan-group/${id}?tabs=${tabs}`;
     router.push(url, undefined, { shallow: true });
   };
 
@@ -50,7 +55,14 @@ const UpdateWeeklyPlanGroupPage = () => {
             {
               label: t('commonTypography.unitCapacityPlan'),
               value: 'unitCapacityPlan',
-              component: <UpdateWeeklyPlanGroupBook />,
+              component: (
+                <MutationUnitCapacityPlanBook
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successUpdateUnitCapacityPlanMessage'
+                  )}
+                  mutationType="update"
+                />
+              ),
               isShowItem: true,
             },
           ]}

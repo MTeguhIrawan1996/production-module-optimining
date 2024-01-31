@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -14,84 +15,53 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 import { IInputGroupMaterialProps } from '@/components/elements/ui/InputGroupMaterial';
 
 import {
+  IMaterialsGroup,
+  ITargetPlan,
+  IUnitCapacityPlanProps,
   IUnitCapacityPlanValues,
   useCreateWeeklyUnitCapacityPlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyUnitcapacityPlan';
+import { useReadOneUnitCapacityPlan } from '@/services/graphql/query/plan/weekly/useReadOneUnitCapacityPlan';
 import { useReadOneWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadOneWeeklyPlan';
+import { material } from '@/utils/constants/DefaultValues/unit-capacity-plans';
 import {
+  globalInputAvarageArray,
+  globalInputSumArray,
   globalMultipleSelectLocation,
-  globalNumberInput,
   globalSelectCompanyRhf,
   globalSelectWeekRhf,
   globalSelectYearRhf,
   globalText,
 } from '@/utils/constants/Field/global-field';
+import { weeklyUnitCapacityPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-unit-capacity-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
-const CreateWeeklyPlanGroupBook = () => {
+interface IMutationUnitCapacityPlanBook {
+  mutationType?: 'create' | 'update';
+  mutationSuccessMassage?: string;
+}
+
+const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
+  mutationType,
+  mutationSuccessMassage,
+}) => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-
-  const material = {
-    materialId: '',
-    fleet: '',
-    classId: '',
-    frontId: '',
-    physicalAvailability: '',
-    useOfAvailability: '',
-    effectiveWorkingHour: '',
-    distance: '',
-    dumpTruckCount: '',
-    targetPlans: [
-      {
-        day: 0,
-        rate: '',
-        ton: '',
-      },
-      {
-        day: 1,
-        rate: '',
-        ton: '',
-      },
-      {
-        day: 2,
-        rate: '',
-        ton: '',
-      },
-      {
-        day: 3,
-        rate: '',
-        ton: '',
-      },
-      {
-        day: 4,
-        rate: '',
-        ton: '',
-      },
-      {
-        day: 5,
-        rate: '',
-        ton: '',
-      },
-      {
-        day: 6,
-        rate: '',
-        ton: '',
-      },
-    ],
-  };
+  const [isOpenConfirmation, setIsOpenConfirmation] =
+    React.useState<boolean>(false);
 
   const methods = useForm<IUnitCapacityPlanValues>({
-    // resolver: zodResolver(weeklyUnitCapacityPlanMutationValidation),
+    resolver: zodResolver(weeklyUnitCapacityPlanMutationValidation),
     defaultValues: {
       companyId: '',
       week: null,
       year: null,
       unitCapacityPlans: [
         {
+          id: '',
           locationIds: [],
           activityName: '',
           materials: [material],
@@ -106,6 +76,7 @@ const CreateWeeklyPlanGroupBook = () => {
     append: unitCapacityAppend,
     update: unitCapacityUpdate,
     remove: unitCapacityRemove,
+    replace: unitCapacityReplace,
   } = useFieldArray({
     name: 'unitCapacityPlans',
     control: methods.control,
@@ -124,16 +95,67 @@ const CreateWeeklyPlanGroupBook = () => {
     },
   });
 
+  useReadOneUnitCapacityPlan({
+    variables: {
+      weeklyPlanId: id,
+    },
+    skip: !router.isReady,
+    onCompleted: (data) => {
+      if (data.weeklyUnitCapacityPlans.length) {
+        const unitCapacityPlans = data.weeklyUnitCapacityPlans.map((obj) => {
+          const locationIds = obj.locations.map((val) => val.id);
+          const materials = obj.materials.map((val) => {
+            const targetPlans = val.targetPlans.map((tObj) => {
+              const targetPlanValue: ITargetPlan = {
+                id: tObj.id || '',
+                day: tObj.day,
+                rate: tObj.rate || '',
+                ton: tObj.ton || '',
+              };
+              return targetPlanValue;
+            });
+            const materialValue: IMaterialsGroup = {
+              id: val.id || '',
+              materialId: val.material.id,
+              fleet: val.fleet,
+              classId: val.class.id,
+              frontId: val.front.id,
+              physicalAvailability: val.physicalAvailability,
+              useOfAvailability: val.useOfAvailability,
+              effectiveWorkingHour: val.effectiveWorkingHour,
+              distance: val.distance,
+              dumpTruckCount: val.dumpTruckCount,
+              targetPlans: targetPlans,
+            };
+            return materialValue;
+          });
+          const returnValue: IUnitCapacityPlanProps = {
+            id: obj.id || '',
+            locationIds,
+            activityName: obj.activityName,
+            materials: materials,
+          };
+          return returnValue;
+        });
+        unitCapacityReplace(unitCapacityPlans);
+      }
+    },
+  });
+
   const [executeUpdate, { loading }] = useCreateWeeklyUnitCapacityPlan({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('weeklyPlan.successCreateUnitCapacityPlanMessage'),
+        message: mutationSuccessMassage,
         icon: <IconCheck />,
       });
-      // methods.reset();
-      // router.push('/input-data/production/data-weather');
+      router.push(
+        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=next`
+      );
+      if (mutationType === 'update') {
+        setIsOpenConfirmation(false);
+      }
     },
     onError: (error) => {
       if (error.graphQLErrors) {
@@ -163,52 +185,44 @@ const CreateWeeklyPlanGroupBook = () => {
       >,
       index: number
     ) => {
-      const value = methods.watch(`unitCapacityPlans.${index}`);
-
       const activityNameItem = globalText({
         name: `unitCapacityPlans.${index}.activityName`,
         label: 'activityName',
         key: `${obj.unitCapacityPlanId}.activityName`,
-        onChange: (e) => {
-          methods.setValue(
-            `unitCapacityPlans.${index}.activityName`,
-            e.currentTarget.value
-          );
-        },
       });
       const multipleSelectLocationItem = globalMultipleSelectLocation({
         label: 'location',
         name: `unitCapacityPlans.${index}.locationIds`,
         key: `${obj.unitCapacityPlanId}.locationIds`,
       });
-      const amountFleetItem = globalNumberInput({
-        precision: 0,
+      const amountFleetItem = globalInputSumArray({
         label: 'amountFleet',
-        name: `unitCapacityPlans.${index}.amountFleet`,
+        name: `unitCapacityPlans.${index}.materials`,
         withAsterisk: false,
         key: `${obj.unitCapacityPlanId}.amountFleet`,
         disabled: true,
+        keyObj: 'fleet',
       });
-      const avarageDistanceItem = globalNumberInput({
-        precision: 0,
+      const avarageDistanceItem = globalInputAvarageArray({
         label: 'avarageDistance',
-        name: `unitCapacityPlans.${index}.avarageDistance`,
+        name: `unitCapacityPlans.${index}.materials`,
         withAsterisk: false,
         key: `${obj.unitCapacityPlanId}.avarageDistance`,
         disabled: true,
+        keyObj: 'distance',
       });
-      const dumpTruckTotalItem = globalNumberInput({
-        precision: 0,
+      const dumpTruckTotalItem = globalInputSumArray({
         label: 'dumpTruckTotal',
         withAsterisk: false,
-        name: `unitCapacityPlans.${index}.dumpTruckTotal`,
+        name: `unitCapacityPlans.${index}.materials`,
         key: `${obj.unitCapacityPlanId}.dumpTruckTotal`,
         disabled: true,
+        keyObj: 'dumpTruckCount',
+        precision: 0,
       });
 
       const materialGroup: IInputGroupMaterialProps[] = obj.materials.map(
         (_, i) => ({
-          methods: methods,
           unitCapacityPlanIndex: index,
           materialIndex: i,
           uniqKey: obj.unitCapacityPlanId,
@@ -216,8 +230,11 @@ const CreateWeeklyPlanGroupBook = () => {
             i === 0
               ? {
                   onClick: () => {
+                    const value = methods.getValues(
+                      `unitCapacityPlans.${index}`
+                    );
                     unitCapacityUpdate(index, {
-                      id: value.id ?? '',
+                      id: value.id || '',
                       activityName: value.activityName,
                       locationIds: value.locationIds,
                       materials: [...value.materials, material],
@@ -227,11 +244,12 @@ const CreateWeeklyPlanGroupBook = () => {
               : undefined,
           deleteButtonInner: {
             onClick: () => {
+              const value = methods.getValues(`unitCapacityPlans.${index}`);
               const copyArray = value.materials?.slice();
               copyArray.splice(i, 1);
               unitCapacityFields?.[index].materials?.length > 1
                 ? unitCapacityUpdate(index, {
-                    id: value.id,
+                    id: value.id || '',
                     activityName: value.activityName,
                     locationIds: value.locationIds,
                     materials: copyArray ?? [],
@@ -260,6 +278,7 @@ const CreateWeeklyPlanGroupBook = () => {
                   label: t('commonTypography.createLocation'),
                   onClick: () =>
                     unitCapacityAppend({
+                      id: '',
                       locationIds: [],
                       activityName: '',
                       materials: [material],
@@ -311,16 +330,43 @@ const CreateWeeklyPlanGroupBook = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, weeklyPlanData, unitCapacityPlanGroup]);
 
-  const handleSubmitForm: SubmitHandler<IUnitCapacityPlanValues> = async (
-    data
-  ) => {
+  const handleSubmitForm: SubmitHandler<IUnitCapacityPlanValues> = async () => {
+    const data = methods.getValues();
     const newUnitCapacityPlan = data.unitCapacityPlans.map(
-      ({ activityName, locationIds, materials }) => ({
-        activityName,
-        locationIds,
-        materials,
-      })
+      ({ activityName, locationIds, materials, id }) => {
+        const materialValues = materials.map(
+          ({ targetPlans, id: idMaterial, ...restMaterial }) => {
+            const targetPlansFilter = targetPlans
+              .filter((val) => val.rate && val.ton)
+              .map((tObj) => {
+                const targetPlansValue: ITargetPlan = {
+                  id: tObj.id === '' ? undefined : tObj.id,
+                  day: tObj.day,
+                  rate: tObj.rate,
+                  ton: tObj.ton,
+                };
+                return targetPlansValue;
+              });
+
+            const materialObj: IMaterialsGroup = {
+              id: idMaterial === '' ? undefined : idMaterial,
+              targetPlans: targetPlansFilter,
+              ...restMaterial,
+            };
+            return materialObj;
+          }
+        );
+
+        const newUnitCapacityPlanObj: IUnitCapacityPlanProps = {
+          id: id === '' ? undefined : id,
+          activityName: activityName,
+          locationIds: locationIds,
+          materials: materialValues,
+        };
+        return newUnitCapacityPlanObj;
+      }
     );
+
     await executeUpdate({
       variables: {
         weeklyPlanId: id,
@@ -328,6 +374,11 @@ const CreateWeeklyPlanGroupBook = () => {
       },
     });
   };
+
+  const handleConfirmation = () => {
+    methods.handleSubmit(handleSubmitForm)();
+  };
+
   return (
     <DashboardCard p={0} isLoading={weeklyPlanDataLoading}>
       <GlobalFormGroup
@@ -336,14 +387,47 @@ const CreateWeeklyPlanGroupBook = () => {
         submitForm={handleSubmitForm}
         submitButton={{
           label: t('commonTypography.save'),
-          loading: loading,
+          loading: mutationType === 'create' ? loading : undefined,
+          type: mutationType === 'create' ? 'submit' : 'button',
+          onClick:
+            mutationType === 'update'
+              ? async () => {
+                  const output = await methods.trigger(undefined, {
+                    shouldFocus: true,
+                  });
+                  if (output) setIsOpenConfirmation((prev) => !prev);
+                }
+              : undefined,
         }}
         backButton={{
-          onClick: () => router.push('/plan/weekly'),
+          onClick: () =>
+            router.push(
+              mutationType === 'update'
+                ? `/plan/weekly/${mutationType}/${id}`
+                : `/plan/weekly`
+            ),
+        }}
+        modalConfirmation={{
+          isOpenModalConfirmation: isOpenConfirmation,
+          actionModalConfirmation: () => setIsOpenConfirmation((prev) => !prev),
+          actionButton: {
+            label: t('commonTypography.yes'),
+            type: 'button',
+            onClick: handleConfirmation,
+            loading: loading,
+          },
+          backButton: {
+            label: 'Batal',
+          },
+          modalType: {
+            type: 'default',
+            title: t('commonTypography.alertTitleConfirmUpdate'),
+          },
+          withDivider: true,
         }}
       />
     </DashboardCard>
   );
 };
 
-export default CreateWeeklyPlanGroupBook;
+export default MutationUnitCapacityPlanBook;

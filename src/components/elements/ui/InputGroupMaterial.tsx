@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumnGroup } from 'mantine-datatable';
 import * as React from 'react';
-import { UseFormReturn, useWatch } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -22,15 +22,12 @@ import {
 } from '@/components/elements';
 import { IPrimaryButtonProps } from '@/components/elements/button/PrimaryButton';
 
-import { ITargetPlan } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyUnitcapacityPlan';
-
 dayjs.extend(isoWeek);
 
 export type IInputGroupMaterialProps = {
   addButtonOuter?: Partial<IPrimaryButtonProps>;
   deleteButtonInner?: Partial<IPrimaryButtonProps>;
   label?: string;
-  methods: UseFormReturn<any, any, undefined>;
   unitCapacityPlanIndex: number;
   materialIndex: number;
   uniqKey?: string | null;
@@ -47,7 +44,6 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
   addButtonOuter,
   deleteButtonInner,
   label = 'material',
-  methods,
   unitCapacityPlanIndex,
   materialIndex,
 }) => {
@@ -62,17 +58,17 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
     ...restDeleteButtonOuter
   } = deleteButtonInner || {};
 
-  const targetPlansData = useWatch({
+  const { fields } = useFieldArray({
     name: `unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.targetPlans`,
-    control: methods.control,
+    keyName: 'targetPlanRhfId',
   });
 
   const renderOtherColumnCallback = React.useCallback(
-    (obj: ITargetPlan, i: number) => {
+    (obj: Record<'targetPlanRhfId', string>, i: number) => {
       const group: DataTableColumnGroup<any> = {
-        id: `${obj.day}`,
+        id: `${obj['day']}`,
         title: dayjs()
-          .isoWeekday(Number(obj.day || 0))
+          .isoWeekday(Number(obj['day'] || 0))
           .format('dddd'),
         style: { textAlign: 'center' },
         columns: [
@@ -109,7 +105,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
     [unitCapacityPlanIndex, materialIndex]
   );
 
-  const renderOtherGroup = targetPlansData?.map(renderOtherColumnCallback);
+  const renderOtherGroup = fields?.map(renderOtherColumnCallback);
 
   return (
     <Flex gap={22} direction="column" align="flex-end" w="100%">
@@ -174,6 +170,8 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 label="heavyEquipmentClass"
                 withAsterisk
                 clearable
+                searchable
+                limit={null}
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -184,6 +182,8 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 categoryId={`${process.env.NEXT_PUBLIC_FRONT_ID}`}
                 withAsterisk
                 clearable
+                searchable
+                limit={null}
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -224,6 +224,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.dumpTruckCount`}
                 label="dumpTruckCount"
                 withAsterisk
+                precision={0}
               />
             </Grid.Col>
             <Grid.Col span={12}>
