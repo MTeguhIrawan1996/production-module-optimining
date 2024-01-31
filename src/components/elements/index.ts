@@ -1,3 +1,4 @@
+import CommonWeeklyPlanInformationBook from '@/components/elements/book/CommonWeeklyPlanInformationBook';
 import DeterminedButton from '@/components/elements/button/DeterminedButton';
 import DownloadButton from '@/components/elements/button/DownloadButton';
 import NotValidButton from '@/components/elements/button/NotValidButton';
@@ -49,7 +50,9 @@ import LocationSelectInputRhf from '@/components/elements/input/LocationSelectIn
 import MarriageSelectInputRhf from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import MaterialSelectInput from '@/components/elements/input/MaterialSelectInputRhf';
 import ModelSelectInputRhf from '@/components/elements/input/ModelSelectInputRhf';
+import MultipleSelectLocationRhf from '@/components/elements/input/MultipleSelectLocationRhf';
 import NumberInputRhf from '@/components/elements/input/NumberInputRhf';
+import NumberInputTableRhf from '@/components/elements/input/NumberInputTableRhf';
 import PasswordInputRhf from '@/components/elements/input/PasswordInputRhf';
 import PdfInputDropzoneRhf from '@/components/elements/input/PdfInputDropzoneRhf';
 import PitSelectInputRhf from '@/components/elements/input/PitSelectInputRhf';
@@ -98,7 +101,9 @@ import UpdatePasswordModal from '@/components/elements/modal/UpdatePasswordModal
 import GlobalPagination from '@/components/elements/pagination/GlobalPagination';
 import PaginationSkeleton from '@/components/elements/skeleton/PaginationSkeleton';
 import GlobalHeaderDetail from '@/components/elements/ui/GlobalHeaderDetail';
+import InputGroupMaterial from '@/components/elements/ui/InputGroupMaterial';
 import ListDetailsRitageDT from '@/components/elements/ui/ListDetailsRitageDT';
+import PlanGroupLink from '@/components/elements/ui/PlanGroupLink';
 import AuthWrapper from '@/components/elements/wrapper/AuthWrapper';
 import InnerWrapper from '@/components/elements/wrapper/InnerWrapper';
 import RootWrapper from '@/components/elements/wrapper/RootWrapper';
@@ -113,6 +118,7 @@ export {
   CheckboxGroupAccess,
   CheckboxGroupRoleAccess,
   ClassSelectInputRhf,
+  CommonWeeklyPlanInformationBook,
   CompanyPermissionTypeSelectInputRhf,
   CompanyTypeSelectInputRhf,
   DashboardCard,
@@ -141,6 +147,7 @@ export {
   ImageInputDropzoneRhf,
   ImageModal,
   InnerWrapper,
+  InputGroupMaterial,
   KeyValueList,
   LinkButton,
   ListDetailsRitageDT,
@@ -153,16 +160,19 @@ export {
   ModalConfirmation,
   ModelSelectInputRhf,
   MultipleFilter,
+  MultipleSelectLocationRhf,
   NavbarCollapseLinksGroup,
   NavbarLinksGroup,
   NextImageFill,
   NotValidButton,
   NumberInputRhf,
+  NumberInputTableRhf,
   PaginationSkeleton,
   PaperLink,
   PasswordInputRhf,
   PdfInputDropzoneRhf,
   PitSelectInputRhf,
+  PlanGroupLink,
   PositionSelectInputRhf,
   PrimaryButton,
   PrimaryLink,

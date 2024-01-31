@@ -25,7 +25,9 @@ import { ILocationSelectInputRhfProps } from '@/components/elements/input/Locati
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import { IMaterialSelectInputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
+import { IMultipleSelectLocationRhfProps } from '@/components/elements/input/MultipleSelectLocationRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
+import { INumberInputTableRhfProps } from '@/components/elements/input/NumberInputTableRhf';
 import { IPasswordInputProps } from '@/components/elements/input/PasswordInputRhf';
 import { IPdfInputDropzoneRhfProps } from '@/components/elements/input/PdfInputDropzoneRhf';
 import { IPitSelectInputRhfProps } from '@/components/elements/input/PitSelectInputRhf';
@@ -62,6 +64,7 @@ import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelect
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 import { IWeatherConditionSelectInputRhfProps } from '@/components/elements/input/WeatherConditionSelectInputRhf';
 import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
+import { IInputGroupMaterialProps } from '@/components/elements/ui/InputGroupMaterial';
 
 import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
 import { IEmployeesData } from '@/services/graphql/query/master-data-company/useReadAllEmploye';
@@ -129,6 +132,8 @@ export type ControllerProps =
   | ISelectCompanyRhfProps
   | ISelectYearRhfProps
   | ISelectWeekRhfProps
+  | INumberInputTableRhfProps
+  | IMultipleSelectLocationRhfProps
   | IWeatherConditionSelectInputRhfProps;
 
 export type InputControllerNativeProps =
@@ -156,6 +161,7 @@ export type ControllerGroup = {
     updateButton?: IPrimaryButtonProps;
     deleteButton?: IPrimaryButtonProps;
   };
+  inputGroupMaterial?: IInputGroupMaterialProps[];
 };
 
 export type ControllerCheckBoxGroup<T> = {

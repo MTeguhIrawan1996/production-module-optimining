@@ -127,8 +127,12 @@ import ReadWorkingHoursPlanMasterPage from '@/components/features/MasterData/wor
 import UpdateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/update/common';
 import WeeklyPlanPage from '@/components/features/Plan/weekly/common';
 import CreateWeeklyPlanInformationPage from '@/components/features/Plan/weekly/create/common';
+import CreateWeeklyPlanGroupPage from '@/components/features/Plan/weekly/create/weekly-plan-group/common';
 import ReadWeeklyPlanPage from '@/components/features/Plan/weekly/read/common';
 import ReadWeeklyPlanInformationPage from '@/components/features/Plan/weekly/read/weekly-plan-information/common';
+import UpdateWeeklyPlanPage from '@/components/features/Plan/weekly/update/common';
+import UpdateWeeklyPlanGroupPage from '@/components/features/Plan/weekly/update/weekly-plan-group/common';
+import UpdateWeeklyPlanInformationPage from '@/components/features/Plan/weekly/update/weekly-plan-information/common';
 import ProfilePage from '@/components/features/Profile/common';
 import CompanyTypePage from '@/components/features/Reference/company-type/common';
 import HeavyEquipmentPage from '@/components/features/Reference/heavy-equipment/common';
@@ -188,6 +192,7 @@ export {
   CreateStockpileMasterPage,
   CreateUserPage,
   CreateWeatherProductionPage,
+  CreateWeeklyPlanGroupPage,
   CreateWeeklyPlanInformationPage,
   CreateWorkingHoursPlanMasterPage,
   DashboardPage,
@@ -284,6 +289,9 @@ export {
   UpdateStockpileMonitoringPage,
   UpdateUserPage,
   UpdateWeatherProductionPage,
+  UpdateWeeklyPlanGroupPage,
+  UpdateWeeklyPlanInformationPage,
+  UpdateWeeklyPlanPage,
   UpdateWorkingHoursPlanMasterPage,
   UploadHeavyEquipmentProductionPage,
   UploadRitageBargingPage,
