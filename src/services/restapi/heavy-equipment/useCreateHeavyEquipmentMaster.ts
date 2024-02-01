@@ -11,7 +11,7 @@ export interface ICreateHeavyEquipmentMasterValues {
   brandId: string;
   typeId: string;
   referenceId: string;
-  classId: string;
+  classId: string | null;
   eligibilityStatusId: string;
   specification: string;
   vehicleNumber: string;

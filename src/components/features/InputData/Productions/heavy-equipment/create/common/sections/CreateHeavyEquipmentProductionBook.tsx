@@ -445,6 +445,7 @@ const CreateHeavyEquipmentProductionBook = () => {
       amountHourMeter,
       loseTimes,
       date,
+      fuel,
       ...restValue
     } = data;
     const newLoseTimes = loseTimes.map(({ workingHourPlanId, details }) => ({
@@ -456,6 +457,7 @@ const CreateHeavyEquipmentProductionBook = () => {
       variables: {
         loseTimes: newLoseTimes,
         date: dateToString(date ?? null),
+        fuel: fuel || null,
         ...restValue,
       },
     });

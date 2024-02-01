@@ -498,6 +498,7 @@ const UpdateHeavyEquipmentProductionBook = () => {
       amountHourMeter,
       loseTimes,
       date,
+      fuel,
       ...restValue
     } = data;
     const newLoseTimes = loseTimes
@@ -512,6 +513,7 @@ const UpdateHeavyEquipmentProductionBook = () => {
         id,
         loseTimes: newLoseTimes,
         date: dateToString(date ?? null),
+        fuel: fuel || null,
         ...restValue,
       },
     });
