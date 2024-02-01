@@ -32,6 +32,9 @@ export const READ_ONE_UNIT_CAPACITY_PLAN = gql`
           name
         }
         activityName
+        fleetTotal
+        averageDistance
+        dumpTruckCountTotal
         materials {
           id
           material {
@@ -64,40 +67,47 @@ export const READ_ONE_UNIT_CAPACITY_PLAN = gql`
   }
 `;
 
-interface IReadOneUnitCapacityPlan {
+export interface IReadOneTargetPlan {
+  id: string;
+  day: number;
+  rate: number | null;
+  ton: number | null;
+}
+
+export interface IReadOneMaterialUnitCapacityPlan {
+  id: string;
+  material: {
+    id: string;
+    name: string;
+  };
+  fleet: number;
+  class: {
+    id: string;
+    name: string;
+  };
+  front: {
+    id: string;
+    name: string;
+  };
+  physicalAvailability: number;
+  useOfAvailability: number;
+  effectiveWorkingHour: number;
+  distance: number;
+  dumpTruckCount: number;
+  targetPlans: IReadOneTargetPlan[];
+}
+
+export interface IReadOneUnitCapacityPlan {
   id: string;
   locations: {
     id: string;
     name: string;
   }[];
   activityName: string;
-  materials: {
-    id: string;
-    material: {
-      id: string;
-      name: string;
-    };
-    fleet: number;
-    class: {
-      id: string;
-      name: string;
-    };
-    front: {
-      id: string;
-      name: string;
-    };
-    physicalAvailability: number;
-    useOfAvailability: number;
-    effectiveWorkingHour: number;
-    distance: number;
-    dumpTruckCount: number;
-    targetPlans: {
-      id: string;
-      day: number;
-      rate: number | null;
-      ton: number | null;
-    }[];
-  }[];
+  fleetTotal: number;
+  averageDistance: number;
+  dumpTruckCountTotal: number;
+  materials: IReadOneMaterialUnitCapacityPlan[];
 }
 
 interface IReadOneUnitCapacityPlanResponse {

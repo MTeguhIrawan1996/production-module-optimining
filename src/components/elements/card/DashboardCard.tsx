@@ -11,7 +11,7 @@ import {
   Title,
   TitleProps,
 } from '@mantine/core';
-import { IconChevronLeft, IconDownload } from '@tabler/icons-react';
+import { IconDownload } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -209,7 +209,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
           <PrimaryButton
             type="button"
             variant="outline"
-            leftIcon={<IconChevronLeft size="1rem" />}
+            // leftIcon={<IconChevronLeft size="1rem" />}
             label={t('commonTypography.back')}
             mt="lg"
             {...enebleBackBottomInner}
@@ -225,7 +225,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
           <PrimaryButton
             type="button"
             variant="outline"
-            leftIcon={<IconChevronLeft size="1rem" />}
+            // leftIcon={<IconChevronLeft size="1rem" />}
             label={t('commonTypography.back')}
             {...enebleBackBottomOuter}
           />

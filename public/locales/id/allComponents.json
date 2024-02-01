@@ -239,7 +239,7 @@
       "useOfAvailability": "UA (Use Of Availability)",
       "effectiveWorkingHour": "EWH (Effective Working Hour)",
       "distance": "Jarak (M)",
-      "avarageDistance": "Rata - rata Jarak (M)",
+      "averageDistance": "Rata - rata Jarak (M)",
       "dumpTruckCount": "Jumlah Dump Truck",
       "dumpTruckTotal": "Jumlah Total Dump Truck"
     },
