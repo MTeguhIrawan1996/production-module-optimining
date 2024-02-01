@@ -6,6 +6,8 @@ import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/inp
 import { IEmployeeSelectInputRhfProps } from '@/components/elements/input/EmployeeSelectInputRhf';
 import { IHeavyEquipmentSelectInputRhfProps } from '@/components/elements/input/HeavyEquipmentSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
+import { IInputAvarageArrayProps } from '@/components/elements/input/InputAvarageArray';
+import { IInputSumArrayProps } from '@/components/elements/input/InputSumArray';
 import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
 import { ILocationSelectInputRhfProps } from '@/components/elements/input/LocationSelectInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
@@ -561,6 +563,42 @@ export const globalNumberInput = ({
 }: Partial<INumberInputProps>) => {
   const field: ControllerProps = {
     control: 'number-input',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalInputSumArray = ({
+  name = 'numberInputSum',
+  label = 'numberInputSum',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IInputSumArrayProps>) => {
+  const field: ControllerProps = {
+    control: 'input-sum-array',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalInputAvarageArray = ({
+  name = 'numberInputAvarage',
+  label = 'numberInputAvarage',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IInputAvarageArrayProps>) => {
+  const field: ControllerProps = {
+    control: 'input-avarage-array',
     name,
     label,
     withAsterisk,

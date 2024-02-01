@@ -16,9 +16,10 @@ export type IClassSelectInputRhfProps = {
   control: 'class-select-input';
   name: string;
   labelValue?: string;
+  limit?: number | null;
 } & Omit<
   SelectProps,
-  'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
+  'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder' | 'limit'
 > &
   CommonProps;
 
@@ -28,6 +29,7 @@ const ClassSelectInputRhf: React.FC<IClassSelectInputRhfProps> = ({
   label,
   labelValue,
   defaultValue,
+  limit = 15,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -38,7 +40,7 @@ const ClassSelectInputRhf: React.FC<IClassSelectInputRhfProps> = ({
 
   const { heavyEquipmentClassesData } = useReadAllHeavyEquipmentClass({
     variables: {
-      limit: 15,
+      limit: limit,
       search: searchQuery === '' ? null : searchQuery,
     },
   });

@@ -959,6 +959,7 @@
     "successDeleteMessage": "$t(weeklyPlan.title2) berhasil dihapus",
     "successCreateMessage": "$t(weeklyPlan.title2) berhasil dibuat",
     "successCreateUnitCapacityPlanMessage": "$t(commonTypography.unitCapacityPlan) berhasil dibuat",
+    "successUpdateUnitCapacityPlanMessage": "$t(commonTypography.unitCapacityPlan) berhasil diubah",
     "successUpdateMessage": "$t(weeklyPlan.title2) berhasil diubah",
     "formCreate": "$t(commonTypography.form) $t(weeklyPlan.title2)",
     "successIsValidateMessage": "$t(weeklyPlan.title) berhasil divalidasi",
