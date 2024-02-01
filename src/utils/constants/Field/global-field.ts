@@ -6,7 +6,7 @@ import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/inp
 import { IEmployeeSelectInputRhfProps } from '@/components/elements/input/EmployeeSelectInputRhf';
 import { IHeavyEquipmentSelectInputRhfProps } from '@/components/elements/input/HeavyEquipmentSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
-import { IInputAvarageArrayProps } from '@/components/elements/input/InputAvarageArray';
+import { IInputAverageArrayProps } from '@/components/elements/input/InputAverageArray';
 import { IInputSumArrayProps } from '@/components/elements/input/InputSumArray';
 import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
 import { ILocationSelectInputRhfProps } from '@/components/elements/input/LocationSelectInputRhf';
@@ -590,15 +590,15 @@ export const globalInputSumArray = ({
   return field;
 };
 
-export const globalInputAvarageArray = ({
-  name = 'numberInputAvarage',
-  label = 'numberInputAvarage',
+export const globalInputaverageArray = ({
+  name = 'numberInputaverage',
+  label = 'numberInputaverage',
   withAsterisk = true,
   colSpan = 6,
   ...rest
-}: Partial<IInputAvarageArrayProps>) => {
+}: Partial<IInputAverageArrayProps>) => {
   const field: ControllerProps = {
-    control: 'input-avarage-array',
+    control: 'input-average-array',
     name,
     label,
     withAsterisk,

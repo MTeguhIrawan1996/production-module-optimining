@@ -62,7 +62,7 @@ export interface IMutationHeavyEquipmentDataProdValues {
   hourMeterBefore: number | '';
   hourMeterAfter: number | '';
   amountHourMeter: number | '';
-  fuel: number | '';
+  fuel: number | null | '';
   loseTimes: IloseTimes[];
 }
 

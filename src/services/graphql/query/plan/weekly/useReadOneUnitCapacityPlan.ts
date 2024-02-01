@@ -1,86 +1,120 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
+import { GResponse, IGlobalMetaRequest } from '@/types/global';
+
 export const READ_ONE_UNIT_CAPACITY_PLAN = gql`
-  query ReadOneUnitCapacityPlan($weeklyPlanId: String!) {
-    weeklyUnitCapacityPlans(weeklyPlanId: $weeklyPlanId) {
-      id
-      locations {
-        id
-        name
+  query ReadOneUnitCapacityPlan(
+    $weeklyPlanId: String!
+    $page: Int
+    $limit: Int
+    $orderBy: String
+    $orderDir: String
+  ) {
+    weeklyUnitCapacityPlans(
+      findAllUnitCapacityPlanInput: {
+        weeklyPlanId: $weeklyPlanId
+        page: $page
+        limit: $limit
+        orderBy: $orderBy
+        orderDir: $orderDir
       }
-      activityName
-      materials {
+    ) {
+      meta {
+        currentPage
+        totalAllData
+        totalData
+        totalPage
+      }
+      data {
         id
-        material {
+        locations {
           id
           name
         }
-        fleet
-        class {
+        activityName
+        fleetTotal
+        averageDistance
+        dumpTruckCountTotal
+        materials {
           id
-          name
-        }
-        front {
-          id
-          name
-        }
-        physicalAvailability
-        useOfAvailability
-        effectiveWorkingHour
-        distance
-        dumpTruckCount
-        targetPlans {
-          id
-          day
-          rate
-          ton
+          material {
+            id
+            name
+          }
+          fleet
+          class {
+            id
+            name
+          }
+          front {
+            id
+            name
+          }
+          physicalAvailability
+          useOfAvailability
+          effectiveWorkingHour
+          distance
+          dumpTruckCount
+          targetPlans {
+            id
+            day
+            rate
+            ton
+          }
         }
       }
     }
   }
 `;
 
-interface IReadOneUnitCapacityPlan {
+export interface IReadOneTargetPlan {
+  id: string;
+  day: number;
+  rate: number | null;
+  ton: number | null;
+}
+
+export interface IReadOneMaterialUnitCapacityPlan {
+  id: string;
+  material: {
+    id: string;
+    name: string;
+  };
+  fleet: number;
+  class: {
+    id: string;
+    name: string;
+  };
+  front: {
+    id: string;
+    name: string;
+  };
+  physicalAvailability: number;
+  useOfAvailability: number;
+  effectiveWorkingHour: number;
+  distance: number;
+  dumpTruckCount: number;
+  targetPlans: IReadOneTargetPlan[];
+}
+
+export interface IReadOneUnitCapacityPlan {
   id: string;
   locations: {
     id: string;
     name: string;
   }[];
   activityName: string;
-  materials: {
-    id: string;
-    material: {
-      id: string;
-      name: string;
-    };
-    fleet: number;
-    class: {
-      id: string;
-      name: string;
-    };
-    front: {
-      id: string;
-      name: string;
-    };
-    physicalAvailability: number;
-    useOfAvailability: number;
-    effectiveWorkingHour: number;
-    distance: number;
-    dumpTruckCount: number;
-    targetPlans: {
-      id: string;
-      day: number;
-      rate: number | null;
-      ton: number | null;
-    }[];
-  }[];
+  fleetTotal: number;
+  averageDistance: number;
+  dumpTruckCountTotal: number;
+  materials: IReadOneMaterialUnitCapacityPlan[];
 }
 
 interface IReadOneUnitCapacityPlanResponse {
-  weeklyUnitCapacityPlans: IReadOneUnitCapacityPlan[];
+  weeklyUnitCapacityPlans: GResponse<IReadOneUnitCapacityPlan>;
 }
 
-interface IReadOneUnitCapacityPlanRequest {
+interface IReadOneUnitCapacityPlanRequest extends Partial<IGlobalMetaRequest> {
   weeklyPlanId: string;
 }
 
@@ -111,7 +145,9 @@ export const useReadOneUnitCapacityPlan = ({
 
   return {
     weeklyUnitCapacityPlanData:
-      weeklyUnitCapacityPlanData?.weeklyUnitCapacityPlans,
+      weeklyUnitCapacityPlanData?.weeklyUnitCapacityPlans.data,
+    weeklyUnitCapacityPlanMeta:
+      weeklyUnitCapacityPlanData?.weeklyUnitCapacityPlans.meta,
     weeklyUnitCapacityPlanDataLoading,
   };
 };

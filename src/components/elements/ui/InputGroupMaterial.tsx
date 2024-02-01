@@ -35,8 +35,8 @@ export type IInputGroupMaterialProps = {
 
 const table = [
   {
-    id: '9d7b6df5-aa1e-4203-bfa8-7d9464e331cb',
-    activity: 'Kegiatan',
+    id: 'productionPlan',
+    activity: 'Target Produksi',
   },
 ];
 
@@ -81,6 +81,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 <FormController
                   control="number-input-table-rhf"
                   name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.targetPlans.${i}.rate`}
+                  precision={0}
                 />
               );
             },
@@ -161,6 +162,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 label="fleet"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.fleet`}
                 withAsterisk
+                precision={0}
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -238,7 +240,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                       title: 'Hari',
                       style: { textAlign: 'center' },
                       columns: [
-                        { accessor: 'activity', width: 350, title: '' },
+                        { accessor: 'activity', width: 300, title: '' },
                       ],
                     },
                     ...(renderOtherGroup ?? []),

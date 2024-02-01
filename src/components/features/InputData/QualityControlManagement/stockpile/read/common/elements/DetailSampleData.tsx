@@ -53,7 +53,7 @@ const DetailSampleData: React.FC<IDetailSampleDataProps> = ({
 
   const renderOtherColumnRitageSampleCallback = React.useCallback(
     (element: IElementsData) => {
-      const avarageValue =
+      const averageValue =
         monitoringStockpile?.ritageSamples?.additional.averageSamples.find(
           (obj) => obj.element.id === element.id
         );
@@ -64,7 +64,7 @@ const DetailSampleData: React.FC<IDetailSampleDataProps> = ({
           const value = elements?.find((val) => val.element?.id === element.id);
           return value?.value ?? '-';
         },
-        footer: <Text>{avarageValue?.value ?? '-'}</Text>,
+        footer: <Text>{averageValue?.value ?? '-'}</Text>,
       };
       return column;
     },

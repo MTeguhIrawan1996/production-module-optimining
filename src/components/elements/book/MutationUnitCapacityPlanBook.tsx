@@ -25,7 +25,7 @@ import { useReadOneUnitCapacityPlan } from '@/services/graphql/query/plan/weekly
 import { useReadOneWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadOneWeeklyPlan';
 import { material } from '@/utils/constants/DefaultValues/unit-capacity-plans';
 import {
-  globalInputAvarageArray,
+  globalInputaverageArray,
   globalInputSumArray,
   globalMultipleSelectLocation,
   globalSelectCompanyRhf,
@@ -98,45 +98,48 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
   useReadOneUnitCapacityPlan({
     variables: {
       weeklyPlanId: id,
+      limit: null,
     },
     skip: !router.isReady,
     onCompleted: (data) => {
-      if (data.weeklyUnitCapacityPlans.length) {
-        const unitCapacityPlans = data.weeklyUnitCapacityPlans.map((obj) => {
-          const locationIds = obj.locations.map((val) => val.id);
-          const materials = obj.materials.map((val) => {
-            const targetPlans = val.targetPlans.map((tObj) => {
-              const targetPlanValue: ITargetPlan = {
-                id: tObj.id || '',
-                day: tObj.day,
-                rate: tObj.rate || '',
-                ton: tObj.ton || '',
+      if (data.weeklyUnitCapacityPlans.data.length) {
+        const unitCapacityPlans = data.weeklyUnitCapacityPlans.data.map(
+          (obj) => {
+            const locationIds = obj.locations.map((val) => val.id);
+            const materials = obj.materials.map((val) => {
+              const targetPlans = val.targetPlans.map((tObj) => {
+                const targetPlanValue: ITargetPlan = {
+                  id: tObj.id || '',
+                  day: tObj.day,
+                  rate: tObj.rate || '',
+                  ton: tObj.ton || '',
+                };
+                return targetPlanValue;
+              });
+              const materialValue: IMaterialsGroup = {
+                id: val.id || '',
+                materialId: val.material.id,
+                fleet: val.fleet,
+                classId: val.class.id,
+                frontId: val.front.id,
+                physicalAvailability: val.physicalAvailability,
+                useOfAvailability: val.useOfAvailability,
+                effectiveWorkingHour: val.effectiveWorkingHour,
+                distance: val.distance,
+                dumpTruckCount: val.dumpTruckCount,
+                targetPlans: targetPlans,
               };
-              return targetPlanValue;
+              return materialValue;
             });
-            const materialValue: IMaterialsGroup = {
-              id: val.id || '',
-              materialId: val.material.id,
-              fleet: val.fleet,
-              classId: val.class.id,
-              frontId: val.front.id,
-              physicalAvailability: val.physicalAvailability,
-              useOfAvailability: val.useOfAvailability,
-              effectiveWorkingHour: val.effectiveWorkingHour,
-              distance: val.distance,
-              dumpTruckCount: val.dumpTruckCount,
-              targetPlans: targetPlans,
+            const returnValue: IUnitCapacityPlanProps = {
+              id: obj.id || '',
+              locationIds,
+              activityName: obj.activityName,
+              materials: materials,
             };
-            return materialValue;
-          });
-          const returnValue: IUnitCapacityPlanProps = {
-            id: obj.id || '',
-            locationIds,
-            activityName: obj.activityName,
-            materials: materials,
-          };
-          return returnValue;
-        });
+            return returnValue;
+          }
+        );
         unitCapacityReplace(unitCapacityPlans);
       }
     },
@@ -203,11 +206,11 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
         disabled: true,
         keyObj: 'fleet',
       });
-      const avarageDistanceItem = globalInputAvarageArray({
-        label: 'avarageDistance',
+      const averageDistanceItem = globalInputaverageArray({
+        label: 'averageDistance',
         name: `unitCapacityPlans.${index}.materials`,
         withAsterisk: false,
-        key: `${obj.unitCapacityPlanId}.avarageDistance`,
+        key: `${obj.unitCapacityPlanId}.averageDistance`,
         disabled: true,
         keyObj: 'distance',
       });
@@ -267,7 +270,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
           multipleSelectLocationItem,
           activityNameItem,
           amountFleetItem,
-          avarageDistanceItem,
+          averageDistanceItem,
           dumpTruckTotalItem,
         ],
         inputGroupMaterial: materialGroup,

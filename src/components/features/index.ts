@@ -129,6 +129,7 @@ import WeeklyPlanPage from '@/components/features/Plan/weekly/common';
 import CreateWeeklyPlanInformationPage from '@/components/features/Plan/weekly/create/common';
 import CreateWeeklyPlanGroupPage from '@/components/features/Plan/weekly/create/weekly-plan-group/common';
 import ReadWeeklyPlanPage from '@/components/features/Plan/weekly/read/common';
+import ReadWeeklyPlanGroupPage from '@/components/features/Plan/weekly/read/weekly-plan-group/common';
 import ReadWeeklyPlanInformationPage from '@/components/features/Plan/weekly/read/weekly-plan-information/common';
 import UpdateWeeklyPlanPage from '@/components/features/Plan/weekly/update/common';
 import UpdateWeeklyPlanGroupPage from '@/components/features/Plan/weekly/update/weekly-plan-group/common';
@@ -247,6 +248,7 @@ export {
   ReadStockpileMasterPage,
   ReadStockpileMonitoringPage,
   ReadWeatherProductionPage,
+  ReadWeeklyPlanGroupPage,
   ReadWeeklyPlanInformationPage,
   ReadWeeklyPlanPage,
   ReadWorkingHoursPlanMasterPage,

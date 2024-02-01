@@ -14,8 +14,11 @@ export const hourDiff = (startTime: string, endTime: string) => {
     const newStartTime = dayjs(startTime, 'HH:mm:ss');
     const newEndTime = dayjs(endTime, 'HH:mm:ss');
     const diffSeconds = newEndTime.diff(newStartTime, 'second');
+
     const newSecondsDuration = secondsDuration(diffSeconds);
-    return newSecondsDuration;
+
+    if (!isNaN(Number(newSecondsDuration))) return newSecondsDuration;
+    return null;
   }
   return null;
 };

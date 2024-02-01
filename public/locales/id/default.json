@@ -46,6 +46,7 @@
     "amountEffectiveWorkingHours": "Total Jam Kerja Efektif",
     "equipmentPerformance": "Equipment Performance",
     "activity": "Kegiatan",
+    "activityName": "Nama Kegiatan",
     "activityCategory": "Kategori Kegiatan",
     "calculationCategory": "Kategori Perhitungan",
     "activityPlan": "Rencana Aktivitas",
@@ -428,7 +429,12 @@
     "heavyEquipmentAvailabilityPlan": "Rencana Ketersediaan Alat Berat",
     "productionTargetPlan": "Rencana Target Produksi",
     "miningPlanMap": "Peta Rencana Penambangan",
-    "bargingPlan": "Rencana Barging"
+    "bargingPlan": "Rencana Barging",
+    "amountFleet": "Jumlah Fleet",
+    "distance": "Jarak",
+    "averageDistance": "Rata - rata Jarak (M)",
+    "dumpTruckTotal": "Jumlah Total Dump Truck",
+    "dumpTruckCount": "Jumlah Dump Truck"
   },
   "sideBar": {
     "dashboard": "Dashboard",

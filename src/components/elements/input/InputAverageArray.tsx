@@ -8,15 +8,15 @@ import { useTranslation } from 'react-i18next';
 
 import { CommonProps } from '@/types/global';
 
-export type IInputAvarageArrayProps = {
-  control: 'input-avarage-array';
+export type IInputAverageArrayProps = {
+  control: 'input-average-array';
   name: string;
   labelWithTranslate?: boolean;
   keyObj?: string;
 } & Omit<NumberInputProps, 'name'> &
   CommonProps;
 
-const InputAvarageArray: React.FC<IInputAvarageArrayProps> = ({
+const InputAverageArray: React.FC<IInputAverageArrayProps> = ({
   label,
   labelWithTranslate = true,
   precision = 2,
@@ -72,4 +72,4 @@ const InputAvarageArray: React.FC<IInputAvarageArrayProps> = ({
   );
 };
 
-export default InputAvarageArray;
+export default InputAverageArray;
