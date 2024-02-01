@@ -1,39 +1,63 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
+import { GResponse, IGlobalMetaRequest } from '@/types/global';
+
 export const READ_ONE_UNIT_CAPACITY_PLAN = gql`
-  query ReadOneUnitCapacityPlan($weeklyPlanId: String!) {
-    weeklyUnitCapacityPlans(weeklyPlanId: $weeklyPlanId) {
-      id
-      locations {
-        id
-        name
+  query ReadOneUnitCapacityPlan(
+    $weeklyPlanId: String!
+    $page: Int
+    $limit: Int
+    $orderBy: String
+    $orderDir: String
+  ) {
+    weeklyUnitCapacityPlans(
+      findAllUnitCapacityPlanInput: {
+        weeklyPlanId: $weeklyPlanId
+        page: $page
+        limit: $limit
+        orderBy: $orderBy
+        orderDir: $orderDir
       }
-      activityName
-      materials {
+    ) {
+      meta {
+        currentPage
+        totalAllData
+        totalData
+        totalPage
+      }
+      data {
         id
-        material {
+        locations {
           id
           name
         }
-        fleet
-        class {
+        activityName
+        materials {
           id
-          name
-        }
-        front {
-          id
-          name
-        }
-        physicalAvailability
-        useOfAvailability
-        effectiveWorkingHour
-        distance
-        dumpTruckCount
-        targetPlans {
-          id
-          day
-          rate
-          ton
+          material {
+            id
+            name
+          }
+          fleet
+          class {
+            id
+            name
+          }
+          front {
+            id
+            name
+          }
+          physicalAvailability
+          useOfAvailability
+          effectiveWorkingHour
+          distance
+          dumpTruckCount
+          targetPlans {
+            id
+            day
+            rate
+            ton
+          }
         }
       }
     }
@@ -77,10 +101,10 @@ interface IReadOneUnitCapacityPlan {
 }
 
 interface IReadOneUnitCapacityPlanResponse {
-  weeklyUnitCapacityPlans: IReadOneUnitCapacityPlan[];
+  weeklyUnitCapacityPlans: GResponse<IReadOneUnitCapacityPlan>;
 }
 
-interface IReadOneUnitCapacityPlanRequest {
+interface IReadOneUnitCapacityPlanRequest extends Partial<IGlobalMetaRequest> {
   weeklyPlanId: string;
 }
 
@@ -111,7 +135,9 @@ export const useReadOneUnitCapacityPlan = ({
 
   return {
     weeklyUnitCapacityPlanData:
-      weeklyUnitCapacityPlanData?.weeklyUnitCapacityPlans,
+      weeklyUnitCapacityPlanData?.weeklyUnitCapacityPlans.data,
+    weeklyUnitCapacityPlanMeta:
+      weeklyUnitCapacityPlanData?.weeklyUnitCapacityPlans.meta,
     weeklyUnitCapacityPlanDataLoading,
   };
 };
