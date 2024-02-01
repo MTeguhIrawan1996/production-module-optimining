@@ -45,8 +45,8 @@ export interface IMutationFrontProductionValues {
   gridId: string | null;
   elevationId: string | null;
   domeId: string | null;
-  x: number | '';
-  y: number | '';
+  x: number | null | '';
+  y: number | null | '';
 }
 
 type ICreateFrontProductionRequest = Omit<
