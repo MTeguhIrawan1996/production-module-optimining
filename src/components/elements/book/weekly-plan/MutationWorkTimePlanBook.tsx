@@ -242,7 +242,8 @@ const MutationWorkTimePlanBook = () => {
     renderOtherColumnLosetimeCallback
   );
 
-  const handleSubmitForm: SubmitHandler<IWorkTimePlanValues> = async (data) => {
+  const handleSubmitForm: SubmitHandler<IWorkTimePlanValues> = async () => {
+    const data = methods.getValues();
     const newWorkTimeActivity = data.workTimePlanActivities
       .map((obj) => {
         const weekltWorkTimeValue = obj.weeklyWorkTimes.map((wObj) => {
