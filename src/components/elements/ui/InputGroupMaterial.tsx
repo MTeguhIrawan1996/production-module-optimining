@@ -7,7 +7,6 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumnGroup } from 'mantine-datatable';
@@ -31,6 +30,7 @@ export type IInputGroupMaterialProps = {
   unitCapacityPlanIndex: number;
   materialIndex: number;
   uniqKey?: string | null;
+  tabs?: string;
 };
 
 const table = [
@@ -46,6 +46,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
   label = 'material',
   unitCapacityPlanIndex,
   materialIndex,
+  tabs,
 }) => {
   const { t } = useTranslation('default');
 
@@ -113,7 +114,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
       <Group spacing="xs" position="right">
         {addButtonOuter ? (
           <PrimaryButton
-            leftIcon={<IconPlus size="20px" />}
+            // leftIcon={<IconPlus size="20px" />}
             label={addButtonOuterLabel}
             {...restAddButtonOuter}
           />
@@ -154,15 +155,15 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 label="material"
                 withAsterisk
                 clearable
+                skipQuery={tabs !== 'unitCapacityPlan'}
               />
             </Grid.Col>
             <Grid.Col span={6}>
               <FormController
-                control="number-input"
-                label="fleet"
+                control="text-input"
+                label="fleetName"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.fleet`}
                 withAsterisk
-                precision={0}
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -174,6 +175,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 clearable
                 searchable
                 limit={null}
+                skipQuery={tabs !== 'unitCapacityPlan'}
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -186,6 +188,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 clearable
                 searchable
                 limit={null}
+                skipQuery={tabs !== 'unitCapacityPlan'}
               />
             </Grid.Col>
             <Grid.Col span={6}>

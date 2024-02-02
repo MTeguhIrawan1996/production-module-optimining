@@ -14,6 +14,7 @@ export type ISelectWeekRhfProps = {
   control: 'select-week-rhf';
   name: string;
   year?: number | null;
+  skipQuery?: boolean;
 } & Omit<SelectProps, 'data' | 'onSearchChange' | 'searchValue'> &
   CommonProps;
 
@@ -23,6 +24,7 @@ const SelectWeekRhf: React.FC<ISelectWeekRhfProps> = ({
   label = 'week',
   placeholder = 'chooseWeek',
   name,
+  skipQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -32,6 +34,7 @@ const SelectWeekRhf: React.FC<ISelectWeekRhfProps> = ({
     variables: {
       year,
     },
+    skip: skipQuery,
   });
 
   const weeksItem = weeksData?.map((val) => {

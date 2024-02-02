@@ -17,7 +17,7 @@ export type ITextButtonProps = {
 const TextButton: React.FC<ITextButtonProps> = ({
   label,
   className,
-  color = 'brand.5',
+  color = 'brand.6',
   fz = 14,
   fw = 400,
   buttonProps,

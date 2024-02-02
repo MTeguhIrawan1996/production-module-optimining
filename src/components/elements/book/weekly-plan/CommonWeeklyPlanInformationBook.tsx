@@ -66,7 +66,9 @@ const CommonWeeklyPlanInformationBook: React.FC<
         icon: <IconCheck />,
       });
       methods.reset();
-      // router.push('/input-data/production/data-weather');
+      router.push(
+        `/plan/weekly/create/weekly-plan-group/${id}?tabs=workTimePlan`
+      );
     },
     onError: (error) => {
       if (error.graphQLErrors) {
@@ -92,6 +94,7 @@ const CommonWeeklyPlanInformationBook: React.FC<
   /* #   /**=========== Field =========== */
   const fieldRhf = React.useMemo(() => {
     const companyItem = globalSelectCompanyRhf({
+      label: 'companyName',
       disabled: type === 'read' ? true : false,
       defaultValue: weeklyPlanData?.company?.id ?? '',
       labelValue: weeklyPlanData?.company?.name ?? '',

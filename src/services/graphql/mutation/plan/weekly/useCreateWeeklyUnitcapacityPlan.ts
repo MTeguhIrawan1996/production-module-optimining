@@ -28,7 +28,7 @@ export interface ITargetPlan {
 export interface IMaterialsGroup {
   id?: string;
   materialId: string | null;
-  fleet: number | string | '';
+  fleet: string;
   classId: string | null;
   frontId: string | null;
   physicalAvailability: number | string | '';

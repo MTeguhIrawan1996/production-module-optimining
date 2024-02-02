@@ -50,7 +50,7 @@ const CreateWeeklyPlanInformationBook = () => {
       });
       methods.reset();
       router.push(
-        `/plan/weekly/create/weekly-plan-group/${createWeeklyPlan.id}`
+        `/plan/weekly/create/weekly-plan-group/${createWeeklyPlan.id}?tabs=workTimePlan`
       );
     },
     onError: (error) => {
@@ -76,7 +76,9 @@ const CreateWeeklyPlanInformationBook = () => {
 
   /* #   /**=========== Field =========== */
   const fieldRhf = React.useMemo(() => {
-    const companyItem = globalSelectCompanyRhf({});
+    const companyItem = globalSelectCompanyRhf({
+      label: 'companyName',
+    });
     const yearItem = globalSelectYearRhf({});
     const weekItem = globalSelectWeekRhf({
       disabled: !year,

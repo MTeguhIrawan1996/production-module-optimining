@@ -17,6 +17,7 @@ export type ILocationSelectInputRhfProps = {
   labelValue?: string;
   categoryId?: string | null;
   limit?: number | null;
+  skipQuery?: boolean;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder' | 'limit'
@@ -31,6 +32,7 @@ const LocationSelectInputRhf: React.FC<ILocationSelectInputRhfProps> = ({
   defaultValue,
   categoryId = null,
   limit = 15,
+  skipQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -46,6 +48,7 @@ const LocationSelectInputRhf: React.FC<ILocationSelectInputRhfProps> = ({
       search: searchQuery === '' ? null : searchQuery,
       categoryId: categoryId === '' ? null : categoryId,
     },
+    skip: skipQuery,
   });
 
   const { combinedItems, uncombinedItem } = useCombineFilterItems({
