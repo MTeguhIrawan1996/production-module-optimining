@@ -31,6 +31,7 @@ export type IInputGroupMaterialProps = {
   unitCapacityPlanIndex: number;
   materialIndex: number;
   uniqKey?: string | null;
+  tabs?: string;
 };
 
 const table = [
@@ -46,6 +47,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
   label = 'material',
   unitCapacityPlanIndex,
   materialIndex,
+  tabs,
 }) => {
   const { t } = useTranslation('default');
 
@@ -154,6 +156,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 label="material"
                 withAsterisk
                 clearable
+                skipQuery={tabs !== 'unitCapacityPlan'}
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -174,6 +177,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 clearable
                 searchable
                 limit={null}
+                skipQuery={tabs !== 'unitCapacityPlan'}
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -186,6 +190,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 clearable
                 searchable
                 limit={null}
+                skipQuery={tabs !== 'unitCapacityPlan'}
               />
             </Grid.Col>
             <Grid.Col span={6}>

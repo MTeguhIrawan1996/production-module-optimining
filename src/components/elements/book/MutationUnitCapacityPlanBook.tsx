@@ -50,6 +50,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const tabs = router.query.tabs as string;
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
 
@@ -87,7 +88,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
     variables: {
       id,
     },
-    skip: !router.isReady,
+    skip: tabs !== 'unitCapacityPlan' || !router.isReady,
     onCompleted: (data) => {
       methods.setValue('companyId', data.weeklyPlan.company?.id ?? '');
       methods.setValue('week', `${data.weeklyPlan.week}`);
@@ -100,7 +101,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
       weeklyPlanId: id,
       limit: null,
     },
-    skip: !router.isReady,
+    skip: tabs !== 'unitCapacityPlan' || !router.isReady,
     onCompleted: (data) => {
       if (data.weeklyUnitCapacityPlans.data.length) {
         const unitCapacityPlans = data.weeklyUnitCapacityPlans.data.map(
@@ -179,7 +180,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
     },
   });
 
-  const unitCpacityCallback = React.useCallback(
+  const unitCapacityCallback = React.useCallback(
     (
       obj: FieldArrayWithId<
         IUnitCapacityPlanValues,
@@ -197,6 +198,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
         label: 'location',
         name: `unitCapacityPlans.${index}.locationIds`,
         key: `${obj.unitCapacityPlanId}.locationIds`,
+        skipQuery: tabs !== 'unitCapacityPlan',
       });
       const amountFleetItem = globalInputSumArray({
         label: 'amountFleet',
@@ -229,6 +231,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
           unitCapacityPlanIndex: index,
           materialIndex: i,
           uniqKey: obj.unitCapacityPlanId,
+          tabs: tabs,
           addButtonOuter:
             i === 0
               ? {
@@ -301,23 +304,26 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
       return group;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [unitCapacityFields]
+    [unitCapacityFields, tabs]
   );
 
-  const unitCapacityPlanGroup = unitCapacityFields.map(unitCpacityCallback);
+  const unitCapacityPlanGroup = unitCapacityFields.map(unitCapacityCallback);
 
   const fieldRhf = React.useMemo(() => {
     const companyItem = globalSelectCompanyRhf({
       disabled: true,
       defaultValue: weeklyPlanData?.company?.id ?? '',
       labelValue: weeklyPlanData?.company?.name ?? '',
+      skipQuery: tabs !== 'unitCapacityPlan',
     });
     const yearItem = globalSelectYearRhf({
       disabled: true,
+      skipQuery: tabs !== 'unitCapacityPlan',
     });
     const weekItem = globalSelectWeekRhf({
       disabled: true,
       year: year ? Number(year) : null,
+      skipQuery: tabs !== 'unitCapacityPlan',
     });
 
     const field: ControllerGroup[] = [
@@ -331,7 +337,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year, weeklyPlanData, unitCapacityPlanGroup]);
+  }, [year, weeklyPlanData, unitCapacityPlanGroup, tabs]);
 
   const handleSubmitForm: SubmitHandler<IUnitCapacityPlanValues> = async () => {
     const data = methods.getValues();

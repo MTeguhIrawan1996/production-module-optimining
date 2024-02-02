@@ -53,6 +53,12 @@ const CreateWeeklyPlanGroupPage = () => {
           }}
           tabsData={[
             {
+              label: t('commonTypography.workTimePlan'),
+              value: 'workTimePlan',
+              component: <div>Rencana Waktu Kerja</div>,
+              isShowItem: true,
+            },
+            {
               label: t('commonTypography.unitCapacityPlan'),
               value: 'unitCapacityPlan',
               component: (

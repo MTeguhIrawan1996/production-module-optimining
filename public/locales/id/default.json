@@ -33,6 +33,7 @@
     "subMaterialType": "Sub Jenis Material",
     "subMaterialTypeBy": "Sub Jenis Material Dari",
     "workingHoursPlan": "Rencana Waktu Hilang",
+    "workTimePlan": "Rencana Waktu Kerja",
     "workingHour": "Waktu Kerja",
     "workingHourStart": "Jam Mulai Kerja",
     "workingHourFinish": "Jam Berakhir Kerja",

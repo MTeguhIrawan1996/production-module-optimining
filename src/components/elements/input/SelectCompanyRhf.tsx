@@ -15,6 +15,7 @@ export type ISelectCompanyRhfProps = {
   control: 'select-company-rhf';
   name: string;
   labelValue?: string;
+  skipQuery?: boolean;
 } & Omit<SelectProps, 'data' | 'onSearchChange' | 'searchValue'> &
   CommonProps;
 
@@ -25,6 +26,7 @@ const SelectCompanyRhf: React.FC<ISelectCompanyRhfProps> = ({
   name,
   labelValue,
   defaultValue,
+  skipQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -38,6 +40,7 @@ const SelectCompanyRhf: React.FC<ISelectCompanyRhfProps> = ({
       search: searchQuery === '' ? null : searchQuery,
       limit: 15,
     },
+    skip: skipQuery,
   });
 
   const { uncombinedItem, combinedItems } = useCombineFilterItems({

@@ -15,6 +15,7 @@ export type IMultipleSelectLocationRhfProps = {
   control: 'multiple-select-location';
   name: string;
   categoryId?: string | null;
+  skipQuery?: boolean;
 } & Omit<
   MultiSelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
@@ -26,6 +27,7 @@ const MultipleSelectLocationRhf: React.FC<IMultipleSelectLocationRhfProps> = ({
   control,
   label,
   categoryId = null,
+  skipQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -40,6 +42,7 @@ const MultipleSelectLocationRhf: React.FC<IMultipleSelectLocationRhfProps> = ({
       search: searchQuery === '' ? null : searchQuery,
       categoryId: categoryId === '' ? null : categoryId,
     },
+    skip: skipQuery,
   });
 
   const { uncombinedItem } = useCombineFilterItems({

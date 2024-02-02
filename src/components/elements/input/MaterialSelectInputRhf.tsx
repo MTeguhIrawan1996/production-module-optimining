@@ -22,6 +22,7 @@ export type IMaterialSelectInputRhfProps = {
   parentId?: string | null;
   includeIds?: string[];
   isHaveParent?: boolean | null;
+  skipQuery?: boolean;
 } & Omit<
   SelectProps,
   | 'name'
@@ -43,6 +44,7 @@ const MaterialSelectInput: React.FC<IMaterialSelectInputRhfProps> = ({
   isHaveParent = false,
   parentId = null,
   includeIds = null,
+  skipQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -62,6 +64,7 @@ const MaterialSelectInput: React.FC<IMaterialSelectInputRhfProps> = ({
       parentId: parentId === '' ? null : parentId,
       includeIds: includeIds ? includeIds : null,
     },
+    skip: skipQuery,
   });
 
   const { uncombinedItem } = useFilterItems({

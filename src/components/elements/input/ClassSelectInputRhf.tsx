@@ -17,6 +17,7 @@ export type IClassSelectInputRhfProps = {
   name: string;
   labelValue?: string;
   limit?: number | null;
+  skipQuery?: boolean;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder' | 'limit'
@@ -30,6 +31,7 @@ const ClassSelectInputRhf: React.FC<IClassSelectInputRhfProps> = ({
   labelValue,
   defaultValue,
   limit = 15,
+  skipQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -43,6 +45,7 @@ const ClassSelectInputRhf: React.FC<IClassSelectInputRhfProps> = ({
       limit: limit,
       search: searchQuery === '' ? null : searchQuery,
     },
+    skip: skipQuery,
   });
 
   const { combinedItems, uncombinedItem } = useCombineFilterItems({
