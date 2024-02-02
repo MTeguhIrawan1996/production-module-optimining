@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Flex, Group } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -32,6 +33,7 @@ import {
 import { useReadAllActivityWorkTimePlan } from '@/services/graphql/query/plan/weekly/work-time-plan/useReadAllActivityWorkTimePlan';
 import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
 import { workTimeDay } from '@/utils/constants/DefaultValues/work-time-plan';
+import { weeklyWorkTimePlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-work-time-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 dayjs.extend(isoWeek);
@@ -43,6 +45,7 @@ const MutationWorkTimePlanBook = () => {
   const tabs = router.query.tabs as string;
 
   const methods = useForm<IWorkTimePlanValues>({
+    resolver: zodResolver(weeklyWorkTimePlanMutationValidation),
     defaultValues: {
       workTimePlanActivities: [
         {
@@ -409,6 +412,9 @@ const MutationWorkTimePlanBook = () => {
                 label={t('commonTypography.back')}
                 type="button"
                 variant="outline"
+                onClick={() => {
+                  router.push(`/plan/weekly`);
+                }}
               />
               <Group spacing="xs">
                 <PrimaryButton
