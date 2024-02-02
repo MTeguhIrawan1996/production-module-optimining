@@ -311,17 +311,21 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
 
   const fieldRhf = React.useMemo(() => {
     const companyItem = globalSelectCompanyRhf({
+      label: 'companyName',
       disabled: true,
       defaultValue: weeklyPlanData?.company?.id ?? '',
       labelValue: weeklyPlanData?.company?.name ?? '',
       skipQuery: tabs !== 'unitCapacityPlan',
+      withAsterisk: false,
     });
     const yearItem = globalSelectYearRhf({
       disabled: true,
+      withAsterisk: false,
       skipQuery: tabs !== 'unitCapacityPlan',
     });
     const weekItem = globalSelectWeekRhf({
       disabled: true,
+      withAsterisk: false,
       year: year ? Number(year) : null,
       skipQuery: tabs !== 'unitCapacityPlan',
     });

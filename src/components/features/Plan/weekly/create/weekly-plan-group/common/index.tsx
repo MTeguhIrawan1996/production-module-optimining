@@ -8,6 +8,7 @@ import {
   GlobalTabs,
   InnerWrapper,
   MutationUnitCapacityPlanBook,
+  MutationWorkTimePlanBook,
   RootWrapper,
 } from '@/components/elements';
 
@@ -55,7 +56,7 @@ const CreateWeeklyPlanGroupPage = () => {
             {
               label: t('commonTypography.workTimePlan'),
               value: 'workTimePlan',
-              component: <div>Rencana Waktu Kerja</div>,
+              component: <MutationWorkTimePlanBook />,
               isShowItem: true,
             },
             {

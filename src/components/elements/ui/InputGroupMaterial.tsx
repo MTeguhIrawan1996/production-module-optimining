@@ -7,7 +7,6 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumnGroup } from 'mantine-datatable';
@@ -115,7 +114,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
       <Group spacing="xs" position="right">
         {addButtonOuter ? (
           <PrimaryButton
-            leftIcon={<IconPlus size="20px" />}
+            // leftIcon={<IconPlus size="20px" />}
             label={addButtonOuterLabel}
             {...restAddButtonOuter}
           />
