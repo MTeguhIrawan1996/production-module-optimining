@@ -126,7 +126,7 @@ const MutationWorkTimePlanBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('weeklyPlan.successUpdateMessage'),
+        message: t('weeklyPlan.successCreateWorkTimePlanMessage'),
         icon: <IconCheck />,
       });
       // router.push(
