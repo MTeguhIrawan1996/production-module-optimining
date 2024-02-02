@@ -141,7 +141,7 @@ const MutationWorkTimePlanBook = () => {
         const errorArry = errorBadRequestField<IWorkTimePlanValues>(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
-            methods.setError(name, { type, message });
+            methods.setError(name, { type, message }, { shouldFocus: true });
           });
           return;
         }
