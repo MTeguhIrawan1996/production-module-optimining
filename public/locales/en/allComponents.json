@@ -100,6 +100,7 @@
       "locationName": "Nama Lokasi",
       "material": "Material",
       "fleet": "Fleet",
+      "fleetName": "Nama Fleet",
       "amountFleet": "Jumlah Fleet",
       "subMaterial": "Sub Material",
       "materialType": "Jenis Material",

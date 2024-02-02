@@ -39,7 +39,7 @@ const UpdatePasswordModal: React.FC<IModalProps> = ({
             fw={600}
             fz={16}
             sx={(theme) => ({
-              color: theme.colors.brand[5],
+              color: theme.colors.brand[6],
             })}
             w="100%"
           >

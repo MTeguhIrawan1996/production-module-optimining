@@ -38,7 +38,7 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
         <Text component="span" fz={14}>
           {authUser?.name}
         </Text>
-        <ActionIcon color="brand.5" variant="filled" radius={4} size="md">
+        <ActionIcon color="brand.6" variant="filled" radius={4} size="md">
           <IconUser size="1.2rem" />
         </ActionIcon>
       </Group>

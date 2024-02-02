@@ -1,4 +1,11 @@
-import { Group, Modal, ScrollArea, Stack, Text } from '@mantine/core';
+import {
+  Group,
+  Modal,
+  ScrollArea,
+  Stack,
+  Text,
+  useMantineTheme,
+} from '@mantine/core';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumnGroup } from 'mantine-datatable';
@@ -33,12 +40,17 @@ const UnitCapacityPlanData = ({
   tabs,
 }: IUnitCapacityPlanData) => {
   const { t } = useTranslation('default');
+  const theme = useMantineTheme();
   const router = useRouter();
   const pageParams = useSearchParams();
   const page = Number(pageParams.get('page')) || 1;
   const [materials, setMaterials] = React.useState<
     IReadOneMaterialUnitCapacityPlan[] | undefined
   >(undefined);
+  const [fleetTotal, setFleetTotal] = React.useState<number | ''>('');
+  const [dumpTruckCountTotal, setDumpTruckCountTotal] = React.useState<
+    number | ''
+  >('');
   const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
 
   const handleSetPage = (page: number) => {
@@ -122,7 +134,7 @@ const UnitCapacityPlanData = ({
               {
                 accessor: 'material',
                 title: t('commonTypography.material'),
-                render: ({ id }) => {
+                render: ({ id, fleetTotal, dumpTruckCountTotal }) => {
                   return (
                     <GlobalActionTable
                       actionRead={{
@@ -132,6 +144,8 @@ const UnitCapacityPlanData = ({
                             (val) => val.id === id
                           );
                           setMaterials(materialById?.materials);
+                          setFleetTotal(fleetTotal);
+                          setDumpTruckCountTotal(dumpTruckCountTotal);
                           setIsOpenModal((prev) => !prev);
                         },
                       }}
@@ -174,6 +188,14 @@ const UnitCapacityPlanData = ({
               <Group noWrap spacing={0} py={4}>
                 <MantineDataTable
                   tableProps={{
+                    defaultColumnProps: {
+                      footerStyle: {
+                        visibility: 'unset',
+                        backgroundColor: 'transparent',
+                        color: theme.colors.dark[5],
+                        fontSize: 14,
+                      },
+                    },
                     groups: [
                       {
                         id: 'information',
@@ -183,9 +205,11 @@ const UnitCapacityPlanData = ({
                           {
                             accessor: 'material',
                             render: ({ material }) => material.name ?? '-',
+                            footer: <Text>Total</Text>,
                           },
                           {
                             accessor: 'fleet',
+                            footer: <Text>{fleetTotal}</Text>,
                           },
                           {
                             accessor: 'heavyEquipmentClass',
@@ -218,6 +242,7 @@ const UnitCapacityPlanData = ({
                             accessor: 'dumpTruckCount',
                             title: t('commonTypography.dumpTruckCount'),
                             width: 180,
+                            footer: <Text>{dumpTruckCountTotal}</Text>,
                           },
                         ],
                       },

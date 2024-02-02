@@ -13,6 +13,7 @@ import { CommonProps } from '@/types/global';
 export type ISelectYearRhfProps = {
   control: 'select-year-rhf';
   name: string;
+  skipQuery?: boolean;
 } & Omit<SelectProps, 'data' | 'onSearchChange' | 'searchValue'> &
   CommonProps;
 
@@ -21,11 +22,14 @@ const SelectYearRhf: React.FC<ISelectYearRhfProps> = ({
   label = 'year',
   placeholder = 'chooseYear',
   name,
+  skipQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
-  const { yearsData } = useReadAllYearSelect({});
+  const { yearsData } = useReadAllYearSelect({
+    skip: skipQuery,
+  });
 
   const yearsItem = yearsData?.map((val) => {
     return {

@@ -10,7 +10,7 @@ import {
   SwitchProps,
   Text,
 } from '@mantine/core';
-import { IconPencil, IconPlus } from '@tabler/icons-react';
+import { IconPlus } from '@tabler/icons-react';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -107,7 +107,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
           {outerButton ? (
             <PrimaryButton
               label={outerButtonLabel}
-              leftIcon={<IconPlus size="20px" />}
+              // leftIcon={<IconPlus size="20px" />}
               {...restOuterButtonLabel}
             />
           ) : null}
@@ -142,13 +142,13 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                     <Group spacing="xs" position="right">
                       {addButtonOuter ? (
                         <PrimaryButton
-                          leftIcon={<IconPlus size="20px" />}
+                          // leftIcon={<IconPlus size="20px" />}
                           {...addButtonOuter}
                         />
                       ) : null}
                       {updateButtonOuter ? (
                         <PrimaryButton
-                          leftIcon={<IconPencil size="20px" />}
+                          // leftIcon={<IconPencil size="20px" />}
                           {...updateButtonOuter}
                         />
                       ) : null}
@@ -167,9 +167,9 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                     </Group>
                   ) : null}
                   <Paper p={24} withBorder w="100%">
-                    <Stack spacing={8}>
+                    <Stack spacing="md">
                       {enableGroupLabel || actionGroup ? (
-                        <SimpleGrid cols={enableGroupLabel ? 2 : 1} mb="sm">
+                        <SimpleGrid cols={enableGroupLabel ? 2 : 1}>
                           {enableGroupLabel && (
                             <Text
                               component="span"
