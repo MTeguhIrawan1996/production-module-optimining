@@ -160,11 +160,10 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
             </Grid.Col>
             <Grid.Col span={6}>
               <FormController
-                control="number-input"
-                label="fleet"
+                control="text-input"
+                label="fleetName"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.fleet`}
                 withAsterisk
-                precision={0}
               />
             </Grid.Col>
             <Grid.Col span={6}>

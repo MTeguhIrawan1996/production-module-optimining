@@ -80,7 +80,7 @@ export interface IReadOneMaterialUnitCapacityPlan {
     id: string;
     name: string;
   };
-  fleet: number;
+  fleet: string;
   class: {
     id: string;
     name: string;

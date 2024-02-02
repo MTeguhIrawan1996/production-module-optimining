@@ -120,7 +120,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
               const materialValue: IMaterialsGroup = {
                 id: val.id || '',
                 materialId: val.material.id,
-                fleet: val.fleet,
+                fleet: `${val.fleet}`,
                 classId: val.class.id,
                 frontId: val.front.id,
                 physicalAvailability: val.physicalAvailability,

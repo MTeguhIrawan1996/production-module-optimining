@@ -35,12 +35,15 @@ const InputSumArray: React.FC<IInputSumArrayProps> = ({
 
   const valueMemo = React.useMemo(() => {
     if (Array.isArray(data)) {
-      const value = data?.reduce((acc: any, curr: any) => {
+      const value = data?.reduce((acc: number, curr: any) => {
         if (typeof curr[`${keyObj}`] === 'number') {
-          const sum = curr[`${keyObj}`] || 0;
-          const currentValue = acc + sum;
-
+          const objValue = curr[`${keyObj}`] || 0;
+          const currentValue = acc + objValue;
           return currentValue;
+        }
+        if (curr[`${keyObj}`] !== '') {
+          const sum = acc + 1;
+          return sum;
         }
         return acc;
       }, 0);

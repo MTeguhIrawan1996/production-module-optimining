@@ -30,7 +30,7 @@ const CommonWeeklyPlanInformation = () => {
             <Grid.Col span={6}>
               <TextInputNative
                 control="text-input-native"
-                name="foo"
+                name="companyName"
                 label="companyName"
                 disabled
                 defaultValue={weeklyPlanData?.company?.name ?? ''}
@@ -39,7 +39,7 @@ const CommonWeeklyPlanInformation = () => {
             <Grid.Col span={6}>
               <TextInputNative
                 control="text-input-native"
-                name="foo"
+                name="year"
                 label="year"
                 disabled
                 defaultValue={`${weeklyPlanData?.year ?? ''}`}
@@ -48,7 +48,7 @@ const CommonWeeklyPlanInformation = () => {
             <Grid.Col span={6}>
               <TextInputNative
                 control="text-input-native"
-                name="foo"
+                name="week"
                 label="week"
                 disabled
                 defaultValue={`${weeklyPlanData?.week ?? ''}`}

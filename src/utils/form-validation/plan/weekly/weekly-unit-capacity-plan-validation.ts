@@ -24,7 +24,7 @@ export const weeklyUnitCapacityPlanMutationValidation: z.ZodType<IUnitCapacityPl
         materials: z
           .object({
             materialId: zRequiredSelectInput,
-            fleet: zRequiredNumber,
+            fleet: zRequiredString,
             classId: zRequiredSelectInput,
             frontId: zRequiredSelectInput,
             physicalAvailability: zRequiredNumber,
