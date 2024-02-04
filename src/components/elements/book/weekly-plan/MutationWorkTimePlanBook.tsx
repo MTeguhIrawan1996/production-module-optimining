@@ -200,27 +200,47 @@ const MutationWorkTimePlanBook = () => {
           .isoWeekday(Number(obj['day'] || 0))
           .format('dddd'),
         render: ({ id }, i: number) => {
-          // const recordsWithLoseTimeLength = recordsWithLoseTime?.length || 0;
+          const recordsWithLoseTimeLength = recordsWithLoseTime?.length || 0;
           if (id === 'loseTime') {
-            return <div className="">sistem</div>;
+            return (
+              <FormController
+                control="input-sum-lose-times"
+                name="workTimePlanActivities"
+                indexOfHour={index}
+                variant="unstyled"
+                disabled={false}
+                styles={{
+                  input: {
+                    textAlign: 'center',
+                  },
+                }}
+              />
+            );
           }
           if (id === 'amountEffectiveWorkingHours') {
-            return <div className="">sistem</div>;
+            return (
+              <div className="">{`${
+                i + recordsWithLoseTimeLength
+              }.${recordsWithLoseTimeLength}`}</div>
+            );
           }
           return (
             <FormController
               control="number-input-table-rhf"
               name={`workTimePlanActivities.${i}.weeklyWorkTimes.${index}.hour`}
-              label={`${i}.${index}`}
-              labelWithTranslate={false}
               precision={0}
+              styles={{
+                input: {
+                  textAlign: 'center',
+                },
+              }}
             />
           );
         },
       };
       return group;
     },
-    []
+    [recordsWithLoseTime]
   );
 
   const renderOtherColumnActivityDay = workTimeDay?.map(
@@ -248,11 +268,12 @@ const MutationWorkTimePlanBook = () => {
               name={`workTimePlanActivities.${
                 i + activityWorkTImePlanLength
               }.weeklyWorkTimes.${index}.hour`}
-              label={`${
-                i + activityWorkTImePlanLength
-              }.${index}.${activityWorkTImePlanLength}`}
-              labelWithTranslate={false}
               precision={0}
+              styles={{
+                input: {
+                  textAlign: 'center',
+                },
+              }}
             />
           );
         },
@@ -344,7 +365,68 @@ const MutationWorkTimePlanBook = () => {
                     id: 'amount',
                     title: 'Total',
                     style: { textAlign: 'center' },
-                    columns: [{ accessor: 'amount', title: '', width: 100 }],
+                    columns: [
+                      {
+                        accessor: 'amount',
+                        title: '',
+                        render: ({ id }, index) => {
+                          const recordsWithLoseTimeLength =
+                            recordsWithLoseTime?.length || 0;
+
+                          if (id === 'loseTime') {
+                            return (
+                              <FormController
+                                control="input-sum-array"
+                                name={`workTimePlanActivities.${
+                                  index + recordsWithLoseTimeLength
+                                }.weeklyWorkTimes`}
+                                keyObj="hour"
+                                variant="unstyled"
+                                disabled={false}
+                                styles={{
+                                  input: {
+                                    textAlign: 'center',
+                                  },
+                                }}
+                              />
+                            );
+                          }
+                          if (id === 'amountEffectiveWorkingHours') {
+                            return (
+                              <FormController
+                                control="input-sum-array"
+                                name={`workTimePlanActivities.${
+                                  index + recordsWithLoseTimeLength
+                                }.weeklyWorkTimes`}
+                                keyObj="hour"
+                                variant="unstyled"
+                                disabled={false}
+                                styles={{
+                                  input: {
+                                    textAlign: 'center',
+                                  },
+                                }}
+                              />
+                            );
+                          }
+                          return (
+                            <FormController
+                              control="input-sum-array"
+                              name={`workTimePlanActivities.${index}.weeklyWorkTimes`}
+                              keyObj="hour"
+                              variant="unstyled"
+                              disabled={false}
+                              styles={{
+                                input: {
+                                  textAlign: 'center',
+                                },
+                              }}
+                            />
+                          );
+                        },
+                        width: 100,
+                      },
+                    ],
                   },
                   {
                     id: 'unit',
@@ -408,7 +490,37 @@ const MutationWorkTimePlanBook = () => {
                             title: 'Total',
                             style: { textAlign: 'center' },
                             columns: [
-                              { accessor: 'amount', title: '', width: 100 },
+                              {
+                                accessor: 'amount',
+                                title: '',
+                                render: (_, index) => {
+                                  const activityWorkTimePlan =
+                                    recordsWithoutLoseTime.filter(
+                                      (val) =>
+                                        val.id !== 'loseTime' &&
+                                        val.id !== 'amountEffectiveWorkingHours'
+                                    );
+                                  const activityWorkTImePlanLength =
+                                    activityWorkTimePlan?.length || 0;
+                                  return (
+                                    <FormController
+                                      control="input-sum-array"
+                                      name={`workTimePlanActivities.${
+                                        index + activityWorkTImePlanLength
+                                      }.weeklyWorkTimes`}
+                                      keyObj="hour"
+                                      variant="unstyled"
+                                      disabled={false}
+                                      styles={{
+                                        input: {
+                                          textAlign: 'center',
+                                        },
+                                      }}
+                                    />
+                                  );
+                                },
+                                width: 100,
+                              },
                             ],
                           },
                           {

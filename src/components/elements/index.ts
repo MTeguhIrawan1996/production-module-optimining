@@ -49,6 +49,7 @@ import IdentityRadioInputRhf from '@/components/elements/input/IdentityRadioInpu
 import ImageInputDropzoneRhf from '@/components/elements/input/ImageInputDropzoneRhf';
 import InputAverageArray from '@/components/elements/input/InputAverageArray';
 import InputSumArray from '@/components/elements/input/InputSumArray';
+import InputSumLoseTimes from '@/components/elements/input/InputSumLoseTimes';
 import LocationCategorySelectInputRhf from '@/components/elements/input/LocationCategorySelectInputRhf';
 import LocationSelectInputRhf from '@/components/elements/input/LocationSelectInputRhf';
 import MarriageSelectInputRhf from '@/components/elements/input/MarriageStatusesSelectInputRhf';
@@ -157,6 +158,7 @@ export {
   InputAverageArray,
   InputGroupMaterial,
   InputSumArray,
+  InputSumLoseTimes,
   KeyValueList,
   LinkButton,
   ListDetailsRitageDT,
