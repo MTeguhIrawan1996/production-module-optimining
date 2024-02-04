@@ -43,6 +43,10 @@ const MutationWorkTimePlanBook = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const tabs = router.query.tabs as string;
+  const [skipWorkingHourPlansData, setSkipWorkingHourPlansData] =
+    React.useState<boolean>(false);
+  const [skipActivityWorkTimePlan, setSkipActivityWorkTimePlan] =
+    React.useState<boolean>(false);
 
   const methods = useForm<IWorkTimePlanValues>({
     resolver: zodResolver(weeklyWorkTimePlanMutationValidation),
@@ -66,27 +70,27 @@ const MutationWorkTimePlanBook = () => {
         },
       ],
     },
-    mode: 'onBlur',
+    mode: 'onSubmit',
   });
 
   const {
     fields: workTimePlanActivityFields,
     // append: workTimePlanActivityAppend,
-    prepend: workTimePlanActivityPrepend,
+    // prepend: workTimePlanActivityPrepend,
     // update: workTimePlanActivityUpdate,
     // remove: workTimePlanActivityRemove,
-    // replace: workTimePlanActivityReplace,
+    replace: workTimePlanActivityReplace,
   } = useFieldArray({
     name: 'workTimePlanActivities',
     control: methods.control,
     keyName: 'workTimePlanActivityId',
   });
 
-  const { workingHourPlansData } = useReadAllWHPsMaster({
+  useReadAllWHPsMaster({
     variables: {
       limit: null,
     },
-    skip: tabs !== 'workTimePlan',
+    skip: tabs !== 'workTimePlan' || skipWorkingHourPlansData,
     onCompleted: ({ workingHourPlans }) => {
       const workTimePlanActivities = workingHourPlans.data.map((obj) => {
         const value = {
@@ -99,12 +103,20 @@ const MutationWorkTimePlanBook = () => {
         };
         return value;
       });
-      workTimePlanActivityPrepend(workTimePlanActivities);
+      const defaultValue = [
+        ...workTimePlanActivities,
+        ...workTimePlanActivityFields,
+      ];
+      workTimePlanActivityReplace(defaultValue);
+      setSkipWorkingHourPlansData(true);
     },
   });
 
-  const { activityWorkTImePlan } = useReadAllActivityWorkTimePlan({
-    skip: tabs !== 'workTimePlan' || !workingHourPlansData,
+  useReadAllActivityWorkTimePlan({
+    skip:
+      tabs !== 'workTimePlan' ||
+      !skipWorkingHourPlansData ||
+      skipActivityWorkTimePlan,
     onCompleted: ({ activities }) => {
       const workTimePlanActivities = activities.map((obj) => {
         const value = {
@@ -117,7 +129,12 @@ const MutationWorkTimePlanBook = () => {
         };
         return value;
       });
-      workTimePlanActivityPrepend(workTimePlanActivities);
+      const defaultValue = [
+        ...workTimePlanActivities,
+        ...workTimePlanActivityFields,
+      ];
+      workTimePlanActivityReplace(defaultValue);
+      setSkipActivityWorkTimePlan(true);
     },
   });
 
@@ -141,7 +158,7 @@ const MutationWorkTimePlanBook = () => {
         const errorArry = errorBadRequestField<IWorkTimePlanValues>(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
-            methods.setError(name, { type, message }, { shouldFocus: true });
+            methods.setError(name, { type, message });
           });
           return;
         }
@@ -174,10 +191,6 @@ const MutationWorkTimePlanBook = () => {
     ) => val.isLoseTime
   );
 
-  // console.log(workTimePlanActivityFields);
-  // // console.log('no losetime', recordsWithoutLoseTime);
-  // // console.log('with losetime', recordsWithLoseTime);
-
   const renderOtherColumnActivityCallback = React.useCallback(
     (obj: IWorkTimeDay, index: number) => {
       const group: DataTableColumn<IWorkTimePlanActivities> = {
@@ -198,6 +211,8 @@ const MutationWorkTimePlanBook = () => {
             <FormController
               control="number-input-table-rhf"
               name={`workTimePlanActivities.${i}.weeklyWorkTimes.${index}.hour`}
+              label={`${i}.${index}`}
+              labelWithTranslate={false}
               precision={0}
             />
           );
@@ -221,13 +236,22 @@ const MutationWorkTimePlanBook = () => {
           .isoWeekday(Number(obj['day'] || 0))
           .format('dddd'),
         render: (_, i) => {
-          const activityWorkTImePlanLength = activityWorkTImePlan?.length || 0;
+          const activityWorkTimePlan = recordsWithoutLoseTime.filter(
+            (val) =>
+              val.id !== 'loseTime' && val.id !== 'amountEffectiveWorkingHours'
+          );
+          const activityWorkTImePlanLength = activityWorkTimePlan?.length || 0;
+
           return (
             <FormController
               control="number-input-table-rhf"
               name={`workTimePlanActivities.${
                 i + activityWorkTImePlanLength
               }.weeklyWorkTimes.${index}.hour`}
+              label={`${
+                i + activityWorkTImePlanLength
+              }.${index}.${activityWorkTImePlanLength}`}
+              labelWithTranslate={false}
               precision={0}
             />
           );
@@ -235,15 +259,14 @@ const MutationWorkTimePlanBook = () => {
       };
       return group;
     },
-    [activityWorkTImePlan]
+    [recordsWithoutLoseTime]
   );
 
   const renderOtherColumnLosetimeDay = workTimeDay?.map(
     renderOtherColumnLosetimeCallback
   );
 
-  const handleSubmitForm: SubmitHandler<IWorkTimePlanValues> = async () => {
-    const data = methods.getValues();
+  const handleSubmitForm: SubmitHandler<IWorkTimePlanValues> = async (data) => {
     const newWorkTimeActivity = data.workTimePlanActivities
       .map((obj) => {
         const weekltWorkTimeValue = obj.weeklyWorkTimes.map((wObj) => {
@@ -398,6 +421,7 @@ const MutationWorkTimePlanBook = () => {
                           },
                         ],
                         records: recordsWithLoseTime ?? [],
+                        emptyState: undefined,
                       }}
                     />
                   ),
