@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Flex, Group } from '@mantine/core';
+import { Flex, Group, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import dayjs from 'dayjs';
@@ -75,10 +75,6 @@ const MutationWorkTimePlanBook = () => {
 
   const {
     fields: workTimePlanActivityFields,
-    // append: workTimePlanActivityAppend,
-    // prepend: workTimePlanActivityPrepend,
-    // update: workTimePlanActivityUpdate,
-    // remove: workTimePlanActivityRemove,
     replace: workTimePlanActivityReplace,
   } = useFieldArray({
     name: 'workTimePlanActivities',
@@ -200,7 +196,7 @@ const MutationWorkTimePlanBook = () => {
           .isoWeekday(Number(obj['day'] || 0))
           .format('dddd'),
         render: ({ id }, i: number) => {
-          const recordsWithLoseTimeLength = recordsWithLoseTime?.length || 0;
+          // const recordsWithLoseTimeLength = recordsWithLoseTime?.length || 0;
           if (id === 'loseTime') {
             return (
               <FormController
@@ -209,6 +205,8 @@ const MutationWorkTimePlanBook = () => {
                 indexOfHour={index}
                 variant="unstyled"
                 disabled={false}
+                readOnly
+                calculationType="loseTime"
                 styles={{
                   input: {
                     textAlign: 'center',
@@ -219,16 +217,26 @@ const MutationWorkTimePlanBook = () => {
           }
           if (id === 'amountEffectiveWorkingHours') {
             return (
-              <div className="">{`${
-                i + recordsWithLoseTimeLength
-              }.${recordsWithLoseTimeLength}`}</div>
+              <FormController
+                control="input-sum-lose-times"
+                name="workTimePlanActivities"
+                indexOfHour={index}
+                variant="unstyled"
+                disabled={false}
+                readOnly
+                calculationType="amountEffectiveWorkingHours"
+                styles={{
+                  input: {
+                    textAlign: 'center',
+                  },
+                }}
+              />
             );
           }
           return (
             <FormController
               control="number-input-table-rhf"
               name={`workTimePlanActivities.${i}.weeklyWorkTimes.${index}.hour`}
-              precision={0}
               styles={{
                 input: {
                   textAlign: 'center',
@@ -240,7 +248,7 @@ const MutationWorkTimePlanBook = () => {
       };
       return group;
     },
-    [recordsWithLoseTime]
+    []
   );
 
   const renderOtherColumnActivityDay = workTimeDay?.map(
@@ -268,7 +276,6 @@ const MutationWorkTimePlanBook = () => {
               name={`workTimePlanActivities.${
                 i + activityWorkTImePlanLength
               }.weeklyWorkTimes.${index}.hour`}
-              precision={0}
               styles={{
                 input: {
                   textAlign: 'center',
@@ -383,6 +390,7 @@ const MutationWorkTimePlanBook = () => {
                                 keyObj="hour"
                                 variant="unstyled"
                                 disabled={false}
+                                readOnly
                                 styles={{
                                   input: {
                                     textAlign: 'center',
@@ -401,6 +409,7 @@ const MutationWorkTimePlanBook = () => {
                                 keyObj="hour"
                                 variant="unstyled"
                                 disabled={false}
+                                readOnly
                                 styles={{
                                   input: {
                                     textAlign: 'center',
@@ -432,7 +441,18 @@ const MutationWorkTimePlanBook = () => {
                     id: 'unit',
                     title: 'Unit',
                     style: { textAlign: 'center' },
-                    columns: [{ accessor: 'unit', title: '', width: 100 }],
+                    columns: [
+                      {
+                        accessor: 'unit',
+                        title: '',
+                        render: (_, index) => {
+                          return (
+                            <Text>{index === 0 ? 'Jam/Hari' : 'Jam'}</Text>
+                          );
+                        },
+                        width: 100,
+                      },
+                    ],
                   },
                 ],
                 rowExpansion: {
@@ -528,7 +548,15 @@ const MutationWorkTimePlanBook = () => {
                             title: 'Unit',
                             style: { textAlign: 'center' },
                             columns: [
-                              { accessor: 'unit', title: '', width: 100 },
+                              {
+                                accessor: 'unit',
+                                title: '',
+
+                                render: () => {
+                                  return <Text>Jam</Text>;
+                                },
+                                width: 100,
+                              },
                             ],
                           },
                         ],

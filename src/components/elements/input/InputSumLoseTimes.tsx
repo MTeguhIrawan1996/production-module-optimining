@@ -10,11 +10,17 @@ import { IWorkTimePlanActivities } from '@/services/graphql/mutation/plan/weekly
 
 import { CommonProps } from '@/types/global';
 
+type IValueInput = {
+  loseTime: number | '';
+  amountEffectiveWorkingHours: number | '';
+};
+
 export type IInputSumLoseTimesProps = {
   control: 'input-sum-lose-times';
   name: string;
   labelWithTranslate?: boolean;
   indexOfHour?: number;
+  calculationType?: 'amountEffectiveWorkingHours' | 'loseTime';
 } & Omit<NumberInputProps, 'name'> &
   CommonProps;
 
@@ -27,6 +33,7 @@ const InputSumLoseTimes: React.FC<IInputSumLoseTimesProps> = ({
   disabled = true,
   name,
   indexOfHour,
+  calculationType = 'loseTime',
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -35,7 +42,7 @@ const InputSumLoseTimes: React.FC<IInputSumLoseTimesProps> = ({
     name,
   });
 
-  const valueMemo = React.useMemo(() => {
+  const totalAllLoseTime = React.useMemo(() => {
     if (Array.isArray(data) && indexOfHour !== undefined) {
       const newData = data.filter((val) => val.isLoseTime);
 
@@ -51,7 +58,28 @@ const InputSumLoseTimes: React.FC<IInputSumLoseTimesProps> = ({
 
       return value;
     }
+    return 0;
   }, [data, indexOfHour]);
+
+  const amountEffectiveWorkingHours = React.useMemo(() => {
+    const nationalHoliday = data.find(
+      (val) =>
+        val.activityId === `${process.env.NEXT_PUBLIC_NATIONAL_HOLIDAY_ID}`
+    );
+    const workTime = data.find(
+      (val) => val.activityId === `${process.env.NEXT_PUBLIC_WORKING_TIME_ID}`
+    );
+    const totalNationalHoliday =
+      nationalHoliday?.weeklyWorkTimes[indexOfHour || 0].hour || 0;
+    const totalWorkTime = workTime?.weeklyWorkTimes[indexOfHour || 0].hour || 0;
+    const loseTime = totalNationalHoliday + totalAllLoseTime;
+    return totalWorkTime - loseTime;
+  }, [data, indexOfHour, totalAllLoseTime]);
+
+  const value: IValueInput = {
+    loseTime: totalAllLoseTime || '',
+    amountEffectiveWorkingHours: amountEffectiveWorkingHours || '',
+  };
 
   return (
     <MantineNumberInput
@@ -71,7 +99,7 @@ const InputSumLoseTimes: React.FC<IInputSumLoseTimesProps> = ({
       }
       parser={(value) => value.replace(/\s|,/g, '.')}
       precision={precision}
-      value={valueMemo || ''}
+      value={value[calculationType]}
       {...rest}
     />
   );
