@@ -205,9 +205,9 @@ const MutationWorkTimePlanBook = ({
       router.push(
         `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=unitCapacityPlan`
       );
-      // if (mutationType === 'update') {
-      //   setIsOpenConfirmation(false);
-      // }
+      if (mutationType === 'update') {
+        setIsOpenConfirmation(false);
+      }
     },
     onError: (error) => {
       if (error.graphQLErrors) {
