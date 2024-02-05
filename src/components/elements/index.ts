@@ -49,7 +49,6 @@ import IdentityRadioInputRhf from '@/components/elements/input/IdentityRadioInpu
 import ImageInputDropzoneRhf from '@/components/elements/input/ImageInputDropzoneRhf';
 import InputAverageArray from '@/components/elements/input/InputAverageArray';
 import InputSumArray from '@/components/elements/input/InputSumArray';
-import InputSumLoseTimes from '@/components/elements/input/InputSumLoseTimes';
 import LocationCategorySelectInputRhf from '@/components/elements/input/LocationCategorySelectInputRhf';
 import LocationSelectInputRhf from '@/components/elements/input/LocationSelectInputRhf';
 import MarriageSelectInputRhf from '@/components/elements/input/MarriageStatusesSelectInputRhf';
@@ -107,6 +106,7 @@ import UpdatePasswordModal from '@/components/elements/modal/UpdatePasswordModal
 import GlobalPagination from '@/components/elements/pagination/GlobalPagination';
 import PaginationSkeleton from '@/components/elements/skeleton/PaginationSkeleton';
 import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
+import DisplayLoseTimeAndEffectiveWork from '@/components/elements/ui/DisplayLoseTimeAndEffectiveWork';
 import GlobalHeaderDetail from '@/components/elements/ui/GlobalHeaderDetail';
 import InputGroupMaterial from '@/components/elements/ui/InputGroupMaterial';
 import ListDetailsRitageDT from '@/components/elements/ui/ListDetailsRitageDT';
@@ -133,6 +133,7 @@ export {
   DateInputNative,
   DateInputRhf,
   DeterminedButton,
+  DisplayLoseTimeAndEffectiveWork,
   DivisionSelectInputRhf,
   DomeNameSelectInputRhf,
   DownloadButton,
@@ -158,7 +159,6 @@ export {
   InputAverageArray,
   InputGroupMaterial,
   InputSumArray,
-  InputSumLoseTimes,
   KeyValueList,
   LinkButton,
   ListDetailsRitageDT,

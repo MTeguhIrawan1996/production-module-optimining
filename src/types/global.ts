@@ -22,7 +22,6 @@ import { IIdentityTypesRadioInputProps } from '@/components/elements/input/Ident
 import { IImageInputDropzoneRhfProps } from '@/components/elements/input/ImageInputDropzoneRhf';
 import { IInputAverageArrayProps } from '@/components/elements/input/InputAverageArray';
 import { IInputSumArrayProps } from '@/components/elements/input/InputSumArray';
-import { IInputSumLoseTimesProps } from '@/components/elements/input/InputSumLoseTimes';
 import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
 import { ILocationSelectInputRhfProps } from '@/components/elements/input/LocationSelectInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
@@ -138,7 +137,6 @@ export type ControllerProps =
   | INumberInputTableRhfProps
   | IMultipleSelectLocationRhfProps
   | IInputSumArrayProps
-  | IInputSumLoseTimesProps
   | IInputAverageArrayProps
   | IWeatherConditionSelectInputRhfProps;
 

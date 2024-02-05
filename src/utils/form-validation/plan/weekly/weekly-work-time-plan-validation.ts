@@ -9,6 +9,8 @@ import {
 
 export const weeklyWorkTimePlanMutationValidation: z.ZodType<IWorkTimePlanValues> =
   z.object({
+    totalLoseTimeWeek: zOptionalNumber,
+    totalEffectiveWorkHourWeek: zOptionalNumber,
     workTimePlanActivities: z
       .object({
         id: zOptionalString.nullable(),

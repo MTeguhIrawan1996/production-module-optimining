@@ -32,6 +32,8 @@ export interface IWorkTimePlanActivities {
 }
 
 export interface IWorkTimePlanValues {
+  totalLoseTimeWeek: number | '';
+  totalEffectiveWorkHourWeek: number | '';
   workTimePlanActivities: IWorkTimePlanActivities[];
 }
 

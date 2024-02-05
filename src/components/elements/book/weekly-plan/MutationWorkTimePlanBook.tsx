@@ -17,6 +17,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import {
+  DisplayLoseTimeAndEffectiveWork,
   FormController,
   MantineDataTable,
   PrimaryButton,
@@ -51,6 +52,8 @@ const MutationWorkTimePlanBook = () => {
   const methods = useForm<IWorkTimePlanValues>({
     resolver: zodResolver(weeklyWorkTimePlanMutationValidation),
     defaultValues: {
+      totalLoseTimeWeek: '',
+      totalEffectiveWorkHourWeek: '',
       workTimePlanActivities: [
         {
           id: 'loseTime',
@@ -142,9 +145,9 @@ const MutationWorkTimePlanBook = () => {
         message: t('weeklyPlan.successCreateWorkTimePlanMessage'),
         icon: <IconCheck />,
       });
-      // router.push(
-      //   `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=next`
-      // );
+      router.push(
+        `/plan/weekly/create/weekly-plan-group/${id}?tabs=unitCapacityPlan`
+      );
       // if (mutationType === 'update') {
       //   setIsOpenConfirmation(false);
       // }
@@ -196,11 +199,9 @@ const MutationWorkTimePlanBook = () => {
           .isoWeekday(Number(obj['day'] || 0))
           .format('dddd'),
         render: ({ id }, i: number) => {
-          // const recordsWithLoseTimeLength = recordsWithLoseTime?.length || 0;
           if (id === 'loseTime') {
             return (
-              <FormController
-                control="input-sum-lose-times"
+              <DisplayLoseTimeAndEffectiveWork
                 name="workTimePlanActivities"
                 indexOfHour={index}
                 variant="unstyled"
@@ -217,8 +218,7 @@ const MutationWorkTimePlanBook = () => {
           }
           if (id === 'amountEffectiveWorkingHours') {
             return (
-              <FormController
-                control="input-sum-lose-times"
+              <DisplayLoseTimeAndEffectiveWork
                 name="workTimePlanActivities"
                 indexOfHour={index}
                 variant="unstyled"
@@ -377,17 +377,11 @@ const MutationWorkTimePlanBook = () => {
                         accessor: 'amount',
                         title: '',
                         render: ({ id }, index) => {
-                          const recordsWithLoseTimeLength =
-                            recordsWithLoseTime?.length || 0;
-
                           if (id === 'loseTime') {
                             return (
                               <FormController
-                                control="input-sum-array"
-                                name={`workTimePlanActivities.${
-                                  index + recordsWithLoseTimeLength
-                                }.weeklyWorkTimes`}
-                                keyObj="hour"
+                                control="number-input"
+                                name="totalLoseTimeWeek"
                                 variant="unstyled"
                                 disabled={false}
                                 readOnly
@@ -402,11 +396,8 @@ const MutationWorkTimePlanBook = () => {
                           if (id === 'amountEffectiveWorkingHours') {
                             return (
                               <FormController
-                                control="input-sum-array"
-                                name={`workTimePlanActivities.${
-                                  index + recordsWithLoseTimeLength
-                                }.weeklyWorkTimes`}
-                                keyObj="hour"
+                                control="number-input"
+                                name="totalEffectiveWorkHourWeek"
                                 variant="unstyled"
                                 disabled={false}
                                 readOnly
@@ -495,6 +486,14 @@ const MutationWorkTimePlanBook = () => {
                               {
                                 accessor: 'name',
                                 title: '',
+                                render: ({ name }, index) => {
+                                  const indextoAlphabet = String.fromCharCode(
+                                    65 + index
+                                  );
+                                  return (
+                                    <Text>{`${indextoAlphabet}. ${name}`}</Text>
+                                  );
+                                },
                                 width: 260,
                               },
                             ],

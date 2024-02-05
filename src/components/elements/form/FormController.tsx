@@ -17,7 +17,6 @@ import {
   ImageInputDropzoneRhf,
   InputAverageArray,
   InputSumArray,
-  InputSumLoseTimes,
   LocationCategorySelectInputRhf,
   LocationSelectInputRhf,
   MarriageSelectInputRhf,
@@ -164,8 +163,6 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <MultipleSelectLocationRhf {...props} />;
     case 'input-sum-array':
       return <InputSumArray {...props} />;
-    case 'input-sum-lose-times':
-      return <InputSumLoseTimes {...props} />;
     case 'input-average-array':
       return <InputAverageArray {...props} />;
     default:
