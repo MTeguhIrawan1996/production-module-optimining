@@ -56,7 +56,14 @@ const CreateWeeklyPlanGroupPage = () => {
             {
               label: t('commonTypography.workTimePlan'),
               value: 'workTimePlan',
-              component: <MutationWorkTimePlanBook />,
+              component: (
+                <MutationWorkTimePlanBook
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successCreateWorkTimePlanMessage'
+                  )}
+                  mutationType="create"
+                />
+              ),
               isShowItem: true,
             },
             {

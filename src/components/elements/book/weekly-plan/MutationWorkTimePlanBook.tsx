@@ -20,6 +20,7 @@ import {
   DisplayLoseTimeAndEffectiveWork,
   FormController,
   MantineDataTable,
+  ModalConfirmation,
   PrimaryButton,
 } from '@/components/elements';
 import DashboardCard from '@/components/elements/card/DashboardCard';
@@ -32,6 +33,7 @@ import {
   useCreateWeeklyWorkTimePlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyWorkTimePlan';
 import { useReadAllActivityWorkTimePlan } from '@/services/graphql/query/plan/weekly/work-time-plan/useReadAllActivityWorkTimePlan';
+import { useReadOneWorkTimePlan } from '@/services/graphql/query/plan/weekly/work-time-plan/useReadOneWorkTimePlan';
 import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
 import { workTimeDay } from '@/utils/constants/DefaultValues/work-time-plan';
 import { weeklyWorkTimePlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-work-time-plan-validation';
@@ -39,7 +41,15 @@ import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 dayjs.extend(isoWeek);
 
-const MutationWorkTimePlanBook = () => {
+interface IMutationWorkTimePlanBook {
+  mutationType?: 'create' | 'update';
+  mutationSuccessMassage?: string;
+}
+
+const MutationWorkTimePlanBook = ({
+  mutationType,
+  mutationSuccessMassage,
+}: IMutationWorkTimePlanBook) => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
@@ -47,6 +57,8 @@ const MutationWorkTimePlanBook = () => {
   const [skipWorkingHourPlansData, setSkipWorkingHourPlansData] =
     React.useState<boolean>(false);
   const [skipActivityWorkTimePlan, setSkipActivityWorkTimePlan] =
+    React.useState<boolean>(false);
+  const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
 
   const methods = useForm<IWorkTimePlanValues>({
@@ -137,16 +149,61 @@ const MutationWorkTimePlanBook = () => {
     },
   });
 
+  const { weeklyWorkTimePlanLoading } = useReadOneWorkTimePlan({
+    variables: {
+      weeklyPlanId: id,
+    },
+    skip:
+      !router.isReady ||
+      tabs !== 'workTimePlan' ||
+      !skipWorkingHourPlansData ||
+      !skipActivityWorkTimePlan,
+    onCompleted: ({ weeklyWorkTimePlan }) => {
+      if (weeklyWorkTimePlan) {
+        weeklyWorkTimePlan.workTimePlanActivities.forEach((val) => {
+          const newWeeklyWorkTime: IWorkTimeDay[] = val.weeklyWorkTimes.map(
+            (wObj) => {
+              return {
+                id: wObj.id,
+                day: wObj.day,
+                hour: wObj.hour || '',
+              };
+            }
+          );
+          if (!val.loseTime) {
+            const index = workTimePlanActivityFields.findIndex(
+              (item) => item.activityId === val.activity?.id
+            );
+            methods.setValue(`workTimePlanActivities.${index}.id`, val.id);
+            methods.setValue(
+              `workTimePlanActivities.${index}.weeklyWorkTimes`,
+              newWeeklyWorkTime
+            );
+            return;
+          }
+          const index = workTimePlanActivityFields.findIndex(
+            (item) => item.loseTimeId === val.loseTime?.id
+          );
+          methods.setValue(`workTimePlanActivities.${index}.id`, val.id);
+          methods.setValue(
+            `workTimePlanActivities.${index}.weeklyWorkTimes`,
+            newWeeklyWorkTime
+          );
+        });
+      }
+    },
+  });
+
   const [executeUpdate, { loading }] = useCreateWeeklyWorkTimePlan({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('weeklyPlan.successCreateWorkTimePlanMessage'),
+        message: mutationSuccessMassage,
         icon: <IconCheck />,
       });
       router.push(
-        `/plan/weekly/create/weekly-plan-group/${id}?tabs=unitCapacityPlan`
+        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=unitCapacityPlan`
       );
       // if (mutationType === 'update') {
       //   setIsOpenConfirmation(false);
@@ -324,8 +381,13 @@ const MutationWorkTimePlanBook = () => {
       },
     });
   };
+
+  const handleConfirmation = () => {
+    methods.handleSubmit(handleSubmitForm)();
+  };
+
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={weeklyWorkTimePlanLoading}>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(handleSubmitForm)}>
           <Flex gap={32} direction="column" p={22}>
@@ -416,6 +478,7 @@ const MutationWorkTimePlanBook = () => {
                               keyObj="hour"
                               variant="unstyled"
                               disabled={false}
+                              readOnly
                               styles={{
                                 input: {
                                   textAlign: 'center',
@@ -530,6 +593,7 @@ const MutationWorkTimePlanBook = () => {
                                       keyObj="hour"
                                       variant="unstyled"
                                       disabled={false}
+                                      readOnly
                                       styles={{
                                         input: {
                                           textAlign: 'center',
@@ -577,18 +641,52 @@ const MutationWorkTimePlanBook = () => {
                 type="button"
                 variant="outline"
                 onClick={() => {
-                  router.push(`/plan/weekly`);
+                  router.push(
+                    mutationType === 'update'
+                      ? `/plan/weekly/${mutationType}/${id}`
+                      : `/plan/weekly`
+                  );
                 }}
               />
               <Group spacing="xs">
                 <PrimaryButton
                   label={t('commonTypography.save')}
-                  loading={loading}
-                  type="submit"
+                  loading={mutationType === 'create' ? loading : undefined}
+                  type={mutationType === 'create' ? 'submit' : 'button'}
+                  onClick={
+                    mutationType === 'update'
+                      ? async () => {
+                          const output = await methods.trigger(undefined, {
+                            shouldFocus: true,
+                          });
+                          if (output) setIsOpenConfirmation((prev) => !prev);
+                        }
+                      : undefined
+                  }
                 />
               </Group>
             </Group>
           </Flex>
+          <ModalConfirmation
+            isOpenModalConfirmation={isOpenConfirmation}
+            actionModalConfirmation={() =>
+              setIsOpenConfirmation((prev) => !prev)
+            }
+            actionButton={{
+              label: t('commonTypography.yes'),
+              type: 'button',
+              onClick: handleConfirmation,
+              loading: loading,
+            }}
+            backButton={{
+              label: 'Batal',
+            }}
+            modalType={{
+              type: 'default',
+              title: t('commonTypography.alertTitleConfirmUpdate'),
+            }}
+            withDivider={true}
+          />
         </form>
       </FormProvider>
     </DashboardCard>
