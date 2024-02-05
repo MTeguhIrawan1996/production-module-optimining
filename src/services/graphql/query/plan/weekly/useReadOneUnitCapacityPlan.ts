@@ -61,6 +61,10 @@ export const READ_ONE_UNIT_CAPACITY_PLAN = gql`
             rate
             ton
           }
+          totalTargetPlan {
+            rate
+            ton
+          }
         }
       }
     }
@@ -95,6 +99,10 @@ export interface IReadOneMaterialUnitCapacityPlan {
   distance: number;
   dumpTruckCount: number;
   targetPlans: IReadOneTargetPlan[];
+  totalTargetPlan: {
+    rate: number | null;
+    ton: number | null;
+  };
 }
 
 export interface IReadOneUnitCapacityPlan {
