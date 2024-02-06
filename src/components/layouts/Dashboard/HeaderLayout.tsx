@@ -1,6 +1,5 @@
 import { ActionIcon, Box, Group, Menu, Stack, Text } from '@mantine/core';
 import { IconMenu2, IconUser } from '@tabler/icons-react';
-import i18n from 'i18n';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import * as React from 'react';
@@ -12,6 +11,10 @@ import {
   IAuthUserData,
   useReadAuthUser,
 } from '@/services/graphql/query/auth/useReadAuthUser';
+import { useReadPermissionUser } from '@/services/graphql/query/auth/useReadPermission';
+import { usePermissions } from '@/utils/store/usePermissions';
+
+import i18n from './../../../../i18n';
 
 interface IHeaderlayoutProps {
   isExpand: boolean;
@@ -21,6 +24,7 @@ interface IHeaderlayoutProps {
 const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
   const router = useRouter();
   const { t } = useTranslation('default');
+  const { setPermissions, permissions } = usePermissions();
   const [authUser, setAUthUser] = React.useState<IAuthUserData | null>(null);
   useReadAuthUser({
     skip: authUser !== null,
@@ -28,7 +32,20 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
       setAUthUser(data.authUser);
     },
   });
+  useReadPermissionUser({
+    skip: permissions && permissions.length > 0,
+    onCompleted: (res) => {
+      if (res) {
+        const arrayOfString = res.authUser.role.permissions.data.map(
+          (val) => val.slug
+        );
+        setPermissions(arrayOfString);
+      }
+    },
+  });
+
   React.useEffect(() => {
+    i18n.init();
     i18n.changeLanguage('id');
   }, []);
 

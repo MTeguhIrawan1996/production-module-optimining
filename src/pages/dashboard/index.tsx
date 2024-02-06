@@ -1,5 +1,11 @@
+import dynamic from 'next/dynamic';
+
 import { DashboardPage } from '@/components/features';
-import { DashboardLayout } from '@/components/layouts';
+// import { DashboardLayout } from '@/components/layouts';
+
+const DashboardLayout = dynamic(() => import('main/DashboardLayout'), {
+  ssr: false,
+});
 
 const Dashboard = () => {
   return <DashboardPage />;
