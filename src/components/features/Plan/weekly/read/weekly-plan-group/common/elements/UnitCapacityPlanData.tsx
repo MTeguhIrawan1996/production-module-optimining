@@ -247,6 +247,29 @@ const UnitCapacityPlanData = ({
                         ],
                       },
                       ...(renderOtherGroup ?? []),
+                      {
+                        id: 'total',
+                        title: 'Total',
+                        style: { textAlign: 'center' },
+                        columns: [
+                          {
+                            accessor: `rate`,
+                            title: 'Rate',
+                            width: 100,
+                            render: ({ totalTargetPlan }) => {
+                              return totalTargetPlan.rate;
+                            },
+                          },
+                          {
+                            accessor: `ton`,
+                            title: 'Ton',
+                            width: 100,
+                            render: ({ totalTargetPlan }) => {
+                              return totalTargetPlan.ton;
+                            },
+                          },
+                        ],
+                      },
                     ],
                     defaultColumnRender: (record, _, accesor) => {
                       const data = record[

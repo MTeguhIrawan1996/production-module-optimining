@@ -18,7 +18,7 @@ export const CREATE_WEEKLY_WORK_TIME_PLAN = gql`
 
 export interface IWorkTimeDay {
   id?: string | null;
-  day: number | string | '';
+  day: number;
   hour: number | null | '';
 }
 
@@ -32,6 +32,8 @@ export interface IWorkTimePlanActivities {
 }
 
 export interface IWorkTimePlanValues {
+  totalLoseTimeWeek: number | '';
+  totalEffectiveWorkHourWeek: number | '';
   workTimePlanActivities: IWorkTimePlanActivities[];
 }
 
