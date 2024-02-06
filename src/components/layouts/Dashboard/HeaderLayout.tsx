@@ -14,8 +14,6 @@ import {
 import { useReadPermissionUser } from '@/services/graphql/query/auth/useReadPermission';
 import { usePermissions } from '@/utils/store/usePermissions';
 
-import i18n from './../../../../i18n';
-
 interface IHeaderlayoutProps {
   isExpand: boolean;
   onHandleExpand: () => void;
@@ -43,11 +41,6 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
       }
     },
   });
-
-  React.useEffect(() => {
-    i18n.init();
-    i18n.changeLanguage('id');
-  }, []);
 
   const renderName = React.useMemo(() => {
     return (
