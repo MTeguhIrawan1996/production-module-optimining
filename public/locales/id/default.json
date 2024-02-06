@@ -270,6 +270,7 @@
     "chooseCondition": "$t(commonTypography.choose) $t(commonTypography.condition)",
     "chooseActivity": "$t(commonTypography.choose) / Ketikan $t(commonTypography.activity)",
     "chooseCategory": "$t(commonTypography.choose) / Ketikan $t(commonTypography.category)",
+    "chooseActivityForm": "$t(commonTypography.choose) Bentuk Kegiatan",
     "complete": "Lengkap",
     "unComplete": "Tidak Lengkap",
     "engineNumber": "Nomor Mesin",
@@ -436,7 +437,11 @@
     "distance": "Jarak",
     "averageDistance": "Rata - rata Jarak (M)",
     "dumpTruckTotal": "Jumlah Total Dump Truck",
-    "dumpTruckCount": "Jumlah Dump Truck"
+    "dumpTruckCount": "Jumlah Dump Truck",
+    "heavyEquipmentReqPlan": "Rencana Kebutuhan Alat Berat",
+    "heavyEquipmentReqPlanInformation": "Informasi Rencana Kebutuhan Alat Berat",
+    "formsOfActivity": "Bentuk Kegiatan",
+    "createFormsOfActivity": "Tambah Bentuk Kegiatan"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -968,6 +973,7 @@
     "successCreateMessage": "$t(weeklyPlan.title2) berhasil dibuat",
     "successCreateUnitCapacityPlanMessage": "$t(commonTypography.unitCapacityPlan) berhasil dibuat",
     "successCreateWorkTimePlanMessage": "$t(commonTypography.workTimePlan) berhasil dibuat",
+    "successCreateHeavyEquipmentReqPlanMessage": "$t(commonTypography.heavyEquipmentReqPlan) berhasil dibuat",
     "successUpdateUnitCapacityPlanMessage": "$t(commonTypography.unitCapacityPlan) berhasil diubah",
     "successUpdateWorkTimePlanMessage": "$t(commonTypography.workTimePlan) berhasil diubah",
     "successUpdateMessage": "$t(weeklyPlan.title2) berhasil diubah",

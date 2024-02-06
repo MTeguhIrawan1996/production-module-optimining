@@ -1,6 +1,7 @@
 import {
   Checkbox,
   Flex,
+  FlexProps,
   Grid,
   Group,
   Paper,
@@ -17,7 +18,6 @@ import { useTranslation } from 'react-i18next';
 
 import {
   FormController,
-  InputGroupMaterial,
   ModalConfirmation,
   PrimaryButton,
 } from '@/components/elements';
@@ -41,6 +41,7 @@ interface IGlobalFormGroupProps {
     label: string;
   };
   children?: React.ReactNode;
+  flexProps?: FlexProps;
 }
 
 const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
@@ -55,6 +56,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
   modalConfirmation,
   switchProps,
   children,
+  flexProps,
 }) => {
   const { t } = useTranslation('default');
   const {
@@ -79,10 +81,18 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
     ...restOuterButtonLabel
   } = outerButton || {};
 
+  const { p = 22, ...restFlexProps } = flexProps || {};
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(submitForm)}>
-        <Flex gap={32} direction="column" align="flex-end" p={22}>
+        <Flex
+          gap={32}
+          direction="column"
+          align="flex-end"
+          p={p}
+          {...restFlexProps}
+        >
           {switchProps ? (
             <Stack justify="flex-start" align="flex-start" w="100%" spacing={8}>
               <Text component="label" fw={400} fz={16}>
@@ -120,7 +130,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                 enableGroupLabel,
                 actionGroup,
                 actionOuterGroup,
-                inputGroupMaterial,
+                renderItem,
               },
               i
             ) => {
@@ -218,29 +228,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                             );
                           }
                         )}
-                        {inputGroupMaterial
-                          ? inputGroupMaterial.map(
-                              ({
-                                materialIndex,
-                                unitCapacityPlanIndex,
-                                uniqKey,
-                                ...restMaterial
-                              }) => (
-                                <Grid.Col
-                                  span={12}
-                                  key={`${unitCapacityPlanIndex}.${materialIndex}.${uniqKey}`}
-                                >
-                                  <InputGroupMaterial
-                                    materialIndex={materialIndex}
-                                    unitCapacityPlanIndex={
-                                      unitCapacityPlanIndex
-                                    }
-                                    {...restMaterial}
-                                  />
-                                </Grid.Col>
-                              )
-                            )
-                          : null}
+                        {renderItem ? renderItem() : null}
                       </Grid>
                       {groupCheckbox && (
                         <Checkbox

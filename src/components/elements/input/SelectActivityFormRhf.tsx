@@ -5,14 +5,15 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllWeather } from '@/services/graphql/query/global-select/useReadAllWeather';
+import { useReadAllActivityForm } from '@/services/graphql/query/global-select/useReadAllActivityFormSelect';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
-export type IWeatherSelectInputRhfProps = {
-  control: 'weathers-select-input';
+export type ISelectActivityFormRhfProps = {
+  control: 'select-activity-form-rhf';
   name: string;
+  skipQuery?: boolean;
 } & Omit<
   SelectProps,
   | 'name'
@@ -24,24 +25,23 @@ export type IWeatherSelectInputRhfProps = {
 > &
   CommonProps;
 
-const WeatherSelectInputRhf: React.FC<IWeatherSelectInputRhfProps> = ({
+const SelectActivityFormRhf: React.FC<ISelectActivityFormRhfProps> = ({
   name,
   control,
   label,
   defaultValue,
+  skipQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
 
-  const { weathersData } = useReadAllWeather({
-    variables: {
-      limit: null,
-    },
+  const { activityFormData } = useReadAllActivityForm({
+    skip: skipQuery,
   });
 
   const { uncombinedItem } = useFilterItems({
-    data: weathersData ?? [],
+    data: activityFormData ?? [],
   });
 
   return (
@@ -61,7 +61,7 @@ const WeatherSelectInputRhf: React.FC<IWeatherSelectInputRhfProps> = ({
         },
       })}
       data-control={control}
-      placeholder={t('commonTypography.chooseWeather', { ns: 'default' })}
+      placeholder={t('commonTypography.chooseActivityForm', { ns: 'default' })}
       label={label ? t(`components.field.${label}`) : null}
       error={
         fieldState &&
@@ -74,4 +74,4 @@ const WeatherSelectInputRhf: React.FC<IWeatherSelectInputRhfProps> = ({
   );
 };
 
-export default WeatherSelectInputRhf;
+export default SelectActivityFormRhf;
