@@ -9,7 +9,6 @@ import HeaderLayout from '@/components/layouts/Dashboard/HeaderLayout';
 import { linksDashboard } from '@/utils/constants/Links/linksDashboard';
 import { decodeFc } from '@/utils/helper/encodeDecode';
 import { filterMenuByPermission } from '@/utils/helper/filterMenuByPermission';
-import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 import { usePermissions } from '@/utils/store/usePermissions';
 
 import NavbarCollapse from './NavbarCollapse';
@@ -43,7 +42,6 @@ const DashboardLayout = ({ children }: LayoutProps) => {
   const { classes } = useStyles();
   const [isExpand, setIsExpand] = React.useState<boolean>(true);
   const [isConfirmLogout, setIsConfirmLogout] = React.useState<boolean>(false);
-  const [breadcrumbs] = useBreadcrumbs((state) => [state.breadcrumbs], shallow);
   const [setPermissions] = usePermissions(
     (state) => [state.setPermissions],
     shallow
@@ -70,15 +68,6 @@ const DashboardLayout = ({ children }: LayoutProps) => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionData]);
-
-  const renderBreadcrumb = React.useMemo(() => {
-    if (breadcrumbs.length)
-      return (
-        <Box px={22} py={8} sx={{ zIndex: 1 }}>
-          <Breadcrumb breadcrumbs={breadcrumbs} />
-        </Box>
-      );
-  }, [breadcrumbs]);
 
   const onHandleExpand = () => {
     setIsExpand((prev) => !prev);
@@ -119,7 +108,9 @@ const DashboardLayout = ({ children }: LayoutProps) => {
       }
     >
       <HeaderLayout isExpand={isExpand} onHandleExpand={onHandleExpand} />
-      {renderBreadcrumb}
+      <Box px={22} py={8} sx={{ zIndex: 1 }}>
+        <Breadcrumb />
+      </Box>
       {children}
       <LogoutConfirmModal
         isOpenModalLogout={isConfirmLogout}
