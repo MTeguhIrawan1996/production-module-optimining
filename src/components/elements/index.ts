@@ -1,4 +1,5 @@
 import CommonWeeklyPlanInformationBook from '@/components/elements/book/weekly-plan/CommonWeeklyPlanInformationBook';
+import MutationHeavyEquipmentReqPlanBook from '@/components/elements/book/weekly-plan/MutationHeavyEquipmentReqPlanBook';
 import MutationUnitCapacityPlanBook from '@/components/elements/book/weekly-plan/MutationUnitCapacityPlanBook';
 import MutationWorkTimePlanBook from '@/components/elements/book/weekly-plan/MutationWorkTimePlanBook';
 import DeterminedButton from '@/components/elements/button/DeterminedButton';
@@ -108,6 +109,7 @@ import PaginationSkeleton from '@/components/elements/skeleton/PaginationSkeleto
 import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
 import DisplayLoseTimeAndEffectiveWork from '@/components/elements/ui/DisplayLoseTimeAndEffectiveWork';
 import GlobalHeaderDetail from '@/components/elements/ui/GlobalHeaderDetail';
+import InputGroupActivity from '@/components/elements/ui/InputGroupActivity';
 import InputGroupMaterial from '@/components/elements/ui/InputGroupMaterial';
 import ListDetailsRitageDT from '@/components/elements/ui/ListDetailsRitageDT';
 import PlanGroupLink from '@/components/elements/ui/PlanGroupLink';
@@ -157,6 +159,7 @@ export {
   ImageModal,
   InnerWrapper,
   InputAverageArray,
+  InputGroupActivity,
   InputGroupMaterial,
   InputSumArray,
   KeyValueList,
@@ -172,6 +175,7 @@ export {
   ModelSelectInputRhf,
   MultipleFilter,
   MultipleSelectLocationRhf,
+  MutationHeavyEquipmentReqPlanBook,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,
   NavbarCollapseLinksGroup,

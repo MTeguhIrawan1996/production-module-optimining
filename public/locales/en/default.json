@@ -436,7 +436,9 @@
     "distance": "Jarak",
     "averageDistance": "Rata - rata Jarak (M)",
     "dumpTruckTotal": "Jumlah Total Dump Truck",
-    "dumpTruckCount": "Jumlah Dump Truck"
+    "dumpTruckCount": "Jumlah Dump Truck",
+    "heavyEquipmentReqPlan": "Rencana Kebutuhan Alat Berat",
+    "heavyEquipmentReqPlanInformation": "Informasi Rencana Kebutuhan Alat Berat"
   },
   "sideBar": {
     "dashboard": "Dashboard",

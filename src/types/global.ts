@@ -66,7 +66,6 @@ import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelect
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 import { IWeatherConditionSelectInputRhfProps } from '@/components/elements/input/WeatherConditionSelectInputRhf';
 import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
-import { IInputGroupMaterialProps } from '@/components/elements/ui/InputGroupMaterial';
 
 import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
 import { IEmployeesData } from '@/services/graphql/query/master-data-company/useReadAllEmploye';
@@ -151,7 +150,7 @@ export type InputControllerNativeProps =
   | ICompanyNativeProps
   | ISelectWeekNativeProps;
 
-export type ControllerGroup = {
+export type ControllerGroup<> = {
   group: string;
   formControllers: ControllerProps[];
   enableGroupLabel?: boolean;
@@ -165,7 +164,7 @@ export type ControllerGroup = {
     updateButton?: IPrimaryButtonProps;
     deleteButton?: IPrimaryButtonProps;
   };
-  inputGroupMaterial?: IInputGroupMaterialProps[];
+  renderItem?: () => React.ReactNode;
 };
 
 export type ControllerCheckBoxGroup<T> = {

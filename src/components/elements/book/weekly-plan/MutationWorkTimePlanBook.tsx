@@ -35,7 +35,7 @@ import {
 import { useReadAllActivityWorkTimePlan } from '@/services/graphql/query/plan/weekly/work-time-plan/useReadAllActivityWorkTimePlan';
 import { useReadOneWorkTimePlan } from '@/services/graphql/query/plan/weekly/work-time-plan/useReadOneWorkTimePlan';
 import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
-import { workTimeDay } from '@/utils/constants/DefaultValues/work-time-plan';
+import { workTimeDay } from '@/utils/constants/DefaultValues/work-time-plans';
 import { weeklyWorkTimePlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-work-time-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
