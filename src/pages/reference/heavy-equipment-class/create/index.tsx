@@ -1,5 +1,9 @@
+import dynamic from 'next/dynamic';
+
 import { CreateHeavyEquipmentClassPage } from '@/components/features';
-import { DashboardLayout } from '@/components/layouts';
+const DashboardLayout = dynamic(() => import('main/DashboardLayout'), {
+  ssr: false,
+});
 
 const CreateHeavyEquipmentClass = () => {
   return <CreateHeavyEquipmentClassPage />;
