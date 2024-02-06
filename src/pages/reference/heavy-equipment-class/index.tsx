@@ -1,6 +1,10 @@
-import { HeavyEquipmentClassPage } from '@/components/features';
-import { DashboardLayout } from '@/components/layouts';
+// import { DashboardLayout } from '@/components/layouts';
+import dynamic from 'next/dynamic';
 
+import { HeavyEquipmentClassPage } from '@/components/features';
+const DashboardLayout = dynamic(() => import('main/DashboardLayout'), {
+  ssr: false,
+});
 const HeavyEquipmentClass = () => {
   return <HeavyEquipmentClassPage />;
 };
