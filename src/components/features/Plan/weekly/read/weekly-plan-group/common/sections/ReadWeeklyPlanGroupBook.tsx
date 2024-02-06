@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalTabs } from '@/components/elements';
 import UnitCapacityPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/UnitCapacityPlanData';
+import WorkTimePlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/WorkTimePlanData';
 
 import { useReadOneUnitCapacityPlan } from '@/services/graphql/query/plan/weekly/useReadOneUnitCapacityPlan';
 
@@ -61,6 +62,12 @@ const ReadWeeklyPlanGroupBook = () => {
           onTabChange: (value) => handleChangeTab(value),
         }}
         tabsData={[
+          {
+            label: t('commonTypography.workTimePlan'),
+            value: 'workTimePlan',
+            component: <WorkTimePlanData />,
+            isShowItem: true,
+          },
           {
             label: t('commonTypography.unitCapacityPlan'),
             value: 'unitCapacityPlan',
