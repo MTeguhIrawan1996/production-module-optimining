@@ -158,7 +158,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
         icon: <IconCheck />,
       });
       router.push(
-        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=next`
+        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=heavyEquipmentReqPlan`
       );
       if (mutationType === 'update') {
         setIsOpenConfirmation(false);

@@ -86,7 +86,7 @@ const CreateWeeklyPlanGroupPage = () => {
               component: (
                 <MutationHeavyEquipmentReqPlanBook
                   mutationSuccessMassage={t(
-                    'weeklyPlan.successCreateUnitCapacityPlanMessage'
+                    'weeklyPlan.successCreateHeavyEquipmentReqPlanMessage'
                   )}
                   mutationType="create"
                 />

@@ -28,6 +28,7 @@ import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/Marria
 import { IMaterialSelectInputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { IMultipleSelectLocationRhfProps } from '@/components/elements/input/MultipleSelectLocationRhf';
+import { IMultipleSelectMaterialRhfProps } from '@/components/elements/input/MultipleSelectMaterialRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { INumberInputTableRhfProps } from '@/components/elements/input/NumberInputTableRhf';
 import { IPasswordInputProps } from '@/components/elements/input/PasswordInputRhf';
@@ -40,6 +41,7 @@ import { IRegencySelectInputRhfProps } from '@/components/elements/input/Regency
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
 import { ISampleTypesSelectnputRhfProps } from '@/components/elements/input/SampleTypeSelectInputRhf';
 import { ISelectActivityCategoryRhfProps } from '@/components/elements/input/SelectActivityCategoryRhf';
+import { ISelectActivityFormRhfProps } from '@/components/elements/input/SelectActivityFormRhf';
 import { IArriveBargeNativeProps } from '@/components/elements/input/SelectArriveBargeNative';
 import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
 import { ICompanyNativeProps } from '@/components/elements/input/SelectCompanyNative';
@@ -134,9 +136,11 @@ export type ControllerProps =
   | ISelectYearRhfProps
   | ISelectWeekRhfProps
   | INumberInputTableRhfProps
-  | IMultipleSelectLocationRhfProps
   | IInputSumArrayProps
   | IInputAverageArrayProps
+  | ISelectActivityFormRhfProps
+  | IMultipleSelectLocationRhfProps
+  | IMultipleSelectMaterialRhfProps
   | IWeatherConditionSelectInputRhfProps;
 
 export type InputControllerNativeProps =

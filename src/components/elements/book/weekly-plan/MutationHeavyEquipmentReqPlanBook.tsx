@@ -1,4 +1,7 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Flex, Grid } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import React from 'react';
 import {
@@ -16,12 +19,22 @@ import InputGroupActivity, {
   IInputGroupActivityProps,
 } from '@/components/elements/ui/InputGroupActivity';
 
-import { IMutationHeavyEquipmentReqPlanValues } from '@/services/graphql/mutation/plan/weekly/useCreateHeavyEquipmentReqPlan';
+import {
+  IActivity,
+  ICreateHeavyEquipmentReqPlan,
+  IMutationHeavyEquipmentReqPlanValues,
+  IWeeklyHeavyEquipmentRequirement,
+  useCreateHeavyEquipmentReqPlan,
+} from '@/services/graphql/mutation/plan/weekly/useCreateHeavyEquipmentReqPlan';
 import { activities } from '@/utils/constants/DefaultValues/heavy-equipment-req-plans';
 import {
   globalMultipleSelectLocation,
+  globalMultipleSelectMaterial,
+  globalNumberInput,
   globalText,
 } from '@/utils/constants/Field/global-field';
+import { heavyEquipmentReqMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-heavy-equipment-req-validation';
+import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -37,10 +50,13 @@ const MutationHeavyEquipmentReqPlanBook = ({
 }: Props) => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const id = router.query.id as string;
   const tabs = router.query.tabs as string;
+  const [isOpenConfirmation, setIsOpenConfirmation] =
+    React.useState<boolean>(false);
 
   const methods = useForm<IMutationHeavyEquipmentReqPlanValues>({
-    // resolver: zodResolver(weeklyWorkTimePlanMutationValidation),
+    resolver: zodResolver(heavyEquipmentReqMutationValidation),
     defaultValues: {
       heavyEquipmentRequirementPlans: [
         {
@@ -91,6 +107,25 @@ const MutationHeavyEquipmentReqPlanBook = ({
         key: `${obj.heavyequipmentReqPlanId}.locationIds`,
         skipQuery: tabs !== 'heavyEquipmentReqPlan',
       });
+      const multipleSelectMaterialItem = globalMultipleSelectMaterial({
+        label: 'material',
+        withAsterisk: false,
+        name: `heavyEquipmentRequirementPlans.${index}.materialIds`,
+        key: `${obj.heavyequipmentReqPlanId}.materialIds`,
+        skipQuery: tabs !== 'heavyEquipmentReqPlan',
+      });
+      const averageDistanceItem = globalNumberInput({
+        name: `heavyEquipmentRequirementPlans.${index}.averageDistance`,
+        label: 'averageDistance',
+        withAsterisk: false,
+        key: `${obj.heavyequipmentReqPlanId}.averageDistance`,
+      });
+      const descItem = globalText({
+        name: `heavyEquipmentRequirementPlans.${index}.desc`,
+        label: 'desc',
+        withAsterisk: false,
+        key: `${obj.heavyequipmentReqPlanId}.desc`,
+      });
 
       const activityGroup: IInputGroupActivityProps[] = obj.activities.map(
         (_, i) => ({
@@ -106,7 +141,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
                       `heavyEquipmentRequirementPlans.${index}`
                     );
                     heavyequipmentReqUpdate(index, {
-                      id: value.id || '',
+                      id: value.id,
                       activityName: value.activityName,
                       materialIds: value.materialIds,
                       locationIds: value.locationIds,
@@ -126,7 +161,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
               copyArray.splice(i, 1);
               heavyequipmentReqFields?.[index].activities?.length > 1
                 ? heavyequipmentReqUpdate(index, {
-                    id: value.id || '',
+                    id: value.id,
                     activityName: value.activityName,
                     materialIds: value.materialIds,
                     locationIds: value.locationIds,
@@ -143,7 +178,13 @@ const MutationHeavyEquipmentReqPlanBook = ({
       const group: ControllerGroup = {
         group: t('commonTypography.heavyEquipmentReqPlanInformation'),
         enableGroupLabel: true,
-        formControllers: [activityNameItem, multipleSelectLocationItem],
+        formControllers: [
+          activityNameItem,
+          multipleSelectMaterialItem,
+          multipleSelectLocationItem,
+          averageDistanceItem,
+          descItem,
+        ],
         renderItem: () =>
           activityGroup.map(
             ({
@@ -170,7 +211,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
           addButton:
             index === 0
               ? {
-                  label: t('commonTypography.createLocation'),
+                  label: t('commonTypography.createActivity'),
                   onClick: () =>
                     heavyequipmentReqAppend({
                       id: null,
@@ -198,22 +239,94 @@ const MutationHeavyEquipmentReqPlanBook = ({
       return group;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [heavyequipmentReqFields]
+    [heavyequipmentReqFields, tabs]
   );
-
   const fieldGroup = heavyequipmentReqFields.map(unitCapacityCallback);
+
+  const [executeUpdate, { loading }] = useCreateHeavyEquipmentReqPlan({
+    onCompleted: () => {
+      notifications.show({
+        color: 'green',
+        title: 'Selamat',
+        message: mutationSuccessMassage,
+        icon: <IconCheck />,
+      });
+      router.push(
+        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=next`
+      );
+      if (mutationType === 'update') {
+        setIsOpenConfirmation(false);
+      }
+    },
+    onError: (error) => {
+      if (error.graphQLErrors) {
+        const errorArry =
+          errorBadRequestField<IMutationHeavyEquipmentReqPlanValues>(error);
+        if (errorArry.length) {
+          errorArry.forEach(({ name, type, message }) => {
+            methods.setError(name, { type, message });
+          });
+          return;
+        }
+        notifications.show({
+          color: 'red',
+          title: 'Gagal',
+          message: error.message,
+          icon: <IconX />,
+        });
+      }
+    },
+  });
 
   const handleSubmitForm: SubmitHandler<
     IMutationHeavyEquipmentReqPlanValues
-    // eslint-disable-next-line unused-imports/no-unused-vars
   > = async (data) => {
-    // await executeUpdate({
-    //   variables: {
-    //     weeklyPlanId: id,
-    //     workTimePlanActivities: newWorkTimeActivity,
-    //   },
-    // });
+    const newHeavyEquipmentRequirementPlans =
+      data.heavyEquipmentRequirementPlans.map((hObj) => {
+        const newActivities = hObj.activities.map(
+          ({ id, weeklyHeavyEquipmentRequirements, ...restActivity }) => {
+            const newWeeklyHER = weeklyHeavyEquipmentRequirements.map(
+              (wObj) => {
+                const newWeeklyHER: IWeeklyHeavyEquipmentRequirement = {
+                  id: wObj.id,
+                  day: wObj.day,
+                  value: wObj.value === '' ? null : wObj.value,
+                };
+                return newWeeklyHER;
+              }
+            );
+            const newActivityObj: IActivity = {
+              id: id || undefined,
+              weeklyHeavyEquipmentRequirements: newWeeklyHER,
+              ...restActivity,
+            };
+            return newActivityObj;
+          }
+        );
+        const newHeavyEquipmentRequirementPlanObj: ICreateHeavyEquipmentReqPlan =
+          {
+            id: hObj.id || undefined,
+            activityName: hObj.activityName,
+            materialIds: hObj.materialIds,
+            locationIds: hObj.locationIds,
+            averageDistance: hObj.averageDistance,
+            desc: hObj.desc,
+            activities: newActivities,
+          };
+        return newHeavyEquipmentRequirementPlanObj;
+      });
+
+    await executeUpdate({
+      variables: {
+        weeklyPlanId: id,
+        heavyEquipmentRequirementPlans: newHeavyEquipmentRequirementPlans,
+      },
+    });
   };
+  const handleConfirmation = () => {
+    methods.handleSubmit(handleSubmitForm)();
+  };
+
   return (
     <DashboardCard p={0}>
       <Flex gap={32} direction="column" p={22}>
@@ -227,44 +340,45 @@ const MutationHeavyEquipmentReqPlanBook = ({
           submitForm={handleSubmitForm}
           submitButton={{
             label: t('commonTypography.save'),
-            // loading: mutationType === 'create' ? loading : undefined,
+            loading: mutationType === 'create' ? loading : undefined,
             type: mutationType === 'create' ? 'submit' : 'button',
-            // onClick:
-            //   mutationType === 'update'
-            //     ? async () => {
-            //         const output = await methods.trigger(undefined, {
-            //           shouldFocus: true,
-            //         });
-            //         if (output) setIsOpenConfirmation((prev) => !prev);
-            //       }
-            //     : undefined,
+            onClick:
+              mutationType === 'update'
+                ? async () => {
+                    const output = await methods.trigger(undefined, {
+                      shouldFocus: true,
+                    });
+                    if (output) setIsOpenConfirmation((prev) => !prev);
+                  }
+                : undefined,
           }}
-          // backButton={{
-          //   onClick: () =>
-          //     router.push(
-          //       mutationType === 'update'
-          //         ? `/plan/weekly/${mutationType}/${id}`
-          //         : `/plan/weekly`
-          //     ),
-          // }}
-          // modalConfirmation={{
-          //   isOpenModalConfirmation: isOpenConfirmation,
-          //   actionModalConfirmation: () => setIsOpenConfirmation((prev) => !prev),
-          //   actionButton: {
-          //     label: t('commonTypography.yes'),
-          //     type: 'button',
-          //     onClick: handleConfirmation,
-          //     loading: loading,
-          //   },
-          //   backButton: {
-          //     label: 'Batal',
-          //   },
-          //   modalType: {
-          //     type: 'default',
-          //     title: t('commonTypography.alertTitleConfirmUpdate'),
-          //   },
-          //   withDivider: true,
-          // }}
+          backButton={{
+            onClick: () =>
+              router.push(
+                mutationType === 'update'
+                  ? `/plan/weekly/${mutationType}/${id}`
+                  : `/plan/weekly`
+              ),
+          }}
+          modalConfirmation={{
+            isOpenModalConfirmation: isOpenConfirmation,
+            actionModalConfirmation: () =>
+              setIsOpenConfirmation((prev) => !prev),
+            actionButton: {
+              label: t('commonTypography.yes'),
+              type: 'button',
+              onClick: handleConfirmation,
+              loading: loading,
+            },
+            backButton: {
+              label: 'Batal',
+            },
+            modalType: {
+              type: 'default',
+              title: t('commonTypography.alertTitleConfirmUpdate'),
+            },
+            withDivider: true,
+          }}
         />
       </Flex>
     </DashboardCard>

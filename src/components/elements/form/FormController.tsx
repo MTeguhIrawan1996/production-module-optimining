@@ -23,6 +23,7 @@ import {
   MaterialSelectInput,
   ModelSelectInputRhf,
   MultipleSelectLocationRhf,
+  MultipleSelectMaterialRhf,
   NumberInputRhf,
   NumberInputTableRhf,
   PasswordInputRhf,
@@ -35,6 +36,7 @@ import {
   RelegionSelectInputRhf,
   SampleTypeSelectInput,
   SelectActivityCategoryRhf,
+  SelectActivityFormRhf,
   SelectArriveBargeRhf,
   SelectCompanyRhf,
   SelectFactoryRhf,
@@ -157,10 +159,14 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <SelectYearRhf {...props} />;
     case 'select-week-rhf':
       return <SelectWeekRhf {...props} />;
+    case 'select-activity-form-rhf':
+      return <SelectActivityFormRhf {...props} />;
     case 'number-input-table-rhf':
       return <NumberInputTableRhf {...props} />;
     case 'multiple-select-location':
       return <MultipleSelectLocationRhf {...props} />;
+    case 'multiple-select-material':
+      return <MultipleSelectMaterialRhf {...props} />;
     case 'input-sum-array':
       return <InputSumArray {...props} />;
     case 'input-average-array':

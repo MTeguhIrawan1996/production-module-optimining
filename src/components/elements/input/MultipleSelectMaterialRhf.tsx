@@ -1,20 +1,24 @@
-import { Select, SelectProps } from '@mantine/core';
+import { MultiSelect, MultiSelectProps } from '@mantine/core';
 import * as React from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllWeather } from '@/services/graphql/query/global-select/useReadAllWeather';
-import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
+import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
-export type IWeatherSelectInputRhfProps = {
-  control: 'weathers-select-input';
+export type IMultipleSelectMaterialRhfProps = {
+  control: 'multiple-select-material';
   name: string;
+  parentId?: string | null;
+  includeIds?: string[];
+  isHaveParent?: boolean | null;
+  skipQuery?: boolean;
 } & Omit<
-  SelectProps,
+  MultiSelectProps,
   | 'name'
   | 'data'
   | 'onSearchChange'
@@ -24,32 +28,40 @@ export type IWeatherSelectInputRhfProps = {
 > &
   CommonProps;
 
-const WeatherSelectInputRhf: React.FC<IWeatherSelectInputRhfProps> = ({
+const MultipleSelectMaterialRhf: React.FC<IMultipleSelectMaterialRhfProps> = ({
   name,
   control,
   label,
-  defaultValue,
+  isHaveParent = false,
+  parentId = null,
+  includeIds = null,
+  skipQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
 
-  const { weathersData } = useReadAllWeather({
+  const { materialsData } = useReadAllMaterialsMaster({
     variables: {
       limit: null,
+      orderDir: 'desc',
+      orderBy: 'createdAt',
+      isHaveParent: isHaveParent,
+      parentId: parentId === '' ? null : parentId,
+      includeIds: includeIds ? includeIds : null,
     },
+    skip: skipQuery,
   });
 
-  const { uncombinedItem } = useFilterItems({
-    data: weathersData ?? [],
+  const { uncombinedItem } = useCombineFilterItems({
+    data: materialsData ?? [],
   });
 
   return (
-    <Select
+    <MultiSelect
       {...field}
       radius={8}
       data={uncombinedItem}
-      defaultValue={defaultValue}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
       styles={(theme) => ({
@@ -59,9 +71,14 @@ const WeatherSelectInputRhf: React.FC<IWeatherSelectInputRhfProps> = ({
         dropdown: {
           borderRadius: theme.spacing.xs,
         },
+        value: {
+          backgroundColor: theme.colors.brand[3],
+        },
       })}
       data-control={control}
-      placeholder={t('commonTypography.chooseWeather', { ns: 'default' })}
+      placeholder={t('commonTypography.chooseMaterial', {
+        ns: 'default',
+      })}
       label={label ? t(`components.field.${label}`) : null}
       error={
         fieldState &&
@@ -74,4 +91,4 @@ const WeatherSelectInputRhf: React.FC<IWeatherSelectInputRhfProps> = ({
   );
 };
 
-export default WeatherSelectInputRhf;
+export default MultipleSelectMaterialRhf;

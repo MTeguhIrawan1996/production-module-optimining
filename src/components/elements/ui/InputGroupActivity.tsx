@@ -9,7 +9,7 @@ import {
 } from '@mantine/core';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
-import { DataTableColumnGroup } from 'mantine-datatable';
+import { DataTableColumn } from 'mantine-datatable';
 import * as React from 'react';
 import { useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -35,15 +35,15 @@ export type IInputGroupActivityProps = {
 
 const table = [
   {
-    id: 'productionPlan',
-    activity: 'Target Produksi',
+    id: 'numberOfHeavyEquipmentRequired',
+    value: 'Jumlah Alat Berat yang dibutuhkan',
   },
 ];
 
 const InputGroupActivity: React.FunctionComponent<IInputGroupActivityProps> = ({
   addButtonOuter,
   deleteButtonInner,
-  label = 'material',
+  label = 'formsOfActivity',
   heavyEquipmentRequirementPlanIndex,
   activityIndex,
   tabs,
@@ -51,7 +51,7 @@ const InputGroupActivity: React.FunctionComponent<IInputGroupActivityProps> = ({
   const { t } = useTranslation('default');
 
   const {
-    label: addButtonOuterLabel = t('commonTypography.createMaterial'),
+    label: addButtonOuterLabel = t('commonTypography.createFormsOfActivity'),
     ...restAddButtonOuter
   } = addButtonOuter || {};
   const {
@@ -69,35 +69,33 @@ const InputGroupActivity: React.FunctionComponent<IInputGroupActivityProps> = ({
       obj: Record<'weeklyHeavyEquipmentRequirementRhfId', string>,
       i: number
     ) => {
-      const group: DataTableColumnGroup<any> = {
-        id: `${obj['day']}`,
+      const group: DataTableColumn<any> = {
+        accessor: `weeklyHeavyEquipmentRequirements.${i}`,
         title: dayjs()
           .isoWeekday(Number(obj['day'] || 0))
           .format('dddd'),
-        style: { textAlign: 'center' },
-        columns: [
-          {
-            accessor: `rate.${i}`,
-            title: 'Rate',
-            width: 100,
-            render: () => {
-              return (
-                <FormController
-                  control="number-input-table-rhf"
-                  name={`heavyEquipmentRequirementPlans.${heavyEquipmentRequirementPlanIndex}.activities.${activityIndex}.weeklyHeavyEquipmentRequirements.${i}.value`}
-                  precision={0}
-                />
-              );
-            },
-          },
-        ],
+        width: 100,
+        render: () => {
+          return (
+            <FormController
+              control="number-input-table-rhf"
+              name={`heavyEquipmentRequirementPlans.${heavyEquipmentRequirementPlanIndex}.activities.${activityIndex}.weeklyHeavyEquipmentRequirements.${i}.value`}
+              precision={0}
+              styles={{
+                input: {
+                  textAlign: 'center',
+                },
+              }}
+            />
+          );
+        },
       };
       return group;
     },
     [heavyEquipmentRequirementPlanIndex, activityIndex]
   );
 
-  const renderOtherGroup = fields?.map(renderOtherColumnCallback);
+  const renderOtherColumn = fields?.map(renderOtherColumnCallback);
 
   return (
     <Flex gap={22} direction="column" align="flex-end" w="100%">
@@ -140,33 +138,24 @@ const InputGroupActivity: React.FunctionComponent<IInputGroupActivityProps> = ({
           <Grid gutter="md">
             <Grid.Col span={6}>
               <FormController
-                control="material-select-input"
-                name={`heavyEquipmentRequirementPlans.${heavyEquipmentRequirementPlanIndex}.activities.${activityIndex}.materialId`}
-                label="material"
+                control="select-activity-form-rhf"
+                name={`heavyEquipmentRequirementPlans.${heavyEquipmentRequirementPlanIndex}.activities.${activityIndex}.activityFormId`}
+                label="formsOfActivity"
                 withAsterisk
                 clearable
-                skipQuery={tabs !== 'unitCapacityPlan'}
+                skipQuery={tabs !== 'heavyEquipmentReqPlan'}
               />
             </Grid.Col>
             <Grid.Col span={6}>
               <FormController
-                control="text-input"
-                label="fleetName"
-                name={`heavyEquipmentRequirementPlans.${heavyEquipmentRequirementPlanIndex}.activities.${activityIndex}.fleet`}
-                withAsterisk
-              />
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <FormController
-                control="location-select-input"
-                name={`heavyEquipmentRequirementPlans.${heavyEquipmentRequirementPlanIndex}.activities.${activityIndex}.frontId`}
-                label="front"
-                categoryId={`${process.env.NEXT_PUBLIC_FRONT_ID}`}
+                control="class-select-input"
+                name={`heavyEquipmentRequirementPlans.${heavyEquipmentRequirementPlanIndex}.activities.${activityIndex}.classId`}
+                label="heavyEquipmentClass"
                 withAsterisk
                 clearable
                 searchable
                 limit={null}
-                skipQuery={tabs !== 'unitCapacityPlan'}
+                skipQuery={tabs !== 'heavyEquipmentReqPlan'}
               />
             </Grid.Col>
             <Grid.Col span={12}>
@@ -174,16 +163,14 @@ const InputGroupActivity: React.FunctionComponent<IInputGroupActivityProps> = ({
                 tableProps={{
                   highlightOnHover: true,
                   withColumnBorders: true,
-                  groups: [
+                  minHeight: 0,
+                  columns: [
                     {
-                      id: 'day',
-                      title: 'Hari',
-                      style: { textAlign: 'center' },
-                      columns: [
-                        { accessor: 'activity', width: 300, title: '' },
-                      ],
+                      accessor: 'value',
+                      width: 250,
+                      title: t('commonTypography.information'),
                     },
-                    ...(renderOtherGroup ?? []),
+                    ...(renderOtherColumn ?? []),
                   ],
                   records: table,
                 }}
