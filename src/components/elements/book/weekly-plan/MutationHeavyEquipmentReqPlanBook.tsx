@@ -23,7 +23,7 @@ import {
   IMutationHeavyEquipmentReqPlan,
   IMutationHeavyEquipmentReqPlanActivity,
   IMutationHeavyEquipmentReqPlanValues,
-  IWeeklyHeavyEquipmentRequirement,
+  IMutationWeeklyHeavyEquipmentRequirement,
   useCreateHeavyEquipmentReqPlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateHeavyEquipmentReqPlan';
 import { useReadOneHeavyEquipmentReqPlan } from '@/services/graphql/query/plan/weekly/heavy-equipment-req-plan/useReadOneHeavyEquipmentReqPlan';
@@ -126,7 +126,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
         weeklyPlanId: id,
         limit: null,
       },
-      skip: tabs !== 'heavyEquipmentReqPlan' || !router.isReady,
+      skip: !router.isReady || tabs !== 'heavyEquipmentReqPlan',
       onCompleted: (data) => {
         if (data.weeklyHeavyEquipmentRequirementPlans.data.length) {
           const weeklyHeavyEquipmentRequirementPlans: IMutationHeavyEquipmentReqPlan[] =
@@ -135,7 +135,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
               const materialIds = obj.materials.map((val) => val.id);
               const activities: IMutationHeavyEquipmentReqPlanActivity[] =
                 obj.heavyEquipmentRequirementPlanActivities.map((hObj) => {
-                  const weeklyHeavyEquipmentRequirements: IWeeklyHeavyEquipmentRequirement[] =
+                  const weeklyHeavyEquipmentRequirements: IMutationWeeklyHeavyEquipmentRequirement[] =
                     hObj.weeklyHeavyEquipmentRequirements.map((wObj) => {
                       return {
                         id: wObj.id,
@@ -331,7 +331,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
           ({ id, weeklyHeavyEquipmentRequirements, ...restActivity }) => {
             const newWeeklyHER = weeklyHeavyEquipmentRequirements.map(
               (wObj) => {
-                const newWeeklyHER: IWeeklyHeavyEquipmentRequirement = {
+                const newWeeklyHER: IMutationWeeklyHeavyEquipmentRequirement = {
                   id: wObj.id,
                   day: wObj.day,
                   value: wObj.value === '' ? null : wObj.value,

@@ -16,7 +16,7 @@ export const CREATE_HEAVY_EQUIPMENT_REQ_PLAN = gql`
   }
 `;
 
-export interface IWeeklyHeavyEquipmentRequirement {
+export interface IMutationWeeklyHeavyEquipmentRequirement {
   id?: string | null;
   day: number;
   value: number | null | '';
@@ -26,7 +26,7 @@ export interface IMutationHeavyEquipmentReqPlanActivity {
   id?: string | null;
   activityFormId: string | null;
   classId: string | null;
-  weeklyHeavyEquipmentRequirements: IWeeklyHeavyEquipmentRequirement[];
+  weeklyHeavyEquipmentRequirements: IMutationWeeklyHeavyEquipmentRequirement[];
 }
 
 export interface IMutationHeavyEquipmentReqPlan {
