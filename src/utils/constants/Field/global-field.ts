@@ -31,12 +31,14 @@ import { ISelectWeekRhfProps } from '@/components/elements/input/SelectWeekRhf';
 import { ISelectWorkingHoursPlanRhfProps } from '@/components/elements/input/SelectWorkingHoursPlanRhf';
 import { ISelectYearRhfProps } from '@/components/elements/input/SelectYearRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
+import { ITextAreaInput } from '@/components/elements/input/TextAreaInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
 import { ITimeInputRhfProps } from '@/components/elements/input/TimeInputRhf';
 import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelectInputRhf';
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 import { IWeatherConditionSelectInputRhfProps } from '@/components/elements/input/WeatherConditionSelectInputRhf';
 import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
+import { IDisplayQuietNumber } from '@/components/elements/ui/DisplayQuietNumber';
 
 import { ControllerProps } from '@/types/global';
 
@@ -555,6 +557,23 @@ export const globalText = ({
   };
   return field;
 };
+export const globalTextArea = ({
+  name = 'globalTextArea',
+  label = 'globalTextArea',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ITextAreaInput>) => {
+  const field: ControllerProps = {
+    control: 'text-area-input',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
 
 export const globalNumberInput = ({
   name = 'globalNumberInput',
@@ -565,6 +584,23 @@ export const globalNumberInput = ({
 }: Partial<INumberInputProps>) => {
   const field: ControllerProps = {
     control: 'number-input',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const displayQuietNumber = ({
+  name = 'displayQuietNumber',
+  label = 'displayQuietNumber',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IDisplayQuietNumber>) => {
+  const field: ControllerProps = {
+    control: 'display-quiet-number',
     name,
     label,
     withAsterisk,

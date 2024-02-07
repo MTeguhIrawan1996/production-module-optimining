@@ -110,6 +110,7 @@ import GlobalPagination from '@/components/elements/pagination/GlobalPagination'
 import PaginationSkeleton from '@/components/elements/skeleton/PaginationSkeleton';
 import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
 import DisplayLoseTimeAndEffectiveWork from '@/components/elements/ui/DisplayLoseTimeAndEffectiveWork';
+import DisplayQuietNumber from '@/components/elements/ui/DisplayQuietNumber';
 import GlobalHeaderDetail from '@/components/elements/ui/GlobalHeaderDetail';
 import InputGroupActivity from '@/components/elements/ui/InputGroupActivity';
 import InputGroupMaterial from '@/components/elements/ui/InputGroupMaterial';
@@ -138,6 +139,7 @@ export {
   DateInputRhf,
   DeterminedButton,
   DisplayLoseTimeAndEffectiveWork,
+  DisplayQuietNumber,
   DivisionSelectInputRhf,
   DomeNameSelectInputRhf,
   DownloadButton,

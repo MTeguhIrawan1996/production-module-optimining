@@ -244,7 +244,11 @@
       "dumpTruckCount": "Jumlah Dump Truck",
       "dumpTruckTotal": "Jumlah Total Dump Truck",
       "formsOfActivity": "Bentuk Kegiatan",
-      "numberOfHeavyEquipmentRequired": "Jumlah Alat Berat yang dibutuhkan"
+      "numberOfHeavyEquipmentRequired": "Jumlah Alat Berat yang dibutuhkan",
+      "totalAvailabilityHeavyEquipment": "Total Ketersediaan Alat Berat",
+      "breakdownCount": "Jumlah Rusak",
+      "withoutOperatorCount": "Tanpa Operator",
+      "quietNumber": "Jumlah yang Tersedia"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",

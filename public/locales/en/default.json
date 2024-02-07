@@ -441,7 +441,8 @@
     "heavyEquipmentReqPlan": "Rencana Kebutuhan Alat Berat",
     "heavyEquipmentReqPlanInformation": "Informasi Rencana Kebutuhan Alat Berat",
     "formsOfActivity": "Bentuk Kegiatan",
-    "createFormsOfActivity": "Tambah Bentuk Kegiatan"
+    "createFormsOfActivity": "Tambah Bentuk Kegiatan",
+    "totalAvailabilityHeavyEquipment": "Total Ketersediaan Alat Berat"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -974,9 +975,11 @@
     "successCreateUnitCapacityPlanMessage": "$t(commonTypography.unitCapacityPlan) berhasil dibuat",
     "successCreateWorkTimePlanMessage": "$t(commonTypography.workTimePlan) berhasil dibuat",
     "successCreateHeavyEquipmentReqPlanMessage": "$t(commonTypography.heavyEquipmentReqPlan) berhasil dibuat",
+    "successCreateHeavyEquipmentAvailabilityPlanMessage": "$t(commonTypography.heavyEquipmentAvailabilityPlan) berhasil dibuat",
     "successUpdateUnitCapacityPlanMessage": "$t(commonTypography.unitCapacityPlan) berhasil diubah",
     "successUpdateWorkTimePlanMessage": "$t(commonTypography.workTimePlan) berhasil diubah",
     "successUpdateHeavyEquipmentReqPlanMessage": "$t(commonTypography.heavyEquipmentReqPlan) berhasil diubah",
+    "successUpdateHeavyEquipmentAvailabilityPlanMessage": "$t(commonTypography.heavyEquipmentAvailabilityPlan) berhasil diubah",
     "successUpdateMessage": "$t(weeklyPlan.title2) berhasil diubah",
     "formCreate": "$t(commonTypography.form) $t(weeklyPlan.title2)",
     "successIsValidateMessage": "$t(weeklyPlan.title) berhasil divalidasi",
