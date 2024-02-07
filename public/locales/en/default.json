@@ -443,7 +443,10 @@
     "formsOfActivity": "Bentuk Kegiatan",
     "createFormsOfActivity": "Tambah Bentuk Kegiatan",
     "totalAvailabilityHeavyEquipment": "Total Ketersediaan Alat Berat",
-    "createHeavyEquipment": "$t(commonTypography.create) $t(commonTypography.heavyEquipment)"
+    "breakdownCount": "Jumlah Rusak",
+    "createHeavyEquipment": "$t(commonTypography.create) $t(commonTypography.heavyEquipment)",
+    "withoutOperatorCount": "Tanpa Operator",
+    "quietNumber": "Jumlah yang Tersedia"
   },
   "sideBar": {
     "dashboard": "Dashboard",

@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalTabs } from '@/components/elements';
+import HeavyEquipmentAvailabilityPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/HeavyEquipmentAvailabilityPlanData';
 import HeavyEquipmentReqPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/HeavyEquipmentReqPlanData';
 import UnitCapacityPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/UnitCapacityPlanData';
 import WorkTimePlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/WorkTimePlanData';
@@ -64,6 +65,12 @@ const ReadWeeklyPlanGroupBook = () => {
             label: t('commonTypography.heavyEquipmentReqPlan'),
             value: 'heavyEquipmentReqPlan',
             component: <HeavyEquipmentReqPlanData />,
+            isShowItem: true,
+          },
+          {
+            label: t('commonTypography.heavyEquipmentAvailabilityPlan'),
+            value: 'heavyEquipmentAvailabilityPlan',
+            component: <HeavyEquipmentAvailabilityPlanData />,
             isShowItem: true,
           },
         ]}
