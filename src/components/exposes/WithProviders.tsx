@@ -2,6 +2,7 @@ import { ApolloProvider } from '@apollo/client';
 import { MantineProvider } from '@mantine/core';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { theme } from 'mantine';
+import { SessionProvider } from 'next-auth/react';
 import React from 'react';
 
 import getClient from '@/services/graphql/apollo-client';
@@ -21,19 +22,21 @@ const queryClient = new QueryClient({
 export default function WithProviders({ children }: Props) {
   const { client } = getClient();
   return (
-    <ApolloProvider client={client}>
-      <QueryClientProvider client={queryClient}>
-        <MantineProvider
-          withGlobalStyles
-          withNormalizeCSS
-          theme={{
-            ...theme,
-            colorScheme: 'light',
-          }}
-        >
-          {children}
-        </MantineProvider>
-      </QueryClientProvider>
-    </ApolloProvider>
+    <SessionProvider refetchInterval={5 * 60} refetchOnWindowFocus={false}>
+      <ApolloProvider client={client}>
+        <QueryClientProvider client={queryClient}>
+          <MantineProvider
+            withGlobalStyles
+            withNormalizeCSS
+            theme={{
+              ...theme,
+              colorScheme: 'light',
+            }}
+          >
+            {children}
+          </MantineProvider>
+        </QueryClientProvider>
+      </ApolloProvider>
+    </SessionProvider>
   );
 }
