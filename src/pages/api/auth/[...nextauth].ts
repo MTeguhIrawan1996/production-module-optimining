@@ -76,7 +76,7 @@ async function refreshToken(token: JWT) {
 
 export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: '/',
+    signIn: '/auth/signin',
   },
   providers: [
     // Email & Password
