@@ -23,7 +23,7 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const HeavyEquipmentProductionBook = () => {
   const router = useRouter();
-  const page = Number(router.query.page) || 1;
+  const page = Number(router.query['page']) || 1;
   const url = `/input-data/production/data-heavy-equipment?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');

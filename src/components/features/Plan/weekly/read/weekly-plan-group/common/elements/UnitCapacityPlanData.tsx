@@ -9,7 +9,6 @@ import {
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumnGroup } from 'mantine-datatable';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -42,8 +41,7 @@ const UnitCapacityPlanData = ({
   const { t } = useTranslation('default');
   const theme = useMantineTheme();
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const page = Number(router.query['page']) || 1;
   const [materials, setMaterials] = React.useState<
     IReadOneMaterialUnitCapacityPlan[] | undefined
   >(undefined);
@@ -247,6 +245,29 @@ const UnitCapacityPlanData = ({
                         ],
                       },
                       ...(renderOtherGroup ?? []),
+                      {
+                        id: 'total',
+                        title: 'Total',
+                        style: { textAlign: 'center' },
+                        columns: [
+                          {
+                            accessor: `rate`,
+                            title: 'Rate',
+                            width: 100,
+                            render: ({ totalTargetPlan }) => {
+                              return totalTargetPlan.rate;
+                            },
+                          },
+                          {
+                            accessor: `ton`,
+                            title: 'Ton',
+                            width: 100,
+                            render: ({ totalTargetPlan }) => {
+                              return totalTargetPlan.ton;
+                            },
+                          },
+                        ],
+                      },
                     ],
                     defaultColumnRender: (record, _, accesor) => {
                       const data = record[

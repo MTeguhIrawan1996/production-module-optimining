@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -37,8 +36,7 @@ const UpdateFrontProductionBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const pageParams = useSearchParams();
-  const segment = pageParams.get('segment') || 'pit';
+  const segment = router.query['segment'] || 'pit';
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
 

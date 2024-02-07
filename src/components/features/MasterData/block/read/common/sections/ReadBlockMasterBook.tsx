@@ -3,7 +3,6 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,9 +22,8 @@ import { useReadOneBlockMaster } from '@/services/graphql/query/block/useReadOne
 const ReadBlockMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const pageParams = useSearchParams();
   const id = router.query.id as string;
-  const page = Number(pageParams.get('page')) || 1;
+  const page = Number(router.query['page']) || 1;
   const url = `/master-data/block/read/${id}?page=1`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [pitId, setPitId] = React.useState<string>('');

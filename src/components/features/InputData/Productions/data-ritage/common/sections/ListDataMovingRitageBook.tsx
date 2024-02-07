@@ -31,9 +31,9 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const ListDataMovingRitageBook = () => {
   const router = useRouter();
-  const tabs = router.query.tabs || '';
-  const page = Number(router.query.rp) || 1;
-  const heavyEquipmentPage = Number(router.query.hp) || 1;
+  const tabs = router.query['tabs'] || '';
+  const page = Number(router.query['rp']) || 1;
+  const heavyEquipmentPage = Number(router.query['hp']) || 1;
   const url = `/input-data/production/data-ritage?rp=1&hp=${heavyEquipmentPage}&tabs=moving`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');

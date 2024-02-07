@@ -25,7 +25,7 @@ export const useReadAllActivityWorkTimePlan = ({
   onCompleted?: (data: IReadAllActivityWorkTimePlanResponse) => void;
   skip?: boolean;
 }) => {
-  const { data: activityWorkTImePlan } =
+  const { data: activityWorkTimePlan } =
     useQuery<IReadAllActivityWorkTimePlanResponse>(
       READ_ALL_ACTIVITY_WORK_TIME_PLAN,
       {
@@ -39,6 +39,6 @@ export const useReadAllActivityWorkTimePlan = ({
     );
 
   return {
-    activityWorkTImePlan: activityWorkTImePlan?.activities,
+    activityWorkTImePlan: activityWorkTimePlan?.activities,
   };
 };

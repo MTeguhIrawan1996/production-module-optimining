@@ -8,6 +8,7 @@ import {
   GlobalTabs,
   InnerWrapper,
   MutationUnitCapacityPlanBook,
+  MutationWorkTimePlanBook,
   RootWrapper,
 } from '@/components/elements';
 
@@ -52,6 +53,19 @@ const UpdateWeeklyPlanGroupPage = () => {
             onTabChange: (value) => handleChangeTab(value),
           }}
           tabsData={[
+            {
+              label: t('commonTypography.workTimePlan'),
+              value: 'workTimePlan',
+              component: (
+                <MutationWorkTimePlanBook
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successUpdateWorkTimePlanMessage'
+                  )}
+                  mutationType="update"
+                />
+              ),
+              isShowItem: true,
+            },
             {
               label: t('commonTypography.unitCapacityPlan'),
               value: 'unitCapacityPlan',

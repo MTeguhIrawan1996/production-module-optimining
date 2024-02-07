@@ -41,8 +41,8 @@ export default function ListDataRitageDumptruckBook<
   columns,
 }: IRitageDTProps<T>) {
   const router = useRouter();
-  const page = Number(router.query.rp) || 1;
-  const heavyEquipmentPage = Number(router.query.hp) || 1;
+  const page = Number(router.query['rp']) || 1;
+  const heavyEquipmentPage = Number(router.query['hp']) || 1;
   const url = `/input-data/production/data-ritage?rp=${page}&hp=1&tabs=${tabs}`;
   const { t } = useTranslation('default');
 
