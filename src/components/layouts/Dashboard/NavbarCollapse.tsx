@@ -33,11 +33,7 @@ const NavbarCollapse: React.FC<IProps> = ({ menuItems, styles }) => {
       return item.subMenu ? (
         <NavbarCollapseLinksGroup {...item} key={i} />
       ) : (
-        <Tooltip.Floating
-          label={t(`sideBar.${item.label}`)}
-          position="right"
-          key={i}
-        >
+        <Tooltip label={t(`sideBar.${item.label}`)} position="right" key={i}>
           <Link href={item.href ?? '/'}>
             <ActionIcon
               radius="md"
@@ -50,7 +46,7 @@ const NavbarCollapse: React.FC<IProps> = ({ menuItems, styles }) => {
               <Icon icon={item.icon ?? ''} style={{ fontSize: '18px' }} />
             </ActionIcon>
           </Link>
-        </Tooltip.Floating>
+        </Tooltip>
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

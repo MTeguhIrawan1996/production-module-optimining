@@ -1,5 +1,4 @@
 import { AppShell, Box, createStyles, Transition } from '@mantine/core';
-import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { shallow } from 'zustand/shallow';
 
@@ -7,7 +6,6 @@ import { Breadcrumb, LogoutConfirmModal } from '@/components/elements';
 import HeaderLayout from '@/components/layouts/Dashboard/HeaderLayout';
 
 import { linksDashboard } from '@/utils/constants/Links/linksDashboard';
-import { decodeFc } from '@/utils/helper/encodeDecode';
 import { filterMenuByPermission } from '@/utils/helper/filterMenuByPermission';
 import { usePermissions } from '@/utils/store/usePermissions';
 
@@ -42,32 +40,25 @@ const DashboardLayout = ({ children }: LayoutProps) => {
   const { classes } = useStyles();
   const [isExpand, setIsExpand] = React.useState<boolean>(true);
   const [isConfirmLogout, setIsConfirmLogout] = React.useState<boolean>(false);
-  const [setPermissions] = usePermissions(
-    (state) => [state.setPermissions],
+  const { permissions, setPermissions } = usePermissions(
+    (state) => state,
     shallow
   );
-  const { data: sessionData } = useSession();
 
   const [filteredMenu, setFilteredMenu] = React.useState<IMenuItem[]>([]);
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      if (sessionData && sessionData.user?.permission) {
-        const permissionSession = await decodeFc<string[]>(
-          sessionData.user?.permission
-        );
-        setPermissions(permissionSession);
-        const filtered = filterMenuByPermission(
-          linksDashboard,
-          permissionSession
-        );
-        setFilteredMenu(filtered);
-      }
-    };
+  //
 
-    fetchData();
+  React.useEffect(() => {
+    if (permissions.length > 0 && filteredMenu.length === 0) {
+      const filtered = filterMenuByPermission(
+        linksDashboard,
+        permissions ?? []
+      );
+      setFilteredMenu(filtered);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionData]);
+  }, [permissions, setPermissions]);
 
   const onHandleExpand = () => {
     setIsExpand((prev) => !prev);

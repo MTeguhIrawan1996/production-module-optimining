@@ -1,13 +1,8 @@
-import dynamic from 'next/dynamic';
 import * as React from 'react';
 
 import CompanyTypePage from '@/components/features/Reference/company-type/common';
 // import Link from 'next/link';
-// import DashboardLayout from 'main/DashboardLayout';
-
-const DashboardLayout = dynamic(() => import('main/DashboardLayout'), {
-  ssr: false,
-});
+import { DashboardLayout } from '@/components/layouts';
 
 const CompanyType = () => {
   // const { companyTypesdata, companyTypesLoading } = useReadAllCompanyTypes({
@@ -24,7 +19,6 @@ const CompanyType = () => {
       <CompanyTypePage />
     </>
   );
-  // return <div>Helloo</div>;
 };
 
 export default CompanyType;
