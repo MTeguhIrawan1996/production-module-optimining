@@ -1,9 +1,9 @@
 import {
   IMutationHeavyEquipmentReqPlanActivity,
-  IWeeklyHeavyEquipmentRequirement,
+  IMutationWeeklyHeavyEquipmentRequirement,
 } from '@/services/graphql/mutation/plan/weekly/useCreateHeavyEquipmentReqPlan';
 
-export const weeklyHeavyEquipmentRequirement: IWeeklyHeavyEquipmentRequirement[] =
+export const weeklyHeavyEquipmentRequirement: IMutationWeeklyHeavyEquipmentRequirement[] =
   [
     {
       id: null,
