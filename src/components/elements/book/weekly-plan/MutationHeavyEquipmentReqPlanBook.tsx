@@ -20,12 +20,13 @@ import InputGroupActivity, {
 } from '@/components/elements/ui/InputGroupActivity';
 
 import {
-  IActivity,
-  ICreateHeavyEquipmentReqPlan,
+  IMutationHeavyEquipmentReqPlan,
+  IMutationHeavyEquipmentReqPlanActivity,
   IMutationHeavyEquipmentReqPlanValues,
-  IWeeklyHeavyEquipmentRequirement,
+  IMutationWeeklyHeavyEquipmentRequirement,
   useCreateHeavyEquipmentReqPlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateHeavyEquipmentReqPlan';
+import { useReadOneHeavyEquipmentReqPlan } from '@/services/graphql/query/plan/weekly/heavy-equipment-req-plan/useReadOneHeavyEquipmentReqPlan';
 import { activities } from '@/utils/constants/DefaultValues/heavy-equipment-req-plans';
 import {
   globalMultipleSelectLocation,
@@ -45,7 +46,6 @@ type Props = {
 
 const MutationHeavyEquipmentReqPlanBook = ({
   mutationType,
-  // eslint-disable-next-line unused-imports/no-unused-vars
   mutationSuccessMassage,
 }: Props) => {
   const { t } = useTranslation('default');
@@ -78,13 +78,92 @@ const MutationHeavyEquipmentReqPlanBook = ({
     append: heavyequipmentReqAppend,
     update: heavyequipmentReqUpdate,
     remove: heavyequipmentReqRemove,
-    // eslint-disable-next-line unused-imports/no-unused-vars
     replace: heavyequipmentReqReplace,
   } = useFieldArray({
     name: 'heavyEquipmentRequirementPlans',
     control: methods.control,
     keyName: 'heavyequipmentReqPlanId',
   });
+
+  const [executeUpdate, { loading }] = useCreateHeavyEquipmentReqPlan({
+    onCompleted: () => {
+      notifications.show({
+        color: 'green',
+        title: 'Selamat',
+        message: mutationSuccessMassage,
+        icon: <IconCheck />,
+      });
+      router.push(
+        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=heavyEquipmentAvailabilityPlan`
+      );
+      if (mutationType === 'update') {
+        setIsOpenConfirmation(false);
+      }
+    },
+    onError: (error) => {
+      if (error.graphQLErrors) {
+        const errorArry =
+          errorBadRequestField<IMutationHeavyEquipmentReqPlanValues>(error);
+        if (errorArry.length) {
+          errorArry.forEach(({ name, type, message }) => {
+            methods.setError(name, { type, message });
+          });
+          return;
+        }
+        notifications.show({
+          color: 'red',
+          title: 'Gagal',
+          message: error.message,
+          icon: <IconX />,
+        });
+      }
+    },
+  });
+
+  const { weeklyHeavyEquipmentReqPlanDataLoading } =
+    useReadOneHeavyEquipmentReqPlan({
+      variables: {
+        weeklyPlanId: id,
+        limit: null,
+      },
+      skip: !router.isReady || tabs !== 'heavyEquipmentReqPlan',
+      onCompleted: (data) => {
+        if (data.weeklyHeavyEquipmentRequirementPlans.data.length > 0) {
+          const weeklyHeavyEquipmentRequirementPlans: IMutationHeavyEquipmentReqPlan[] =
+            data.weeklyHeavyEquipmentRequirementPlans.data.map((obj) => {
+              const locationIds = obj.locations.map((val) => val.id);
+              const materialIds = obj.materials.map((val) => val.id);
+              const activities: IMutationHeavyEquipmentReqPlanActivity[] =
+                obj.heavyEquipmentRequirementPlanActivities.map((hObj) => {
+                  const weeklyHeavyEquipmentRequirements: IMutationWeeklyHeavyEquipmentRequirement[] =
+                    hObj.weeklyHeavyEquipmentRequirements.map((wObj) => {
+                      return {
+                        id: wObj.id,
+                        day: wObj.day,
+                        value: wObj.value || '',
+                      };
+                    });
+                  return {
+                    id: hObj.id,
+                    activityFormId: hObj.activityForm.id,
+                    classId: hObj.class.id,
+                    weeklyHeavyEquipmentRequirements,
+                  };
+                });
+              return {
+                id: obj.id,
+                activityName: obj.activityName,
+                locationIds,
+                materialIds,
+                averageDistance: obj.averageDistance,
+                desc: obj.desc,
+                activities,
+              };
+            });
+          heavyequipmentReqReplace(weeklyHeavyEquipmentRequirementPlans);
+        }
+      },
+    });
 
   const unitCapacityCallback = React.useCallback(
     (
@@ -243,41 +322,6 @@ const MutationHeavyEquipmentReqPlanBook = ({
   );
   const fieldGroup = heavyequipmentReqFields.map(unitCapacityCallback);
 
-  const [executeUpdate, { loading }] = useCreateHeavyEquipmentReqPlan({
-    onCompleted: () => {
-      notifications.show({
-        color: 'green',
-        title: 'Selamat',
-        message: mutationSuccessMassage,
-        icon: <IconCheck />,
-      });
-      router.push(
-        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=next`
-      );
-      if (mutationType === 'update') {
-        setIsOpenConfirmation(false);
-      }
-    },
-    onError: (error) => {
-      if (error.graphQLErrors) {
-        const errorArry =
-          errorBadRequestField<IMutationHeavyEquipmentReqPlanValues>(error);
-        if (errorArry.length) {
-          errorArry.forEach(({ name, type, message }) => {
-            methods.setError(name, { type, message });
-          });
-          return;
-        }
-        notifications.show({
-          color: 'red',
-          title: 'Gagal',
-          message: error.message,
-          icon: <IconX />,
-        });
-      }
-    },
-  });
-
   const handleSubmitForm: SubmitHandler<
     IMutationHeavyEquipmentReqPlanValues
   > = async (data) => {
@@ -287,7 +331,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
           ({ id, weeklyHeavyEquipmentRequirements, ...restActivity }) => {
             const newWeeklyHER = weeklyHeavyEquipmentRequirements.map(
               (wObj) => {
-                const newWeeklyHER: IWeeklyHeavyEquipmentRequirement = {
+                const newWeeklyHER: IMutationWeeklyHeavyEquipmentRequirement = {
                   id: wObj.id,
                   day: wObj.day,
                   value: wObj.value === '' ? null : wObj.value,
@@ -295,7 +339,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
                 return newWeeklyHER;
               }
             );
-            const newActivityObj: IActivity = {
+            const newActivityObj: IMutationHeavyEquipmentReqPlanActivity = {
               id: id || undefined,
               weeklyHeavyEquipmentRequirements: newWeeklyHER,
               ...restActivity,
@@ -303,7 +347,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
             return newActivityObj;
           }
         );
-        const newHeavyEquipmentRequirementPlanObj: ICreateHeavyEquipmentReqPlan =
+        const newHeavyEquipmentRequirementPlanObj: IMutationHeavyEquipmentReqPlan =
           {
             id: hObj.id || undefined,
             activityName: hObj.activityName,
@@ -328,7 +372,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
   };
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={weeklyHeavyEquipmentReqPlanDataLoading}>
       <Flex gap={32} direction="column" p={22}>
         <CommonWeeklyPlanInformation />
         <GlobalFormGroup

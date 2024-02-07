@@ -104,9 +104,9 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
       weeklyPlanId: id,
       limit: null,
     },
-    skip: tabs !== 'unitCapacityPlan' || !router.isReady,
+    skip: !router.isReady || tabs !== 'unitCapacityPlan',
     onCompleted: (data) => {
-      if (data.weeklyUnitCapacityPlans.data.length) {
+      if (data.weeklyUnitCapacityPlans.data.length > 0) {
         const unitCapacityPlans = data.weeklyUnitCapacityPlans.data.map(
           (obj) => {
             const locationIds = obj.locations.map((val) => val.id);
