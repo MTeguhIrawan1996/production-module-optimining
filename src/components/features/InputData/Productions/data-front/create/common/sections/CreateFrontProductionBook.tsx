@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -33,8 +32,7 @@ import { ControllerGroup } from '@/types/global';
 const CreateFrontProductionBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const segment = pageParams.get('segment') || 'pit';
+  const segment = router.query['segment'] || 'pit';
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationFrontProductionValues>({
@@ -58,7 +56,7 @@ const CreateFrontProductionBook = () => {
   const pitId = methods.watch('pitId');
 
   React.useEffect(() => {
-    methods.setValue('type', segment);
+    methods.setValue('type', segment as string);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [segment]);
 

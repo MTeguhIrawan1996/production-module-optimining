@@ -2,7 +2,6 @@ import { SelectProps } from '@mantine/core';
 import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -28,9 +27,8 @@ const ReadHeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('hp')) || 1;
-  const companyPage = Number(pageParams.get('cp')) || 1;
+  const page = Number(router.query['hp']) || 1;
+  const companyPage = Number(router.query['cp']) || 1;
   const url = `/master-data/company/read/${id}?cp=${companyPage}&hp=1`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
