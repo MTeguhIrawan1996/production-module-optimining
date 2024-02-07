@@ -1,5 +1,5 @@
 import {
-  IActivity,
+  IMutationHeavyEquipmentReqPlanActivity,
   IWeeklyHeavyEquipmentRequirement,
 } from '@/services/graphql/mutation/plan/weekly/useCreateHeavyEquipmentReqPlan';
 
@@ -42,7 +42,7 @@ export const weeklyHeavyEquipmentRequirement: IWeeklyHeavyEquipmentRequirement[]
     },
   ];
 
-export const activities: IActivity[] = [
+export const activities: IMutationHeavyEquipmentReqPlanActivity[] = [
   {
     id: null,
     activityFormId: '',
