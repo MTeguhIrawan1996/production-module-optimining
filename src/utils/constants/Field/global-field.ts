@@ -14,6 +14,7 @@ import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/Marria
 import { IMaterialSelectInputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { IMultipleSelectLocationRhfProps } from '@/components/elements/input/MultipleSelectLocationRhf';
+import { IMultipleSelectMaterialRhfProps } from '@/components/elements/input/MultipleSelectMaterialRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { IPitSelectInputRhfProps } from '@/components/elements/input/PitSelectInputRhf';
 import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
@@ -21,6 +22,7 @@ import { IProvinceSelectInputRhfProps } from '@/components/elements/input/Provin
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
 import { ISelectActivityCategoryRhfProps } from '@/components/elements/input/SelectActivityCategoryRhf';
+import { ISelectActivityFormRhfProps } from '@/components/elements/input/SelectActivityFormRhf';
 import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
 import { ISelectCompanyRhfProps } from '@/components/elements/input/SelectCompanyRhf';
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
@@ -871,6 +873,23 @@ export const weatherSelect = ({
   };
   return field;
 };
+export const selectActivityForm = ({
+  name = 'activityFormId',
+  label = 'formsOfActivity',
+  clearable = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectActivityFormRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-activity-form-rhf',
+    name,
+    label,
+    colSpan,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
 
 export const pitSelect = ({
   name = 'fromPitId',
@@ -930,6 +949,26 @@ export const globalMultipleSelectLocation = ({
     name,
     label,
     searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalMultipleSelectMaterial = ({
+  name = 'materialIds',
+  label = 'material',
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IMultipleSelectMaterialRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'multiple-select-material',
+    name,
+    label,
     clearable,
     withAsterisk,
     colSpan,

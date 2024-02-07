@@ -83,6 +83,11 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                   control="number-input-table-rhf"
                   name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.targetPlans.${i}.rate`}
                   precision={0}
+                  styles={{
+                    input: {
+                      textAlign: 'center',
+                    },
+                  }}
                 />
               );
             },
@@ -96,6 +101,11 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 <FormController
                   control="number-input-table-rhf"
                   name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.targetPlans.${i}.ton`}
+                  styles={{
+                    input: {
+                      textAlign: 'center',
+                    },
+                  }}
                 />
               );
             },
@@ -240,10 +250,10 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                   groups: [
                     {
                       id: 'day',
-                      title: 'Hari',
+                      title: t('commonTypography.information'),
                       style: { textAlign: 'center' },
                       columns: [
-                        { accessor: 'activity', width: 300, title: '' },
+                        { accessor: 'activity', width: 250, title: '' },
                       ],
                     },
                     ...(renderOtherGroup ?? []),

@@ -19,9 +19,7 @@ const PrimaryLink = React.forwardRef<HTMLAnchorElement, PrimaryLinkProps>(
     const { classes, cx } = useComponentsStyle();
 
     const isNewTab =
-      openNewTab !== undefined
-        ? openNewTab
-        : href && !href.startsWith('/') && !href.startsWith('#');
+      openNewTab && !href.startsWith('/') && !href.startsWith('#');
 
     if (!isNewTab) {
       return (

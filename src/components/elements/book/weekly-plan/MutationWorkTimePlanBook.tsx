@@ -17,14 +17,14 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import {
+  CommonWeeklyPlanInformation,
+  DashboardCard,
   DisplayLoseTimeAndEffectiveWork,
   FormController,
   MantineDataTable,
   ModalConfirmation,
   PrimaryButton,
 } from '@/components/elements';
-import DashboardCard from '@/components/elements/card/DashboardCard';
-import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
 
 import {
   IWorkTimeDay,
@@ -35,14 +35,14 @@ import {
 import { useReadAllActivityWorkTimePlan } from '@/services/graphql/query/plan/weekly/work-time-plan/useReadAllActivityWorkTimePlan';
 import { useReadOneWorkTimePlan } from '@/services/graphql/query/plan/weekly/work-time-plan/useReadOneWorkTimePlan';
 import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
-import { workTimeDay } from '@/utils/constants/DefaultValues/work-time-plan';
+import { workTimeDay } from '@/utils/constants/DefaultValues/work-time-plans';
 import { weeklyWorkTimePlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-work-time-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 dayjs.extend(isoWeek);
 
 interface IMutationWorkTimePlanBook {
-  mutationType?: 'create' | 'update';
+  mutationType?: 'create' | 'update' | 'read';
   mutationSuccessMassage?: string;
 }
 
@@ -294,6 +294,8 @@ const MutationWorkTimePlanBook = ({
             <FormController
               control="number-input-table-rhf"
               name={`workTimePlanActivities.${i}.weeklyWorkTimes.${index}.hour`}
+              readOnly={mutationType === 'read' ? true : false}
+              variant={mutationType === 'read' ? 'unstyled' : 'default'}
               styles={{
                 input: {
                   textAlign: 'center',
@@ -305,7 +307,7 @@ const MutationWorkTimePlanBook = ({
       };
       return group;
     },
-    []
+    [mutationType]
   );
 
   const renderOtherColumnActivityDay = workTimeDay?.map(
@@ -333,6 +335,8 @@ const MutationWorkTimePlanBook = ({
               name={`workTimePlanActivities.${
                 i + activityWorkTImePlanLength
               }.weeklyWorkTimes.${index}.hour`}
+              readOnly={mutationType === 'read' ? true : false}
+              variant={mutationType === 'read' ? 'unstyled' : 'default'}
               styles={{
                 input: {
                   textAlign: 'center',
@@ -344,7 +348,7 @@ const MutationWorkTimePlanBook = ({
       };
       return group;
     },
-    [recordsWithoutLoseTime]
+    [recordsWithoutLoseTime, mutationType]
   );
 
   const renderOtherColumnLosetimeDay = workTimeDay?.map(
@@ -390,8 +394,14 @@ const MutationWorkTimePlanBook = ({
     <DashboardCard p={0} isLoading={weeklyWorkTimePlanLoading}>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(handleSubmitForm)}>
-          <Flex gap={32} direction="column" p={22}>
-            <CommonWeeklyPlanInformation />
+          <Flex
+            gap={32}
+            direction="column"
+            p={mutationType === 'read' ? 0 : 22}
+          >
+            {mutationType === 'read' ? undefined : (
+              <CommonWeeklyPlanInformation />
+            )}
             <MantineDataTable
               tableProps={{
                 highlightOnHover: true,
@@ -635,37 +645,39 @@ const MutationWorkTimePlanBook = ({
                 title: t('commonTypography.dataNotfound'),
               }}
             />
-            <Group w="100%" position="apart">
-              <PrimaryButton
-                label={t('commonTypography.back')}
-                type="button"
-                variant="outline"
-                onClick={() => {
-                  router.push(
-                    mutationType === 'update'
-                      ? `/plan/weekly/${mutationType}/${id}`
-                      : `/plan/weekly`
-                  );
-                }}
-              />
-              <Group spacing="xs">
+            {mutationType === 'read' ? undefined : (
+              <Group w="100%" position="apart">
                 <PrimaryButton
-                  label={t('commonTypography.save')}
-                  loading={mutationType === 'create' ? loading : undefined}
-                  type={mutationType === 'create' ? 'submit' : 'button'}
-                  onClick={
-                    mutationType === 'update'
-                      ? async () => {
-                          const output = await methods.trigger(undefined, {
-                            shouldFocus: true,
-                          });
-                          if (output) setIsOpenConfirmation((prev) => !prev);
-                        }
-                      : undefined
-                  }
+                  label={t('commonTypography.back')}
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    router.push(
+                      mutationType === 'update'
+                        ? `/plan/weekly/${mutationType}/${id}`
+                        : `/plan/weekly`
+                    );
+                  }}
                 />
+                <Group spacing="xs">
+                  <PrimaryButton
+                    label={t('commonTypography.save')}
+                    loading={mutationType === 'create' ? loading : undefined}
+                    type={mutationType === 'create' ? 'submit' : 'button'}
+                    onClick={
+                      mutationType === 'update'
+                        ? async () => {
+                            const output = await methods.trigger(undefined, {
+                              shouldFocus: true,
+                            });
+                            if (output) setIsOpenConfirmation((prev) => !prev);
+                          }
+                        : undefined
+                    }
+                  />
+                </Group>
               </Group>
-            </Group>
+            )}
           </Flex>
           <ModalConfirmation
             isOpenModalConfirmation={isOpenConfirmation}
