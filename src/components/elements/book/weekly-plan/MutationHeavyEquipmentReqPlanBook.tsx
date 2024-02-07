@@ -94,7 +94,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
         icon: <IconCheck />,
       });
       router.push(
-        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=next`
+        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=heavyEquipmentAvailabilityPlan`
       );
       if (mutationType === 'update') {
         setIsOpenConfirmation(false);
@@ -128,7 +128,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
       },
       skip: !router.isReady || tabs !== 'heavyEquipmentReqPlan',
       onCompleted: (data) => {
-        if (data.weeklyHeavyEquipmentRequirementPlans.data.length) {
+        if (data.weeklyHeavyEquipmentRequirementPlans.data.length > 0) {
           const weeklyHeavyEquipmentRequirementPlans: IMutationHeavyEquipmentReqPlan[] =
             data.weeklyHeavyEquipmentRequirementPlans.data.map((obj) => {
               const locationIds = obj.locations.map((val) => val.id);

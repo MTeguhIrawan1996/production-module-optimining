@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Flex } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -16,15 +17,18 @@ import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
 import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
 
 import {
+  IMutationHeavyEquipmentAvailabilityPlanData,
   IMutationHeavyEquipmentAvailabilityPlanValues,
   useCreateHeavyEquipmentAvailabilityPlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateHeavyEquipmentAvailabilityPlan';
+import { useReadOneHeavyEquipmentAvailabilityPlan } from '@/services/graphql/query/plan/weekly/heavy-equipment-availability-plan.ts/useReadOneHeavyEquipmentAvailabilityPlan';
 import {
   classSelect,
   displayQuietNumber,
   globalNumberInput,
   globalTextArea,
 } from '@/utils/constants/Field/global-field';
+import { heavyEquipmentAvailAbilityMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-heavy-equipment-availability-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -46,7 +50,7 @@ const MutationHeavyEquipmentAvailabilityPlanBook = ({
     React.useState<boolean>(false);
 
   const methods = useForm<IMutationHeavyEquipmentAvailabilityPlanValues>({
-    // resolver: zodResolver(heavyEquipmentAvailabilityMutationValidation),
+    resolver: zodResolver(heavyEquipmentAvailAbilityMutationValidation),
     defaultValues: {
       heavyEquipmentAvailabilityPlans: [
         {
@@ -65,9 +69,8 @@ const MutationHeavyEquipmentAvailabilityPlanBook = ({
   const {
     fields: heavyEquipmentAvailabilityFields,
     append: heavyEquipmentAvailabilityAppend,
-    // update: heavyEquipmentAvailabilityUpdate,
     remove: heavyEquipmentAvailabilityRemove,
-    // replace: heavyEquipmentAvailabilityReplace,
+    replace: heavyEquipmentAvailabilityReplace,
   } = useFieldArray({
     name: 'heavyEquipmentAvailabilityPlans',
     control: methods.control,
@@ -111,50 +114,30 @@ const MutationHeavyEquipmentAvailabilityPlanBook = ({
     },
   });
 
-  // const { weeklyHeavyEquipmentAvailabilityPlanDataLoading } =
-  //   useReadOneHeavyEquipmentAvailabilityPlan({
-  //     variables: {
-  //       weeklyPlanId: id,
-  //       limit: null,
-  //     },
-  //     skip: !router.isReady || tabs !== 'heavyEquipmentAvailabilityPlan',
-  //     onCompleted: (data) => {
-  //       if (data.weeklyHeavyEquipmentAvailabilityuirementPlans.data.length) {
-  //         const weeklyHeavyEquipmentAvailabilityuirementPlans: IMutationHeavyEquipmentAvailabilityPlan[] =
-  //           data.weeklyHeavyEquipmentAvailabilityuirementPlans.data.map((obj) => {
-  //             const locationIds = obj.locations.map((val) => val.id);
-  //             const materialIds = obj.materials.map((val) => val.id);
-  //             const activities: IMutationHeavyEquipmentAvailabilityPlanActivity[] =
-  //               obj.heavyEquipmentAvailabilityuirementPlanActivities.map((hObj) => {
-  //                 const weeklyHeavyEquipmentAvailabilityuirements: IMutationWeeklyHeavyEquipmentAvailabilityuirement[] =
-  //                   hObj.weeklyHeavyEquipmentAvailabilityuirements.map((wObj) => {
-  //                     return {
-  //                       id: wObj.id,
-  //                       day: wObj.day,
-  //                       value: wObj.value || '',
-  //                     };
-  //                   });
-  //                 return {
-  //                   id: hObj.id,
-  //                   activityFormId: hObj.activityForm.id,
-  //                   classId: hObj.class.id,
-  //                   weeklyHeavyEquipmentAvailabilityuirements,
-  //                 };
-  //               });
-  //             return {
-  //               id: obj.id,
-  //               activityName: obj.activityName,
-  //               locationIds,
-  //               materialIds,
-  //               averageDistance: obj.averageDistance,
-  //               desc: obj.desc,
-  //               activities,
-  //             };
-  //           });
-  //         heavyEquipmentAvailabilityReplace(weeklyHeavyEquipmentAvailabilityuirementPlans);
-  //       }
-  //     },
-  //   });
+  const { weeklyHeavyEquipmentAvailabilityPlanDataLoading } =
+    useReadOneHeavyEquipmentAvailabilityPlan({
+      variables: {
+        weeklyPlanId: id,
+        limit: null,
+      },
+      skip: !router.isReady || tabs !== 'heavyEquipmentAvailabilityPlan',
+      onCompleted: ({ weeklyHeavyEquipmentAvailabilityPlans }) => {
+        if (weeklyHeavyEquipmentAvailabilityPlans.data.length > 0) {
+          const newData: IMutationHeavyEquipmentAvailabilityPlanData[] =
+            weeklyHeavyEquipmentAvailabilityPlans.data.map((wObj) => {
+              return {
+                id: wObj.id,
+                classId: wObj.class.id,
+                totalCount: wObj.totalCount || '',
+                damagedCount: wObj.damagedCount || '',
+                withoutOperatorCount: wObj.withoutOperatorCount || '',
+                desc: wObj.desc || '',
+              };
+            });
+          heavyEquipmentAvailabilityReplace(newData);
+        }
+      },
+    });
 
   const unitCapacityCallback = React.useCallback(
     (
@@ -171,6 +154,7 @@ const MutationHeavyEquipmentAvailabilityPlanBook = ({
         key: `${obj.heavyEquipmentAvailabilityPlanId}.classId`,
         skipQuery: tabs !== 'heavyEquipmentAvailabilityPlan',
         colSpan: 12,
+        limit: null,
       });
       const totalAvailabilityHeavyEquipmentItem = globalNumberInput({
         name: `heavyEquipmentAvailabilityPlans.${index}.totalCount`,
@@ -222,7 +206,7 @@ const MutationHeavyEquipmentAvailabilityPlanBook = ({
           addButton:
             index === 0
               ? {
-                  label: t('commonTypography.createActivity'),
+                  label: t('commonTypography.createHeavyEquipment'),
                   onClick: () =>
                     heavyEquipmentAvailabilityAppend({
                       id: null,
@@ -256,10 +240,21 @@ const MutationHeavyEquipmentAvailabilityPlanBook = ({
   const handleSubmitForm: SubmitHandler<
     IMutationHeavyEquipmentAvailabilityPlanValues
   > = async (data) => {
+    const newData: IMutationHeavyEquipmentAvailabilityPlanData[] =
+      data.heavyEquipmentAvailabilityPlans.map(
+        ({ damagedCount, totalCount, withoutOperatorCount, ...rest }) => {
+          return {
+            damagedCount: damagedCount || null,
+            totalCount: totalCount || null,
+            withoutOperatorCount: withoutOperatorCount || null,
+            ...rest,
+          };
+        }
+      );
     await executeUpdate({
       variables: {
         weeklyPlanId: id,
-        heavyEquipmentAvailabilityPlans: data.heavyEquipmentAvailabilityPlans,
+        heavyEquipmentAvailabilityPlans: newData,
       },
     });
   };
@@ -268,7 +263,10 @@ const MutationHeavyEquipmentAvailabilityPlanBook = ({
   };
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard
+      p={0}
+      isLoading={weeklyHeavyEquipmentAvailabilityPlanDataLoading}
+    >
       <Flex gap={32} direction="column" p={22}>
         <CommonWeeklyPlanInformation />
         <GlobalFormGroup

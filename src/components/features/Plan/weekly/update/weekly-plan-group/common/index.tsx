@@ -12,6 +12,7 @@ import {
   MutationWorkTimePlanBook,
   RootWrapper,
 } from '@/components/elements';
+import MutationHeavyEquipmentAvailabilityPlanBook from '@/components/elements/book/weekly-plan/MutationHeavyEquipmentAvailabilityPlanBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
@@ -87,6 +88,19 @@ const UpdateWeeklyPlanGroupPage = () => {
                 <MutationHeavyEquipmentReqPlanBook
                   mutationSuccessMassage={t(
                     'weeklyPlan.successUpdateHeavyEquipmentReqPlanMessage'
+                  )}
+                  mutationType="update"
+                />
+              ),
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.heavyEquipmentAvailabilityPlan'),
+              value: 'heavyEquipmentAvailabilityPlan',
+              component: (
+                <MutationHeavyEquipmentAvailabilityPlanBook
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successUpdateHeavyEquipmentAvailabilityPlanMessage'
                   )}
                   mutationType="update"
                 />

@@ -442,7 +442,8 @@
     "heavyEquipmentReqPlanInformation": "Informasi Rencana Kebutuhan Alat Berat",
     "formsOfActivity": "Bentuk Kegiatan",
     "createFormsOfActivity": "Tambah Bentuk Kegiatan",
-    "totalAvailabilityHeavyEquipment": "Total Ketersediaan Alat Berat"
+    "totalAvailabilityHeavyEquipment": "Total Ketersediaan Alat Berat",
+    "createHeavyEquipment": "$t(commonTypography.create) $t(commonTypography.heavyEquipment)"
   },
   "sideBar": {
     "dashboard": "Dashboard",

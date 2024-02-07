@@ -33,7 +33,7 @@ const PlanGroupLink: React.FC<IPlanGroupLinkProps> = ({ type }) => {
     },
     {
       label: 'heavyEquipmentAvailabilityPlan',
-      href: `/plan/weekly/${type}/weekly-plan-information`,
+      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=heavyEquipmentAvailabilityPlan`,
     },
     {
       label: 'heavyEquipmentAvailabilityPlan',
