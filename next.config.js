@@ -31,9 +31,7 @@ const moduleExports = {
         name: 'production',
         filename: `static/${isServer ? 'ssr' : 'chunks'}/remoteEntry.js`,
         exposes: {
-          './CompanyTypeReferenceFeature':
-            './src/components/features/Reference/company-type/common/index.tsx',
-          './features': './src/components/features/index.ts',
+          './features': './src/components/exposes/exposes.tsx',
         },
         remotes: {
           main: `main@${MAIN_MODULE_URL}/_next/static/${
