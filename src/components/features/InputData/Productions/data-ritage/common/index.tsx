@@ -24,12 +24,12 @@ const DataRitagePage = () => {
     shallow
   );
 
-  const isPremissionOre = permission.includes('read-ore-ritage');
-  const isPremissionOb = permission.includes('read-overburden-ritage');
-  const isPremissionQuarry = permission.includes('read-quarry-ritage');
-  const isPremissionBarging = permission.includes('read-barging-ritage');
-  const isPremissionMoving = permission.includes('read-moving-ritage');
-  const isPremissionTopsoil = permission.includes('read-topsoil-ritage');
+  const [isPremissionOre, setIsPermissionOre] = React.useState(false);
+  const [isPremissionOb, setIsPermissionOb] = React.useState(false);
+  const [isPremissionQuarry, setIsPermissionQuarry] = React.useState(false);
+  const [isPremissionBarging, setIsPermissionBarging] = React.useState(false);
+  const [isPremissionMoving, setIsPermissionMoving] = React.useState(false);
+  const [isPremissionTopsoil, setIsPermissionTopsoil] = React.useState(false);
 
   React.useEffect(() => {
     setBreadcrumbs([
@@ -38,8 +38,18 @@ const DataRitagePage = () => {
         path: router.asPath,
       },
     ]);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
+
+  React.useEffect(() => {
+    setIsPermissionOre(permission.includes('read-ore-ritage'));
+    setIsPermissionOb(permission.includes('read-overburden-ritage'));
+    setIsPermissionQuarry(permission.includes('read-quarry-ritage'));
+    setIsPermissionBarging(permission.includes('read-barging-ritage'));
+    setIsPermissionMoving(permission.includes('read-moving-ritage'));
+    setIsPermissionTopsoil(permission.includes('read-topsoil-ritage'));
+  }, [permission]);
 
   const handleChangeTab = (tabs: TabsValue) => {
     const url = `/input-data/production/data-ritage?tabs=${tabs}`;

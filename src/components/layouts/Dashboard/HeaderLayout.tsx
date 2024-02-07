@@ -140,7 +140,9 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
               />
               <PrimaryButton
                 label="Logout"
-                onClick={() => signOut({ redirect: true, callbackUrl: '/' })}
+                onClick={() =>
+                  signOut({ redirect: true, callbackUrl: '/auth/signin' })
+                }
               />
             </Stack>
           </Menu.Dropdown>

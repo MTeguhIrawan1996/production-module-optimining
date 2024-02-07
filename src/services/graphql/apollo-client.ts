@@ -72,7 +72,39 @@ const getClient = (tokenServer?: ISessionServer | null) => {
   });
 
   const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
-    const blackList: string[] = [];
+    const blackList: string[] = [
+      'ReadAllBrand',
+      'ReadAllHeavyEquipmentType',
+      'ReadAllHeavyEquipmentModel',
+      'ReadAllRelegion',
+      'ReadAllMarriage',
+      'ReadAllProvince',
+      'ReadAllSubDistrict',
+      'ReadAllIdentityType',
+      'ReadAllVillage',
+      'ReadAllRegency',
+      'ReadAllEmployeStatus',
+      'ReadAllEmployePosition',
+      'ReadAllDivision',
+      'ReadAllEligibilityStatus',
+      'ReadAllBussinessType',
+      'ReadAllCompanyPermissionType',
+      'ReadAllLoactionCategory',
+      'ReadAllHeavyEquipmentClass',
+      'ReadAllSampleType',
+      'ReadAllHeavyEquipmentSelect',
+      'ReadAllWeather',
+      'ReadAllPit',
+      'ReadAllDome',
+      'ReadAllLocationSelect',
+      'ReadAllYearSelect',
+      'ReadAllMonthSelect',
+      'ReadAllWeekSelect',
+      'ReadAllWeatherCondition',
+      'ReadAllArriveBargeSelect',
+      'ReadAllStatusSelect',
+      'ReadAllActivityWorkTimePlan',
+    ];
 
     if (blackList.includes(operation.operationName)) {
       return;
