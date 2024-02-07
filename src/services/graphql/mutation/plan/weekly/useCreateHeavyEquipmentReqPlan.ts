@@ -16,39 +16,39 @@ export const CREATE_HEAVY_EQUIPMENT_REQ_PLAN = gql`
   }
 `;
 
-export interface IWeeklyHeavyEquipmentRequirement {
+export interface IMutationWeeklyHeavyEquipmentRequirement {
   id?: string | null;
   day: number;
   value: number | null | '';
 }
 
-export interface IActivity {
+export interface IMutationHeavyEquipmentReqPlanActivity {
   id?: string | null;
   activityFormId: string | null;
   classId: string | null;
-  weeklyHeavyEquipmentRequirements: IWeeklyHeavyEquipmentRequirement[];
+  weeklyHeavyEquipmentRequirements: IMutationWeeklyHeavyEquipmentRequirement[];
 }
 
-export interface ICreateHeavyEquipmentReqPlan {
+export interface IMutationHeavyEquipmentReqPlan {
   id?: string | null;
   activityName: string;
   materialIds: string[];
   locationIds: string[];
   averageDistance: number | null | '';
   desc: string;
-  activities: IActivity[];
+  activities: IMutationHeavyEquipmentReqPlanActivity[];
 }
 
 export interface IMutationHeavyEquipmentReqPlanValues {
-  heavyEquipmentRequirementPlans: ICreateHeavyEquipmentReqPlan[];
+  heavyEquipmentRequirementPlans: IMutationHeavyEquipmentReqPlan[];
 }
 
-type ICreateHeavyEquipmentReqPlanRequest = {
+type IMutationHeavyEquipmentReqPlanRequest = {
   weeklyPlanId: string;
-  heavyEquipmentRequirementPlans: ICreateHeavyEquipmentReqPlan[];
+  heavyEquipmentRequirementPlans: IMutationHeavyEquipmentReqPlan[];
 };
 
-interface ICreateHeavyEquipmentReqPlanResponse {
+interface IMutationHeavyEquipmentReqPlanResponse {
   updateWeeklyHeavyEquipmentRequirementPlanBulk: {
     id: string;
   };
@@ -59,11 +59,11 @@ export const useCreateHeavyEquipmentReqPlan = ({
   onCompleted,
 }: {
   onError?: ({ graphQLErrors }: ApolloError) => void;
-  onCompleted?: (data: ICreateHeavyEquipmentReqPlanResponse) => void;
+  onCompleted?: (data: IMutationHeavyEquipmentReqPlanResponse) => void;
 }) => {
   return useMutation<
-    ICreateHeavyEquipmentReqPlanResponse,
-    ICreateHeavyEquipmentReqPlanRequest
+    IMutationHeavyEquipmentReqPlanResponse,
+    IMutationHeavyEquipmentReqPlanRequest
   >(CREATE_HEAVY_EQUIPMENT_REQ_PLAN, {
     onError,
     onCompleted,

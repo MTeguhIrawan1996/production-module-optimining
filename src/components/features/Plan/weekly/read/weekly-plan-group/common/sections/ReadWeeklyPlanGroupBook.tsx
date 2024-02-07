@@ -4,28 +4,16 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalTabs } from '@/components/elements';
+import HeavyEquipmentAvailabilityPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/HeavyEquipmentAvailabilityPlanData';
+import HeavyEquipmentReqPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/HeavyEquipmentReqPlanData';
 import UnitCapacityPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/UnitCapacityPlanData';
 import WorkTimePlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/WorkTimePlanData';
-
-import { useReadOneUnitCapacityPlan } from '@/services/graphql/query/plan/weekly/useReadOneUnitCapacityPlan';
 
 const ReadWeeklyPlanGroupBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const id = router.query.id as string;
   const tabs = router.query.tabs as string;
-
-  const {
-    weeklyUnitCapacityPlanData,
-    weeklyUnitCapacityPlanMeta,
-    weeklyUnitCapacityPlanDataLoading,
-  } = useReadOneUnitCapacityPlan({
-    variables: {
-      weeklyPlanId: id,
-      limit: 10,
-    },
-    skip: tabs !== 'unitCapacityPlan',
-  });
 
   const handleChangeTab = (tabs: TabsValue) => {
     const url = `/plan/weekly/read/weekly-plan-group/${id}?tabs=${tabs}`;
@@ -34,7 +22,6 @@ const ReadWeeklyPlanGroupBook = () => {
 
   return (
     <DashboardCard
-      isLoading={weeklyUnitCapacityPlanDataLoading}
       title={t('weeklyPlan.title2')}
       titleStyle={{
         fw: 700,
@@ -71,14 +58,19 @@ const ReadWeeklyPlanGroupBook = () => {
           {
             label: t('commonTypography.unitCapacityPlan'),
             value: 'unitCapacityPlan',
-            component: (
-              <UnitCapacityPlanData
-                data={weeklyUnitCapacityPlanData}
-                id={id}
-                tabs={tabs}
-                meta={weeklyUnitCapacityPlanMeta}
-              />
-            ),
+            component: <UnitCapacityPlanData />,
+            isShowItem: true,
+          },
+          {
+            label: t('commonTypography.heavyEquipmentReqPlan'),
+            value: 'heavyEquipmentReqPlan',
+            component: <HeavyEquipmentReqPlanData />,
+            isShowItem: true,
+          },
+          {
+            label: t('commonTypography.heavyEquipmentAvailabilityPlan'),
+            value: 'heavyEquipmentAvailabilityPlan',
+            component: <HeavyEquipmentAvailabilityPlanData />,
             isShowItem: true,
           },
         ]}

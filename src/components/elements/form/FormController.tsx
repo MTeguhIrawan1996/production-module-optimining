@@ -7,6 +7,7 @@ import {
   CompanyPermissionTypeSelectInputRhf,
   CompanyTypeSelectInputRhf,
   DateInputRhf,
+  DisplayQuietNumber,
   DivisionSelectInputRhf,
   DomeNameSelectInputRhf,
   EligibilityStatusSelectInputRhf,
@@ -49,6 +50,7 @@ import {
   ShiftSelectInputRhf,
   StockpileNameSelectInputRhf,
   SubDistrictSelectInputRhf,
+  TextAreaInput,
   TextInputRhf,
   TimeInputRhf,
   TypeSelectInputRhf,
@@ -65,6 +67,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
   switch (control) {
     case 'text-input':
       return <TextInputRhf {...props} />;
+    case 'text-area-input':
+      return <TextAreaInput {...props} />;
     case 'select-input':
       return <SelectInputRhf {...props} />;
     case 'password-input':
@@ -171,6 +175,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <InputSumArray {...props} />;
     case 'input-average-array':
       return <InputAverageArray {...props} />;
+    case 'display-quiet-number':
+      return <DisplayQuietNumber {...props} />;
     default:
       return null;
   }

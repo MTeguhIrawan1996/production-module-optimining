@@ -62,12 +62,14 @@ import { ISelectYearRhfProps } from '@/components/elements/input/SelectYearRhf';
 import { IShiftSelectInputRhfProps } from '@/components/elements/input/ShiftSelectInputRhf';
 import { IStockpileNameSelectInputRhfProps } from '@/components/elements/input/StockpileNameSelectInputRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
+import { ITextAreaInput } from '@/components/elements/input/TextAreaInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
 import { ITimeInputRhfProps } from '@/components/elements/input/TimeInputRhf';
 import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelectInputRhf';
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 import { IWeatherConditionSelectInputRhfProps } from '@/components/elements/input/WeatherConditionSelectInputRhf';
 import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
+import { IDisplayQuietNumber } from '@/components/elements/ui/DisplayQuietNumber';
 
 import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
 import { IEmployeesData } from '@/services/graphql/query/master-data-company/useReadAllEmploye';
@@ -89,6 +91,7 @@ export type IDate = Date | undefined | string | null;
 // Controller Field
 export type ControllerProps =
   | ITextInputProps
+  | ITextAreaInput
   | ISelectInputRhfProps
   | IPasswordInputProps
   | IImageInputDropzoneRhfProps
@@ -141,6 +144,7 @@ export type ControllerProps =
   | ISelectActivityFormRhfProps
   | IMultipleSelectLocationRhfProps
   | IMultipleSelectMaterialRhfProps
+  | IDisplayQuietNumber
   | IWeatherConditionSelectInputRhfProps;
 
 export type InputControllerNativeProps =
