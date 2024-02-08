@@ -90,7 +90,6 @@ const HeavyEquipmentProductionBook = () => {
     const dateItem = globalDateNative({
       label: 'date',
       placeholder: 'chooseDate',
-      radius: 'lg',
       clearable: true,
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });
