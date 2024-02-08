@@ -21,7 +21,7 @@ export const theme: MantineProviderProps['theme'] = {
     lg: '1rem', // 16px
     xl: '1.25rem', // 20px
   },
-  defaultRadius: 'xs',
+  defaultRadius: 'sm',
   breakpoints: {
     xs: '36em',
     sm: '48em',
@@ -46,7 +46,13 @@ export const theme: MantineProviderProps['theme'] = {
         px: '0.5rem',
       },
     },
+    // # Input Components
     Select: {
+      defaultProps: {
+        radius: 'sm',
+      },
+    },
+    DatePickerInput: {
       defaultProps: {
         radius: 'sm',
       },
