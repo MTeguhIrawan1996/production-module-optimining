@@ -17,10 +17,9 @@ const LogoutConfirmModal: React.FC<IModalProps> = ({
     <Modal.Root
       opened={isOpenModalLogout}
       onClose={actionModalLogout}
-      centered
-      radius="xs"
+      radius="md"
     >
-      <Modal.Overlay />
+      <Modal.Overlay opacity={0.2} />
       <Modal.Content>
         <Modal.Header>
           <Modal.Title fw={600} fz={16} w="100%" sx={{ textAlign: 'center' }}>

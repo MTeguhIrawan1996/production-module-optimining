@@ -34,11 +34,10 @@ const ImageModal: React.FC<IImageModalProps> = ({
     <Modal.Root
       opened={isOpenImageModal}
       onClose={actionImageModal}
-      centered
-      radius="xs"
+      radius="md"
       size="xl"
     >
-      <Modal.Overlay />
+      <Modal.Overlay opacity={0.2} />
       <Modal.Content>
         <Modal.Header>
           <Text component="span" fz={22} fw={500}>

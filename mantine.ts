@@ -56,6 +56,11 @@ export const theme: MantineProviderProps['theme'] = {
         p: 'sm',
       },
     },
+    Modal: {
+      defaultProps: {
+        radius: 'md',
+      },
+    },
   },
   fontSizes: {
     xs: '0.75rem', // 12px
