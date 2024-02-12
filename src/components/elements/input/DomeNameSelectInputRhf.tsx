@@ -16,9 +16,12 @@ export type IDomeNameSelectInputRhfProps = {
   name: string;
   labelValue?: string;
   stockpileId?: string | null;
+  limit?: number | null;
+  skipQuery?: boolean;
+  skipSeacrhQuary?: boolean;
 } & Omit<
   SelectProps,
-  'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
+  'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder' | 'limit'
 > &
   CommonProps;
 
@@ -29,6 +32,9 @@ const DomeNameSelectInputRhf: React.FC<IDomeNameSelectInputRhfProps> = ({
   labelValue,
   defaultValue,
   stockpileId = null,
+  limit = 15,
+  skipQuery = false,
+  skipSeacrhQuary = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -39,12 +45,13 @@ const DomeNameSelectInputRhf: React.FC<IDomeNameSelectInputRhfProps> = ({
 
   const { domeData } = useReadAllDome({
     variables: {
-      limit: 15,
+      limit: limit,
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       stockpileId: stockpileId === '' ? null : stockpileId,
     },
+    skip: skipQuery,
   });
 
   const { combinedItems, uncombinedItem } = useCombineFilterItems({
@@ -69,8 +76,8 @@ const DomeNameSelectInputRhf: React.FC<IDomeNameSelectInputRhfProps> = ({
           borderRadius: theme.spacing.xs,
         },
       })}
-      onSearchChange={setSearchTerm}
-      searchValue={searchTerm}
+      onSearchChange={!skipSeacrhQuary ? setSearchTerm : undefined}
+      searchValue={!skipSeacrhQuary ? searchTerm : undefined}
       data-control={control}
       placeholder={t('commonTypography.chooseDomeName', {
         ns: 'default',

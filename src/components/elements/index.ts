@@ -1,4 +1,5 @@
 import CommonWeeklyPlanInformationBook from '@/components/elements/book/weekly-plan/CommonWeeklyPlanInformationBook';
+import MutationBargingTargetPlanBook from '@/components/elements/book/weekly-plan/MutationBargingTargetPlanBook';
 import MutationHeavyEquipmentReqPlanBook from '@/components/elements/book/weekly-plan/MutationHeavyEquipmentReqPlanBook';
 import MutationUnitCapacityPlanBook from '@/components/elements/book/weekly-plan/MutationUnitCapacityPlanBook';
 import MutationWorkTimePlanBook from '@/components/elements/book/weekly-plan/MutationWorkTimePlanBook';
@@ -50,6 +51,7 @@ import IdentityRadioInputRhf from '@/components/elements/input/IdentityRadioInpu
 import ImageInputDropzoneRhf from '@/components/elements/input/ImageInputDropzoneRhf';
 import InputAverageArray from '@/components/elements/input/InputAverageArray';
 import InputSumArray from '@/components/elements/input/InputSumArray';
+import InputTableBargingTargetPlan from '@/components/elements/input/InputTableBargingTargetPlan';
 import LocationCategorySelectInputRhf from '@/components/elements/input/LocationCategorySelectInputRhf';
 import LocationSelectInputRhf from '@/components/elements/input/LocationSelectInputRhf';
 import MarriageSelectInputRhf from '@/components/elements/input/MarriageStatusesSelectInputRhf';
@@ -113,6 +115,7 @@ import DisplayLoseTimeAndEffectiveWork from '@/components/elements/ui/DisplayLos
 import DisplayQuietNumber from '@/components/elements/ui/DisplayQuietNumber';
 import GlobalHeaderDetail from '@/components/elements/ui/GlobalHeaderDetail';
 import InputGroupActivity from '@/components/elements/ui/InputGroupActivity';
+import InputGroupDome from '@/components/elements/ui/InputGroupDome';
 import InputGroupMaterial from '@/components/elements/ui/InputGroupMaterial';
 import ListDetailsRitageDT from '@/components/elements/ui/ListDetailsRitageDT';
 import PlanGroupLink from '@/components/elements/ui/PlanGroupLink';
@@ -164,8 +167,10 @@ export {
   InnerWrapper,
   InputAverageArray,
   InputGroupActivity,
+  InputGroupDome,
   InputGroupMaterial,
   InputSumArray,
+  InputTableBargingTargetPlan,
   KeyValueList,
   LinkButton,
   ListDetailsRitageDT,
@@ -180,6 +185,7 @@ export {
   MultipleFilter,
   MultipleSelectLocationRhf,
   MultipleSelectMaterialRhf,
+  MutationBargingTargetPlanBook,
   MutationHeavyEquipmentReqPlanBook,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,
