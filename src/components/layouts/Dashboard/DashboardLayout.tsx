@@ -1,8 +1,14 @@
-import { AppShell, Container, createStyles, Transition } from '@mantine/core';
+import {
+  AppShell,
+  Box,
+  Container,
+  createStyles,
+  Transition,
+} from '@mantine/core';
 import * as React from 'react';
 import { shallow } from 'zustand/shallow';
 
-import { Breadcrumb, LogoutConfirmModal } from '@/components/elements';
+import { Breadcrumb } from '@/components/elements';
 import HeaderLayout from '@/components/layouts/Dashboard/HeaderLayout';
 
 import { linksDashboard } from '@/utils/constants/Links/linksDashboard';
@@ -21,10 +27,10 @@ const useStyles = createStyles(() => ({
     overflow: 'clip',
   },
   main: {
-    display: 'flex',
-    justifyContent: 'start',
-    alignItems: 'start',
-    flexDirection: 'column',
+    // display: 'flex',
+    // justifyContent: 'start',
+    // alignItems: 'start',
+    // flexDirection: 'column',
     overflow: 'clip',
     paddingRight: 'calc(var(--mantine-aside-width, 0px))',
     paddingLeft: 'calc(var(--mantine-navbar-width, 0px))',
@@ -39,7 +45,6 @@ type LayoutProps = {
 const DashboardLayout = ({ children }: LayoutProps) => {
   const { classes } = useStyles();
   const [isExpand, setIsExpand] = React.useState<boolean>(true);
-  const [isConfirmLogout, setIsConfirmLogout] = React.useState<boolean>(false);
   const { permissions, setPermissions } = usePermissions(
     (state) => state,
     shallow
@@ -99,14 +104,12 @@ const DashboardLayout = ({ children }: LayoutProps) => {
       }
     >
       <HeaderLayout isExpand={isExpand} onHandleExpand={onHandleExpand} />
+
       <Container px="1.5rem" py="sm" maw="calc(1400px + 3rem)">
         <Breadcrumb />
       </Container>
-      {children}
-      <LogoutConfirmModal
-        isOpenModalLogout={isConfirmLogout}
-        actionModalLogout={() => setIsConfirmLogout((prev) => !prev)}
-      />
+
+      <Box w="100%">{children}</Box>
     </AppShell>
   );
 };

@@ -476,7 +476,13 @@
     "button": {
       "login": "$t(commonTypography.login)"
     },
-    "title": "$t(commonTypography.login) ke Optimining"
+    "title": "$t(commonTypography.login) ke Optimining",
+    "message": {
+      "logoutConfirmationTitle": "Apakah yakin ingin keluar?",
+      "logoutConfirmationDescription": "Pastikan data Anda telah tersimpan",
+      "confirmLogout": "Ya, lanjut keluar",
+      "cancelLogout": "Batalkan"
+    }
   },
   "user": {
     "userTitle": "$t(commonTypography.user)",
