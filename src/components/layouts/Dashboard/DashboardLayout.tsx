@@ -1,8 +1,8 @@
-import { AppShell, createStyles, Transition } from '@mantine/core';
+import { AppShell, Container, createStyles, Transition } from '@mantine/core';
 import * as React from 'react';
 import { shallow } from 'zustand/shallow';
 
-import { LogoutConfirmModal } from '@/components/elements';
+import { Breadcrumb, LogoutConfirmModal } from '@/components/elements';
 import HeaderLayout from '@/components/layouts/Dashboard/HeaderLayout';
 
 import { linksDashboard } from '@/utils/constants/Links/linksDashboard';
@@ -99,6 +99,9 @@ const DashboardLayout = ({ children }: LayoutProps) => {
       }
     >
       <HeaderLayout isExpand={isExpand} onHandleExpand={onHandleExpand} />
+      <Container px="1.5rem" py="sm" maw="calc(1400px + 3rem)">
+        <Breadcrumb />
+      </Container>
       {children}
       <LogoutConfirmModal
         isOpenModalLogout={isConfirmLogout}
