@@ -7,6 +7,7 @@ import { shallow } from 'zustand/shallow';
 import {
   GlobalTabs,
   InnerWrapper,
+  MutationBargingTargetPlanBook,
   MutationHeavyEquipmentReqPlanBook,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,
@@ -101,6 +102,19 @@ const CreateWeeklyPlanGroupPage = () => {
                 <MutationHeavyEquipmentAvailabilityPlanBook
                   mutationSuccessMassage={t(
                     'weeklyPlan.successCreateHeavyEquipmentAvailabilityPlanMessage'
+                  )}
+                  mutationType="create"
+                />
+              ),
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.bargingTargetPlan'),
+              value: 'bargingTargetPlan',
+              component: (
+                <MutationBargingTargetPlanBook
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successCreateBargingTargetPlanMessage'
                   )}
                   mutationType="create"
                 />

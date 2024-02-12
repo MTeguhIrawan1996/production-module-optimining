@@ -1,4 +1,9 @@
-export const targetPlansDay = [
+import {
+  IMaterialsGroup,
+  ITargetPlan,
+} from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyUnitcapacityPlan';
+
+export const targetPlansDay: ITargetPlan[] = [
   {
     id: '',
     day: 0,
@@ -43,7 +48,7 @@ export const targetPlansDay = [
   },
 ];
 
-export const material = {
+export const material: IMaterialsGroup = {
   id: '',
   materialId: '',
   fleet: '',
