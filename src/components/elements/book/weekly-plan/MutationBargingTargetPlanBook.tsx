@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Flex, Grid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -8,20 +9,23 @@ import { useTranslation } from 'react-i18next';
 
 import DashboardCard from '@/components/elements/card/DashboardCard';
 import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
-import InputTableBargingTargetPlan from '@/components/elements/input/InputTableBargingTargetPlan';
 import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
 import InputGroupDome, {
   IInputGroupDomeProps,
 } from '@/components/elements/ui/InputGroupDome';
+import InputTableBargingTargetPlan from '@/components/elements/ui/InputTableBargingTargetPlan';
 
 import {
+  IBargingDomePlan,
   IBargingTargetPlan,
   IBargingTargetPlanValue,
   IWeeklyBargingTarget,
   useCreateWeeklyBargingTargetPlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateBargingTargetPlan';
 import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
+import { useReadOneBargingTargetPlan } from '@/services/graphql/query/plan/weekly/barging-target-plan/useReadOneBargingTargetPlan';
 import { bargingTarget } from '@/utils/constants/DefaultValues/barging-target-plan';
+import { weeklyBargingTargetPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-barging-target-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -43,7 +47,7 @@ const MutationBargingTargetPlanBook = ({
     React.useState<boolean>(false);
 
   const methods = useForm<IBargingTargetPlanValue>({
-    // resolver: zodResolver(weeklyUnitCapacityPlanMutationValidation),
+    resolver: zodResolver(weeklyBargingTargetPlanMutationValidation),
     defaultValues: {
       bargingTargetPlans: [
         {
@@ -63,22 +67,28 @@ const MutationBargingTargetPlanBook = ({
     mode: 'onBlur',
   });
 
+  const { fields: bargingTargetPlanFields } = useFieldArray({
+    name: 'bargingTargetPlans',
+    control: methods.control,
+    keyName: 'bargingTargetPlanId',
+  });
   const {
     fields: bargingDomePlanFields,
     append: bargingDomePlanAppend,
     remove: bargingDomePlanRemove,
+    replace: bargingDomePlanReplace,
   } = useFieldArray({
     name: 'bargingDomePlans',
     control: methods.control,
     keyName: 'bargingDomePlanId',
   });
 
-  useReadAllMaterialsMaster({
+  const { materialsData, materialsDataLoading } = useReadAllMaterialsMaster({
     variables: {
       limit: null,
       orderDir: 'desc',
-      isHaveParent: false,
-      parentId: null,
+      parentId: `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`,
+      isHaveParent: null,
       includeIds: null,
     },
     skip: tabs !== 'bargingTargetPlan',
@@ -94,6 +104,55 @@ const MutationBargingTargetPlanBook = ({
         }
       );
       methods.setValue('bargingTargetPlans', newBargingtargetPlan);
+    },
+  });
+
+  useReadOneBargingTargetPlan({
+    variables: {
+      weeklyPlanId: id,
+    },
+    skip: !router.isReady || !materialsData || tabs !== 'bargingTargetPlan',
+    onCompleted: (data) => {
+      if (
+        data.weeklyBargingPlan &&
+        data.weeklyBargingPlan.bargingTargetPlans.length > 0
+      ) {
+        data.weeklyBargingPlan.bargingTargetPlans.forEach((val) => {
+          const newWeeklyBargingTargets: IWeeklyBargingTarget[] =
+            val.weeklyBargingTargets.map((wObj) => {
+              return {
+                id: wObj.id || null,
+                day: wObj.day,
+                rate: wObj.rate || '',
+                ton: wObj.ton || '',
+              };
+            });
+          const bargingTargetPlanIndex = bargingTargetPlanFields.findIndex(
+            (item) => item.materialId === val.material.id
+          );
+          methods.setValue(
+            `bargingTargetPlans.${bargingTargetPlanIndex}.id`,
+            val.id
+          );
+          methods.setValue(
+            `bargingTargetPlans.${bargingTargetPlanIndex}.weeklyBargingTargets`,
+            newWeeklyBargingTargets
+          );
+        });
+      }
+      if (
+        data.weeklyBargingPlan &&
+        data.weeklyBargingPlan.bargingDomePlans.data.length > 0
+      ) {
+        const newBargingDomePlans: IBargingDomePlan[] =
+          data.weeklyBargingPlan.bargingDomePlans.data.map((val) => {
+            return {
+              id: val.id,
+              domeId: val.dome.id,
+            };
+          });
+        bargingDomePlanReplace(newBargingDomePlans);
+      }
     },
   });
 
@@ -229,7 +288,7 @@ const MutationBargingTargetPlanBook = ({
   };
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={materialsDataLoading}>
       <Flex gap={32} direction="column" p={22}>
         <CommonWeeklyPlanInformation />
         <GlobalFormGroup

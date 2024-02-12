@@ -44,8 +44,8 @@ const PlanGroupLink: React.FC<IPlanGroupLinkProps> = ({ type }) => {
       href: `/plan/weekly/${type}/weekly-plan-information`,
     },
     {
-      label: 'bargingPlan',
-      href: `/plan/weekly/${type}/weekly-plan-information`,
+      label: 'bargingTargetPlan',
+      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=bargingTargetPlan`,
     },
   ];
   return (
