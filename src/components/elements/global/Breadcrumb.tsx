@@ -6,14 +6,12 @@ import {
 import Link from 'next/link';
 import * as React from 'react';
 
+import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
+
 type Breadcrumbs = {
   label: string;
   path: string;
 };
-
-interface IBreadcrumbProps {
-  breadcrumbs: Breadcrumbs[];
-}
 
 const useStyles = createStyles((theme) => ({
   breadcrumbStyle: {
@@ -25,34 +23,40 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const Breadcrumb: React.FC<IBreadcrumbProps> = ({ breadcrumbs }) => {
+const Breadcrumb: React.FC = () => {
   const { classes, cx } = useStyles();
 
-  const breadCrumbCallback = React.useCallback(
-    (value: Breadcrumbs, index: number) => {
-      const { label, path } = value;
-      return (
-        <Link href={path} key={label} prefetch={false}>
-          <Text
-            fw={index === breadcrumbs.length - 1 ? 600 : 400}
-            className={cx('textPrimaryHover', classes.breadcrumbStyle)}
-          >
-            {label}
-          </Text>
-        </Link>
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [breadcrumbs]
-  );
+  // const { breadcrumbs } = useBreadcrumbs((state) => state);
 
-  const breadcrumbLinks = breadcrumbs.map(breadCrumbCallback);
+  const { breadcrumbs } = useBreadcrumbs((state) => state);
+  const [data, setData] = React.useState<Breadcrumbs[]>([]);
+
+  React.useEffect(() => {
+    // Fetch data from local storage or perform any necessary logic
+    // const localData = localStorage.getItem('yourDataKey');
+    setData(breadcrumbs);
+  }, [breadcrumbs]); // Empty dependency array ensures it runs only on mount
 
   return (
     <MantineBreadcrumbs separator={<span> / </span>}>
-      {breadcrumbLinks}
+      {data?.map(({ label, path }) => {
+        return (
+          <Link href={path} key={label} prefetch={false}>
+            <Text
+              fw={100}
+              className={cx('textPrimaryHover', classes.breadcrumbStyle)}
+            >
+              {label}
+            </Text>
+          </Link>
+        );
+      })}
     </MantineBreadcrumbs>
   );
 };
 
 export default Breadcrumb;
+
+/**
+ *
+ */

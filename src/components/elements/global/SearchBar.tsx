@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { Center, TextInput, TextInputProps } from '@mantine/core';
+import { TextInput, TextInputProps } from '@mantine/core';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 
@@ -32,7 +32,7 @@ const SearchBar: React.FC<ISerachBar> = ({
   }, [searchQuery]);
   return (
     <TextInput
-      radius="xl"
+      radius="sm"
       placeholder={placeholder}
       value={value}
       onChange={onChange}
@@ -41,13 +41,10 @@ const SearchBar: React.FC<ISerachBar> = ({
       //     onSearch();
       //   }
       // }}
-      icon={
-        <Center>
-          <Icon icon="tabler:search" fontSize={20} />
-        </Center>
-      }
+      icon={<Icon icon="tabler:search" fontSize={20} />}
       styles={(theme) => ({
         input: {
+          paddingLeft: '40px !important',
           backgroundColor: theme.white,
           '::placeholder': {
             fontWeight: 400,
@@ -57,6 +54,8 @@ const SearchBar: React.FC<ISerachBar> = ({
         },
         icon: {
           color: theme.colors.dark[6],
+          marginLeft: 4,
+          width: '36px !important',
         },
       })}
       {...rest}

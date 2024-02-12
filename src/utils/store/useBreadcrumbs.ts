@@ -10,7 +10,7 @@ interface BreadcrumbsProps {
   updateBreadcrumbsByIndex: (index: number, breadcrumb: Breadcrumb) => void;
 }
 
-export const useBreadcrumbs = create<BreadcrumbsProps>((set) => ({
+export const useBreadcrumbs = create<BreadcrumbsProps>()((set) => ({
   breadcrumbs: [],
   setBreadcrumbs: (breadcrumbs: Breadcrumb[]) => set({ breadcrumbs }),
   updateBreadcrumbsByIndex: (index: number, breadcrumb: Breadcrumb) =>

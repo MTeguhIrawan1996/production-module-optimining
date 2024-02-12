@@ -1,5 +1,4 @@
 import { useDebouncedState } from '@mantine/hooks';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,8 +15,7 @@ import { useReadAllUser } from '@/services/graphql/query/user/useReadAllUser';
 const UserBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const page = Number(router.query['page']) || 1;
   const url = `/setting/user?page=1`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
 

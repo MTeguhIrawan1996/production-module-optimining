@@ -1,6 +1,5 @@
 import { Stack } from '@mantine/core';
 import { DataTableColumn } from 'mantine-datatable';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -50,8 +49,7 @@ export default function ListDetailsRitageDT<
 }: IListDetailsRitageDTProps<T, D>) {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('p')) || 1;
+  const page = Number(router.query['p']) || 1;
   const date = router.query?.id?.[0] as string;
   const shiftId = router.query?.id?.[1] as string;
   const companyHeavyEquipmentId = router.query?.id?.[2] as string;

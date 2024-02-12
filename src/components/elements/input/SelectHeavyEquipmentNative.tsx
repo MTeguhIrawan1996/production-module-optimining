@@ -55,7 +55,7 @@ const SelectHeavyEquipmentNative: React.FC<
   return (
     <Select
       value={value}
-      radius="lg"
+      radius="sm"
       data={uncombinedItem}
       defaultValue={defaultValue}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}

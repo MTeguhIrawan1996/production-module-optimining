@@ -1,4 +1,3 @@
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,9 +18,8 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
   tab: tabProps,
 }) => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
-  const tab = pageParams.get('tab') || 'lose-time-category';
+  const page = Number(router.query['page']) || 1;
+  const tab = router.query['tab'] || 'lose-time-category';
   const { t } = useTranslation('default');
 
   /* #   /**=========== Query =========== */
