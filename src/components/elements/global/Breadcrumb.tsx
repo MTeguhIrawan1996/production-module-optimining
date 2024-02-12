@@ -17,14 +17,16 @@ const useStyles = createStyles((theme) => ({
   breadcrumbStyle: {
     cursor: 'pointer',
     textDecoration: 'none',
-    color: theme.colors.dark[1],
-    fontSize: 12,
-    fontWeight: 400,
+    color: theme.colors.dark[7],
+    fontSize: 14,
+    '&:hover': {
+      color: theme.colors.brand[6],
+    },
   },
 }));
 
 const Breadcrumb: React.FC = () => {
-  const { classes, cx } = useStyles();
+  const { classes } = useStyles();
 
   // const { breadcrumbs } = useBreadcrumbs((state) => state);
 
@@ -42,12 +44,7 @@ const Breadcrumb: React.FC = () => {
       {data?.map(({ label, path }) => {
         return (
           <Link href={path} key={label} prefetch={false}>
-            <Text
-              fw={100}
-              className={cx('textPrimaryHover', classes.breadcrumbStyle)}
-            >
-              {label}
-            </Text>
+            <Text className={classes.breadcrumbStyle}>{label}</Text>
           </Link>
         );
       })}
