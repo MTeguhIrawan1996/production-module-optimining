@@ -144,13 +144,6 @@ import HeavyEquipmentClassPage from '@/components/features/Reference/heavy-equip
 import CreateHeavyEquipmentClassPage from '@/components/features/Reference/heavy-equipment-class/create/common';
 import ReadHeavyEquipmentClassPage from '@/components/features/Reference/heavy-equipment-class/read/common';
 import UpdateHeavyEquipmentClassPage from '@/components/features/Reference/heavy-equipment-class/update/common';
-import ManagementRolePage from '@/components/features/Setting/management-role/common';
-import CreateManagementRolePage from '@/components/features/Setting/management-role/create-management-role/common';
-import ReadManagementRolePage from '@/components/features/Setting/management-role/read-management-role/common';
-import UpdateManagementRolePage from '@/components/features/Setting/management-role/update-management-role/common';
-import UserPage from '@/components/features/Setting/user/common';
-import CreateUserPage from '@/components/features/Setting/user/create-user/common';
-import UpdateUserPage from '@/components/features/Setting/user/update-user/common';
 
 export {
   ActivityCategoryMasterPage,
@@ -178,7 +171,6 @@ export {
   CreateHumanResourcesAvailablePage,
   CreateHumanResourcesPage,
   CreateLocationMasterPage,
-  CreateManagementRolePage,
   CreateMaterialMasterPage,
   CreateRitageBargingPage,
   CreateRitageMovingPage,
@@ -191,7 +183,6 @@ export {
   CreateSmapleHouseLabPage,
   CreateStockpileDomeMasterPage,
   CreateStockpileMasterPage,
-  CreateUserPage,
   CreateWeatherProductionPage,
   CreateWeeklyPlanGroupPage,
   CreateWeeklyPlanInformationPage,
@@ -208,7 +199,6 @@ export {
   HeavyEquipmentProductionPage,
   HumanResourcesPage,
   LocationPage,
-  ManagementRolePage,
   MaterialMasterPage,
   ProfilePage,
   ReadActivityPlanPage,
@@ -234,7 +224,6 @@ export {
   ReadHumanResourcesPage,
   ReadLocationMasterPage,
   ReadLoseTimeCategoryPage,
-  ReadManagementRolePage,
   ReadMaterialMasterPage,
   ReadRitageBargingPage,
   ReadRitageMovingPage,
@@ -275,7 +264,6 @@ export {
   UpdateHumanResourcesPage,
   UpdateLocationMasterPage,
   UpdateLoseTimeActivityPage,
-  UpdateManagementRolePage,
   UpdateMaterialMasterPage,
   UpdateRitageBargingPage,
   UpdateRitageMovingPage,
@@ -289,7 +277,6 @@ export {
   UpdateStockpileDomeMasterPage,
   UpdateStockpileMasterPage,
   UpdateStockpileMonitoringPage,
-  UpdateUserPage,
   UpdateWeatherProductionPage,
   UpdateWeeklyPlanGroupPage,
   UpdateWeeklyPlanInformationPage,
@@ -302,7 +289,6 @@ export {
   UploadRitageOrePage,
   UploadRitageQuarryPage,
   UploadRitageTopsoilPage,
-  UserPage,
   WeatherProductionPage,
   WeeklyPlanPage,
   WorkingHoursPlanMasterPage,

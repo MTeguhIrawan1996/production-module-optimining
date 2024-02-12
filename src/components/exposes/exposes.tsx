@@ -153,12 +153,6 @@ export const CreateLocationMasterPage = () => (
   </WithProviders>
 );
 
-export const CreateManagementRolePage = () => (
-  <WithProviders>
-    <Pages.CreateManagementRolePage />
-  </WithProviders>
-);
-
 export const CreateMaterialMasterPage = () => (
   <WithProviders>
     <Pages.CreateMaterialMasterPage />
@@ -228,12 +222,6 @@ export const CreateStockpileDomeMasterPage = () => (
 export const CreateStockpileMasterPage = () => (
   <WithProviders>
     <Pages.CreateStockpileMasterPage />
-  </WithProviders>
-);
-
-export const CreateUserPage = () => (
-  <WithProviders>
-    <Pages.CreateUserPage />
   </WithProviders>
 );
 
@@ -330,12 +318,6 @@ export const HumanResourcesPage = () => (
 export const LocationPage = () => (
   <WithProviders>
     <Pages.LocationPage />
-  </WithProviders>
-);
-
-export const ManagementRolePage = () => (
-  <WithProviders>
-    <Pages.ManagementRolePage />
   </WithProviders>
 );
 
@@ -486,12 +468,6 @@ export const ReadLocationMasterPage = () => (
 export const ReadLoseTimeCategoryPage = () => (
   <WithProviders>
     <Pages.ReadLoseTimeCategoryPage />
-  </WithProviders>
-);
-
-export const ReadManagementRolePage = () => (
-  <WithProviders>
-    <Pages.ReadManagementRolePage />
   </WithProviders>
 );
 
@@ -735,12 +711,6 @@ export const UpdateLoseTimeActivityPage = () => (
   </WithProviders>
 );
 
-export const UpdateManagementRolePage = () => (
-  <WithProviders>
-    <Pages.UpdateManagementRolePage />
-  </WithProviders>
-);
-
 export const UpdateMaterialMasterPage = () => (
   <WithProviders>
     <Pages.UpdateMaterialMasterPage />
@@ -819,12 +789,6 @@ export const UpdateStockpileMonitoringPage = () => (
   </WithProviders>
 );
 
-export const UpdateUserPage = () => (
-  <WithProviders>
-    <Pages.UpdateUserPage />
-  </WithProviders>
-);
-
 export const UpdateWeatherProductionPage = () => (
   <WithProviders>
     <Pages.UpdateWeatherProductionPage />
@@ -894,12 +858,6 @@ export const UploadRitageQuarryPage = () => (
 export const UploadRitageTopsoilPage = () => (
   <WithProviders>
     <Pages.UploadRitageTopsoilPage />
-  </WithProviders>
-);
-
-export const UserPage = () => (
-  <WithProviders>
-    <Pages.UserPage />
   </WithProviders>
 );
 

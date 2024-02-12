@@ -168,20 +168,4 @@ export const linksDashboard: IMenuItem[] = [
       },
     ],
   },
-  {
-    label: 'setting',
-    icon: 'bi:gear-fill',
-    subMenu: [
-      {
-        label: 'managementRole',
-        href: '/setting/management-role',
-        access: ['create-role'],
-      },
-      {
-        label: 'user',
-        href: '/setting/user',
-        access: ['create-user'],
-      },
-    ],
-  },
 ];
