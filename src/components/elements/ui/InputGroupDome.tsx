@@ -11,6 +11,7 @@ import {
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import * as React from 'react';
+import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -20,7 +21,9 @@ import {
 } from '@/components/elements';
 import { IPrimaryButtonProps } from '@/components/elements/button/PrimaryButton';
 
+import { IBargingDomePlan } from '@/services/graphql/mutation/plan/weekly/useCreateBargingTargetPlan';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
+import { useReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 
 dayjs.extend(isoWeek);
 
@@ -30,16 +33,14 @@ export type IInputGroupDomeProps = {
   label?: string;
   bargingDomePlanIndex: number;
   uniqKey?: string | null;
-  domeId?: string;
   tabs?: string;
 };
 
 const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({
   addButtonOuter,
   deleteButtonInner,
-  label = 'material',
+  label = 'inputGroupDomeLabel',
   bargingDomePlanIndex,
-  domeId,
   tabs,
 }) => {
   const { t } = useTranslation('default');
@@ -53,10 +54,23 @@ const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({
     ...restDeleteButtonOuter
   } = deleteButtonInner || {};
 
+  const bargingDomePlans: IBargingDomePlan[] = useWatch({
+    name: 'bargingDomePlans',
+  });
+
+  const domeId = bargingDomePlans[bargingDomePlanIndex].domeId;
+
   const { elementsData } = useReadAllElementMaster({
     variables: {
       limit: null,
     },
+  });
+
+  const { stockpileDomeMaster } = useReadOneStockpileDomeMaster({
+    variables: {
+      id: domeId || '',
+    },
+    skip: tabs !== 'bargingTargetPlan' || !domeId,
   });
 
   return (
@@ -107,7 +121,7 @@ const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({
                 searchable
                 skipQuery={tabs !== 'bargingTargetPlan'}
                 limit={null}
-                skipSeacrhQuary={false}
+                skipSearchQuery={true}
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -116,7 +130,7 @@ const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({
                 name="stockpile"
                 label="stockpile"
                 disabled
-                // defaultValue={`${weeklyPlanData?.year ?? ''}`}
+                defaultValue={stockpileDomeMaster?.stockpile.name || ''}
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -125,7 +139,9 @@ const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({
                 name="tonByRitage"
                 label="tonByRitage"
                 disabled
-                // defaultValue={`${weeklyPlanData?.year ?? ''}`}
+                defaultValue={
+                  stockpileDomeMaster?.monitoringStockpile.tonByRitage || ''
+                }
               />
             </Grid.Col>
             <Grid.Col span={6}>
@@ -134,10 +150,17 @@ const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({
                 name="tonBySurvey"
                 label="tonBySurvey"
                 disabled
-                // defaultValue={`${weeklyPlanData?.year ?? ''}`}
+                defaultValue={
+                  stockpileDomeMaster?.monitoringStockpile.currentTonSurvey ||
+                  ''
+                }
               />
             </Grid.Col>
             {elementsData?.map((obj) => {
+              const value =
+                stockpileDomeMaster?.monitoringStockpile.ritageSamples.additional.averageSamples.find(
+                  (val) => val.element?.id === obj.id
+                );
               return (
                 <Grid.Col span={6} key={obj.id}>
                   <TextInputNative
@@ -146,7 +169,7 @@ const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({
                     label={obj.name}
                     disabled
                     labelWithTranslate={false}
-                    // defaultValue={`${weeklyPlanData?.year ?? ''}`}
+                    defaultValue={value?.value || ''}
                   />
                 </Grid.Col>
               );

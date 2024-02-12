@@ -1,4 +1,6 @@
 import { Flex, Grid } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
@@ -15,9 +17,12 @@ import InputGroupDome, {
 import {
   IBargingTargetPlan,
   IBargingTargetPlanValue,
+  IWeeklyBargingTarget,
+  useCreateWeeklyBargingTargetPlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateBargingTargetPlan';
 import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { bargingTarget } from '@/utils/constants/DefaultValues/barging-target-plan';
+import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -28,7 +33,6 @@ interface IMutationBargingTargetPlanBook {
 
 const MutationBargingTargetPlanBook = ({
   mutationType,
-  // eslint-disable-next-line unused-imports/no-unused-vars
   mutationSuccessMassage,
 }: IMutationBargingTargetPlanBook) => {
   const { t } = useTranslation('default');
@@ -44,7 +48,7 @@ const MutationBargingTargetPlanBook = ({
       bargingTargetPlans: [
         {
           id: null,
-          materialId: '',
+          materialId: null,
           materialName: '',
           weeklyBargingTargets: bargingTarget,
         },
@@ -52,7 +56,7 @@ const MutationBargingTargetPlanBook = ({
       bargingDomePlans: [
         {
           id: null,
-          domeId: '',
+          domeId: null,
         },
       ],
     },
@@ -93,11 +97,41 @@ const MutationBargingTargetPlanBook = ({
     },
   });
 
-  const fieldRhf = React.useMemo(() => {
-    // const tableBargingTargetPlanItem = inputTableBargingTargetPlan({
-    //   name: 'tableBargingtargetPlan',
-    // });
+  const [executeUpdate, { loading }] = useCreateWeeklyBargingTargetPlan({
+    onCompleted: () => {
+      notifications.show({
+        color: 'green',
+        title: 'Selamat',
+        message: mutationSuccessMassage,
+        icon: <IconCheck />,
+      });
+      router.push(
+        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=${tabs}`
+      );
+      if (mutationType === 'update') {
+        setIsOpenConfirmation(false);
+      }
+    },
+    onError: (error) => {
+      if (error.graphQLErrors) {
+        const errorArry = errorBadRequestField<IBargingTargetPlanValue>(error);
+        if (errorArry.length) {
+          errorArry.forEach(({ name, type, message }) => {
+            methods.setError(name, { type, message });
+          });
+          return;
+        }
+        notifications.show({
+          color: 'red',
+          title: 'Gagal',
+          message: error.message,
+          icon: <IconX />,
+        });
+      }
+    },
+  });
 
+  const fieldRhf = React.useMemo(() => {
     const domeGroup: IInputGroupDomeProps[] = bargingDomePlanFields.map(
       (obj, i) => ({
         bargingDomePlanIndex: i,
@@ -140,8 +174,7 @@ const MutationBargingTargetPlanBook = ({
                     key={`${bargingDomePlanIndex}.${uniqKey}`}
                   >
                     <InputGroupDome
-                      bargingDomePlanIndex={1}
-                      domeId="1"
+                      bargingDomePlanIndex={bargingDomePlanIndex}
                       {...restDome}
                     />
                   </Grid.Col>
@@ -158,15 +191,37 @@ const MutationBargingTargetPlanBook = ({
   }, [bargingDomePlanFields, tabs]);
 
   const handleSubmitForm: SubmitHandler<IBargingTargetPlanValue> = async (
-    // eslint-disable-next-line unused-imports/no-unused-vars
     data
   ) => {
-    // await executeUpdate({
-    //   variables: {
-    //     weeklyPlanId: id,
-    //     unitCapacityPlans: newUnitCapacityPlan,
-    //   },
-    // });
+    const newBargingTargetPlans: IBargingTargetPlan[] = data.bargingTargetPlans
+      .map(({ id, materialId, weeklyBargingTargets }) => {
+        const newWeeklyBargingTargets: IWeeklyBargingTarget[] =
+          weeklyBargingTargets
+            .filter((v) => v.rate && v.ton)
+            .map((wObj) => {
+              return {
+                id: wObj.id || undefined,
+                day: wObj.day,
+                rate: wObj.rate || null,
+                ton: wObj.ton || null,
+              };
+            });
+        return {
+          id: id || undefined,
+          materialId,
+          weeklyBargingTargets: newWeeklyBargingTargets,
+        };
+      })
+      .filter((v) => v.weeklyBargingTargets.length > 0);
+    const newBargingDomePlans = data.bargingDomePlans.filter((v) => v.domeId);
+
+    await executeUpdate({
+      variables: {
+        weeklyPlanId: id,
+        bargingTargetPlans: newBargingTargetPlans,
+        bargingDomePlans: newBargingDomePlans,
+      },
+    });
   };
 
   const handleConfirmation = () => {
@@ -186,7 +241,7 @@ const MutationBargingTargetPlanBook = ({
           submitForm={handleSubmitForm}
           submitButton={{
             label: t('commonTypography.save'),
-            loading: mutationType === 'create' ? true : undefined,
+            loading: mutationType === 'create' ? loading : undefined,
             type: mutationType === 'create' ? 'submit' : 'button',
             onClick:
               mutationType === 'update'
@@ -214,7 +269,7 @@ const MutationBargingTargetPlanBook = ({
               label: t('commonTypography.yes'),
               type: 'button',
               onClick: handleConfirmation,
-              loading: true,
+              loading: loading,
             },
             backButton: {
               label: 'Batal',

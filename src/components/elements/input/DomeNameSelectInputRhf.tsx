@@ -18,7 +18,7 @@ export type IDomeNameSelectInputRhfProps = {
   stockpileId?: string | null;
   limit?: number | null;
   skipQuery?: boolean;
-  skipSeacrhQuary?: boolean;
+  skipSearchQuery?: boolean;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder' | 'limit'
@@ -34,7 +34,7 @@ const DomeNameSelectInputRhf: React.FC<IDomeNameSelectInputRhfProps> = ({
   stockpileId = null,
   limit = 15,
   skipQuery = false,
-  skipSeacrhQuary = false,
+  skipSearchQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -76,8 +76,8 @@ const DomeNameSelectInputRhf: React.FC<IDomeNameSelectInputRhfProps> = ({
           borderRadius: theme.spacing.xs,
         },
       })}
-      onSearchChange={!skipSeacrhQuary ? setSearchTerm : undefined}
-      searchValue={!skipSeacrhQuary ? searchTerm : undefined}
+      onSearchChange={!skipSearchQuery ? setSearchTerm : undefined}
+      searchValue={!skipSearchQuery ? searchTerm : undefined}
       data-control={control}
       placeholder={t('commonTypography.chooseDomeName', {
         ns: 'default',

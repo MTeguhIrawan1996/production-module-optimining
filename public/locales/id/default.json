@@ -448,7 +448,8 @@
     "createHeavyEquipment": "$t(commonTypography.create) $t(commonTypography.heavyEquipment)",
     "withoutOperatorCount": "Tanpa Operator",
     "quietNumber": "Jumlah yang Tersedia",
-    "createDome": "$t(commonTypography.create) $t(commonTypography.dome)"
+    "createDome": "$t(commonTypography.create) $t(commonTypography.dome)",
+    "inputGroupDomeLabel": "Rencana List Dome Yang akan di Tongkang"
   },
   "sideBar": {
     "dashboard": "Dashboard",

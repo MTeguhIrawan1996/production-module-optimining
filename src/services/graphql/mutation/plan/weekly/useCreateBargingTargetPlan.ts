@@ -7,7 +7,7 @@ export const CREATE_WEEKLY_BARGING_TARGET_PLAN = gql`
     $bargingDomePlans: [UpdateBargingDomePlan!]
   ) {
     updateWeeklyBargingPlan(
-      updateWeeklyBargingPlanInput: {
+      updateWeeklyBargingPlanDto: {
         weeklyPlanId: $weeklyPlanId
         bargingTargetPlans: $bargingTargetPlans
         bargingDomePlans: $bargingDomePlans
