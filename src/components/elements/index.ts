@@ -1,4 +1,5 @@
 import CommonWeeklyPlanInformationBook from '@/components/elements/book/weekly-plan/CommonWeeklyPlanInformationBook';
+import MutationBargingTargetPlanBook from '@/components/elements/book/weekly-plan/MutationBargingTargetPlanBook';
 import MutationHeavyEquipmentReqPlanBook from '@/components/elements/book/weekly-plan/MutationHeavyEquipmentReqPlanBook';
 import MutationUnitCapacityPlanBook from '@/components/elements/book/weekly-plan/MutationUnitCapacityPlanBook';
 import MutationWorkTimePlanBook from '@/components/elements/book/weekly-plan/MutationWorkTimePlanBook';
@@ -113,7 +114,9 @@ import DisplayLoseTimeAndEffectiveWork from '@/components/elements/ui/DisplayLos
 import DisplayQuietNumber from '@/components/elements/ui/DisplayQuietNumber';
 import GlobalHeaderDetail from '@/components/elements/ui/GlobalHeaderDetail';
 import InputGroupActivity from '@/components/elements/ui/InputGroupActivity';
+import InputGroupDome from '@/components/elements/ui/InputGroupDome';
 import InputGroupMaterial from '@/components/elements/ui/InputGroupMaterial';
+import InputTableBargingTargetPlan from '@/components/elements/ui/InputTableBargingTargetPlan';
 import ListDetailsRitageDT from '@/components/elements/ui/ListDetailsRitageDT';
 import PlanGroupLink from '@/components/elements/ui/PlanGroupLink';
 import AuthWrapper from '@/components/elements/wrapper/AuthWrapper';
@@ -164,8 +167,10 @@ export {
   InnerWrapper,
   InputAverageArray,
   InputGroupActivity,
+  InputGroupDome,
   InputGroupMaterial,
   InputSumArray,
+  InputTableBargingTargetPlan,
   KeyValueList,
   LinkButton,
   ListDetailsRitageDT,
@@ -180,6 +185,7 @@ export {
   MultipleFilter,
   MultipleSelectLocationRhf,
   MultipleSelectMaterialRhf,
+  MutationBargingTargetPlanBook,
   MutationHeavyEquipmentReqPlanBook,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,

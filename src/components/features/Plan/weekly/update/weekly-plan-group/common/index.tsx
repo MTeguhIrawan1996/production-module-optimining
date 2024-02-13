@@ -7,12 +7,12 @@ import { shallow } from 'zustand/shallow';
 import {
   GlobalTabs,
   InnerWrapper,
+  MutationBargingTargetPlanBook,
   MutationHeavyEquipmentReqPlanBook,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,
   RootWrapper,
 } from '@/components/elements';
-import MutationHeavyEquipmentAvailabilityPlanBook from '@/components/elements/book/weekly-plan/MutationHeavyEquipmentAvailabilityPlanBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
@@ -95,12 +95,12 @@ const UpdateWeeklyPlanGroupPage = () => {
               isShowItem: true,
             },
             {
-              label: t('commonTypography.heavyEquipmentAvailabilityPlan'),
-              value: 'heavyEquipmentAvailabilityPlan',
+              label: t('commonTypography.bargingTargetPlan'),
+              value: 'bargingTargetPlan',
               component: (
-                <MutationHeavyEquipmentAvailabilityPlanBook
+                <MutationBargingTargetPlanBook
                   mutationSuccessMassage={t(
-                    'weeklyPlan.successUpdateHeavyEquipmentAvailabilityPlanMessage'
+                    'weeklyPlan.successUpdateBargingTargetPlanMessage'
                   )}
                   mutationType="update"
                 />

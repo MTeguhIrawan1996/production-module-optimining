@@ -158,7 +158,7 @@ export type InputControllerNativeProps =
   | ICompanyNativeProps
   | ISelectWeekNativeProps;
 
-export type ControllerGroup<> = {
+export type ControllerGroup = {
   group: string;
   formControllers: ControllerProps[];
   enableGroupLabel?: boolean;

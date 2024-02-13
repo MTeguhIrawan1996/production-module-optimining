@@ -432,7 +432,7 @@
     "heavyEquipmentAvailabilityPlan": "Rencana Ketersediaan Alat Berat",
     "productionTargetPlan": "Rencana Target Produksi",
     "miningPlanMap": "Peta Rencana Penambangan",
-    "bargingPlan": "Rencana Barging",
+    "bargingTargetPlan": "Rencana Target Barging",
     "amountFleet": "Jumlah Fleet",
     "distance": "Jarak",
     "averageDistance": "Rata - rata Jarak (M)",
@@ -446,7 +446,9 @@
     "breakdownCount": "Jumlah Rusak",
     "createHeavyEquipment": "$t(commonTypography.create) $t(commonTypography.heavyEquipment)",
     "withoutOperatorCount": "Tanpa Operator",
-    "quietNumber": "Jumlah yang Tersedia"
+    "quietNumber": "Jumlah yang Tersedia",
+    "createDome": "$t(commonTypography.create) $t(commonTypography.dome)",
+    "inputGroupDomeLabel": "Rencana List Dome Yang akan di Tongkang"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -980,10 +982,12 @@
     "successCreateWorkTimePlanMessage": "$t(commonTypography.workTimePlan) berhasil dibuat",
     "successCreateHeavyEquipmentReqPlanMessage": "$t(commonTypography.heavyEquipmentReqPlan) berhasil dibuat",
     "successCreateHeavyEquipmentAvailabilityPlanMessage": "$t(commonTypography.heavyEquipmentAvailabilityPlan) berhasil dibuat",
+    "successCreateBargingTargetPlanMessage": "$t(commonTypography.bargingTargetPlan) berhasil dibuat",
     "successUpdateUnitCapacityPlanMessage": "$t(commonTypography.unitCapacityPlan) berhasil diubah",
     "successUpdateWorkTimePlanMessage": "$t(commonTypography.workTimePlan) berhasil diubah",
     "successUpdateHeavyEquipmentReqPlanMessage": "$t(commonTypography.heavyEquipmentReqPlan) berhasil diubah",
     "successUpdateHeavyEquipmentAvailabilityPlanMessage": "$t(commonTypography.heavyEquipmentAvailabilityPlan) berhasil diubah",
+    "successUpdateBargingTargetPlanMessage": "$t(commonTypography.bargingTargetPlan) berhasil diubah",
     "successUpdateMessage": "$t(weeklyPlan.title2) berhasil diubah",
     "formCreate": "$t(commonTypography.form) $t(weeklyPlan.title2)",
     "successIsValidateMessage": "$t(weeklyPlan.title) berhasil divalidasi",
