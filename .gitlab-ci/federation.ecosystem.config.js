@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'production.modules.federation.optimining.optimap.id',
+      name: 'federation.production.modules.dev.optimining.optimap.id',
       namespace: 'optimining-federation',
       script: 'node_modules/.bin/next',
       args: 'start',
