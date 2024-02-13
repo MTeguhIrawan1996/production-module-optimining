@@ -1,0 +1,100 @@
+import { Stack, Text } from '@mantine/core';
+import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek';
+import { useRouter } from 'next/router';
+import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { DashboardCard, MantineDataTable } from '@/components/elements';
+import WeeklyPlanInformationData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/WeeklyPlanInformationData';
+
+import { useReadOneHeavyEquipmentAvailabilityPlan } from '@/services/graphql/query/plan/weekly/heavy-equipment-availability-plan.ts/useReadOneHeavyEquipmentAvailabilityPlan';
+
+dayjs.extend(isoWeek);
+
+const BargingTargetPlanData = () => {
+  const { t } = useTranslation('default');
+  const router = useRouter();
+  const id = router.query.id as string;
+  const tabs = router.query.tabs as string;
+  const page = Number(router.query.page) || 1;
+
+  const {
+    weeklyHeavyEquipmentAvailabilityPlanData: data,
+    weeklyHeavyEquipmentReqPlanMeta: meta,
+    weeklyHeavyEquipmentAvailabilityPlanDataLoading,
+  } = useReadOneHeavyEquipmentAvailabilityPlan({
+    variables: {
+      weeklyPlanId: id,
+      limit: null,
+    },
+    skip: !router.isReady || tabs !== 'heavyEquipmentAvailabilityPlan',
+  });
+
+  const handleSetPage = (page: number) => {
+    const urlSet = `/plan/weekly/read/weekly-plan-group/${id}?tabs=${tabs}&page=${page}`;
+    router.push(urlSet, undefined, { shallow: true });
+  };
+
+  return (
+    <>
+      <WeeklyPlanInformationData />
+      <DashboardCard
+        p={0}
+        isLoading={weeklyHeavyEquipmentAvailabilityPlanDataLoading}
+      >
+        <Stack spacing="sm">
+          <Text fz={24} fw={600} color="brand">
+            {t('commonTypography.unitCapacityPlanInformation')}
+          </Text>
+          <MantineDataTable
+            tableProps={{
+              records: data ?? [],
+              columns: [
+                {
+                  accessor: 'heavyEquipmentClass',
+                  title: t('commonTypography.heavyEquipmentClass'),
+                  render: ({ class: classHeavyEquipment }) =>
+                    classHeavyEquipment.name ?? '-',
+                },
+                {
+                  accessor: 'totalCount',
+                  title: t('commonTypography.totalAvailabilityHeavyEquipment'),
+                },
+                {
+                  accessor: 'damagedCount',
+                  title: t('commonTypography.breakdownCount'),
+                },
+                {
+                  accessor: 'withoutOperatorCount',
+                  title: t('commonTypography.withoutOperatorCount'),
+                },
+                {
+                  accessor: 'readyCount',
+                  title: t('commonTypography.quietNumber'),
+                },
+                {
+                  accessor: 'desc',
+                  title: t('commonTypography.desc'),
+                },
+              ],
+              shadow: 'none',
+            }}
+            emptyStateProps={{
+              title: t('commonTypography.dataNotfound'),
+            }}
+            paginationProps={{
+              setPage: handleSetPage,
+              currentPage: page,
+              totalAllData: meta?.totalAllData ?? 0,
+              totalData: meta?.totalData ?? 0,
+              totalPage: meta?.totalPage ?? 0,
+            }}
+          />
+        </Stack>
+      </DashboardCard>
+    </>
+  );
+};
+
+export default BargingTargetPlanData;
