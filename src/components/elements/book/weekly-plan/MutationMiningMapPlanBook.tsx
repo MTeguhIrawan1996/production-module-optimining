@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Flex } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -20,6 +21,7 @@ import {
   locationCategorySelect,
   locationSelect,
 } from '@/utils/constants/Field/global-field';
+import { weeklyMiningMapPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-mining-map-plan-validation';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
@@ -43,7 +45,7 @@ const MutationMiningMapPlanBook = ({
     React.useState<boolean>(false);
 
   const methods = useForm<IMutationMiningMapPlanValues>({
-    // resolver: zodResolver(weeklyBargingTargetPlanMutationValidation),
+    resolver: zodResolver(weeklyMiningMapPlanMutationValidation),
     defaultValues: {
       miningMapPlans: [
         {
