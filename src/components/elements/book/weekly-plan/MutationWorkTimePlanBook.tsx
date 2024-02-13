@@ -432,7 +432,34 @@ const MutationWorkTimePlanBook = ({
                     id: 'activity',
                     title: t('commonTypography.activity'),
                     style: { textAlign: 'center' },
-                    columns: [{ accessor: 'name', title: '', width: 260 }],
+                    columns: [
+                      {
+                        accessor: 'name',
+                        title: '',
+                        width: 260,
+                        render: ({ name, activityId }) => {
+                          if (
+                            activityId ===
+                            `${process.env.NEXT_PUBLIC_WORKING_TIME_ID}`
+                          ) {
+                            return (
+                              <Text component="label">
+                                {name}
+                                <Text
+                                  component="span"
+                                  color="red"
+                                  aria-hidden="true"
+                                >
+                                  {' '}
+                                  *
+                                </Text>
+                              </Text>
+                            );
+                          }
+                          return name;
+                        },
+                      },
+                    ],
                   },
                   {
                     id: 'day',

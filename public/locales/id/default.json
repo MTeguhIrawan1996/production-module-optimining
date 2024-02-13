@@ -448,7 +448,11 @@
     "withoutOperatorCount": "Tanpa Operator",
     "quietNumber": "Jumlah yang Tersedia",
     "createDome": "$t(commonTypography.create) $t(commonTypography.dome)",
-    "inputGroupDomeLabel": "Rencana List Dome Yang akan di Tongkang"
+    "createMap": "$t(commonTypography.create) Peta",
+    "inputGroupDomeLabel": "Rencana List Dome Yang akan di Tongkang",
+    "miningMapPlan": "Rencana Peta Penambangan",
+    "mapName": "Nama Peta",
+    "miningMap": "Peta Penambangan,"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -983,11 +987,13 @@
     "successCreateHeavyEquipmentReqPlanMessage": "$t(commonTypography.heavyEquipmentReqPlan) berhasil dibuat",
     "successCreateHeavyEquipmentAvailabilityPlanMessage": "$t(commonTypography.heavyEquipmentAvailabilityPlan) berhasil dibuat",
     "successCreateBargingTargetPlanMessage": "$t(commonTypography.bargingTargetPlan) berhasil dibuat",
+    "successCreateMiningMapPlanMessage": "$t(commonTypography.miningMapPlan) berhasil dibuat",
     "successUpdateUnitCapacityPlanMessage": "$t(commonTypography.unitCapacityPlan) berhasil diubah",
     "successUpdateWorkTimePlanMessage": "$t(commonTypography.workTimePlan) berhasil diubah",
     "successUpdateHeavyEquipmentReqPlanMessage": "$t(commonTypography.heavyEquipmentReqPlan) berhasil diubah",
     "successUpdateHeavyEquipmentAvailabilityPlanMessage": "$t(commonTypography.heavyEquipmentAvailabilityPlan) berhasil diubah",
     "successUpdateBargingTargetPlanMessage": "$t(commonTypography.bargingTargetPlan) berhasil diubah",
+    "successUpdateMiningMapPlanMessage": "$t(commonTypography.miningMapPlan) berhasil diubah",
     "successUpdateMessage": "$t(weeklyPlan.title2) berhasil diubah",
     "formCreate": "$t(commonTypography.form) $t(weeklyPlan.title2)",
     "successIsValidateMessage": "$t(weeklyPlan.title) berhasil divalidasi",

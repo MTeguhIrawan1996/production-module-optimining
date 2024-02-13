@@ -16,9 +16,12 @@ export type ILocationCategorySelectInputRhfProps = {
   name: string;
   labelValue?: string;
   excludeIds?: string[] | null;
+  limit?: number | null;
+  skipQuery?: boolean;
+  skipSearchQuery?: boolean;
 } & Omit<
   SelectProps,
-  'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
+  'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder' | 'limit'
 > &
   CommonProps;
 
@@ -31,6 +34,9 @@ const LocationCategorySelectInputRhf: React.FC<
   labelValue,
   excludeIds = null,
   defaultValue,
+  limit = 15,
+  skipQuery = false,
+  skipSearchQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -41,10 +47,11 @@ const LocationCategorySelectInputRhf: React.FC<
 
   const { locationCategoriesdata } = useReadAllLocationCategory({
     variables: {
-      limit: 15,
+      limit: limit,
       search: searchQuery === '' ? null : searchQuery,
       excludeIds: excludeIds,
     },
+    skip: skipQuery,
   });
 
   const { combinedItems, uncombinedItem } = useCombineFilterItems({
@@ -69,8 +76,8 @@ const LocationCategorySelectInputRhf: React.FC<
           borderRadius: theme.spacing.xs,
         },
       })}
-      onSearchChange={setSearchTerm}
-      searchValue={searchTerm}
+      onSearchChange={!skipSearchQuery ? setSearchTerm : undefined}
+      searchValue={!skipSearchQuery ? searchTerm : undefined}
       data-control={control}
       placeholder={t('commonTypography.chooseLocationCategory', {
         ns: 'default',

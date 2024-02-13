@@ -164,9 +164,7 @@ const MutationBargingTargetPlanBook = ({
         message: mutationSuccessMassage,
         icon: <IconCheck />,
       });
-      router.push(
-        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=${tabs}`
-      );
+      router.push(`/plan/weekly`);
       if (mutationType === 'update') {
         setIsOpenConfirmation(false);
       }

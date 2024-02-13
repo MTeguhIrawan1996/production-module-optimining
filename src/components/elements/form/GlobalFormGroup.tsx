@@ -11,7 +11,6 @@ import {
   SwitchProps,
   Text,
 } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -194,7 +193,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                             <Group spacing="xs" position="right">
                               {addButton ? (
                                 <PrimaryButton
-                                  leftIcon={<IconPlus size="20px" />}
+                                  // leftIcon={<IconPlus size="20px" />}
                                   {...addButton}
                                 />
                               ) : null}
