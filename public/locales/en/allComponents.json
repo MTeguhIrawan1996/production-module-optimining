@@ -249,7 +249,10 @@
       "totalAvailabilityHeavyEquipment": "Total Ketersediaan Alat Berat",
       "breakdownCount": "Jumlah Rusak",
       "withoutOperatorCount": "Tanpa Operator",
-      "quietNumber": "Jumlah yang Tersedia"
+      "quietNumber": "Jumlah yang Tersedia",
+      "mapName": "Nama Peta",
+      "miningMap": "Peta Penambangan,",
+      "uploadFile": "Unggah File"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",
@@ -257,7 +260,10 @@
       "photoDescription3": "Jumlah file maksimal 3 dengan ukuran 10MB format .JPEG .JPG .PNG atau .WEBP",
       "photoDescription5": "Jumlah file maksimal 5 dengan ukuran 10MB format .JPEG .JPG .PNG atau .WEBP",
       "uploadPdfDescription": "Unggah Dokumen Maksimal 10MB dengan format PDF",
-      "uploadExcelDescription": "Unggah Dokumen Maksimal 100MB dengan format .xlsx dan .CSV"
+      "uploadExcelDescription": "Unggah Dokumen Maksimal 100MB dengan format .xlsx dan .CSV",
+      "uploadFileMax10Mb": "Maksimal Ukuran File 10MB",
+      "dragAndDropFile": "Tarik dan lepas atau cari file anda",
+      "formatPdfOrImageDesc": "Format file berupa .JPEG .JPG .PNG atau .WEBP dan PDF"
     },
     "modal": {
       "updatePasswordModal": {

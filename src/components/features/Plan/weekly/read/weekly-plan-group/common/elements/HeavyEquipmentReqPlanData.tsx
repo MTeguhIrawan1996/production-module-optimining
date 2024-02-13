@@ -87,6 +87,7 @@ const HeavyEquipmentReqPlanData = () => {
           <MantineDataTable
             tableProps={{
               records: data ?? [],
+              minHeight: 0,
               columns: [
                 {
                   accessor: 'activityName',
@@ -97,6 +98,7 @@ const HeavyEquipmentReqPlanData = () => {
                 {
                   accessor: 'materials',
                   title: t('commonTypography.material'),
+                  width: 220,
                   render: ({ materials }) => {
                     const material = materials.map((val) => val.name);
                     return material?.join(', ');
@@ -105,6 +107,8 @@ const HeavyEquipmentReqPlanData = () => {
                 {
                   accessor: 'locations',
                   title: t('commonTypography.location'),
+                  width: 220,
+
                   render: ({ locations }) => {
                     const location = locations.map((val) => val.name);
                     return location?.join(', ');
@@ -174,6 +178,7 @@ const HeavyEquipmentReqPlanData = () => {
                 <Group noWrap spacing={0} py={4}>
                   <MantineDataTable
                     tableProps={{
+                      minHeight: 0,
                       columns: [
                         {
                           accessor: 'formsOfActivity',

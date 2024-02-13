@@ -33,6 +33,7 @@ import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { INumberInputTableRhfProps } from '@/components/elements/input/NumberInputTableRhf';
 import { IPasswordInputProps } from '@/components/elements/input/PasswordInputRhf';
 import { IPdfInputDropzoneRhfProps } from '@/components/elements/input/PdfInputDropzoneRhf';
+import { IPdfOrInputDropzoneRhfProps } from '@/components/elements/input/PdfOrImageInputDropzoneRhf';
 import { IPitSelectInputRhfProps } from '@/components/elements/input/PitSelectInputRhf';
 import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
@@ -96,6 +97,7 @@ export type ControllerProps =
   | IPasswordInputProps
   | IImageInputDropzoneRhfProps
   | IPdfInputDropzoneRhfProps
+  | IPdfOrInputDropzoneRhfProps
   | IExcelInputDropzoneRhfProps
   | INumberInputProps
   | IRadioInputProps

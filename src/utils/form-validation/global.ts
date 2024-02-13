@@ -1,3 +1,4 @@
+import { IMAGE_MIME_TYPE, PDF_MIME_TYPE } from '@mantine/dropzone';
 import { z } from 'zod';
 
 export const zRequiredString = z
@@ -167,3 +168,17 @@ export const zPdfArrayOptional = z
     message: 'File harus pdf',
   })
   .array();
+
+export const zImageOrPDFArrayRequired = z
+  .custom<File>()
+  .refine(
+    (file) =>
+      file && [...PDF_MIME_TYPE, ...IMAGE_MIME_TYPE].includes(file.type as any),
+    {
+      message: 'Format file tidak sesuai FOO',
+    }
+  )
+  .array()
+  .nonempty({
+    message: 'File wajib diisi',
+  });

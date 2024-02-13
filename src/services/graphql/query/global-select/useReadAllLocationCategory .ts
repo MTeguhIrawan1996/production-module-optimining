@@ -53,15 +53,18 @@ interface ILocationCategoriesResponse {
 export const useReadAllLocationCategory = ({
   variables,
   onCompleted,
+  skip,
 }: {
   variables?: Partial<ILocationCategoriesRequest>;
   onCompleted?: (data: ILocationCategoriesResponse) => void;
+  skip?: boolean;
 }) => {
   const { data: locationCategoriesdata, loading: locationCategoriesLoading } =
     useQuery<ILocationCategoriesResponse, Partial<ILocationCategoriesRequest>>(
       READ_ALL_LOCATION_CATEGORY,
       {
         variables: variables,
+        skip: skip,
         onError: (err: ApolloError) => {
           return err;
         },

@@ -44,6 +44,17 @@ export const READ_ONE_BARGING_TARGET_PLAN = gql`
           dome {
             id
             name
+            stockpile {
+              id
+              name
+            }
+            monitoringStockpile {
+              tonByRitage
+              currentTonSurvey
+              ritageSamples {
+                additional
+              }
+            }
           }
         }
       }
@@ -72,6 +83,25 @@ export interface IReadOneBargingDomePlanData {
   dome: {
     id: string;
     name: string;
+    stockpile: {
+      id: string;
+      name: string;
+    };
+    monitoringStockpile: {
+      tonByRitage: number | null;
+      currentTonSurvey: number | null;
+      ritageSamples: {
+        additional: {
+          averageSamples: {
+            element: {
+              id: string;
+              name: string | null;
+            };
+            value: number | null;
+          }[];
+        };
+      };
+    };
   };
 }
 

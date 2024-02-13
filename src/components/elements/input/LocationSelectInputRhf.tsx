@@ -18,6 +18,7 @@ export type ILocationSelectInputRhfProps = {
   categoryId?: string | null;
   limit?: number | null;
   skipQuery?: boolean;
+  skipSearchQuery?: boolean;
 } & Omit<
   SelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder' | 'limit'
@@ -33,6 +34,7 @@ const LocationSelectInputRhf: React.FC<ILocationSelectInputRhfProps> = ({
   categoryId = null,
   limit = 15,
   skipQuery = false,
+  skipSearchQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -73,8 +75,8 @@ const LocationSelectInputRhf: React.FC<ILocationSelectInputRhfProps> = ({
           borderRadius: theme.spacing.xs,
         },
       })}
-      onSearchChange={setSearchTerm}
-      searchValue={searchTerm}
+      onSearchChange={!skipSearchQuery ? setSearchTerm : undefined}
+      searchValue={!skipSearchQuery ? searchTerm : undefined}
       data-control={control}
       placeholder={t('commonTypography.chooseLocation', {
         ns: 'default',

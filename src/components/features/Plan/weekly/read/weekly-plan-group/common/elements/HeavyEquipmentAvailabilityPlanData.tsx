@@ -1,6 +1,4 @@
 import { Stack, Text } from '@mantine/core';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,8 +7,6 @@ import { DashboardCard, MantineDataTable } from '@/components/elements';
 import WeeklyPlanInformationData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/WeeklyPlanInformationData';
 
 import { useReadOneHeavyEquipmentAvailabilityPlan } from '@/services/graphql/query/plan/weekly/heavy-equipment-availability-plan.ts/useReadOneHeavyEquipmentAvailabilityPlan';
-
-dayjs.extend(isoWeek);
 
 const HeavyEquipmentAvailabilityPlanData = () => {
   const { t } = useTranslation('default');
@@ -50,6 +46,7 @@ const HeavyEquipmentAvailabilityPlanData = () => {
           <MantineDataTable
             tableProps={{
               records: data ?? [],
+              minHeight: 0,
               columns: [
                 {
                   accessor: 'heavyEquipmentClass',

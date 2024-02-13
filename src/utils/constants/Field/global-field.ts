@@ -16,6 +16,7 @@ import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSele
 import { IMultipleSelectLocationRhfProps } from '@/components/elements/input/MultipleSelectLocationRhf';
 import { IMultipleSelectMaterialRhfProps } from '@/components/elements/input/MultipleSelectMaterialRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
+import { IPdfOrInputDropzoneRhfProps } from '@/components/elements/input/PdfOrImageInputDropzoneRhf';
 import { IPitSelectInputRhfProps } from '@/components/elements/input/PitSelectInputRhf';
 import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
@@ -1153,6 +1154,32 @@ export const globalSelectWeekRhf = ({
     clearable,
     withAsterisk,
     colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalDropzonePdfOrImageRhf = ({
+  name = 'uploadFile',
+  label,
+  withAsterisk = true,
+  colSpan = 6,
+  maxSize = 10 * 1024 ** 2,
+  multiple = false,
+  onDrop = () => {},
+  onReject = () => {},
+  ...rest
+}: Partial<IPdfOrInputDropzoneRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'pdf-image-dropzone',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    maxSize,
+    multiple,
+    onDrop,
+    onReject,
     ...rest,
   };
   return field;

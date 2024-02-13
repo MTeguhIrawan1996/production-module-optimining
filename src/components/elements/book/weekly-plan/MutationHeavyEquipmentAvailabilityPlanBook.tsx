@@ -86,7 +86,7 @@ const MutationHeavyEquipmentAvailabilityPlanBook = ({
         icon: <IconCheck />,
       });
       router.push(
-        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=next`
+        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=bargingTargetPlan`
       );
       if (mutationType === 'update') {
         setIsOpenConfirmation(false);
