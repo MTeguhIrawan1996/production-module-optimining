@@ -1,6 +1,7 @@
 import CommonWeeklyPlanInformationBook from '@/components/elements/book/weekly-plan/CommonWeeklyPlanInformationBook';
 import MutationBargingTargetPlanBook from '@/components/elements/book/weekly-plan/MutationBargingTargetPlanBook';
 import MutationHeavyEquipmentReqPlanBook from '@/components/elements/book/weekly-plan/MutationHeavyEquipmentReqPlanBook';
+import MutationMiningMapPlanBook from '@/components/elements/book/weekly-plan/MutationMiningMapPlanBook';
 import MutationUnitCapacityPlanBook from '@/components/elements/book/weekly-plan/MutationUnitCapacityPlanBook';
 import MutationWorkTimePlanBook from '@/components/elements/book/weekly-plan/MutationWorkTimePlanBook';
 import DeterminedButton from '@/components/elements/button/DeterminedButton';
@@ -62,6 +63,7 @@ import NumberInputRhf from '@/components/elements/input/NumberInputRhf';
 import NumberInputTableRhf from '@/components/elements/input/NumberInputTableRhf';
 import PasswordInputRhf from '@/components/elements/input/PasswordInputRhf';
 import PdfInputDropzoneRhf from '@/components/elements/input/PdfInputDropzoneRhf';
+import PdfOrImageInputDropzoneRhf from '@/components/elements/input/PdfOrImageInputDropzoneRhf';
 import PitSelectInputRhf from '@/components/elements/input/PitSelectInputRhf';
 import PositionSelectInputRhf from '@/components/elements/input/PositionSelectInputRhf';
 import ProvinceSelectInputRhf from '@/components/elements/input/ProvinceSelectInputRhf';
@@ -187,6 +189,7 @@ export {
   MultipleSelectMaterialRhf,
   MutationBargingTargetPlanBook,
   MutationHeavyEquipmentReqPlanBook,
+  MutationMiningMapPlanBook,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,
   NavbarCollapseLinksGroup,
@@ -199,6 +202,7 @@ export {
   PaperLink,
   PasswordInputRhf,
   PdfInputDropzoneRhf,
+  PdfOrImageInputDropzoneRhf,
   PitSelectInputRhf,
   PlanGroupLink,
   PositionSelectInputRhf,

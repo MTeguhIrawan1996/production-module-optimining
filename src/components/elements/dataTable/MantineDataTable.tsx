@@ -58,7 +58,7 @@ export default function MantineDataTable<T>({
     fontSize = 12,
     horizontalSpacing = 'xs',
     verticalSpacing = 'xs',
-    borderRadius = 6,
+    borderRadius = 0,
     shadow = 'xs',
     highlightOnHover = true,
     withBorder = true,
@@ -95,8 +95,18 @@ export default function MantineDataTable<T>({
             ? 280
             : minHeight !== 520
             ? minHeight
-            : 140
+            : 0
         }
+        styles={{
+          root: {
+            overflow: 'visible',
+          },
+        }}
+        scrollAreaProps={{
+          sx: {
+            overflow: 'visible',
+          },
+        }}
         defaultColumnProps={{
           textAlignment: 'center',
           ...defaultColumnProps,

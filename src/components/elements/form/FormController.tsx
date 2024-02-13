@@ -29,6 +29,7 @@ import {
   NumberInputTableRhf,
   PasswordInputRhf,
   PdfInputDropzoneRhf,
+  PdfOrImageInputDropzoneRhf,
   PitSelectInputRhf,
   PositionSelectInputRhf,
   ProvinceSelectInputRhf,
@@ -77,6 +78,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <ImageInputDropzoneRhf {...props} />;
     case 'pdf-dropzone':
       return <PdfInputDropzoneRhf {...props} />;
+    case 'pdf-image-dropzone':
+      return <PdfOrImageInputDropzoneRhf {...props} />;
     case 'excel-dropzone':
       return <ExcelInputDropzoneRhf {...props} />;
     case 'number-input':
