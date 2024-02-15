@@ -41,7 +41,7 @@ const PlanGroupLink: React.FC<IPlanGroupLinkProps> = ({ type }) => {
     },
     {
       label: 'miningPlanMap',
-      href: `/plan/weekly/${type}/weekly-plan-information`,
+      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=miningMapPlan`,
     },
     {
       label: 'bargingTargetPlan',

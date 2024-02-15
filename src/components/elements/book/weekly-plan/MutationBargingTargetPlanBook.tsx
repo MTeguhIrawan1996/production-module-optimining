@@ -232,6 +232,7 @@ const MutationBargingTargetPlanBook = ({
                   >
                     <InputGroupDome
                       bargingDomePlanIndex={bargingDomePlanIndex}
+                      tabs={tabs}
                       {...restDome}
                     />
                   </Grid.Col>

@@ -131,23 +131,6 @@ export const zImageOptional = z
   )
   .or(z.literal(null));
 
-export const zImageArrayRequired = z
-  .custom<File>()
-  .refine(
-    (file) =>
-      file &&
-      ['image/png', 'image/jpeg', 'image/png', 'image/webp'].includes(
-        file.type
-      ),
-    {
-      message: 'File harus Foto',
-    }
-  )
-  .array()
-  .nonempty({
-    message: 'Foto wajib diisi',
-  });
-
 export const zImageArrayOptional = z
   .custom<File>()
   .refine(
@@ -169,16 +152,13 @@ export const zPdfArrayOptional = z
   })
   .array();
 
-export const zImageOrPDFArrayRequired = z
+export const zImageOrPDFArrayOptional = z
   .custom<File>()
   .refine(
     (file) =>
       file && [...PDF_MIME_TYPE, ...IMAGE_MIME_TYPE].includes(file.type as any),
     {
-      message: 'Format file tidak sesuai FOO',
+      message: 'Format file tidak sesuai',
     }
   )
-  .array()
-  .nonempty({
-    message: 'File wajib diisi',
-  });
+  .array();
