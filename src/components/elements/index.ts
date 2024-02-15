@@ -2,6 +2,7 @@ import CommonWeeklyPlanInformationBook from '@/components/elements/book/weekly-p
 import MutationBargingTargetPlanBook from '@/components/elements/book/weekly-plan/MutationBargingTargetPlanBook';
 import MutationHeavyEquipmentReqPlanBook from '@/components/elements/book/weekly-plan/MutationHeavyEquipmentReqPlanBook';
 import MutationMiningMapPlanBook from '@/components/elements/book/weekly-plan/MutationMiningMapPlanBook';
+import MutationProductionTargetPlan from '@/components/elements/book/weekly-plan/MutationProductionTargetPlanBook';
 import MutationUnitCapacityPlanBook from '@/components/elements/book/weekly-plan/MutationUnitCapacityPlanBook';
 import MutationWorkTimePlanBook from '@/components/elements/book/weekly-plan/MutationWorkTimePlanBook';
 import DeterminedButton from '@/components/elements/button/DeterminedButton';
@@ -192,6 +193,7 @@ export {
   MutationBargingTargetPlanBook,
   MutationHeavyEquipmentReqPlanBook,
   MutationMiningMapPlanBook,
+  MutationProductionTargetPlan,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,
   NavbarCollapseLinksGroup,

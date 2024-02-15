@@ -86,7 +86,8 @@ const MutationBargingTargetPlanBook = ({
   const { materialsData, materialsDataLoading } = useReadAllMaterialsMaster({
     variables: {
       limit: null,
-      orderDir: 'desc',
+      orderDir: 'asc',
+      orderBy: 'createdAt',
       parentId: `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`,
       isHaveParent: null,
       includeIds: null,
