@@ -177,7 +177,6 @@ const HeavyEquipmentReqPlanData = () => {
                 <Group noWrap spacing={0} py={4}>
                   <MantineDataTable
                     tableProps={{
-                      minHeight: 0,
                       columns: [
                         {
                           accessor: 'formsOfActivity',
