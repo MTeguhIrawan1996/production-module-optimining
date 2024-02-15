@@ -557,7 +557,6 @@ const MutationWorkTimePlanBook = ({
                         noHeader: true,
                         shadow: '0',
                         withBorder: false,
-                        minHeight: 0,
                         borderRadius: 0,
                         idAccessor: (record) => {
                           return record.id

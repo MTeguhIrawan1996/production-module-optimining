@@ -11,7 +11,9 @@ import DashboardCard from '@/components/elements/card/DashboardCard';
 import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
 import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
 
+import { useReadOneMiningMapPlan } from '@/services/graphql/query/plan/weekly/mining-map-plan/useReadOneMiningMapPlan';
 import {
+  IMiningMapPlanData,
   IMutationMiningMapPlanValues,
   useCreateMiningMapPlan,
 } from '@/services/restapi/plan/weekly/useCreateMiningMapPlan';
@@ -54,6 +56,7 @@ const MutationMiningMapPlanBook = ({
           locationCategoryId: null,
           locationId: null,
           file: [],
+          serverFile: [],
         },
       ],
     },
@@ -64,7 +67,7 @@ const MutationMiningMapPlanBook = ({
     fields: miningMapPlanFields,
     append: miningMapPlanAppend,
     remove: miningMapPlanRemove,
-    // replace: miningMapPlanReplace,
+    replace: miningMapPlanReplace,
   } = useFieldArray({
     name: 'miningMapPlans',
     control: methods.control,
@@ -72,6 +75,31 @@ const MutationMiningMapPlanBook = ({
   });
 
   const miningMapPlans = methods.watch('miningMapPlans');
+
+  const { weeklyMiningPlanDataLoading } = useReadOneMiningMapPlan({
+    variables: {
+      weeklyPlanId: id,
+      orderBy: 'createdAt',
+      orderDir: 'asc',
+    },
+    skip: !router.isReady || tabs !== 'miningMapPlan',
+    onCompleted: ({ weeklyMiningMapPlans }) => {
+      if (weeklyMiningMapPlans.data.length > 0) {
+        const newMiningMapPlans: IMiningMapPlanData[] =
+          weeklyMiningMapPlans.data.map((obj) => {
+            return {
+              id: obj.id,
+              mapName: obj.mapName,
+              locationCategoryId: obj.locationCategory.id,
+              locationId: obj.location.id,
+              file: [],
+              serverFile: obj.file ? [obj.file] : [],
+            };
+          });
+        miningMapPlanReplace(newMiningMapPlans);
+      }
+    },
+  });
 
   const { mutate, isLoading } = useCreateMiningMapPlan({
     onError: (err) => {
@@ -98,14 +126,16 @@ const MutationMiningMapPlanBook = ({
         message: mutationSuccessMassage,
         icon: <IconCheck />,
       });
-      // router.push(`/plan/weekly`);
+      router.push(
+        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=bargingTargetPlan`
+      );
       if (mutationType === 'update') {
         setIsOpenConfirmation(false);
       }
     },
   });
 
-  const groupingMap = miningMapPlanFields.map((obj, index) => {
+  const groupingField = miningMapPlanFields.map((obj, index) => {
     const newLocationCategoryId = miningMapPlans[index].locationCategoryId;
     const mapNameItem = globalText({
       name: `miningMapPlans.${index}.mapName`,
@@ -136,8 +166,9 @@ const MutationMiningMapPlanBook = ({
       description: 'uploadFileMax10Mb',
       name: `miningMapPlans.${index}.file`,
       key: `${obj.miningMapPlanId}.file.${index}`,
+      serverFile: miningMapPlans[index].serverFile,
       onDrop: (value) => {
-        // setServerDocument([]);
+        methods.setValue(`miningMapPlans.${index}.serverFile`, []);
         methods.setValue(`miningMapPlans.${index}.file`, value);
         methods.clearErrors(`miningMapPlans.${index}.file`);
       },
@@ -170,6 +201,7 @@ const MutationMiningMapPlanBook = ({
                     locationCategoryId: null,
                     locationId: null,
                     file: [],
+                    serverFile: [],
                   }),
               }
             : undefined,
@@ -201,14 +233,14 @@ const MutationMiningMapPlanBook = ({
   };
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={weeklyMiningPlanDataLoading}>
       <Flex gap={32} direction="column" p={22}>
         <CommonWeeklyPlanInformation />
         <GlobalFormGroup
           flexProps={{
             p: 0,
           }}
-          field={groupingMap}
+          field={groupingField}
           methods={methods}
           submitForm={handleSubmitForm}
           submitButton={{

@@ -146,7 +146,6 @@ const BargingTargetPlanData = () => {
           <MantineDataTable
             tableProps={{
               records: weeklyBargingTargetPlanData?.bargingDomePlans.data || [],
-              minHeight: 0,
               columns: [
                 {
                   accessor: 'index',

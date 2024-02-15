@@ -28,7 +28,7 @@ const PlanGroupLink: React.FC<IPlanGroupLinkProps> = ({ type }) => {
       href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=unitCapacityPlan`,
     },
     {
-      label: 'heavyEquipmentRequirementsPlan',
+      label: 'heavyEquipmentReqPlan',
       href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=heavyEquipmentReqPlan`,
     },
     {
@@ -37,11 +37,11 @@ const PlanGroupLink: React.FC<IPlanGroupLinkProps> = ({ type }) => {
     },
     {
       label: 'productionTargetPlan',
-      href: `/plan/weekly/${type}/weekly-plan-information`,
+      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=productionTargetPlan`,
     },
     {
-      label: 'miningPlanMap',
-      href: `/plan/weekly/${type}/weekly-plan-information`,
+      label: 'miningMapPlan',
+      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=miningMapPlan`,
     },
     {
       label: 'bargingTargetPlan',

@@ -44,7 +44,7 @@ const MultipleSelectMaterialRhf: React.FC<IMultipleSelectMaterialRhfProps> = ({
   const { materialsData } = useReadAllMaterialsMaster({
     variables: {
       limit: null,
-      orderDir: 'desc',
+      orderDir: 'asc',
       orderBy: 'createdAt',
       isHaveParent: isHaveParent,
       parentId: parentId === '' ? null : parentId,

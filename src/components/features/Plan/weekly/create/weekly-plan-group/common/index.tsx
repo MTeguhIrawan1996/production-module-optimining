@@ -10,6 +10,7 @@ import {
   MutationBargingTargetPlanBook,
   MutationHeavyEquipmentReqPlanBook,
   MutationMiningMapPlanBook,
+  MutationProductionTargetPlan,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,
   RootWrapper,
@@ -103,6 +104,19 @@ const CreateWeeklyPlanGroupPage = () => {
                 <MutationHeavyEquipmentAvailabilityPlanBook
                   mutationSuccessMassage={t(
                     'weeklyPlan.successCreateHeavyEquipmentAvailabilityPlanMessage'
+                  )}
+                  mutationType="create"
+                />
+              ),
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.productionTargetPlan'),
+              value: 'productionTargetPlan',
+              component: (
+                <MutationProductionTargetPlan
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successCreateProductionTargetPlanMessage'
                   )}
                   mutationType="create"
                 />

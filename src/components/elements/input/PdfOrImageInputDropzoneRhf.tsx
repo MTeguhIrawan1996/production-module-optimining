@@ -57,38 +57,101 @@ const PdfOrImageInputDropzoneRhf: React.FC<IPdfOrInputDropzoneRhfProps> = ({
   const { field, fieldState } = useController({
     name,
   });
+  const localFile: FileWithPath[] = field.value;
 
-  const previewsMemo: JSX.Element[] = React.useMemo(() => {
-    const item = field.value?.map((file: FileWithPath, index: number) => {
-      const isImage = IMAGE_MIME_TYPE.includes(file.type as any);
-      const fileUrl = URL.createObjectURL(file);
-      if (isImage) {
+  const previewLocal = React.useMemo(() => {
+    if (localFile.length > 0) {
+      const item: JSX.Element[] = localFile.map(
+        (file: FileWithPath, index: number) => {
+          const isImage = IMAGE_MIME_TYPE.includes(file.type as any);
+          const fileUrl = URL.createObjectURL(file);
+          if (isImage) {
+            return (
+              <Stack key={index} spacing="xs">
+                <NextImageFill
+                  alt={file.name}
+                  src={fileUrl}
+                  figureProps={{
+                    h: 400,
+                    w: '100%',
+                  }}
+                  imageClassName={classes.image}
+                />
+                <Text
+                  component="span"
+                  align="center"
+                  fw={400}
+                  fz={12}
+                  color="gray.6"
+                  truncate
+                >
+                  {file.name}
+                </Text>
+              </Stack>
+            );
+          }
+          return (
+            <Stack key={index} spacing="xs">
+              <iframe
+                style={{
+                  width: '100%',
+                  height: 400,
+                  borderRadius: 8,
+                  borderWidth: 4,
+                }}
+                src={fileUrl}
+                loading="lazy"
+              />
+              <Text
+                component="span"
+                align="center"
+                fw={400}
+                fz={12}
+                color="gray.6"
+                truncate
+              >
+                {file.name}
+              </Text>
+            </Stack>
+          );
+        }
+      );
+      return item;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localFile]);
+
+  const previewServer = React.useMemo(() => {
+    if (serverFile && serverFile?.length > 0) {
+      const item: JSX.Element[] = serverFile.map((file, index: number) => {
+        const isImage = IMAGE_MIME_TYPE.includes(file.mime as any);
+        if (isImage) {
+          return (
+            <Stack key={index} spacing="xs">
+              <NextImageFill
+                alt={file.originalFileName || ''}
+                src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${file.url}`}
+                figureProps={{
+                  h: 400,
+                  w: '100%',
+                }}
+                imageClassName={classes.image}
+              />
+              <Text
+                component="span"
+                align="center"
+                fw={400}
+                fz={12}
+                color="gray.6"
+                truncate
+              >
+                {file.originalFileName}
+              </Text>
+            </Stack>
+          );
+        }
+
         return (
-          <Stack key={index} spacing="xs">
-            <NextImageFill
-              alt={file.name}
-              src={fileUrl}
-              figureProps={{
-                h: 400,
-                w: '100%',
-              }}
-              imageClassName={classes.image}
-            />
-            <Text
-              component="span"
-              align="center"
-              fw={400}
-              fz={12}
-              color="gray.6"
-              truncate
-            >
-              {file.name}
-            </Text>
-          </Stack>
-        );
-      }
-      return (
-        <Stack key={index} spacing="xs">
           <iframe
             style={{
               width: '100%',
@@ -96,46 +159,13 @@ const PdfOrImageInputDropzoneRhf: React.FC<IPdfOrInputDropzoneRhfProps> = ({
               borderRadius: 8,
               borderWidth: 4,
             }}
-            src={fileUrl}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${file.url}`}
+            key={index}
             loading="lazy"
           />
-          <Text
-            component="span"
-            align="center"
-            fw={400}
-            fz={12}
-            color="gray.6"
-            truncate
-          >
-            {file.name}
-          </Text>
-        </Stack>
-      );
-    });
-    return item;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [field.value]);
-
-  const previewServer = React.useMemo(() => {
-    if (serverFile) {
-      const previewsServer: JSX.Element[] = serverFile.map(
-        (file, index: number) => {
-          return (
-            <iframe
-              style={{
-                width: '100%',
-                height: 400,
-                borderRadius: 8,
-                borderWidth: 4,
-              }}
-              src={`${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${file.url}`}
-              key={index}
-              loading="lazy"
-            />
-          );
-        }
-      );
-      return previewsServer;
+        );
+      });
+      return item;
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -218,10 +248,15 @@ const PdfOrImageInputDropzoneRhf: React.FC<IPdfOrInputDropzoneRhfProps> = ({
       </Stack>
       <SimpleGrid
         cols={1}
-        mt={previewsMemo?.length > 0 || previewServer ? 'sm' : 0}
+        mt={
+          (previewLocal && previewLocal?.length > 0) ||
+          (previewServer && previewServer?.length > 0)
+            ? 'sm'
+            : 0
+        }
       >
         {previewServer}
-        {previewsMemo}
+        {previewLocal}
       </SimpleGrid>
     </Stack>
   );

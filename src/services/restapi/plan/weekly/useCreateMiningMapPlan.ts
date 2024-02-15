@@ -3,14 +3,15 @@ import { useMutation } from '@tanstack/react-query';
 
 import axiosClient from '@/services/restapi/axiosClient';
 
-import { AxiosRestErrorResponse } from '@/types/global';
+import { AxiosRestErrorResponse, IFile } from '@/types/global';
 
-interface IMiningMapPlanData {
+export interface IMiningMapPlanData {
   id?: string | null;
   mapName: string;
   locationCategoryId: string | null;
   locationId: string | null;
   file: FileWithPath[] | null;
+  serverFile: Omit<IFile, 'path'>[];
 }
 
 export interface IMutationMiningMapPlanValues {

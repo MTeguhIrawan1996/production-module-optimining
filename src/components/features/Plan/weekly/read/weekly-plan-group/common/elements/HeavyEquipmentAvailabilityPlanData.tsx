@@ -41,12 +41,11 @@ const HeavyEquipmentAvailabilityPlanData = () => {
       >
         <Stack spacing="sm">
           <Text fz={24} fw={600} color="brand">
-            {t('commonTypography.unitCapacityPlanInformation')}
+            {t('commonTypography.heavyEquipmentAvailabilityPlanInformation')}
           </Text>
           <MantineDataTable
             tableProps={{
               records: data ?? [],
-              minHeight: 0,
               columns: [
                 {
                   accessor: 'heavyEquipmentClass',
