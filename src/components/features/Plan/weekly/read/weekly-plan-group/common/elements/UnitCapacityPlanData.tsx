@@ -108,7 +108,6 @@ const UnitCapacityPlanData = () => {
           <MantineDataTable
             tableProps={{
               records: data ?? [],
-              minHeight: 0,
               columns: [
                 {
                   accessor: 'locations',

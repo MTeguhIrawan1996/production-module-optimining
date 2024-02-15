@@ -82,12 +82,11 @@ const HeavyEquipmentReqPlanData = () => {
       <DashboardCard p={0} isLoading={weeklyHeavyEquipmentReqPlanDataLoading}>
         <Stack spacing="sm">
           <Text fz={24} fw={600} color="brand">
-            {t('commonTypography.unitCapacityPlanInformation')}
+            {t('commonTypography.heavyEquipmentReqPlanInformation')}
           </Text>
           <MantineDataTable
             tableProps={{
               records: data ?? [],
-              minHeight: 0,
               columns: [
                 {
                   accessor: 'activityName',
