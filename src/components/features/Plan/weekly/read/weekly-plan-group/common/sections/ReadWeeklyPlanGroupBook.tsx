@@ -7,6 +7,7 @@ import { DashboardCard, GlobalTabs } from '@/components/elements';
 import BargingTargetPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/BargingTargetPlanData';
 import HeavyEquipmentAvailabilityPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/HeavyEquipmentAvailabilityPlanData';
 import HeavyEquipmentReqPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/HeavyEquipmentReqPlanData';
+import MiningMapPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/MiningMapPlanData';
 import UnitCapacityPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/UnitCapacityPlanData';
 import WorkTimePlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/WorkTimePlanData';
 
@@ -72,6 +73,12 @@ const ReadWeeklyPlanGroupBook = () => {
             label: t('commonTypography.heavyEquipmentAvailabilityPlan'),
             value: 'heavyEquipmentAvailabilityPlan',
             component: <HeavyEquipmentAvailabilityPlanData />,
+            isShowItem: true,
+          },
+          {
+            label: t('commonTypography.miningMapPlan'),
+            value: 'miningMapPlan',
+            component: <MiningMapPlanData />,
             isShowItem: true,
           },
           {

@@ -82,7 +82,7 @@ const MutationMiningMapPlanBook = ({
       orderBy: 'createdAt',
       orderDir: 'asc',
     },
-    skip: tabs !== 'miningMapPlan',
+    skip: !router.isReady || tabs !== 'miningMapPlan',
     onCompleted: ({ weeklyMiningMapPlans }) => {
       if (weeklyMiningMapPlans.data.length > 0) {
         const newMiningMapPlans: IMiningMapPlanData[] =

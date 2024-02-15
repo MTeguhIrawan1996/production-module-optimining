@@ -94,7 +94,8 @@ export const useReadOneMiningMapPlan = ({
     );
 
   return {
-    weeklyMiningPlanData: weeklyMiningPlanData?.weeklyMiningMapPlans,
+    weeklyMiningPlanData: weeklyMiningPlanData?.weeklyMiningMapPlans.data,
+    weeklyMiningPlanMeta: weeklyMiningPlanData?.weeklyMiningMapPlans.meta,
     weeklyMiningPlanDataLoading,
   };
 };
