@@ -79,6 +79,8 @@ const MutationMiningMapPlanBook = ({
   const { weeklyMiningPlanDataLoading } = useReadOneMiningMapPlan({
     variables: {
       weeklyPlanId: id,
+      orderBy: 'createdAt',
+      orderDir: 'asc',
     },
     skip: tabs !== 'miningMapPlan',
     onCompleted: ({ weeklyMiningMapPlans }) => {
