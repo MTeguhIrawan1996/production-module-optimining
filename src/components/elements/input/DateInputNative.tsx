@@ -29,6 +29,14 @@ const DateInputNative: React.FC<IDateInputNativeProps> = ({
           ? t(`commonTypography.${placeholder}`, { ns: 'default' })
           : undefined
       }
+      styles={(theme) => ({
+        input: {
+          '&[data-disabled="true"]': {
+            backgroundColor: theme.colors.dark[0],
+            color: theme.colors.dark[6],
+          },
+        },
+      })}
       label={label ? t(`components.field.${label}`) : null}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}

@@ -40,6 +40,14 @@ const DateInputRhf: React.FC<IDateInputProps> = ({
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
       data-control={control}
       maxDate={maxDate}
+      styles={(theme) => ({
+        input: {
+          '&[data-disabled="true"]': {
+            backgroundColor: theme.colors.dark[0],
+            color: theme.colors.dark[6],
+          },
+        },
+      })}
       error={
         fieldState &&
         fieldState.error && (
