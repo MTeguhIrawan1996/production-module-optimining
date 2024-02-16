@@ -1,7 +1,6 @@
 import {
   NumberInput as MantineNumberInput,
   NumberInputProps,
-  Tooltip,
 } from '@mantine/core';
 import * as React from 'react';
 import { useController, useFormContext, useWatch } from 'react-hook-form';
@@ -31,7 +30,7 @@ const InputOreCalculation = ({
   });
   const { setValue } = useFormContext();
   const { t } = useTranslation('allComponents');
-  const { field, fieldState } = useController({ name });
+  const { field } = useController({ name });
 
   const totalValueMemo = React.useMemo(() => {
     const oreSubMaterial = value.filter((v) => !v.isPerent);
@@ -52,33 +51,33 @@ const InputOreCalculation = ({
   }, [totalValueMemo]);
 
   return (
-    <Tooltip
-      label={fieldState?.error?.message || ''}
-      hidden={fieldState && fieldState.error ? false : true}
-      color="red"
-      position="right"
-    >
-      <MantineNumberInput
-        {...field}
-        radius={8}
-        hideControls={hideControls}
-        labelProps={{
-          style: { fontWeight: 400, fontSize: 16, marginBottom: 8 },
-        }}
-        descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
-        label={
-          labelWithTranslate
-            ? label
-              ? t(`components.field.${label}`)
-              : null
-            : label
-        }
-        parser={(value) => value.replace(/\s|,/g, '.')}
-        precision={precision}
-        error={fieldState && fieldState.error ? true : false}
-        {...rest}
-      />
-    </Tooltip>
+    // <Tooltip
+    //   label={fieldState?.error?.message || ''}
+    //   hidden={fieldState && fieldState.error ? false : true}
+    //   color="red"
+    //   position="right"
+    // >
+    <MantineNumberInput
+      {...field}
+      radius={8}
+      hideControls={hideControls}
+      labelProps={{
+        style: { fontWeight: 400, fontSize: 16, marginBottom: 8 },
+      }}
+      descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
+      label={
+        labelWithTranslate
+          ? label
+            ? t(`components.field.${label}`)
+            : null
+          : label
+      }
+      parser={(value) => value.replace(/\s|,/g, '.')}
+      precision={precision}
+      // error={fieldState && fieldState.error ? true : false}
+      {...rest}
+    />
+    // </Tooltip>
   );
 };
 
