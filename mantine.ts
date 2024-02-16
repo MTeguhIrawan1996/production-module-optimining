@@ -21,7 +21,7 @@ export const theme: MantineProviderProps['theme'] = {
     lg: '1rem', // 16px
     xl: '1.25rem', // 20px
   },
-  defaultRadius: 'sm',
+  // defaultRadius: 'sm',
   breakpoints: {
     xs: '36em',
     sm: '48em',

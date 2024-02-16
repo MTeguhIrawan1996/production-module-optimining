@@ -3,6 +3,8 @@ import * as Pages from '../features'; // Assuming all pages are in this director
 
 // Wrap each Pages with providers and export it
 
+export * from './plan';
+
 export const ActivityCategoryMasterPage = () => (
   <WithProviders>
     <Pages.ActivityCategoryMasterPage />
@@ -228,18 +230,6 @@ export const CreateStockpileMasterPage = () => (
 export const CreateWeatherProductionPage = () => (
   <WithProviders>
     <Pages.CreateWeatherProductionPage />
-  </WithProviders>
-);
-
-export const CreateWeeklyPlanGroupPage = () => (
-  <WithProviders>
-    <Pages.CreateWeeklyPlanGroupPage />
-  </WithProviders>
-);
-
-export const CreateWeeklyPlanInformationPage = () => (
-  <WithProviders>
-    <Pages.CreateWeeklyPlanInformationPage />
   </WithProviders>
 );
 
@@ -549,24 +539,6 @@ export const ReadWeatherProductionPage = () => (
   </WithProviders>
 );
 
-export const ReadWeeklyPlanGroupPage = () => (
-  <WithProviders>
-    <Pages.ReadWeeklyPlanGroupPage />
-  </WithProviders>
-);
-
-export const ReadWeeklyPlanInformationPage = () => (
-  <WithProviders>
-    <Pages.ReadWeeklyPlanInformationPage />
-  </WithProviders>
-);
-
-export const ReadWeeklyPlanPage = () => (
-  <WithProviders>
-    <Pages.ReadWeeklyPlanPage />
-  </WithProviders>
-);
-
 export const ReadWorkingHoursPlanMasterPage = () => (
   <WithProviders>
     <Pages.ReadWorkingHoursPlanMasterPage />
@@ -795,24 +767,6 @@ export const UpdateWeatherProductionPage = () => (
   </WithProviders>
 );
 
-export const UpdateWeeklyPlanGroupPage = () => (
-  <WithProviders>
-    <Pages.UpdateWeeklyPlanGroupPage />
-  </WithProviders>
-);
-
-export const UpdateWeeklyPlanInformationPage = () => (
-  <WithProviders>
-    <Pages.UpdateWeeklyPlanInformationPage />
-  </WithProviders>
-);
-
-export const UpdateWeeklyPlanPage = () => (
-  <WithProviders>
-    <Pages.UpdateWeeklyPlanPage />
-  </WithProviders>
-);
-
 export const UpdateWorkingHoursPlanMasterPage = () => (
   <WithProviders>
     <Pages.UpdateWorkingHoursPlanMasterPage />
@@ -864,12 +818,6 @@ export const UploadRitageTopsoilPage = () => (
 export const WeatherProductionPage = () => (
   <WithProviders>
     <Pages.WeatherProductionPage />
-  </WithProviders>
-);
-
-export const WeeklyPlanPage = () => (
-  <WithProviders>
-    <Pages.WeeklyPlanPage />
   </WithProviders>
 );
 
