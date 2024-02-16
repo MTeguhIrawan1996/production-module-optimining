@@ -32,7 +32,7 @@ const SelectYearNative: React.FC<ISelectYearNativeProps> = ({
   return (
     <Select
       data={uncombinedItem}
-      radius="lg"
+      radius="sm"
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
       styles={(theme) => ({

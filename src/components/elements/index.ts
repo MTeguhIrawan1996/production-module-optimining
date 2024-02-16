@@ -37,7 +37,6 @@ import NextImageFill from '@/components/elements/global/NextImageFill';
 import SearchBar from '@/components/elements/global/SearchBar';
 import BrandSelectInputRhf from '@/components/elements/input/BrandSelectInputRhf';
 import BussinessTypeSelectInputRhf from '@/components/elements/input/BussinessTypeSelectInputRhf';
-import CheckboxGroupAccess from '@/components/elements/input/CheckboxGroupAccess';
 import ClassSelectInputRhf from '@/components/elements/input/ClassSelectInputRhf';
 import CompanyPermissionTypeSelectInputRhf from '@/components/elements/input/CompanyPermissionTypeSelectInputRhf';
 import CompanyTypeSelectInputRhf from '@/components/elements/input/CompanyTypeSelectInputRhf';
@@ -134,7 +133,6 @@ export {
   BrandSelectInputRhf,
   Breadcrumb,
   BussinessTypeSelectInputRhf,
-  CheckboxGroupAccess,
   CheckboxGroupRoleAccess,
   ClassSelectInputRhf,
   CommonWeeklyPlanInformation,

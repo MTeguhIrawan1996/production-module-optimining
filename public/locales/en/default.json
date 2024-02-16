@@ -461,7 +461,6 @@
     "companyType": "$t(commonTypography.companyType)",
     "reference": "$t(commonTypography.reference)",
     "setting": "$t(commonTypography.setting)",
-    "managementRole": "Manajemen $t(commonTypography.role)",
     "user": "$t(commonTypography.user)",
     "heavyEquipmentClass": "$t(commonTypography.class) $t(commonTypography.heavyEquipment)",
     "heavyEquipment": "$t(commonTypography.heavyEquipment)",
@@ -494,21 +493,6 @@
       "login": "$t(commonTypography.login)"
     },
     "title": "$t(commonTypography.login) ke Optimining"
-  },
-  "managementRole": {
-    "managementRoleTitle": "Manajemen $t(commonTypography.role)",
-    "createRole": "$t(commonTypography.create) $t(commonTypography.role)",
-    "editRole": "$t(commonTypography.edit) $t(commonTypography.role)",
-    "readRole": "$t(commonTypography.detail) $t(commonTypography.role)",
-    "formManagementRole": "$t(commonTypography.form) $t(managementRole.managementRoleTitle)",
-    "roleName": "$t(commonTypography.name) $t(commonTypography.role)",
-    "information": "$t(commonTypography.information)",
-    "accessSetting": "$t(commonTypography.setting) Hak Akses",
-    "accessPermission": "Izin Akses",
-    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.role)",
-    "successCreateMessage": "$t(commonTypography.role) berhasil dibuat",
-    "successDeleteMessage": "$t(commonTypography.role) berhasil dihapus",
-    "successUpdateMessage": "$t(commonTypography.role) berhasil diubah"
   },
   "user": {
     "userTitle": "$t(commonTypography.user)",

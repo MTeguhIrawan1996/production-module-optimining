@@ -1,7 +1,6 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,8 +17,7 @@ import { useReadAllCompaniesMasterData } from '@/services/graphql/query/master-d
 
 const CompanyBook = () => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const page = Number(router.query['page']) || 1;
   const url = `/master-data/company?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');

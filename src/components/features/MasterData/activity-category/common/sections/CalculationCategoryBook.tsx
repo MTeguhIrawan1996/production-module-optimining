@@ -1,7 +1,6 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -24,9 +23,8 @@ const CalculationCategoryBook: React.FC<ICalculationCategoryBookProps> = ({
   tab: tabProps,
 }) => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
-  const tab = pageParams.get('tab') || 'calculation-category';
+  const page = Number(router.query['page']) || 1;
+  const tab = router.query['tab'] || 'calculation-category';
   const url = `/master-data/activity-category?page=1&tab=${tabProps}`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');

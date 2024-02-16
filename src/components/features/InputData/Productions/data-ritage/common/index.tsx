@@ -23,7 +23,6 @@ const DataRitagePage = () => {
     (state) => [state.setBreadcrumbs],
     shallow
   );
-
   const isPremissionOre = permission.includes('read-ore-ritage');
   const isPremissionOb = permission.includes('read-overburden-ritage');
   const isPremissionQuarry = permission.includes('read-quarry-ritage');
@@ -38,6 +37,7 @@ const DataRitagePage = () => {
         path: router.asPath,
       },
     ]);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 

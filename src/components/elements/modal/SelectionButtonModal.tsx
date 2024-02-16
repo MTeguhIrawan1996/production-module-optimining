@@ -37,11 +37,10 @@ const SelectionButtonModal: React.FC<ISelectionButtonModalProps> = ({
     <Modal.Root
       opened={isOpenSelectionModal}
       onClose={actionSelectionModal}
-      centered
-      radius="xs"
+      radius="md"
       size="auto"
     >
-      <Modal.Overlay />
+      <Modal.Overlay opacity={0.2} />
       <Modal.Content>
         <Modal.Header>
           <Modal.CloseButton />

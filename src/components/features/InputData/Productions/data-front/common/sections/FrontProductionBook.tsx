@@ -1,7 +1,6 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,9 +19,8 @@ import { useReadAllFrontProduction } from '@/services/graphql/query/front-produc
 
 const FrontProductionBook = () => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
-  const segment = pageParams.get('segment') || 'pit';
+  const page = Number(router.query['page']) || 1;
+  const segment = router.query['segment'] || 'pit';
   const url = `/input-data/production/data-front?page=1&segment=${segment}`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
@@ -46,7 +44,7 @@ const FrontProductionBook = () => {
       page: page,
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
-      type: segment,
+      type: segment as string,
     },
   });
 
@@ -193,9 +191,9 @@ const FrontProductionBook = () => {
         onClick: () => setIsOpenSelectionModal((prev) => !prev),
       }}
       searchBar={{
-        placeholder: `${t(
-          'frontProduction.searchPlaceholder'
-        )} ${segment.toUpperCase()}`,
+        placeholder: `${t('frontProduction.searchPlaceholder')} ${(
+          segment as string
+        ).toUpperCase()}`,
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
@@ -205,7 +203,7 @@ const FrontProductionBook = () => {
         },
       }}
       segmentedControl={{
-        value: segment,
+        value: segment as string,
         onChange: handleChangeSegement,
         data: [
           {

@@ -7,6 +7,7 @@ import { FieldArrayWithId, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { FormController, MantineDataTable } from '@/components/elements';
+import InputOreCalculation from '@/components/elements/book/weekly-plan/input/InputOreCalculation';
 
 import {
   IWeeklyProductionTarget,
@@ -60,7 +61,7 @@ const InputTableProductionPlan = ({
             accessor: `rate.${i}`,
             title: 'Rate',
             width: 100,
-            render: ({ id }, index) => {
+            render: ({ id, materialId }, index) => {
               if (id === 'SR') {
                 return (
                   <FormController
@@ -71,6 +72,27 @@ const InputTableProductionPlan = ({
                     precision={0}
                     label={`${productionTargetPlanFields.length - 1}.${i}`}
                     labelWithTranslate={false}
+                    styles={{
+                      input: {
+                        textAlign: 'center',
+                      },
+                    }}
+                  />
+                );
+              }
+              if (materialId === `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`) {
+                return (
+                  <InputOreCalculation
+                    name={`productionTargetPlans.${
+                      productionTargetPlanFields.length - 1
+                    }.weeklyProductionTargets.${i}.rate`}
+                    indexOfValue={i}
+                    calculationSelected="rate"
+                    precision={0}
+                    label={`${productionTargetPlanFields.length - 1}.${i}`}
+                    labelWithTranslate={false}
+                    variant="unstyled"
+                    readOnly
                     styles={{
                       input: {
                         textAlign: 'center',
@@ -100,7 +122,7 @@ const InputTableProductionPlan = ({
             accessor: `ton.${i}`,
             title: 'Ton',
             width: 100,
-            render: ({ id }, index) => {
+            render: ({ id, materialId }, index) => {
               if (id === 'SR') {
                 return (
                   <FormController
@@ -111,6 +133,27 @@ const InputTableProductionPlan = ({
                     precision={0}
                     label={`${productionTargetPlanFields.length - 1}.${i}`}
                     labelWithTranslate={false}
+                    styles={{
+                      input: {
+                        textAlign: 'center',
+                      },
+                    }}
+                  />
+                );
+              }
+              if (materialId === `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`) {
+                return (
+                  <InputOreCalculation
+                    name={`productionTargetPlans.${
+                      productionTargetPlanFields.length - 1
+                    }.weeklyProductionTargets.${i}.ton`}
+                    indexOfValue={i}
+                    calculationSelected="ton"
+                    precision={0}
+                    label={`${productionTargetPlanFields.length - 1}.${i}`}
+                    labelWithTranslate={false}
+                    variant="unstyled"
+                    readOnly
                     styles={{
                       input: {
                         textAlign: 'center',

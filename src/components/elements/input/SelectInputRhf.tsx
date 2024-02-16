@@ -27,7 +27,7 @@ const SelectInputRhf: React.FC<ISelectInputRhfProps> = ({
   return (
     <Select
       {...field}
-      radius={8}
+      radius="sm"
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
       styles={(theme) => ({

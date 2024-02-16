@@ -2,7 +2,6 @@ import { Divider, SelectProps } from '@mantine/core';
 import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -32,9 +31,9 @@ import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 const ReadCompanyHumanResourceBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('cp')) || 1;
-  const heavyEquipmentPage = Number(pageParams.get('hp')) || 1;
+
+  const page = Number(router.query['cp']) || 1;
+  const heavyEquipmentPage = Number(router.query['hp']) || 1;
   const id = router.query.id as string;
   const url = `/master-data/company/read/${id}?cp=1&hp=${heavyEquipmentPage}`;
   const [employeId, setIdEmploye] = React.useState<string>('');

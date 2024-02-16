@@ -41,20 +41,6 @@ const NavbarLinksGroupLevel2: React.FC<INavbarLinksGroupLevel2Props> = ({
     setOpened(initiallyOpened || currentOpen);
   }, [initiallyOpened, subMenu, cleanedPathSubMenuLevel2]);
 
-  const renderItems = subMenu?.map((item, i) => {
-    return (
-      <PrimaryLink
-        className={cx(classes.subLinksGroup, {
-          [classes.linkActive]: item.href === cleanedPathSubMenuLevel2,
-        })}
-        href={item.href ?? ''}
-        key={`${item.label} + ${i}`}
-        label={t(`sideBar.${item.label}`)}
-        fz="sm"
-      />
-    );
-  });
-
   return (
     <Box>
       <UnstyledButton onClick={() => setOpened((o) => !o)} component="div">
@@ -78,7 +64,21 @@ const NavbarLinksGroupLevel2: React.FC<INavbarLinksGroupLevel2Props> = ({
         </Group>
       </UnstyledButton>
       <Collapse in={opened}>
-        <Stack spacing={0}>{renderItems}</Stack>
+        <Stack spacing={0}>
+          {subMenu?.map((item, i) => {
+            return (
+              <PrimaryLink
+                className={cx(classes.subLinksGroup, {
+                  [classes.linkActive]: item.href === cleanedPathSubMenuLevel2,
+                })}
+                href={item.href ?? ''}
+                key={`${item.label} + ${i}`}
+                label={t(`sideBar.${item.label}`)}
+                fz="sm"
+              />
+            );
+          })}
+        </Stack>
       </Collapse>
     </Box>
   );

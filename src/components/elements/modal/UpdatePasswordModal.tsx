@@ -26,13 +26,8 @@ const UpdatePasswordModal: React.FC<IModalProps> = ({
 }) => {
   const { t } = useTranslation('allComponents');
   return (
-    <Modal.Root
-      opened={isOpen}
-      onClose={onActionUpdatePassword}
-      centered
-      radius="sm"
-    >
-      <Modal.Overlay />
+    <Modal.Root opened={isOpen} onClose={onActionUpdatePassword} radius="md">
+      <Modal.Overlay opacity={0.2} />
       <Modal.Content px="sm" py="xs">
         <Modal.Header>
           <Modal.Title

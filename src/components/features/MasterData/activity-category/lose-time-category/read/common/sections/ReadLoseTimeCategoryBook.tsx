@@ -1,5 +1,4 @@
 import { Divider, Stack, Tabs, Text } from '@mantine/core';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,8 +17,7 @@ const ReadLoseTimeCategoryBook: React.FC<IReadLoseTimeCategoryBookProps> = ({
 }) => {
   const router = useRouter();
   const id = router.query.id as string;
-  const pageParams = useSearchParams();
-  const tab = pageParams.get('tab') || 'lose-time-category';
+  const tab = router.query['tab'] || 'lose-time-category';
   const { t } = useTranslation('default');
 
   /* #   /**=========== Query =========== */
