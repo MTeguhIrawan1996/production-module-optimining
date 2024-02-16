@@ -36,47 +36,6 @@ const NavbarExpand: React.FC<IProps> = ({
   const { t } = useTranslation('default');
   const { classes, cx } = useDashboardLayoutStyle();
   const cleanedPath = router.pathname.split('/').slice(0, 3).join('/');
-  const itemLabel = React.useMemo(() => {
-    const pathname = router.pathname.split('/');
-    return pathname;
-  }, [router]);
-
-  const linksItem = React.useCallback(
-    (item: IMenuItem) => {
-      const initialOpen = itemLabel.some(
-        (items) =>
-          items.toLowerCase().replace(/-/g, '') === item.label.toLowerCase()
-      );
-      return item.subMenu ? (
-        <NavbarLinksGroup
-          {...item}
-          key={item.label}
-          initiallyOpened={initialOpen}
-        />
-      ) : (
-        <Link
-          className={cx(classes.link, {
-            [classes.linkActive]: item.href === cleanedPath,
-          })}
-          href={item.href ?? ''}
-          key={item.label}
-        >
-          <Icon
-            icon={item.icon || ''}
-            className={classes.linkIcon}
-            style={{ fontSize: '18px' }}
-          />
-          <Text component="span" fz="sm">
-            {t(`sideBar.${item.label}`)}
-          </Text>
-        </Link>
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router]
-  );
-
-  const linkRender = menuItems?.map(linksItem);
 
   return (
     <MantineNavbar
@@ -108,7 +67,41 @@ const NavbarExpand: React.FC<IProps> = ({
         </Group>
       </MantineNavbar.Section>
       <MantineNavbar.Section p="xs" pt={2} grow component={ScrollArea}>
-        <Stack spacing={0}>{linkRender}</Stack>
+        <Stack spacing={0}>
+          {menuItems?.map((item: IMenuItem) => {
+            const initialOpen = router.pathname
+              .split('/')
+              .some(
+                (items) =>
+                  items.toLowerCase().replace(/-/g, '') ===
+                  item.label.toLowerCase()
+              );
+            return item.subMenu ? (
+              <NavbarLinksGroup
+                {...item}
+                key={item.label}
+                initiallyOpened={initialOpen}
+              />
+            ) : (
+              <Link
+                className={cx(classes.link, {
+                  [classes.linkActive]: item.href === cleanedPath,
+                })}
+                href={item.href ?? ''}
+                key={item.label}
+              >
+                <Icon
+                  icon={item.icon || ''}
+                  className={classes.linkIcon}
+                  style={{ fontSize: '18px' }}
+                />
+                <Text component="span" fz="sm">
+                  {t(`sideBar.${item.label}`)}
+                </Text>
+              </Link>
+            );
+          })}
+        </Stack>
       </MantineNavbar.Section>
     </MantineNavbar>
   );

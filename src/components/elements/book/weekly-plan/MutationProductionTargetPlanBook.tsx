@@ -1,5 +1,4 @@
 /* eslint-disable unused-imports/no-unused-vars */
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Flex, Grid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -20,7 +19,6 @@ import {
 } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyProductionTargetPlan';
 import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { productionTarget } from '@/utils/constants/DefaultValues/production-target-plan';
-import { weeklyBargingTargetPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-barging-target-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -42,7 +40,7 @@ const MutationProductionTargetPlan = ({
     React.useState<boolean>(false);
 
   const methods = useForm<IWeeklyProductionTargetPlanValues>({
-    resolver: zodResolver(weeklyBargingTargetPlanMutationValidation),
+    // resolver: zodResolver(weeklyBargingTargetPlanMutationValidation),
     defaultValues: {
       productionTargetPlans: [
         {
@@ -171,6 +169,7 @@ const MutationProductionTargetPlan = ({
   const handleSubmitForm: SubmitHandler<
     IWeeklyProductionTargetPlanValues
   > = async (data) => {
+    // console.log(data);
     // const newBargingTargetPlans: IBargingTargetPlan[] = data.bargingTargetPlans
     //   .map(({ id, materialId, weeklyBargingTargets }) => {
     //     const newWeeklyBargingTargets: IWeeklyBargingTarget[] =

@@ -1,5 +1,4 @@
 import { Tabs } from '@mantine/core';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,8 +11,7 @@ import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
 const UpdateFrontProductionPage = () => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const segment = pageParams.get('segment') || 'pit';
+  const segment = router.query['segment'] || 'pit';
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],

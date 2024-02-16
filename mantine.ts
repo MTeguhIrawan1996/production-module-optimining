@@ -7,9 +7,21 @@ export const pulse = keyframes({
 export const theme: MantineProviderProps['theme'] = {
   // fontFamily: 'Cooming soon, cursive',
   fontFamily: 'Inter, sans-serif',
-  spacing: { xs: '12px', sm: '16px', md: '24px', lg: '32px', xl: '40px' },
-  radius: { xs: '12px', sm: '16px', md: '24px', lg: '32px', xl: '40px' },
-
+  spacing: {
+    xs: '0.75rem', // 12px
+    sm: '1rem', // 16px
+    md: '1.5rem', // 24px
+    lg: '2rem', // 32px
+    xl: '2.5rem', // 40px
+  },
+  radius: {
+    xs: '0.25rem', // 4px
+    sm: '0.5rem', // 8px
+    md: '0.75rem', // 12px
+    lg: '1rem', // 16px
+    xl: '1.25rem', // 20px
+  },
+  // defaultRadius: 'sm',
   breakpoints: {
     xs: '36em',
     sm: '48em',
@@ -29,27 +41,53 @@ export const theme: MantineProviderProps['theme'] = {
         },
       },
     },
+    Badge: {
+      defaultProps: {
+        px: '0.5rem',
+      },
+    },
+    // # Input Components
+    Select: {
+      defaultProps: {
+        radius: 'sm',
+      },
+    },
+    DatePickerInput: {
+      defaultProps: {
+        radius: 'sm',
+      },
+    },
+    Alert: {
+      defaultProps: {
+        p: 'sm',
+      },
+    },
+    Modal: {
+      defaultProps: {
+        radius: 'md',
+      },
+    },
   },
   fontSizes: {
-    xs: '12px',
-    sm: '14px',
-    md: '16px',
-    lg: '18px',
-    xl: '20px',
+    xs: '0.75rem', // 12px
+    sm: '0.875rem', // 14px
+    md: '1rem', // 16px
+    lg: '1.125rem', // 18px
+    xl: '1.25rem', // 20px
   },
   headings: {
     // properties for all headings\
     // fontFamily: 'Inter, sans-serif',
-    fontWeight: 400,
+    fontWeight: 600,
 
     // properties for individual headings, all of them are optional
     sizes: {
-      h1: { fontSize: '34px' },
-      h2: { fontSize: '26px' },
-      h3: { fontSize: '22px' },
-      h4: { fontSize: '18px' },
-      h5: { fontSize: '16px' },
-      h6: { fontSize: '14px' },
+      h1: { fontSize: '2.125rem' }, // 34px
+      h2: { fontSize: '1.625rem' }, // 26px
+      h3: { fontSize: '1.375rem' }, // 22px
+      h4: { fontSize: '1.125rem' }, // 18px
+      h5: { fontSize: '1rem' }, // 16px
+      h6: { fontSize: '0.875rem' }, // 14px
     },
   },
   colors: {
@@ -65,8 +103,24 @@ export const theme: MantineProviderProps['theme'] = {
       '#099268',
       '#087F5B',
     ],
+    dark: [
+      '#f8f9fa',
+      '#f1f3f5',
+      '#e9ecef',
+      '#dee2e6',
+      '#ced4da',
+      '#adb5bd',
+      '#868e96',
+      '#495057',
+      '#343a40',
+      '#212529',
+    ],
   },
   primaryColor: 'brand',
+  primaryShade: 6,
+  black: '#495057',
+  white: '#fff',
+  colorScheme: 'light',
 
   globalStyles: (theme) => ({
     '.primaryHover': {

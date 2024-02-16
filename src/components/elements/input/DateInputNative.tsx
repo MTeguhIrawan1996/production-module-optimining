@@ -20,6 +20,7 @@ const DateInputNative: React.FC<IDateInputNativeProps> = ({
   const router = useRouter();
   return (
     <DatePickerInput
+      radius="sm"
       icon={<IconCalendar size="1.1rem" />}
       locale={router.locale}
       valueFormat={valueFormat}
@@ -28,7 +29,6 @@ const DateInputNative: React.FC<IDateInputNativeProps> = ({
           ? t(`commonTypography.${placeholder}`, { ns: 'default' })
           : undefined
       }
-      radius="lg"
       label={label ? t(`components.field.${label}`) : null}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
