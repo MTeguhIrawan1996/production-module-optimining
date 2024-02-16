@@ -2,7 +2,6 @@ import { Divider, Group } from '@mantine/core';
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconChevronLeft, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,8 +19,7 @@ import { useReadAllNonCompanyHeavyEquipment } from '@/services/graphql/query/hea
 
 const CreateHeavyEquipmentAvailableBook = () => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const page = Number(router.query['page']) || 1;
   const { t } = useTranslation('default');
   const companyId = router.query?.id as string;
   const url = `/master-data/company/create/heavy-equipment-available/${companyId}?page=1`;

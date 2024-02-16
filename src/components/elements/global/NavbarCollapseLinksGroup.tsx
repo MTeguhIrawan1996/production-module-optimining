@@ -52,7 +52,7 @@ const NavbarCollapseLinksGroup: React.FC<IMenuItem> = ({
 
   return (
     <Menu shadow="md" width={250} position="right-start">
-      <Tooltip.Floating label={t(`sideBar.${label}`)} position="right">
+      <Tooltip label={t(`sideBar.${label}`)} position="right">
         <Menu.Target>
           <ActionIcon
             radius="md"
@@ -65,7 +65,7 @@ const NavbarCollapseLinksGroup: React.FC<IMenuItem> = ({
             <Icon icon={icon ?? ''} style={{ fontSize: '18px' }} />
           </ActionIcon>
         </Menu.Target>
-      </Tooltip.Floating>
+      </Tooltip>
       <Menu.Dropdown>
         <Menu.Label>{t(`sideBar.${label}`)}</Menu.Label>
         {renderItems}

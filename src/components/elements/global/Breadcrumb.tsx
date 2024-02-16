@@ -6,53 +6,54 @@ import {
 import Link from 'next/link';
 import * as React from 'react';
 
+import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
+
 type Breadcrumbs = {
   label: string;
   path: string;
 };
 
-interface IBreadcrumbProps {
-  breadcrumbs: Breadcrumbs[];
-}
-
 const useStyles = createStyles((theme) => ({
   breadcrumbStyle: {
     cursor: 'pointer',
     textDecoration: 'none',
-    color: theme.colors.dark[1],
-    fontSize: 12,
-    fontWeight: 400,
+    color: theme.colors.dark[7],
+    fontSize: 14,
+    '&:hover': {
+      color: theme.colors.brand[6],
+    },
   },
 }));
 
-const Breadcrumb: React.FC<IBreadcrumbProps> = ({ breadcrumbs }) => {
-  const { classes, cx } = useStyles();
+const Breadcrumb: React.FC = () => {
+  const { classes } = useStyles();
 
-  const breadCrumbCallback = React.useCallback(
-    (value: Breadcrumbs, index: number) => {
-      const { label, path } = value;
-      return (
-        <Link href={path} key={label} prefetch={false}>
-          <Text
-            fw={index === breadcrumbs.length - 1 ? 600 : 400}
-            className={cx('textPrimaryHover', classes.breadcrumbStyle)}
-          >
-            {label}
-          </Text>
-        </Link>
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [breadcrumbs]
-  );
+  // const { breadcrumbs } = useBreadcrumbs((state) => state);
 
-  const breadcrumbLinks = breadcrumbs.map(breadCrumbCallback);
+  const { breadcrumbs } = useBreadcrumbs((state) => state);
+  const [data, setData] = React.useState<Breadcrumbs[]>([]);
+
+  React.useEffect(() => {
+    // Fetch data from local storage or perform any necessary logic
+    // const localData = localStorage.getItem('yourDataKey');
+    setData(breadcrumbs);
+  }, [breadcrumbs]); // Empty dependency array ensures it runs only on mount
 
   return (
     <MantineBreadcrumbs separator={<span> / </span>}>
-      {breadcrumbLinks}
+      {data?.map(({ label, path }) => {
+        return (
+          <Link href={path} key={label} prefetch={false}>
+            <Text className={classes.breadcrumbStyle}>{label}</Text>
+          </Link>
+        );
+      })}
     </MantineBreadcrumbs>
   );
 };
 
 export default Breadcrumb;
+
+/**
+ *
+ */

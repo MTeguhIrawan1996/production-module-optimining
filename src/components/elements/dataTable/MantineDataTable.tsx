@@ -14,12 +14,18 @@ import GlobalPagination, {
 import { EmptyStateImage } from '@/utils/constants/image';
 
 const useStyles = createStyles((theme) => ({
+  root: {
+    '&& td': {
+      color: theme.colors.dark[6],
+      fontSize: theme.fontSizes.xs,
+    },
+  },
   header: {
     '&& th': {
-      backgroundColor: theme.colors.gray[1],
-      color: theme.colors.dark[6],
+      color: `${theme.colors.dark[7]} !important`,
       fontWeight: 500,
-      fontSize: 16,
+      fontSize: theme.fontSizes.xs,
+      backgroundColor: `${theme.colors.dark[1]}  !important`,
     },
   },
   figure: {
@@ -55,7 +61,7 @@ export default function MantineDataTable<T>({
   const {
     fetching,
     loaderBackgroundBlur = 2,
-    fontSize = 12,
+    fontSize = 14,
     horizontalSpacing = 'xs',
     verticalSpacing = 'xs',
     borderRadius = 0,
@@ -63,8 +69,8 @@ export default function MantineDataTable<T>({
     highlightOnHover = true,
     withBorder = true,
     withColumnBorders = false,
-    borderColor = theme.colors.gray[3],
-    rowBorderColor = theme.colors.gray[3],
+    borderColor = theme.colors.gray[2],
+    rowBorderColor = theme.colors.gray[2],
     verticalAlignment = 'center',
     defaultColumnProps,
     minHeight = 520,

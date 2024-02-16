@@ -146,7 +146,6 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
                   <PrimaryButton
                     // leftIcon={<IconPlus size="20px" />}
                     label={label ?? ''}
-                    radius={4}
                     {...rest}
                   />
                 )}

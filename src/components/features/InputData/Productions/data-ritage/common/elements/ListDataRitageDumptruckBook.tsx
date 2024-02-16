@@ -1,5 +1,4 @@
 import { DataTableColumn } from 'mantine-datatable';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -42,9 +41,8 @@ export default function ListDataRitageDumptruckBook<
   columns,
 }: IRitageDTProps<T>) {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('rp')) || 1;
-  const heavyEquipmentPage = Number(pageParams.get('hp')) || 1;
+  const page = Number(router.query['rp']) || 1;
+  const heavyEquipmentPage = Number(router.query['hp']) || 1;
   const url = `/input-data/production/data-ritage?rp=${page}&hp=1&tabs=${tabs}`;
   const { t } = useTranslation('default');
 
@@ -57,7 +55,6 @@ export default function ListDataRitageDumptruckBook<
     const stockpileNameItem = globalDateNative({
       label: 'date',
       placeholder: 'chooseDate',
-      radius: 'lg',
       clearable: true,
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });

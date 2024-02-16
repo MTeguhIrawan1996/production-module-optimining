@@ -1,15 +1,18 @@
-import { AppShell, Box, createStyles, Transition } from '@mantine/core';
-import { useSession } from 'next-auth/react';
+import {
+  AppShell,
+  Box,
+  Container,
+  createStyles,
+  Transition,
+} from '@mantine/core';
 import * as React from 'react';
 import { shallow } from 'zustand/shallow';
 
-import { Breadcrumb, LogoutConfirmModal } from '@/components/elements';
+import { Breadcrumb } from '@/components/elements';
 import HeaderLayout from '@/components/layouts/Dashboard/HeaderLayout';
 
 import { linksDashboard } from '@/utils/constants/Links/linksDashboard';
-import { decodeFc } from '@/utils/helper/encodeDecode';
 import { filterMenuByPermission } from '@/utils/helper/filterMenuByPermission';
-import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 import { usePermissions } from '@/utils/store/usePermissions';
 
 import NavbarCollapse from './NavbarCollapse';
@@ -24,10 +27,10 @@ const useStyles = createStyles(() => ({
     overflow: 'clip',
   },
   main: {
-    display: 'flex',
-    justifyContent: 'start',
-    alignItems: 'start',
-    flexDirection: 'column',
+    // display: 'flex',
+    // justifyContent: 'start',
+    // alignItems: 'start',
+    // flexDirection: 'column',
     overflow: 'clip',
     paddingRight: 'calc(var(--mantine-aside-width, 0px))',
     paddingLeft: 'calc(var(--mantine-navbar-width, 0px))',
@@ -42,43 +45,25 @@ type LayoutProps = {
 const DashboardLayout = ({ children }: LayoutProps) => {
   const { classes } = useStyles();
   const [isExpand, setIsExpand] = React.useState<boolean>(true);
-  const [isConfirmLogout, setIsConfirmLogout] = React.useState<boolean>(false);
-  const [breadcrumbs] = useBreadcrumbs((state) => [state.breadcrumbs], shallow);
-  const [setPermissions] = usePermissions(
-    (state) => [state.setPermissions],
+  const { permissions, setPermissions } = usePermissions(
+    (state) => state,
     shallow
   );
-  const { data: sessionData } = useSession();
 
   const [filteredMenu, setFilteredMenu] = React.useState<IMenuItem[]>([]);
 
+  //
+
   React.useEffect(() => {
-    const fetchData = async () => {
-      if (sessionData && sessionData.user?.permission) {
-        const permissionSession = await decodeFc<string[]>(
-          sessionData.user?.permission
-        );
-        setPermissions(permissionSession);
-        const filtered = filterMenuByPermission(
-          linksDashboard,
-          permissionSession
-        );
-        setFilteredMenu(filtered);
-      }
-    };
-
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionData]);
-
-  const renderBreadcrumb = React.useMemo(() => {
-    if (breadcrumbs.length)
-      return (
-        <Box px={22} py={8} sx={{ zIndex: 1 }}>
-          <Breadcrumb breadcrumbs={breadcrumbs} />
-        </Box>
+    if (permissions.length > 0 && filteredMenu.length === 0) {
+      const filtered = filterMenuByPermission(
+        linksDashboard,
+        permissions ?? []
       );
-  }, [breadcrumbs]);
+      setFilteredMenu(filtered);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [permissions, setPermissions]);
 
   const onHandleExpand = () => {
     setIsExpand((prev) => !prev);
@@ -119,12 +104,12 @@ const DashboardLayout = ({ children }: LayoutProps) => {
       }
     >
       <HeaderLayout isExpand={isExpand} onHandleExpand={onHandleExpand} />
-      {renderBreadcrumb}
-      {children}
-      <LogoutConfirmModal
-        isOpenModalLogout={isConfirmLogout}
-        actionModalLogout={() => setIsConfirmLogout((prev) => !prev)}
-      />
+
+      <Container px="1.5rem" py="sm" maw="calc(1400px + 3rem)">
+        <Breadcrumb />
+      </Container>
+
+      <Box w="100%">{children}</Box>
     </AppShell>
   );
 };
