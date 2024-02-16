@@ -41,10 +41,6 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
   }, [userPermission, setPermissions, permissions.length]);
 
   React.useEffect(() => {
-    i18n.init();
-    // setPermissions(
-    //   userPermission?.role.permissions.data.map((v) => v.slug) ?? [],
-    // );
     i18n.changeLanguage('id');
   }, []);
 

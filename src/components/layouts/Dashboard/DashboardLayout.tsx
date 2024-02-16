@@ -45,14 +45,9 @@ type LayoutProps = {
 const DashboardLayout = ({ children }: LayoutProps) => {
   const { classes } = useStyles();
   const [isExpand, setIsExpand] = React.useState<boolean>(true);
-  const { permissions, setPermissions } = usePermissions(
-    (state) => state,
-    shallow
-  );
+  const { permissions } = usePermissions((state) => state, shallow);
 
   const [filteredMenu, setFilteredMenu] = React.useState<IMenuItem[]>([]);
-
-  //
 
   React.useEffect(() => {
     if (permissions.length > 0 && filteredMenu.length === 0) {
@@ -63,7 +58,7 @@ const DashboardLayout = ({ children }: LayoutProps) => {
       setFilteredMenu(filtered);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [permissions, setPermissions]);
+  }, [permissions]);
 
   const onHandleExpand = () => {
     setIsExpand((prev) => !prev);

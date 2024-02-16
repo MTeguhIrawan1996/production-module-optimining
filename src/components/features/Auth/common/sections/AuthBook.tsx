@@ -13,6 +13,7 @@ import { AuthGlobalForm } from '@/components/elements';
 import { ILogin, useLogin } from '@/services/next-auth/login/useLogin';
 import authField from '@/utils/constants/Field/auth-field';
 import { authValidationSchema } from '@/utils/form-validation/auth/auth-validation';
+import { usePermissions } from '@/utils/store/usePermissions';
 
 import { IErrorResponseExtensionNextAuth } from '@/types/global';
 
@@ -20,6 +21,7 @@ const AuthBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const { setPermissions } = usePermissions();
 
   const methods = useForm<ILogin>({
     resolver: zodResolver(authValidationSchema),
@@ -67,6 +69,11 @@ const AuthBook = () => {
       password: value.password,
     });
   };
+
+  React.useEffect(() => {
+    setPermissions([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box w="100%">
