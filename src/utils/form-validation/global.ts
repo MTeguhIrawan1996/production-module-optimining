@@ -1,3 +1,4 @@
+import { IMAGE_MIME_TYPE, PDF_MIME_TYPE } from '@mantine/dropzone';
 import { z } from 'zod';
 
 export const zRequiredString = z
@@ -130,23 +131,6 @@ export const zImageOptional = z
   )
   .or(z.literal(null));
 
-export const zImageArrayRequired = z
-  .custom<File>()
-  .refine(
-    (file) =>
-      file &&
-      ['image/png', 'image/jpeg', 'image/png', 'image/webp'].includes(
-        file.type
-      ),
-    {
-      message: 'File harus Foto',
-    }
-  )
-  .array()
-  .nonempty({
-    message: 'Foto wajib diisi',
-  });
-
 export const zImageArrayOptional = z
   .custom<File>()
   .refine(
@@ -166,4 +150,15 @@ export const zPdfArrayOptional = z
   .refine((file) => file && ['application/pdf'].includes(file.type), {
     message: 'File harus pdf',
   })
+  .array();
+
+export const zImageOrPDFArrayOptional = z
+  .custom<File>()
+  .refine(
+    (file) =>
+      file && [...PDF_MIME_TYPE, ...IMAGE_MIME_TYPE].includes(file.type as any),
+    {
+      message: 'Format file tidak sesuai',
+    }
+  )
   .array();

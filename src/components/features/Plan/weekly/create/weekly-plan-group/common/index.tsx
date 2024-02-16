@@ -7,10 +7,15 @@ import { shallow } from 'zustand/shallow';
 import {
   GlobalTabs,
   InnerWrapper,
+  MutationBargingTargetPlanBook,
+  MutationHeavyEquipmentReqPlanBook,
+  MutationMiningMapPlanBook,
+  MutationProductionTargetPlan,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,
   RootWrapper,
 } from '@/components/elements';
+import MutationHeavyEquipmentAvailabilityPlanBook from '@/components/elements/book/weekly-plan/MutationHeavyEquipmentAvailabilityPlanBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
@@ -73,6 +78,71 @@ const CreateWeeklyPlanGroupPage = () => {
                 <MutationUnitCapacityPlanBook
                   mutationSuccessMassage={t(
                     'weeklyPlan.successCreateUnitCapacityPlanMessage'
+                  )}
+                  mutationType="create"
+                />
+              ),
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.heavyEquipmentReqPlan'),
+              value: 'heavyEquipmentReqPlan',
+              component: (
+                <MutationHeavyEquipmentReqPlanBook
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successCreateHeavyEquipmentReqPlanMessage'
+                  )}
+                  mutationType="create"
+                />
+              ),
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.heavyEquipmentAvailabilityPlan'),
+              value: 'heavyEquipmentAvailabilityPlan',
+              component: (
+                <MutationHeavyEquipmentAvailabilityPlanBook
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successCreateHeavyEquipmentAvailabilityPlanMessage'
+                  )}
+                  mutationType="create"
+                />
+              ),
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.productionTargetPlan'),
+              value: 'productionTargetPlan',
+              component: (
+                <MutationProductionTargetPlan
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successCreateProductionTargetPlanMessage'
+                  )}
+                  mutationType="create"
+                />
+              ),
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.miningMapPlan'),
+              value: 'miningMapPlan',
+              component: (
+                <MutationMiningMapPlanBook
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successCreateMiningMapPlanMessage'
+                  )}
+                  mutationType="create"
+                />
+              ),
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.bargingTargetPlan'),
+              value: 'bargingTargetPlan',
+              component: (
+                <MutationBargingTargetPlanBook
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successCreateBargingTargetPlanMessage'
                   )}
                   mutationType="create"
                 />

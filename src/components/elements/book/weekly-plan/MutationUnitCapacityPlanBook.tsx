@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Grid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -12,7 +13,9 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
-import { IInputGroupMaterialProps } from '@/components/elements/ui/InputGroupMaterial';
+import InputGroupMaterial, {
+  IInputGroupMaterialProps,
+} from '@/components/elements/ui/InputGroupMaterial';
 
 import {
   IMaterialsGroup,
@@ -101,9 +104,9 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
       weeklyPlanId: id,
       limit: null,
     },
-    skip: tabs !== 'unitCapacityPlan' || !router.isReady,
+    skip: !router.isReady || tabs !== 'unitCapacityPlan',
     onCompleted: (data) => {
-      if (data.weeklyUnitCapacityPlans.data.length) {
+      if (data.weeklyUnitCapacityPlans.data.length > 0) {
         const unitCapacityPlans = data.weeklyUnitCapacityPlans.data.map(
           (obj) => {
             const locationIds = obj.locations.map((val) => val.id);
@@ -155,7 +158,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
         icon: <IconCheck />,
       });
       router.push(
-        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=next`
+        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=heavyEquipmentReqPlan`
       );
       if (mutationType === 'update') {
         setIsOpenConfirmation(false);
@@ -276,7 +279,26 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
           averageDistanceItem,
           dumpTruckTotalItem,
         ],
-        inputGroupMaterial: materialGroup,
+        renderItem: () =>
+          materialGroup.map(
+            ({
+              materialIndex,
+              unitCapacityPlanIndex,
+              uniqKey,
+              ...restMaterial
+            }) => (
+              <Grid.Col
+                span={12}
+                key={`${unitCapacityPlanIndex}.${materialIndex}.${uniqKey}`}
+              >
+                <InputGroupMaterial
+                  materialIndex={materialIndex}
+                  unitCapacityPlanIndex={unitCapacityPlanIndex}
+                  {...restMaterial}
+                />
+              </Grid.Col>
+            )
+          ),
         actionOuterGroup: {
           addButton:
             index === 0

@@ -129,7 +129,7 @@ const DisplayLoseTimeAndEffectiveWork: React.FC<
 
   const value: IValueInput = {
     loseTime: totalAllLoseTime || '',
-    amountEffectiveWorkingHours: amountEffectiveWorkingHours,
+    amountEffectiveWorkingHours: amountEffectiveWorkingHours || '',
   };
 
   return (

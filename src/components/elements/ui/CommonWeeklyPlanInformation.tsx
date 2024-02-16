@@ -22,11 +22,11 @@ const CommonWeeklyPlanInformation = () => {
     <Flex gap={22} direction="column" align="flex-end">
       {/* <PrimaryButton label="Button" /> */}
       <Paper p={24} withBorder w="100%">
-        <Stack spacing="md" align="flex-start">
+        <Stack spacing="md">
           <Text component="span" fw={500} fz={16}>
             {t('commonTypography.companyInformation')}
           </Text>
-          <Grid gutter="md" w="100%">
+          <Grid gutter="md">
             <Grid.Col span={6}>
               <TextInputNative
                 control="text-input-native"

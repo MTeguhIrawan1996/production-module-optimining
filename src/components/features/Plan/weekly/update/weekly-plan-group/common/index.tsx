@@ -7,10 +7,14 @@ import { shallow } from 'zustand/shallow';
 import {
   GlobalTabs,
   InnerWrapper,
+  MutationBargingTargetPlanBook,
+  MutationHeavyEquipmentReqPlanBook,
+  MutationMiningMapPlanBook,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,
   RootWrapper,
 } from '@/components/elements';
+import MutationHeavyEquipmentAvailabilityPlanBook from '@/components/elements/book/weekly-plan/MutationHeavyEquipmentAvailabilityPlanBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
@@ -73,6 +77,58 @@ const UpdateWeeklyPlanGroupPage = () => {
                 <MutationUnitCapacityPlanBook
                   mutationSuccessMassage={t(
                     'weeklyPlan.successUpdateUnitCapacityPlanMessage'
+                  )}
+                  mutationType="update"
+                />
+              ),
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.heavyEquipmentReqPlan'),
+              value: 'heavyEquipmentReqPlan',
+              component: (
+                <MutationHeavyEquipmentReqPlanBook
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successUpdateHeavyEquipmentReqPlanMessage'
+                  )}
+                  mutationType="update"
+                />
+              ),
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.heavyEquipmentAvailabilityPlan'),
+              value: 'heavyEquipmentAvailabilityPlan',
+              component: (
+                <MutationHeavyEquipmentAvailabilityPlanBook
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successUpdateHeavyEquipmentAvailabilityPlanMessage'
+                  )}
+                  mutationType="update"
+                />
+              ),
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.miningMapPlan'),
+              value: 'miningMapPlan',
+              component: (
+                <MutationMiningMapPlanBook
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successUpdateMiningMapPlanMessage'
+                  )}
+                  mutationType="update"
+                />
+              ),
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.bargingTargetPlan'),
+              value: 'bargingTargetPlan',
+              component: (
+                <MutationBargingTargetPlanBook
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successUpdateBargingTargetPlanMessage'
                   )}
                   mutationType="update"
                 />

@@ -14,13 +14,16 @@ import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/Marria
 import { IMaterialSelectInputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { IMultipleSelectLocationRhfProps } from '@/components/elements/input/MultipleSelectLocationRhf';
+import { IMultipleSelectMaterialRhfProps } from '@/components/elements/input/MultipleSelectMaterialRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
+import { IPdfOrInputDropzoneRhfProps } from '@/components/elements/input/PdfOrImageInputDropzoneRhf';
 import { IPitSelectInputRhfProps } from '@/components/elements/input/PitSelectInputRhf';
 import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
 import { ISelectActivityCategoryRhfProps } from '@/components/elements/input/SelectActivityCategoryRhf';
+import { ISelectActivityFormRhfProps } from '@/components/elements/input/SelectActivityFormRhf';
 import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
 import { ISelectCompanyRhfProps } from '@/components/elements/input/SelectCompanyRhf';
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
@@ -29,12 +32,14 @@ import { ISelectWeekRhfProps } from '@/components/elements/input/SelectWeekRhf';
 import { ISelectWorkingHoursPlanRhfProps } from '@/components/elements/input/SelectWorkingHoursPlanRhf';
 import { ISelectYearRhfProps } from '@/components/elements/input/SelectYearRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
+import { ITextAreaInput } from '@/components/elements/input/TextAreaInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
 import { ITimeInputRhfProps } from '@/components/elements/input/TimeInputRhf';
 import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelectInputRhf';
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 import { IWeatherConditionSelectInputRhfProps } from '@/components/elements/input/WeatherConditionSelectInputRhf';
 import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
+import { IDisplayQuietNumber } from '@/components/elements/ui/DisplayQuietNumber';
 
 import { ControllerProps } from '@/types/global';
 
@@ -553,6 +558,23 @@ export const globalText = ({
   };
   return field;
 };
+export const globalTextArea = ({
+  name = 'globalTextArea',
+  label = 'globalTextArea',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ITextAreaInput>) => {
+  const field: ControllerProps = {
+    control: 'text-area-input',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
 
 export const globalNumberInput = ({
   name = 'globalNumberInput',
@@ -563,6 +585,23 @@ export const globalNumberInput = ({
 }: Partial<INumberInputProps>) => {
   const field: ControllerProps = {
     control: 'number-input',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const displayQuietNumber = ({
+  name = 'displayQuietNumber',
+  label = 'displayQuietNumber',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IDisplayQuietNumber>) => {
+  const field: ControllerProps = {
+    control: 'display-quiet-number',
     name,
     label,
     withAsterisk,
@@ -871,6 +910,23 @@ export const weatherSelect = ({
   };
   return field;
 };
+export const selectActivityForm = ({
+  name = 'activityFormId',
+  label = 'formsOfActivity',
+  clearable = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectActivityFormRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-activity-form-rhf',
+    name,
+    label,
+    colSpan,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
 
 export const pitSelect = ({
   name = 'fromPitId',
@@ -930,6 +986,26 @@ export const globalMultipleSelectLocation = ({
     name,
     label,
     searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalMultipleSelectMaterial = ({
+  name = 'materialIds',
+  label = 'material',
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IMultipleSelectMaterialRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'multiple-select-material',
+    name,
+    label,
     clearable,
     withAsterisk,
     colSpan,
@@ -1078,6 +1154,32 @@ export const globalSelectWeekRhf = ({
     clearable,
     withAsterisk,
     colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalDropzonePdfOrImageRhf = ({
+  name = 'uploadFile',
+  label,
+  withAsterisk = true,
+  colSpan = 6,
+  maxSize = 10 * 1024 ** 2,
+  multiple = false,
+  onDrop = () => {},
+  onReject = () => {},
+  ...rest
+}: Partial<IPdfOrInputDropzoneRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'pdf-image-dropzone',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    maxSize,
+    multiple,
+    onDrop,
+    onReject,
     ...rest,
   };
   return field;

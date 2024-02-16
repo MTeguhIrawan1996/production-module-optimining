@@ -1,4 +1,4 @@
-import { CheckboxProps } from '@mantine/core';
+import { CheckboxProps, PaperProps } from '@mantine/core';
 import { FileWithPath } from '@mantine/dropzone';
 import { AxiosError } from 'axios';
 import { GraphQLErrorExtensions } from 'graphql';
@@ -28,10 +28,12 @@ import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/Marria
 import { IMaterialSelectInputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { IMultipleSelectLocationRhfProps } from '@/components/elements/input/MultipleSelectLocationRhf';
+import { IMultipleSelectMaterialRhfProps } from '@/components/elements/input/MultipleSelectMaterialRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { INumberInputTableRhfProps } from '@/components/elements/input/NumberInputTableRhf';
 import { IPasswordInputProps } from '@/components/elements/input/PasswordInputRhf';
 import { IPdfInputDropzoneRhfProps } from '@/components/elements/input/PdfInputDropzoneRhf';
+import { IPdfOrInputDropzoneRhfProps } from '@/components/elements/input/PdfOrImageInputDropzoneRhf';
 import { IPitSelectInputRhfProps } from '@/components/elements/input/PitSelectInputRhf';
 import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
@@ -40,6 +42,7 @@ import { IRegencySelectInputRhfProps } from '@/components/elements/input/Regency
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
 import { ISampleTypesSelectnputRhfProps } from '@/components/elements/input/SampleTypeSelectInputRhf';
 import { ISelectActivityCategoryRhfProps } from '@/components/elements/input/SelectActivityCategoryRhf';
+import { ISelectActivityFormRhfProps } from '@/components/elements/input/SelectActivityFormRhf';
 import { IArriveBargeNativeProps } from '@/components/elements/input/SelectArriveBargeNative';
 import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
 import { ICompanyNativeProps } from '@/components/elements/input/SelectCompanyNative';
@@ -60,13 +63,14 @@ import { ISelectYearRhfProps } from '@/components/elements/input/SelectYearRhf';
 import { IShiftSelectInputRhfProps } from '@/components/elements/input/ShiftSelectInputRhf';
 import { IStockpileNameSelectInputRhfProps } from '@/components/elements/input/StockpileNameSelectInputRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
+import { ITextAreaInput } from '@/components/elements/input/TextAreaInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
 import { ITimeInputRhfProps } from '@/components/elements/input/TimeInputRhf';
 import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelectInputRhf';
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
 import { IWeatherConditionSelectInputRhfProps } from '@/components/elements/input/WeatherConditionSelectInputRhf';
 import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
-import { IInputGroupMaterialProps } from '@/components/elements/ui/InputGroupMaterial';
+import { IDisplayQuietNumber } from '@/components/elements/ui/DisplayQuietNumber';
 
 import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
 import { IEmployeesData } from '@/services/graphql/query/master-data-company/useReadAllEmploye';
@@ -88,10 +92,12 @@ export type IDate = Date | undefined | string | null;
 // Controller Field
 export type ControllerProps =
   | ITextInputProps
+  | ITextAreaInput
   | ISelectInputRhfProps
   | IPasswordInputProps
   | IImageInputDropzoneRhfProps
   | IPdfInputDropzoneRhfProps
+  | IPdfOrInputDropzoneRhfProps
   | IExcelInputDropzoneRhfProps
   | INumberInputProps
   | IRadioInputProps
@@ -135,9 +141,12 @@ export type ControllerProps =
   | ISelectYearRhfProps
   | ISelectWeekRhfProps
   | INumberInputTableRhfProps
-  | IMultipleSelectLocationRhfProps
   | IInputSumArrayProps
   | IInputAverageArrayProps
+  | ISelectActivityFormRhfProps
+  | IMultipleSelectLocationRhfProps
+  | IMultipleSelectMaterialRhfProps
+  | IDisplayQuietNumber
   | IWeatherConditionSelectInputRhfProps;
 
 export type InputControllerNativeProps =
@@ -156,6 +165,7 @@ export type ControllerGroup = {
   formControllers: ControllerProps[];
   enableGroupLabel?: boolean;
   groupCheckbox?: CheckboxProps;
+  paperProps?: PaperProps;
   actionGroup?: {
     addButton?: IPrimaryButtonProps;
     deleteButton?: IPrimaryButtonProps;
@@ -165,7 +175,7 @@ export type ControllerGroup = {
     updateButton?: IPrimaryButtonProps;
     deleteButton?: IPrimaryButtonProps;
   };
-  inputGroupMaterial?: IInputGroupMaterialProps[];
+  renderItem?: () => React.ReactNode;
 };
 
 export type ControllerCheckBoxGroup<T> = {
