@@ -127,6 +127,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                 groupCheckbox,
                 group,
                 enableGroupLabel,
+                paperProps,
                 actionGroup,
                 actionOuterGroup,
                 renderItem,
@@ -139,6 +140,12 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                 deleteButton: deleteButtonOuter,
                 updateButton: updateButtonOuter,
               } = actionOuterGroup || {};
+              const {
+                withBorder = true,
+                p: pPaper = 24,
+                w: wPaper = '100%',
+                ...restPaperProps
+              } = paperProps || {};
               return (
                 <Flex
                   key={`${i}${group}`}
@@ -175,7 +182,12 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                       ) : null}
                     </Group>
                   ) : null}
-                  <Paper p={24} withBorder w="100%">
+                  <Paper
+                    p={pPaper}
+                    withBorder={withBorder}
+                    w={wPaper}
+                    {...restPaperProps}
+                  >
                     <Stack spacing="md">
                       {enableGroupLabel || actionGroup ? (
                         <SimpleGrid cols={enableGroupLabel ? 2 : 1}>

@@ -156,7 +156,10 @@ const CommonWeeklyPlanInformationBook: React.FC<
         nextButton={
           type === 'read'
             ? {
-                onClick: () => router.push('/plan/weekly'),
+                onClick: () =>
+                  router.push(
+                    `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=workTimePlan`
+                  ),
               }
             : undefined
         }
@@ -169,7 +172,7 @@ const CommonWeeklyPlanInformationBook: React.FC<
             : undefined
         }
         backButton={{
-          onClick: () => router.push('/plan/weekly'),
+          onClick: () => router.push(`/plan/weekly/${type}/${id}`),
         }}
       />
     </DashboardCard>

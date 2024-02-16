@@ -1,11 +1,4 @@
-import {
-  Group,
-  Modal,
-  ScrollArea,
-  Stack,
-  Text,
-  useMantineTheme,
-} from '@mantine/core';
+import { Stack, Text, useMantineTheme } from '@mantine/core';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumnGroup } from 'mantine-datatable';
@@ -16,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import {
   DashboardCard,
   GlobalActionTable,
+  GlobalModal,
   MantineDataTable,
 } from '@/components/elements';
 import WeeklyPlanInformationData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/WeeklyPlanInformationData';
@@ -108,7 +102,6 @@ const UnitCapacityPlanData = () => {
           <MantineDataTable
             tableProps={{
               records: data ?? [],
-              minHeight: 0,
               columns: [
                 {
                   accessor: 'locations',
@@ -173,134 +166,128 @@ const UnitCapacityPlanData = () => {
             }}
           />
         </Stack>
-        <Modal.Root
-          opened={isOpenModal}
-          onClose={() => setIsOpenModal((prev) => !prev)}
-          centered
-          radius="xs"
-          size="100%"
+        <GlobalModal
+          actionModal={() => setIsOpenModal((prev) => !prev)}
+          isOpenModal={isOpenModal}
+          scrollAreaProps={{
+            h: 360,
+          }}
+          label={t('commonTypography.material')}
         >
-          <Modal.Overlay />
-          <Modal.Content>
-            <Modal.Header py="sm">
-              <Text component="span" fz={18} fw={500}>
-                Material
-              </Text>
-              <Modal.CloseButton />
-            </Modal.Header>
-            <Modal.Body>
-              <ScrollArea h={260}>
-                <Group noWrap spacing={0} py={4}>
-                  <MantineDataTable
-                    tableProps={{
-                      defaultColumnProps: {
-                        footerStyle: {
-                          visibility: 'unset',
-                          backgroundColor: 'transparent',
-                          color: theme.colors.dark[5],
-                          fontSize: 14,
-                        },
+          <MantineDataTable
+            tableProps={{
+              defaultColumnProps: {
+                footerStyle: {
+                  visibility: 'unset',
+                  backgroundColor: 'transparent',
+                  color: theme.colors.dark[5],
+                  fontSize: 14,
+                },
+              },
+              styles: {
+                header: {
+                  zIndex: 0,
+                },
+                footer: {
+                  zIndex: 0,
+                },
+              },
+              groups: [
+                {
+                  id: 'information',
+                  title: t('commonTypography.information'),
+                  style: { textAlign: 'center' },
+                  columns: [
+                    {
+                      accessor: 'material',
+                      render: ({ material }) => material.name ?? '-',
+                      footer: <Text>Total</Text>,
+                    },
+                    {
+                      accessor: 'fleet',
+                      footer: <Text>{fleetTotal}</Text>,
+                    },
+                    {
+                      accessor: 'heavyEquipmentClass',
+                      title: t('commonTypography.heavyEquipmentClass'),
+                      width: 180,
+                      render: ({ class: heavyEquipmentClass }) =>
+                        heavyEquipmentClass.name ?? '-',
+                    },
+                    {
+                      accessor: 'physicalAvailability',
+                      title: 'PA',
+                      width: 90,
+                    },
+                    {
+                      accessor: 'useOfAvailability',
+                      title: 'UA',
+                      width: 90,
+                    },
+                    {
+                      accessor: 'effectiveWorkingHour',
+                      title: 'EWH',
+                      width: 90,
+                    },
+                    {
+                      accessor: 'distance',
+                      title: t('commonTypography.distance'),
+                      width: 90,
+                    },
+                    {
+                      accessor: 'dumpTruckCount',
+                      title: t('commonTypography.dumpTruckCount'),
+                      width: 180,
+                      footer: <Text>{dumpTruckCountTotal}</Text>,
+                    },
+                  ],
+                },
+                ...(renderOtherGroup ?? []),
+                {
+                  id: 'total',
+                  title: 'Total',
+                  style: { textAlign: 'center' },
+                  columns: [
+                    {
+                      accessor: `rate`,
+                      title: 'Rate',
+                      width: 100,
+                      render: ({ totalTargetPlan }) => {
+                        return totalTargetPlan.rate;
                       },
-                      groups: [
-                        {
-                          id: 'information',
-                          title: t('commonTypography.information'),
-                          style: { textAlign: 'center' },
-                          columns: [
-                            {
-                              accessor: 'material',
-                              render: ({ material }) => material.name ?? '-',
-                              footer: <Text>Total</Text>,
-                            },
-                            {
-                              accessor: 'fleet',
-                              footer: <Text>{fleetTotal}</Text>,
-                            },
-                            {
-                              accessor: 'heavyEquipmentClass',
-                              title: t('commonTypography.heavyEquipmentClass'),
-                              width: 180,
-                              render: ({ class: heavyEquipmentClass }) =>
-                                heavyEquipmentClass.name ?? '-',
-                            },
-                            {
-                              accessor: 'physicalAvailability',
-                              title: 'PA',
-                              width: 90,
-                            },
-                            {
-                              accessor: 'useOfAvailability',
-                              title: 'UA',
-                              width: 90,
-                            },
-                            {
-                              accessor: 'effectiveWorkingHour',
-                              title: 'EWH',
-                              width: 90,
-                            },
-                            {
-                              accessor: 'distance',
-                              title: t('commonTypography.distance'),
-                              width: 90,
-                            },
-                            {
-                              accessor: 'dumpTruckCount',
-                              title: t('commonTypography.dumpTruckCount'),
-                              width: 180,
-                              footer: <Text>{dumpTruckCountTotal}</Text>,
-                            },
-                          ],
-                        },
-                        ...(renderOtherGroup ?? []),
-                        {
-                          id: 'total',
-                          title: 'Total',
-                          style: { textAlign: 'center' },
-                          columns: [
-                            {
-                              accessor: `rate`,
-                              title: 'Rate',
-                              width: 100,
-                              render: ({ totalTargetPlan }) => {
-                                return totalTargetPlan.rate;
-                              },
-                            },
-                            {
-                              accessor: `ton`,
-                              title: 'Ton',
-                              width: 100,
-                              render: ({ totalTargetPlan }) => {
-                                return totalTargetPlan.ton;
-                              },
-                            },
-                          ],
-                        },
-                      ],
-                      defaultColumnRender: (record, _, accesor) => {
-                        const data = record[
-                          accesor as keyof typeof record
-                        ] as React.ReactNode;
-                        if (accesor === 'physicalAvailability') {
-                          return data ? `${data}%` : '-';
-                        }
-                        if (accesor === 'useOfAvailability') {
-                          return data ? `${data}%` : '-';
-                        }
-                        if (accesor === 'distance') {
-                          return data ? `${data} Meter` : '-';
-                        }
-                        return data ? data : '-';
+                    },
+                    {
+                      accessor: `ton`,
+                      title: 'Ton',
+                      width: 100,
+                      render: ({ totalTargetPlan }) => {
+                        return totalTargetPlan.ton;
                       },
-                      records: materials,
-                      highlightOnHover: false,
-                      withColumnBorders: true,
-                    }}
-                  />
-                </Group>
-              </ScrollArea>
-            </Modal.Body>
-          </Modal.Content>
-        </Modal.Root>
+                    },
+                  ],
+                },
+              ],
+              defaultColumnRender: (record, _, accesor) => {
+                const data = record[
+                  accesor as keyof typeof record
+                ] as React.ReactNode;
+                if (accesor === 'physicalAvailability') {
+                  return data ? `${data}%` : '-';
+                }
+                if (accesor === 'useOfAvailability') {
+                  return data ? `${data}%` : '-';
+                }
+                if (accesor === 'distance') {
+                  return data ? `${data} Meter` : '-';
+                }
+                return data ? data : '-';
+              },
+              records: materials,
+              highlightOnHover: false,
+              withColumnBorders: true,
+            }}
+          />
+        </GlobalModal>
       </DashboardCard>
     </>
   );

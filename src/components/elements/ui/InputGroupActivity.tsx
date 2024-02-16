@@ -163,7 +163,6 @@ const InputGroupActivity: React.FunctionComponent<IInputGroupActivityProps> = ({
                 tableProps={{
                   highlightOnHover: true,
                   withColumnBorders: true,
-                  minHeight: 0,
                   columns: [
                     {
                       accessor: 'value',

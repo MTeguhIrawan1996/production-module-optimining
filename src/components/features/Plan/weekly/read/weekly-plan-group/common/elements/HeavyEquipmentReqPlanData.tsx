@@ -1,4 +1,4 @@
-import { Group, Modal, ScrollArea, Stack, Text } from '@mantine/core';
+import { Stack, Text } from '@mantine/core';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumn } from 'mantine-datatable';
@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import {
   DashboardCard,
   GlobalActionTable,
+  GlobalModal,
   MantineDataTable,
 } from '@/components/elements';
 import WeeklyPlanInformationData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/WeeklyPlanInformationData';
@@ -82,12 +83,11 @@ const HeavyEquipmentReqPlanData = () => {
       <DashboardCard p={0} isLoading={weeklyHeavyEquipmentReqPlanDataLoading}>
         <Stack spacing="sm">
           <Text fz={24} fw={600} color="brand">
-            {t('commonTypography.unitCapacityPlanInformation')}
+            {t('commonTypography.heavyEquipmentReqPlanInformation')}
           </Text>
           <MantineDataTable
             tableProps={{
               records: data ?? [],
-              minHeight: 0,
               columns: [
                 {
                   accessor: 'activityName',
@@ -108,7 +108,6 @@ const HeavyEquipmentReqPlanData = () => {
                   accessor: 'locations',
                   title: t('commonTypography.location'),
                   width: 220,
-
                   render: ({ locations }) => {
                     const location = locations.map((val) => val.name);
                     return location?.join(', ');
@@ -158,54 +157,38 @@ const HeavyEquipmentReqPlanData = () => {
             }}
           />
         </Stack>
-        <Modal.Root
-          opened={isOpenModal}
-          onClose={() => setIsOpenModal((prev) => !prev)}
-          centered
-          radius="xs"
-          size="100%"
+        <GlobalModal
+          actionModal={() => setIsOpenModal((prev) => !prev)}
+          isOpenModal={isOpenModal}
+          scrollAreaProps={{
+            h: 360,
+          }}
+          label={t('commonTypography.formsOfActivity')}
         >
-          <Modal.Overlay />
-          <Modal.Content>
-            <Modal.Header py="sm">
-              <Text component="span" fz={18} fw={500}>
-                {t('commonTypography.formsOfActivity')}
-              </Text>
-              <Modal.CloseButton />
-            </Modal.Header>
-            <Modal.Body>
-              <ScrollArea h={260}>
-                <Group noWrap spacing={0} py={4}>
-                  <MantineDataTable
-                    tableProps={{
-                      minHeight: 0,
-                      columns: [
-                        {
-                          accessor: 'formsOfActivity',
-                          title: t('commonTypography.formsOfActivity'),
-                          width: 200,
-                          render: ({ activityForm }) =>
-                            activityForm.name ?? '-',
-                        },
-                        {
-                          accessor: 'heavyEquipmentClass',
-                          title: t('commonTypography.heavyEquipmentClass'),
-                          width: 180,
-                          render: ({ class: heavyEquipmentClass }) =>
-                            heavyEquipmentClass.name ?? '-',
-                        },
-                        ...(renderOtherGroup ?? []),
-                      ],
-                      records: heavyEquipmentRequirementPlanActivities,
-                      highlightOnHover: false,
-                      withColumnBorders: true,
-                    }}
-                  />
-                </Group>
-              </ScrollArea>
-            </Modal.Body>
-          </Modal.Content>
-        </Modal.Root>
+          <MantineDataTable
+            tableProps={{
+              columns: [
+                {
+                  accessor: 'formsOfActivity',
+                  title: t('commonTypography.formsOfActivity'),
+                  width: 200,
+                  render: ({ activityForm }) => activityForm.name ?? '-',
+                },
+                {
+                  accessor: 'heavyEquipmentClass',
+                  title: t('commonTypography.heavyEquipmentClass'),
+                  width: 180,
+                  render: ({ class: heavyEquipmentClass }) =>
+                    heavyEquipmentClass.name ?? '-',
+                },
+                ...(renderOtherGroup ?? []),
+              ],
+              records: heavyEquipmentRequirementPlanActivities,
+              highlightOnHover: false,
+              withColumnBorders: true,
+            }}
+          />
+        </GlobalModal>
       </DashboardCard>
     </>
   );

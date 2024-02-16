@@ -68,6 +68,7 @@ export default function MantineDataTable<T>({
     verticalAlignment = 'center',
     defaultColumnProps,
     minHeight = 520,
+    styles,
     ...rest
   } = tableProps;
 
@@ -101,6 +102,7 @@ export default function MantineDataTable<T>({
           root: {
             overflow: 'visible',
           },
+          ...styles,
         }}
         scrollAreaProps={{
           sx: {

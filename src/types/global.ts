@@ -1,4 +1,4 @@
-import { CheckboxProps } from '@mantine/core';
+import { CheckboxProps, PaperProps } from '@mantine/core';
 import { FileWithPath } from '@mantine/dropzone';
 import { AxiosError } from 'axios';
 import { GraphQLErrorExtensions } from 'graphql';
@@ -165,6 +165,7 @@ export type ControllerGroup = {
   formControllers: ControllerProps[];
   enableGroupLabel?: boolean;
   groupCheckbox?: CheckboxProps;
+  paperProps?: PaperProps;
   actionGroup?: {
     addButton?: IPrimaryButtonProps;
     deleteButton?: IPrimaryButtonProps;
