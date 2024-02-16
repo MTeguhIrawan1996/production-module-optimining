@@ -1,4 +1,4 @@
-/* eslint-disable unused-imports/no-unused-vars */
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Flex, Grid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -13,12 +13,14 @@ import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
 import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
 
 import {
+  IWeeklyProductionTarget,
   IWeeklyProductionTargetPlanData,
   IWeeklyProductionTargetPlanValues,
   useCreateWeeklyProductionTargetPlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyProductionTargetPlan';
 import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { productionTarget } from '@/utils/constants/DefaultValues/production-target-plan';
+import { weeklyProductionTargetPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-production-target-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -38,14 +40,16 @@ const MutationProductionTargetPlan = ({
   const tabs = router.query.tabs as string;
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
+  const [skipMaterialQuery, setSkipMaterialQuery] =
+    React.useState<boolean>(false);
 
   const methods = useForm<IWeeklyProductionTargetPlanValues>({
-    // resolver: zodResolver(weeklyBargingTargetPlanMutationValidation),
+    resolver: zodResolver(weeklyProductionTargetPlanMutationValidation),
     defaultValues: {
       productionTargetPlans: [
         {
-          id: 'SR',
-          materialId: null,
+          id: null,
+          materialId: 'sr',
           materialName: 'SR',
           isPerent: true,
           weeklyProductionTargets: productionTarget,
@@ -57,8 +61,8 @@ const MutationProductionTargetPlan = ({
 
   const {
     fields: productionTargetPlanFields,
-    replace: productionTargetPlanReplace,
-    prepend: productionTargetPlanPrepend,
+    // replace: productionTargetPlanReplace,
+    // prepend: productionTargetPlanPrepend,
   } = useFieldArray({
     name: 'productionTargetPlans',
     control: methods.control,
@@ -73,7 +77,7 @@ const MutationProductionTargetPlan = ({
         message: mutationSuccessMassage,
         icon: <IconCheck />,
       });
-      router.push(`/plan/weekly`);
+      // router.push(`/plan/weekly`);
       if (mutationType === 'update') {
         setIsOpenConfirmation(false);
       }
@@ -98,7 +102,7 @@ const MutationProductionTargetPlan = ({
     },
   });
 
-  const { materialsData, materialsDataLoading } = useReadAllMaterialsMaster({
+  const { materialsDataLoading } = useReadAllMaterialsMaster({
     variables: {
       limit: null,
       orderDir: 'asc',
@@ -107,7 +111,7 @@ const MutationProductionTargetPlan = ({
       isHaveParent: false,
       includeIds: null,
     },
-    skip: tabs !== 'productionTargetPlan',
+    skip: skipMaterialQuery || tabs !== 'productionTargetPlan',
     onCompleted: ({ materials }) => {
       const oreMaterial = materials.data.find(
         (v) => v.id === `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`
@@ -139,6 +143,7 @@ const MutationProductionTargetPlan = ({
         ...(newSubMaterialOre ?? []),
         ...productionTargetPlanFields,
       ]);
+      setSkipMaterialQuery(true);
     },
   });
 
@@ -169,35 +174,39 @@ const MutationProductionTargetPlan = ({
   const handleSubmitForm: SubmitHandler<
     IWeeklyProductionTargetPlanValues
   > = async (data) => {
-    // console.log(data);
-    // const newBargingTargetPlans: IBargingTargetPlan[] = data.bargingTargetPlans
-    //   .map(({ id, materialId, weeklyBargingTargets }) => {
-    //     const newWeeklyBargingTargets: IWeeklyBargingTarget[] =
-    //       weeklyBargingTargets
-    //         .filter((v) => v.rate && v.ton)
-    //         .map((wObj) => {
-    //           return {
-    //             id: wObj.id || undefined,
-    //             day: wObj.day,
-    //             rate: wObj.rate || null,
-    //             ton: wObj.ton || null,
-    //           };
-    //         });
-    //     return {
-    //       id: id || undefined,
-    //       materialId,
-    //       weeklyBargingTargets: newWeeklyBargingTargets,
-    //     };
-    //   })
-    //   .filter((v) => v.weeklyBargingTargets.length > 0);
-    // const newBargingDomePlans = data.bargingDomePlans.filter((v) => v.domeId);
-    // await executeUpdate({
-    //   variables: {
-    //     weeklyPlanId: id,
-    //     bargingTargetPlans: newBargingTargetPlans,
-    //     bargingDomePlans: newBargingDomePlans,
-    //   },
-    // });
+    const newProductionTargetPlans: Omit<
+      IWeeklyProductionTargetPlanData,
+      'materialName' | 'isPerent'
+    >[] = data.productionTargetPlans
+      .filter(
+        (f) =>
+          f.materialId !== 'sr' &&
+          f.materialId !== `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`
+      )
+      .map(({ id, materialId, weeklyProductionTargets }) => {
+        const newWeeklyProductionTargets: IWeeklyProductionTarget[] =
+          weeklyProductionTargets
+            .filter((v) => v.rate && v.ton)
+            .map((wObj) => {
+              return {
+                id: wObj.id || undefined,
+                day: wObj.day,
+                rate: wObj.rate || null,
+                ton: wObj.ton || null,
+              };
+            });
+        return {
+          id: id || undefined,
+          materialId: materialId,
+          weeklyProductionTargets: newWeeklyProductionTargets,
+        };
+      });
+    await executeUpdate({
+      variables: {
+        weeklyPlanId: id,
+        productionTargetPlans: newProductionTargetPlans,
+      },
+    });
   };
 
   const handleConfirmation = () => {
@@ -205,7 +214,7 @@ const MutationProductionTargetPlan = ({
   };
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={materialsDataLoading}>
       <Flex gap={32} direction="column" p={22}>
         <CommonWeeklyPlanInformation />
         <GlobalFormGroup

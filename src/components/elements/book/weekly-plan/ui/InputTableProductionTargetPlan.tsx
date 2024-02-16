@@ -61,8 +61,8 @@ const InputTableProductionPlan = ({
             accessor: `rate.${i}`,
             title: 'Rate',
             width: 100,
-            render: ({ id, materialId }, index) => {
-              if (id === 'SR') {
+            render: ({ materialId }, index) => {
+              if (materialId === 'sr') {
                 return (
                   <FormController
                     control="number-input-table-rhf"
@@ -83,13 +83,11 @@ const InputTableProductionPlan = ({
               if (materialId === `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`) {
                 return (
                   <InputOreCalculation
-                    name={`productionTargetPlans.${
-                      productionTargetPlanFields.length - 1
-                    }.weeklyProductionTargets.${i}.rate`}
+                    name={`productionTargetPlans.${index}.weeklyProductionTargets.${i}.rate`}
                     indexOfValue={i}
                     calculationSelected="rate"
                     precision={0}
-                    label={`${productionTargetPlanFields.length - 1}.${i}`}
+                    label={`${index}.${i}`}
                     labelWithTranslate={false}
                     variant="unstyled"
                     readOnly
@@ -122,8 +120,8 @@ const InputTableProductionPlan = ({
             accessor: `ton.${i}`,
             title: 'Ton',
             width: 100,
-            render: ({ id, materialId }, index) => {
-              if (id === 'SR') {
+            render: ({ materialId }, index) => {
+              if (materialId === 'sr') {
                 return (
                   <FormController
                     control="number-input-table-rhf"
@@ -144,13 +142,11 @@ const InputTableProductionPlan = ({
               if (materialId === `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`) {
                 return (
                   <InputOreCalculation
-                    name={`productionTargetPlans.${
-                      productionTargetPlanFields.length - 1
-                    }.weeklyProductionTargets.${i}.ton`}
+                    name={`productionTargetPlans.${index}.weeklyProductionTargets.${i}.ton`}
                     indexOfValue={i}
                     calculationSelected="ton"
                     precision={0}
-                    label={`${productionTargetPlanFields.length - 1}.${i}`}
+                    label={`${index}.${i}`}
                     labelWithTranslate={false}
                     variant="unstyled"
                     readOnly
@@ -202,7 +198,7 @@ const InputTableProductionPlan = ({
             width: 100,
             render: (_, index) => {
               const materialValue = materialPerent.filter(
-                (val) => val.id !== 'SR'
+                (val) => val.materialId !== 'sr'
               );
               const materialValueLength = materialValue?.length || 0;
               return (
@@ -229,7 +225,7 @@ const InputTableProductionPlan = ({
             width: 100,
             render: (_, index) => {
               const materialValue = materialPerent.filter(
-                (val) => val.id !== 'SR'
+                (val) => val.materialId !== 'sr'
               );
               const materialValueLength = materialValue?.length || 0;
               return (
@@ -266,9 +262,7 @@ const InputTableProductionPlan = ({
         highlightOnHover: true,
         withColumnBorders: true,
         idAccessor: (record) => {
-          return record.materialId
-            ? record.materialId
-            : record.productionTargetPlanId;
+          return record.materialId || record.materialName;
         },
         groups: [
           {
@@ -298,9 +292,7 @@ const InputTableProductionPlan = ({
                 withBorder: false,
                 borderRadius: 0,
                 idAccessor: (record) => {
-                  return record.materialId
-                    ? record.materialId
-                    : record.productionTargetPlanId;
+                  return record.materialId || record.materialName;
                 },
                 groups: [
                   {
