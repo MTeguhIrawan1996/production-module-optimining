@@ -7,6 +7,7 @@ import {
   CompanyPermissionTypeSelectInputRhf,
   CompanyTypeSelectInputRhf,
   DateInputRhf,
+  DisplayQuietNumber,
   DivisionSelectInputRhf,
   DomeNameSelectInputRhf,
   EligibilityStatusSelectInputRhf,
@@ -23,10 +24,12 @@ import {
   MaterialSelectInput,
   ModelSelectInputRhf,
   MultipleSelectLocationRhf,
+  MultipleSelectMaterialRhf,
   NumberInputRhf,
   NumberInputTableRhf,
   PasswordInputRhf,
   PdfInputDropzoneRhf,
+  PdfOrImageInputDropzoneRhf,
   PitSelectInputRhf,
   PositionSelectInputRhf,
   ProvinceSelectInputRhf,
@@ -35,6 +38,7 @@ import {
   RelegionSelectInputRhf,
   SampleTypeSelectInput,
   SelectActivityCategoryRhf,
+  SelectActivityFormRhf,
   SelectArriveBargeRhf,
   SelectCompanyRhf,
   SelectFactoryRhf,
@@ -47,6 +51,7 @@ import {
   ShiftSelectInputRhf,
   StockpileNameSelectInputRhf,
   SubDistrictSelectInputRhf,
+  TextAreaInput,
   TextInputRhf,
   TimeInputRhf,
   TypeSelectInputRhf,
@@ -63,6 +68,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
   switch (control) {
     case 'text-input':
       return <TextInputRhf {...props} />;
+    case 'text-area-input':
+      return <TextAreaInput {...props} />;
     case 'select-input':
       return <SelectInputRhf {...props} />;
     case 'password-input':
@@ -71,6 +78,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <ImageInputDropzoneRhf {...props} />;
     case 'pdf-dropzone':
       return <PdfInputDropzoneRhf {...props} />;
+    case 'pdf-image-dropzone':
+      return <PdfOrImageInputDropzoneRhf {...props} />;
     case 'excel-dropzone':
       return <ExcelInputDropzoneRhf {...props} />;
     case 'number-input':
@@ -157,14 +166,20 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <SelectYearRhf {...props} />;
     case 'select-week-rhf':
       return <SelectWeekRhf {...props} />;
+    case 'select-activity-form-rhf':
+      return <SelectActivityFormRhf {...props} />;
     case 'number-input-table-rhf':
       return <NumberInputTableRhf {...props} />;
     case 'multiple-select-location':
       return <MultipleSelectLocationRhf {...props} />;
+    case 'multiple-select-material':
+      return <MultipleSelectMaterialRhf {...props} />;
     case 'input-sum-array':
       return <InputSumArray {...props} />;
     case 'input-average-array':
       return <InputAverageArray {...props} />;
+    case 'display-quiet-number':
+      return <DisplayQuietNumber {...props} />;
     default:
       return null;
   }

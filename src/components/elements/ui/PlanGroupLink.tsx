@@ -28,28 +28,24 @@ const PlanGroupLink: React.FC<IPlanGroupLinkProps> = ({ type }) => {
       href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=unitCapacityPlan`,
     },
     {
-      label: 'heavyEquipmentRequirementsPlan',
-      href: `/plan/weekly/${type}/weekly-plan-information`,
+      label: 'heavyEquipmentReqPlan',
+      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=heavyEquipmentReqPlan`,
     },
     {
       label: 'heavyEquipmentAvailabilityPlan',
-      href: `/plan/weekly/${type}/weekly-plan-information`,
-    },
-    {
-      label: 'heavyEquipmentAvailabilityPlan',
-      href: `/plan/weekly/${type}/weekly-plan-information`,
+      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=heavyEquipmentAvailabilityPlan`,
     },
     {
       label: 'productionTargetPlan',
-      href: `/plan/weekly/${type}/weekly-plan-information`,
+      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=productionTargetPlan`,
     },
     {
-      label: 'miningPlanMap',
-      href: `/plan/weekly/${type}/weekly-plan-information`,
+      label: 'miningMapPlan',
+      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=miningMapPlan`,
     },
     {
-      label: 'bargingPlan',
-      href: `/plan/weekly/${type}/weekly-plan-information`,
+      label: 'bargingTargetPlan',
+      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=bargingTargetPlan`,
     },
   ];
   return (

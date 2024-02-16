@@ -19,14 +19,14 @@ export const CREATE_WEEKLY_UNIT_CAPACITY_PLAN = gql`
 `;
 
 export interface ITargetPlan {
-  id?: string;
-  day: number | string | '';
-  rate: number | string | '';
-  ton: number | string | '';
+  id?: string | null;
+  day: number;
+  rate: number | null | '';
+  ton: number | null | '';
 }
 
 export interface IMaterialsGroup {
-  id?: string;
+  id?: string | null;
   materialId: string | null;
   fleet: string;
   classId: string | null;
@@ -40,7 +40,7 @@ export interface IMaterialsGroup {
 }
 
 export interface IUnitCapacityPlanProps {
-  id?: string;
+  id?: string | null;
   locationIds: string[];
   activityName: string;
   materials: IMaterialsGroup[];

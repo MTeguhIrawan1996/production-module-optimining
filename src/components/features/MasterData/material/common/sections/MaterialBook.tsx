@@ -35,7 +35,7 @@ const MaterialBook = () => {
     variables: {
       limit: 10,
       page: page,
-      orderDir: 'desc',
+      orderDir: 'asc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       isHaveParent: false,

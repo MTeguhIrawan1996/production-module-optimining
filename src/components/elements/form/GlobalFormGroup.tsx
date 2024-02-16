@@ -1,6 +1,7 @@
 import {
   Checkbox,
   Flex,
+  FlexProps,
   Grid,
   Group,
   Paper,
@@ -10,14 +11,12 @@ import {
   SwitchProps,
   Text,
 } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import {
   FormController,
-  InputGroupMaterial,
   ModalConfirmation,
   PrimaryButton,
 } from '@/components/elements';
@@ -41,6 +40,7 @@ interface IGlobalFormGroupProps {
     label: string;
   };
   children?: React.ReactNode;
+  flexProps?: FlexProps;
 }
 
 const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
@@ -55,6 +55,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
   modalConfirmation,
   switchProps,
   children,
+  flexProps,
 }) => {
   const { t } = useTranslation('default');
   const {
@@ -79,10 +80,18 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
     ...restOuterButtonLabel
   } = outerButton || {};
 
+  const { p = 22, ...restFlexProps } = flexProps || {};
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(submitForm)}>
-        <Flex gap={32} direction="column" align="flex-end" p={22}>
+        <Flex
+          gap={32}
+          direction="column"
+          align="flex-end"
+          p={p}
+          {...restFlexProps}
+        >
           {switchProps ? (
             <Stack justify="flex-start" align="flex-start" w="100%" spacing={8}>
               <Text component="label" fw={400} fz={16}>
@@ -118,9 +127,10 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                 groupCheckbox,
                 group,
                 enableGroupLabel,
+                paperProps,
                 actionGroup,
                 actionOuterGroup,
-                inputGroupMaterial,
+                renderItem,
               },
               i
             ) => {
@@ -130,6 +140,12 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                 deleteButton: deleteButtonOuter,
                 updateButton: updateButtonOuter,
               } = actionOuterGroup || {};
+              const {
+                withBorder = true,
+                p: pPaper = 24,
+                w: wPaper = '100%',
+                ...restPaperProps
+              } = paperProps || {};
               return (
                 <Flex
                   key={`${i}${group}`}
@@ -166,7 +182,12 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                       ) : null}
                     </Group>
                   ) : null}
-                  <Paper p={24} withBorder w="100%" radius="md">
+                  <Paper
+                    p={pPaper}
+                    withBorder={withBorder}
+                    w={wPaper}
+                    {...restPaperProps}
+                  >
                     <Stack spacing="md">
                       {enableGroupLabel || actionGroup ? (
                         <SimpleGrid cols={enableGroupLabel ? 2 : 1}>
@@ -184,7 +205,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                             <Group spacing="xs" position="right">
                               {addButton ? (
                                 <PrimaryButton
-                                  leftIcon={<IconPlus size="20px" />}
+                                  // leftIcon={<IconPlus size="20px" />}
                                   {...addButton}
                                 />
                               ) : null}
@@ -218,29 +239,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                             );
                           }
                         )}
-                        {inputGroupMaterial
-                          ? inputGroupMaterial.map(
-                              ({
-                                materialIndex,
-                                unitCapacityPlanIndex,
-                                uniqKey,
-                                ...restMaterial
-                              }) => (
-                                <Grid.Col
-                                  span={12}
-                                  key={`${unitCapacityPlanIndex}.${materialIndex}.${uniqKey}`}
-                                >
-                                  <InputGroupMaterial
-                                    materialIndex={materialIndex}
-                                    unitCapacityPlanIndex={
-                                      unitCapacityPlanIndex
-                                    }
-                                    {...restMaterial}
-                                  />
-                                </Grid.Col>
-                              )
-                            )
-                          : null}
+                        {renderItem ? renderItem() : null}
                       </Grid>
                       {groupCheckbox && (
                         <Checkbox

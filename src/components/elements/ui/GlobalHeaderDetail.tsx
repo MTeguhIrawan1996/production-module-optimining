@@ -61,7 +61,7 @@ const GlobalHeaderDetail: React.FC<IGlobalHeaderDetailProps> = ({
                 align="center"
                 fw={400}
                 fz={12}
-                color="dark.5"
+                color="gray.6"
                 truncate
               >
                 {fileName}

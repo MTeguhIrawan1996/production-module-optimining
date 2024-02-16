@@ -15,7 +15,12 @@ export type IWeatherSelectInputRhfProps = {
   name: string;
 } & Omit<
   SelectProps,
-  'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
+  | 'name'
+  | 'data'
+  | 'onSearchChange'
+  | 'searchValue'
+  | 'placeholder'
+  | 'searchable'
 > &
   CommonProps;
 
@@ -28,7 +33,6 @@ const WeatherSelectInputRhf: React.FC<IWeatherSelectInputRhfProps> = ({
 }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
-  const [searchTerm, setSearchTerm] = React.useState<string>('');
 
   const { weathersData } = useReadAllWeather({
     variables: {
@@ -56,8 +60,6 @@ const WeatherSelectInputRhf: React.FC<IWeatherSelectInputRhfProps> = ({
           borderRadius: theme.spacing.xs,
         },
       })}
-      onSearchChange={setSearchTerm}
-      searchValue={searchTerm}
       data-control={control}
       placeholder={t('commonTypography.chooseWeather', { ns: 'default' })}
       label={label ? t(`components.field.${label}`) : null}

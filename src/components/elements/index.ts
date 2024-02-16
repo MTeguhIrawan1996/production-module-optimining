@@ -1,4 +1,8 @@
 import CommonWeeklyPlanInformationBook from '@/components/elements/book/weekly-plan/CommonWeeklyPlanInformationBook';
+import MutationBargingTargetPlanBook from '@/components/elements/book/weekly-plan/MutationBargingTargetPlanBook';
+import MutationHeavyEquipmentReqPlanBook from '@/components/elements/book/weekly-plan/MutationHeavyEquipmentReqPlanBook';
+import MutationMiningMapPlanBook from '@/components/elements/book/weekly-plan/MutationMiningMapPlanBook';
+import MutationProductionTargetPlan from '@/components/elements/book/weekly-plan/MutationProductionTargetPlanBook';
 import MutationUnitCapacityPlanBook from '@/components/elements/book/weekly-plan/MutationUnitCapacityPlanBook';
 import MutationWorkTimePlanBook from '@/components/elements/book/weekly-plan/MutationWorkTimePlanBook';
 import DeterminedButton from '@/components/elements/button/DeterminedButton';
@@ -54,10 +58,12 @@ import MarriageSelectInputRhf from '@/components/elements/input/MarriageStatuses
 import MaterialSelectInput from '@/components/elements/input/MaterialSelectInputRhf';
 import ModelSelectInputRhf from '@/components/elements/input/ModelSelectInputRhf';
 import MultipleSelectLocationRhf from '@/components/elements/input/MultipleSelectLocationRhf';
+import MultipleSelectMaterialRhf from '@/components/elements/input/MultipleSelectMaterialRhf';
 import NumberInputRhf from '@/components/elements/input/NumberInputRhf';
 import NumberInputTableRhf from '@/components/elements/input/NumberInputTableRhf';
 import PasswordInputRhf from '@/components/elements/input/PasswordInputRhf';
 import PdfInputDropzoneRhf from '@/components/elements/input/PdfInputDropzoneRhf';
+import PdfOrImageInputDropzoneRhf from '@/components/elements/input/PdfOrImageInputDropzoneRhf';
 import PitSelectInputRhf from '@/components/elements/input/PitSelectInputRhf';
 import PositionSelectInputRhf from '@/components/elements/input/PositionSelectInputRhf';
 import ProvinceSelectInputRhf from '@/components/elements/input/ProvinceSelectInputRhf';
@@ -66,6 +72,7 @@ import RegencySelectInputRhf from '@/components/elements/input/RegencySelectInpu
 import RelegionSelectInputRhf from '@/components/elements/input/RelegionSelectInputRhf';
 import SampleTypeSelectInput from '@/components/elements/input/SampleTypeSelectInputRhf';
 import SelectActivityCategoryRhf from '@/components/elements/input/SelectActivityCategoryRhf';
+import SelectActivityFormRhf from '@/components/elements/input/SelectActivityFormRhf';
 import SelectArriveBargeNative from '@/components/elements/input/SelectArriveBargeNative';
 import SelectArriveBargeRhf from '@/components/elements/input/SelectArriveBargeRhf';
 import SelectCompanyNative from '@/components/elements/input/SelectCompanyNative';
@@ -97,6 +104,7 @@ import WeatherSelectInputRhf from '@/components/elements/input/WeatherSelectInpu
 import LinkButton from '@/components/elements/link/LinkButton';
 import PaperLink from '@/components/elements/link/PaperLink';
 import PrimaryLink from '@/components/elements/link/PrimaryLink';
+import GlobalModal from '@/components/elements/modal/GlobalModal';
 import ImageModal from '@/components/elements/modal/ImageModal';
 import LogoutConfirmModal from '@/components/elements/modal/LogoutConfirmModal';
 import ModalConfirmation from '@/components/elements/modal/ModalConfirmation';
@@ -106,8 +114,12 @@ import GlobalPagination from '@/components/elements/pagination/GlobalPagination'
 import PaginationSkeleton from '@/components/elements/skeleton/PaginationSkeleton';
 import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
 import DisplayLoseTimeAndEffectiveWork from '@/components/elements/ui/DisplayLoseTimeAndEffectiveWork';
+import DisplayQuietNumber from '@/components/elements/ui/DisplayQuietNumber';
 import GlobalHeaderDetail from '@/components/elements/ui/GlobalHeaderDetail';
+import InputGroupActivity from '@/components/elements/ui/InputGroupActivity';
+import InputGroupDome from '@/components/elements/ui/InputGroupDome';
 import InputGroupMaterial from '@/components/elements/ui/InputGroupMaterial';
+import InputTableBargingTargetPlan from '@/components/elements/ui/InputTableBargingTargetPlan';
 import ListDetailsRitageDT from '@/components/elements/ui/ListDetailsRitageDT';
 import PlanGroupLink from '@/components/elements/ui/PlanGroupLink';
 import AuthWrapper from '@/components/elements/wrapper/AuthWrapper';
@@ -132,6 +144,7 @@ export {
   DateInputRhf,
   DeterminedButton,
   DisplayLoseTimeAndEffectiveWork,
+  DisplayQuietNumber,
   DivisionSelectInputRhf,
   DomeNameSelectInputRhf,
   DownloadButton,
@@ -147,6 +160,7 @@ export {
   GlobalFormGroup,
   GlobalHeaderDetail,
   GlobalKebabButton,
+  GlobalModal,
   GlobalPagination,
   GlobalTabs,
   HeavyEquipmentSelectInputRhf,
@@ -155,8 +169,11 @@ export {
   ImageModal,
   InnerWrapper,
   InputAverageArray,
+  InputGroupActivity,
+  InputGroupDome,
   InputGroupMaterial,
   InputSumArray,
+  InputTableBargingTargetPlan,
   KeyValueList,
   LinkButton,
   ListDetailsRitageDT,
@@ -170,6 +187,11 @@ export {
   ModelSelectInputRhf,
   MultipleFilter,
   MultipleSelectLocationRhf,
+  MultipleSelectMaterialRhf,
+  MutationBargingTargetPlanBook,
+  MutationHeavyEquipmentReqPlanBook,
+  MutationMiningMapPlanBook,
+  MutationProductionTargetPlan,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,
   NavbarCollapseLinksGroup,
@@ -182,6 +204,7 @@ export {
   PaperLink,
   PasswordInputRhf,
   PdfInputDropzoneRhf,
+  PdfOrImageInputDropzoneRhf,
   PitSelectInputRhf,
   PlanGroupLink,
   PositionSelectInputRhf,
@@ -196,6 +219,7 @@ export {
   SampleTypeSelectInput,
   SearchBar,
   SelectActivityCategoryRhf,
+  SelectActivityFormRhf,
   SelectArriveBargeNative,
   SelectArriveBargeRhf,
   SelectCompanyNative,

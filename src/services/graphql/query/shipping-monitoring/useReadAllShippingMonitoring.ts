@@ -144,7 +144,7 @@ export const useReadAllShippingMonitoring = ({
       openPalka: formatDate(item.palkaOpenAt),
       openPalkaHour: formatDate(item.palkaOpenAt, 'hh:mm:ss A'),
       closePalka: formatDate(item.palkaCloseAt),
-      closePalkaHour: formatDate(item.palkaOpenAt, 'hh:mm:ss A'),
+      closePalkaHour: formatDate(item.palkaCloseAt, 'hh:mm:ss A'),
       arrive: item.factory?.category?.name ?? null,
       vesselNameOrFactoryName: item.factory?.name ?? null,
       status: item.status,

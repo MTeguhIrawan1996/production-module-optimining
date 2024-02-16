@@ -128,7 +128,7 @@ const WeeklyPlanBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url, year]);
+  }, [url, year, week]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
