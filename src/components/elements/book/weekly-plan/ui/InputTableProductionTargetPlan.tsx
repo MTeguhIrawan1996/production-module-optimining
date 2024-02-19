@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { FormController, MantineDataTable } from '@/components/elements';
 import InputOreCalculation from '@/components/elements/book/weekly-plan/input/InputOreCalculation';
+import InputSRCalculation from '@/components/elements/book/weekly-plan/input/InputSRCalculation';
 
 import {
   IWeeklyProductionTarget,
@@ -63,14 +64,16 @@ const InputTableProductionPlan = ({
             render: ({ materialId }, index) => {
               if (materialId === 'sr') {
                 return (
-                  <FormController
-                    control="number-input-table-rhf"
+                  <InputSRCalculation
+                    calculationSelected="rate"
+                    indexOfValue={i}
                     name={`productionTargetPlans.${
                       productionTargetPlanFields.length - 1
                     }.weeklyProductionTargets.${i}.rate`}
-                    precision={0}
+                    precision={2}
                     readOnly
                     variant="unstyled"
+                    mutationType={mutationType}
                     styles={{
                       input: {
                         textAlign: 'center',
@@ -120,14 +123,16 @@ const InputTableProductionPlan = ({
             render: ({ materialId }, index) => {
               if (materialId === 'sr') {
                 return (
-                  <FormController
-                    control="number-input-table-rhf"
+                  <InputSRCalculation
+                    indexOfValue={i}
+                    calculationSelected="ton"
                     name={`productionTargetPlans.${
                       productionTargetPlanFields.length - 1
                     }.weeklyProductionTargets.${i}.ton`}
                     precision={2}
                     variant="unstyled"
                     readOnly
+                    mutationType={mutationType}
                     styles={{
                       input: {
                         textAlign: 'center',

@@ -186,6 +186,23 @@ const MutationProductionTargetPlan = ({
           );
         });
       }
+      if (mutationType === 'read') {
+        const newSR: IWeeklyProductionTarget[] =
+          weeklyProductionTargetPlans.additional.strippingRatio.map((sObj) => {
+            return {
+              id: null,
+              day: sObj.day,
+              rate: sObj.rate || '',
+              ton: sObj.ton || '',
+            };
+          });
+        methods.setValue(
+          `productionTargetPlans.${
+            productionTargetPlanFields.length - 1
+          }.weeklyProductionTargets`,
+          newSR
+        );
+      }
     },
   });
 
