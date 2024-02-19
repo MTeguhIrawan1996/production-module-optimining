@@ -9,13 +9,14 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, MantineDataTable } from '@/components/elements';
 import WeeklyPlanInformationData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/WeeklyPlanInformationData';
 
+import { IWeeklyBargingTarget } from '@/services/graphql/mutation/plan/weekly/useCreateBargingTargetPlan';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import {
   IReadOneBargingDomePlanData,
   IReadOneBargingtargetPlanData,
-  IReadOneWeeklyBargingTargetData,
   useReadOneBargingTargetPlan,
 } from '@/services/graphql/query/plan/weekly/barging-target-plan/useReadOneBargingTargetPlan';
+import { bargingTarget } from '@/utils/constants/DefaultValues/barging-target-plan';
 
 import { IElementsData } from '@/types/global';
 
@@ -44,7 +45,7 @@ const BargingTargetPlanData = () => {
     });
 
   const renderOtherGroupCallback = React.useCallback(
-    (obj: IReadOneWeeklyBargingTargetData) => {
+    (obj: IWeeklyBargingTarget) => {
       const group: DataTableColumnGroup<IReadOneBargingtargetPlanData> = {
         id: `${obj['day']}`,
         title: dayjs()
@@ -75,10 +76,7 @@ const BargingTargetPlanData = () => {
     []
   );
 
-  const renderOtherGroup =
-    weeklyBargingTargetPlanData?.bargingTargetPlans[0].weeklyBargingTargets.map(
-      renderOtherGroupCallback
-    );
+  const renderOtherGroup = bargingTarget.map(renderOtherGroupCallback);
 
   const renderOtherColumnCallback = React.useCallback(
     (element: IElementsData) => {
@@ -136,6 +134,9 @@ const BargingTargetPlanData = () => {
               records: weeklyBargingTargetPlanData?.bargingTargetPlans || [],
               highlightOnHover: false,
               withColumnBorders: true,
+            }}
+            emptyStateProps={{
+              title: t('commonTypography.dataNotfound'),
             }}
           />
         </Stack>

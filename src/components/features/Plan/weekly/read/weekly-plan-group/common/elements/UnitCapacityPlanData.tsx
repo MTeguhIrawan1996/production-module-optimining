@@ -180,7 +180,7 @@ const UnitCapacityPlanData = () => {
                 footerStyle: {
                   visibility: 'unset',
                   backgroundColor: 'transparent',
-                  color: theme.colors.dark[5],
+                  color: theme.colors.dark[6],
                   fontSize: 14,
                 },
               },

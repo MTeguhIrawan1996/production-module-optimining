@@ -171,7 +171,7 @@ const DetailSampleData: React.FC<IDetailSampleDataProps> = ({
                     : 'hidden',
                 backgroundColor: 'transparent',
                 border: 'none',
-                color: theme.colors.dark[5],
+                color: theme.colors.dark[6],
               },
               cellsStyle: {
                 border: 'none',
