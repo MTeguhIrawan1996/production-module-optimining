@@ -15,6 +15,7 @@ export const weeklyProductionTargetPlanMutationValidation: z.ZodType<IWeeklyProd
         materialId: zOptionalString.nullable(),
         materialName: zOptionalString,
         isPerent: z.boolean(),
+        index: z.number().nullable(),
         weeklyProductionTargets: z
           .object({
             id: zOptionalString.nullable(),

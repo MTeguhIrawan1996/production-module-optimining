@@ -48,7 +48,7 @@ const InputOreCalculation = ({
   React.useEffect(() => {
     setValue(`${name}`, totalValueMemo || '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalValueMemo]);
+  }, [totalValueMemo, name]);
 
   return (
     // <Tooltip

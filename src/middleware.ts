@@ -182,6 +182,8 @@ export async function middleware(request: NextRequest) {
 
     // JIKA PATH ADALAH PROTECTED PATHS, ...
     if (matchProtectedPath && token) {
+      console.log('protected path'); // eslint-disable-line
+
       const now = dayjs().unix();
 
       const validAccess = matchProtectedPath?.allowedPermissions.some(
@@ -202,8 +204,12 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
+    // JIKA PATH BUKAN PROTECTED PATHS, LANJUTKAN
+    console.log('unprotected path'); // eslint-disable-line
+
     return NextResponse.next();
   } catch (error) {
+    console.log('error | middleware', error); // eslint-disable-line
     return NextResponse.redirect(errorPage);
   }
 }
