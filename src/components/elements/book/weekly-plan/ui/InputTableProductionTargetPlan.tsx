@@ -69,8 +69,6 @@ const InputTableProductionPlan = ({
                       productionTargetPlanFields.length - 1
                     }.weeklyProductionTargets.${i}.rate`}
                     precision={0}
-                    label={`${productionTargetPlanFields.length - 1}.${i}`}
-                    labelWithTranslate={false}
                     readOnly
                     variant="unstyled"
                     styles={{
@@ -88,8 +86,6 @@ const InputTableProductionPlan = ({
                     indexOfValue={i}
                     calculationSelected="rate"
                     precision={0}
-                    label={`${index}.${i}`}
-                    labelWithTranslate={false}
                     variant="unstyled"
                     readOnly
                     styles={{
@@ -106,8 +102,6 @@ const InputTableProductionPlan = ({
                   control="number-input-table-rhf"
                   name={`productionTargetPlans.${index}.weeklyProductionTargets.${i}.rate`}
                   precision={0}
-                  label={`${index}.${i}`}
-                  labelWithTranslate={false}
                   readOnly={mutationType === 'read' ? true : false}
                   variant={mutationType === 'read' ? 'unstyled' : 'default'}
                   styles={{
@@ -131,9 +125,7 @@ const InputTableProductionPlan = ({
                     name={`productionTargetPlans.${
                       productionTargetPlanFields.length - 1
                     }.weeklyProductionTargets.${i}.ton`}
-                    precision={0}
-                    label={`${productionTargetPlanFields.length - 1}.${i}`}
-                    labelWithTranslate={false}
+                    precision={2}
                     variant="unstyled"
                     readOnly
                     styles={{
@@ -151,8 +143,6 @@ const InputTableProductionPlan = ({
                     indexOfValue={i}
                     calculationSelected="ton"
                     precision={2}
-                    label={`${index}.${i}`}
-                    labelWithTranslate={false}
                     variant="unstyled"
                     readOnly
                     styles={{
@@ -167,8 +157,6 @@ const InputTableProductionPlan = ({
                 <FormController
                   control="number-input-table-rhf"
                   name={`productionTargetPlans.${index}.weeklyProductionTargets.${i}.ton`}
-                  label={`${index}.${i}`}
-                  labelWithTranslate={false}
                   readOnly={mutationType === 'read' ? true : false}
                   variant={mutationType === 'read' ? 'unstyled' : 'default'}
                   styles={{
@@ -209,8 +197,9 @@ const InputTableProductionPlan = ({
                   control="number-input-table-rhf"
                   name={`productionTargetPlans.${indexRhf}.weeklyProductionTargets.${i}.rate`}
                   precision={0}
-                  label={`${indexRhf}.${i}`}
                   labelWithTranslate={false}
+                  readOnly={mutationType === 'read' ? true : false}
+                  variant={mutationType === 'read' ? 'unstyled' : 'default'}
                   styles={{
                     input: {
                       textAlign: 'center',
@@ -229,8 +218,9 @@ const InputTableProductionPlan = ({
                 <FormController
                   control="number-input-table-rhf"
                   name={`productionTargetPlans.${indexRhf}.weeklyProductionTargets.${i}.ton`}
-                  label={`${indexRhf}.${i}`}
                   labelWithTranslate={false}
+                  readOnly={mutationType === 'read' ? true : false}
+                  variant={mutationType === 'read' ? 'unstyled' : 'default'}
                   styles={{
                     input: {
                       textAlign: 'center',
@@ -244,7 +234,7 @@ const InputTableProductionPlan = ({
       };
       return group;
     },
-    []
+    [mutationType]
   );
 
   const renderOtherGroupSubMaterialDay = productionTarget?.map(
