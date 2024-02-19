@@ -28,6 +28,7 @@ export interface IWeeklyProductionTargetPlanData {
   materialId: string | null;
   materialName: string;
   isPerent: boolean;
+  index?: number | null;
   weeklyProductionTargets: IWeeklyProductionTarget[];
 }
 

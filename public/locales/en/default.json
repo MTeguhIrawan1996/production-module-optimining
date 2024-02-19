@@ -492,7 +492,13 @@
     "button": {
       "login": "$t(commonTypography.login)"
     },
-    "title": "$t(commonTypography.login) ke Optimining"
+    "title": "$t(commonTypography.login) ke Optimining",
+    "message": {
+      "logoutConfirmationTitle": "Apakah yakin ingin keluar?",
+      "logoutConfirmationDescription": "Pastikan data Anda telah tersimpan",
+      "confirmLogout": "Ya, lanjut keluar",
+      "cancelLogout": "Batalkan"
+    }
   },
   "user": {
     "userTitle": "$t(commonTypography.user)",
@@ -972,12 +978,14 @@
     "successCreateHeavyEquipmentAvailabilityPlanMessage": "$t(commonTypography.heavyEquipmentAvailabilityPlan) berhasil dibuat",
     "successCreateBargingTargetPlanMessage": "$t(commonTypography.bargingTargetPlan) berhasil dibuat",
     "successCreateMiningMapPlanMessage": "$t(commonTypography.miningMapPlan) berhasil dibuat",
+    "successCreateProductionTargetPlanMessage": "$t(commonTypography.productionTargetPlan) berhasil dibuat",
     "successUpdateUnitCapacityPlanMessage": "$t(commonTypography.unitCapacityPlan) berhasil diubah",
     "successUpdateWorkTimePlanMessage": "$t(commonTypography.workTimePlan) berhasil diubah",
     "successUpdateHeavyEquipmentReqPlanMessage": "$t(commonTypography.heavyEquipmentReqPlan) berhasil diubah",
     "successUpdateHeavyEquipmentAvailabilityPlanMessage": "$t(commonTypography.heavyEquipmentAvailabilityPlan) berhasil diubah",
     "successUpdateBargingTargetPlanMessage": "$t(commonTypography.bargingTargetPlan) berhasil diubah",
     "successUpdateMiningMapPlanMessage": "$t(commonTypography.miningMapPlan) berhasil diubah",
+    "successUpdateProductionTargetPlanMessage": "$t(commonTypography.productionTargetPlan) berhasil diubah",
     "successUpdateMessage": "$t(weeklyPlan.title2) berhasil diubah",
     "formCreate": "$t(commonTypography.form) $t(weeklyPlan.title2)",
     "successIsValidateMessage": "$t(weeklyPlan.title) berhasil divalidasi",
