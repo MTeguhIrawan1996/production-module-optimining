@@ -114,7 +114,6 @@ import SelectionButtonModal from '@/components/elements/modal/SelectionButtonMod
 import UpdatePasswordModal from '@/components/elements/modal/UpdatePasswordModal';
 import GlobalPagination from '@/components/elements/pagination/GlobalPagination';
 import PaginationSkeleton from '@/components/elements/skeleton/PaginationSkeleton';
-import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
 import DisplayQuietNumber from '@/components/elements/ui/DisplayQuietNumber';
 import GlobalHeaderDetail from '@/components/elements/ui/GlobalHeaderDetail';
 import ListDetailsRitageDT from '@/components/elements/ui/ListDetailsRitageDT';
@@ -133,7 +132,6 @@ export {
   CheckboxGroupRoleAccess,
   ClassSelectInputRhf,
   CommonMonthlyPlanInformationBook,
-  CommonWeeklyPlanInformation,
   CommonWeeklyPlanInformationBook,
   CompanyPermissionTypeSelectInputRhf,
   CompanyTypeSelectInputRhf,
