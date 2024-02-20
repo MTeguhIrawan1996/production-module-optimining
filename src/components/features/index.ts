@@ -125,6 +125,12 @@ import WorkingHoursPlanMasterPage from '@/components/features/MasterData/working
 import CreateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/create/common';
 import ReadWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/read/common';
 import UpdateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/update/common';
+import MonthlyPlanPage from '@/components/features/Plan/monthly/common';
+import CreateMonthlyPlanInformationPage from '@/components/features/Plan/monthly/create/common';
+import ReadMonthlyPlanPage from '@/components/features/Plan/monthly/read/common';
+import ReadMonthlyPlanInformationPage from '@/components/features/Plan/monthly/read/monthly-plan-infromation/common';
+import UpdateMonthlyPlanPage from '@/components/features/Plan/monthly/update/common';
+import UpdateMonthlyPlanInformationPage from '@/components/features/Plan/monthly/update/monthly-plan-information/common';
 import WeeklyPlanPage from '@/components/features/Plan/weekly/common';
 import CreateWeeklyPlanInformationPage from '@/components/features/Plan/weekly/create/common';
 import CreateWeeklyPlanGroupPage from '@/components/features/Plan/weekly/create/weekly-plan-group/common';
@@ -172,6 +178,7 @@ export {
   CreateHumanResourcesPage,
   CreateLocationMasterPage,
   CreateMaterialMasterPage,
+  CreateMonthlyPlanInformationPage,
   CreateRitageBargingPage,
   CreateRitageMovingPage,
   CreateRitageObPage,
@@ -200,6 +207,7 @@ export {
   HumanResourcesPage,
   LocationPage,
   MaterialMasterPage,
+  MonthlyPlanPage,
   ProfilePage,
   ReadActivityPlanPage,
   ReadBlockMasterPage,
@@ -225,6 +233,8 @@ export {
   ReadLocationMasterPage,
   ReadLoseTimeCategoryPage,
   ReadMaterialMasterPage,
+  ReadMonthlyPlanInformationPage,
+  ReadMonthlyPlanPage,
   ReadRitageBargingPage,
   ReadRitageMovingPage,
   ReadRitageObPage,
@@ -265,6 +275,8 @@ export {
   UpdateLocationMasterPage,
   UpdateLoseTimeActivityPage,
   UpdateMaterialMasterPage,
+  UpdateMonthlyPlanInformationPage,
+  UpdateMonthlyPlanPage,
   UpdateRitageBargingPage,
   UpdateRitageMovingPage,
   UpdateRitageObPage,

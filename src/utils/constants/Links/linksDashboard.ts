@@ -166,6 +166,11 @@ export const linksDashboard: IMenuItem[] = [
         href: '/plan/weekly',
         access: ['create-weekly-plan'],
       },
+      {
+        label: 'monthly',
+        href: '/plan/monthly',
+        access: ['create-monthly-plan'],
+      },
     ],
   },
 ];

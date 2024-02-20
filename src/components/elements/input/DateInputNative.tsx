@@ -34,6 +34,9 @@ const DateInputNative: React.FC<IDateInputNativeProps> = ({
           '&[data-disabled="true"]': {
             backgroundColor: theme.colors.dark[0],
             color: theme.colors.dark[6],
+            '::placeholder': {
+              color: theme.colors.dark[5],
+            },
           },
         },
       })}
