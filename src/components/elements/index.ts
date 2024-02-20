@@ -1,3 +1,4 @@
+import CommonMonthlyPlanInformationBook from '@/components/elements/book/monthly-plan/CommonMonthlyPlanInformationBook';
 import CommonWeeklyPlanInformationBook from '@/components/elements/book/weekly-plan/CommonWeeklyPlanInformationBook';
 import MutationBargingTargetPlanBook from '@/components/elements/book/weekly-plan/MutationBargingTargetPlanBook';
 import MutationHeavyEquipmentReqPlanBook from '@/components/elements/book/weekly-plan/MutationHeavyEquipmentReqPlanBook';
@@ -131,6 +132,7 @@ export {
   BussinessTypeSelectInputRhf,
   CheckboxGroupRoleAccess,
   ClassSelectInputRhf,
+  CommonMonthlyPlanInformationBook,
   CommonWeeklyPlanInformation,
   CommonWeeklyPlanInformationBook,
   CompanyPermissionTypeSelectInputRhf,

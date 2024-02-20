@@ -18,9 +18,14 @@ const PlanGroupLink: React.FC<IPlanGroupLinkProps> = ({
   const router = useRouter();
   const id = router.query.id as string;
 
+  const planInformationLabel = {
+    weekly: 'weeklyPlanInformation',
+    monthly: 'monthlyPlanInformation',
+  };
+
   const links = [
     {
-      label: 'weeklyPlanInformation',
+      label: planInformationLabel[planType],
       href: `/plan/${planType}/${type}/${planType}-plan-information/${id}`,
     },
     {

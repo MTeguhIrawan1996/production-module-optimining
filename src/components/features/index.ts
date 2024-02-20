@@ -128,6 +128,8 @@ import UpdateWorkingHoursPlanMasterPage from '@/components/features/MasterData/w
 import MonthlyPlanPage from '@/components/features/Plan/monthly/common';
 import CreateMonthlyPlanInformationPage from '@/components/features/Plan/monthly/create/common';
 import ReadMonthlyPlanPage from '@/components/features/Plan/monthly/read/common';
+import UpdateMonthlyPlanPage from '@/components/features/Plan/monthly/update/common';
+import UpdateMonthlyPlanInformationPage from '@/components/features/Plan/monthly/update/monthly-plan-information/common';
 import WeeklyPlanPage from '@/components/features/Plan/weekly/common';
 import CreateWeeklyPlanInformationPage from '@/components/features/Plan/weekly/create/common';
 import CreateWeeklyPlanGroupPage from '@/components/features/Plan/weekly/create/weekly-plan-group/common';
@@ -271,6 +273,8 @@ export {
   UpdateLocationMasterPage,
   UpdateLoseTimeActivityPage,
   UpdateMaterialMasterPage,
+  UpdateMonthlyPlanInformationPage,
+  UpdateMonthlyPlanPage,
   UpdateRitageBargingPage,
   UpdateRitageMovingPage,
   UpdateRitageObPage,

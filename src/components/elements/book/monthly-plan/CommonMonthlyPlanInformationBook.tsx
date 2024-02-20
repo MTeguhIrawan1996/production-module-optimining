@@ -8,36 +8,36 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
-import { ICreateWeeklyPlanInformationValues } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyPlanInformation';
-import { useUpdateWeeklyPlanInformation } from '@/services/graphql/mutation/plan/weekly/useUpdateWeeklyPlanInformation';
-import { useReadOneWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadOneWeeklyPlan';
+import { ICreateMonthlyPlanInformationValues } from '@/services/graphql/mutation/plan/monthly/useCreateMonthlyPlanInformation';
+import { useUpdateMonthlyPlanInformation } from '@/services/graphql/mutation/plan/monthly/useUpdateMonthlyPlanInformation';
+import { useReadOneMonthlyPlan } from '@/services/graphql/query/plan/monthly/useReadOneMonthlyPlan';
 import {
   globalSelectCompanyRhf,
-  globalSelectWeekRhf,
+  globalSelectMonthRhf,
   globalSelectYearRhf,
 } from '@/utils/constants/Field/global-field';
-import { weeklyPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-plan-validation';
+import { monthlyPlanInformationMutationValidation } from '@/utils/form-validation/plan/monthly/monthly-plan-information-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
-interface ICommonWeeklyPlanInformationBook {
+interface ICommonMonthlyPlanInformationBook {
   type: 'read' | 'update';
 }
 
-const CommonWeeklyPlanInformationBook: React.FC<
-  ICommonWeeklyPlanInformationBook
+const CommonMonthlyPlanInformationBook: React.FC<
+  ICommonMonthlyPlanInformationBook
 > = ({ type }) => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
 
   /* #   /**=========== Methods =========== */
-  const methods = useForm<ICreateWeeklyPlanInformationValues<string>>({
-    resolver: zodResolver(weeklyPlanMutationValidation),
+  const methods = useForm<ICreateMonthlyPlanInformationValues<string>>({
+    resolver: zodResolver(monthlyPlanInformationMutationValidation),
     defaultValues: {
       companyId: '',
-      week: null,
+      month: null,
       year: null,
     },
     mode: 'onBlur',
@@ -46,34 +46,34 @@ const CommonWeeklyPlanInformationBook: React.FC<
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  const { weeklyPlanData, weeklyPlanDataLoading } = useReadOneWeeklyPlan({
+  const { monthlyPlanData, monthlyPlanDataLoading } = useReadOneMonthlyPlan({
     variables: {
       id,
     },
     skip: !router.isReady,
     onCompleted: (data) => {
-      methods.setValue('companyId', data.weeklyPlan.company?.id ?? '');
-      methods.setValue('week', `${data.weeklyPlan.week}`);
-      methods.setValue('year', `${data.weeklyPlan.year}`);
+      methods.setValue('companyId', data.monthlyPlan.company?.id ?? '');
+      methods.setValue('month', `${data.monthlyPlan.month}`);
+      methods.setValue('year', `${data.monthlyPlan.year}`);
     },
   });
-  const [executeUpdate, { loading }] = useUpdateWeeklyPlanInformation({
+  const [executeUpdate, { loading }] = useUpdateMonthlyPlanInformation({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('weeklyPlan.successUpdateMessage'),
+        message: t('monthlyPlan.successUpdateMessage'),
         icon: <IconCheck />,
       });
       methods.reset();
       router.push(
-        `/plan/weekly/create/weekly-plan-group/${id}?tabs=workTimePlan`
+        `/plan/monthly/create/monthly-plan-group/${id}?tabs=workTimePlan`
       );
     },
     onError: (error) => {
       if (error.graphQLErrors) {
         const errorArry =
-          errorBadRequestField<ICreateWeeklyPlanInformationValues>(error);
+          errorBadRequestField<ICreateMonthlyPlanInformationValues>(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
             methods.setError(name, { type, message });
@@ -96,20 +96,19 @@ const CommonWeeklyPlanInformationBook: React.FC<
     const companyItem = globalSelectCompanyRhf({
       label: 'companyName',
       disabled: type === 'read' ? true : false,
-      defaultValue: weeklyPlanData?.company?.id ?? '',
-      labelValue: weeklyPlanData?.company?.name ?? '',
+      defaultValue: monthlyPlanData?.company?.id ?? '',
+      labelValue: monthlyPlanData?.company?.name ?? '',
     });
     const yearItem = globalSelectYearRhf({
       disabled: type === 'read' ? true : false,
     });
-    const weekItem = globalSelectWeekRhf({
-      disabled: type === 'read' ? true : !year,
-      year: year ? Number(year) : null,
+    const monthItem = globalSelectMonthRhf({
+      disabled: type === 'read' ? true : false,
     });
 
     const field: ControllerGroup[] = [
       {
-        group: t('commonTypography.weeklyPlanInformation'),
+        group: t('commonTypography.monthlyPlanInformation'),
         enableGroupLabel: true,
         actionOuterGroup: {
           updateButton:
@@ -118,29 +117,29 @@ const CommonWeeklyPlanInformationBook: React.FC<
                   label: 'Edit',
                   onClick: () =>
                     router.push(
-                      `/plan/weekly/update/weekly-plan-information/${id}`
+                      `/plan/monthly/update/monthly-plan-information/${id}`
                     ),
                 }
               : undefined,
         },
-        formControllers: [companyItem, yearItem, weekItem],
+        formControllers: [companyItem, yearItem, monthItem],
       },
     ];
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year, weeklyPlanData, type]);
+  }, [year, monthlyPlanData, type]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<
-    ICreateWeeklyPlanInformationValues
-  > = async ({ companyId, week, year }) => {
+    ICreateMonthlyPlanInformationValues
+  > = async ({ companyId, month, year }) => {
     await executeUpdate({
       variables: {
         id,
         companyId,
-        week: Number(week),
+        month: Number(month),
         year: Number(year),
       },
     });
@@ -148,7 +147,7 @@ const CommonWeeklyPlanInformationBook: React.FC<
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0} isLoading={weeklyPlanDataLoading}>
+    <DashboardCard p={0} isLoading={monthlyPlanDataLoading}>
       <GlobalFormGroup
         field={fieldRhf}
         methods={methods}
@@ -158,7 +157,7 @@ const CommonWeeklyPlanInformationBook: React.FC<
             ? {
                 onClick: () =>
                   router.push(
-                    `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=workTimePlan`
+                    `/plan/monthly/${type}/monthly-plan-group/${id}?tabs=workTimePlan`
                   ),
               }
             : undefined
@@ -172,11 +171,11 @@ const CommonWeeklyPlanInformationBook: React.FC<
             : undefined
         }
         backButton={{
-          onClick: () => router.push(`/plan/weekly/${type}/${id}`),
+          onClick: () => router.push(`/plan/monthly/${type}/${id}`),
         }}
       />
     </DashboardCard>
   );
 };
 
-export default CommonWeeklyPlanInformationBook;
+export default CommonMonthlyPlanInformationBook;
