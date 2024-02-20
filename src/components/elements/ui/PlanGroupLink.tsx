@@ -7,9 +7,13 @@ import PaperLink from '@/components/elements/link/PaperLink';
 
 interface IPlanGroupLinkProps {
   type: 'read' | 'update';
+  planType?: 'weekly' | 'monthly';
 }
 
-const PlanGroupLink: React.FC<IPlanGroupLinkProps> = ({ type }) => {
+const PlanGroupLink: React.FC<IPlanGroupLinkProps> = ({
+  type,
+  planType = 'weekly',
+}) => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
@@ -17,35 +21,35 @@ const PlanGroupLink: React.FC<IPlanGroupLinkProps> = ({ type }) => {
   const links = [
     {
       label: 'weeklyPlanInformation',
-      href: `/plan/weekly/${type}/weekly-plan-information/${id}`,
+      href: `/plan/${planType}/${type}/${planType}-plan-information/${id}`,
     },
     {
       label: 'workingTimePlan',
-      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=workTimePlan`,
+      href: `/plan/${planType}/${type}/${planType}-plan-group/${id}?tabs=workTimePlan`,
     },
     {
       label: 'unitCapacityPlan',
-      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=unitCapacityPlan`,
+      href: `/plan/${planType}/${type}/${planType}-plan-group/${id}?tabs=unitCapacityPlan`,
     },
     {
       label: 'heavyEquipmentReqPlan',
-      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=heavyEquipmentReqPlan`,
+      href: `/plan/${planType}/${type}/${planType}-plan-group/${id}?tabs=heavyEquipmentReqPlan`,
     },
     {
       label: 'heavyEquipmentAvailabilityPlan',
-      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=heavyEquipmentAvailabilityPlan`,
+      href: `/plan/${planType}/${type}/${planType}-plan-group/${id}?tabs=heavyEquipmentAvailabilityPlan`,
     },
     {
       label: 'productionTargetPlan',
-      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=productionTargetPlan`,
+      href: `/plan/${planType}/${type}/${planType}-plan-group/${id}?tabs=productionTargetPlan`,
     },
     {
       label: 'miningMapPlan',
-      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=miningMapPlan`,
+      href: `/plan/${planType}/${type}/${planType}-plan-group/${id}?tabs=miningMapPlan`,
     },
     {
       label: 'bargingTargetPlan',
-      href: `/plan/weekly/${type}/weekly-plan-group/${id}?tabs=bargingTargetPlan`,
+      href: `/plan/${planType}/${type}/${planType}-plan-group/${id}?tabs=bargingTargetPlan`,
     },
   ];
   return (

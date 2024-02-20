@@ -15,12 +15,12 @@ import {
 
 import { useUpdateIsDeterminedWeeklyPlan } from '@/services/graphql/mutation/plan/weekly/useIsDeterminedWeeklyPlan';
 import { useUpdateIsValidateWeeklyPlan } from '@/services/graphql/mutation/plan/weekly/useIsValidateWeeklyPlan';
-import { useReadOneWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadOneWeeklyPlan';
+import { useReadOneMonthlyPlan } from '@/services/graphql/query/plan/monthly/useReadOneMonthlyPlan';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 
 import { IUpdateStatusValues } from '@/types/global';
 
-const ReadWeeklyPlanBook = () => {
+const ReadMonthlyPlanBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
@@ -33,7 +33,7 @@ const ReadWeeklyPlanBook = () => {
     mode: 'onSubmit',
   });
 
-  const { weeklyPlanData, weeklyPlanDataLoading } = useReadOneWeeklyPlan({
+  const { monthlyPlanData, monthlyPlanDataLoading } = useReadOneMonthlyPlan({
     variables: {
       id,
     },
@@ -149,25 +149,25 @@ const ReadWeeklyPlanBook = () => {
   const includesValid = [`${process.env.NEXT_PUBLIC_STATUS_VALID}`];
 
   const isShowButtonValidation = includesWaiting.includes(
-    weeklyPlanData?.status?.id ?? ''
+    monthlyPlanData?.status?.id ?? ''
   );
 
   const isShowButtonInvalidation = includesWaiting.includes(
-    weeklyPlanData?.status?.id ?? ''
+    monthlyPlanData?.status?.id ?? ''
   );
 
   const isShowButtonDetermined = includesValid.includes(
-    weeklyPlanData?.status?.id ?? ''
+    monthlyPlanData?.status?.id ?? ''
   );
 
   const isShowButtonReject = includesValid.includes(
-    weeklyPlanData?.status?.id ?? ''
+    monthlyPlanData?.status?.id ?? ''
   );
 
   return (
     <DashboardCard
       p={0}
-      isLoading={weeklyPlanDataLoading}
+      isLoading={monthlyPlanDataLoading}
       validationButton={
         isShowButtonValidation
           ? {
@@ -207,28 +207,30 @@ const ReadWeeklyPlanBook = () => {
           : undefined
       }
       enebleBackBottomOuter={{
-        onClick: () => router.push('/plan/weekly'),
+        onClick: () => router.push('/plan/monthly'),
       }}
     >
-      {weeklyPlanData?.status?.id === 'af06163a-2ba3-45ee-a724-ab3af0c97cc9' ? (
+      {monthlyPlanData?.status?.id ===
+      'af06163a-2ba3-45ee-a724-ab3af0c97cc9' ? (
         <GlobalAlert
-          description={weeklyPlanData?.statusMessage ?? ''}
+          description={monthlyPlanData?.statusMessage ?? ''}
           title={t('commonTypography.invalidData')}
           color="red"
           mt="xs"
         />
       ) : null}
-      {weeklyPlanData?.status?.id === '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
+      {monthlyPlanData?.status?.id ===
+      '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
         <GlobalAlert
-          description={weeklyPlanData?.statusMessage ?? ''}
+          description={monthlyPlanData?.statusMessage ?? ''}
           title={t('commonTypography.rejectedData')}
           color="red"
           mt="xs"
         />
       ) : null}
-      <PlanGroupLink type="read" planType="weekly" />
+      <PlanGroupLink type="read" planType="monthly" />
     </DashboardCard>
   );
 };
 
-export default ReadWeeklyPlanBook;
+export default ReadMonthlyPlanBook;
