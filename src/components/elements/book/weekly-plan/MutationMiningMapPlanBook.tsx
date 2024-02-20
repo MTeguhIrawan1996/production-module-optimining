@@ -80,7 +80,7 @@ const MutationMiningMapPlanBook = ({
     variables: {
       weeklyPlanId: id,
       orderBy: 'createdAt',
-      orderDir: 'asc',
+      orderDir: 'desc',
     },
     skip: !router.isReady || tabs !== 'miningMapPlan',
     onCompleted: ({ weeklyMiningMapPlans }) => {
