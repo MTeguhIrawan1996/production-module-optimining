@@ -12,7 +12,7 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteMonthlyPlan } from '@/services/graphql/mutation/plan/monthly/useDeleteWeeklyPlan';
+import { useDeleteMonthlyPlan } from '@/services/graphql/mutation/plan/monthly/useDeleteMonthlyPlan';
 import { useReadAllMonthlyPlan } from '@/services/graphql/query/plan/monthly/useReadAllMonthlyPlan';
 import {
   globalSelectCompanyNative,

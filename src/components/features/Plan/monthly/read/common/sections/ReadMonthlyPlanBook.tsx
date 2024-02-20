@@ -13,8 +13,8 @@ import {
   PlanGroupLink,
 } from '@/components/elements';
 
-import { useUpdateIsDeterminedWeeklyPlan } from '@/services/graphql/mutation/plan/weekly/useIsDeterminedWeeklyPlan';
-import { useUpdateIsValidateWeeklyPlan } from '@/services/graphql/mutation/plan/weekly/useIsValidateWeeklyPlan';
+import { useUpdateIsDeterminedMonthlyPlan } from '@/services/graphql/mutation/plan/monthly/useIsDeterminedMonthlyPlan';
+import { useUpdateIsValidateMonthlyPlan } from '@/services/graphql/mutation/plan/monthly/useIsValidateMonthlyPlan';
 import { useReadOneMonthlyPlan } from '@/services/graphql/query/plan/monthly/useReadOneMonthlyPlan';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 
@@ -40,24 +40,24 @@ const ReadMonthlyPlanBook = () => {
     skip: !router.isReady,
   });
 
-  const [executeUpdateStatus, { loading }] = useUpdateIsValidateWeeklyPlan({
+  const [executeUpdateStatus, { loading }] = useUpdateIsValidateMonthlyPlan({
     onCompleted: (data) => {
       const message = {
         '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
-          'weeklyPlan.successIsValidateMessage'
+          'monthlyPlan.successIsValidateMessage'
         ),
         'af06163a-2ba3-45ee-a724-ab3af0c97cc9': t(
-          'weeklyPlan.successIsNotValidateMessage'
+          'monthlyPlan.successIsNotValidateMessage'
         ),
-        default: t('weeklyPlan.title'),
+        default: t('monthlyPlan.title'),
       };
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: message[data.validateWeeklyPlan.status.id],
+        message: message[data.validateMonthlyPlan.status.id],
         icon: <IconCheck />,
       });
-      router.push('/plan/weekly');
+      router.push('/plan/monthly');
     },
     onError: (error) => {
       if (error.graphQLErrors) {
@@ -72,24 +72,24 @@ const ReadMonthlyPlanBook = () => {
   });
 
   const [executeUpdateStatusDetermiend, { loading: determinedLoading }] =
-    useUpdateIsDeterminedWeeklyPlan({
+    useUpdateIsDeterminedMonthlyPlan({
       onCompleted: (data) => {
         const message = {
           'f5f644d9-8810-44f7-8d42-36b5222b97d1': t(
-            'weeklyPlan.successIsDeterminedMessage'
+            'monthlyPlan.successIsDeterminedMessage'
           ),
           '7848a063-ae40-4a80-af86-dfc532cbb688': t(
-            'weeklyPlan.successIsRejectMessage'
+            'monthlyPlan.successIsRejectMessage'
           ),
-          default: t('weeklyPlan.title'),
+          default: t('monthlyPlan.title'),
         };
         notifications.show({
           color: 'green',
           title: 'Selamat',
-          message: message[data.determineWeeklyPlan.status.id],
+          message: message[data.determineMonthlyPlan.status.id],
           icon: <IconCheck />,
         });
-        router.push('/plan/weekly');
+        router.push('/plan/monthly');
       },
       onError: (error) => {
         if (error.graphQLErrors) {
