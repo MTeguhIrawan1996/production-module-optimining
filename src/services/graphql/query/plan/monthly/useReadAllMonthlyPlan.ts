@@ -1,4 +1,5 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
+import dayjs from 'dayjs';
 
 import { simpleOtherColumn } from '@/utils/helper/simpleOtherColumn';
 
@@ -79,7 +80,7 @@ interface ISimpleTableKeyValue {
   id: string;
   companyName: string | null;
   year: string | null;
-  month: number | null;
+  month: string | null;
   status: IStatus | null;
 }
 
@@ -114,7 +115,9 @@ export const useReadAllMonthlyPlan = ({
       id: item.id,
       companyName: item.company?.name ?? null,
       year: `${item.year}`,
-      month: item.month,
+      month: `${dayjs()
+        .month((item.month || 1) - 1)
+        .format('MMMM')}`,
       status: item.status,
     }));
   const excludeAccessor = ['status', 'id'];

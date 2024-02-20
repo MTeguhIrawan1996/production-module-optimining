@@ -100,7 +100,6 @@ const MonthlyPlanBook = () => {
       },
     });
     const selectMonthItem = globalSelectMonthNative({
-      value: month ? `${month}` : null,
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });
         setMonth(value ? Number(value) : null);
