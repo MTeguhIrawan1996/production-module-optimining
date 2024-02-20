@@ -113,13 +113,8 @@ import UpdatePasswordModal from '@/components/elements/modal/UpdatePasswordModal
 import GlobalPagination from '@/components/elements/pagination/GlobalPagination';
 import PaginationSkeleton from '@/components/elements/skeleton/PaginationSkeleton';
 import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
-import DisplayLoseTimeAndEffectiveWork from '@/components/elements/ui/DisplayLoseTimeAndEffectiveWork';
 import DisplayQuietNumber from '@/components/elements/ui/DisplayQuietNumber';
 import GlobalHeaderDetail from '@/components/elements/ui/GlobalHeaderDetail';
-import InputGroupActivity from '@/components/elements/ui/InputGroupActivity';
-import InputGroupDome from '@/components/elements/ui/InputGroupDome';
-import InputGroupMaterial from '@/components/elements/ui/InputGroupMaterial';
-import InputTableBargingTargetPlan from '@/components/elements/ui/InputTableBargingTargetPlan';
 import ListDetailsRitageDT from '@/components/elements/ui/ListDetailsRitageDT';
 import PlanGroupLink from '@/components/elements/ui/PlanGroupLink';
 import AuthWrapper from '@/components/elements/wrapper/AuthWrapper';
@@ -143,7 +138,6 @@ export {
   DateInputNative,
   DateInputRhf,
   DeterminedButton,
-  DisplayLoseTimeAndEffectiveWork,
   DisplayQuietNumber,
   DivisionSelectInputRhf,
   DomeNameSelectInputRhf,
@@ -169,11 +163,7 @@ export {
   ImageModal,
   InnerWrapper,
   InputAverageArray,
-  InputGroupActivity,
-  InputGroupDome,
-  InputGroupMaterial,
   InputSumArray,
-  InputTableBargingTargetPlan,
   KeyValueList,
   LinkButton,
   ListDetailsRitageDT,

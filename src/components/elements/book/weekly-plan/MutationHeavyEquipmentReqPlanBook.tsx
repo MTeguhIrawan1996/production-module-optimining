@@ -12,12 +12,12 @@ import {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import InputGroupActivity, {
+  IInputGroupActivityProps,
+} from '@/components/elements/book/weekly-plan/input/InputGroupActivity';
 import DashboardCard from '@/components/elements/card/DashboardCard';
 import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
 import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
-import InputGroupActivity, {
-  IInputGroupActivityProps,
-} from '@/components/elements/ui/InputGroupActivity';
 
 import {
   IMutationHeavyEquipmentReqPlan,
