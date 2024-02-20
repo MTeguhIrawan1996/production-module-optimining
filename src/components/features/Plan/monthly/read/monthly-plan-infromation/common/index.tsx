@@ -10,6 +10,7 @@ import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
 const ReadMonthlyPlanInformationPage = () => {
   const router = useRouter();
+  const id = router.query.id as string;
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
@@ -24,6 +25,10 @@ const ReadMonthlyPlanInformationPage = () => {
       },
       {
         label: t('monthlyPlan.read'),
+        path: `/plan/monthly/read/${id}`,
+      },
+      {
+        label: t('commonTypography.monthlyPlanInformation'),
         path: router.asPath,
       },
     ]);

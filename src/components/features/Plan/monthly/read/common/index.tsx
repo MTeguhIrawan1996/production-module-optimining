@@ -23,7 +23,7 @@ const ReadMonthlyPlanPage = () => {
         path: '/plan/weekly',
       },
       {
-        label: t('monthlyPlan.detail'),
+        label: t('monthlyPlan.read'),
         path: router.asPath,
       },
     ]);
