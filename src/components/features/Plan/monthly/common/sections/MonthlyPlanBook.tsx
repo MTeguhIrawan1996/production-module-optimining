@@ -12,7 +12,7 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteWeeklyPlan } from '@/services/graphql/mutation/plan/weekly/useDeleteWeeklyPlan';
+import { useDeleteMonthlyPlan } from '@/services/graphql/mutation/plan/monthly/useDeleteWeeklyPlan';
 import { useReadAllMonthlyPlan } from '@/services/graphql/query/plan/monthly/useReadAllMonthlyPlan';
 import {
   globalSelectCompanyNative,
@@ -56,7 +56,7 @@ const MonthlyPlanBook = () => {
     },
   });
 
-  const [executeDelete, { loading }] = useDeleteWeeklyPlan({
+  const [executeDelete, { loading }] = useDeleteMonthlyPlan({
     onCompleted: () => {
       refetchMonthlyPlanData();
       setIsOpenDeleteConfirmation((prev) => !prev);
@@ -64,7 +64,7 @@ const MonthlyPlanBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('weeklyPlan.successDeleteMessage'),
+        message: t('monthlyPlan.successDeleteMessage'),
         icon: <IconCheck />,
       });
     },
