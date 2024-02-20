@@ -6645,6 +6645,11 @@ zustand-middleware-xstate@^2.0.0:
   resolved "https://registry.yarnpkg.com/zustand-middleware-xstate/-/zustand-middleware-xstate-2.0.0.tgz#9ff45ae0de275e905a6a036080d4e050127d81e8"
   integrity sha512-NWCdwzoL1eiKn8s4NQC7ZcMW5r4nLEbYkwZU1j2iiPMFiLUBPYkvZWD3kAxiV53oWct5SVyqoTVXQXfNKq86Vw==
 
+zustand-pub@^1.0.0-beta.19:
+  version "1.0.0-beta.19"
+  resolved "https://registry.yarnpkg.com/zustand-pub/-/zustand-pub-1.0.0-beta.19.tgz#40d3a6e6503cb916d5403ee19b187a99728dd45f"
+  integrity sha512-KVZdesLECiU7oH1bVvTQjcyMyCYbr2q/NPaywooW93y9Nzl5raEQ8+39Xz3g+7Op4MGn+XdxPO3wo//QPS7bGg==
+
 zustand@^4.3.8:
   version "4.3.8"
   resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.3.8.tgz#37113df8e9e1421b0be1b2dca02b49b76210e7c4"

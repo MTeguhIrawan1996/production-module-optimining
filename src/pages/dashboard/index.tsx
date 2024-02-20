@@ -1,3 +1,10 @@
+// const Breadcrumbs = dynamic(
+//   () => import('main/components').then((v) => v.Breadcrumbs),
+//   {
+//     ssr: false,
+//   }
+// );
+
 import { DashboardPage } from '@/components/features';
 import { DashboardLayout } from '@/components/layouts';
 
