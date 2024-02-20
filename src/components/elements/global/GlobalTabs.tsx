@@ -30,7 +30,7 @@ const GlobalTabs: React.FC<IGlobalTabsProps> = ({ tabs, tabsData }) => {
       }}
       {...restTabs}
     >
-      <ScrollArea w="100%" px={0} h={55}>
+      <ScrollArea w="100%" offsetScrollbars>
         <Tabs.List>
           {tabsData?.map((val, i) => {
             if (val.isShowItem) {

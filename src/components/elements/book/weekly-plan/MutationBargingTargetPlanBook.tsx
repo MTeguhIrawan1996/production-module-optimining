@@ -7,13 +7,13 @@ import * as React from 'react';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import DashboardCard from '@/components/elements/card/DashboardCard';
-import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
-import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
 import InputGroupDome, {
   IInputGroupDomeProps,
-} from '@/components/elements/ui/InputGroupDome';
-import InputTableBargingTargetPlan from '@/components/elements/ui/InputTableBargingTargetPlan';
+} from '@/components/elements/book/weekly-plan/input/InputGroupDome';
+import CommonWeeklyPlanInformation from '@/components/elements/book/weekly-plan/ui/CommonWeeklyPlanInformation';
+import InputTableBargingTargetPlan from '@/components/elements/book/weekly-plan/ui/InputTableBargingTargetPlan';
+import DashboardCard from '@/components/elements/card/DashboardCard';
+import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
 
 import {
   IBargingDomePlan,
@@ -86,7 +86,7 @@ const MutationBargingTargetPlanBook = ({
   const { materialsData, materialsDataLoading } = useReadAllMaterialsMaster({
     variables: {
       limit: null,
-      orderDir: 'asc',
+      orderDir: 'desc',
       orderBy: 'createdAt',
       parentId: `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`,
       isHaveParent: null,
