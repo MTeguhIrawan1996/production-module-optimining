@@ -167,6 +167,10 @@ export async function middleware(request: NextRequest) {
         allowedPermissions: ['create-weekly-plan'],
       },
       {
+        path: '/plan/monthly',
+        allowedPermissions: ['create-monthly-plan'],
+      },
+      {
         path: '/setting/management-role',
         allowedPermissions: ['create-role'],
       },

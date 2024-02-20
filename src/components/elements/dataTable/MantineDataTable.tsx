@@ -1,5 +1,4 @@
 import { Box, createStyles, Stack, Text, useMantineTheme } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
 import { DataTable, DataTableProps } from 'mantine-datatable';
 import * as React from 'react';
 
@@ -145,7 +144,7 @@ export default function MantineDataTable<T>({
                         }}
                       >
                         <PrimaryButton
-                          leftIcon={<IconPlus size="20px" />}
+                          // leftIcon={<IconPlus size="20px" />}
                           {...emptyStateProps?.actionButton}
                         />
                       </Box>

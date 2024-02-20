@@ -452,7 +452,9 @@
     "inputGroupDomeLabel": "Rencana List Dome Yang akan di Tongkang",
     "miningMapPlan": "Rencana Peta Penambangan",
     "mapName": "Nama Peta",
-    "miningMap": "Peta Penambangan,"
+    "miningMap": "Peta Penambangan",
+    "month": "Bulan",
+    "monthly": "Bulanan"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -486,7 +488,8 @@
     "dataFront": "$t(commonTypography.front)",
     "activityCategory": "$t(commonTypography.activityCategory)",
     "plan": "$t(commonTypography.plan)",
-    "weekly": "$t(commonTypography.weekly)"
+    "weekly": "$t(commonTypography.weekly)",
+    "monthly": "$t(commonTypography.monthly)"
   },
   "auth": {
     "button": {
@@ -992,5 +995,35 @@
     "successIsNotValidateMessage": "Status $t(weeklyPlan.title) Tidak Valid",
     "successIsDeterminedMessage": "$t(weeklyPlan.title) berhasil ditetapkan",
     "successIsRejectMessage": "$t(weeklyPlan.title) berhasil $t(commonTypography.reject)"
+  },
+  "monthlyPlan": {
+    "title": "Rencana Produksi Bulanan",
+    "title2": "Rencana Bulanan",
+    "create": "$t(commonTypography.create) $t(monthlyPlan.title2)",
+    "read": "$t(commonTypography.read) $t(monthlyPlan.title2)",
+    "detail": "$t(commonTypography.detail) $t(monthlyPlan.title2)",
+    "update": "$t(commonTypography.update) $t(monthlyPlan.title2)",
+    "successDeleteMessage": "$t(monthlyPlan.title2) berhasil dihapus",
+    "successCreateMessage": "$t(monthlyPlan.title2) berhasil dibuat",
+    "successCreateUnitCapacityPlanMessage": "$t(commonTypography.unitCapacityPlan) berhasil dibuat",
+    "successCreateWorkTimePlanMessage": "$t(commonTypography.workTimePlan) berhasil dibuat",
+    "successCreateHeavyEquipmentReqPlanMessage": "$t(commonTypography.heavyEquipmentReqPlan) berhasil dibuat",
+    "successCreateHeavyEquipmentAvailabilityPlanMessage": "$t(commonTypography.heavyEquipmentAvailabilityPlan) berhasil dibuat",
+    "successCreateBargingTargetPlanMessage": "$t(commonTypography.bargingTargetPlan) berhasil dibuat",
+    "successCreateMiningMapPlanMessage": "$t(commonTypography.miningMapPlan) berhasil dibuat",
+    "successCreateProductionTargetPlanMessage": "$t(commonTypography.productionTargetPlan) berhasil dibuat",
+    "successUpdateUnitCapacityPlanMessage": "$t(commonTypography.unitCapacityPlan) berhasil diubah",
+    "successUpdateWorkTimePlanMessage": "$t(commonTypography.workTimePlan) berhasil diubah",
+    "successUpdateHeavyEquipmentReqPlanMessage": "$t(commonTypography.heavyEquipmentReqPlan) berhasil diubah",
+    "successUpdateHeavyEquipmentAvailabilityPlanMessage": "$t(commonTypography.heavyEquipmentAvailabilityPlan) berhasil diubah",
+    "successUpdateBargingTargetPlanMessage": "$t(commonTypography.bargingTargetPlan) berhasil diubah",
+    "successUpdateMiningMapPlanMessage": "$t(commonTypography.miningMapPlan) berhasil diubah",
+    "successUpdateProductionTargetPlanMessage": "$t(commonTypography.productionTargetPlan) berhasil diubah",
+    "successUpdateMessage": "$t(monthlyPlan.title2) berhasil diubah",
+    "formCreate": "$t(commonTypography.form) $t(monthlyPlan.title2)",
+    "successIsValidateMessage": "$t(monthlyPlan.title) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(monthlyPlan.title) Tidak Valid",
+    "successIsDeterminedMessage": "$t(monthlyPlan.title) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(monthlyPlan.title) berhasil $t(commonTypography.reject)"
   }
 }

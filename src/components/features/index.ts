@@ -125,6 +125,7 @@ import WorkingHoursPlanMasterPage from '@/components/features/MasterData/working
 import CreateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/create/common';
 import ReadWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/read/common';
 import UpdateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/update/common';
+import MonthlyPlanPage from '@/components/features/Plan/monthly/common';
 import WeeklyPlanPage from '@/components/features/Plan/weekly/common';
 import CreateWeeklyPlanInformationPage from '@/components/features/Plan/weekly/create/common';
 import CreateWeeklyPlanGroupPage from '@/components/features/Plan/weekly/create/weekly-plan-group/common';
@@ -200,6 +201,7 @@ export {
   HumanResourcesPage,
   LocationPage,
   MaterialMasterPage,
+  MonthlyPlanPage,
   ProfilePage,
   ReadActivityPlanPage,
   ReadBlockMasterPage,
