@@ -105,7 +105,7 @@ const MutationProductionTargetPlan = ({
   const { materialsDataLoading } = useReadAllMaterialsMaster({
     variables: {
       limit: null,
-      orderDir: 'desc',
+      orderDir: 'asc',
       orderBy: 'createdAt',
       parentId: null,
       isHaveParent: false,
