@@ -9,54 +9,53 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import {
-  ICreateWeeklyPlanInformationValues,
-  useCreateWeeklyPlanInformation,
-} from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyPlanInformation';
+  ICreateMonthlyPlanInformationValues,
+  useCreateMonthlyPlanInformation,
+} from '@/services/graphql/mutation/plan/monthly/useCreateMonthlyPlanInformation';
 import {
   globalSelectCompanyRhf,
-  globalSelectWeekRhf,
+  globalSelectMonthRhf,
   globalSelectYearRhf,
 } from '@/utils/constants/Field/global-field';
-import { weeklyPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-plan-validation';
+import { monthlyPlanInformationMutationValidation } from '@/utils/form-validation/plan/monthly/monthly-plan-information-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
-const CreateWeeklyPlanInformationBook = () => {
+const CreateMonthlyPlanInformationBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
 
   /* #   /**=========== Methods =========== */
-  const methods = useForm<ICreateWeeklyPlanInformationValues<string>>({
-    resolver: zodResolver(weeklyPlanMutationValidation),
+  const methods = useForm<ICreateMonthlyPlanInformationValues<string>>({
+    resolver: zodResolver(monthlyPlanInformationMutationValidation),
     defaultValues: {
       companyId: '',
-      week: null,
+      month: null,
       year: null,
     },
     mode: 'onBlur',
   });
-  const year = methods.watch('year');
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
-  const [executeCreate, { loading }] = useCreateWeeklyPlanInformation({
-    onCompleted: ({ createWeeklyPlan }) => {
+  const [executeCreate, { loading }] = useCreateMonthlyPlanInformation({
+    onCompleted: ({ createMonthlyPlan }) => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('weeklyPlan.successCreateMessage'),
+        message: t('monthlyPlan.successCreateMessage'),
         icon: <IconCheck />,
       });
       methods.reset();
       router.push(
-        `/plan/weekly/create/weekly-plan-group/${createWeeklyPlan.id}?tabs=workTimePlan`
+        `/plan/monthly/create/monthly-plan-group/${createMonthlyPlan.id}?tabs=workTimePlan`
       );
     },
     onError: (error) => {
       if (error.graphQLErrors) {
         const errorArry =
-          errorBadRequestField<ICreateWeeklyPlanInformationValues>(error);
+          errorBadRequestField<ICreateMonthlyPlanInformationValues>(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
             methods.setError(name, { type, message });
@@ -80,32 +79,29 @@ const CreateWeeklyPlanInformationBook = () => {
       label: 'companyName',
     });
     const yearItem = globalSelectYearRhf({});
-    const weekItem = globalSelectWeekRhf({
-      disabled: !year,
-      year: year ? Number(year) : null,
-    });
+    const monthItm = globalSelectMonthRhf({});
 
     const field: ControllerGroup[] = [
       {
-        group: t('commonTypography.weeklyPlanInformation'),
+        group: t('commonTypography.monthlyPlanInformation'),
         enableGroupLabel: true,
-        formControllers: [companyItem, yearItem, weekItem],
+        formControllers: [companyItem, yearItem, monthItm],
       },
     ];
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year]);
+  }, []);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<
-    ICreateWeeklyPlanInformationValues
-  > = async ({ companyId, week, year }) => {
+    ICreateMonthlyPlanInformationValues
+  > = async ({ companyId, month, year }) => {
     await executeCreate({
       variables: {
         companyId,
-        week: Number(week),
+        month: Number(month),
         year: Number(year),
       },
     });
@@ -123,11 +119,11 @@ const CreateWeeklyPlanInformationBook = () => {
           loading: loading,
         }}
         backButton={{
-          onClick: () => router.push('/plan/weekly'),
+          onClick: () => router.push('/plan/monthly'),
         }}
       />
     </DashboardCard>
   );
 };
 
-export default CreateWeeklyPlanInformationBook;
+export default CreateMonthlyPlanInformationBook;

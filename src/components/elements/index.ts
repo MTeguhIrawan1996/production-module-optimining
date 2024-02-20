@@ -84,6 +84,7 @@ import SelectHeavyEquipmentTypesInput from '@/components/elements/input/SelectHe
 import SelectInputNative from '@/components/elements/input/SelectInputNative';
 import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
 import SelectMonthNative from '@/components/elements/input/SelectMonthNative';
+import SelectMonthRhf from '@/components/elements/input/SelectMonthRhf';
 import SelectStatusNative from '@/components/elements/input/SelectStatusNative';
 import SelectWeekNative from '@/components/elements/input/SelectWeekNative';
 import SelectWeekRhf from '@/components/elements/input/SelectWeekRhf';
@@ -222,6 +223,7 @@ export {
   SelectInputRhf,
   SelectionButtonModal,
   SelectMonthNative,
+  SelectMonthRhf,
   SelectStatusNative,
   SelectWeekNative,
   SelectWeekRhf,
