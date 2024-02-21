@@ -13,7 +13,7 @@ const UpdateWeeklyPlanBook = () => {
         onClick: () => router.push('/plan/weekly'),
       }}
     >
-      <PlanGroupLink type="update" />
+      <PlanGroupLink type="update" planType="weekly" />
     </DashboardCard>
   );
 };

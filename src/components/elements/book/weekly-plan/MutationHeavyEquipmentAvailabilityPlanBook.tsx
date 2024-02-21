@@ -12,9 +12,9 @@ import {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import CommonWeeklyPlanInformation from '@/components/elements/book/weekly-plan/ui/CommonWeeklyPlanInformation';
 import DashboardCard from '@/components/elements/card/DashboardCard';
 import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
-import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
 
 import {
   IMutationHeavyEquipmentAvailabilityPlanData,

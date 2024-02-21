@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 import InputGroupMaterial, {
   IInputGroupMaterialProps,
-} from '@/components/elements/ui/InputGroupMaterial';
+} from '@/components/elements/book/weekly-plan/input/InputGroupMaterial';
 
 import {
   IMaterialsGroup,

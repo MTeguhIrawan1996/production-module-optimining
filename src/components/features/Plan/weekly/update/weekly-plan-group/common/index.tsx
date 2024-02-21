@@ -10,6 +10,7 @@ import {
   MutationBargingTargetPlanBook,
   MutationHeavyEquipmentReqPlanBook,
   MutationMiningMapPlanBook,
+  MutationProductionTargetPlan,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,
   RootWrapper,
@@ -21,6 +22,7 @@ import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 const UpdateWeeklyPlanGroupPage = () => {
   const router = useRouter();
   const id = router.query.id as string;
+  const tabs = (router.query.tabs as string) || '';
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
@@ -35,6 +37,10 @@ const UpdateWeeklyPlanGroupPage = () => {
       },
       {
         label: t('weeklyPlan.update'),
+        path: `/plan/weekly/update/${id}`,
+      },
+      {
+        label: t(`commonTypography.${tabs}`),
         path: router.asPath,
       },
     ]);
@@ -103,6 +109,19 @@ const UpdateWeeklyPlanGroupPage = () => {
                 <MutationHeavyEquipmentAvailabilityPlanBook
                   mutationSuccessMassage={t(
                     'weeklyPlan.successUpdateHeavyEquipmentAvailabilityPlanMessage'
+                  )}
+                  mutationType="update"
+                />
+              ),
+              isShowItem: true,
+            },
+            {
+              label: t('commonTypography.productionTargetPlan'),
+              value: 'productionTargetPlan',
+              component: (
+                <MutationProductionTargetPlan
+                  mutationSuccessMassage={t(
+                    'weeklyPlan.successUpdateProductionTargetPlanMessage'
                   )}
                   mutationType="update"
                 />

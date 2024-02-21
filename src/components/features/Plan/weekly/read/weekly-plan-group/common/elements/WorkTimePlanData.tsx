@@ -7,7 +7,7 @@ const WorkTimePlanData = () => {
   return (
     <>
       <WeeklyPlanInformationData />
-      <MutationWorkTimePlanBook mutationType="read" />;
+      <MutationWorkTimePlanBook mutationType="read" />
     </>
   );
 };

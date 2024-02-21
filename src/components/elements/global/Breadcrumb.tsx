@@ -1,50 +1,41 @@
-import {
-  Breadcrumbs as MantineBreadcrumbs,
-  createStyles,
-  Text,
-} from '@mantine/core';
+import { Breadcrumbs as MantineBreadcrumbs } from '@mantine/core';
+import { IconChevronRight } from '@tabler/icons-react';
 import Link from 'next/link';
 import * as React from 'react';
+import { shallow } from 'zustand/shallow';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-type Breadcrumbs = {
-  label: string;
-  path: string;
-};
-
-const useStyles = createStyles((theme) => ({
-  breadcrumbStyle: {
-    cursor: 'pointer',
-    textDecoration: 'none',
-    color: theme.colors.dark[7],
-    fontSize: 14,
-    '&:hover': {
-      color: theme.colors.brand[6],
-    },
-  },
-}));
-
 const Breadcrumb: React.FC = () => {
-  const { classes } = useStyles();
-
-  // const { breadcrumbs } = useBreadcrumbs((state) => state);
-
-  const { breadcrumbs } = useBreadcrumbs((state) => state);
-  const [data, setData] = React.useState<Breadcrumbs[]>([]);
-
-  React.useEffect(() => {
-    // Fetch data from local storage or perform any necessary logic
-    // const localData = localStorage.getItem('yourDataKey');
-    setData(breadcrumbs);
-  }, [breadcrumbs]); // Empty dependency array ensures it runs only on mount
+  const { breadcrumbs } = useBreadcrumbs((state) => state, shallow);
 
   return (
-    <MantineBreadcrumbs separator={<span> / </span>}>
-      {data?.map(({ label, path }) => {
+    <MantineBreadcrumbs
+      separator={<IconChevronRight size={16} />}
+      styles={(theme) => ({
+        separator: {
+          color: theme.colors.dark[6],
+          marginLeft: 8,
+          marginRight: 8,
+        },
+        breadcrumb: {
+          cursor: 'pointer',
+          textDecoration: 'none',
+          color: theme.colors.dark[6],
+          fontSize: 14,
+          '&:hover': {
+            color: theme.colors.brand[6],
+          },
+          '&:last-of-type': {
+            color: theme.colors.brand[6],
+          },
+        },
+      })}
+    >
+      {breadcrumbs?.map(({ label, path }) => {
         return (
           <Link href={path} key={label} prefetch={false}>
-            <Text className={classes.breadcrumbStyle}>{label}</Text>
+            {label}
           </Link>
         );
       })}
@@ -53,7 +44,3 @@ const Breadcrumb: React.FC = () => {
 };
 
 export default Breadcrumb;
-
-/**
- *
- */

@@ -17,14 +17,14 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import {
-  CommonWeeklyPlanInformation,
   DashboardCard,
-  DisplayLoseTimeAndEffectiveWork,
   FormController,
   MantineDataTable,
   ModalConfirmation,
   PrimaryButton,
 } from '@/components/elements';
+import CommonWeeklyPlanInformation from '@/components/elements/book/weekly-plan/ui/CommonWeeklyPlanInformation';
+import DisplayLoseTimeAndEffectiveWork from '@/components/elements/book/weekly-plan/ui/DisplayLoseTimeAndEffectiveWork';
 
 import {
   IWorkTimeDay,

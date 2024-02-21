@@ -68,7 +68,8 @@
     "xstate": "^4.37.0",
     "zod": "^3.22.4",
     "zustand": "^4.3.8",
-    "zustand-middleware-xstate": "^2.0.0"
+    "zustand-middleware-xstate": "^2.0.0",
+    "zustand-pub": "^1.0.0-beta.19"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.4.4",

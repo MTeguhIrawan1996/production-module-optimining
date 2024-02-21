@@ -87,7 +87,7 @@ const CreateWeeklyPlanInformationBook = () => {
 
     const field: ControllerGroup[] = [
       {
-        group: t('commonTypography.companyInformation'),
+        group: t('commonTypography.weeklyPlanInformation'),
         enableGroupLabel: true,
         formControllers: [companyItem, yearItem, weekItem],
       },

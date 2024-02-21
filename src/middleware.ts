@@ -1,4 +1,3 @@
-// import type { NextRequest } from 'next/server';
 import dayjs from 'dayjs';
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
@@ -14,16 +13,12 @@ export async function middleware(request: NextRequest) {
   const errorPage = new URL('/500', request.url);
   const notFoundPage = new URL(`/not-found`, request.url);
 
-  console.log('request.url', request.url); // eslint-disable-line
-
   const { pathname } = request.nextUrl;
 
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_JWT_SECRET,
   });
-
-  console.log('token', token); // eslint-disable-line
 
   const REST_API_URL = process.env.NEXT_PUBLIC_REST_API_URL;
   const authorization = token
@@ -35,10 +30,7 @@ export async function middleware(request: NextRequest) {
       method: 'GET',
       headers: { authorization },
     });
-    // console.log('middleware | permission data', response);
-
     const { data } = await response.json();
-    console.log('middleware | permission data', data?.slice(1)); // eslint-disable-line
 
     const permission = (data as IPermissionAuth[] | undefined)?.map(
       (val) => val.slug
@@ -46,22 +38,16 @@ export async function middleware(request: NextRequest) {
 
     // // JIKA BELUM LOGIN DAN INGIN AKSES HALAMAN SELAIN AUTH, MAKA AKAN DILEMPAR KE HALAMAN LOGIN
     if (!pathname.startsWith('/auth') && !permission) {
-      console.log('need login'); // eslint-disable-line
-
       return NextResponse.redirect(loginPage);
     }
 
     // // JIKA SUDAH LOGIN DAN INGIN AKSES HALAMAN AUTH TANPA LOGOUT MAKA AKAN DIKEMBALIKAN KE HALAMAN DASHBOARD
     if (pathname.startsWith('/auth') && permission) {
-      console.log('you have logged in | middleware'); // eslint-disable-line
-
       return NextResponse.redirect(dashboardPage);
     }
 
     // SEMENTARA, `/` DIARAHKAN KE /dashboard
     if (pathname === '/') {
-      console.log('/ | middleware'); // eslint-disable-line
-
       return NextResponse.redirect(dashboardPage);
     }
 
@@ -181,6 +167,10 @@ export async function middleware(request: NextRequest) {
         allowedPermissions: ['create-weekly-plan'],
       },
       {
+        path: '/plan/monthly',
+        allowedPermissions: ['create-monthly-plan'],
+      },
+      {
         path: '/setting/management-role',
         allowedPermissions: ['create-role'],
       },
@@ -196,6 +186,8 @@ export async function middleware(request: NextRequest) {
 
     // JIKA PATH ADALAH PROTECTED PATHS, ...
     if (matchProtectedPath && token) {
+      console.log('protected path'); // eslint-disable-line
+
       const now = dayjs().unix();
 
       const validAccess = matchProtectedPath?.allowedPermissions.some(
@@ -206,20 +198,13 @@ export async function middleware(request: NextRequest) {
       );
       // JIKA TOKEN EXPIRED, LEMPAR KE LOGIN
       if (now > token.login?.accessToken?.exp) {
-        console.log('token is expired | middleware'); // eslint-disable-line
-
         return NextResponse.next();
       }
 
       // JIKA TOKEN TIDAK MEMILIKI HAK AKSES ATAS PATH, ARAHKAN KE /not-found
       if (!validAccess) {
-        console.log('token is not valid | middleware'); // eslint-disable-line
-
         return NextResponse.redirect(notFoundPage);
       }
-
-      // LANJUTKAN
-      console.log('next | middleware'); // eslint-disable-line
       return NextResponse.next();
     }
 

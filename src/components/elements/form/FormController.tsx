@@ -45,6 +45,7 @@ import {
   SelectHeavyEquipmentReferenceInput,
   SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
+  SelectMonthRhf,
   SelectWeekRhf,
   SelectWorkingHoursPlanRhf,
   SelectYearRhf,
@@ -166,6 +167,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <SelectYearRhf {...props} />;
     case 'select-week-rhf':
       return <SelectWeekRhf {...props} />;
+    case 'select-month-rhf':
+      return <SelectMonthRhf {...props} />;
     case 'select-activity-form-rhf':
       return <SelectActivityFormRhf {...props} />;
     case 'number-input-table-rhf':

@@ -1,5 +1,4 @@
 import { Box, createStyles, Stack, Text, useMantineTheme } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
 import { DataTable, DataTableProps } from 'mantine-datatable';
 import * as React from 'react';
 
@@ -22,10 +21,10 @@ const useStyles = createStyles((theme) => ({
   },
   header: {
     '&& th': {
-      color: `${theme.colors.dark[7]} !important`,
+      color: `${theme.colors.dark[7]}`,
       fontWeight: 500,
       fontSize: theme.fontSizes.xs,
-      backgroundColor: `${theme.colors.dark[1]}  !important`,
+      backgroundColor: `${theme.colors.dark[1]}`,
     },
   },
   figure: {
@@ -145,7 +144,7 @@ export default function MantineDataTable<T>({
                         }}
                       >
                         <PrimaryButton
-                          leftIcon={<IconPlus size="20px" />}
+                          // leftIcon={<IconPlus size="20px" />}
                           {...emptyStateProps?.actionButton}
                         />
                       </Box>

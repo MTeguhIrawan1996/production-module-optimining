@@ -35,6 +35,7 @@ const NavbarExpand: React.FC<IProps> = ({
   const router = useRouter();
   const { t } = useTranslation('default');
   const { classes, cx } = useDashboardLayoutStyle();
+  const cleanedPath = router.pathname.split('/').slice(0, 3).join('/');
 
   return (
     <MantineNavbar
@@ -84,9 +85,7 @@ const NavbarExpand: React.FC<IProps> = ({
             ) : (
               <Link
                 className={cx(classes.link, {
-                  [classes.linkActive]:
-                    item.href ===
-                    router.pathname.split('/').slice(0, 3).join('/'),
+                  [classes.linkActive]: item.href === cleanedPath,
                 })}
                 href={item.href ?? ''}
                 key={item.label}

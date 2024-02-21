@@ -28,11 +28,10 @@ const GlobalModal: React.FunctionComponent<IGlobalModalProps> = ({
     <Modal.Root
       opened={isOpenModal}
       onClose={actionModal}
-      centered
       radius="xs"
       size={modalSize}
     >
-      <Modal.Overlay />
+      <Modal.Overlay opacity={0.2} />
       <Modal.Content>
         <Modal.Header py="sm">
           {label ? (

@@ -34,6 +34,25 @@ const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
   const { t } = useTranslation('default');
   const { classes, cx } = useDashboardLayoutStyle();
   const [opened, setOpened] = React.useState(initiallyOpened || false);
+  const cleanedPath = router.pathname.split('/').slice(0, 3).join('/');
+  const cleanedPathSub = router.pathname.split('/').slice(0, 4).join('/');
+
+  React.useEffect(() => {
+    if (subMenu) {
+      const flattenedArray = subMenu.flatMap((item) =>
+        item.subMenu ? item.subMenu : []
+      );
+      const isOpen = subMenu.some((val) => {
+        if (val.subMenu && val.subMenu?.length > 0) {
+          const isOpenByFlatArray =
+            flattenedArray?.some((val) => val.href === cleanedPathSub) ?? false;
+          return isOpenByFlatArray;
+        }
+        return val.href === cleanedPath ?? false;
+      });
+      setOpened(isOpen);
+    }
+  }, [cleanedPath, cleanedPathSub, subMenu]);
 
   return (
     <Box>
@@ -61,25 +80,16 @@ const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
       <Collapse in={opened}>
         <Stack spacing={0}>
           {subMenu?.map((item: IMenuItem, i) => {
-            const initialOpen = router.pathname
-              .split('/')
-              .some(
-                (items) =>
-                  items.toLowerCase().replace(/-/g, '') ===
-                  item.label.toLowerCase()
-              );
             return item.subMenu ? (
               <NavbarLinksGroupLevel2
                 key={i}
-                initiallyOpened={initialOpen}
+                initiallyOpened={item.href === cleanedPath}
                 {...item}
               />
             ) : (
               <PrimaryLink
                 className={cx(classes.subLinksGroup, {
-                  [classes.linkActive]:
-                    item.href ===
-                    router.pathname.split('/').slice(0, 4).join('/'),
+                  [classes.linkActive]: item.href === cleanedPath,
                 })}
                 href={item.href ?? ''}
                 key={`${item.label} + ${i}`}

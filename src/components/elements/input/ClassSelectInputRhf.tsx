@@ -64,14 +64,6 @@ const ClassSelectInputRhf: React.FC<IClassSelectInputRhfProps> = ({
       defaultValue={defaultValue}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
-      styles={(theme) => ({
-        item: {
-          borderRadius: theme.spacing.xs,
-        },
-        dropdown: {
-          borderRadius: theme.spacing.xs,
-        },
-      })}
       onSearchChange={setSearchTerm}
       searchValue={searchTerm}
       data-control={control}

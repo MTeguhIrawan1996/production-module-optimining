@@ -47,9 +47,41 @@ export const theme: MantineProviderProps['theme'] = {
       },
     },
     // # Input Components
+    TextInput: {
+      defaultProps: {
+        styles: (theme) => ({
+          input: {
+            '&[data-disabled="true"]': {
+              backgroundColor: theme.colors.dark[0],
+              color: theme.colors.dark[6],
+              '::placeholder': {
+                color: theme.colors.dark[5],
+              },
+            },
+          },
+        }),
+      },
+    },
     Select: {
       defaultProps: {
         radius: 'sm',
+        styles: (theme) => ({
+          item: {
+            borderRadius: theme.spacing.xs,
+          },
+          dropdown: {
+            borderRadius: theme.spacing.xs,
+          },
+          input: {
+            '&[data-disabled="true"]': {
+              backgroundColor: theme.colors.dark[0],
+              color: theme.colors.dark[6],
+              '::placeholder': {
+                color: theme.colors.dark[5],
+              },
+            },
+          },
+        }),
       },
     },
     DatePickerInput: {

@@ -226,7 +226,7 @@ const ReadWeeklyPlanBook = () => {
           mt="xs"
         />
       ) : null}
-      <PlanGroupLink type="read" />
+      <PlanGroupLink type="read" planType="weekly" />
     </DashboardCard>
   );
 };

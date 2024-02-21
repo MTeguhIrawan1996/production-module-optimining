@@ -7,6 +7,8 @@ import { FieldArrayWithId, useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { FormController, MantineDataTable } from '@/components/elements';
+import InputOreCalculation from '@/components/elements/book/weekly-plan/input/InputOreCalculation';
+import InputSRCalculation from '@/components/elements/book/weekly-plan/input/InputSRCalculation';
 
 import {
   IWeeklyProductionTarget,
@@ -18,12 +20,11 @@ import { productionTarget } from '@/utils/constants/DefaultValues/production-tar
 dayjs.extend(isoWeek);
 
 interface IInputTableProductionProps {
-  productionTargetPlanIndex?: number;
+  mutationType?: 'create' | 'update' | 'read';
 }
 
 const InputTableProductionPlan = ({
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  productionTargetPlanIndex,
+  mutationType,
 }: IInputTableProductionProps) => {
   const { t } = useTranslation('default');
 
@@ -60,17 +61,36 @@ const InputTableProductionPlan = ({
             accessor: `rate.${i}`,
             title: 'Rate',
             width: 100,
-            render: ({ id }, index) => {
-              if (id === 'SR') {
+            render: ({ materialId }, index) => {
+              if (materialId === 'sr') {
                 return (
-                  <FormController
-                    control="number-input-table-rhf"
+                  <InputSRCalculation
+                    calculationSelected="rate"
+                    indexOfValue={i}
                     name={`productionTargetPlans.${
                       productionTargetPlanFields.length - 1
                     }.weeklyProductionTargets.${i}.rate`}
+                    precision={2}
+                    readOnly
+                    variant="unstyled"
+                    mutationType={mutationType}
+                    styles={{
+                      input: {
+                        textAlign: 'center',
+                      },
+                    }}
+                  />
+                );
+              }
+              if (materialId === `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`) {
+                return (
+                  <InputOreCalculation
+                    name={`productionTargetPlans.${index}.weeklyProductionTargets.${i}.rate`}
+                    indexOfValue={i}
+                    calculationSelected="rate"
                     precision={0}
-                    label={`${productionTargetPlanFields.length - 1}.${i}`}
-                    labelWithTranslate={false}
+                    variant="unstyled"
+                    readOnly
                     styles={{
                       input: {
                         textAlign: 'center',
@@ -85,8 +105,8 @@ const InputTableProductionPlan = ({
                   control="number-input-table-rhf"
                   name={`productionTargetPlans.${index}.weeklyProductionTargets.${i}.rate`}
                   precision={0}
-                  label={`${index}.${i}`}
-                  labelWithTranslate={false}
+                  readOnly={mutationType === 'read' ? true : false}
+                  variant={mutationType === 'read' ? 'unstyled' : 'default'}
                   styles={{
                     input: {
                       textAlign: 'center',
@@ -100,17 +120,36 @@ const InputTableProductionPlan = ({
             accessor: `ton.${i}`,
             title: 'Ton',
             width: 100,
-            render: ({ id }, index) => {
-              if (id === 'SR') {
+            render: ({ materialId }, index) => {
+              if (materialId === 'sr') {
                 return (
-                  <FormController
-                    control="number-input-table-rhf"
+                  <InputSRCalculation
+                    indexOfValue={i}
+                    calculationSelected="ton"
                     name={`productionTargetPlans.${
                       productionTargetPlanFields.length - 1
                     }.weeklyProductionTargets.${i}.ton`}
-                    precision={0}
-                    label={`${productionTargetPlanFields.length - 1}.${i}`}
-                    labelWithTranslate={false}
+                    precision={2}
+                    variant="unstyled"
+                    readOnly
+                    mutationType={mutationType}
+                    styles={{
+                      input: {
+                        textAlign: 'center',
+                      },
+                    }}
+                  />
+                );
+              }
+              if (materialId === `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`) {
+                return (
+                  <InputOreCalculation
+                    name={`productionTargetPlans.${index}.weeklyProductionTargets.${i}.ton`}
+                    indexOfValue={i}
+                    calculationSelected="ton"
+                    precision={2}
+                    variant="unstyled"
+                    readOnly
                     styles={{
                       input: {
                         textAlign: 'center',
@@ -123,8 +162,8 @@ const InputTableProductionPlan = ({
                 <FormController
                   control="number-input-table-rhf"
                   name={`productionTargetPlans.${index}.weeklyProductionTargets.${i}.ton`}
-                  label={`${index}.${i}`}
-                  labelWithTranslate={false}
+                  readOnly={mutationType === 'read' ? true : false}
+                  variant={mutationType === 'read' ? 'unstyled' : 'default'}
                   styles={{
                     input: {
                       textAlign: 'center',
@@ -138,7 +177,7 @@ const InputTableProductionPlan = ({
       };
       return group;
     },
-    [productionTargetPlanFields]
+    [productionTargetPlanFields, mutationType]
   );
   const renderOtherGroupMaterialDay = productionTarget?.map(
     renderOtherGroupMaterialCallback
@@ -157,20 +196,15 @@ const InputTableProductionPlan = ({
             accessor: `rate.${i}`,
             title: 'Rate',
             width: 100,
-            render: (_, index) => {
-              const materialValue = materialPerent.filter(
-                (val) => val.id !== 'SR'
-              );
-              const materialValueLength = materialValue?.length || 0;
+            render: ({ index: indexRhf }) => {
               return (
                 <FormController
                   control="number-input-table-rhf"
-                  name={`productionTargetPlans.${
-                    index + materialValueLength
-                  }.weeklyProductionTargets.${i}.rate`}
+                  name={`productionTargetPlans.${indexRhf}.weeklyProductionTargets.${i}.rate`}
                   precision={0}
-                  label={`${index + materialValueLength}.${i}`}
                   labelWithTranslate={false}
+                  readOnly={mutationType === 'read' ? true : false}
+                  variant={mutationType === 'read' ? 'unstyled' : 'default'}
                   styles={{
                     input: {
                       textAlign: 'center',
@@ -184,19 +218,14 @@ const InputTableProductionPlan = ({
             accessor: `ton.${i}`,
             title: 'Ton',
             width: 100,
-            render: (_, index) => {
-              const materialValue = materialPerent.filter(
-                (val) => val.id !== 'SR'
-              );
-              const materialValueLength = materialValue?.length || 0;
+            render: ({ index: indexRhf }) => {
               return (
                 <FormController
                   control="number-input-table-rhf"
-                  name={`productionTargetPlans.${
-                    index + materialValueLength
-                  }.weeklyProductionTargets.${i}.ton`}
-                  label={`${index + materialValueLength}.${i}`}
+                  name={`productionTargetPlans.${indexRhf}.weeklyProductionTargets.${i}.ton`}
                   labelWithTranslate={false}
+                  readOnly={mutationType === 'read' ? true : false}
+                  variant={mutationType === 'read' ? 'unstyled' : 'default'}
                   styles={{
                     input: {
                       textAlign: 'center',
@@ -210,7 +239,7 @@ const InputTableProductionPlan = ({
       };
       return group;
     },
-    [materialPerent]
+    [mutationType]
   );
 
   const renderOtherGroupSubMaterialDay = productionTarget?.map(
@@ -223,9 +252,7 @@ const InputTableProductionPlan = ({
         highlightOnHover: true,
         withColumnBorders: true,
         idAccessor: (record) => {
-          return record.materialId
-            ? record.materialId
-            : record.productionTargetPlanId;
+          return record.materialId || record.materialName;
         },
         groups: [
           {
@@ -255,9 +282,7 @@ const InputTableProductionPlan = ({
                 withBorder: false,
                 borderRadius: 0,
                 idAccessor: (record) => {
-                  return record.materialId
-                    ? record.materialId
-                    : record.productionTargetPlanId;
+                  return record.materialId || record.materialName;
                 },
                 groups: [
                   {

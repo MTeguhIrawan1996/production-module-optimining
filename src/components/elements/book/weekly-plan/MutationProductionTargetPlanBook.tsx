@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-vars */
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Flex, Grid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
@@ -8,48 +7,53 @@ import * as React from 'react';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import CommonWeeklyPlanInformation from '@/components/elements/book/weekly-plan/ui/CommonWeeklyPlanInformation';
 import InputTableProductionPlan from '@/components/elements/book/weekly-plan/ui/InputTableProductionTargetPlan';
 import DashboardCard from '@/components/elements/card/DashboardCard';
 import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
-import CommonWeeklyPlanInformation from '@/components/elements/ui/CommonWeeklyPlanInformation';
 
 import {
+  IWeeklyProductionTarget,
   IWeeklyProductionTargetPlanData,
   IWeeklyProductionTargetPlanValues,
   useCreateWeeklyProductionTargetPlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyProductionTargetPlan';
 import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
+import { useReadOneProductionTargetPlan } from '@/services/graphql/query/plan/weekly/production-target-plan/useReadOneProductionTargetPlan';
 import { productionTarget } from '@/utils/constants/DefaultValues/production-target-plan';
-import { weeklyBargingTargetPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-barging-target-plan-validation';
+import { weeklyProductionTargetPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-production-target-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
-interface IMutationBargingTargetPlanBook {
-  mutationType?: 'create' | 'update';
+interface IMutationProductionTargetPlanBook {
+  mutationType?: 'create' | 'update' | 'read';
   mutationSuccessMassage?: string;
 }
 
 const MutationProductionTargetPlan = ({
   mutationType,
   mutationSuccessMassage,
-}: IMutationBargingTargetPlanBook) => {
+}: IMutationProductionTargetPlanBook) => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
   const tabs = router.query.tabs as string;
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
+  const [skipMaterialQuery, setSkipMaterialQuery] =
+    React.useState<boolean>(false);
 
   const methods = useForm<IWeeklyProductionTargetPlanValues>({
-    resolver: zodResolver(weeklyBargingTargetPlanMutationValidation),
+    resolver: zodResolver(weeklyProductionTargetPlanMutationValidation),
     defaultValues: {
       productionTargetPlans: [
         {
-          id: 'SR',
-          materialId: null,
+          id: null,
+          materialId: 'sr',
           materialName: 'SR',
           isPerent: true,
+          index: null,
           weeklyProductionTargets: productionTarget,
         },
       ],
@@ -57,11 +61,7 @@ const MutationProductionTargetPlan = ({
     mode: 'onBlur',
   });
 
-  const {
-    fields: productionTargetPlanFields,
-    replace: productionTargetPlanReplace,
-    prepend: productionTargetPlanPrepend,
-  } = useFieldArray({
+  const { fields: productionTargetPlanFields } = useFieldArray({
     name: 'productionTargetPlans',
     control: methods.control,
     keyName: 'productionTargetPlanId',
@@ -75,7 +75,9 @@ const MutationProductionTargetPlan = ({
         message: mutationSuccessMassage,
         icon: <IconCheck />,
       });
-      router.push(`/plan/weekly`);
+      router.push(
+        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=miningMapPlan`
+      );
       if (mutationType === 'update') {
         setIsOpenConfirmation(false);
       }
@@ -100,7 +102,7 @@ const MutationProductionTargetPlan = ({
     },
   });
 
-  const { materialsData, materialsDataLoading } = useReadAllMaterialsMaster({
+  const { materialsDataLoading } = useReadAllMaterialsMaster({
     variables: {
       limit: null,
       orderDir: 'asc',
@@ -109,29 +111,33 @@ const MutationProductionTargetPlan = ({
       isHaveParent: false,
       includeIds: null,
     },
-    skip: tabs !== 'productionTargetPlan',
+    skip: skipMaterialQuery || tabs !== 'productionTargetPlan',
     onCompleted: ({ materials }) => {
       const oreMaterial = materials.data.find(
         (v) => v.id === `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`
       );
+      const materialValueLength = materials.data?.length || 0;
+
       const newPerentMaterial: IWeeklyProductionTargetPlanData[] =
-        materials.data.map((Obj) => {
+        materials.data.map((Obj, i) => {
           return {
             id: null,
             materialId: Obj.id,
             materialName: Obj.name,
             isPerent: true,
+            index: i,
             weeklyProductionTargets: productionTarget,
           };
         });
 
       const newSubMaterialOre: IWeeklyProductionTargetPlanData[] | undefined =
-        oreMaterial?.subMaterials.map((sObj) => {
+        oreMaterial?.subMaterials.map((sObj, i) => {
           return {
             id: null,
             materialId: sObj.id,
             materialName: sObj.name,
             isPerent: false,
+            index: materialValueLength + i,
             weeklyProductionTargets: productionTarget,
           };
         });
@@ -141,6 +147,62 @@ const MutationProductionTargetPlan = ({
         ...(newSubMaterialOre ?? []),
         ...productionTargetPlanFields,
       ]);
+      setSkipMaterialQuery(true);
+    },
+  });
+
+  useReadOneProductionTargetPlan({
+    variables: {
+      weeklyPlanId: id,
+    },
+    skip:
+      !router.isReady || !skipMaterialQuery || tabs !== 'productionTargetPlan',
+    onCompleted: ({ weeklyProductionTargetPlans }) => {
+      if (
+        weeklyProductionTargetPlans.data &&
+        weeklyProductionTargetPlans.data.length > 0
+      ) {
+        weeklyProductionTargetPlans.data.forEach((val) => {
+          const newWeeklyProductionTarget: IWeeklyProductionTarget[] =
+            val.weeklyProductionTargets.map((wObj) => {
+              return {
+                id: wObj.id || null,
+                day: wObj.day,
+                rate: wObj.rate || '',
+                ton: wObj.ton || '',
+              };
+            });
+          const productionTargetPlanIndex =
+            productionTargetPlanFields.findIndex(
+              (item) => item.materialId === val.material.id
+            );
+          methods.setValue(
+            `productionTargetPlans.${productionTargetPlanIndex}.id`,
+            val.id
+          );
+          methods.setValue(
+            `productionTargetPlans.${productionTargetPlanIndex}.weeklyProductionTargets`,
+            newWeeklyProductionTarget
+          );
+        });
+      }
+      if (mutationType === 'read') {
+        const newSR: IWeeklyProductionTarget[] =
+          weeklyProductionTargetPlans.additional.strippingRatio.map((sObj) => {
+            return {
+              id: null,
+              day: sObj.day,
+              rate: sObj.rate || '',
+              ton: sObj.ton || '',
+            };
+          });
+        methods.setValue(
+          `productionTargetPlans.${
+            productionTargetPlanFields.length - 1
+          }.weeklyProductionTargets`,
+          newSR
+        );
+      }
     },
   });
 
@@ -157,7 +219,7 @@ const MutationProductionTargetPlan = ({
         renderItem: () => {
           return (
             <Grid.Col span={12}>
-              <InputTableProductionPlan />
+              <InputTableProductionPlan mutationType={mutationType} />
             </Grid.Col>
           );
         },
@@ -166,39 +228,38 @@ const MutationProductionTargetPlan = ({
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabs]);
+  }, [tabs, mutationType]);
 
   const handleSubmitForm: SubmitHandler<
     IWeeklyProductionTargetPlanValues
   > = async (data) => {
-    // const newBargingTargetPlans: IBargingTargetPlan[] = data.bargingTargetPlans
-    //   .map(({ id, materialId, weeklyBargingTargets }) => {
-    //     const newWeeklyBargingTargets: IWeeklyBargingTarget[] =
-    //       weeklyBargingTargets
-    //         .filter((v) => v.rate && v.ton)
-    //         .map((wObj) => {
-    //           return {
-    //             id: wObj.id || undefined,
-    //             day: wObj.day,
-    //             rate: wObj.rate || null,
-    //             ton: wObj.ton || null,
-    //           };
-    //         });
-    //     return {
-    //       id: id || undefined,
-    //       materialId,
-    //       weeklyBargingTargets: newWeeklyBargingTargets,
-    //     };
-    //   })
-    //   .filter((v) => v.weeklyBargingTargets.length > 0);
-    // const newBargingDomePlans = data.bargingDomePlans.filter((v) => v.domeId);
-    // await executeUpdate({
-    //   variables: {
-    //     weeklyPlanId: id,
-    //     bargingTargetPlans: newBargingTargetPlans,
-    //     bargingDomePlans: newBargingDomePlans,
-    //   },
-    // });
+    const newProductionTargetPlans: Omit<
+      IWeeklyProductionTargetPlanData,
+      'materialName' | 'isPerent'
+    >[] = data.productionTargetPlans
+      .filter((f) => f.materialId !== 'sr')
+      .map(({ id, materialId, weeklyProductionTargets }) => {
+        const newWeeklyProductionTargets: IWeeklyProductionTarget[] =
+          weeklyProductionTargets.map((wObj) => {
+            return {
+              id: wObj.id || undefined,
+              day: wObj.day,
+              rate: wObj.rate || null,
+              ton: wObj.ton || null,
+            };
+          });
+        return {
+          id: id || undefined,
+          materialId: materialId,
+          weeklyProductionTargets: newWeeklyProductionTargets,
+        };
+      });
+    await executeUpdate({
+      variables: {
+        weeklyPlanId: id,
+        productionTargetPlans: newProductionTargetPlans,
+      },
+    });
   };
 
   const handleConfirmation = () => {
@@ -206,9 +267,9 @@ const MutationProductionTargetPlan = ({
   };
 
   return (
-    <DashboardCard p={0}>
-      <Flex gap={32} direction="column" p={22}>
-        <CommonWeeklyPlanInformation />
+    <DashboardCard p={0} isLoading={materialsDataLoading}>
+      <Flex gap={32} direction="column" p={mutationType === 'read' ? 0 : 22}>
+        {mutationType === 'read' ? undefined : <CommonWeeklyPlanInformation />}
         <GlobalFormGroup
           flexProps={{
             p: 0,
@@ -216,28 +277,36 @@ const MutationProductionTargetPlan = ({
           field={fieldRhf}
           methods={methods}
           submitForm={handleSubmitForm}
-          submitButton={{
-            label: t('commonTypography.save'),
-            loading: mutationType === 'create' ? loading : undefined,
-            type: mutationType === 'create' ? 'submit' : 'button',
-            onClick:
-              mutationType === 'update'
-                ? async () => {
-                    const output = await methods.trigger(undefined, {
-                      shouldFocus: true,
-                    });
-                    if (output) setIsOpenConfirmation((prev) => !prev);
-                  }
-                : undefined,
-          }}
-          backButton={{
-            onClick: () =>
-              router.push(
-                mutationType === 'update'
-                  ? `/plan/weekly/${mutationType}/${id}`
-                  : `/plan/weekly`
-              ),
-          }}
+          submitButton={
+            mutationType === 'read'
+              ? undefined
+              : {
+                  label: t('commonTypography.save'),
+                  loading: mutationType === 'create' ? loading : undefined,
+                  type: mutationType === 'create' ? 'submit' : 'button',
+                  onClick:
+                    mutationType === 'update'
+                      ? async () => {
+                          const output = await methods.trigger(undefined, {
+                            shouldFocus: true,
+                          });
+                          if (output) setIsOpenConfirmation((prev) => !prev);
+                        }
+                      : undefined,
+                }
+          }
+          backButton={
+            mutationType === 'read'
+              ? undefined
+              : {
+                  onClick: () =>
+                    router.push(
+                      mutationType === 'update'
+                        ? `/plan/weekly/${mutationType}/${id}`
+                        : `/plan/weekly`
+                    ),
+                }
+          }
           modalConfirmation={{
             isOpenModalConfirmation: isOpenConfirmation,
             actionModalConfirmation: () =>

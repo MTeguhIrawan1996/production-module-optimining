@@ -6,15 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@/components/elements';
 import { DefaultModal } from '@/components/elements/modal/DefaultModal';
 
-import { usePermissions } from '@/utils/store/usePermissions';
-
 const LogoutConfirmModal: React.FC<ModalProps> = ({
   onClose,
   opened,
   ...restModalProps
 }) => {
-  const { setPermissions } = usePermissions();
-
   const { t } = useTranslation('default');
   return (
     <DefaultModal
@@ -33,7 +29,6 @@ const LogoutConfirmModal: React.FC<ModalProps> = ({
         <PrimaryButton
           label={t('auth.message.confirmLogout')}
           onClick={() => {
-            setPermissions([]);
             signOut({ redirect: true, callbackUrl: '/auth/signin' });
           }}
         />
