@@ -44,7 +44,7 @@ const GridItem: React.FC<IKeyValueItemProps & IGridTypeProps> = ({
       </Text>
     </Grid.Col>
     <Grid.Col span={valueSpan ?? 6}>
-      <Text span fw={400} fz={18} color="dark.7" {...valueStyleText}>
+      <Text span fw={400} fz={16} color="dark.6" {...valueStyleText}>
         {value ?? '-'}
       </Text>
     </Grid.Col>
@@ -62,7 +62,7 @@ const FlexItem: React.FC<IKeyValueItemProps & IFlexTypeProps> = ({
     <Text span fw={400} fz={18} color="dark.6" {...keyStyleText}>
       {dataKey}
     </Text>
-    <Text span fw={400} fz={18} color="dark.7" {...valueStyleText}>
+    <Text span fw={400} fz={16} color="dark.6" {...valueStyleText}>
       {value ?? '-'}
     </Text>
   </Flex>
