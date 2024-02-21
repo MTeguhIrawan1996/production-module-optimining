@@ -176,14 +176,6 @@ export default function ListDetailsRitageDT<
           type="grid"
           keySpan={3}
           valueSpan={9}
-          keyStyleText={{
-            fw: 400,
-            fz: 18,
-          }}
-          valueStyleText={{
-            fw: 400,
-            fz: 18,
-          }}
         />
       </Stack>
       {renderTable}

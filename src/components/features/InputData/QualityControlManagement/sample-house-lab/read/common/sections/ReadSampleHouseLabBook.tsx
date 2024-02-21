@@ -419,14 +419,6 @@ const ReadSampleHouseLabBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -435,18 +427,7 @@ const ReadSampleHouseLabBook = () => {
               {t('commonTypography.rate')}
             </Text>
             {renderOtherGcElement.length > 0 ? (
-              <KeyValueList
-                data={[...renderOtherGcElement]}
-                type="grid"
-                keyStyleText={{
-                  fw: 400,
-                  fz: 20,
-                }}
-                valueStyleText={{
-                  fw: 600,
-                  fz: 20,
-                }}
-              />
+              <KeyValueList data={[...renderOtherGcElement]} type="grid" />
             ) : (
               <Text color="gray.6">{t(`commonTypography.rateNotFound`)}</Text>
             )}
@@ -461,14 +442,6 @@ const ReadSampleHouseLabBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -506,14 +479,6 @@ const ReadSampleHouseLabBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -547,14 +512,6 @@ const ReadSampleHouseLabBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -563,18 +520,7 @@ const ReadSampleHouseLabBook = () => {
               {t('commonTypography.rate')}
             </Text>
             {renderOtherLabElement.length > 0 ? (
-              <KeyValueList
-                data={[...renderOtherLabElement]}
-                type="grid"
-                keyStyleText={{
-                  fw: 400,
-                  fz: 20,
-                }}
-                valueStyleText={{
-                  fw: 600,
-                  fz: 20,
-                }}
-              />
+              <KeyValueList data={[...renderOtherLabElement]} type="grid" />
             ) : (
               <Text color="gray.6">{t(`commonTypography.rateNotFound`)}</Text>
             )}

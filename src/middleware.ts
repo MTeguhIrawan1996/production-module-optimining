@@ -31,6 +31,8 @@ export async function middleware(request: NextRequest) {
       headers: { authorization },
     });
     const { data } = await response.json();
+    // eslint-disable-next-line no-console
+    console.log('Success get permission');
 
     const permission = (data as IPermissionAuth[] | undefined)?.map(
       (val) => val.slug
@@ -203,6 +205,7 @@ export async function middleware(request: NextRequest) {
 
       // JIKA TOKEN TIDAK MEMILIKI HAK AKSES ATAS PATH, ARAHKAN KE /not-found
       if (!validAccess) {
+        console.log('access invalid'); // eslint-disable-line
         return NextResponse.redirect(notFoundPage);
       }
       return NextResponse.next();
