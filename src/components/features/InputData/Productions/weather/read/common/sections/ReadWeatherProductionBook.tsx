@@ -281,14 +281,6 @@ const ReadWeatherProductionBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Stack spacing="sm" mt="sm">
@@ -311,14 +303,6 @@ const ReadWeatherProductionBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -343,13 +327,13 @@ const ReadWeatherProductionBook = () => {
                     border: 'none',
                     fontSize: 18,
                     fontWeight: 600,
-                    color: theme.colors.dark[5],
+                    color: theme.colors.dark[6],
                   },
                   cellsStyle: {
                     border: 'none',
                     fontSize: 16,
                     fontWeight: 400,
-                    color: theme.colors.dark[3],
+                    color: theme.colors.dark[6],
                   },
                   noWrap: false,
                 },
@@ -404,14 +388,6 @@ const ReadWeatherProductionBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
         </Tabs.Panel>

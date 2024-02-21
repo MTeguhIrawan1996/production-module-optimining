@@ -301,18 +301,7 @@ const ReadFrontProductionBook = () => {
                       {t(`commonTypography.${val.group}`)}
                     </Text>
                   )}
-                  <KeyValueList
-                    data={keyValueData}
-                    type="grid"
-                    keyStyleText={{
-                      fw: 400,
-                      fz: 20,
-                    }}
-                    valueStyleText={{
-                      fw: 600,
-                      fz: 20,
-                    }}
-                  />
+                  <KeyValueList data={keyValueData} type="grid" />
                 </Stack>
                 {val.withDivider && <Divider my="md" />}
               </React.Fragment>
