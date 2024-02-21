@@ -88,7 +88,7 @@ const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
               />
             ) : (
               <PrimaryLink
-                className={cx(classes.subLinksGroup, {
+                className={cx(classes.linkGroup, {
                   [classes.linkActive]: item.href === cleanedPath,
                 })}
                 href={item.href ?? ''}
