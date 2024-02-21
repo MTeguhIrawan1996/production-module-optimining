@@ -2,6 +2,7 @@ import { ActionIcon, Box, Group } from '@mantine/core';
 import { IconMenu2 } from '@tabler/icons-react';
 import i18n from 'i18n';
 import * as React from 'react';
+import { shallow } from 'zustand/shallow';
 
 import { ProfileCard } from '@/components/layouts/Dashboard/ProfileCard';
 
@@ -18,7 +19,10 @@ interface IHeaderlayoutProps {
 }
 
 const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
-  const { setPermissions, permissions } = usePermissions();
+  const [setPermissions, permissions] = usePermissions(
+    (state) => [state.setPermissions, state.permissions],
+    shallow
+  );
   const [authUser, setAUthUser] = React.useState<IAuthUserData | null>(null);
   useReadAuthUser({
     skip: authUser !== null,
@@ -38,7 +42,7 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
         userPermission?.role.permissions.data.map((v) => v.slug) ?? []
       );
     }
-  }, [userPermission, setPermissions, permissions.length]);
+  }, [userPermission, setPermissions, permissions]);
 
   React.useEffect(() => {
     i18n.changeLanguage('id');
