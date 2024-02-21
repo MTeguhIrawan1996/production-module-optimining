@@ -46,7 +46,7 @@ const GlobalHeaderDetail: React.FC<IGlobalHeaderDetailProps> = ({
         >
           {data.map(({ type, src, fileName, alt }, i) => (
             <Stack spacing={8} key={i} justify="flex-end">
-              <Text component="span" fw={400} fz={20} color="dark.3">
+              <Text component="span" fw={400} fz={20} color="dark.5">
                 {type === '' ? '' : t(`commonTypography.${type}`)}
               </Text>
               <NextImageFill
