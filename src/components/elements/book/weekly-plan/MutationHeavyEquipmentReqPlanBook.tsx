@@ -155,7 +155,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
                 activityName: obj.activityName,
                 locationIds,
                 materialIds,
-                averageDistance: obj.averageDistance,
+                averageDistance: obj.averageDistance || '',
                 desc: obj.desc,
                 activities,
               };
@@ -353,7 +353,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
             activityName: hObj.activityName,
             materialIds: hObj.materialIds,
             locationIds: hObj.locationIds,
-            averageDistance: hObj.averageDistance,
+            averageDistance: hObj.averageDistance || null,
             desc: hObj.desc,
             activities: newActivities,
           };
