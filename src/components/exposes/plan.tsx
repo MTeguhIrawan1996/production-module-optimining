@@ -55,3 +55,40 @@ export const UpdateWeeklyPlanPage = () => (
     <Pages.UpdateWeeklyPlanPage />
   </WithProviders>
 );
+
+// Monthly Plan
+export const MonthlyPlanPage = () => (
+  <WithProviders>
+    <Pages.MonthlyPlanPage />
+  </WithProviders>
+);
+
+export const CreateMonthlyPlanInformationPage = () => (
+  <WithProviders>
+    <Pages.CreateMonthlyPlanInformationPage />
+  </WithProviders>
+);
+
+export const ReadMonthlyPlanPage = () => (
+  <WithProviders>
+    <Pages.ReadMonthlyPlanPage />
+  </WithProviders>
+);
+
+export const ReadMonthlyPlanInformationPage = () => (
+  <WithProviders>
+    <Pages.ReadMonthlyPlanInformationPage />
+  </WithProviders>
+);
+
+export const UpdateMonthlyPlanPage = () => (
+  <WithProviders>
+    <Pages.UpdateMonthlyPlanPage />
+  </WithProviders>
+);
+
+export const UpdateMonthlyPlanInformationPage = () => (
+  <WithProviders>
+    <Pages.UpdateMonthlyPlanInformationPage />
+  </WithProviders>
+);
