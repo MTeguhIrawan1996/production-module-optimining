@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import * as React from 'react';
 import { shallow } from 'zustand/shallow';
 
@@ -8,16 +7,15 @@ import DashboardBook from '@/components/features/Dashboard/common/sections/Dashb
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
 const DashboardPage = () => {
-  const router = useRouter();
-  const [setBreadcrumbs] = useBreadcrumbs(
-    (state) => [state.setBreadcrumbs],
-    shallow
-  );
-
+  const { setBreadcrumbs } = useBreadcrumbs((state) => state, shallow);
   React.useEffect(() => {
-    setBreadcrumbs([{ label: 'Dashboard', path: '/dashboard' }]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router]);
+    setBreadcrumbs([
+      {
+        label: 'Dashboard',
+        path: '/dashboard',
+      },
+    ]);
+  }, [setBreadcrumbs]);
 
   return (
     <RootWrapper>

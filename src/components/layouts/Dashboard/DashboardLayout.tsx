@@ -99,11 +99,9 @@ const DashboardLayout = ({ children }: LayoutProps) => {
       }
     >
       <HeaderLayout isExpand={isExpand} onHandleExpand={onHandleExpand} />
-
       <Container px="1.5rem" py="sm" maw="calc(1400px + 3rem)">
         <Breadcrumb />
       </Container>
-
       <Box w="100%">{children}</Box>
     </AppShell>
   );

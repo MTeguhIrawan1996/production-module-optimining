@@ -54,6 +54,7 @@ import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/inpu
 import { ISelectInputNativeProps } from '@/components/elements/input/SelectInputNative';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
+import { ISelectMonthRhfProps } from '@/components/elements/input/SelectMonthRhf';
 import { IStatusNativeProps } from '@/components/elements/input/SelectStatusNative';
 import { ISelectWeekNativeProps } from '@/components/elements/input/SelectWeekNative';
 import { ISelectWeekRhfProps } from '@/components/elements/input/SelectWeekRhf';
@@ -147,6 +148,7 @@ export type ControllerProps =
   | IMultipleSelectLocationRhfProps
   | IMultipleSelectMaterialRhfProps
   | IDisplayQuietNumber
+  | ISelectMonthRhfProps
   | IWeatherConditionSelectInputRhfProps;
 
 export type InputControllerNativeProps =

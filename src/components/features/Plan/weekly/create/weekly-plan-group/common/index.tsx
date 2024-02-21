@@ -22,6 +22,7 @@ import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 const CreateWeeklyPlanGroupPage = () => {
   const router = useRouter();
   const id = router.query.id as string;
+  const tabs = (router.query.tabs as string) || '';
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
@@ -35,7 +36,7 @@ const CreateWeeklyPlanGroupPage = () => {
         path: '/plan/weekly',
       },
       {
-        label: t('weeklyPlan.create'),
+        label: t(`commonTypography.${tabs}`),
         path: router.asPath,
       },
     ]);

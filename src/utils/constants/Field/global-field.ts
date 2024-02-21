@@ -28,6 +28,7 @@ import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBa
 import { ISelectCompanyRhfProps } from '@/components/elements/input/SelectCompanyRhf';
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
+import { ISelectMonthRhfProps } from '@/components/elements/input/SelectMonthRhf';
 import { ISelectWeekRhfProps } from '@/components/elements/input/SelectWeekRhf';
 import { ISelectWorkingHoursPlanRhfProps } from '@/components/elements/input/SelectWorkingHoursPlanRhf';
 import { ISelectYearRhfProps } from '@/components/elements/input/SelectYearRhf';
@@ -1127,6 +1128,27 @@ export const globalSelectYearRhf = ({
 }: Partial<ISelectYearRhfProps>) => {
   const field: ControllerProps = {
     control: 'select-year-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectMonthRhf = ({
+  name = 'month',
+  label,
+  searchable = false,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectMonthRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-month-rhf',
     name,
     label,
     searchable,

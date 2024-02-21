@@ -109,7 +109,7 @@ const CommonWeeklyPlanInformationBook: React.FC<
 
     const field: ControllerGroup[] = [
       {
-        group: t('commonTypography.companyInformation'),
+        group: t('commonTypography.weeklyPlanInformation'),
         enableGroupLabel: true,
         actionOuterGroup: {
           updateButton:

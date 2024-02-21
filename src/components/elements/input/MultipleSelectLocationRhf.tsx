@@ -38,7 +38,8 @@ const MultipleSelectLocationRhf: React.FC<IMultipleSelectLocationRhfProps> = ({
   const { allLocationsData } = useReadAllLocationselect({
     variables: {
       limit: null,
-      orderDir: 'asc',
+      orderDir: 'desc',
+      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       categoryId: categoryId === '' ? null : categoryId,
     },
