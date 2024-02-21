@@ -9,10 +9,9 @@ const NextFederationPlugin = require('@module-federation/nextjs-mf');
 const { i18n } = require('./next-i18next.config.js');
 
 const MAIN_MODULE_URL = process.env.MAIN_MODULE_URL;
-const PRODUCTION_MODULE_URL = process.env.PRODUCTION_MODULE_URL;
 
 const moduleExports = {
-  assetPrefix: `${PRODUCTION_MODULE_URL}`,
+  // assetPrefix: `${process.env.PRODUCTION_MODULE_URL}`,
   trailingSlash: false,
   publicRuntimeConfig: {
     dsn: process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN,
