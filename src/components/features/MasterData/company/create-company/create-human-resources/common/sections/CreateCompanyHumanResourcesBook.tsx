@@ -181,7 +181,7 @@ const CreateCompanyHumanResourcesBook = () => {
     });
     const domicileRegencyItem = regencySelect({
       name: 'domicileRegencyId',
-      provinceId: domicileProvinceId,
+      provinceId: domicileProvinceId || undefined,
       onChange: (value) => {
         methods.setValue('domicileRegencyId', value ?? '');
         methods.setValue('domicileSubdistrictId', '');
@@ -191,8 +191,8 @@ const CreateCompanyHumanResourcesBook = () => {
     });
     const domicileSubdistrictItem = subdistrictSelect({
       name: 'domicileSubdistrictId',
-      provinceId: domicileProvinceId,
-      regencyId: domicileRegencyId,
+      provinceId: domicileProvinceId || undefined,
+      regencyId: domicileRegencyId || undefined,
       onChange: (value) => {
         methods.setValue('domicileSubdistrictId', value ?? '');
         methods.setValue('domicileVillageId', '');
@@ -201,9 +201,9 @@ const CreateCompanyHumanResourcesBook = () => {
     });
     const domicileVillageItem = villageSelect({
       name: 'domicileVillageId',
-      provinceId: domicileProvinceId,
-      regencyId: domicileRegencyId,
-      subdistrictId: domicileSubdistrictId,
+      provinceId: domicileProvinceId || undefined,
+      regencyId: domicileRegencyId || undefined,
+      subdistrictId: domicileSubdistrictId || undefined,
     });
 
     const photo: ControllerProps = {
