@@ -22,6 +22,7 @@ const ReadStockpileMonitoringBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const page = Number(router.query['page']) || 1;
 
   const methods = useForm<IUpdateStatusValues>({
     resolver: zodResolver(statusValidationSchema),
@@ -36,6 +37,8 @@ const ReadStockpileMonitoringBook = () => {
     useReadOneStockpileMonitoring({
       variables: {
         id,
+        limit: 15,
+        page,
       },
       skip: !router.isReady,
     });
@@ -174,6 +177,11 @@ const ReadStockpileMonitoringBook = () => {
     monitoringStockpile?.status?.id ?? ''
   );
 
+  const handleSetPage = (page: number) => {
+    const urlSet = `/input-data/quality-control-management/stockpile-monitoring/read/${id}?page=${page}`;
+    router.push(urlSet, undefined, { shallow: true });
+  };
+
   return (
     <DashboardCard
       title={t('stockpileMonitoring.readStockpileMonitoring')}
@@ -255,6 +263,10 @@ const ReadStockpileMonitoringBook = () => {
               <DetailStockpileData
                 monitoringStockpile={monitoringStockpile}
                 monitoringStockpileLoading={monitoringStockpileLoading}
+                ritageProps={{
+                  handleSetPage,
+                  page,
+                }}
               />
             ),
             isShowItem: true,

@@ -15,15 +15,20 @@ import { formatDate } from '@/utils/helper/dateFormat';
 interface IDetailStockpileDataProps {
   monitoringStockpile?: IReadOneStockpileMonitoring;
   monitoringStockpileLoading?: boolean;
+  ritageProps: {
+    page: number;
+    handleSetPage: (page: number) => void;
+  };
 }
 
 const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
   monitoringStockpile,
   monitoringStockpileLoading,
+  ritageProps,
 }) => {
   const theme = useMantineTheme();
   const { t } = useTranslation('default');
-  const [page, setPage] = React.useState<number>(1);
+  const { handleSetPage, page } = ritageProps;
 
   const photo = monitoringStockpile?.photo
     ? [
@@ -256,7 +261,7 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
             title: t('commonTypography.dataNotfound'),
           }}
           paginationProps={{
-            setPage: setPage,
+            setPage: handleSetPage,
             currentPage: page,
             totalAllData: monitoringStockpile?.ritages?.meta.totalAllData ?? 0,
             totalData: monitoringStockpile?.ritages?.meta.totalData ?? 0,

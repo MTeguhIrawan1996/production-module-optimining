@@ -35,7 +35,7 @@ const GlobalPagination: React.FC<IPaginationProps> = (props) => {
   }
 
   return (
-    <Group spacing="xs" mx="xs">
+    <Group spacing="xs">
       <Group align="center" h="100%">
         <Text
           fz="xs"
