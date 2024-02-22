@@ -16,6 +16,7 @@ export type IMultipleSelectLocationRhfProps = {
   name: string;
   categoryId?: string | null;
   skipQuery?: boolean;
+  skipSearchQuery?: boolean;
 } & Omit<
   MultiSelectProps,
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
@@ -28,6 +29,7 @@ const MultipleSelectLocationRhf: React.FC<IMultipleSelectLocationRhfProps> = ({
   label,
   categoryId = null,
   skipQuery = false,
+  skipSearchQuery = true,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -68,8 +70,8 @@ const MultipleSelectLocationRhf: React.FC<IMultipleSelectLocationRhfProps> = ({
           backgroundColor: theme.colors.brand[3],
         },
       })}
-      onSearchChange={setSearchTerm}
-      searchValue={searchTerm}
+      onSearchChange={!skipSearchQuery ? setSearchTerm : undefined}
+      searchValue={!skipSearchQuery ? searchTerm : undefined}
       data-control={control}
       placeholder={t('commonTypography.chooseLocation', {
         ns: 'default',
