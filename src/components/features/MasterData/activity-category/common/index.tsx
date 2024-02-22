@@ -11,20 +11,23 @@ import LoseTimeCategoryBook from '@/components/features/MasterData/activity-cate
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ActivityCategoryMasterPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const [permission] = usePermissions((state) => [state.permissions], shallow);
+
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
     shallow
   );
 
-  const isPremissionActivityCategory = permission.includes(
+  const isPremissionActivityCategory = permissions?.includes(
     'create-working-hour-plan-category'
   );
-  const isPremissionHeavyEquipmentFormula = permission.includes(
+  const isPremissionHeavyEquipmentFormula = permissions?.includes(
     'create-heavy-equipment-data-formula'
   );
 
