@@ -185,6 +185,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
         name: `heavyEquipmentRequirementPlans.${index}.locationIds`,
         key: `${obj.heavyequipmentReqPlanId}.locationIds`,
         skipQuery: tabs !== 'heavyEquipmentReqPlan',
+        skipSearchQuery: true,
       });
       const multipleSelectMaterialItem = globalMultipleSelectMaterial({
         label: 'material',

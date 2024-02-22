@@ -167,9 +167,12 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
     onError: (error) => {
       if (error.graphQLErrors) {
         const errorArry = errorBadRequestField<IUnitCapacityPlanValues>(error);
+        if (mutationType === 'update') {
+          setIsOpenConfirmation(false);
+        }
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
-            methods.setError(name, { type, message });
+            methods.setError(name, { type, message }, { shouldFocus: true });
           });
           return;
         }
@@ -202,6 +205,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
         name: `unitCapacityPlans.${index}.locationIds`,
         key: `${obj.unitCapacityPlanId}.locationIds`,
         skipQuery: tabs !== 'unitCapacityPlan',
+        skipSearchQuery: true,
       });
       const amountFleetItem = globalInputSumArray({
         label: 'amountFleet',
