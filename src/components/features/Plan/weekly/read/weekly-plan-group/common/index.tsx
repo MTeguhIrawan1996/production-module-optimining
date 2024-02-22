@@ -19,20 +19,21 @@ const ReadWeeklyPlanGroupPage = () => {
   );
 
   React.useEffect(() => {
-    setBreadcrumbs([
-      {
-        label: t('weeklyPlan.title'),
-        path: '/plan/weekly',
-      },
-      {
-        label: t('weeklyPlan.read'),
-        path: `/plan/weekly/read/${id}`,
-      },
-      {
-        label: t(`commonTypography.${tabs}`),
-        path: router.asPath,
-      },
-    ]);
+    if (router.isReady)
+      setBreadcrumbs([
+        {
+          label: t('weeklyPlan.title'),
+          path: '/plan/weekly',
+        },
+        {
+          label: t('weeklyPlan.read'),
+          path: `/plan/weekly/read/${id}`,
+        },
+        {
+          label: t(`commonTypography.${tabs}`),
+          path: router.asPath,
+        },
+      ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 

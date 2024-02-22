@@ -30,16 +30,17 @@ const CreateWeeklyPlanGroupPage = () => {
   );
 
   React.useEffect(() => {
-    setBreadcrumbs([
-      {
-        label: t('weeklyPlan.title'),
-        path: '/plan/weekly',
-      },
-      {
-        label: t(`commonTypography.${tabs}`),
-        path: router.asPath,
-      },
-    ]);
+    if (router.isReady)
+      setBreadcrumbs([
+        {
+          label: t('weeklyPlan.title'),
+          path: '/plan/weekly',
+        },
+        {
+          label: t(`commonTypography.${tabs}`),
+          path: router.asPath,
+        },
+      ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
