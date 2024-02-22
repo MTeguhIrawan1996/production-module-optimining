@@ -232,7 +232,7 @@ const StockpileBook = () => {
             {
               accessor: 'tonBySurveys',
               title: t('commonTypography.tonBySurvey'),
-              render: ({ averageTonSurvey }) => averageTonSurvey ?? '-',
+              render: ({ currentTonSurvey }) => currentTonSurvey ?? '-',
             },
             ...(renderOtherColumn ?? []),
             {
