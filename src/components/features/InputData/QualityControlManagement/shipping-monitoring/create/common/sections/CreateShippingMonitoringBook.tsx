@@ -176,6 +176,10 @@ const CreateShippingMonitoringBook = () => {
       onChange: (value) => {
         methods.setValue('factoryCategoryId', value ?? '');
         methods.setValue('factoryId', '');
+        methods.setValue('vesselOpenDate', null);
+        methods.setValue('vesselCloseDate', null);
+        methods.setValue('vesselOpenTime', '');
+        methods.setValue('vesselCloseTime', '');
         methods.trigger('factoryCategoryId');
       },
     });
