@@ -431,12 +431,12 @@ const MutationWorkTimePlanBook = ({
                   {
                     id: 'activity',
                     title: t('commonTypography.activity'),
-                    style: { textAlign: 'center' },
                     columns: [
                       {
                         accessor: 'name',
                         title: '',
                         width: 260,
+                        textAlignment: 'left',
                         render: ({ name, activityId }) => {
                           if (
                             activityId ===
@@ -580,11 +580,11 @@ const MutationWorkTimePlanBook = ({
                           {
                             id: 'activity',
                             title: t('commonTypography.activity'),
-                            style: { textAlign: 'center' },
                             columns: [
                               {
                                 accessor: 'name',
                                 title: '',
+                                textAlignment: 'left',
                                 render: ({ name }, index) => {
                                   const indextoAlphabet = String.fromCharCode(
                                     65 + index

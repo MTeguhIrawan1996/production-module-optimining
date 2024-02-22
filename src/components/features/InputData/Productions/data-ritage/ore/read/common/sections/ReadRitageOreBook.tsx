@@ -315,14 +315,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           {!oreRitageLoading && oreRitage ? (
@@ -383,14 +375,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -414,14 +398,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -457,14 +433,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -484,14 +452,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -511,14 +471,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -546,14 +498,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -562,18 +506,7 @@ const ReadRitageOreBook = () => {
               {t('commonTypography.rate')}
             </Text>
             {renderOtherElement.length > 0 ? (
-              <KeyValueList
-                data={[...renderOtherElement]}
-                type="grid"
-                keyStyleText={{
-                  fw: 400,
-                  fz: 20,
-                }}
-                valueStyleText={{
-                  fw: 600,
-                  fz: 20,
-                }}
-              />
+              <KeyValueList data={[...renderOtherElement]} type="grid" />
             ) : (
               <Text color="gray.6">{t(`commonTypography.rateNotFound`)}</Text>
             )}
@@ -588,14 +521,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
         </Tabs.Panel>
