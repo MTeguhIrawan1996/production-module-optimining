@@ -82,18 +82,20 @@ const ReadLoseTimeCategoryBook: React.FC<IReadLoseTimeCategoryBookProps> = ({
             });
             return (
               <React.Fragment key={i}>
-                <Stack
-                  spacing="sm"
-                  mt={i === 0 ? 'sm' : undefined}
-                  mb={i === 0 ? 'sm' : undefined}
-                >
-                  {val.enableTitle && (
-                    <Text fz={24} fw={600} color="brand">
-                      {t(`commonTypography.${val.group}`)}
-                    </Text>
-                  )}
-                  <KeyValueList data={keyValueData} type="grid" />
-                </Stack>
+                {val.itemValue.length > 0 ? (
+                  <Stack
+                    spacing="sm"
+                    mt={i === 0 ? 'sm' : undefined}
+                    mb={i === 0 ? 'sm' : undefined}
+                  >
+                    {val.enableTitle && (
+                      <Text fz={24} fw={600} color="brand">
+                        {t(`commonTypography.${val.group}`)}
+                      </Text>
+                    )}
+                    <KeyValueList data={keyValueData} type="grid" />
+                  </Stack>
+                ) : null}
                 {val.withDivider && <Divider my="md" />}
               </React.Fragment>
             );

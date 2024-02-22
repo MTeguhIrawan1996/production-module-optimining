@@ -234,7 +234,7 @@
       "hourMeterAfter": "HM Akhir",
       "amountHourMeter": "Total HM",
       "vesselNameOrFactoryName": "Nama Vessel / Pabrik",
-      "amountFuel": "Jumlah pengisian BBM",
+      "amountFuel": "Jumlah pengisian BBM (Dalam Liter)",
       "status": "Status",
       "company": "Perusahaan",
       "physicalAvailability": "PA (Physical Availability)",
