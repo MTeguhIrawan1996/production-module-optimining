@@ -152,7 +152,7 @@ const UpdateShippingMonitoringBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('shippingMonitoring.successCreateMessage'),
+        message: t('shippingMonitoring.successUpdateMessage'),
         icon: <IconCheck />,
       });
       router.push('/input-data/quality-control-management/shipping-monitoring');
@@ -253,6 +253,10 @@ const UpdateShippingMonitoringBook = () => {
       onChange: (value) => {
         methods.setValue('factoryCategoryId', value ?? '');
         methods.setValue('factoryId', '');
+        methods.setValue('vesselOpenDate', null);
+        methods.setValue('vesselCloseDate', null);
+        methods.setValue('vesselOpenTime', '');
+        methods.setValue('vesselCloseTime', '');
         methods.trigger('factoryCategoryId');
       },
     });
