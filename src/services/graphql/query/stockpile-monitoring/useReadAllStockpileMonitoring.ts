@@ -56,7 +56,7 @@ export const READ_ALL_STOCKPILE_MONITORING_MASTER = gql`
           additional
         }
         tonByRitage
-        averageTonSurvey
+        currentTonSurvey
         domeStatus
         status {
           id
@@ -88,7 +88,7 @@ export interface IMonitoringStockpilesData {
   };
   tonByRitage: number | null;
   domeStatus: string | null;
-  averageTonSurvey: number | null;
+  currentTonSurvey: number | null;
   status: IStatus | null;
 }
 
