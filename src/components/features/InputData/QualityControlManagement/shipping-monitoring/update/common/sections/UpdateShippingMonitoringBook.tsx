@@ -152,7 +152,7 @@ const UpdateShippingMonitoringBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('shippingMonitoring.successCreateMessage'),
+        message: t('shippingMonitoring.successUpdateMessage'),
         icon: <IconCheck />,
       });
       router.push('/input-data/quality-control-management/shipping-monitoring');

@@ -2,7 +2,7 @@ import { ApolloError, gql, useQuery } from '@apollo/client';
 
 import { IReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 
-import { GResponse, IFile, IStatus } from '@/types/global';
+import { GResponse, IFile, IGlobalMetaRequest, IStatus } from '@/types/global';
 
 export const READ_ONE_STOCKPILE_MONITORING = gql`
   query ReadOneStockpileMonitoring(
@@ -246,7 +246,8 @@ interface IReadOneStockpileMonitoringResponse {
   monitoringStockpile: IReadOneStockpileMonitoring;
 }
 
-interface IReadOneStockpileMonitoringRequest {
+interface IReadOneStockpileMonitoringRequest
+  extends Partial<IGlobalMetaRequest> {
   id: string;
 }
 

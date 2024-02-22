@@ -200,10 +200,11 @@ export const isWniRadio: ControllerProps = {
 export const bloodTypeSelect: ControllerProps = {
   control: 'select-input',
   name: 'bloodType',
-  withAsterisk: true,
+  withAsterisk: false,
   label: 'bloodType',
   placeholder: 'chooseBloodType',
   colSpan: 6,
+  clearable: true,
   data: [
     {
       label: 'A',
@@ -231,6 +232,7 @@ export const resusSelect: ControllerProps = {
   label: 'resus',
   placeholder: 'chooseResus',
   colSpan: 6,
+  clearable: true,
   data: [
     {
       label: '+',
