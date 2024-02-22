@@ -14,21 +14,22 @@ import ListDataTopsoilRitageBook from '@/components/features/InputData/Productio
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const DataRitagePage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const [permission] = usePermissions((state) => [state.permissions], shallow);
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
     shallow
   );
-  const isPremissionOre = permission.includes('read-ore-ritage');
-  const isPremissionOb = permission.includes('read-overburden-ritage');
-  const isPremissionQuarry = permission.includes('read-quarry-ritage');
-  const isPremissionBarging = permission.includes('read-barging-ritage');
-  const isPremissionMoving = permission.includes('read-moving-ritage');
-  const isPremissionTopsoil = permission.includes('read-topsoil-ritage');
+  const isPremissionOre = permissions?.includes('read-ore-ritage');
+  const isPremissionOb = permissions?.includes('read-overburden-ritage');
+  const isPremissionQuarry = permissions?.includes('read-quarry-ritage');
+  const isPremissionBarging = permissions?.includes('read-barging-ritage');
+  const isPremissionMoving = permissions?.includes('read-moving-ritage');
+  const isPremissionTopsoil = permissions?.includes('read-topsoil-ritage');
 
   React.useEffect(() => {
     setBreadcrumbs([
