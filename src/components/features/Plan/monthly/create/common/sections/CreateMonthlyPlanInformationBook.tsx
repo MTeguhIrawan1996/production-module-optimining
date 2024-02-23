@@ -49,7 +49,7 @@ const CreateMonthlyPlanInformationBook = () => {
       });
       methods.reset();
       router.push(
-        `/plan/monthly/create/monthly-plan-group/${createMonthlyPlan.id}?tabs=workTimePlan`
+        `/plan/monthly/create/monthly-plan-group/${createMonthlyPlan.id}?tabs=workTimePlan&year=${createMonthlyPlan.year}&month=${createMonthlyPlan.month}`
       );
     },
     onError: (error) => {

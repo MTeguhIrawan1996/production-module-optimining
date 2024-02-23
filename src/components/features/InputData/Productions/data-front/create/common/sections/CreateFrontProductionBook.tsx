@@ -22,6 +22,7 @@ import {
   materialSelect,
   pitSelect,
 } from '@/utils/constants/Field/global-field';
+import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { domeNameSelect } from '@/utils/constants/Field/stockpile-field';
 import { frontProductionMutationValidation } from '@/utils/form-validation/front-production/front-production-validation';
 import { dateToString } from '@/utils/helper/dateToString';
@@ -50,6 +51,7 @@ const CreateFrontProductionBook = () => {
       domeId: '',
       x: '',
       y: '',
+      shiftId: '',
     },
     mode: 'onBlur',
   });
@@ -190,6 +192,11 @@ const CreateFrontProductionBook = () => {
       precision: 6,
       step: 0.000001,
     });
+    const shiftItem = shiftSelect({
+      colSpan: 12,
+      name: 'shiftId',
+      withAsterisk: false,
+    });
 
     const fieldIsDome: ControllerGroup[] = [
       {
@@ -210,6 +217,10 @@ const CreateFrontProductionBook = () => {
       {
         group: t('commonTypography.date'),
         formControllers: [date],
+      },
+      {
+        group: t('commonTypography.shift'),
+        formControllers: [shiftItem],
       },
       {
         group: t('commonTypography.heavyEquipmentCode'),
@@ -243,6 +254,7 @@ const CreateFrontProductionBook = () => {
     await executeCreate({
       variables: {
         date,
+        shiftId: data.shiftId,
         companyHeavyEquipmentId: data.companyHeavyEquipmentId,
         frontId: data.frontId,
         materialId: data.materialId,

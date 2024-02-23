@@ -16,6 +16,7 @@ export const UPDATE_FRONT_PRODUCTION = gql`
     $domeId: String
     $x: Float
     $y: Float
+    $shiftId: String
   ) {
     updateFrontData(
       updateFrontDataInput: {
@@ -31,6 +32,7 @@ export const UPDATE_FRONT_PRODUCTION = gql`
         domeId: $domeId
         x: $x
         y: $y
+        shiftId: $shiftId
       }
     ) {
       id
