@@ -192,7 +192,7 @@ const MutationProductionTargetPlan = ({
             return {
               id: null,
               day: sObj.day,
-              rate: sObj.rate || '',
+              rate: '',
               ton: sObj.ton || '',
             };
           });
