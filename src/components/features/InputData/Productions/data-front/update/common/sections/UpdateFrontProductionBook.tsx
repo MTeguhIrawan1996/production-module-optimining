@@ -25,6 +25,7 @@ import {
   materialSelect,
   pitSelect,
 } from '@/utils/constants/Field/global-field';
+import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { domeNameSelect } from '@/utils/constants/Field/stockpile-field';
 import { frontProductionMutationValidation } from '@/utils/form-validation/front-production/front-production-validation';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
@@ -48,6 +49,7 @@ const UpdateFrontProductionBook = () => {
       companyHeavyEquipmentId: '',
       frontId: '',
       materialId: '',
+      shiftId: '',
       type: '',
       pitId: '',
       block: '',
@@ -93,6 +95,10 @@ const UpdateFrontProductionBook = () => {
           key: 'frontId',
           value: frontData.front?.id ?? '',
         },
+        {
+          key: 'shiftId',
+          value: frontData.shift?.id ?? '',
+        },
         { key: 'materialId', value: frontData.material?.id ?? '' },
         { key: 'x', value: frontData.x ?? '' },
         { key: 'y', value: frontData.y ?? '' },
@@ -132,7 +138,7 @@ const UpdateFrontProductionBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('frontProduction.successCreateMessage'),
+        message: t('frontProduction.successUpdateMessage'),
         icon: <IconCheck />,
       });
       methods.reset();
@@ -169,6 +175,11 @@ const UpdateFrontProductionBook = () => {
       withAsterisk: true,
       clearable: true,
       colSpan: 12,
+    });
+    const shiftItem = shiftSelect({
+      colSpan: 12,
+      name: 'shiftId',
+      withAsterisk: false,
     });
     const heavyEquipmentCodeItem = heavyEquipmentSelect({
       colSpan: 12,
@@ -278,6 +289,10 @@ const UpdateFrontProductionBook = () => {
         formControllers: [date],
       },
       {
+        group: t('commonTypography.shift'),
+        formControllers: [shiftItem],
+      },
+      {
         group: t('commonTypography.heavyEquipmentCode'),
         enableGroupLabel: false,
         formControllers: [heavyEquipmentCodeItem],
@@ -310,6 +325,7 @@ const UpdateFrontProductionBook = () => {
       variables: {
         id,
         date,
+        shiftId: data.shiftId === '' ? null : data.shiftId,
         companyHeavyEquipmentId: data.companyHeavyEquipmentId,
         frontId: data.frontId,
         materialId: data.materialId,
