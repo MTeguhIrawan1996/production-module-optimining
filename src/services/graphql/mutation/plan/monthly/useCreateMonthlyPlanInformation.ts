@@ -14,6 +14,8 @@ export const CREATE_MONTHLY_PLAN_INFORMATION = gql`
       }
     ) {
       id
+      year
+      month
     }
   }
 `;
@@ -30,6 +32,8 @@ type ICreateMonthlyPlanInformationRequest =
 interface ICreateMonthlyPlanInformationResponse {
   createMonthlyPlan: {
     id: string;
+    year: number;
+    month: number;
   };
 }
 

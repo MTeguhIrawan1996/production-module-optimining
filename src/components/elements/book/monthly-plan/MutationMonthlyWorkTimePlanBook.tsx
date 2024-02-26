@@ -1,4 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Flex, Grid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -7,8 +6,8 @@ import * as React from 'react';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import CommonWeeklyPlanInformation from '@/components/elements/book/weekly-plan/ui/CommonWeeklyPlanInformation';
-import InputTableProductionPlan from '@/components/elements/book/weekly-plan/ui/InputTableProductionTargetPlan';
+import CommonMonthlyPlanInformation from '@/components/elements/book/monthly-plan/ui/CommonMonthlyPlanInformation';
+import InputMonthlyTableWorkTimePlan from '@/components/elements/book/monthly-plan/ui/InputMonthlyTableWorkTimePlan';
 import DashboardCard from '@/components/elements/card/DashboardCard';
 import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
 
@@ -18,53 +17,118 @@ import {
   IWeeklyProductionTargetPlanValues,
   useCreateWeeklyProductionTargetPlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyProductionTargetPlan';
-import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
-import { useReadOneProductionTargetPlan } from '@/services/graphql/query/plan/weekly/production-target-plan/useReadOneProductionTargetPlan';
-import { productionTarget } from '@/utils/constants/DefaultValues/production-target-plan';
-import { weeklyProductionTargetPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-production-target-plan-validation';
+import { useReadAllActivityWorkTimePlan } from '@/services/graphql/query/plan/weekly/work-time-plan/useReadAllActivityWorkTimePlan';
+import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
-interface IMutationProductionTargetPlanBook {
+interface IMutationMonthlyWorkTimePlanBook {
   mutationType?: 'create' | 'update' | 'read';
   mutationSuccessMassage?: string;
 }
 
-const MutationProductionTargetPlan = ({
+const MutationMonthlyWorkTimePlanBook = ({
   mutationType,
   mutationSuccessMassage,
-}: IMutationProductionTargetPlanBook) => {
+}: IMutationMonthlyWorkTimePlanBook) => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
   const tabs = router.query.tabs as string;
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
-  const [skipMaterialQuery, setSkipMaterialQuery] =
+  const [skipWorkingHourPlansData, setSkipWorkingHourPlansData] =
+    React.useState<boolean>(false);
+  const [skipActivityWorkTimePlan, setSkipActivityWorkTimePlan] =
     React.useState<boolean>(false);
 
-  const methods = useForm<IWeeklyProductionTargetPlanValues>({
-    resolver: zodResolver(weeklyProductionTargetPlanMutationValidation),
+  const methods = useForm<any>({
+    // resolver: zodResolver(weeklyProductionTargetPlanMutationValidation),
     defaultValues: {
-      productionTargetPlans: [
+      totalLoseTimeWeek: '',
+      totalEffectiveWorkHourWeek: '',
+      workTimePlanActivities: [
         {
           id: null,
-          materialId: 'sr',
-          materialName: 'SR',
-          isPerent: true,
-          index: null,
-          weeklyProductionTargets: productionTarget,
+          isLoseTime: false,
+          activityId: 'loseTime',
+          loseTimeId: null,
+          name: t('commonTypography.loseTime'),
+          weeklyWorkTimes: [],
+        },
+        {
+          id: null,
+          isLoseTime: false,
+          activityId: 'amountEffectiveWorkingHours',
+          loseTimeId: null,
+          name: t('commonTypography.amountEffectiveWorkingHours'),
+          weeklyWorkTimes: [],
         },
       ],
     },
     mode: 'onBlur',
   });
 
-  const { fields: productionTargetPlanFields } = useFieldArray({
-    name: 'productionTargetPlans',
+  const {
+    fields: workTimePlanActivityFields,
+    // replace: workTimePlanActivityReplace,
+  } = useFieldArray({
+    name: 'workTimePlanActivities',
     control: methods.control,
-    keyName: 'productionTargetPlanId',
+    keyName: 'workTimePlanActivityId',
+  });
+
+  useReadAllWHPsMaster({
+    variables: {
+      limit: null,
+    },
+    skip: tabs !== 'workTimePlan' || skipWorkingHourPlansData,
+    onCompleted: ({ workingHourPlans }) => {
+      const workTimePlanActivities = workingHourPlans.data.map((obj) => {
+        const value = {
+          id: null,
+          isLoseTime: true,
+          activityId: null,
+          loseTimeId: obj.id,
+          name: obj.activityName,
+          weeklyWorkTimes: [],
+        };
+        return value;
+      });
+      const defaultValue = [
+        ...workTimePlanActivities,
+        ...workTimePlanActivityFields,
+      ];
+      methods.setValue('workTimePlanActivities', defaultValue);
+      setSkipWorkingHourPlansData(true);
+    },
+  });
+
+  useReadAllActivityWorkTimePlan({
+    skip:
+      tabs !== 'workTimePlan' ||
+      !skipWorkingHourPlansData ||
+      skipActivityWorkTimePlan,
+    onCompleted: ({ activities }) => {
+      const workTimePlanActivities = activities.map((obj) => {
+        const value = {
+          id: null,
+          isLoseTime: false,
+          activityId: obj.id,
+          loseTimeId: null,
+          name: obj.name,
+          weeklyWorkTimes: [],
+        };
+        return value;
+      });
+      const defaultValue = [
+        ...workTimePlanActivities,
+        ...workTimePlanActivityFields,
+      ];
+      methods.setValue('workTimePlanActivities', defaultValue);
+      setSkipActivityWorkTimePlan(true);
+    },
   });
 
   const [executeUpdate, { loading }] = useCreateWeeklyProductionTargetPlan({
@@ -102,110 +166,6 @@ const MutationProductionTargetPlan = ({
     },
   });
 
-  const { materialsDataLoading } = useReadAllMaterialsMaster({
-    variables: {
-      limit: null,
-      orderDir: 'asc',
-      orderBy: 'createdAt',
-      parentId: null,
-      isHaveParent: false,
-      includeIds: null,
-    },
-    skip: skipMaterialQuery || tabs !== 'productionTargetPlan',
-    onCompleted: ({ materials }) => {
-      const oreMaterial = materials.data.find(
-        (v) => v.id === `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`
-      );
-      const materialValueLength = materials.data?.length || 0;
-
-      const newPerentMaterial: IWeeklyProductionTargetPlanData[] =
-        materials.data.map((Obj, i) => {
-          return {
-            id: null,
-            materialId: Obj.id,
-            materialName: Obj.name,
-            isPerent: true,
-            index: i,
-            weeklyProductionTargets: productionTarget,
-          };
-        });
-
-      const newSubMaterialOre: IWeeklyProductionTargetPlanData[] | undefined =
-        oreMaterial?.subMaterials.map((sObj, i) => {
-          return {
-            id: null,
-            materialId: sObj.id,
-            materialName: sObj.name,
-            isPerent: false,
-            index: materialValueLength + i,
-            weeklyProductionTargets: productionTarget,
-          };
-        });
-
-      methods.setValue('productionTargetPlans', [
-        ...newPerentMaterial,
-        ...(newSubMaterialOre ?? []),
-        ...productionTargetPlanFields,
-      ]);
-      setSkipMaterialQuery(true);
-    },
-  });
-
-  useReadOneProductionTargetPlan({
-    variables: {
-      weeklyPlanId: id,
-    },
-    skip:
-      !router.isReady || !skipMaterialQuery || tabs !== 'productionTargetPlan',
-    onCompleted: ({ weeklyProductionTargetPlans }) => {
-      if (
-        weeklyProductionTargetPlans.data &&
-        weeklyProductionTargetPlans.data.length > 0
-      ) {
-        weeklyProductionTargetPlans.data.forEach((val) => {
-          const newWeeklyProductionTarget: IWeeklyProductionTarget[] =
-            val.weeklyProductionTargets.map((wObj) => {
-              return {
-                id: wObj.id || null,
-                day: wObj.day,
-                rate: wObj.rate || '',
-                ton: wObj.ton || '',
-              };
-            });
-          const productionTargetPlanIndex =
-            productionTargetPlanFields.findIndex(
-              (item) => item.materialId === val.material.id
-            );
-          methods.setValue(
-            `productionTargetPlans.${productionTargetPlanIndex}.id`,
-            val.id
-          );
-          methods.setValue(
-            `productionTargetPlans.${productionTargetPlanIndex}.weeklyProductionTargets`,
-            newWeeklyProductionTarget
-          );
-        });
-      }
-      if (mutationType === 'read') {
-        const newSR: IWeeklyProductionTarget[] =
-          weeklyProductionTargetPlans.additional.strippingRatio.map((sObj) => {
-            return {
-              id: null,
-              day: sObj.day,
-              rate: '',
-              ton: sObj.ton || '',
-            };
-          });
-        methods.setValue(
-          `productionTargetPlans.${
-            productionTargetPlanFields.length - 1
-          }.weeklyProductionTargets`,
-          newSR
-        );
-      }
-    },
-  });
-
   const fieldRhf = React.useMemo(() => {
     const field: ControllerGroup[] = [
       {
@@ -219,7 +179,7 @@ const MutationProductionTargetPlan = ({
         renderItem: () => {
           return (
             <Grid.Col span={12}>
-              <InputTableProductionPlan mutationType={mutationType} />
+              <InputMonthlyTableWorkTimePlan />
             </Grid.Col>
           );
         },
@@ -230,9 +190,7 @@ const MutationProductionTargetPlan = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabs, mutationType]);
 
-  const handleSubmitForm: SubmitHandler<
-    IWeeklyProductionTargetPlanValues
-  > = async (data) => {
+  const handleSubmitForm: SubmitHandler<any> = async (data) => {
     const newProductionTargetPlans: Omit<
       IWeeklyProductionTargetPlanData,
       'materialName' | 'isPerent'
@@ -267,9 +225,9 @@ const MutationProductionTargetPlan = ({
   };
 
   return (
-    <DashboardCard p={0} isLoading={materialsDataLoading}>
+    <DashboardCard p={0}>
       <Flex gap={32} direction="column" p={mutationType === 'read' ? 0 : 22}>
-        {mutationType === 'read' ? undefined : <CommonWeeklyPlanInformation />}
+        {mutationType === 'read' ? undefined : <CommonMonthlyPlanInformation />}
         <GlobalFormGroup
           flexProps={{
             p: 0,
@@ -332,4 +290,4 @@ const MutationProductionTargetPlan = ({
   );
 };
 
-export default MutationProductionTargetPlan;
+export default MutationMonthlyWorkTimePlanBook;

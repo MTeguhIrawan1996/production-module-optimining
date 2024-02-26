@@ -127,6 +127,7 @@ import ReadWorkingHoursPlanMasterPage from '@/components/features/MasterData/wor
 import UpdateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/update/common';
 import MonthlyPlanPage from '@/components/features/Plan/monthly/common';
 import CreateMonthlyPlanInformationPage from '@/components/features/Plan/monthly/create/common';
+import CreateMonthlyPlanGroupPage from '@/components/features/Plan/monthly/create/monthly-plan-group/common';
 import ReadMonthlyPlanPage from '@/components/features/Plan/monthly/read/common';
 import ReadMonthlyPlanInformationPage from '@/components/features/Plan/monthly/read/monthly-plan-infromation/common';
 import UpdateMonthlyPlanPage from '@/components/features/Plan/monthly/update/common';
@@ -178,6 +179,7 @@ export {
   CreateHumanResourcesPage,
   CreateLocationMasterPage,
   CreateMaterialMasterPage,
+  CreateMonthlyPlanGroupPage,
   CreateMonthlyPlanInformationPage,
   CreateRitageBargingPage,
   CreateRitageMovingPage,
