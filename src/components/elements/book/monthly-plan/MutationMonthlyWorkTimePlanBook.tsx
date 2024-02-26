@@ -20,6 +20,7 @@ import {
 import { useReadAllActivityWorkTimePlan } from '@/services/graphql/query/plan/weekly/work-time-plan/useReadAllActivityWorkTimePlan';
 import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
+import { getWeeksInMonth } from '@/utils/helper/getWeeksInMonth';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -223,6 +224,8 @@ const MutationMonthlyWorkTimePlanBook = ({
   const handleConfirmation = () => {
     methods.handleSubmit(handleSubmitForm)();
   };
+
+  getWeeksInMonth('2024', '09');
 
   return (
     <DashboardCard p={0}>
