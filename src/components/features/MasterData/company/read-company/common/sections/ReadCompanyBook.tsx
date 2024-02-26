@@ -78,13 +78,13 @@ const ReadCompanyBook = () => {
               },
               {
                 dataKey: `${t('commonTypography.number')} ${
-                  companyData?.permissionType?.name
+                  companyData?.permissionType?.name ?? ''
                 }`,
                 value: companyData?.permissionTypeNumber,
               },
               {
                 dataKey: `${t('commonTypography.date')} ${
-                  companyData?.permissionType?.name
+                  companyData?.permissionType?.name ?? ''
                 }`,
                 value: formatDate(companyData?.permissionTypeDate) ?? '-',
               },
