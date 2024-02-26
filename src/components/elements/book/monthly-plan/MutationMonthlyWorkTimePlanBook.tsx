@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import CommonMonthlyPlanInformation from '@/components/elements/book/monthly-plan/ui/CommonMonthlyPlanInformation';
 import InputMonthlyTableWorkTimePlan from '@/components/elements/book/monthly-plan/ui/InputMonthlyTableWorkTimePlan';
@@ -12,15 +13,15 @@ import DashboardCard from '@/components/elements/card/DashboardCard';
 import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
 
 import {
-  IWeeklyProductionTarget,
-  IWeeklyProductionTargetPlanData,
   IWeeklyProductionTargetPlanValues,
   useCreateWeeklyProductionTargetPlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyProductionTargetPlan';
+import { useReadOneMonthlyPlan } from '@/services/graphql/query/plan/monthly/useReadOneMonthlyPlan';
 import { useReadAllActivityWorkTimePlan } from '@/services/graphql/query/plan/weekly/work-time-plan/useReadAllActivityWorkTimePlan';
 import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { getWeeksInMonth } from '@/utils/helper/getWeeksInMonth';
+import { useStoreWeeklyInMonthly } from '@/utils/store/useWeekInMonthlyStore';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -43,6 +44,10 @@ const MutationMonthlyWorkTimePlanBook = ({
     React.useState<boolean>(false);
   const [skipActivityWorkTimePlan, setSkipActivityWorkTimePlan] =
     React.useState<boolean>(false);
+  const [weeklyInMonthly, setWeeklyInMonthly] = useStoreWeeklyInMonthly(
+    (state) => [state.weeklyInMonthly, state.setWeeklyInMonthly],
+    shallow
+  );
 
   const methods = useForm<any>({
     // resolver: zodResolver(weeklyProductionTargetPlanMutationValidation),
@@ -80,12 +85,32 @@ const MutationMonthlyWorkTimePlanBook = ({
     keyName: 'workTimePlanActivityId',
   });
 
+  const { monthlyPlanData } = useReadOneMonthlyPlan({
+    variables: {
+      id,
+    },
+    skip: !router.isReady || tabs !== 'workTimePlan',
+    onCompleted: (data) => {
+      const weekInMonth = getWeeksInMonth(
+        `${data.monthlyPlan.year}`,
+        `${data.monthlyPlan.month}`
+      );
+      setWeeklyInMonthly(weekInMonth);
+    },
+  });
+
   useReadAllWHPsMaster({
     variables: {
       limit: null,
     },
-    skip: tabs !== 'workTimePlan' || skipWorkingHourPlansData,
+    skip: !monthlyPlanData || skipWorkingHourPlansData,
     onCompleted: ({ workingHourPlans }) => {
+      const newWeekInMonth = weeklyInMonthly.map((val) => ({
+        id: null,
+        week: val,
+        value: '',
+      }));
+
       const workTimePlanActivities = workingHourPlans.data.map((obj) => {
         const value = {
           id: null,
@@ -93,13 +118,21 @@ const MutationMonthlyWorkTimePlanBook = ({
           activityId: null,
           loseTimeId: obj.id,
           name: obj.activityName,
-          weeklyWorkTimes: [],
+          weeklyWorkTimes: newWeekInMonth,
         };
         return value;
       });
+      const newWrokTimeActivityFields = workTimePlanActivityFields.map(
+        (wObj) => {
+          return {
+            ...wObj,
+            weeklyWorkTimes: newWeekInMonth,
+          };
+        }
+      );
       const defaultValue = [
         ...workTimePlanActivities,
-        ...workTimePlanActivityFields,
+        ...newWrokTimeActivityFields,
       ];
       methods.setValue('workTimePlanActivities', defaultValue);
       setSkipWorkingHourPlansData(true);
@@ -108,10 +141,13 @@ const MutationMonthlyWorkTimePlanBook = ({
 
   useReadAllActivityWorkTimePlan({
     skip:
-      tabs !== 'workTimePlan' ||
-      !skipWorkingHourPlansData ||
-      skipActivityWorkTimePlan,
+      !monthlyPlanData || !skipWorkingHourPlansData || skipActivityWorkTimePlan,
     onCompleted: ({ activities }) => {
+      const newWeekInMonth = weeklyInMonthly.map((val) => ({
+        id: null,
+        week: val,
+        value: '',
+      }));
       const workTimePlanActivities = activities.map((obj) => {
         const value = {
           id: null,
@@ -119,19 +155,28 @@ const MutationMonthlyWorkTimePlanBook = ({
           activityId: obj.id,
           loseTimeId: null,
           name: obj.name,
-          weeklyWorkTimes: [],
+          weeklyWorkTimes: newWeekInMonth,
         };
         return value;
       });
+      const newWrokTimeActivityFields = workTimePlanActivityFields.map(
+        (wObj) => {
+          return {
+            ...wObj,
+            weeklyWorkTimes: newWeekInMonth,
+          };
+        }
+      );
       const defaultValue = [
         ...workTimePlanActivities,
-        ...workTimePlanActivityFields,
+        ...newWrokTimeActivityFields,
       ];
       methods.setValue('workTimePlanActivities', defaultValue);
       setSkipActivityWorkTimePlan(true);
     },
   });
 
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const [executeUpdate, { loading }] = useCreateWeeklyProductionTargetPlan({
     onCompleted: () => {
       notifications.show({
@@ -191,41 +236,40 @@ const MutationMonthlyWorkTimePlanBook = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabs, mutationType]);
 
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const handleSubmitForm: SubmitHandler<any> = async (data) => {
-    const newProductionTargetPlans: Omit<
-      IWeeklyProductionTargetPlanData,
-      'materialName' | 'isPerent'
-    >[] = data.productionTargetPlans
-      .filter((f) => f.materialId !== 'sr')
-      .map(({ id, materialId, weeklyProductionTargets }) => {
-        const newWeeklyProductionTargets: IWeeklyProductionTarget[] =
-          weeklyProductionTargets.map((wObj) => {
-            return {
-              id: wObj.id || undefined,
-              day: wObj.day,
-              rate: wObj.rate || null,
-              ton: wObj.ton || null,
-            };
-          });
-        return {
-          id: id || undefined,
-          materialId: materialId,
-          weeklyProductionTargets: newWeeklyProductionTargets,
-        };
-      });
-    await executeUpdate({
-      variables: {
-        weeklyPlanId: id,
-        productionTargetPlans: newProductionTargetPlans,
-      },
-    });
+    // const newProductionTargetPlans: Omit<
+    //   IWeeklyProductionTargetPlanData,
+    //   'materialName' | 'isPerent'
+    // >[] = data.productionTargetPlans
+    //   .filter((f) => f.materialId !== 'sr')
+    //   .map(({ id, materialId, weeklyProductionTargets }) => {
+    //     const newWeeklyProductionTargets: IWeeklyProductionTarget[] =
+    //       weeklyProductionTargets.map((wObj) => {
+    //         return {
+    //           id: wObj.id || undefined,
+    //           day: wObj.day,
+    //           rate: wObj.rate || null,
+    //           ton: wObj.ton || null,
+    //         };
+    //       });
+    //     return {
+    //       id: id || undefined,
+    //       materialId: materialId,
+    //       weeklyProductionTargets: newWeeklyProductionTargets,
+    //     };
+    //   });
+    // await executeUpdate({
+    //   variables: {
+    //     weeklyPlanId: id,
+    //     productionTargetPlans: newProductionTargetPlans,
+    //   },
+    // });
   };
 
   const handleConfirmation = () => {
     methods.handleSubmit(handleSubmitForm)();
   };
-
-  getWeeksInMonth('2024', '09');
 
   return (
     <DashboardCard p={0}>

@@ -111,15 +111,19 @@ export const useReadAllMonthlyPlan = ({
   });
 
   const simplifiedData: ISimpleTableKeyValue[] | undefined =
-    monthlyPlanData?.monthlyPlans.data.map((item) => ({
-      id: item.id,
-      companyName: item.company?.name ?? null,
-      year: `${item.year}`,
-      month: `${dayjs()
-        .month((item.month || 1) - 1)
-        .format('MMMM')}`,
-      status: item.status,
-    }));
+    monthlyPlanData?.monthlyPlans.data.map((item) => {
+      return {
+        id: item.id,
+        companyName: item.company?.name ?? null,
+        year: `${item.year}`,
+        month: item.month
+          ? `${dayjs()
+              .month(item.month - 1)
+              .format('MMMM')}`
+          : '-',
+        status: item.status,
+      };
+    });
   const excludeAccessor = ['status', 'id'];
 
   const otherColumn = simpleOtherColumn({

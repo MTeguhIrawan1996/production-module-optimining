@@ -1,12 +1,8 @@
 import dayjs from 'dayjs';
-import weekOfYear from 'dayjs/plugin/weekOfYear';
-// import weekYear from 'dayjs/plugin/weekYear';
-// import 'dayjs/locale/id';
-// dayjs.locale('id');
-// dayjs.extend(weekYear);
-dayjs.extend(weekOfYear);
+import isoWeek from 'dayjs/plugin/isoWeek';
+dayjs.extend(isoWeek);
 
-export const getWeeksInMonth = (year: number, month: number) => {
+export const getWeeksInMonth = (year: string, month: string) => {
   // Menghitung jumlah hari dalam bulan tersebut
   const daysInMonth = dayjs(`${year}-${month}`).daysInMonth();
 
@@ -16,11 +12,18 @@ export const getWeeksInMonth = (year: number, month: number) => {
   // Mendapatkan hari keberapa tanggal pertama tersebut dalam seminggu (0: Minggu, 1: Senin, dst.)
   const firstDayOfWeek = firstDayOfMonth.day();
 
+  const weekOfMonth = firstDayOfMonth.isoWeek();
+  const adjustWeekOfMonth =
+    firstDayOfWeek === 0 ? weekOfMonth + 1 : weekOfMonth;
+
   // Menghitung jumlah minggu berdasarkan jumlah hari dalam bulan dan hari pertama dalam seminggu
   const weeks = Math.ceil((daysInMonth + firstDayOfWeek) / 7);
 
   // Membuat array yang berisi nomor-nomor minggu dalam bulan tersebut
-  const weeksArray = Array.from({ length: weeks }, (_, index) => index + 1);
+  const weeksArray = Array.from(
+    { length: weeks },
+    (_, index) => index + adjustWeekOfMonth
+  );
 
   return weeksArray;
 };

@@ -1,17 +1,21 @@
 import { Text } from '@mantine/core';
+import { DataTableColumn } from 'mantine-datatable';
 import * as React from 'react';
-import { FieldArrayWithId, useFieldArray } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import DisplayLoseTimeAndEffectiveWork from '@/components/elements/book/weekly-plan/ui/DisplayLoseTimeAndEffectiveWork';
 import MantineDataTable from '@/components/elements/dataTable/MantineDataTable';
 import FormController from '@/components/elements/form/FormController';
 
-import { IWorkTimePlanValues } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyWorkTimePlan';
-
-interface IInputTableWorkTimePlanProps {}
+interface IInputTableWorkTimePlanProps {
+  mutationType?: 'create' | 'update' | 'read';
+}
 
 // eslint-disable-next-line unused-imports/no-unused-vars
-const InputMonthlyTableWorkTimePlan = (props: IInputTableWorkTimePlanProps) => {
+const InputMonthlyTableWorkTimePlan = ({
+  mutationType,
+}: IInputTableWorkTimePlanProps) => {
   const { t } = useTranslation('default');
 
   const { fields: workTimePlanActivityFields } = useFieldArray({
@@ -19,27 +23,126 @@ const InputMonthlyTableWorkTimePlan = (props: IInputTableWorkTimePlanProps) => {
     keyName: 'workTimePlanActivityId',
   });
 
-  const recordsWithoutLoseTime = (
-    workTimePlanActivityFields as FieldArrayWithId<
-      IWorkTimePlanValues,
-      'workTimePlanActivities',
-      'workTimePlanActivityId'
-    >[]
-  ).filter((val) => !val.isLoseTime);
-  const recordsWithLoseTime = (
-    workTimePlanActivityFields as FieldArrayWithId<
-      IWorkTimePlanValues,
-      'workTimePlanActivities',
-      'workTimePlanActivityId'
-    >[]
-  ).filter((val) => val.isLoseTime);
+  const recordsWithoutLoseTime = (workTimePlanActivityFields as any).filter(
+    (val) => !val.isLoseTime
+  );
+  const recordsWithLoseTime = (workTimePlanActivityFields as any).filter(
+    (val) => val.isLoseTime
+  );
+
+  const renderOtherColumnActivityCallback = React.useCallback(
+    (obj: any, index: number) => {
+      const group: DataTableColumn<any> = {
+        accessor: `${obj['week']}.activity`,
+        width: 100,
+        title: `${t('commonTypography.week')} ${obj.week}`,
+        render: ({ activityId }, i: number) => {
+          if (activityId === 'loseTime') {
+            return (
+              <DisplayLoseTimeAndEffectiveWork
+                name="workTimePlanActivities"
+                indexOfHour={index}
+                variant="unstyled"
+                disabled={false}
+                readOnly
+                calculationType="loseTime"
+                styles={{
+                  input: {
+                    textAlign: 'center',
+                  },
+                }}
+              />
+            );
+          }
+          if (activityId === 'amountEffectiveWorkingHours') {
+            return (
+              <DisplayLoseTimeAndEffectiveWork
+                name="workTimePlanActivities"
+                indexOfHour={index}
+                variant="unstyled"
+                disabled={false}
+                readOnly
+                calculationType="amountEffectiveWorkingHours"
+                styles={{
+                  input: {
+                    textAlign: 'center',
+                  },
+                }}
+              />
+            );
+          }
+          return (
+            <FormController
+              control="number-input-table-rhf"
+              name={`workTimePlanActivities.${i}.weeklyWorkTimes.${index}.hour`}
+              readOnly={mutationType === 'read' ? true : false}
+              variant={mutationType === 'read' ? 'unstyled' : 'default'}
+              styles={{
+                input: {
+                  textAlign: 'center',
+                },
+              }}
+            />
+          );
+        },
+      };
+      return group;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [mutationType]
+  );
+
+  const renderOtherColumnActivityWeek = (
+    workTimePlanActivityFields[0] as any
+  ).weeklyWorkTimes?.map(renderOtherColumnActivityCallback);
+
+  const renderOtherColumnLosetimeCallback = React.useCallback(
+    (obj: any, index: number) => {
+      const group: DataTableColumn<any> = {
+        accessor: `${obj['week']}.loseTime`,
+        width: 100,
+        title: `${t('commonTypography.week')} ${obj.week}`,
+        render: (_, i) => {
+          const activityWorkTimePlan = recordsWithoutLoseTime.filter(
+            (val) =>
+              val.activityId !== 'loseTime' &&
+              val.activityId !== 'amountEffectiveWorkingHours'
+          );
+          const activityWorkTImePlanLength = activityWorkTimePlan?.length || 0;
+
+          return (
+            <FormController
+              control="number-input-table-rhf"
+              name={`workTimePlanActivities.${
+                i + activityWorkTImePlanLength
+              }.weeklyWorkTimes.${index}.hour`}
+              readOnly={mutationType === 'read' ? true : false}
+              variant={mutationType === 'read' ? 'unstyled' : 'default'}
+              styles={{
+                input: {
+                  textAlign: 'center',
+                },
+              }}
+            />
+          );
+        },
+      };
+      return group;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [recordsWithoutLoseTime, mutationType]
+  );
+
+  const renderOtherColumnLosetimeWeek = (
+    workTimePlanActivityFields[0] as any
+  ).weeklyWorkTimes?.map(renderOtherColumnLosetimeCallback);
 
   return (
     <MantineDataTable
       tableProps={{
         highlightOnHover: true,
         withColumnBorders: true,
-        idAccessor: (record) => {
+        idAccessor: (record: any) => {
           return record.activityId || record.workTimePlanActivityId;
         },
         groups: [
@@ -90,10 +193,10 @@ const InputMonthlyTableWorkTimePlan = (props: IInputTableWorkTimePlanProps) => {
             ],
           },
           {
-            id: 'day',
-            title: t('commonTypography.day'),
+            id: 'week',
+            title: t('commonTypography.week'),
             style: { textAlign: 'center' },
-            columns: [],
+            columns: renderOtherColumnActivityWeek || [],
           },
           {
             id: 'amount',
@@ -140,7 +243,7 @@ const InputMonthlyTableWorkTimePlan = (props: IInputTableWorkTimePlanProps) => {
                     <FormController
                       control="input-sum-array"
                       name={`workTimePlanActivities.${index}.weeklyWorkTimes`}
-                      keyObj="hour"
+                      keyObj="value"
                       variant="unstyled"
                       disabled={false}
                       readOnly
@@ -184,7 +287,7 @@ const InputMonthlyTableWorkTimePlan = (props: IInputTableWorkTimePlanProps) => {
                 shadow: '0',
                 withBorder: false,
                 borderRadius: 0,
-                idAccessor: (record) => {
+                idAccessor: (record: any) => {
                   return record.activityId || record.workTimePlanActivityId;
                 },
                 groups: [
@@ -220,10 +323,10 @@ const InputMonthlyTableWorkTimePlan = (props: IInputTableWorkTimePlanProps) => {
                     ],
                   },
                   {
-                    id: 'day',
-                    title: t('commonTypography.day'),
+                    id: 'week',
+                    title: t('commonTypography.week'),
                     style: { textAlign: 'center' },
-                    columns: [],
+                    columns: renderOtherColumnLosetimeWeek || [],
                   },
                   {
                     id: 'amount',
@@ -237,8 +340,8 @@ const InputMonthlyTableWorkTimePlan = (props: IInputTableWorkTimePlanProps) => {
                           const activityWorkTimePlan =
                             recordsWithoutLoseTime.filter(
                               (val) =>
-                                val.id !== 'loseTime' &&
-                                val.id !== 'amountEffectiveWorkingHours'
+                                val.activityId !== 'loseTime' &&
+                                val.activityId !== 'amountEffectiveWorkingHours'
                             );
                           const activityWorkTimePlanLength =
                             activityWorkTimePlan?.length || 0;
@@ -248,7 +351,7 @@ const InputMonthlyTableWorkTimePlan = (props: IInputTableWorkTimePlanProps) => {
                               name={`workTimePlanActivities.${
                                 index + activityWorkTimePlanLength
                               }.weeklyWorkTimes`}
-                              keyObj="hour"
+                              keyObj="value"
                               variant="unstyled"
                               disabled={false}
                               readOnly
@@ -272,7 +375,6 @@ const InputMonthlyTableWorkTimePlan = (props: IInputTableWorkTimePlanProps) => {
                       {
                         accessor: 'unit',
                         title: '',
-
                         render: () => {
                           return <Text>Jam</Text>;
                         },
