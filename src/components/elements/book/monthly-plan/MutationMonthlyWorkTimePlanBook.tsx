@@ -307,8 +307,8 @@ const MutationMonthlyWorkTimePlanBook = ({
                   onClick: () =>
                     router.push(
                       mutationType === 'update'
-                        ? `/plan/weekly/${mutationType}/${id}`
-                        : `/plan/weekly`
+                        ? `/plan/monthly/${mutationType}/${id}`
+                        : `/plan/monthly`
                     ),
                 }
           }

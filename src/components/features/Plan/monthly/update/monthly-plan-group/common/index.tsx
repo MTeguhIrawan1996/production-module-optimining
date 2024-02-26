@@ -31,6 +31,10 @@ const UpdateMonthlyPlanGroupPage = () => {
           path: '/plan/monthly',
         },
         {
+          label: t('monthlyPlan.update'),
+          path: `/plan/monthly/update/${id}`,
+        },
+        {
           label: t(`commonTypography.${tabs}`),
           path: router.asPath,
         },
