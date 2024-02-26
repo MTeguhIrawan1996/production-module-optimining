@@ -1,6 +1,4 @@
 import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
-import { notifications } from '@mantine/notifications';
-import { IconCheck, IconX } from '@tabler/icons-react';
 import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -11,10 +9,8 @@ import {
   GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
-  ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteStockpileMonitoring } from '@/services/graphql/mutation/stockpile-monitoring/useDeleteStockpileMonitoring';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import { useReadAllLocationselect } from '@/services/graphql/query/global-select/useReadAllLocationSelect';
 import {
@@ -36,7 +32,6 @@ const StockpileBook = () => {
   const page = Number(router.query['page']) || 1;
   const url = `/input-data/quality-control-management/stockpile-monitoring?page=1`;
   const { t } = useTranslation('default');
-  const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [stockpileNameSerachTerm, setStockpileNameSerachTerm] =
     React.useState<string>('');
@@ -48,8 +43,6 @@ const StockpileBook = () => {
   const [year, setYear] = React.useState<number | null>(null);
   const [month, setMonth] = React.useState<number | null>(null);
   const [week, setWeek] = React.useState<number | null>(null);
-  const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
-    React.useState<boolean>(false);
 
   /* #   /**=========== Query =========== */
   const { elementsData } = useReadAllElementMaster({
@@ -71,7 +64,6 @@ const StockpileBook = () => {
     monitoringStockpilesData,
     monitoringStockpilesDataLoading,
     monitoringStockpilesDataMeta,
-    refetchMonitoringStockpiles,
   } = useReadAllStockpileMonitoring({
     variables: {
       limit: 10,
@@ -85,27 +77,6 @@ const StockpileBook = () => {
     },
   });
 
-  const [executeDelete, { loading }] = useDeleteStockpileMonitoring({
-    onCompleted: () => {
-      refetchMonitoringStockpiles();
-      setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push(url, undefined, { shallow: true });
-      notifications.show({
-        color: 'green',
-        title: 'Selamat',
-        message: t('stockpileMonitoring.successDeleteMessage'),
-        icon: <IconCheck />,
-      });
-    },
-    onError: ({ message }) => {
-      notifications.show({
-        color: 'red',
-        title: 'Gagal',
-        message: message,
-        icon: <IconX />,
-      });
-    },
-  });
   /* #endregion  /**======== Query =========== */
 
   const { uncombinedItem: locationItems } = useFilterItems({
@@ -160,14 +131,6 @@ const StockpileBook = () => {
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationItems, year, month, week]);
-
-  const handleDelete = async () => {
-    await executeDelete({
-      variables: {
-        id,
-      },
-    });
-  };
 
   const handleSetPage = (page: number) => {
     const urlSet = `/input-data/quality-control-management/stockpile-monitoring?page=${page}`;
@@ -294,18 +257,6 @@ const StockpileBook = () => {
                           }
                         : undefined
                     }
-                    actionDelete={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
-                        ? {
-                            onClick: (e) => {
-                              e.stopPropagation();
-                              setIsOpenDeleteConfirmation((prev) => !prev);
-                              setId(id);
-                            },
-                          }
-                        : undefined
-                    }
                   />
                 );
               },
@@ -346,27 +297,6 @@ const StockpileBook = () => {
       }}
     >
       {renderTable}
-      <ModalConfirmation
-        isOpenModalConfirmation={isOpenDeleteConfirmation}
-        actionModalConfirmation={() =>
-          setIsOpenDeleteConfirmation((prev) => !prev)
-        }
-        actionButton={{
-          label: t('commonTypography.yesDelete'),
-          color: 'red',
-          onClick: handleDelete,
-          loading: loading,
-        }}
-        backButton={{
-          label: 'Batal',
-        }}
-        modalType={{
-          type: 'default',
-          title: t('commonTypography.alertTitleConfirmDelete'),
-          description: t('commonTypography.alertDescConfirmDeleteMasterData'),
-        }}
-        withDivider
-      />
     </DashboardCard>
   );
 };

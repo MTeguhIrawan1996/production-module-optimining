@@ -131,6 +131,7 @@ import CreateMonthlyPlanGroupPage from '@/components/features/Plan/monthly/creat
 import ReadMonthlyPlanPage from '@/components/features/Plan/monthly/read/common';
 import ReadMonthlyPlanInformationPage from '@/components/features/Plan/monthly/read/monthly-plan-infromation/common';
 import UpdateMonthlyPlanPage from '@/components/features/Plan/monthly/update/common';
+import UpdateMonthlyPlanGroupPage from '@/components/features/Plan/monthly/update/monthly-plan-group/common';
 import UpdateMonthlyPlanInformationPage from '@/components/features/Plan/monthly/update/monthly-plan-information/common';
 import WeeklyPlanPage from '@/components/features/Plan/weekly/common';
 import CreateWeeklyPlanInformationPage from '@/components/features/Plan/weekly/create/common';
@@ -277,6 +278,7 @@ export {
   UpdateLocationMasterPage,
   UpdateLoseTimeActivityPage,
   UpdateMaterialMasterPage,
+  UpdateMonthlyPlanGroupPage,
   UpdateMonthlyPlanInformationPage,
   UpdateMonthlyPlanPage,
   UpdateRitageBargingPage,

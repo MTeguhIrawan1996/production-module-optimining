@@ -41,7 +41,7 @@ const InputSumArray: React.FC<IInputSumArrayProps> = ({
           const currentValue = acc + objValue;
           return currentValue;
         }
-        if (curr[`${keyObj}`] !== '') {
+        if (curr[`${keyObj}`] !== '' && typeof curr[`${keyObj}`] === 'string') {
           const sum = acc + 1;
           return sum;
         }

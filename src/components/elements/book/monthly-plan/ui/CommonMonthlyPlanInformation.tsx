@@ -19,9 +19,6 @@ const CommonMonthlyPlanInformation = () => {
     skip: !router.isReady,
   });
 
-  // const feb = getWeeksInMonth(2025, 12);
-  // console.log('FEB', feb);
-
   return (
     <DashboardCard p={0} isLoading={monthlyPlanDataLoading}>
       <Flex gap={22} direction="column" align="flex-end">
