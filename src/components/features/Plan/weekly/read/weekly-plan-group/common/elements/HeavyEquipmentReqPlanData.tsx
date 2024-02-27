@@ -172,7 +172,7 @@ const HeavyEquipmentReqPlanData = () => {
                   accessor: 'formsOfActivity',
                   title: t('commonTypography.formsOfActivity'),
                   width: 200,
-                  render: ({ activityForm }) => activityForm.name ?? '-',
+                  render: ({ activity }) => activity.name ?? '-',
                 },
                 {
                   accessor: 'heavyEquipmentClass',

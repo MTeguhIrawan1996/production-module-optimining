@@ -25,6 +25,13 @@ export const frontProductionMutationValidation: z.ZodType<IMutationFrontProducti
       domeId: zOptionalString.nullable(),
       x: zOptionalNumber,
       y: zOptionalNumber,
+      supportingHeavyEquipments: z
+        .object({
+          id: zOptionalString.nullable(),
+          activityPlanId: zRequiredSelectInput,
+          companyHeavyEquipmentId: zRequiredSelectInput,
+        })
+        .array(),
     })
     .superRefine((arg, ctx) => {
       if (arg.type === 'pit') {

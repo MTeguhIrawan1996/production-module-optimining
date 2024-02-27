@@ -36,7 +36,7 @@ export const READ_ONE_HEAVY_EQUIPMENT_REQ_PLAN = gql`
         desc
         heavyEquipmentRequirementPlanActivities {
           id
-          activityForm {
+          activity {
             id
             name
           }
@@ -63,7 +63,7 @@ export interface IWeeklyHeavyEquipmentRequirement {
 
 export interface IHeavyEquipmentRequirementPlanActivity {
   id: string | null;
-  activityForm: {
+  activity: {
     id: string;
     name: string;
   };

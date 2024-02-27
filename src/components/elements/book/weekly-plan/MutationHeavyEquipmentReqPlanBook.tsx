@@ -145,7 +145,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
                     });
                   return {
                     id: hObj.id,
-                    activityFormId: hObj.activityForm.id,
+                    activityId: hObj.activity.id,
                     classId: hObj.class.id,
                     weeklyHeavyEquipmentRequirements,
                   };
@@ -204,6 +204,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
         name: `heavyEquipmentRequirementPlans.${index}.desc`,
         label: 'desc',
         withAsterisk: false,
+        colSpan: 12,
         key: `${obj.heavyequipmentReqPlanId}.desc`,
       });
 

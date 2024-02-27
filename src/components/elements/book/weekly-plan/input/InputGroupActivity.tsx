@@ -139,7 +139,7 @@ const InputGroupActivity: React.FunctionComponent<IInputGroupActivityProps> = ({
             <Grid.Col span={6}>
               <FormController
                 control="select-activity-form-rhf"
-                name={`heavyEquipmentRequirementPlans.${heavyEquipmentRequirementPlanIndex}.activities.${activityIndex}.activityFormId`}
+                name={`heavyEquipmentRequirementPlans.${heavyEquipmentRequirementPlanIndex}.activities.${activityIndex}.activityId`}
                 label="formsOfActivity"
                 withAsterisk
                 clearable
