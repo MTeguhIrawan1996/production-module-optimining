@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllActivityForm } from '@/services/graphql/query/global-select/useReadAllActivityFormSelect';
+import { useReadAllActivityPlanMaster } from '@/services/graphql/query/activity-plan/useReadAllActivityPlanMaster';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
@@ -36,12 +36,17 @@ const SelectActivityFormRhf: React.FC<ISelectActivityFormRhfProps> = ({
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
 
-  const { activityFormData } = useReadAllActivityForm({
+  const { activityPlansData } = useReadAllActivityPlanMaster({
+    variables: {
+      limit: null,
+      orderDir: 'desc',
+      orderBy: 'createdAt',
+    },
     skip: skipQuery,
   });
 
   const { uncombinedItem } = useFilterItems({
-    data: activityFormData ?? [],
+    data: activityPlansData ?? [],
   });
 
   return (

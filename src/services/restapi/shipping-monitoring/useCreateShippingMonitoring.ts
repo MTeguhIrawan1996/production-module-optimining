@@ -18,6 +18,7 @@ export interface IMutationShippingMonitoringValues {
   vesselOpenTime: string;
   vesselCloseDate?: Date | null;
   vesselCloseTime: string;
+  tonByDraft: number | string;
   desc: string;
   photo: FileWithPath[] | null;
 }
@@ -25,6 +26,7 @@ export type IShippingMonitoringNameProps =
   keyof IMutationShippingMonitoringValues;
 export type IShippingMonitoringValueProps =
   | string
+  | number
   | FileWithPath[]
   | Date
   | null;

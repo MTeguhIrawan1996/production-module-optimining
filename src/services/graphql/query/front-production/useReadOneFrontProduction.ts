@@ -59,6 +59,17 @@ export const READ_ONE_FRONT_PRODUCTION = gql`
       }
       x
       y
+      supportingHeavyEquipments {
+        id
+        activityPlan {
+          id
+          name
+        }
+        companyHeavyEquipment {
+          id
+          hullNumber
+        }
+      }
       statusMessage
       status {
         id
@@ -102,6 +113,17 @@ interface IReadOneFrontProductionData extends IReadAllFrontProductionData {
   } | null;
   x: number | null;
   y: number | null;
+  supportingHeavyEquipments: {
+    id: string;
+    activityPlan: {
+      id: string | null;
+      name: string | null;
+    } | null;
+    companyHeavyEquipment: {
+      id: string | null;
+      hullNumber: string | null;
+    } | null;
+  }[];
   statusMessage: string | null;
   status: IStatus | null;
 }
@@ -214,16 +236,16 @@ export const useReadOneFrontProduction = ({
     },
     {
       group: 'coordinate',
-      withDivider: false,
+      withDivider: true,
       enableTitle: true,
       itemValue: [
         {
           name: 'coordinateX',
-          value: `${frontData?.frontData.x}`,
+          value: `${frontData?.frontData.x || '-'}`,
         },
         {
           name: 'coordinateY',
-          value: `${frontData?.frontData.y}`,
+          value: `${frontData?.frontData.y || '-'}`,
         },
       ],
     },

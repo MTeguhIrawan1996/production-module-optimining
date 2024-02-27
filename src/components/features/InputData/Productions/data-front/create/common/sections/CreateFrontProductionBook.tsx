@@ -3,7 +3,12 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import {
+  FieldArrayWithId,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
@@ -21,6 +26,7 @@ import {
   locationSelect,
   materialSelect,
   pitSelect,
+  selectActivityForm,
 } from '@/utils/constants/Field/global-field';
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { domeNameSelect } from '@/utils/constants/Field/stockpile-field';
@@ -52,10 +58,20 @@ const CreateFrontProductionBook = () => {
       x: '',
       y: '',
       shiftId: '',
+      supportingHeavyEquipments: [],
     },
     mode: 'onBlur',
   });
   const pitId = methods.watch('pitId');
+  const {
+    fields: supportingHeavyEquipmentFields,
+    remove: removeSupportingHeavyEquipment,
+    append: appendsupportingHeavyEquipment,
+  } = useFieldArray({
+    name: 'supportingHeavyEquipments',
+    control: methods.control,
+    keyName: 'supportingHeavyEquipmentId',
+  });
 
   React.useEffect(() => {
     methods.setValue('type', segment as string);
@@ -110,7 +126,54 @@ const CreateFrontProductionBook = () => {
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Field =========== */
+  const supportingHeavyequipmentGroupCallback = React.useCallback(
+    (
+      val: FieldArrayWithId<
+        IMutationFrontProductionValues,
+        'supportingHeavyEquipments',
+        'supportingHeavyEquipmentId'
+      >,
+      index: number
+    ) => {
+      const activityItem = selectActivityForm({
+        name: `supportingHeavyEquipments.${index}.activityPlanId`,
+        key: `supportingHeavyEquipments.${index}.activityPlanId.${val.supportingHeavyEquipmentId}`,
+        label: 'activity',
+        withAsterisk: true,
+      });
+      const heavyEquipmentCodeItem = heavyEquipmentSelect({
+        colSpan: 6,
+        skipSearchQuery: true,
+        limit: null,
+        name: `supportingHeavyEquipments.${index}.companyHeavyEquipmentId`,
+        key: `supportingHeavyEquipments.${index}.companyHeavyEquipmentId.${val.supportingHeavyEquipmentId}`,
+        label: 'heavyEquipmentCode',
+        withAsterisk: true,
+        deleteButtonField: {
+          onClick: () => {
+            removeSupportingHeavyEquipment(index);
+          },
+        },
+      });
+      return { activityItem, heavyEquipmentCodeItem };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [supportingHeavyEquipmentFields]
+  );
+
+  const supportingHeavyequipmentGroup = supportingHeavyEquipmentFields.map(
+    supportingHeavyequipmentGroupCallback
+  );
+
   const fieldRhf = React.useMemo(() => {
+    const supportingHeavyEquipmentController =
+      supportingHeavyequipmentGroup?.flatMap(
+        ({ activityItem, heavyEquipmentCodeItem }) => [
+          activityItem,
+          heavyEquipmentCodeItem,
+        ]
+      );
+
     const date = globalDate({
       name: 'date',
       label: 'date',
@@ -238,11 +301,28 @@ const CreateFrontProductionBook = () => {
         enableGroupLabel: true,
         formControllers: [coordinateX, coordinateY],
       },
+      {
+        group: t('commonTypography.supportingHeavyEquipment'),
+        enableGroupLabel: true,
+        formControllers: [...(supportingHeavyEquipmentController ?? [])],
+        actionGroup: {
+          addButton: {
+            label: t('commonTypography.createHeavyEquipment'),
+            onClick: () => {
+              appendsupportingHeavyEquipment({
+                id: null,
+                activityPlanId: '',
+                companyHeavyEquipmentId: '',
+              });
+            },
+          },
+        },
+      },
     ];
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [segment]);
+  }, [segment, supportingHeavyequipmentGroup]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
@@ -265,6 +345,7 @@ const CreateFrontProductionBook = () => {
         pitId: data.pitId === '' ? null : data.pitId,
         gridId: data.gridId === '' ? null : data.gridId,
         elevationId: data.elevationId === '' ? null : data.elevationId,
+        supportingHeavyEquipments: data.supportingHeavyEquipments,
       },
     });
   };
