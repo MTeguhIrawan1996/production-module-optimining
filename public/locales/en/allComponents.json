@@ -252,7 +252,8 @@
       "quietNumber": "Jumlah yang Tersedia",
       "mapName": "Nama Peta",
       "miningMap": "Peta Penambangan,",
-      "uploadFile": "Unggah File"
+      "uploadFile": "Unggah File",
+      "tonByDraft": "Ton Berdasarkan Draft"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",

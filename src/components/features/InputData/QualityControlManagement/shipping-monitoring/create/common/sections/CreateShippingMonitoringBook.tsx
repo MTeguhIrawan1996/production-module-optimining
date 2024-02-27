@@ -14,6 +14,7 @@ import {
 } from '@/services/restapi/shipping-monitoring/useCreateShippingMonitoring';
 import {
   globalDate,
+  globalNumberInput,
   globalSelectArriveBargeRhf,
   globalSelectFactoryRhf,
   globalText,
@@ -49,6 +50,7 @@ const CreateShippingMonitoringBook = () => {
       vesselCloseDate: undefined,
       vesselCloseTime: '',
       desc: '',
+      tonByDraft: '',
       photo: [],
     },
     mode: 'onBlur',
@@ -162,6 +164,12 @@ const CreateShippingMonitoringBook = () => {
       withAsterisk: false,
       disabled: !isVessel,
     });
+    const tonByDraftItem = globalNumberInput({
+      colSpan: 12,
+      name: 'tonByDraft',
+      label: 'tonByDraft',
+      withAsterisk: false,
+    });
     const desc = globalText({
       colSpan: 12,
       name: 'desc',
@@ -249,7 +257,7 @@ const CreateShippingMonitoringBook = () => {
       {
         group: t('commonTypography.desc'),
         enableGroupLabel: false,
-        formControllers: [desc],
+        formControllers: [tonByDraftItem, desc],
       },
       {
         group: t('commonTypography.photo'),
@@ -273,6 +281,7 @@ const CreateShippingMonitoringBook = () => {
       'vesselOpenDate',
       'vesselCloseDate',
     ];
+    const numberValue = ['tonByDraft'];
 
     const manipulateValue = values.map((val) => {
       if (dateValue.includes(val.name)) {
@@ -280,6 +289,12 @@ const CreateShippingMonitoringBook = () => {
         return {
           name: val.name,
           value: date,
+        };
+      }
+      if (numberValue.includes(val.name)) {
+        return {
+          name: val.name,
+          value: `${val.value}`,
         };
       }
       return {

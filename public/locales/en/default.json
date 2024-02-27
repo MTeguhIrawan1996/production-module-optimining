@@ -455,7 +455,9 @@
     "mapName": "Nama Peta",
     "miningMap": "Peta Penambangan",
     "month": "Bulan",
-    "monthly": "Bulanan"
+    "monthly": "Bulanan",
+    "supportingHeavyEquipment": "Alat Berat Pendukung",
+    "tonByDraft": "Ton Berdasarkan Draft"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -490,7 +492,8 @@
     "activityCategory": "$t(commonTypography.activityCategory)",
     "plan": "$t(commonTypography.plan)",
     "weekly": "$t(commonTypography.weekly)",
-    "monthly": "$t(commonTypography.monthly)"
+    "monthly": "$t(commonTypography.monthly)",
+    "map": "$t(commonTypography.map)"
   },
   "auth": {
     "button": {
@@ -1026,5 +1029,8 @@
     "successIsNotValidateMessage": "Status $t(monthlyPlan.title) Tidak Valid",
     "successIsDeterminedMessage": "$t(monthlyPlan.title) berhasil ditetapkan",
     "successIsRejectMessage": "$t(monthlyPlan.title) berhasil $t(commonTypography.reject)"
+  },
+  "mapProduction": {
+    "title": "$t(commonTypography.map)"
   }
 }

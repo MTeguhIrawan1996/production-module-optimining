@@ -133,6 +133,11 @@ export const linksDashboard: IMenuItem[] = [
             href: '/input-data/production/data-front',
             access: ['create-front-data'],
           },
+          {
+            label: 'map',
+            href: '/input-data/production/map',
+            access: ['all'],
+          },
         ],
       },
       {

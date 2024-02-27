@@ -24,7 +24,7 @@ export interface IMutationWeeklyHeavyEquipmentRequirement {
 
 export interface IMutationHeavyEquipmentReqPlanActivity {
   id?: string | null;
-  activityFormId: string | null;
+  activityId: string | null;
   classId: string | null;
   weeklyHeavyEquipmentRequirements: IMutationWeeklyHeavyEquipmentRequirement[];
 }

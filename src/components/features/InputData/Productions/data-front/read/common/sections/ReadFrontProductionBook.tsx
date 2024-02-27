@@ -12,6 +12,7 @@ import {
   DashboardCard,
   GlobalAlert,
   KeyValueList,
+  MantineDataTable,
 } from '@/components/elements';
 import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
@@ -307,6 +308,34 @@ const ReadFrontProductionBook = () => {
               </React.Fragment>
             );
           })}
+          <Stack spacing="sm">
+            <Text fz={24} fw={600} color="brand">
+              {t('commonTypography.supportingHeavyEquipment')}
+            </Text>
+            <MantineDataTable
+              tableProps={{
+                records: frontData?.supportingHeavyEquipments ?? [],
+                columns: [
+                  {
+                    accessor: 'activity',
+                    title: t('commonTypography.activity'),
+                    noWrap: false,
+                    render: ({ activityPlan }) => activityPlan?.name || '-',
+                  },
+                  {
+                    accessor: 'heavyEquipmentCode',
+                    title: t('commonTypography.heavyEquipmentCode'),
+                    render: ({ companyHeavyEquipment }) =>
+                      companyHeavyEquipment?.hullNumber || '-',
+                  },
+                ],
+                shadow: 'none',
+              }}
+              emptyStateProps={{
+                title: t('commonTypography.dataNotfound'),
+              }}
+            />
+          </Stack>
         </Tabs.Panel>
       </Tabs>
     </DashboardCard>

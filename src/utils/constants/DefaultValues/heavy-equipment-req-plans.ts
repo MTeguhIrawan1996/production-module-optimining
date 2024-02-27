@@ -45,7 +45,7 @@ export const weeklyHeavyEquipmentRequirement: IMutationWeeklyHeavyEquipmentRequi
 export const activities: IMutationHeavyEquipmentReqPlanActivity[] = [
   {
     id: null,
-    activityFormId: '',
+    activityId: '',
     classId: '',
     weeklyHeavyEquipmentRequirements: weeklyHeavyEquipmentRequirement,
   },

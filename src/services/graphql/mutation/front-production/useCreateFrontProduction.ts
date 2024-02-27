@@ -14,6 +14,7 @@ export const CREATE_FRONT_PRODUCTION = gql`
     $x: Float
     $y: Float
     $shiftId: String
+    $supportingHeavyEquipments: [CreateSupportingHeavyEquipmentDto!]
   ) {
     createFrontData(
       createFrontDataInput: {
@@ -29,12 +30,19 @@ export const CREATE_FRONT_PRODUCTION = gql`
         x: $x
         y: $y
         shiftId: $shiftId
+        supportingHeavyEquipments: $supportingHeavyEquipments
       }
     ) {
       id
     }
   }
 `;
+
+export interface ISupportingHeavyEquipment {
+  id: string | null;
+  activityPlanId: string | null;
+  companyHeavyEquipmentId: string | null;
+}
 
 export interface IMutationFrontProductionValues {
   date?: Date | string | null;
@@ -50,6 +58,7 @@ export interface IMutationFrontProductionValues {
   shiftId: string | null;
   x: number | null | '';
   y: number | null | '';
+  supportingHeavyEquipments: ISupportingHeavyEquipment[];
 }
 
 type ICreateFrontProductionRequest = Omit<

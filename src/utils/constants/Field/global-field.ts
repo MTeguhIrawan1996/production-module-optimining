@@ -914,7 +914,7 @@ export const weatherSelect = ({
   return field;
 };
 export const selectActivityForm = ({
-  name = 'activityFormId',
+  name = 'activityId',
   label = 'formsOfActivity',
   clearable = true,
   colSpan = 6,
