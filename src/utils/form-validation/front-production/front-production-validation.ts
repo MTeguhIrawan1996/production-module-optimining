@@ -13,6 +13,7 @@ export const frontProductionMutationValidation: z.ZodType<IMutationFrontProducti
   z
     .object({
       date: zDateValidation,
+      shiftId: zOptionalString.nullable(),
       companyHeavyEquipmentId: zRequiredSelectInput,
       frontId: zRequiredSelectInput,
       materialId: zRequiredSelectInput,

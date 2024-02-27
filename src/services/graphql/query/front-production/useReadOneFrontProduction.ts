@@ -13,6 +13,10 @@ export const READ_ONE_FRONT_PRODUCTION = gql`
     frontData(id: $id) {
       id
       date
+      shift {
+        id
+        name
+      }
       material {
         id
         name
@@ -80,6 +84,10 @@ interface IReadOneFrontProductionData extends IReadAllFrontProductionData {
       name: string;
     };
   } | null;
+  shift: {
+    id: string;
+    name: string;
+  } | null;
   dome: {
     id: string;
     name: string;
@@ -139,6 +147,10 @@ export const useReadOneFrontProduction = ({
     {
       name: 'front',
       value: frontData?.frontData.front?.name,
+    },
+    {
+      name: 'shift',
+      value: frontData?.frontData.shift?.name,
     },
     {
       name: 'heavyEquipmentCode',

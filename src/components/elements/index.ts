@@ -1,4 +1,5 @@
 import CommonMonthlyPlanInformationBook from '@/components/elements/book/monthly-plan/CommonMonthlyPlanInformationBook';
+import MutationMonthlyWorkTimePlanBook from '@/components/elements/book/monthly-plan/MutationMonthlyWorkTimePlanBook';
 import CommonWeeklyPlanInformationBook from '@/components/elements/book/weekly-plan/CommonWeeklyPlanInformationBook';
 import MutationBargingTargetPlanBook from '@/components/elements/book/weekly-plan/MutationBargingTargetPlanBook';
 import MutationHeavyEquipmentReqPlanBook from '@/components/elements/book/weekly-plan/MutationHeavyEquipmentReqPlanBook';
@@ -182,6 +183,7 @@ export {
   MutationBargingTargetPlanBook,
   MutationHeavyEquipmentReqPlanBook,
   MutationMiningMapPlanBook,
+  MutationMonthlyWorkTimePlanBook,
   MutationProductionTargetPlan,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,

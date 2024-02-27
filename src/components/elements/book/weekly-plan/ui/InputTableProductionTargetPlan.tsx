@@ -65,16 +65,19 @@ const InputTableProductionPlan = ({
               if (materialId === 'sr') {
                 return (
                   <InputSRCalculation
-                    calculationSelected="rate"
                     indexOfValue={i}
+                    calculationSelected="rate"
                     name={`productionTargetPlans.${
                       productionTargetPlanFields.length - 1
                     }.weeklyProductionTargets.${i}.rate`}
                     precision={2}
-                    readOnly
                     variant="unstyled"
+                    readOnly
                     mutationType={mutationType}
                     styles={{
+                      root: {
+                        display: 'none',
+                      },
                       input: {
                         textAlign: 'center',
                       },

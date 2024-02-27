@@ -13,6 +13,7 @@ export const CREATE_FRONT_PRODUCTION = gql`
     $domeId: String
     $x: Float
     $y: Float
+    $shiftId: String
   ) {
     createFrontData(
       createFrontDataInput: {
@@ -27,6 +28,7 @@ export const CREATE_FRONT_PRODUCTION = gql`
         domeId: $domeId
         x: $x
         y: $y
+        shiftId: $shiftId
       }
     ) {
       id
@@ -45,6 +47,7 @@ export interface IMutationFrontProductionValues {
   gridId: string | null;
   elevationId: string | null;
   domeId: string | null;
+  shiftId: string | null;
   x: number | null | '';
   y: number | null | '';
 }
