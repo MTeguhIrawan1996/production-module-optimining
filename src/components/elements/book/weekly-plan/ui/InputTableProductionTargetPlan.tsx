@@ -64,14 +64,20 @@ const InputTableProductionPlan = ({
             render: ({ materialId }, index) => {
               if (materialId === 'sr') {
                 return (
-                  <FormController
-                    control="text-input"
+                  <InputSRCalculation
+                    indexOfValue={i}
+                    calculationSelected="rate"
                     name={`productionTargetPlans.${
                       productionTargetPlanFields.length - 1
                     }.weeklyProductionTargets.${i}.rate`}
-                    readOnly
+                    precision={2}
                     variant="unstyled"
+                    readOnly
+                    mutationType={mutationType}
                     styles={{
+                      root: {
+                        display: 'none',
+                      },
                       input: {
                         textAlign: 'center',
                       },
