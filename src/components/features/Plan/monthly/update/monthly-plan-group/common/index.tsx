@@ -7,6 +7,7 @@ import { shallow } from 'zustand/shallow';
 import {
   GlobalTabs,
   InnerWrapper,
+  MutationMonthlyUnitCapacityPlanBook,
   MutationMonthlyWorkTimePlanBook,
   RootWrapper,
 } from '@/components/elements';
@@ -75,13 +76,12 @@ const UpdateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.unitCapacityPlan'),
               value: 'unitCapacityPlan',
               component: (
-                // <MutationUnitCapacityPlanBook
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successUpdateUnitCapacityPlanMessage'
-                //   )}
-                //   mutationType="update"
-                // />
-                <div className="">Unit Cpacity Plan</div>
+                <MutationMonthlyUnitCapacityPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successUpdateUnitCapacityPlanMessage'
+                  )}
+                  mutationType="update"
+                />
               ),
               isShowItem: true,
             },
