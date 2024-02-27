@@ -37,6 +37,7 @@ export const READ_ONE_SHIPPING_MONITORING = gql`
         fileName
       }
       statusMessage
+      tonByDraft
       desc
       status {
         id
@@ -55,6 +56,7 @@ interface IReadOneShippingMonitoringData
     hullNumber: string;
   } | null;
   statusMessage: string | null;
+  tonByDraft: number | null;
   photo: Omit<IFile, 'mime' | 'path'> | null;
   desc: string | null;
 }
@@ -111,6 +113,10 @@ export const useReadOneShippingMonitoring = ({
           value:
             monitoringBarging?.monitoringBarging.tugboatHeavyEquipment
               ?.hullNumber,
+        },
+        {
+          name: 'tonByDraft',
+          value: `${monitoringBarging?.monitoringBarging.tonByDraft ?? '-'}`,
         },
       ],
     },

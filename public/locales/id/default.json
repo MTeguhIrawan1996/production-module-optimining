@@ -456,7 +456,8 @@
     "miningMap": "Peta Penambangan",
     "month": "Bulan",
     "monthly": "Bulanan",
-    "supportingHeavyEquipment": "Alat Berat Pendukung"
+    "supportingHeavyEquipment": "Alat Berat Pendukung",
+    "tonByDraft": "Ton Berdasarkan Draft"
   },
   "sideBar": {
     "dashboard": "Dashboard",
