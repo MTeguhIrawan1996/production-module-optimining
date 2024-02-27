@@ -42,6 +42,7 @@ import CreateHeavyEquipmentProductionPage from '@/components/features/InputData/
 import ReadHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/read/common';
 import UpdateHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/update/common';
 import UploadHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/upload/common';
+import MapProductionPage from '@/components/features/InputData/Productions/map/common';
 import WeatherProductionPage from '@/components/features/InputData/Productions/weather/common';
 import CreateWeatherProductionPage from '@/components/features/InputData/Productions/weather/create/common';
 import ReadWeatherProductionPage from '@/components/features/InputData/Productions/weather/read/common';
@@ -209,6 +210,7 @@ export {
   HeavyEquipmentProductionPage,
   HumanResourcesPage,
   LocationPage,
+  MapProductionPage,
   MaterialMasterPage,
   MonthlyPlanPage,
   ProfilePage,
