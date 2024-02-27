@@ -23,7 +23,7 @@ export const heavyEquipmentReqMutationValidation: z.ZodType<IMutationHeavyEquipm
         activities: z
           .object({
             id: zOptionalString.nullable(),
-            activityFormId: zRequiredSelectInput,
+            activityId: zRequiredSelectInput,
             classId: zRequiredString,
             weeklyHeavyEquipmentRequirements: z
               .object({
