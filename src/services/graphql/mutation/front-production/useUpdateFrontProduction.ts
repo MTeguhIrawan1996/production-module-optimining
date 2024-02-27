@@ -1,6 +1,9 @@
 import { ApolloError, gql, useMutation } from '@apollo/client';
 
-import { IMutationFrontProductionValues } from '@/services/graphql/mutation/front-production/useCreateFrontProduction';
+import {
+  IMutationFrontProductionValues,
+  ISupportingHeavyEquipment,
+} from '@/services/graphql/mutation/front-production/useCreateFrontProduction';
 
 export const UPDATE_FRONT_PRODUCTION = gql`
   mutation UpdateFrontProduction(
@@ -17,6 +20,7 @@ export const UPDATE_FRONT_PRODUCTION = gql`
     $x: Float
     $y: Float
     $shiftId: String
+    $supportingHeavyEquipments: [CreateSupportingHeavyEquipmentDto!]
   ) {
     updateFrontData(
       updateFrontDataInput: {
@@ -33,6 +37,7 @@ export const UPDATE_FRONT_PRODUCTION = gql`
         x: $x
         y: $y
         shiftId: $shiftId
+        supportingHeavyEquipments: $supportingHeavyEquipments
       }
     ) {
       id
@@ -48,7 +53,12 @@ export type IFrontProductionNameProps = keyof Omit<
   IMutationFrontProductionValues,
   'block'
 >;
-export type IFrontProductionValueProps = string | Date | number | null;
+export type IFrontProductionValueProps =
+  | ISupportingHeavyEquipment[]
+  | string
+  | Date
+  | number
+  | null;
 
 interface IUpdateFrontProductionResponse {
   updateFrontData: {
