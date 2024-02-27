@@ -4,6 +4,7 @@ import { IMutationShippingMonitoringValues } from '@/services/restapi/shipping-m
 import {
   zDateOptionalValidation,
   zImageArrayOptional,
+  zOptionalNumber,
   zOptionalString,
   zRequiredSelectInput,
 } from '@/utils/form-validation/global';
@@ -23,5 +24,6 @@ export const shippingMonitoringMutationValidation: z.ZodType<IMutationShippingMo
     vesselCloseDate: zDateOptionalValidation,
     vesselCloseTime: zOptionalString,
     desc: zOptionalString,
+    tonByDraft: zOptionalNumber,
     photo: zImageArrayOptional,
   });

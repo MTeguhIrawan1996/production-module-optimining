@@ -17,6 +17,7 @@ import {
 import { useUpdateShippingMonitoring } from '@/services/restapi/shipping-monitoring/useUpdateShippingMonitoring';
 import {
   globalDate,
+  globalNumberInput,
   globalSelectArriveBargeRhf,
   globalSelectFactoryRhf,
   globalText,
@@ -102,6 +103,7 @@ const UpdateShippingMonitoringBook = () => {
             value: monitoringBarging.factory?.category?.id ?? '',
           },
           { key: 'factoryId', value: monitoringBarging.factory?.id ?? '' },
+          { key: 'tonByDraft', value: monitoringBarging.tonByDraft ?? '' },
           { key: 'desc', value: monitoringBarging.desc ?? '' },
         ];
 
@@ -239,6 +241,12 @@ const UpdateShippingMonitoringBook = () => {
       withAsterisk: false,
       disabled: !isVessel,
     });
+    const tonByDraftItem = globalNumberInput({
+      colSpan: 12,
+      name: 'tonByDraft',
+      label: 'tonByDraft',
+      withAsterisk: false,
+    });
     const desc = globalText({
       colSpan: 12,
       name: 'desc',
@@ -332,7 +340,7 @@ const UpdateShippingMonitoringBook = () => {
       {
         group: t('commonTypography.desc'),
         enableGroupLabel: false,
-        formControllers: [desc],
+        formControllers: [tonByDraftItem, desc],
       },
       {
         group: t('commonTypography.photo'),
@@ -356,6 +364,7 @@ const UpdateShippingMonitoringBook = () => {
       'vesselOpenDate',
       'vesselCloseDate',
     ];
+    const numberValue = ['tonByDraft'];
 
     const manipulateValue = values.map((val) => {
       if (dateValue.includes(val.name)) {
@@ -363,6 +372,12 @@ const UpdateShippingMonitoringBook = () => {
         return {
           name: val.name,
           value: date,
+        };
+      }
+      if (numberValue.includes(val.name)) {
+        return {
+          name: val.name,
+          value: `${val.value}`,
         };
       }
       return {
