@@ -7,6 +7,11 @@ import { shallow } from 'zustand/shallow';
 import {
   GlobalTabs,
   InnerWrapper,
+  MutationMonthlyHeavyEquipmentAvailabilityPlanBook,
+  MutationMonthlyHeavyEquipmentReqPlanBook,
+  MutationMonthlyMiningMapPlanBook,
+  MutationMonthlyProductionTargetPlanBook,
+  MutationMonthlyUnitCapacityPlanBook,
   MutationMonthlyWorkTimePlanBook,
   RootWrapper,
 } from '@/components/elements';
@@ -71,13 +76,12 @@ const CreateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.unitCapacityPlan'),
               value: 'unitCapacityPlan',
               component: (
-                // <MutationUnitCapacityPlanBook
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successCreateUnitCapacityPlanMessage'
-                //   )}
-                //   mutationType="create"
-                // />
-                <div className="">Unit Cpacity Plan</div>
+                <MutationMonthlyUnitCapacityPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successCreateUnitCapacityPlanMessage'
+                  )}
+                  mutationType="create"
+                />
               ),
               isShowItem: true,
             },
@@ -85,13 +89,12 @@ const CreateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.heavyEquipmentReqPlan'),
               value: 'heavyEquipmentReqPlan',
               component: (
-                // <MutationHeavyEquipmentReqPlanBook
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successCreateHeavyEquipmentReqPlanMessage'
-                //   )}
-                //   mutationType="create"
-                // />
-                <div className="">HeavyEquipment Req Plan</div>
+                <MutationMonthlyHeavyEquipmentReqPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successCreateHeavyEquipmentReqPlanMessage'
+                  )}
+                  mutationType="create"
+                />
               ),
               isShowItem: true,
             },
@@ -99,13 +102,12 @@ const CreateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.heavyEquipmentAvailabilityPlan'),
               value: 'heavyEquipmentAvailabilityPlan',
               component: (
-                // <MutationHeavyEquipmentAvailabilityPlanBook
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successCreateHeavyEquipmentAvailabilityPlanMessage'
-                //   )}
-                //   mutationType="create"
-                // />
-                <div className="">Heavy Equipment Availability plan</div>
+                <MutationMonthlyHeavyEquipmentAvailabilityPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successCreateHeavyEquipmentAvailabilityPlanMessage'
+                  )}
+                  mutationType="create"
+                />
               ),
               isShowItem: true,
             },
@@ -113,13 +115,12 @@ const CreateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.productionTargetPlan'),
               value: 'productionTargetPlan',
               component: (
-                // <MutationProductionTargetPlan
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successCreateProductionTargetPlanMessage'
-                //   )}
-                //   mutationType="create"
-                // />
-                <div className="">ProductionTargetPlan</div>
+                <MutationMonthlyProductionTargetPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successCreateProductionTargetPlanMessage'
+                  )}
+                  mutationType="create"
+                />
               ),
               isShowItem: true,
             },
@@ -127,13 +128,12 @@ const CreateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.miningMapPlan'),
               value: 'miningMapPlan',
               component: (
-                // <MutationMiningMapPlanBook
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successCreateMiningMapPlanMessage'
-                //   )}
-                //   mutationType="create"
-                // />
-                <div className="">mining map plan</div>
+                <MutationMonthlyMiningMapPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successCreateMiningMapPlanMessage'
+                  )}
+                  mutationType="create"
+                />
               ),
               isShowItem: true,
             },
