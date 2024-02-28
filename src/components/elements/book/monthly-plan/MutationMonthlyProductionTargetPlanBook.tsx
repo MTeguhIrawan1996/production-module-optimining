@@ -8,158 +8,66 @@ import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import CommonMonthlyPlanInformation from '@/components/elements/book/monthly-plan/ui/CommonMonthlyPlanInformation';
-import InputMonthlyTableWorkTimePlan from '@/components/elements/book/monthly-plan/ui/InputMonthlyTableWorkTimePlan';
+import InputMonthlyTableProductionTargetPlan from '@/components/elements/book/monthly-plan/ui/InputMonthlyTableProductionTargetPlan';
 import DashboardCard from '@/components/elements/card/DashboardCard';
 import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
 
 import {
-  IWeeklyProductionTargetPlanValues,
-  useCreateWeeklyProductionTargetPlan,
-} from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyProductionTargetPlan';
-import { useReadAllActivityWorkTimePlan } from '@/services/graphql/query/plan/weekly/work-time-plan/useReadAllActivityWorkTimePlan';
-import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
+  IMonthlyProductionTarget,
+  IMonthlyProductionTargetPlanData,
+  IMonthlyProductionTargetPlanValues,
+} from '@/services/graphql/mutation/plan/monthly/useCreateMonthlyProductionTargetPlan';
+import { useCreateWeeklyProductionTargetPlan } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyProductionTargetPlan';
+import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
+import { useReadOneProductionTargetPlan } from '@/services/graphql/query/plan/weekly/production-target-plan/useReadOneProductionTargetPlan';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { useStoreWeeklyInMonthly } from '@/utils/store/useWeekInMonthlyStore';
 
 import { ControllerGroup } from '@/types/global';
 
-interface IMutationMonthlyWorkTimePlanBook {
+interface IMutationMonthlyProductionTargetPlanBook {
   mutationType?: 'create' | 'update' | 'read';
   mutationSuccessMassage?: string;
 }
 
-const MutationMonthlyWorkTimePlanBook = ({
+const MutationMonthlyProductionTargetPlanBook = ({
   mutationType,
   mutationSuccessMassage,
-}: IMutationMonthlyWorkTimePlanBook) => {
+}: IMutationMonthlyProductionTargetPlanBook) => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
   const tabs = router.query.tabs as string;
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
-  const [skipWorkingHourPlansData, setSkipWorkingHourPlansData] =
-    React.useState<boolean>(false);
-  const [skipActivityWorkTimePlan, setSkipActivityWorkTimePlan] =
+  const [skipMaterialQuery, setSkipMaterialQuery] =
     React.useState<boolean>(false);
   const [weeklyInMonthly] = useStoreWeeklyInMonthly(
     (state) => [state.weeklyInMonthly],
     shallow
   );
 
-  const methods = useForm<any>({
+  const methods = useForm<IMonthlyProductionTargetPlanValues>({
     // resolver: zodResolver(weeklyProductionTargetPlanMutationValidation),
     defaultValues: {
-      totalLoseTimeWeek: '',
-      totalEffectiveWorkHourWeek: '',
-      workTimePlanActivities: [
+      productionTargetPlans: [
         {
           id: null,
-          isLoseTime: false,
-          activityId: 'loseTime',
-          loseTimeId: null,
-          name: t('commonTypography.loseTime'),
-          weeklyWorkTimes: [],
-        },
-        {
-          id: null,
-          isLoseTime: false,
-          activityId: 'amountEffectiveWorkingHours',
-          loseTimeId: null,
-          name: t('commonTypography.amountEffectiveWorkingHours'),
-          weeklyWorkTimes: [],
+          materialId: 'sr',
+          materialName: 'SR',
+          isPerent: true,
+          index: null,
+          weeklyProductionTargets: [],
         },
       ],
     },
     mode: 'onBlur',
   });
 
-  const {
-    fields: workTimePlanActivityFields,
-    // replace: workTimePlanActivityReplace,
-  } = useFieldArray({
-    name: 'workTimePlanActivities',
+  const { fields: productionTargetPlanFields } = useFieldArray({
+    name: 'productionTargetPlans',
     control: methods.control,
-    keyName: 'workTimePlanActivityId',
-  });
-
-  useReadAllWHPsMaster({
-    variables: {
-      limit: null,
-    },
-    skip: tabs !== 'workTimePlan' || skipWorkingHourPlansData,
-    onCompleted: ({ workingHourPlans }) => {
-      const newWeekInMonth = weeklyInMonthly.map((val) => ({
-        id: null,
-        week: val,
-        value: '',
-      }));
-
-      const workTimePlanActivities = workingHourPlans.data.map((obj) => {
-        const value = {
-          id: null,
-          isLoseTime: true,
-          activityId: null,
-          loseTimeId: obj.id,
-          name: obj.activityName,
-          weeklyWorkTimes: newWeekInMonth,
-        };
-        return value;
-      });
-      const newWrokTimeActivityFields = workTimePlanActivityFields.map(
-        (wObj) => {
-          return {
-            ...wObj,
-            weeklyWorkTimes: newWeekInMonth,
-          };
-        }
-      );
-      const defaultValue = [
-        ...workTimePlanActivities,
-        ...newWrokTimeActivityFields,
-      ];
-      methods.setValue('workTimePlanActivities', defaultValue);
-      setSkipWorkingHourPlansData(true);
-    },
-  });
-
-  useReadAllActivityWorkTimePlan({
-    skip:
-      tabs !== 'workTimePlan' ||
-      !skipWorkingHourPlansData ||
-      skipActivityWorkTimePlan,
-    onCompleted: ({ activities }) => {
-      const newWeekInMonth = weeklyInMonthly.map((val) => ({
-        id: null,
-        week: val,
-        value: '',
-      }));
-      const workTimePlanActivities = activities.map((obj) => {
-        const value = {
-          id: null,
-          isLoseTime: false,
-          activityId: obj.id,
-          loseTimeId: null,
-          name: obj.name,
-          weeklyWorkTimes: newWeekInMonth,
-        };
-        return value;
-      });
-      const newWrokTimeActivityFields = workTimePlanActivityFields.map(
-        (wObj) => {
-          return {
-            ...wObj,
-            weeklyWorkTimes: newWeekInMonth,
-          };
-        }
-      );
-      const defaultValue = [
-        ...workTimePlanActivities,
-        ...newWrokTimeActivityFields,
-      ];
-      methods.setValue('workTimePlanActivities', defaultValue);
-      setSkipActivityWorkTimePlan(true);
-    },
+    keyName: 'productionTargetPlanId',
   });
 
   // eslint-disable-next-line unused-imports/no-unused-vars
@@ -181,7 +89,7 @@ const MutationMonthlyWorkTimePlanBook = ({
     onError: (error) => {
       if (error.graphQLErrors) {
         const errorArry =
-          errorBadRequestField<IWeeklyProductionTargetPlanValues>(error);
+          errorBadRequestField<IMonthlyProductionTargetPlanValues>(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
             methods.setError(name, { type, message });
@@ -198,6 +106,130 @@ const MutationMonthlyWorkTimePlanBook = ({
     },
   });
 
+  const { materialsDataLoading } = useReadAllMaterialsMaster({
+    variables: {
+      limit: null,
+      orderDir: 'asc',
+      orderBy: 'createdAt',
+      parentId: null,
+      isHaveParent: false,
+      includeIds: null,
+    },
+    skip:
+      weeklyInMonthly.length === 0 ||
+      skipMaterialQuery ||
+      tabs !== 'productionTargetPlan',
+    onCompleted: ({ materials }) => {
+      const newWeekInMonth: IMonthlyProductionTarget[] = weeklyInMonthly.map(
+        (val) => ({
+          id: null,
+          week: val,
+          rate: '',
+          ton: '',
+        })
+      );
+      const oreMaterial = materials.data.find(
+        (v) => v.id === `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`
+      );
+      const materialValueLength = materials.data?.length || 0;
+
+      const newPerentMaterial: IMonthlyProductionTargetPlanData[] =
+        materials.data.map((Obj, i) => {
+          return {
+            id: null,
+            materialId: Obj.id,
+            materialName: Obj.name,
+            isPerent: true,
+            index: i,
+            weeklyProductionTargets: newWeekInMonth,
+          };
+        });
+
+      const newSubMaterialOre: IMonthlyProductionTargetPlanData[] | undefined =
+        oreMaterial?.subMaterials.map((sObj, i) => {
+          return {
+            id: null,
+            materialId: sObj.id,
+            materialName: sObj.name,
+            isPerent: false,
+            index: materialValueLength + i,
+            weeklyProductionTargets: newWeekInMonth,
+          };
+        });
+
+      const newProductionTargetPlanFields = productionTargetPlanFields.map(
+        (wObj) => {
+          return {
+            ...wObj,
+            weeklyProductionTargets: newWeekInMonth,
+          };
+        }
+      );
+
+      methods.setValue('productionTargetPlans', [
+        ...newPerentMaterial,
+        ...(newSubMaterialOre ?? []),
+        ...newProductionTargetPlanFields,
+      ]);
+      setSkipMaterialQuery(true);
+    },
+  });
+
+  useReadOneProductionTargetPlan({
+    variables: {
+      weeklyPlanId: id,
+    },
+    skip:
+      !router.isReady || !skipMaterialQuery || tabs !== 'productionTargetPlan',
+    // onCompleted: ({ weeklyProductionTargetPlans }) => {
+    //   if (
+    //     weeklyProductionTargetPlans.data &&
+    //     weeklyProductionTargetPlans.data.length > 0
+    //   ) {
+    //     weeklyProductionTargetPlans.data.forEach((val) => {
+    //       const newWeeklyProductionTarget: IWeeklyProductionTarget[] =
+    //         val.weeklyProductionTargets.map((wObj) => {
+    //           return {
+    //             id: wObj.id || null,
+    //             day: wObj.day,
+    //             rate: wObj.rate || '',
+    //             ton: wObj.ton || '',
+    //           };
+    //         });
+    //       const productionTargetPlanIndex =
+    //         productionTargetPlanFields.findIndex(
+    //           (item) => item.materialId === val.material.id
+    //         );
+    //       methods.setValue(
+    //         `productionTargetPlans.${productionTargetPlanIndex}.id`,
+    //         val.id
+    //       );
+    //       methods.setValue(
+    //         `productionTargetPlans.${productionTargetPlanIndex}.weeklyProductionTargets`,
+    //         newWeeklyProductionTarget
+    //       );
+    //     });
+    //   }
+    //   if (mutationType === 'read') {
+    //     const newSR: IWeeklyProductionTarget[] =
+    //       weeklyProductionTargetPlans.additional.strippingRatio.map((sObj) => {
+    //         return {
+    //           id: null,
+    //           day: sObj.day,
+    //           rate: 0,
+    //           ton: sObj.ton || '',
+    //         };
+    //       });
+    //     methods.setValue(
+    //       `productionTargetPlans.${
+    //         productionTargetPlanFields.length - 1
+    //       }.weeklyProductionTargets`,
+    //       newSR
+    //     );
+    //   }
+    // },
+  });
+
   const fieldRhf = React.useMemo(() => {
     const field: ControllerGroup[] = [
       {
@@ -211,7 +243,9 @@ const MutationMonthlyWorkTimePlanBook = ({
         renderItem: () => {
           return (
             <Grid.Col span={12}>
-              <InputMonthlyTableWorkTimePlan />
+              <InputMonthlyTableProductionTargetPlan
+                mutationType={mutationType}
+              />
             </Grid.Col>
           );
         },
@@ -222,8 +256,9 @@ const MutationMonthlyWorkTimePlanBook = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabs, mutationType]);
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const handleSubmitForm: SubmitHandler<any> = async (data) => {
+  const handleSubmitForm: SubmitHandler<
+    IMonthlyProductionTargetPlanValues
+  > = async () => {
     // const newProductionTargetPlans: Omit<
     //   IWeeklyProductionTargetPlanData,
     //   'materialName' | 'isPerent'
@@ -258,7 +293,7 @@ const MutationMonthlyWorkTimePlanBook = ({
   };
 
   return (
-    <DashboardCard p={0}>
+    <DashboardCard p={0} isLoading={materialsDataLoading}>
       <Flex gap={32} direction="column" p={mutationType === 'read' ? 0 : 22}>
         {mutationType === 'read' ? undefined : <CommonMonthlyPlanInformation />}
         <GlobalFormGroup
@@ -293,8 +328,8 @@ const MutationMonthlyWorkTimePlanBook = ({
                   onClick: () =>
                     router.push(
                       mutationType === 'update'
-                        ? `/plan/monthly/${mutationType}/${id}`
-                        : `/plan/monthly`
+                        ? `/plan/weekly/${mutationType}/${id}`
+                        : `/plan/weekly`
                     ),
                 }
           }
@@ -323,4 +358,4 @@ const MutationMonthlyWorkTimePlanBook = ({
   );
 };
 
-export default MutationMonthlyWorkTimePlanBook;
+export default MutationMonthlyProductionTargetPlanBook;

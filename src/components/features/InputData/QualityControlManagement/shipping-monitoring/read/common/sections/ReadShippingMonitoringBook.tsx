@@ -20,7 +20,6 @@ import { useUpdateIsDeterminedShippingMonitoring } from '@/services/graphql/muta
 import { useUpdateIsValidateShippingMonitoring } from '@/services/graphql/mutation/shipping-monitoring/useIsValidateShippingMonitoring';
 import { useReadOneShippingMonitoring } from '@/services/graphql/query/shipping-monitoring/useReadOneShippingMonitoring';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
-import { formatDate } from '@/utils/helper/dateFormat';
 
 import { IUpdateStatusValues } from '@/types/global';
 
@@ -296,17 +295,6 @@ const ReadShippingMonitoringBook = () => {
               mt="xs"
             />
           ) : null}
-          <Stack spacing="sm" mt="sm">
-            <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.date'),
-                  value: formatDate(monitoringBarging?.createdAt) ?? '-',
-                },
-              ]}
-              type="grid"
-            />
-          </Stack>
           {!monitoringBargingLoading && monitoringBarging ? (
             <>
               <GlobalHeaderDetail

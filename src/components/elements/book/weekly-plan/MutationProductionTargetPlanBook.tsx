@@ -31,7 +31,7 @@ interface IMutationProductionTargetPlanBook {
   mutationSuccessMassage?: string;
 }
 
-const MutationProductionTargetPlan = ({
+const MutationProductionTargetPlanBook = ({
   mutationType,
   mutationSuccessMassage,
 }: IMutationProductionTargetPlanBook) => {
@@ -332,4 +332,4 @@ const MutationProductionTargetPlan = ({
   );
 };
 
-export default MutationProductionTargetPlan;
+export default MutationProductionTargetPlanBook;
