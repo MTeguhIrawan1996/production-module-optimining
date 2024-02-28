@@ -9,6 +9,7 @@ import {
   InnerWrapper,
   MutationMonthlyHeavyEquipmentAvailabilityPlanBook,
   MutationMonthlyHeavyEquipmentReqPlanBook,
+  MutationMonthlyProductionTargetPlanBook,
   MutationMonthlyUnitCapacityPlanBook,
   MutationMonthlyWorkTimePlanBook,
   RootWrapper,
@@ -117,13 +118,12 @@ const UpdateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.productionTargetPlan'),
               value: 'productionTargetPlan',
               component: (
-                // <MutationProductionTargetPlan
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successUpdateProductionTargetPlanMessage'
-                //   )}
-                //   mutationType="update"
-                // />
-                <div className="">ProductionTargetPlan</div>
+                <MutationMonthlyProductionTargetPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successUpdateProductionTargetPlanMessage'
+                  )}
+                  mutationType="update"
+                />
               ),
               isShowItem: true,
             },

@@ -1,13 +1,14 @@
 import CommonMonthlyPlanInformationBook from '@/components/elements/book/monthly-plan/CommonMonthlyPlanInformationBook';
 import MutationMonthlyHeavyEquipmentAvailabilityPlanBook from '@/components/elements/book/monthly-plan/MutationMonthlyHeavyEquipmentAvailabilityPlanBook';
 import MutationMonthlyHeavyEquipmentReqPlanBook from '@/components/elements/book/monthly-plan/MutationMonthlyHeavyEquipmentReqPlanBook';
+import MutationMonthlyProductionTargetPlanBook from '@/components/elements/book/monthly-plan/MutationMonthlyProductionTargetPlanBook';
 import MutationMonthlyUnitCapacityPlanBook from '@/components/elements/book/monthly-plan/MutationMonthlyUnitCapacityPlanBook';
 import MutationMonthlyWorkTimePlanBook from '@/components/elements/book/monthly-plan/MutationMonthlyWorkTimePlanBook';
 import CommonWeeklyPlanInformationBook from '@/components/elements/book/weekly-plan/CommonWeeklyPlanInformationBook';
 import MutationBargingTargetPlanBook from '@/components/elements/book/weekly-plan/MutationBargingTargetPlanBook';
 import MutationHeavyEquipmentReqPlanBook from '@/components/elements/book/weekly-plan/MutationHeavyEquipmentReqPlanBook';
 import MutationMiningMapPlanBook from '@/components/elements/book/weekly-plan/MutationMiningMapPlanBook';
-import MutationProductionTargetPlan from '@/components/elements/book/weekly-plan/MutationProductionTargetPlanBook';
+import MutationProductionTargetPlanBook from '@/components/elements/book/weekly-plan/MutationProductionTargetPlanBook';
 import MutationUnitCapacityPlanBook from '@/components/elements/book/weekly-plan/MutationUnitCapacityPlanBook';
 import MutationWorkTimePlanBook from '@/components/elements/book/weekly-plan/MutationWorkTimePlanBook';
 import DeterminedButton from '@/components/elements/button/DeterminedButton';
@@ -188,9 +189,10 @@ export {
   MutationMiningMapPlanBook,
   MutationMonthlyHeavyEquipmentAvailabilityPlanBook,
   MutationMonthlyHeavyEquipmentReqPlanBook,
+  MutationMonthlyProductionTargetPlanBook,
   MutationMonthlyUnitCapacityPlanBook,
   MutationMonthlyWorkTimePlanBook,
-  MutationProductionTargetPlan,
+  MutationProductionTargetPlanBook,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,
   NavbarCollapseLinksGroup,
