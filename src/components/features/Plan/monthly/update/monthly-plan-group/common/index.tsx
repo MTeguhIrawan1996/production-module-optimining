@@ -7,6 +7,7 @@ import { shallow } from 'zustand/shallow';
 import {
   GlobalTabs,
   InnerWrapper,
+  MutationMonthlyHeavyEquipmentAvailabilityPlanBook,
   MutationMonthlyHeavyEquipmentReqPlanBook,
   MutationMonthlyUnitCapacityPlanBook,
   MutationMonthlyWorkTimePlanBook,
@@ -103,13 +104,12 @@ const UpdateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.heavyEquipmentAvailabilityPlan'),
               value: 'heavyEquipmentAvailabilityPlan',
               component: (
-                // <MutationHeavyEquipmentAvailabilityPlanBook
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successUpdateHeavyEquipmentAvailabilityPlanMessage'
-                //   )}
-                //   mutationType="update"
-                // />
-                <div className="">Heavy Equipment Availability plan</div>
+                <MutationMonthlyHeavyEquipmentAvailabilityPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successUpdateHeavyEquipmentAvailabilityPlanMessage'
+                  )}
+                  mutationType="update"
+                />
               ),
               isShowItem: true,
             },
