@@ -16,11 +16,9 @@ import {
   IWeeklyProductionTargetPlanValues,
   useCreateWeeklyProductionTargetPlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyProductionTargetPlan';
-import { useReadOneMonthlyPlan } from '@/services/graphql/query/plan/monthly/useReadOneMonthlyPlan';
 import { useReadAllActivityWorkTimePlan } from '@/services/graphql/query/plan/weekly/work-time-plan/useReadAllActivityWorkTimePlan';
 import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
-import { getWeeksInMonth } from '@/utils/helper/getWeeksInMonth';
 import { useStoreWeeklyInMonthly } from '@/utils/store/useWeekInMonthlyStore';
 
 import { ControllerGroup } from '@/types/global';
@@ -44,8 +42,8 @@ const MutationMonthlyWorkTimePlanBook = ({
     React.useState<boolean>(false);
   const [skipActivityWorkTimePlan, setSkipActivityWorkTimePlan] =
     React.useState<boolean>(false);
-  const [weeklyInMonthly, setWeeklyInMonthly] = useStoreWeeklyInMonthly(
-    (state) => [state.weeklyInMonthly, state.setWeeklyInMonthly],
+  const [weeklyInMonthly] = useStoreWeeklyInMonthly(
+    (state) => [state.weeklyInMonthly],
     shallow
   );
 
@@ -85,25 +83,11 @@ const MutationMonthlyWorkTimePlanBook = ({
     keyName: 'workTimePlanActivityId',
   });
 
-  const { monthlyPlanData } = useReadOneMonthlyPlan({
-    variables: {
-      id,
-    },
-    skip: !router.isReady || tabs !== 'workTimePlan',
-    onCompleted: (data) => {
-      const weekInMonth = getWeeksInMonth(
-        `${data.monthlyPlan.year}`,
-        `${data.monthlyPlan.month}`
-      );
-      setWeeklyInMonthly(weekInMonth);
-    },
-  });
-
   useReadAllWHPsMaster({
     variables: {
       limit: null,
     },
-    skip: !monthlyPlanData || skipWorkingHourPlansData,
+    skip: tabs !== 'workTimePlan' || skipWorkingHourPlansData,
     onCompleted: ({ workingHourPlans }) => {
       const newWeekInMonth = weeklyInMonthly.map((val) => ({
         id: null,
@@ -141,7 +125,9 @@ const MutationMonthlyWorkTimePlanBook = ({
 
   useReadAllActivityWorkTimePlan({
     skip:
-      !monthlyPlanData || !skipWorkingHourPlansData || skipActivityWorkTimePlan,
+      tabs !== 'workTimePlan' ||
+      !skipWorkingHourPlansData ||
+      skipActivityWorkTimePlan,
     onCompleted: ({ activities }) => {
       const newWeekInMonth = weeklyInMonthly.map((val) => ({
         id: null,

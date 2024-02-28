@@ -24,7 +24,6 @@ import {
   IMonthlyUnitCapacityPlanValues,
 } from '@/services/graphql/mutation/plan/monthly/useCreateMonthlyUnitcapacityPlan';
 import { useCreateWeeklyUnitCapacityPlan } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyUnitcapacityPlan';
-import { useReadOneMonthlyPlan } from '@/services/graphql/query/plan/monthly/useReadOneMonthlyPlan';
 import { useReadOneUnitCapacityPlan } from '@/services/graphql/query/plan/weekly/useReadOneUnitCapacityPlan';
 import {
   globalInputaverageArray,
@@ -34,7 +33,6 @@ import {
 } from '@/utils/constants/Field/global-field';
 import { weeklyUnitCapacityPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-unit-capacity-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
-import { getWeeksInMonth } from '@/utils/helper/getWeeksInMonth';
 import { useStoreWeeklyInMonthly } from '@/utils/store/useWeekInMonthlyStore';
 
 import { ControllerGroup } from '@/types/global';
@@ -53,8 +51,8 @@ const MutationMonthlyUnitCapacityPlanBook: React.FC<
   const tabs = router.query.tabs as string;
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
-  const [weeklyInMonthly, setWeeklyInMonthly] = useStoreWeeklyInMonthly(
-    (state) => [state.weeklyInMonthly, state.setWeeklyInMonthly],
+  const [weeklyInMonthly] = useStoreWeeklyInMonthly(
+    (state) => [state.weeklyInMonthly],
     shallow
   );
 
@@ -99,29 +97,23 @@ const MutationMonthlyUnitCapacityPlanBook: React.FC<
     keyName: 'unitCapacityPlanId',
   });
 
-  useReadOneMonthlyPlan({
-    variables: {
-      id,
-    },
-    skip: !router.isReady || tabs !== 'unitCapacityPlan',
-    onCompleted: (data) => {
-      const weekInMonth = getWeeksInMonth(
-        `${data.monthlyPlan.year}`,
-        `${data.monthlyPlan.month}`
+  React.useEffect(() => {
+    if (weeklyInMonthly.length > 0) {
+      const newWeekInMonth: IMonthlyTargetPlan[] = weeklyInMonthly.map(
+        (val) => ({
+          id: null,
+          week: val,
+          rate: '',
+          ton: '',
+        })
       );
-      const newWeekInMonth: IMonthlyTargetPlan[] = weekInMonth.map((val) => ({
-        id: null,
-        week: val,
-        rate: '',
-        ton: '',
-      }));
       methods.setValue(
         'unitCapacityPlans.0.materials.0.targetPlans',
         newWeekInMonth
       );
-      setWeeklyInMonthly(weekInMonth);
-    },
-  });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [weeklyInMonthly]);
 
   useReadOneUnitCapacityPlan({
     variables: {
