@@ -9,6 +9,7 @@ import {
   InnerWrapper,
   MutationMonthlyHeavyEquipmentAvailabilityPlanBook,
   MutationMonthlyHeavyEquipmentReqPlanBook,
+  MutationMonthlyMiningMapPlanBook,
   MutationMonthlyProductionTargetPlanBook,
   MutationMonthlyUnitCapacityPlanBook,
   MutationMonthlyWorkTimePlanBook,
@@ -131,13 +132,12 @@ const UpdateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.miningMapPlan'),
               value: 'miningMapPlan',
               component: (
-                // <MutationMiningMapPlanBook
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successUpdateMiningMapPlanMessage'
-                //   )}
-                //   mutationType="update"
-                // />
-                <div className="">mining map plan</div>
+                <MutationMonthlyMiningMapPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successUpdateMiningMapPlanMessage'
+                  )}
+                  mutationType="update"
+                />
               ),
               isShowItem: true,
             },
