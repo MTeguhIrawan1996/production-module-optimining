@@ -7,6 +7,7 @@ import { shallow } from 'zustand/shallow';
 import {
   GlobalTabs,
   InnerWrapper,
+  MutationMonthlyHeavyEquipmentReqPlanBook,
   MutationMonthlyUnitCapacityPlanBook,
   MutationMonthlyWorkTimePlanBook,
   RootWrapper,
@@ -85,13 +86,12 @@ const CreateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.heavyEquipmentReqPlan'),
               value: 'heavyEquipmentReqPlan',
               component: (
-                // <MutationHeavyEquipmentReqPlanBook
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successCreateHeavyEquipmentReqPlanMessage'
-                //   )}
-                //   mutationType="create"
-                // />
-                <div className="">HeavyEquipment Req Plan</div>
+                <MutationMonthlyHeavyEquipmentReqPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successCreateHeavyEquipmentReqPlanMessage'
+                  )}
+                  mutationType="create"
+                />
               ),
               isShowItem: true,
             },
