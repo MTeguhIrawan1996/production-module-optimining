@@ -1,22 +1,36 @@
 import { Flex, Grid, Paper, Stack, Text } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import DashboardCard from '@/components/elements/card/DashboardCard';
 import TextInputNative from '@/components/elements/input/TextInputNative';
 
 import { useReadOneMonthlyPlan } from '@/services/graphql/query/plan/monthly/useReadOneMonthlyPlan';
+import { getWeeksInMonth } from '@/utils/helper/getWeeksInMonth';
+import { useStoreWeeklyInMonthly } from '@/utils/store/useWeekInMonthlyStore';
 
 const CommonMonthlyPlanInformation = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const [setWeeklyInMonthly] = useStoreWeeklyInMonthly(
+    (state) => [state.setWeeklyInMonthly],
+    shallow
+  );
 
   const { monthlyPlanData, monthlyPlanDataLoading } = useReadOneMonthlyPlan({
     variables: {
       id,
     },
     skip: !router.isReady,
+    onCompleted: (data) => {
+      const weekInMonth = getWeeksInMonth(
+        `${data.monthlyPlan.year}`,
+        `${data.monthlyPlan.month}`
+      );
+      setWeeklyInMonthly(weekInMonth);
+    },
   });
 
   return (

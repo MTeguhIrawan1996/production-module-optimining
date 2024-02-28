@@ -10,7 +10,7 @@ import {
   MutationBargingTargetPlanBook,
   MutationHeavyEquipmentReqPlanBook,
   MutationMiningMapPlanBook,
-  MutationProductionTargetPlan,
+  MutationProductionTargetPlanBook,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,
   RootWrapper,
@@ -120,7 +120,7 @@ const UpdateWeeklyPlanGroupPage = () => {
               label: t('commonTypography.productionTargetPlan'),
               value: 'productionTargetPlan',
               component: (
-                <MutationProductionTargetPlan
+                <MutationProductionTargetPlanBook
                   mutationSuccessMassage={t(
                     'weeklyPlan.successUpdateProductionTargetPlanMessage'
                   )}
