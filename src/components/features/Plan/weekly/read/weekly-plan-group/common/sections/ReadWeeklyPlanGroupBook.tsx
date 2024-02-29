@@ -48,6 +48,7 @@ const ReadWeeklyPlanGroupBook = () => {
     >
       <GlobalTabs
         tabs={{
+          keepMounted: false,
           value: tabs,
           onTabChange: (value) => handleChangeTab(value),
         }}

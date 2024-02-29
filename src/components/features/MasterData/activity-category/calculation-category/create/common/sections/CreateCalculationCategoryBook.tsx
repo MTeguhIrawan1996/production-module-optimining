@@ -172,14 +172,10 @@ const CreateCalculationCategoryBook: React.FC<
                       sx={{
                         overflow: 'unset',
                       }}
+                      offsetScrollbars
+                      type="always"
                     >
-                      <Group
-                        align="flex-end"
-                        w="100%"
-                        noWrap
-                        pb="xs"
-                        spacing="xs"
-                      >
+                      <Group align="flex-end" w="100%" noWrap spacing="xs">
                         {fields.map((val, i) => (
                           <React.Fragment key={val.id}>
                             {val.operator !== '' && val.operator ? (
