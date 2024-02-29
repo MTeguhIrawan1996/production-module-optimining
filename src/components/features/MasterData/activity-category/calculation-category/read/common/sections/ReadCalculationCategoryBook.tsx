@@ -100,8 +100,8 @@ const ReadCalculationCategoryBook: React.FC<
               {t('commonTypography.calculation')}
             </Text>
             {newArray ? (
-              <ScrollArea>
-                <Group spacing="xs" noWrap pb="sm">
+              <ScrollArea offsetScrollbars type="always">
+                <Group spacing="xs" noWrap>
                   {newArray?.map((val, i) => (
                     <Badge key={i} radius={4} size="lg">
                       {val}

@@ -6,3 +6,8 @@ declare module '@mantine/dates' {
     placeholder?: string | undefined;
   }
 }
+declare module '@mantine/core' {
+  interface ScrollAreaAutosizeProps {
+    placeholder?: string | undefined;
+  }
+}
