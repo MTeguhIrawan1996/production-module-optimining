@@ -60,6 +60,7 @@ const UpdateWeeklyPlanGroupPage = () => {
       >
         <GlobalTabs
           tabs={{
+            keepMounted: false,
             value: router.query.tabs as string,
             onTabChange: (value) => handleChangeTab(value),
           }}

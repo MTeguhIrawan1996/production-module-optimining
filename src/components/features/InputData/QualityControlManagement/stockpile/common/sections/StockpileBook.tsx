@@ -1,4 +1,6 @@
+import { rem } from '@mantine/core';
 import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
+import { IconPencil } from '@tabler/icons-react';
 import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -235,6 +237,11 @@ const StockpileBook = () => {
                       `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
                         ? {
                             label: 'createSample',
+                            icon: (
+                              <IconPencil
+                                style={{ width: rem(14), height: rem(14) }}
+                              />
+                            ),
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
