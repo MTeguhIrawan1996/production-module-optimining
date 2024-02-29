@@ -37,7 +37,7 @@ const ReadStockpileMonitoringBook = () => {
     useReadOneStockpileMonitoring({
       variables: {
         id,
-        limit: 15,
+        limit: 10,
         page,
       },
       skip: !router.isReady,

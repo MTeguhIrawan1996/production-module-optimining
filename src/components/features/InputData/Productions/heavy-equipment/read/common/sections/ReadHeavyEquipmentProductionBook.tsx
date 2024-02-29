@@ -475,7 +475,7 @@ const ReadHeavyEquipmentProductionBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.desc'),
-                  value: heavyEquipmentData?.desc,
+                  value: heavyEquipmentData?.desc || '-',
                 },
               ]}
               type="grid"
