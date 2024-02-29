@@ -53,6 +53,7 @@ const ActivityCategoryMasterPage = () => {
       >
         <GlobalTabs
           tabs={{
+            keepMounted: false,
             value: router.query.tab as string,
             onTabChange: (value) => handleChangeTab(value),
           }}

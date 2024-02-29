@@ -253,6 +253,7 @@ const ReadStockpileMonitoringBook = () => {
     >
       <GlobalTabs
         tabs={{
+          keepMounted: false,
           defaultValue: 'stockpileData',
         }}
         tabsData={[
