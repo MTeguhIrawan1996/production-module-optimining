@@ -7,6 +7,7 @@ import { shallow } from 'zustand/shallow';
 import {
   GlobalTabs,
   InnerWrapper,
+  MutationMonthlyBargingTargetPlanBook,
   MutationMonthlyHeavyEquipmentAvailabilityPlanBook,
   MutationMonthlyHeavyEquipmentReqPlanBook,
   MutationMonthlyMiningMapPlanBook,
@@ -55,6 +56,7 @@ const CreateMonthlyPlanGroupPage = () => {
       >
         <GlobalTabs
           tabs={{
+            keepMounted: false,
             value: router.query.tabs as string,
             onTabChange: (value) => handleChangeTab(value),
           }}
@@ -141,13 +143,12 @@ const CreateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.bargingTargetPlan'),
               value: 'bargingTargetPlan',
               component: (
-                // <MutationBargingTargetPlanBook
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successCreateBargingTargetPlanMessage'
-                //   )}
-                //   mutationType="create"
-                // />
-                <div className="">Barging Target Plan</div>
+                <MutationMonthlyBargingTargetPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successCreateBargingTargetPlanMessage'
+                  )}
+                  mutationType="create"
+                />
               ),
               isShowItem: true,
             },

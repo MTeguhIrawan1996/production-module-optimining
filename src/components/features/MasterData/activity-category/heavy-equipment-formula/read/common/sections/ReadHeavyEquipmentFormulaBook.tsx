@@ -7,6 +7,7 @@ import {
   Tabs,
   Text,
 } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +23,7 @@ interface IReadHeavyEquipmentFormulaBookProps {
 const ReadHeavyEquipmentFormulaBook: React.FC<
   IReadHeavyEquipmentFormulaBookProps
 > = ({ tab: tabProps }) => {
+  const largeScreen = useMediaQuery('(min-width: 88em)');
   const router = useRouter();
   const id = router.query.id as string;
   const { t } = useTranslation('default');
@@ -118,9 +120,11 @@ const ReadHeavyEquipmentFormulaBook: React.FC<
                 sx={{
                   overflow: 'unset',
                 }}
-                maw={700}
+                maw={largeScreen ? 850 : 700}
+                offsetScrollbars
+                type="always"
               >
-                <Stack spacing={6} sx={{ width: 'fit-content' }} p="xs">
+                <Stack spacing={6} sx={{ width: 'fit-content' }}>
                   {newArrayTopFormula ? (
                     <Group spacing="xs" align="flex-end" noWrap>
                       {newArrayTopFormula?.map((val, i) => (
