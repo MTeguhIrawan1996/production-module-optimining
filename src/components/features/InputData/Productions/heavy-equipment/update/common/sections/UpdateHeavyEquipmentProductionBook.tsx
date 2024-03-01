@@ -95,7 +95,11 @@ const UpdateHeavyEquipmentProductionBook = () => {
   });
 
   React.useEffect(() => {
-    const amountWorkTime = hourDiff(newWorkStartTime, newWorkFinishTime);
+    const amountWorkTime = hourDiff({
+      startTime: newWorkStartTime,
+      endTime: newWorkFinishTime,
+      functionIsBeforeEndTime: false,
+    });
     methods.setValue('amountWorkTime', amountWorkTime ?? '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newWorkStartTime, newWorkFinishTime]);
