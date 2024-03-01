@@ -345,6 +345,12 @@ const CreateRitageOreBook = () => {
       name: 'bulkSamplingDensity',
       label: 'bulkSamplingDensity',
       withAsterisk: true,
+      // formatter: (value) =>
+      //   !Number.isNaN(parseFloat(value))
+      //     ? `${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, '.')
+      //     : '',
+      // decimalSeparator: ',',
+      // thousandsSeparator: '.',
       onChange: (value) => {
         methods.setValue('bulkSamplingDensity', value);
         setNewBulkSamplingDensity(`${value}`);
