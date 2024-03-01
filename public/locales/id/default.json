@@ -457,7 +457,10 @@
     "month": "Bulan",
     "monthly": "Bulanan",
     "supportingHeavyEquipment": "Alat Berat Pendukung",
-    "tonByDraft": "Ton Berdasarkan Draft"
+    "tonByDraft": "Ton Berdasarkan Draft",
+    "chooseMapType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.map) $t(commonTypography.type)",
+    "quarterly": "Triwulan",
+    "mapInformation": "Informasi Peta"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -493,7 +496,8 @@
     "plan": "$t(commonTypography.plan)",
     "weekly": "$t(commonTypography.weekly)",
     "monthly": "$t(commonTypography.monthly)",
-    "map": "$t(commonTypography.map)"
+    "map": "$t(commonTypography.map)",
+    "quarter": "Triwulan"
   },
   "auth": {
     "button": {
@@ -1031,6 +1035,8 @@
     "successIsRejectMessage": "$t(monthlyPlan.title) berhasil $t(commonTypography.reject)"
   },
   "mapProduction": {
-    "title": "$t(commonTypography.map)"
+    "title": "$t(commonTypography.inputData) $t(commonTypography.map)",
+    "createMapProd": "$t(commonTypography.create) $t(commonTypography.map)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.map)"
   }
 }

@@ -253,7 +253,9 @@
       "mapName": "Nama Peta",
       "miningMap": "Peta Penambangan,",
       "uploadFile": "Unggah File",
-      "tonByDraft": "Ton Berdasarkan Draft"
+      "tonByDraft": "Ton Berdasarkan Draft",
+      "mapType": "Jenis Peta",
+      "quarter": "Triwulan"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",

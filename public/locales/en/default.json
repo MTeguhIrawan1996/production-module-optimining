@@ -242,7 +242,7 @@
     "chooseMarriageStatus": "Pilih / Ketikan Status Pernikahan",
     "chooseProvince": "Pilih / Ketikan Provinsi",
     "chooseRegency": "Pilih / Ketikan Kabupaten/Kota",
-    "chooseSubDistrict": "Pilih / Ketikan Kecamatan",
+    "chooseSubDiswct": "Pilih / Ketikan Kecamatan",
     "chooseVillage": "Pilih / Ketikan Desa",
     "chooseResus": "Pilih Resus Darah",
     "chooseBloodType": "Pilih Golongan Darah",
@@ -457,7 +457,9 @@
     "month": "Bulan",
     "monthly": "Bulanan",
     "supportingHeavyEquipment": "Alat Berat Pendukung",
-    "tonByDraft": "Ton Berdasarkan Draft"
+    "tonByDraft": "Ton Berdasarkan Draft",
+    "quarterly": "Triwulan",
+    "mapInformation": "Informasi Peta"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -1031,6 +1033,8 @@
     "successIsRejectMessage": "$t(monthlyPlan.title) berhasil $t(commonTypography.reject)"
   },
   "mapProduction": {
-    "title": "$t(commonTypography.map)"
+    "title": "$t(commonTypography.inputData) $t(commonTypography.map)",
+    "createMapProd": "$t(commonTypography.create) $t(commonTypography.map)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.map)"
   }
 }
