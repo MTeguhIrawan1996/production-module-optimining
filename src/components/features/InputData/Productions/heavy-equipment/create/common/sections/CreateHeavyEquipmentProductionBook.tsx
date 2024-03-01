@@ -49,12 +49,14 @@ const CreateHeavyEquipmentProductionBook = () => {
     '',
     400
   );
-  const [newHourMeterBefore, setNewHourMeterBefore] = useDebouncedState<
-    number | ''
-  >('', 400);
-  const [newHourMeterAfter, setNewHourMeterAfter] = useDebouncedState<
-    number | ''
-  >('', 400);
+  const [newHourMeterBefore, setNewHourMeterBefore] = useDebouncedState<number>(
+    0,
+    400
+  );
+  const [newHourMeterAfter, setNewHourMeterAfter] = useDebouncedState<number>(
+    0,
+    400
+  );
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationHeavyEquipmentDataProdValues>({
@@ -70,8 +72,8 @@ const CreateHeavyEquipmentProductionBook = () => {
       amountWorkTime: '',
       desc: '',
       heavyEquipmentType: '',
-      hourMeterBefore: '',
-      hourMeterAfter: '',
+      hourMeterBefore: 0,
+      hourMeterAfter: 0,
       amountHourMeter: '',
       fuel: '',
       loseTimes: [],
@@ -97,11 +99,8 @@ const CreateHeavyEquipmentProductionBook = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newWorkStartTime, newWorkFinishTime]);
   const amountHourMeter = React.useMemo(() => {
-    if (newHourMeterAfter && newHourMeterBefore) {
-      const amountHourMeterValue = newHourMeterAfter - newHourMeterBefore;
-      return amountHourMeterValue;
-    }
-    return '';
+    const amountHourMeterValue = newHourMeterAfter - newHourMeterBefore;
+    return amountHourMeterValue;
   }, [newHourMeterAfter, newHourMeterBefore]);
   /* #endregion  /**======== Methods =========== */
 
@@ -356,8 +355,8 @@ const CreateHeavyEquipmentProductionBook = () => {
       label: 'hourMeterBefore',
       withAsterisk: true,
       onChange: (value) => {
-        methods.setValue('hourMeterBefore', value);
-        setNewHourMeterBefore(value);
+        methods.setValue('hourMeterBefore', value || 0);
+        setNewHourMeterBefore(value || 0);
         methods.trigger('hourMeterBefore');
       },
     });
@@ -367,8 +366,8 @@ const CreateHeavyEquipmentProductionBook = () => {
       label: 'hourMeterAfter',
       withAsterisk: true,
       onChange: (value) => {
-        methods.setValue('hourMeterAfter', value);
-        setNewHourMeterAfter(value);
+        methods.setValue('hourMeterAfter', value || 0);
+        setNewHourMeterAfter(value || 0);
         methods.trigger('hourMeterAfter');
       },
     });

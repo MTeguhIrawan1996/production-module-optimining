@@ -48,12 +48,14 @@ const UpdateHeavyEquipmentProductionBook = () => {
     '',
     400
   );
-  const [newHourMeterBefore, setNewHourMeterBefore] = useDebouncedState<
-    number | ''
-  >('', 400);
-  const [newHourMeterAfter, setNewHourMeterAfter] = useDebouncedState<
-    number | ''
-  >('', 400);
+  const [newHourMeterBefore, setNewHourMeterBefore] = useDebouncedState<number>(
+    0,
+    400
+  );
+  const [newHourMeterAfter, setNewHourMeterAfter] = useDebouncedState<number>(
+    0,
+    400
+  );
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
 
@@ -71,8 +73,8 @@ const UpdateHeavyEquipmentProductionBook = () => {
       amountWorkTime: '',
       desc: '',
       heavyEquipmentType: '',
-      hourMeterBefore: '',
-      hourMeterAfter: '',
+      hourMeterBefore: 0,
+      hourMeterAfter: 0,
       amountHourMeter: '',
       fuel: '',
       loseTimes: [],
@@ -97,12 +99,10 @@ const UpdateHeavyEquipmentProductionBook = () => {
     methods.setValue('amountWorkTime', amountWorkTime ?? '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newWorkStartTime, newWorkFinishTime]);
+
   const amountHourMeter = React.useMemo(() => {
-    if (newHourMeterAfter && newHourMeterBefore) {
-      const amountHourMeterValue = newHourMeterAfter - newHourMeterBefore;
-      return amountHourMeterValue;
-    }
-    return '';
+    const amountHourMeterValue = newHourMeterAfter - newHourMeterBefore;
+    return amountHourMeterValue;
   }, [newHourMeterAfter, newHourMeterBefore]);
   /* #endregion  /**======== Methods =========== */
 
@@ -158,14 +158,14 @@ const UpdateHeavyEquipmentProductionBook = () => {
         methods.setValue('desc', heavyEquipmentData.desc ?? '');
         methods.setValue(
           'hourMeterBefore',
-          heavyEquipmentData.hourMeterBefore ?? ''
+          heavyEquipmentData.hourMeterBefore || 0
         );
-        setNewHourMeterBefore(heavyEquipmentData.hourMeterBefore ?? '');
+        setNewHourMeterBefore(heavyEquipmentData.hourMeterBefore || 0);
         methods.setValue(
           'hourMeterAfter',
-          heavyEquipmentData.hourMeterAfter ?? ''
+          heavyEquipmentData.hourMeterAfter || 0
         );
-        setNewHourMeterAfter(heavyEquipmentData.hourMeterAfter ?? '');
+        setNewHourMeterAfter(heavyEquipmentData.hourMeterAfter || 0);
         methods.setValue('fuel', heavyEquipmentData.fuel ?? '');
       },
     });
@@ -409,8 +409,8 @@ const UpdateHeavyEquipmentProductionBook = () => {
       label: 'hourMeterBefore',
       withAsterisk: true,
       onChange: (value) => {
-        methods.setValue('hourMeterBefore', value);
-        setNewHourMeterBefore(value);
+        methods.setValue('hourMeterBefore', value || 0);
+        setNewHourMeterBefore(value || 0);
         methods.trigger('hourMeterBefore');
       },
     });
@@ -420,8 +420,8 @@ const UpdateHeavyEquipmentProductionBook = () => {
       label: 'hourMeterAfter',
       withAsterisk: true,
       onChange: (value) => {
-        methods.setValue('hourMeterAfter', value);
-        setNewHourMeterAfter(value);
+        methods.setValue('hourMeterAfter', value || 0);
+        setNewHourMeterAfter(value || 0);
         methods.trigger('hourMeterAfter');
       },
     });
