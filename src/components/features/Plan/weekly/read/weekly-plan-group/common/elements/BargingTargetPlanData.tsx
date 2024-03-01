@@ -1,6 +1,4 @@
 import { Stack, Text } from '@mantine/core';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumn, DataTableColumnGroup } from 'mantine-datatable';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -17,10 +15,9 @@ import {
   useReadOneBargingTargetPlan,
 } from '@/services/graphql/query/plan/weekly/barging-target-plan/useReadOneBargingTargetPlan';
 import { bargingTarget } from '@/utils/constants/DefaultValues/barging-target-plan';
+import dayjs from '@/utils/helper/dayjs.config';
 
 import { IElementsData } from '@/types/global';
-
-dayjs.extend(isoWeek);
 
 const BargingTargetPlanData = () => {
   const { t } = useTranslation('default');

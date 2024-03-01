@@ -7,6 +7,7 @@ import DashboardCard from '@/components/elements/card/DashboardCard';
 import TextInputNative from '@/components/elements/input/TextInputNative';
 
 import { useReadOneMonthlyPlan } from '@/services/graphql/query/plan/monthly/useReadOneMonthlyPlan';
+import dayjs from '@/utils/helper/dayjs.config';
 import { getWeeksInMonth } from '@/utils/helper/getWeeksInMonth';
 import { useStoreWeeklyInMonthly } from '@/utils/store/useWeekInMonthlyStore';
 
@@ -67,7 +68,13 @@ const CommonMonthlyPlanInformation = () => {
                   name="month"
                   label="month"
                   disabled
-                  defaultValue={`${monthlyPlanData?.month ?? ''}`}
+                  defaultValue={`${
+                    monthlyPlanData?.month
+                      ? dayjs()
+                          .month(monthlyPlanData.month - 1)
+                          .format('MMMM')
+                      : ''
+                  }`}
                 />
               </Grid.Col>
             </Grid>
