@@ -352,6 +352,7 @@
     "fromDome": "Dari Dome",
     "bulkSamplingDensity": "Massa Jenis Bulk Sampling",
     "listRitage": "List Ritase",
+    "listDome": "List Dome",
     "ritageStatus": "Status Ritase",
     "readRitageDT": "$t(commonTypography.detail) Data Ritase Dump Truck",
     "problem": "Bermasalah",

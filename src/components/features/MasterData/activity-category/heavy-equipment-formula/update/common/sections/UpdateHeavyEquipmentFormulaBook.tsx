@@ -9,6 +9,7 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import {
   IconCheck,
@@ -53,6 +54,7 @@ interface IUpdateHeavyEquipmentFormulaBookProps {
 const UpdateHeavyEquipmentFormulaBook: React.FC<
   IUpdateHeavyEquipmentFormulaBookProps
 > = ({ tab: tabProps }) => {
+  const largeScreen = useMediaQuery('(min-width: 88em)');
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
@@ -216,9 +218,11 @@ const UpdateHeavyEquipmentFormulaBook: React.FC<
                     sx={{
                       overflow: 'unset',
                     }}
-                    maw={500}
+                    maw={largeScreen ? 650 : 500}
+                    offsetScrollbars
+                    type="always"
                   >
-                    <Stack spacing={6} sx={{ width: 'fit-content' }} p="xs">
+                    <Stack spacing={6} sx={{ width: 'fit-content' }}>
                       <Group spacing={6} align="flex-end" noWrap>
                         {topFormulaFields.map((val, i) => {
                           return (

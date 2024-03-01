@@ -10,7 +10,7 @@ import {
   MutationBargingTargetPlanBook,
   MutationHeavyEquipmentReqPlanBook,
   MutationMiningMapPlanBook,
-  MutationProductionTargetPlan,
+  MutationProductionTargetPlanBook,
   MutationUnitCapacityPlanBook,
   MutationWorkTimePlanBook,
   RootWrapper,
@@ -56,6 +56,7 @@ const CreateWeeklyPlanGroupPage = () => {
       >
         <GlobalTabs
           tabs={{
+            keepMounted: false,
             value: router.query.tabs as string,
             onTabChange: (value) => handleChangeTab(value),
           }}
@@ -116,7 +117,7 @@ const CreateWeeklyPlanGroupPage = () => {
               label: t('commonTypography.productionTargetPlan'),
               value: 'productionTargetPlan',
               component: (
-                <MutationProductionTargetPlan
+                <MutationProductionTargetPlanBook
                   mutationSuccessMassage={t(
                     'weeklyPlan.successCreateProductionTargetPlanMessage'
                   )}

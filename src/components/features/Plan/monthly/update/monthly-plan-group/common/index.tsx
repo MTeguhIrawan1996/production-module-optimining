@@ -7,6 +7,12 @@ import { shallow } from 'zustand/shallow';
 import {
   GlobalTabs,
   InnerWrapper,
+  MutationMonthlyBargingTargetPlanBook,
+  MutationMonthlyHeavyEquipmentAvailabilityPlanBook,
+  MutationMonthlyHeavyEquipmentReqPlanBook,
+  MutationMonthlyMiningMapPlanBook,
+  MutationMonthlyProductionTargetPlanBook,
+  MutationMonthlyUnitCapacityPlanBook,
   MutationMonthlyWorkTimePlanBook,
   RootWrapper,
 } from '@/components/elements';
@@ -54,6 +60,7 @@ const UpdateMonthlyPlanGroupPage = () => {
       >
         <GlobalTabs
           tabs={{
+            keepMounted: false,
             value: router.query.tabs as string,
             onTabChange: (value) => handleChangeTab(value),
           }}
@@ -75,13 +82,12 @@ const UpdateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.unitCapacityPlan'),
               value: 'unitCapacityPlan',
               component: (
-                // <MutationUnitCapacityPlanBook
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successUpdateUnitCapacityPlanMessage'
-                //   )}
-                //   mutationType="update"
-                // />
-                <div className="">Unit Cpacity Plan</div>
+                <MutationMonthlyUnitCapacityPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successUpdateUnitCapacityPlanMessage'
+                  )}
+                  mutationType="update"
+                />
               ),
               isShowItem: true,
             },
@@ -89,13 +95,12 @@ const UpdateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.heavyEquipmentReqPlan'),
               value: 'heavyEquipmentReqPlan',
               component: (
-                // <MutationHeavyEquipmentReqPlanBook
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successUpdateHeavyEquipmentReqPlanMessage'
-                //   )}
-                //   mutationType="update"
-                // />
-                <div className="">HeavyEquipment Req Plan</div>
+                <MutationMonthlyHeavyEquipmentReqPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successUpdateHeavyEquipmentReqPlanMessage'
+                  )}
+                  mutationType="update"
+                />
               ),
               isShowItem: true,
             },
@@ -103,13 +108,12 @@ const UpdateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.heavyEquipmentAvailabilityPlan'),
               value: 'heavyEquipmentAvailabilityPlan',
               component: (
-                // <MutationHeavyEquipmentAvailabilityPlanBook
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successUpdateHeavyEquipmentAvailabilityPlanMessage'
-                //   )}
-                //   mutationType="update"
-                // />
-                <div className="">Heavy Equipment Availability plan</div>
+                <MutationMonthlyHeavyEquipmentAvailabilityPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successUpdateHeavyEquipmentAvailabilityPlanMessage'
+                  )}
+                  mutationType="update"
+                />
               ),
               isShowItem: true,
             },
@@ -117,13 +121,12 @@ const UpdateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.productionTargetPlan'),
               value: 'productionTargetPlan',
               component: (
-                // <MutationProductionTargetPlan
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successUpdateProductionTargetPlanMessage'
-                //   )}
-                //   mutationType="update"
-                // />
-                <div className="">ProductionTargetPlan</div>
+                <MutationMonthlyProductionTargetPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successUpdateProductionTargetPlanMessage'
+                  )}
+                  mutationType="update"
+                />
               ),
               isShowItem: true,
             },
@@ -131,13 +134,12 @@ const UpdateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.miningMapPlan'),
               value: 'miningMapPlan',
               component: (
-                // <MutationMiningMapPlanBook
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successUpdateMiningMapPlanMessage'
-                //   )}
-                //   mutationType="update"
-                // />
-                <div className="">mining map plan</div>
+                <MutationMonthlyMiningMapPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successUpdateMiningMapPlanMessage'
+                  )}
+                  mutationType="update"
+                />
               ),
               isShowItem: true,
             },
@@ -145,13 +147,12 @@ const UpdateMonthlyPlanGroupPage = () => {
               label: t('commonTypography.bargingTargetPlan'),
               value: 'bargingTargetPlan',
               component: (
-                // <MutationBargingTargetPlanBook
-                //   mutationSuccessMassage={t(
-                //     'monthlyPlan.successUpdateBargingTargetPlanMessage'
-                //   )}
-                //   mutationType="update"
-                // />
-                <div className="">Barging Target Plan</div>
+                <MutationMonthlyBargingTargetPlanBook
+                  mutationSuccessMassage={t(
+                    'monthlyPlan.successUpdateBargingTargetPlanMessage'
+                  )}
+                  mutationType="update"
+                />
               ),
               isShowItem: true,
             },

@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Divider, Stack, Tabs, Text } from '@mantine/core';
+import { Box, Divider, ScrollArea, Stack, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { IconX } from '@tabler/icons-react';
@@ -12,7 +12,9 @@ import {
   DashboardCard,
   GlobalAlert,
   GlobalHeaderDetail,
+  GlobalTabs,
   KeyValueList,
+  MantineDataTable,
 } from '@/components/elements';
 import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
@@ -20,7 +22,6 @@ import { useUpdateIsDeterminedShippingMonitoring } from '@/services/graphql/muta
 import { useUpdateIsValidateShippingMonitoring } from '@/services/graphql/mutation/shipping-monitoring/useIsValidateShippingMonitoring';
 import { useReadOneShippingMonitoring } from '@/services/graphql/query/shipping-monitoring/useReadOneShippingMonitoring';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
-import { formatDate } from '@/utils/helper/dateFormat';
 
 import { IUpdateStatusValues } from '@/types/global';
 
@@ -263,86 +264,100 @@ const ReadShippingMonitoringBook = () => {
         spacing: 'sm',
       }}
     >
-      <Tabs
-        defaultValue="information"
-        radius={4}
-        styles={{
-          tabsList: {
-            flexWrap: 'nowrap',
-          },
+      <GlobalTabs
+        tabs={{
+          keepMounted: false,
+          defaultValue: 'information',
         }}
-      >
-        <Tabs.List>
-          <Tabs.Tab value="information" fz={14} fw={500}>
-            {t('commonTypography.information')}
-          </Tabs.Tab>
-        </Tabs.List>
-        <Tabs.Panel value="information">
-          {monitoringBarging?.status?.id ===
-          'af06163a-2ba3-45ee-a724-ab3af0c97cc9' ? (
-            <GlobalAlert
-              description={monitoringBarging?.statusMessage ?? ''}
-              title={t('commonTypography.invalidData')}
-              color="red"
-              mt="xs"
-            />
-          ) : null}
-          {monitoringBarging?.status?.id ===
-          '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
-            <GlobalAlert
-              description={monitoringBarging?.statusMessage ?? ''}
-              title={t('commonTypography.rejectedData')}
-              color="red"
-              mt="xs"
-            />
-          ) : null}
-          <Stack spacing="sm" mt="sm">
-            <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.date'),
-                  value: formatDate(monitoringBarging?.createdAt) ?? '-',
-                },
-              ]}
-              type="grid"
-            />
-          </Stack>
-          {!monitoringBargingLoading && monitoringBarging ? (
-            <>
-              <GlobalHeaderDetail
-                data={[...photo]}
-                title="documentation"
-                pt="md"
-              />
-              <Divider my="md" />
-            </>
-          ) : null}
-          {monitoringBargingGrouping.map((val, i) => {
-            const keyValueData: Pick<
-              IKeyValueItemProps,
-              'value' | 'dataKey'
-            >[] = val.itemValue.map((obj) => {
-              return {
-                dataKey: t(`commonTypography.${obj.name}`),
-                value: obj.value,
-              };
-            });
-            return (
-              <React.Fragment key={i}>
-                <Stack spacing="sm">
-                  {val.enableTitle && (
-                    <Text fz={24} fw={600} color="brand">
-                      {t(`commonTypography.${val.group}`)}
-                    </Text>
-                  )}
-                  <KeyValueList data={keyValueData} type="grid" />
+        tabsData={[
+          {
+            label: t('commonTypography.information'),
+            value: 'information',
+            component: (
+              <>
+                {monitoringBarging?.status?.id ===
+                'af06163a-2ba3-45ee-a724-ab3af0c97cc9' ? (
+                  <GlobalAlert
+                    description={monitoringBarging?.statusMessage ?? ''}
+                    title={t('commonTypography.invalidData')}
+                    color="red"
+                    mt="xs"
+                  />
+                ) : null}
+                {monitoringBarging?.status?.id ===
+                '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
+                  <GlobalAlert
+                    description={monitoringBarging?.statusMessage ?? ''}
+                    title={t('commonTypography.rejectedData')}
+                    color="red"
+                    mt="xs"
+                  />
+                ) : null}
+                {!monitoringBargingLoading && monitoringBarging ? (
+                  <>
+                    <GlobalHeaderDetail
+                      data={[...photo]}
+                      title="documentation"
+                      pt="xs"
+                    />
+                    <Divider my="md" />
+                  </>
+                ) : null}
+                {monitoringBargingGrouping.map((val, i) => {
+                  const keyValueData: Pick<
+                    IKeyValueItemProps,
+                    'value' | 'dataKey'
+                  >[] = val.itemValue.map((obj) => {
+                    return {
+                      dataKey: t(`commonTypography.${obj.name}`),
+                      value: obj.value,
+                    };
+                  });
+                  return (
+                    <React.Fragment key={i}>
+                      <Stack spacing="sm">
+                        {val.enableTitle && (
+                          <Text fz={24} fw={600} color="brand">
+                            {t(`commonTypography.${val.group}`)}
+                          </Text>
+                        )}
+                        <KeyValueList data={keyValueData} type="grid" />
+                      </Stack>
+                      {val.withDivider && <Divider my="md" />}
+                    </React.Fragment>
+                  );
+                })}
+                <Stack spacing="sm" sx={{ height: 'fit-content' }}>
+                  <Text fz={24} fw={600} color="brand">
+                    {t('commonTypography.listDome')}
+                  </Text>
+                  <ScrollArea.Autosize mah={540} offsetScrollbars type="always">
+                    <Box sx={{ height: 'fit-content' }}>
+                      <MantineDataTable
+                        tableProps={{
+                          records: monitoringBarging?.domes ?? [],
+                          columns: [
+                            {
+                              accessor: 'name',
+                              title: t('commonTypography.domeName'),
+                              textAlignment: 'left',
+                            },
+                          ],
+                          shadow: 'none',
+                        }}
+                        emptyStateProps={{
+                          title: t('commonTypography.dataNotfound'),
+                        }}
+                      />
+                    </Box>
+                  </ScrollArea.Autosize>
                 </Stack>
-                {val.withDivider && <Divider my="md" />}
-              </React.Fragment>
-            );
-          })}
-        </Tabs.Panel>
-      </Tabs>
+              </>
+            ),
+            isShowItem: true,
+          },
+        ]}
+      />
     </DashboardCard>
   );
 };
