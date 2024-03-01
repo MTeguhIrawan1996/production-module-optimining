@@ -1,11 +1,13 @@
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
-import 'dayjs/locale/id';
+// import dayjs from 'dayjs';
+// import duration from 'dayjs/plugin/duration';
+// import localizedFormat from 'dayjs/plugin/localizedFormat';
+// import 'dayjs/locale/id';
 
-dayjs.locale('id');
-dayjs.extend(localizedFormat);
-dayjs.extend(duration);
+// dayjs.locale('id');
+// dayjs.extend(localizedFormat);
+// dayjs.extend(duration);
+
+import dayjs from './dayjs.config';
 
 export const formatDate = (
   value: string | Date | undefined | null,

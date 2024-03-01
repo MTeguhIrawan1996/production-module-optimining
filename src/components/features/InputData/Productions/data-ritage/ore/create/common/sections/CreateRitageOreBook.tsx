@@ -99,7 +99,11 @@ const CreateRitageOreBook = () => {
   const closeDome = methods.watch('closeDome');
 
   React.useEffect(() => {
-    const ritageDuration = hourDiff(newFromTime, newArriveTime);
+    const ritageDuration = hourDiff({
+      startTime: newFromTime,
+      endTime: newArriveTime,
+      functionIsBeforeEndTime: true,
+    });
     const amount = countTonByRitage(newBucketVolume, newBulkSamplingDensity);
     methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
     methods.setValue('ritageDuration', ritageDuration ?? '');
@@ -345,6 +349,12 @@ const CreateRitageOreBook = () => {
       name: 'bulkSamplingDensity',
       label: 'bulkSamplingDensity',
       withAsterisk: true,
+      // formatter: (value) =>
+      //   !Number.isNaN(parseFloat(value))
+      //     ? `${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, '.')
+      //     : '',
+      // decimalSeparator: ',',
+      // thousandsSeparator: '.',
       onChange: (value) => {
         methods.setValue('bulkSamplingDensity', value);
         setNewBulkSamplingDensity(`${value}`);
