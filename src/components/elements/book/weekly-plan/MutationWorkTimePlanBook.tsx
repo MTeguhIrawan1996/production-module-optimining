@@ -2,8 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Flex, Group, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -37,9 +35,8 @@ import { useReadOneWorkTimePlan } from '@/services/graphql/query/plan/weekly/wor
 import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
 import { workTimeDay } from '@/utils/constants/DefaultValues/work-time-plans';
 import { weeklyWorkTimePlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-work-time-plan-validation';
+import dayjs from '@/utils/helper/dayjs.config';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
-
-dayjs.extend(isoWeek);
 
 interface IMutationWorkTimePlanBook {
   mutationType?: 'create' | 'update' | 'read';

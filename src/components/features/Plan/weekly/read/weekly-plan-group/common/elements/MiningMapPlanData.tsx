@@ -1,7 +1,5 @@
 import { Stack, Text } from '@mantine/core';
 import { IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,8 +17,6 @@ import {
   IReadOneMiningMapPlanData,
   useReadOneMiningMapPlan,
 } from '@/services/graphql/query/plan/weekly/mining-map-plan/useReadOneMiningMapPlan';
-
-dayjs.extend(isoWeek);
 
 const MiningMapPlanData = () => {
   const { t } = useTranslation('default');

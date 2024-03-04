@@ -1,6 +1,4 @@
 import { Text } from '@mantine/core';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumnGroup } from 'mantine-datatable';
 import * as React from 'react';
 import { FieldArrayWithId, useFieldArray } from 'react-hook-form';
@@ -15,8 +13,6 @@ import {
   IMonthlyProductionTargetPlanData,
   IMonthlyProductionTargetPlanValues,
 } from '@/services/graphql/mutation/plan/monthly/useCreateMonthlyProductionTargetPlan';
-
-dayjs.extend(isoWeek);
 
 interface IInputMonthlyTableProductionTargetPlanProps {
   mutationType?: 'create' | 'update' | 'read';
