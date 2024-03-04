@@ -83,7 +83,7 @@ const MutationBargingTargetPlanBook = ({
     keyName: 'bargingDomePlanId',
   });
 
-  const { materialsData, materialsDataLoading } = useReadAllMaterialsMaster({
+  const { materialsData } = useReadAllMaterialsMaster({
     variables: {
       limit: null,
       orderDir: 'desc',
@@ -288,7 +288,7 @@ const MutationBargingTargetPlanBook = ({
   };
 
   return (
-    <DashboardCard p={0} isLoading={materialsDataLoading}>
+    <DashboardCard p={0}>
       <Flex gap={32} direction="column" p={22}>
         <CommonWeeklyPlanInformation />
         <GlobalFormGroup

@@ -10,7 +10,7 @@ import {
   GlobalModal,
   MantineDataTable,
 } from '@/components/elements';
-import WeeklyPlanInformationData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/WeeklyPlanInformationData';
+import MonthlyPlanInformationData from '@/components/features/Plan/monthly/read/monthly-plan-group/elements/MonthlyPlanInformationData';
 
 import {
   IReadOneMaterialUnitCapacityPlan,
@@ -48,7 +48,7 @@ const UnitCapacityPlanData = () => {
   });
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/plan/weekly/read/weekly-plan-group/${id}?tabs=${tabs}&page=${page}`;
+    const urlSet = `/plan/monthly/read/monthly-plan-group/${id}?tabs=${tabs}&page=${page}`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
@@ -90,8 +90,8 @@ const UnitCapacityPlanData = () => {
 
   return (
     <>
-      <WeeklyPlanInformationData />
-      <DashboardCard p={0}>
+      <MonthlyPlanInformationData />
+      <DashboardCard p={0} isLoading={weeklyUnitCapacityPlanDataLoading}>
         <Stack spacing="sm">
           <Text fz={24} fw={600} color="brand">
             {t('commonTypography.unitCapacityPlanInformation')}
@@ -99,7 +99,6 @@ const UnitCapacityPlanData = () => {
           <MantineDataTable
             tableProps={{
               records: data ?? [],
-              fetching: weeklyUnitCapacityPlanDataLoading,
               columns: [
                 {
                   accessor: 'locations',
