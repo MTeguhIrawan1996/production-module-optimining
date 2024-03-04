@@ -1,4 +1,4 @@
-import { Select, SelectProps } from '@mantine/core';
+import { Select, SelectProps, Text } from '@mantine/core';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,6 +9,9 @@ export type ISelectWeekNativeProps = {
   control: 'select-week-native';
   year?: number | null;
 } & Omit<SelectProps, 'data' | 'onSearchChange' | 'searchValue'>;
+interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
+  label: string;
+}
 
 const SelectWeekNative: React.FC<ISelectWeekNativeProps> = ({
   control,
@@ -35,10 +38,24 @@ const SelectWeekNative: React.FC<ISelectWeekNativeProps> = ({
     data: weeksItem ?? [],
   });
 
+  const SelectItem = React.forwardRef<HTMLDivElement, ItemProps>(
+    ({ label, ...others }: ItemProps, ref) => (
+      <div ref={ref} {...others}>
+        <Text size="sm">
+          {t('commonTypography.nthWeek', {
+            n: label, // week is started by 1 by default
+            ns: 'default',
+          })}
+        </Text>
+      </div>
+    )
+  );
+
   return (
     <Select
       data={uncombinedItem}
       radius="sm"
+      itemComponent={SelectItem}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
       data-control={control}

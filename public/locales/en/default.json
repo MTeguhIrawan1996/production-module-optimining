@@ -458,7 +458,8 @@
     "month": "Bulan",
     "monthly": "Bulanan",
     "supportingHeavyEquipment": "Alat Berat Pendukung",
-    "tonByDraft": "Ton Berdasarkan Draft"
+    "tonByDraft": "Ton Berdasarkan Draft",
+    "nthWeek": "Minggu ke-{{n}}"
   },
   "sideBar": {
     "dashboard": "Dashboard",

@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumnGroup } from 'mantine-datatable';
 import * as React from 'react';
 import { useFieldArray } from 'react-hook-form';
@@ -12,8 +10,7 @@ import {
   IWeeklyBargingTarget,
 } from '@/services/graphql/mutation/plan/weekly/useCreateBargingTargetPlan';
 import { bargingTarget } from '@/utils/constants/DefaultValues/barging-target-plan';
-
-dayjs.extend(isoWeek);
+import dayjs from '@/utils/helper/dayjs.config';
 
 const InputTableBargingTargetPlan = () => {
   const { t } = useTranslation('default');

@@ -1,6 +1,6 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
-import dayjs from 'dayjs';
 
+import dayjs from '@/utils/helper/dayjs.config';
 import { simpleOtherColumn } from '@/utils/helper/simpleOtherColumn';
 
 import { GResponse, IGlobalMetaRequest, IStatus } from '@/types/global';

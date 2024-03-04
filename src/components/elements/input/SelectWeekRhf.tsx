@@ -1,4 +1,5 @@
 import { Select, SelectProps } from '@mantine/core';
+import { Text } from '@mantine/core';
 import * as React from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +18,10 @@ export type ISelectWeekRhfProps = {
   skipQuery?: boolean;
 } & Omit<SelectProps, 'data' | 'onSearchChange' | 'searchValue'> &
   CommonProps;
+
+interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
+  label: string;
+}
 
 const SelectWeekRhf: React.FC<ISelectWeekRhfProps> = ({
   control,
@@ -48,11 +53,25 @@ const SelectWeekRhf: React.FC<ISelectWeekRhfProps> = ({
     data: weeksItem ?? [],
   });
 
+  const SelectItem = React.forwardRef<HTMLDivElement, ItemProps>(
+    ({ label, ...others }: ItemProps, ref) => (
+      <div ref={ref} {...others}>
+        <Text size="sm">
+          {t('commonTypography.nthWeek', {
+            n: label, // week is started by 1 by default
+            ns: 'default',
+          })}
+        </Text>
+      </div>
+    )
+  );
+
   return (
     <Select
       {...field}
       data={uncombinedItem}
       radius={8}
+      itemComponent={SelectItem}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
       data-control={control}

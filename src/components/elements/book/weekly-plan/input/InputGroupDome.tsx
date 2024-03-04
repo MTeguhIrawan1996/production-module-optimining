@@ -8,8 +8,6 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import * as React from 'react';
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -24,8 +22,6 @@ import { IPrimaryButtonProps } from '@/components/elements/button/PrimaryButton'
 import { IBargingDomePlan } from '@/services/graphql/mutation/plan/weekly/useCreateBargingTargetPlan';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import { useReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
-
-dayjs.extend(isoWeek);
 
 export type IInputGroupDomeProps = {
   addButtonOuter?: Partial<IPrimaryButtonProps>;

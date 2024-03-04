@@ -1,6 +1,4 @@
 import { Stack, Text } from '@mantine/core';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -19,8 +17,7 @@ import {
   IWeeklyHeavyEquipmentRequirement,
   useReadOneHeavyEquipmentReqPlan,
 } from '@/services/graphql/query/plan/weekly/heavy-equipment-req-plan/useReadOneHeavyEquipmentReqPlan';
-
-dayjs.extend(isoWeek);
+import dayjs from '@/utils/helper/dayjs.config';
 
 const HeavyEquipmentReqPlanData = () => {
   const { t } = useTranslation('default');
