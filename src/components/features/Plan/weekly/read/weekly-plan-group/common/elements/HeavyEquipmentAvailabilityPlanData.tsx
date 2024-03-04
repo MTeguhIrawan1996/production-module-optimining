@@ -35,10 +35,7 @@ const HeavyEquipmentAvailabilityPlanData = () => {
   return (
     <>
       <WeeklyPlanInformationData />
-      <DashboardCard
-        p={0}
-        isLoading={weeklyHeavyEquipmentAvailabilityPlanDataLoading}
-      >
+      <DashboardCard p={0}>
         <Stack spacing="sm">
           <Text fz={24} fw={600} color="brand">
             {t('commonTypography.heavyEquipmentAvailabilityPlanInformation')}
@@ -46,6 +43,7 @@ const HeavyEquipmentAvailabilityPlanData = () => {
           <MantineDataTable
             tableProps={{
               records: data ?? [],
+              fetching: weeklyHeavyEquipmentAvailabilityPlanDataLoading,
               columns: [
                 {
                   accessor: 'heavyEquipmentClass',

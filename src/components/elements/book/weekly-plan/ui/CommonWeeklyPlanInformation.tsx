@@ -54,7 +54,7 @@ const CommonWeeklyPlanInformation = () => {
                   name="week"
                   label="week"
                   disabled
-                  defaultValue={`${weeklyPlanData?.week ?? ''}`}
+                  value={`${weeklyPlanData?.week ?? ''}`}
                 />
               </Grid.Col>
             </Grid>

@@ -91,7 +91,7 @@ const UnitCapacityPlanData = () => {
   return (
     <>
       <WeeklyPlanInformationData />
-      <DashboardCard p={0} isLoading={weeklyUnitCapacityPlanDataLoading}>
+      <DashboardCard p={0}>
         <Stack spacing="sm">
           <Text fz={24} fw={600} color="brand">
             {t('commonTypography.unitCapacityPlanInformation')}
@@ -99,6 +99,7 @@ const UnitCapacityPlanData = () => {
           <MantineDataTable
             tableProps={{
               records: data ?? [],
+              fetching: weeklyUnitCapacityPlanDataLoading,
               columns: [
                 {
                   accessor: 'locations',

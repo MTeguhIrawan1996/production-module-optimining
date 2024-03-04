@@ -310,120 +310,129 @@ const InputTableWorkTimePlan = ({
             ],
           },
         ],
-        rowExpansion: {
-          allowMultiple: true,
-          expanded: {
-            recordIds: ['loseTime'],
-          },
-          content: () => (
-            <MantineDataTable
-              tableProps={{
-                noHeader: true,
-                shadow: '0',
-                withBorder: false,
-                borderRadius: 0,
-                idAccessor: (record) => {
-                  return record.activityId || record.workTimePlanActivityId;
+        rowExpansion:
+          recordsWithLoseTime.length > 0
+            ? {
+                allowMultiple: true,
+                expanded: {
+                  recordIds: ['loseTime'],
                 },
-                groups: [
-                  {
-                    id: 'no',
-                    title: 'No',
-                    style: { textAlign: 'center' },
-                    columns: [
-                      {
-                        accessor: 'index',
-                        title: '',
-                        render: () => null,
-                        width: 60,
+                content: () => (
+                  <MantineDataTable
+                    tableProps={{
+                      noHeader: true,
+                      shadow: '0',
+                      withBorder: false,
+                      borderRadius: 0,
+                      minHeight: 0,
+                      idAccessor: (record) => {
+                        return (
+                          record.activityId || record.workTimePlanActivityId
+                        );
                       },
-                    ],
-                  },
-                  {
-                    id: 'activity',
-                    title: t('commonTypography.activity'),
-                    columns: [
-                      {
-                        accessor: 'name',
-                        title: '',
-                        textAlignment: 'left',
-                        render: ({ name }, index) => {
-                          const indextoAlphabet = String.fromCharCode(
-                            65 + index
-                          );
-                          return <Text>{`${indextoAlphabet}. ${name}`}</Text>;
+                      groups: [
+                        {
+                          id: 'no',
+                          title: 'No',
+                          style: { textAlign: 'center' },
+                          columns: [
+                            {
+                              accessor: 'index',
+                              title: '',
+                              render: () => null,
+                              width: 60,
+                            },
+                          ],
                         },
-                        width: 260,
-                      },
-                    ],
-                  },
-                  {
-                    id: 'day',
-                    title: t('commonTypography.day'),
-                    style: { textAlign: 'center' },
-                    columns: renderOtherColumnLosetimeDay ?? [],
-                  },
-                  {
-                    id: 'amount',
-                    title: 'Total',
-                    style: { textAlign: 'center' },
-                    columns: [
-                      {
-                        accessor: 'amount',
-                        title: '',
-                        render: (_, index) => {
-                          const activityWorkTimePlan =
-                            recordsWithoutLoseTime.filter(
-                              (val) =>
-                                val.activityId !== 'loseTime' &&
-                                val.activityId !== 'amountEffectiveWorkingHours'
-                            );
-                          const activityWorkTImePlanLength =
-                            activityWorkTimePlan?.length || 0;
-                          return (
-                            <FormController
-                              control="input-sum-array"
-                              name={`workTimePlanActivities.${
-                                index + activityWorkTImePlanLength
-                              }.weeklyWorkTimes`}
-                              keyObj="hour"
-                              variant="unstyled"
-                              disabled={false}
-                              readOnly
-                              styles={{
-                                input: {
-                                  textAlign: 'center',
-                                },
-                              }}
-                            />
-                          );
+                        {
+                          id: 'activity',
+                          title: t('commonTypography.activity'),
+                          columns: [
+                            {
+                              accessor: 'name',
+                              title: '',
+                              textAlignment: 'left',
+                              render: ({ name }, index) => {
+                                const indextoAlphabet = String.fromCharCode(
+                                  65 + index
+                                );
+                                return (
+                                  <Text>{`${indextoAlphabet}. ${name}`}</Text>
+                                );
+                              },
+                              width: 260,
+                            },
+                          ],
                         },
-                        width: 100,
-                      },
-                    ],
-                  },
-                  {
-                    id: 'unit',
-                    title: 'Unit',
-                    style: { textAlign: 'center' },
-                    columns: [
-                      {
-                        accessor: 'unit',
-                        title: '',
-                        render: () => {
-                          return <Text>Jam</Text>;
+                        {
+                          id: 'day',
+                          title: t('commonTypography.day'),
+                          style: { textAlign: 'center' },
+                          columns: renderOtherColumnLosetimeDay ?? [],
                         },
-                        width: 100,
-                      },
-                    ],
-                  },
-                ],
-                records: recordsWithLoseTime ?? [],
-                emptyState: undefined,
-              }}
-            />
-          ),
-        },
+                        {
+                          id: 'amount',
+                          title: 'Total',
+                          style: { textAlign: 'center' },
+                          columns: [
+                            {
+                              accessor: 'amount',
+                              title: '',
+                              render: (_, index) => {
+                                const activityWorkTimePlan =
+                                  recordsWithoutLoseTime.filter(
+                                    (val) =>
+                                      val.activityId !== 'loseTime' &&
+                                      val.activityId !==
+                                        'amountEffectiveWorkingHours'
+                                  );
+                                const activityWorkTImePlanLength =
+                                  activityWorkTimePlan?.length || 0;
+                                return (
+                                  <FormController
+                                    control="input-sum-array"
+                                    name={`workTimePlanActivities.${
+                                      index + activityWorkTImePlanLength
+                                    }.weeklyWorkTimes`}
+                                    keyObj="hour"
+                                    variant="unstyled"
+                                    disabled={false}
+                                    readOnly
+                                    styles={{
+                                      input: {
+                                        textAlign: 'center',
+                                      },
+                                    }}
+                                  />
+                                );
+                              },
+                              width: 100,
+                            },
+                          ],
+                        },
+                        {
+                          id: 'unit',
+                          title: 'Unit',
+                          style: { textAlign: 'center' },
+                          columns: [
+                            {
+                              accessor: 'unit',
+                              title: '',
+                              render: () => {
+                                return <Text>Jam</Text>;
+                              },
+                              width: 100,
+                            },
+                          ],
+                        },
+                      ],
+                      records: recordsWithLoseTime ?? [],
+                      emptyState: undefined,
+                    }}
+                  />
+                ),
+              }
+            : undefined,
         records: recordsWithoutLoseTime ?? [],
       }}
       emptyStateProps={{
