@@ -219,7 +219,10 @@ const MutationProductionTargetPlanBook = ({
         renderItem: () => {
           return (
             <Grid.Col span={12}>
-              <InputTableProductionPlan mutationType={mutationType} />
+              <InputTableProductionPlan
+                mutationType={mutationType}
+                isLoading={materialsDataLoading}
+              />
             </Grid.Col>
           );
         },
@@ -228,7 +231,7 @@ const MutationProductionTargetPlanBook = ({
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabs, mutationType]);
+  }, [tabs, mutationType, materialsDataLoading]);
 
   const handleSubmitForm: SubmitHandler<
     IWeeklyProductionTargetPlanValues
@@ -267,7 +270,7 @@ const MutationProductionTargetPlanBook = ({
   };
 
   return (
-    <DashboardCard p={0} isLoading={materialsDataLoading}>
+    <DashboardCard p={0}>
       <Flex gap={32} direction="column" p={mutationType === 'read' ? 0 : 22}>
         {mutationType === 'read' ? undefined : <CommonWeeklyPlanInformation />}
         <GlobalFormGroup

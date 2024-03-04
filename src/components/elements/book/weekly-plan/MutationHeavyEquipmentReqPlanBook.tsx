@@ -120,50 +120,49 @@ const MutationHeavyEquipmentReqPlanBook = ({
     },
   });
 
-  const { weeklyHeavyEquipmentReqPlanDataLoading } =
-    useReadOneHeavyEquipmentReqPlan({
-      variables: {
-        weeklyPlanId: id,
-        limit: null,
-      },
-      skip: !router.isReady || tabs !== 'heavyEquipmentReqPlan',
-      onCompleted: (data) => {
-        if (data.weeklyHeavyEquipmentRequirementPlans.data.length > 0) {
-          const weeklyHeavyEquipmentRequirementPlans: IMutationHeavyEquipmentReqPlan[] =
-            data.weeklyHeavyEquipmentRequirementPlans.data.map((obj) => {
-              const locationIds = obj.locations.map((val) => val.id);
-              const materialIds = obj.materials.map((val) => val.id);
-              const activities: IMutationHeavyEquipmentReqPlanActivity[] =
-                obj.heavyEquipmentRequirementPlanActivities.map((hObj) => {
-                  const weeklyHeavyEquipmentRequirements: IMutationWeeklyHeavyEquipmentRequirement[] =
-                    hObj.weeklyHeavyEquipmentRequirements.map((wObj) => {
-                      return {
-                        id: wObj.id,
-                        day: wObj.day,
-                        value: wObj.value || '',
-                      };
-                    });
-                  return {
-                    id: hObj.id,
-                    activityId: hObj.activity.id,
-                    classId: hObj.class.id,
-                    weeklyHeavyEquipmentRequirements,
-                  };
-                });
-              return {
-                id: obj.id,
-                activityName: obj.activityName,
-                locationIds,
-                materialIds,
-                averageDistance: obj.averageDistance || '',
-                desc: obj.desc,
-                activities,
-              };
-            });
-          heavyequipmentReqReplace(weeklyHeavyEquipmentRequirementPlans);
-        }
-      },
-    });
+  useReadOneHeavyEquipmentReqPlan({
+    variables: {
+      weeklyPlanId: id,
+      limit: null,
+    },
+    skip: !router.isReady || tabs !== 'heavyEquipmentReqPlan',
+    onCompleted: (data) => {
+      if (data.weeklyHeavyEquipmentRequirementPlans.data.length > 0) {
+        const weeklyHeavyEquipmentRequirementPlans: IMutationHeavyEquipmentReqPlan[] =
+          data.weeklyHeavyEquipmentRequirementPlans.data.map((obj) => {
+            const locationIds = obj.locations.map((val) => val.id);
+            const materialIds = obj.materials.map((val) => val.id);
+            const activities: IMutationHeavyEquipmentReqPlanActivity[] =
+              obj.heavyEquipmentRequirementPlanActivities.map((hObj) => {
+                const weeklyHeavyEquipmentRequirements: IMutationWeeklyHeavyEquipmentRequirement[] =
+                  hObj.weeklyHeavyEquipmentRequirements.map((wObj) => {
+                    return {
+                      id: wObj.id,
+                      day: wObj.day,
+                      value: wObj.value || '',
+                    };
+                  });
+                return {
+                  id: hObj.id,
+                  activityId: hObj.activity.id,
+                  classId: hObj.class.id,
+                  weeklyHeavyEquipmentRequirements,
+                };
+              });
+            return {
+              id: obj.id,
+              activityName: obj.activityName,
+              locationIds,
+              materialIds,
+              averageDistance: obj.averageDistance || '',
+              desc: obj.desc,
+              activities,
+            };
+          });
+        heavyequipmentReqReplace(weeklyHeavyEquipmentRequirementPlans);
+      }
+    },
+  });
 
   const unitCapacityCallback = React.useCallback(
     (
@@ -374,7 +373,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
   };
 
   return (
-    <DashboardCard p={0} isLoading={weeklyHeavyEquipmentReqPlanDataLoading}>
+    <DashboardCard p={0}>
       <Flex gap={32} direction="column" p={22}>
         <CommonWeeklyPlanInformation />
         <GlobalFormGroup

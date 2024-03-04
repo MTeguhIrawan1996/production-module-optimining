@@ -103,13 +103,14 @@ const BargingTargetPlanData = () => {
   return (
     <>
       <WeeklyPlanInformationData />
-      <DashboardCard p={0} isLoading={weeklyBargingTargetPlanDataLoading}>
+      <DashboardCard p={0}>
         <Stack spacing="sm">
           <Text fz={24} fw={600} color="brand">
             {t('commonTypography.bargingTargetPlan')}
           </Text>
           <MantineDataTable
             tableProps={{
+              fetching: weeklyBargingTargetPlanDataLoading,
               groups: [
                 {
                   id: 'material',
@@ -144,6 +145,7 @@ const BargingTargetPlanData = () => {
           <MantineDataTable
             tableProps={{
               records: weeklyBargingTargetPlanData?.bargingDomePlans.data || [],
+              fetching: weeklyBargingTargetPlanDataLoading,
               columns: [
                 {
                   accessor: 'index',

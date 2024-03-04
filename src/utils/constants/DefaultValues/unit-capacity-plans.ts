@@ -5,43 +5,43 @@ import {
 
 export const targetPlansDay: ITargetPlan[] = [
   {
-    id: '',
+    id: null,
     day: 0,
     rate: '',
     ton: '',
   },
   {
-    id: '',
+    id: null,
     day: 1,
     rate: '',
     ton: '',
   },
   {
-    id: '',
+    id: null,
     day: 2,
     rate: '',
     ton: '',
   },
   {
-    id: '',
+    id: null,
     day: 3,
     rate: '',
     ton: '',
   },
   {
-    id: '',
+    id: null,
     day: 4,
     rate: '',
     ton: '',
   },
   {
-    id: '',
+    id: null,
     day: 5,
     rate: '',
     ton: '',
   },
   {
-    id: '',
+    id: null,
     day: 6,
     rate: '',
     ton: '',
@@ -49,7 +49,7 @@ export const targetPlansDay: ITargetPlan[] = [
 ];
 
 export const material: IMaterialsGroup = {
-  id: '',
+  id: null,
   materialId: '',
   fleet: '',
   classId: '',

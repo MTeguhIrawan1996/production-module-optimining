@@ -44,7 +44,10 @@ const SelectWeekRhf: React.FC<ISelectWeekRhfProps> = ({
 
   const weeksItem = weeksData?.map((val) => {
     return {
-      name: `${val}`,
+      name: t('commonTypography.nthWeek', {
+        n: val, // week is started by 1 by default
+        ns: 'default',
+      }),
       id: `${val}`,
     };
   });
@@ -56,12 +59,7 @@ const SelectWeekRhf: React.FC<ISelectWeekRhfProps> = ({
   const SelectItem = React.forwardRef<HTMLDivElement, ItemProps>(
     ({ label, ...others }: ItemProps, ref) => (
       <div ref={ref} {...others}>
-        <Text size="sm">
-          {t('commonTypography.nthWeek', {
-            n: label, // week is started by 1 by default
-            ns: 'default',
-          })}
-        </Text>
+        <Text size="sm">{label}</Text>
       </div>
     )
   );

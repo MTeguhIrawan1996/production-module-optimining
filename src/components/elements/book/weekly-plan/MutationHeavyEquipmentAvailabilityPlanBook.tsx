@@ -114,30 +114,29 @@ const MutationHeavyEquipmentAvailabilityPlanBook = ({
     },
   });
 
-  const { weeklyHeavyEquipmentAvailabilityPlanDataLoading } =
-    useReadOneHeavyEquipmentAvailabilityPlan({
-      variables: {
-        weeklyPlanId: id,
-        limit: null,
-      },
-      skip: !router.isReady || tabs !== 'heavyEquipmentAvailabilityPlan',
-      onCompleted: ({ weeklyHeavyEquipmentAvailabilityPlans }) => {
-        if (weeklyHeavyEquipmentAvailabilityPlans.data.length > 0) {
-          const newData: IMutationHeavyEquipmentAvailabilityPlanData[] =
-            weeklyHeavyEquipmentAvailabilityPlans.data.map((wObj) => {
-              return {
-                id: wObj.id,
-                classId: wObj.class.id,
-                totalCount: wObj.totalCount || '',
-                damagedCount: wObj.damagedCount || '',
-                withoutOperatorCount: wObj.withoutOperatorCount || '',
-                desc: wObj.desc || '',
-              };
-            });
-          heavyEquipmentAvailabilityReplace(newData);
-        }
-      },
-    });
+  useReadOneHeavyEquipmentAvailabilityPlan({
+    variables: {
+      weeklyPlanId: id,
+      limit: null,
+    },
+    skip: !router.isReady || tabs !== 'heavyEquipmentAvailabilityPlan',
+    onCompleted: ({ weeklyHeavyEquipmentAvailabilityPlans }) => {
+      if (weeklyHeavyEquipmentAvailabilityPlans.data.length > 0) {
+        const newData: IMutationHeavyEquipmentAvailabilityPlanData[] =
+          weeklyHeavyEquipmentAvailabilityPlans.data.map((wObj) => {
+            return {
+              id: wObj.id,
+              classId: wObj.class.id,
+              totalCount: wObj.totalCount || '',
+              damagedCount: wObj.damagedCount || '',
+              withoutOperatorCount: wObj.withoutOperatorCount || '',
+              desc: wObj.desc || '',
+            };
+          });
+        heavyEquipmentAvailabilityReplace(newData);
+      }
+    },
+  });
 
   const unitCapacityCallback = React.useCallback(
     (
@@ -263,10 +262,7 @@ const MutationHeavyEquipmentAvailabilityPlanBook = ({
   };
 
   return (
-    <DashboardCard
-      p={0}
-      isLoading={weeklyHeavyEquipmentAvailabilityPlanDataLoading}
-    >
+    <DashboardCard p={0}>
       <Flex gap={32} direction="column" p={22}>
         <CommonWeeklyPlanInformation />
         <GlobalFormGroup
