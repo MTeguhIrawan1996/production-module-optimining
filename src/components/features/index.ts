@@ -1,7 +1,5 @@
 import AuthPage from '@/components/features/Auth/common';
 import DashboardPage from '@/components/features/Dashboard/common';
-import ComponentsPage from '@/components/features/Example/components/common';
-import DataTablePage from '@/components/features/Example/datatable/common';
 import FrontProductionPage from '@/components/features/InputData/Productions/data-front/common';
 import CreateFrontProductionPage from '@/components/features/InputData/Productions/data-front/create/common';
 import ReadFrontProductionPage from '@/components/features/InputData/Productions/data-front/read/common';
@@ -162,7 +160,6 @@ export {
   BlockPage,
   CompanyPage,
   CompanyTypePage,
-  ComponentsPage,
   CreateActivityPlanMasterPage,
   CreateBlockMasterPage,
   CreateBlockPitMasterPage,
@@ -201,7 +198,6 @@ export {
   CreateWorkingHoursPlanMasterPage,
   DashboardPage,
   DataRitagePage,
-  DataTablePage,
   ElementMasterPage,
   FactoryMasterPage,
   FrontProductionPage,
