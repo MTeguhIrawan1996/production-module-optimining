@@ -50,28 +50,32 @@ const MapProductionPage = () => {
           tabs={{
             value: router.query.tabs as string,
             onTabChange: (value) => handleChangeTab(value),
-            keepMounted: true,
+            keepMounted: false,
           }}
           tabsData={[
             {
               label: 'Mingguan',
               value: 'weekly',
               component: <ListWeeklyMapBook />,
+              isShowItem: true,
             },
             {
               label: 'Bulanan',
               value: 'monthly',
               component: <ListMonthlyMapBook />,
+              isShowItem: true,
             },
             {
               label: 'Triwulan',
               value: 'quarterly',
               component: <ListQuarterlyMapBook />,
+              isShowItem: true,
             },
             {
               label: 'Tahunan',
               value: 'yearly',
               component: <ListYearlyMapBook />,
+              isShowItem: true,
             },
           ]}
         />

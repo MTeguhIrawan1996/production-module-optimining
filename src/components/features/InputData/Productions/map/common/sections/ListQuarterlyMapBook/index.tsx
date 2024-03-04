@@ -100,7 +100,8 @@ const ListQuarterlyMapBook = () => {
     <DashboardCard
       addButton={{
         label: t('mapProduction.createMapProd'),
-        onClick: () => router.push('/input-data/production/map/create'),
+        onClick: () =>
+          router.push('/input-data/production/map/create?mapType=quarterly'),
       }}
       filterDateWithSelect={{
         colSpan: 4,

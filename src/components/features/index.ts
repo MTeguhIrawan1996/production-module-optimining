@@ -154,12 +154,19 @@ import CreateHeavyEquipmentClassPage from '@/components/features/Reference/heavy
 import ReadHeavyEquipmentClassPage from '@/components/features/Reference/heavy-equipment-class/read/common';
 import UpdateHeavyEquipmentClassPage from '@/components/features/Reference/heavy-equipment-class/update/common';
 
-import CreateMapProductionPage from './InputData/Productions/map/create/common';
-import CreateMapProductionBook from './InputData/Productions/map/create/common/sections/CreateMapProductionBook';
-import ReadMapProductionPage from './InputData/Productions/map/read/common';
-import ReadMapProductionBook from './InputData/Productions/map/read/common/sections/ReadMapProductionBook';
-import UpdateMapProductionPage from './InputData/Productions/map/update/common';
-import UpdateMapProductionBook from './InputData/Productions/map/update/common/sections/UpdateMapProductionBook';
+import CreateMapMonthlyProductionPage from './InputData/Productions/map/monthly/create/common';
+import ReadMapMonthlyProductionPage from './InputData/Productions/map/monthly/read/common';
+import UpdateMapMonthlyProductionPage from './InputData/Productions/map/monthly/update/common';
+import CreateMapQuarterlyProductionPage from './InputData/Productions/map/quarterly/create/common';
+import ReadMapQuarterlyProductionPage from './InputData/Productions/map/quarterly/read/common';
+import UpdateMapQuarterlyProductionPage from './InputData/Productions/map/quarterly/update/common';
+// Input Map Production
+import CreateMapWeeklyProductionPage from './InputData/Productions/map/weekly/create/common';
+import ReadMapWeeklyProductionPage from './InputData/Productions/map/weekly/read/common';
+import UpdateMapWeeklyProductionPage from './InputData/Productions/map/weekly/update/common';
+import CreateMapYearlyProductionPage from './InputData/Productions/map/yearly/create/common';
+import ReadMapYearlyProductionPage from './InputData/Productions/map/yearly/read/common';
+import UpdateMapYearlyProductionPage from './InputData/Productions/map/yearly/update/common';
 
 export {
   ActivityCategoryMasterPage,
@@ -187,8 +194,10 @@ export {
   CreateHumanResourcesAvailablePage,
   CreateHumanResourcesPage,
   CreateLocationMasterPage,
-  CreateMapProductionBook,
-  CreateMapProductionPage,
+  CreateMapMonthlyProductionPage,
+  CreateMapQuarterlyProductionPage,
+  CreateMapWeeklyProductionPage,
+  CreateMapYearlyProductionPage,
   CreateMaterialMasterPage,
   CreateMonthlyPlanGroupPage,
   CreateMonthlyPlanInformationPage,
@@ -246,8 +255,10 @@ export {
   ReadHumanResourcesPage,
   ReadLocationMasterPage,
   ReadLoseTimeCategoryPage,
-  ReadMapProductionBook,
-  ReadMapProductionPage,
+  ReadMapMonthlyProductionPage,
+  ReadMapQuarterlyProductionPage,
+  ReadMapWeeklyProductionPage,
+  ReadMapYearlyProductionPage,
   ReadMaterialMasterPage,
   ReadMonthlyPlanInformationPage,
   ReadMonthlyPlanPage,
@@ -290,8 +301,10 @@ export {
   UpdateHumanResourcesPage,
   UpdateLocationMasterPage,
   UpdateLoseTimeActivityPage,
-  UpdateMapProductionBook,
-  UpdateMapProductionPage,
+  UpdateMapMonthlyProductionPage,
+  UpdateMapQuarterlyProductionPage,
+  UpdateMapWeeklyProductionPage,
+  UpdateMapYearlyProductionPage,
   UpdateMaterialMasterPage,
   UpdateMonthlyPlanGroupPage,
   UpdateMonthlyPlanInformationPage,
