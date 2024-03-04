@@ -12,17 +12,16 @@ import {
 
 export const weeklyUnitCapacityPlanMutationValidation: z.ZodType<IUnitCapacityPlanValues> =
   z.object({
-    companyId: zOptionalString.nullable(),
-    year: zOptionalString.nullable(),
-    week: zOptionalString.nullable(),
     unitCapacityPlans: z
       .object({
+        id: zOptionalString.nullable(),
         locationIds: zArrayOfString.min(1, {
           message: 'Pilih minimal 1 lokasi',
         }),
         activityName: zRequiredString,
         materials: z
           .object({
+            id: zOptionalString.nullable(),
             materialId: zRequiredSelectInput,
             fleet: zRequiredString,
             classId: zRequiredSelectInput,
@@ -34,6 +33,7 @@ export const weeklyUnitCapacityPlanMutationValidation: z.ZodType<IUnitCapacityPl
             dumpTruckCount: zRequiredNumber,
             targetPlans: z
               .object({
+                id: zOptionalString.nullable(),
                 day: zRequiredNumber,
                 rate: zOptionalNumber,
                 ton: zOptionalNumber,
