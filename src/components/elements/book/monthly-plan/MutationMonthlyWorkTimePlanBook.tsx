@@ -211,7 +211,7 @@ const MutationMonthlyWorkTimePlanBook = ({
         renderItem: () => {
           return (
             <Grid.Col span={12}>
-              <InputMonthlyTableWorkTimePlan />
+              <InputMonthlyTableWorkTimePlan mutationType={mutationType} />
             </Grid.Col>
           );
         },
