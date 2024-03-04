@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Grid } from '@mantine/core';
+import { Flex, Grid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -16,6 +16,7 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 import InputGroupMaterial, {
   IInputGroupMaterialProps,
 } from '@/components/elements/book/weekly-plan/input/InputGroupMaterial';
+import CommonWeeklyPlanInformation from '@/components/elements/book/weekly-plan/ui/CommonWeeklyPlanInformation';
 
 import {
   IMaterialsGroup,
@@ -25,15 +26,11 @@ import {
   useCreateWeeklyUnitCapacityPlan,
 } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyUnitcapacityPlan';
 import { useReadOneUnitCapacityPlan } from '@/services/graphql/query/plan/weekly/useReadOneUnitCapacityPlan';
-import { useReadOneWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadOneWeeklyPlan';
 import { material } from '@/utils/constants/DefaultValues/unit-capacity-plans';
 import {
   globalInputaverageArray,
   globalInputSumArray,
   globalMultipleSelectLocation,
-  globalSelectCompanyRhf,
-  globalSelectWeekRhf,
-  globalSelectYearRhf,
   globalText,
 } from '@/utils/constants/Field/global-field';
 import { weeklyUnitCapacityPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-unit-capacity-plan-validation';
@@ -60,12 +57,9 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
   const methods = useForm<IUnitCapacityPlanValues>({
     resolver: zodResolver(weeklyUnitCapacityPlanMutationValidation),
     defaultValues: {
-      companyId: '',
-      week: null,
-      year: null,
       unitCapacityPlans: [
         {
-          id: '',
+          id: null,
           locationIds: [],
           activityName: '',
           materials: [material],
@@ -74,7 +68,6 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
     },
     mode: 'onBlur',
   });
-  const year = methods.watch('year');
   const {
     fields: unitCapacityFields,
     append: unitCapacityAppend,
@@ -85,18 +78,6 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
     name: 'unitCapacityPlans',
     control: methods.control,
     keyName: 'unitCapacityPlanId',
-  });
-
-  const { weeklyPlanData, weeklyPlanDataLoading } = useReadOneWeeklyPlan({
-    variables: {
-      id,
-    },
-    skip: tabs !== 'unitCapacityPlan' || !router.isReady,
-    onCompleted: (data) => {
-      methods.setValue('companyId', data.weeklyPlan.company?.id ?? '');
-      methods.setValue('week', `${data.weeklyPlan.week}`);
-      methods.setValue('year', `${data.weeklyPlan.year}`);
-    },
   });
 
   useReadOneUnitCapacityPlan({
@@ -113,7 +94,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
             const materials = obj.materials.map((val) => {
               const targetPlans = val.targetPlans.map((tObj) => {
                 const targetPlanValue: ITargetPlan = {
-                  id: tObj.id || '',
+                  id: tObj.id || null,
                   day: tObj.day,
                   rate: tObj.rate || '',
                   ton: tObj.ton || '',
@@ -121,7 +102,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
                 return targetPlanValue;
               });
               const materialValue: IMaterialsGroup = {
-                id: val.id || '',
+                id: val.id || null,
                 materialId: val.material.id,
                 fleet: `${val.fleet}`,
                 classId: val.class.id,
@@ -136,7 +117,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
               return materialValue;
             });
             const returnValue: IUnitCapacityPlanProps = {
-              id: obj.id || '',
+              id: obj.id || null,
               locationIds,
               activityName: obj.activityName,
               materials: materials,
@@ -247,7 +228,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
                       `unitCapacityPlans.${index}`
                     );
                     unitCapacityUpdate(index, {
-                      id: value.id || '',
+                      id: value.id || null,
                       activityName: value.activityName,
                       locationIds: value.locationIds,
                       materials: [...value.materials, material],
@@ -262,7 +243,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
               copyArray.splice(i, 1);
               unitCapacityFields?.[index].materials?.length > 1
                 ? unitCapacityUpdate(index, {
-                    id: value.id || '',
+                    id: value.id || null,
                     activityName: value.activityName,
                     locationIds: value.locationIds,
                     materials: copyArray ?? [],
@@ -310,7 +291,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
                   label: t('commonTypography.createLocation'),
                   onClick: () =>
                     unitCapacityAppend({
-                      id: '',
+                      id: null,
                       locationIds: [],
                       activityName: '',
                       materials: [material],
@@ -335,42 +316,9 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
 
   const unitCapacityPlanGroup = unitCapacityFields.map(unitCapacityCallback);
 
-  const fieldRhf = React.useMemo(() => {
-    const companyItem = globalSelectCompanyRhf({
-      label: 'companyName',
-      disabled: true,
-      defaultValue: weeklyPlanData?.company?.id ?? '',
-      labelValue: weeklyPlanData?.company?.name ?? '',
-      skipQuery: tabs !== 'unitCapacityPlan',
-      withAsterisk: false,
-    });
-    const yearItem = globalSelectYearRhf({
-      disabled: true,
-      withAsterisk: false,
-      skipQuery: tabs !== 'unitCapacityPlan',
-    });
-    const weekItem = globalSelectWeekRhf({
-      disabled: true,
-      withAsterisk: false,
-      year: year ? Number(year) : null,
-      skipQuery: tabs !== 'unitCapacityPlan',
-    });
-
-    const field: ControllerGroup[] = [
-      {
-        group: t('commonTypography.companyInformation'),
-        enableGroupLabel: true,
-        formControllers: [companyItem, yearItem, weekItem],
-      },
-      ...unitCapacityPlanGroup,
-    ];
-
-    return field;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year, weeklyPlanData, unitCapacityPlanGroup, tabs]);
-
-  const handleSubmitForm: SubmitHandler<IUnitCapacityPlanValues> = async () => {
-    const data = methods.getValues();
+  const handleSubmitForm: SubmitHandler<IUnitCapacityPlanValues> = async (
+    data
+  ) => {
     const newUnitCapacityPlan = data.unitCapacityPlans.map(
       ({ activityName, locationIds, materials, id }) => {
         const materialValues = materials.map(
@@ -379,7 +327,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
               .filter((val) => val.rate && val.ton)
               .map((tObj) => {
                 const targetPlansValue: ITargetPlan = {
-                  id: tObj.id === '' ? undefined : tObj.id,
+                  id: tObj.id ? tObj.id : undefined,
                   day: tObj.day,
                   rate: tObj.rate,
                   ton: tObj.ton,
@@ -388,7 +336,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
               });
 
             const materialObj: IMaterialsGroup = {
-              id: idMaterial === '' ? undefined : idMaterial,
+              id: idMaterial ? idMaterial : undefined,
               targetPlans: targetPlansFilter,
               ...restMaterial,
             };
@@ -397,7 +345,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
         );
 
         const newUnitCapacityPlanObj: IUnitCapacityPlanProps = {
-          id: id === '' ? undefined : id,
+          id: id ? id : undefined,
           activityName: activityName,
           locationIds: locationIds,
           materials: materialValues,
@@ -419,52 +367,59 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
   };
 
   return (
-    <DashboardCard p={0} isLoading={weeklyPlanDataLoading}>
-      <GlobalFormGroup
-        field={fieldRhf}
-        methods={methods}
-        submitForm={handleSubmitForm}
-        submitButton={{
-          label: t('commonTypography.save'),
-          loading: mutationType === 'create' ? loading : undefined,
-          type: mutationType === 'create' ? 'submit' : 'button',
-          onClick:
-            mutationType === 'update'
-              ? async () => {
-                  const output = await methods.trigger(undefined, {
-                    shouldFocus: true,
-                  });
-                  if (output) setIsOpenConfirmation((prev) => !prev);
-                }
-              : undefined,
-        }}
-        backButton={{
-          onClick: () =>
-            router.push(
+    <DashboardCard p={0}>
+      <Flex gap={32} direction="column" p={22}>
+        <CommonWeeklyPlanInformation />
+        <GlobalFormGroup
+          flexProps={{
+            p: 0,
+          }}
+          field={unitCapacityPlanGroup}
+          methods={methods}
+          submitForm={handleSubmitForm}
+          submitButton={{
+            label: t('commonTypography.save'),
+            loading: mutationType === 'create' ? loading : undefined,
+            type: mutationType === 'create' ? 'submit' : 'button',
+            onClick:
               mutationType === 'update'
-                ? `/plan/weekly/${mutationType}/${id}`
-                : `/plan/weekly`
-            ),
-        }}
-        modalConfirmation={{
-          isOpenModalConfirmation: isOpenConfirmation,
-          actionModalConfirmation: () => setIsOpenConfirmation((prev) => !prev),
-          actionButton: {
-            label: t('commonTypography.yes'),
-            type: 'button',
-            onClick: handleConfirmation,
-            loading: loading,
-          },
-          backButton: {
-            label: 'Batal',
-          },
-          modalType: {
-            type: 'default',
-            title: t('commonTypography.alertTitleConfirmUpdate'),
-          },
-          withDivider: true,
-        }}
-      />
+                ? async () => {
+                    const output = await methods.trigger(undefined, {
+                      shouldFocus: true,
+                    });
+                    if (output) setIsOpenConfirmation((prev) => !prev);
+                  }
+                : undefined,
+          }}
+          backButton={{
+            onClick: () =>
+              router.push(
+                mutationType === 'update'
+                  ? `/plan/weekly/${mutationType}/${id}`
+                  : `/plan/weekly`
+              ),
+          }}
+          modalConfirmation={{
+            isOpenModalConfirmation: isOpenConfirmation,
+            actionModalConfirmation: () =>
+              setIsOpenConfirmation((prev) => !prev),
+            actionButton: {
+              label: t('commonTypography.yes'),
+              type: 'button',
+              onClick: handleConfirmation,
+              loading: loading,
+            },
+            backButton: {
+              label: 'Batal',
+            },
+            modalType: {
+              type: 'default',
+              title: t('commonTypography.alertTitleConfirmUpdate'),
+            },
+            withDivider: true,
+          }}
+        />
+      </Flex>
     </DashboardCard>
   );
 };

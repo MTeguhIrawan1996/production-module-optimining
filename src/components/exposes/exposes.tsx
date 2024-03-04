@@ -41,12 +41,6 @@ export const CompanyTypePage = () => (
   </WithProviders>
 );
 
-export const ComponentsPage = () => (
-  <WithProviders>
-    <Pages.ComponentsPage />
-  </WithProviders>
-);
-
 export const CreateActivityPlanMasterPage = () => (
   <WithProviders>
     <Pages.CreateActivityPlanMasterPage />
@@ -248,12 +242,6 @@ export const DashboardPage = () => (
 export const DataRitagePage = () => (
   <WithProviders>
     <Pages.DataRitagePage />
-  </WithProviders>
-);
-
-export const DataTablePage = () => (
-  <WithProviders>
-    <Pages.DataTablePage />
   </WithProviders>
 );
 

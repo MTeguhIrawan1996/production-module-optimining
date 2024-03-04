@@ -18,10 +18,12 @@ import dayjs from '@/utils/helper/dayjs.config';
 
 interface IInputTableProductionProps {
   mutationType?: 'create' | 'update' | 'read';
+  isLoading?: boolean;
 }
 
 const InputTableProductionPlan = ({
   mutationType,
+  isLoading,
 }: IInputTableProductionProps) => {
   const { t } = useTranslation('default');
 
@@ -251,6 +253,7 @@ const InputTableProductionPlan = ({
       tableProps={{
         highlightOnHover: true,
         withColumnBorders: true,
+        fetching: isLoading,
         idAccessor: (record) => {
           return record.materialId || record.materialName;
         },

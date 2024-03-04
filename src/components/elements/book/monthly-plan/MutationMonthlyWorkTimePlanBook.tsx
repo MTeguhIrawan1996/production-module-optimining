@@ -211,7 +211,7 @@ const MutationMonthlyWorkTimePlanBook = ({
         renderItem: () => {
           return (
             <Grid.Col span={12}>
-              <InputMonthlyTableWorkTimePlan />
+              <InputMonthlyTableWorkTimePlan mutationType={mutationType} />
             </Grid.Col>
           );
         },
@@ -220,7 +220,7 @@ const MutationMonthlyWorkTimePlanBook = ({
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabs, mutationType]);
+  }, [mutationType]);
 
   // eslint-disable-next-line unused-imports/no-unused-vars
   const handleSubmitForm: SubmitHandler<any> = async (data) => {
