@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 import DashboardCard from '@/components/elements/card/DashboardCard';
+import SelectWeekNative from '@/components/elements/input/SelectWeekNative';
 import TextInputNative from '@/components/elements/input/TextInputNative';
 
 import { useReadOneWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadOneWeeklyPlan';
@@ -48,8 +49,8 @@ const CommonWeeklyPlanInformation = () => {
                 />
               </Grid.Col>
               <Grid.Col span={6}>
-                <TextInputNative
-                  control="text-input-native"
+                <SelectWeekNative
+                  control="select-week-native"
                   name="week"
                   label="week"
                   disabled
