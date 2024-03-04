@@ -4,13 +4,13 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalTabs } from '@/components/elements';
+import UnitCapacityPlanData from '@/components/features/Plan/monthly/read/monthly-plan-group/elements/UnitCapacityPlanData';
 import WorkTimePlanData from '@/components/features/Plan/monthly/read/monthly-plan-group/elements/WorkTimePlanData';
 import BargingTargetPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/BargingTargetPlanData';
 import HeavyEquipmentAvailabilityPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/HeavyEquipmentAvailabilityPlanData';
 import HeavyEquipmentReqPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/HeavyEquipmentReqPlanData';
 import MiningMapPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/MiningMapPlanData';
 import ProductionTargetPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/ProductionTargetPlanData';
-import UnitCapacityPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/UnitCapacityPlanData';
 
 const ReadMonthlyPlanGroupBook = () => {
   const router = useRouter();
