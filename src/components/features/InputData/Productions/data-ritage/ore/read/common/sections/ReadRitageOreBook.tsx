@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useStore } from 'zustand';
 
 import {
   DashboardCard,
@@ -21,12 +22,14 @@ import { useUpdateIsValidateOreRitage } from '@/services/graphql/mutation/ore-ri
 import { useReadOneOreRitage } from '@/services/graphql/query/ore-ritage/useReadOneOreRitage';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
 
 import { IElementWithValue, IFile, IUpdateStatusValues } from '@/types/global';
 
 const ReadRitageOreBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
 
   const methods = useForm<IUpdateStatusValues>({
@@ -189,22 +192,26 @@ const ReadRitageOreBook = () => {
   const includesValid = [`${process.env.NEXT_PUBLIC_STATUS_VALID}`];
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
+  const isPermissionValidation = permissions?.includes('validate-ore-ritage');
   const isShowButtonValidation = includesWaiting.includes(
     oreRitage?.status?.id ?? ''
   );
-
   const isShowButtonInvalidation = includesWaiting.includes(
     oreRitage?.status?.id ?? ''
   );
 
+  const isPermissionDetermination = permissions?.includes(
+    'determine-ore-ritage'
+  );
   const isShowButtonDetermined = includesValid.includes(
     oreRitage?.status?.id ?? ''
   );
-
   const isShowButtonReject = includesValid.includes(
     oreRitage?.status?.id ?? ''
   );
-  const isHiddenButtonEdit = includesDetermined.includes(
+
+  const isPermissionEdit = permissions?.includes('update-ore-ritage');
+  const isIncludeDetermination = includesDetermined.includes(
     oreRitage?.status?.id ?? ''
   );
 
@@ -212,18 +219,18 @@ const ReadRitageOreBook = () => {
     <DashboardCard
       title={t('ritageOre.readRitageOre')}
       updateButton={
-        isHiddenButtonEdit
-          ? undefined
-          : {
+        isPermissionEdit && !isIncludeDetermination
+          ? {
               label: 'Edit',
               onClick: () =>
                 router.push(
                   `/input-data/production/data-ritage/ore/update/${id}`
                 ),
             }
+          : undefined
       }
       validationButton={
-        isShowButtonValidation
+        isPermissionValidation && isShowButtonValidation
           ? {
               onClickValid: handleIsValid,
               loading: loading,
@@ -231,7 +238,7 @@ const ReadRitageOreBook = () => {
           : undefined
       }
       determinedButton={
-        isShowButtonDetermined
+        isPermissionDetermination && isShowButtonDetermined
           ? {
               onClickDetermined: handleIsDetermined,
               loading: determinedLoading,
@@ -239,7 +246,7 @@ const ReadRitageOreBook = () => {
           : undefined
       }
       notValidButton={
-        isShowButtonInvalidation
+        isPermissionValidation && isShowButtonInvalidation
           ? {
               methods: methods,
               submitForm: handleInvalidForm,
@@ -250,7 +257,7 @@ const ReadRitageOreBook = () => {
           : undefined
       }
       rejectButton={
-        isShowButtonReject
+        isPermissionDetermination && isShowButtonReject
           ? {
               methods: methods,
               submitForm: handleRejectForm,
