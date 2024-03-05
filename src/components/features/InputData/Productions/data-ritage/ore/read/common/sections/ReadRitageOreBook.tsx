@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useStore } from 'zustand';
 
 import {
   DashboardCard,
@@ -23,6 +22,7 @@ import { useReadOneOreRitage } from '@/services/graphql/query/ore-ritage/useRead
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
 import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { IElementWithValue, IFile, IUpdateStatusValues } from '@/types/global';
 

@@ -20,12 +20,15 @@ import { useUpdateIsValidateQuarryRitage } from '@/services/graphql/mutation/qua
 import { useReadOneQuarryRitage } from '@/services/graphql/query/quarry-ritage/useReadOneQuarryRitage';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { IFile, IUpdateStatusValues } from '@/types/global';
 
 const ReadRitageQuarryBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
 
   const methods = useForm<IUpdateStatusValues>({
@@ -172,22 +175,28 @@ const ReadRitageQuarryBook = () => {
   const includesValid = [`${process.env.NEXT_PUBLIC_STATUS_VALID}`];
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
+  const isPermissionValidation = permissions?.includes(
+    'validate-quarry-ritage'
+  );
   const isShowButtonValidation = includesWaiting.includes(
     quarryRitage?.status?.id ?? ''
   );
-
   const isShowButtonInvalidation = includesWaiting.includes(
     quarryRitage?.status?.id ?? ''
   );
 
+  const isPermissionDetermination = permissions?.includes(
+    'determine-quarry-ritage'
+  );
   const isShowButtonDetermined = includesValid.includes(
     quarryRitage?.status?.id ?? ''
   );
-
   const isShowButtonReject = includesValid.includes(
     quarryRitage?.status?.id ?? ''
   );
-  const isHiddenButtonEdit = includesDetermined.includes(
+
+  const isPermissionEdit = permissions?.includes('update-quarry-ritage');
+  const isIncludeDetermination = includesDetermined.includes(
     quarryRitage?.status?.id ?? ''
   );
 
@@ -195,18 +204,18 @@ const ReadRitageQuarryBook = () => {
     <DashboardCard
       title={t('ritageQuarry.readRitageQuarry')}
       updateButton={
-        isHiddenButtonEdit
-          ? undefined
-          : {
+        isPermissionEdit && !isIncludeDetermination
+          ? {
               label: 'Edit',
               onClick: () =>
                 router.push(
                   `/input-data/production/data-ritage/quarry/update/${id}`
                 ),
             }
+          : undefined
       }
       validationButton={
-        isShowButtonValidation
+        isPermissionValidation && isShowButtonValidation
           ? {
               onClickValid: handleIsValid,
               loading: loading,
@@ -214,7 +223,7 @@ const ReadRitageQuarryBook = () => {
           : undefined
       }
       determinedButton={
-        isShowButtonDetermined
+        isPermissionDetermination && isShowButtonDetermined
           ? {
               onClickDetermined: handleIsDetermined,
               loading: determinedLoading,
@@ -222,7 +231,7 @@ const ReadRitageQuarryBook = () => {
           : undefined
       }
       notValidButton={
-        isShowButtonInvalidation
+        isPermissionValidation && isShowButtonInvalidation
           ? {
               methods: methods,
               submitForm: handleInvalidForm,
@@ -233,7 +242,7 @@ const ReadRitageQuarryBook = () => {
           : undefined
       }
       rejectButton={
-        isShowButtonReject
+        isPermissionDetermination && isShowButtonReject
           ? {
               methods: methods,
               submitForm: handleRejectForm,
