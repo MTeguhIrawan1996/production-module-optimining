@@ -7,6 +7,8 @@ import { DashboardCard, KeyValueList } from '@/components/elements';
 import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
 import { useReadOneActivityCategory } from '@/services/graphql/query/activity-category/useReadOneActivityCategory';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 interface IReadLoseTimeCategoryBookProps {
   tab?: string;
@@ -16,9 +18,14 @@ const ReadLoseTimeCategoryBook: React.FC<IReadLoseTimeCategoryBookProps> = ({
   tab: tabProps,
 }) => {
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
   const tab = router.query['tab'] || 'lose-time-category';
   const { t } = useTranslation('default');
+
+  const isPermissionUpdate = permissions?.includes(
+    'update-working-hour-plan-category'
+  );
 
   /* #   /**=========== Query =========== */
   const {
@@ -34,13 +41,17 @@ const ReadLoseTimeCategoryBook: React.FC<IReadLoseTimeCategoryBookProps> = ({
   return (
     <DashboardCard
       title={t('activityCategory.readLoseTimeCategory')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () =>
-          router.push(
-            `/master-data/activity-category/lose-time-category/update/${id}`
-          ),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () =>
+                router.push(
+                  `/master-data/activity-category/lose-time-category/update/${id}`
+                ),
+            }
+          : undefined
+      }
       enebleBackBottomOuter={{
         onClick: () =>
           router.push(`/master-data/activity-category?tab=${tabProps}`),

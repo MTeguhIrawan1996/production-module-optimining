@@ -11,6 +11,8 @@ import {
 
 import { useReadOneCompany } from '@/services/graphql/query/master-data-company/useReadOneCompany';
 import { formatDate } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const useStyles = createStyles(() => ({
   image: {
@@ -22,7 +24,9 @@ const useStyles = createStyles(() => ({
 const ReadCompanyBook = () => {
   const { classes } = useStyles();
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
+  const isPermissionUpdate = permissions?.includes('update-company');
 
   const { companyData, companyDataLoading } = useReadOneCompany({
     variables: {
@@ -35,12 +39,16 @@ const ReadCompanyBook = () => {
       pb={0}
       paperStackProps={{ spacing: 0 }}
       childrenStackProps={{ spacing: 0 }}
-      updateButton={{
-        label: 'Edit',
-        onClick: () => {
-          router.push(`/master-data/company/update/${id}`);
-        },
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () => {
+                router.push(`/master-data/company/update/${id}`);
+              },
+            }
+          : undefined
+      }
       isLoading={companyDataLoading}
     >
       <Divider my="md" />

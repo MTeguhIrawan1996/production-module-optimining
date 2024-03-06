@@ -14,9 +14,12 @@ import {
 
 import { useDeleteMasterDataHumanResource } from '@/services/graphql/mutation/master-data-human-resources/useDeleteHumanResources';
 import { useReadAllHumanResourcesMasterData } from '@/services/graphql/query/master-data-human-resources/useReadAllMasterDataHumanResources';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const HumanResourcesBook = () => {
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const page = Number(router.query['page']) || 1;
   const url = `/master-data/human-resources?page=1`;
   const { t } = useTranslation('default');
@@ -24,6 +27,11 @@ const HumanResourcesBook = () => {
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const isPermissionCreate = permissions?.includes('create-human-resource');
+  const isPermissionUpdate = permissions?.includes('update-human-resource');
+  const isPermissionDelete = permissions?.includes('delete-human-resource');
+  const isPermissionRead = permissions?.includes('read-human-resource');
 
   /* #   /**=========== Query =========== */
   const {
@@ -122,27 +130,41 @@ const HumanResourcesBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/human-resources/read/${id}`);
-                      },
-                    }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/master-data/human-resources/update/${id}`
-                        );
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/human-resources/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/human-resources/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -151,10 +173,13 @@ const HumanResourcesBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('humanResources.createHumanResources'),
-            onClick: () => router.push('/master-data/human-resources/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('humanResources.createHumanResources'),
+                onClick: () =>
+                  router.push('/master-data/human-resources/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -166,15 +191,26 @@ const HumanResourcesBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [humanResourcesData, humanResourcesDataLoading]);
+  }, [
+    humanResourcesData,
+    humanResourcesDataLoading,
+    isPermissionRead,
+    isPermissionDelete,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('humanResources.createHumanResources'),
-        onClick: () => router.push('/master-data/human-resources/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('humanResources.createHumanResources'),
+              onClick: () => router.push('/master-data/human-resources/create'),
+            }
+          : undefined
+      }
       searchBar={{
         placeholder: t('humanResources.searchPlaceholder'),
         onChange: (e) => {

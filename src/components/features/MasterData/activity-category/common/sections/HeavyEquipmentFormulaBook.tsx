@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useStore } from 'zustand';
 
 import {
   DashboardCard,
@@ -9,6 +10,7 @@ import {
 } from '@/components/elements';
 
 import { useReadAllHeavyEquipmentFormula } from '@/services/graphql/query/heavy-equipment-formula/useReadAllHeavyEquipmentFormula';
+import { usePermissions } from '@/utils/store/usePermissions';
 
 interface IHeavyEquipmentFormulaBookProps {
   tab?: string;
@@ -18,9 +20,17 @@ const HeavyEquipmentFormulaBook: React.FC<IHeavyEquipmentFormulaBookProps> = ({
   tab: tabProps,
 }) => {
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const page = Number(router.query['page']) || 1;
   const tab = router.query['tab'] || 'lose-time-category';
   const { t } = useTranslation('default');
+
+  const isPermissionUpdate = permissions?.includes(
+    'update-heavy-equipment-data-formula'
+  );
+  const isPermissionRead = permissions?.includes(
+    'read-heavy-equipment-data-formula'
+  );
 
   /* #   /**=========== Query =========== */
   const {
@@ -67,22 +77,30 @@ const HeavyEquipmentFormulaBook: React.FC<IHeavyEquipmentFormulaBookProps> = ({
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/master-data/activity-category/heavy-equipment-performance-formula/read/${id}`
-                        );
-                      },
-                    }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/master-data/activity-category/heavy-equipment-performance-formula/update/${id}`
-                        );
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/activity-category/heavy-equipment-performance-formula/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/activity-category/heavy-equipment-performance-formula/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -105,6 +123,8 @@ const HeavyEquipmentFormulaBook: React.FC<IHeavyEquipmentFormulaBookProps> = ({
   }, [
     readAllHeavyEquipmentFormulaData,
     readAllHeavyEquipmentFormulaDataLoading,
+    isPermissionRead,
+    isPermissionUpdate,
   ]);
   /* #endregion  /**======== RenderTable =========== */
 

@@ -14,6 +14,8 @@ import {
 
 import { useDeleteActivityCategory } from '@/services/graphql/mutation/activity-category/useDeleteActivityCategory';
 import { useReadAllActivityCategory } from '@/services/graphql/query/activity-category/useReadAllActivityCategoryMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 interface ICalculationCategoryBookProps {
   tab?: string;
@@ -23,6 +25,7 @@ const CalculationCategoryBook: React.FC<ICalculationCategoryBookProps> = ({
   tab: tabProps,
 }) => {
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const page = Number(router.query['page']) || 1;
   const tab = router.query['tab'] || 'calculation-category';
   const url = `/master-data/activity-category?page=1&tab=${tabProps}`;
@@ -31,6 +34,19 @@ const CalculationCategoryBook: React.FC<ICalculationCategoryBookProps> = ({
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const isPermissionCreate = permissions?.includes(
+    'create-working-hour-plan-category'
+  );
+  const isPermissionUpdate = permissions?.includes(
+    'update-working-hour-plan-category'
+  );
+  const isPermissionDelete = permissions?.includes(
+    'delete-working-hour-plan-category'
+  );
+  const isPermissionRead = permissions?.includes(
+    'read-working-hour-plan-category'
+  );
 
   /* #   /**=========== Query =========== */
   const {
@@ -110,29 +126,41 @@ const CalculationCategoryBook: React.FC<ICalculationCategoryBookProps> = ({
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/master-data/activity-category/calculation-category/read/${id}`
-                        );
-                      },
-                    }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/master-data/activity-category/calculation-category/update/${id}`
-                        );
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/activity-category/calculation-category/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/activity-category/calculation-category/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -152,18 +180,29 @@ const CalculationCategoryBook: React.FC<ICalculationCategoryBookProps> = ({
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [readAllActivityCategoryData, readAllActivityCategoryDataLoading]);
+  }, [
+    readAllActivityCategoryData,
+    readAllActivityCategoryDataLoading,
+    isPermissionCreate,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionDelete,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('activityCategory.createCalculationCategory'),
-        onClick: () =>
-          router.push(
-            `/master-data/activity-category/calculation-category/create`
-          ),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('activityCategory.createCalculationCategory'),
+              onClick: () =>
+                router.push(
+                  `/master-data/activity-category/calculation-category/create`
+                ),
+            }
+          : undefined
+      }
       searchBar={{
         placeholder: t('activityCategory.searchPlaceholderCalculation'),
         onChange: (e) => {
