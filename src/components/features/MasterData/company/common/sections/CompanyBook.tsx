@@ -163,10 +163,12 @@ const CompanyBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('company.createCompany'),
-            onClick: () => router.push('/master-data/company/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('company.createCompany'),
+                onClick: () => router.push('/master-data/company/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -183,6 +185,7 @@ const CompanyBook = () => {
     companiesDataLoading,
     isPermissionRead,
     isPermissionDelete,
+    isPermissionCreate,
   ]);
   /* #endregion  /**======== RenderTable =========== */
 

@@ -10,13 +10,18 @@ import {
 } from '@/components/elements';
 
 import { useReadOneHeavyEquipmentMaster } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { IFile } from '@/types/global';
 
 const ReadHeavyEquipmentMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
+
+  const isPermissionUpdate = permissions?.includes('update-heavy-equipment');
 
   /* #   /**=========== Query =========== */
   const { heavyEquipmentMasterData, heavyEquipmentMasterDataLoading } =
@@ -64,10 +69,15 @@ const ReadHeavyEquipmentMasterBook = () => {
   return (
     <DashboardCard
       title={t('heavyEquipment.heavyEquipmentTitle')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () => router.push(`/master-data/heavy-equipment/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () =>
+                router.push(`/master-data/heavy-equipment/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,

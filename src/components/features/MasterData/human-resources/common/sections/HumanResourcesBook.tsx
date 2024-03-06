@@ -173,10 +173,13 @@ const HumanResourcesBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('humanResources.createHumanResources'),
-            onClick: () => router.push('/master-data/human-resources/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('humanResources.createHumanResources'),
+                onClick: () =>
+                  router.push('/master-data/human-resources/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -194,6 +197,7 @@ const HumanResourcesBook = () => {
     isPermissionRead,
     isPermissionDelete,
     isPermissionUpdate,
+    isPermissionCreate,
   ]);
   /* #endregion  /**======== RenderTable =========== */
 
