@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard } from '@/components/elements';
 
 import { useReadOneHeavyEquipmentFormula } from '@/services/graphql/query/heavy-equipment-formula/useReadOneHeavyEquipmentFormula';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 interface IReadHeavyEquipmentFormulaBookProps {
   tab?: string;
@@ -25,8 +27,13 @@ const ReadHeavyEquipmentFormulaBook: React.FC<
 > = ({ tab: tabProps }) => {
   const largeScreen = useMediaQuery('(min-width: 88em)');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
   const { t } = useTranslation('default');
+
+  const isPermissionUpdate = permissions?.includes(
+    'update-heavy-equipment-data-formula'
+  );
 
   /* #   /**=========== Query =========== */
   const {
@@ -69,13 +76,17 @@ const ReadHeavyEquipmentFormulaBook: React.FC<
   return (
     <DashboardCard
       title={t('activityCategory.readHeavyEquipmentFormula')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () =>
-          router.push(
-            `/master-data/activity-category/heavy-equipment-performance-formula/update/${id}`
-          ),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () =>
+                router.push(
+                  `/master-data/activity-category/heavy-equipment-performance-formula/update/${id}`
+                ),
+            }
+          : undefined
+      }
       enebleBackBottomOuter={{
         onClick: () =>
           router.push(`/master-data/activity-category?tab=${tabProps}`),
