@@ -7,11 +7,16 @@ import { DashboardCard, KeyValueList } from '@/components/elements';
 
 import { ISubmaterials } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { useReadOneMaterialMaster } from '@/services/graphql/query/material/useReadOneMaterialMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ReadMaterialMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
+
+  const isPermissionUpdate = permissions?.includes('update-material');
 
   /* #   /**=========== Query =========== */
   const { materialMaster, materialMasterLoading } = useReadOneMaterialMaster({
@@ -34,10 +39,14 @@ const ReadMaterialMasterBook = () => {
   return (
     <DashboardCard
       title={t('commonTypography.material')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () => router.push(`/master-data/material/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () => router.push(`/master-data/material/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,

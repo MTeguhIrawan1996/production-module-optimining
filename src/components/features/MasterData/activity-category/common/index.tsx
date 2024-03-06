@@ -25,10 +25,10 @@ const ActivityCategoryMasterPage = () => {
   );
 
   const isPremissionActivityCategory = permissions?.includes(
-    'create-working-hour-plan-category'
+    'read-working-hour-plan-category'
   );
   const isPremissionHeavyEquipmentFormula = permissions?.includes(
-    'create-heavy-equipment-data-formula'
+    'read-heavy-equipment-data-formula'
   );
 
   React.useEffect(() => {

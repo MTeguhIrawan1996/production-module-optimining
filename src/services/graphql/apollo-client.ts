@@ -124,7 +124,7 @@ const getClient = (tokenServer?: ISessionServer | null) => {
             signOut({ redirect: true, callbackUrl: '/auth/signin' });
             return;
           case 'FORBIDDEN':
-            signOut({ redirect: true, callbackUrl: '/auth/signin' });
+            // signOut({ redirect: true, callbackUrl: '/auth/signin' });
             return;
           case 'INTERNAL_SERVER_ERROR':
             notifications.show({
