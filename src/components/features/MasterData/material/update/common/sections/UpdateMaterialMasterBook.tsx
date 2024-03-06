@@ -3,7 +3,12 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import {
+  FieldArrayWithId,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
@@ -94,13 +99,20 @@ const UpdateMaterialMasterBook = () => {
   });
 
   const fieldsSubMaterial = React.useCallback(
-    (_, index: number) => {
+    (
+      val: FieldArrayWithId<
+        IMutationUpdateMaterialValues,
+        'subMaterials',
+        'id'
+      >,
+      index: number
+    ) => {
       const materialSubItem = globalText({
         colSpan: 12,
         name: `subMaterials.${index}.name`,
         label: `subMaterialType`,
+        key: val.id,
         withAsterisk: true,
-        value: methods.watch(`subMaterials.${index}.name`),
         onChange: (event) => {
           methods.setValue(
             `subMaterials.${index}.name`,

@@ -20,7 +20,7 @@ import MantineDataTable from '@/components/elements/dataTable/MantineDataTable';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 import GlobalBadgeStatus from '@/components/elements/global/GlobalBadgeStatus';
 
-import { formatDate, formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { hourFromat } from '@/utils/helper/hourFromat';
 
 import { CommonProps } from '@/types/global';
@@ -32,6 +32,7 @@ export type IExcelInputDropzoneRhfProps = {
   description?: string;
   withAsterisk?: boolean;
   faildData?: unknown[];
+  usedWhere?: 'ritage' | 'heavy-equipment-prod';
 } & Omit<DropzoneProps, 'name' | 'children'> &
   CommonProps;
 
@@ -42,6 +43,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
   label,
   withAsterisk,
   faildData,
+  usedWhere = 'ritage',
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -60,24 +62,38 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
   const convertJSONtoExcel = () => {
     if (faildData) {
       const formattedData = (faildData as any).map((item: any) => {
-        if ('close_dome' in item) {
+        if (usedWhere === 'ritage') {
+          if ('tutup dome' in item) {
+            return {
+              ...item,
+              tanggal: formatDate(item['tanggal'], 'YYYY-MM-DD'),
+              'apakah ritase bermasalah': item['apakah ritase bermasalah']
+                ? 'TRUE'
+                : 'FALSE',
+              'tutup dome': item['tutup dome'] ? 'TRUE' : 'FALSE',
+            };
+          }
           return {
             ...item,
-            date: formatDate2(item.date, 'YYYY-MM-DD'),
-            is_ritage_problematic: item.is_ritage_problematic
+            tanggal: formatDate(item['tanggal'], 'YYYY-MM-DD'),
+            'apakah ritase bermasalah': item['apakah ritase bermasalah']
               ? 'TRUE'
               : 'FALSE',
-            close_dome: item.close_dome ? 'TRUE' : 'FALSE',
           };
         }
-        return {
-          ...item,
-          date: formatDate2(item.date, 'YYYY-MM-DD'),
-          is_ritage_problematic: item.is_ritage_problematic ? 'TRUE' : 'FALSE',
-        };
+        if (usedWhere === 'heavy-equipment-prod') {
+          return { ...item };
+        }
+        return { ...item };
       });
 
-      const worksheet = XLSX.utils.json_to_sheet(formattedData);
+      const newData = formattedData.map((item: any) => {
+        // eslint-disable-next-line unused-imports/no-unused-vars
+        const { errors, ...rest } = item;
+        return rest;
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(newData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'sheet1');
       const excelBuffer = XLSX.write(workbook, {
@@ -87,7 +103,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
       const dataExcel = new Blob([excelBuffer], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       });
-      const excelFileName = 'faild_data.xlsx';
+      const excelFileName = 'fail_data.xlsx';
 
       if (typeof window !== 'undefined') {
         // Check if browser is running in the client-side
@@ -127,7 +143,8 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
           const accessor = modifiedArray.map((val) => {
             const column: DataTableColumn<(typeof modifiedArray)[number]> = {
               accessor: `${val.accessor}`,
-              width: val.accessor === 'date' ? 160 : undefined,
+              title: `${val.accessor.replace(/[_0-9]/g, '')}`,
+              width: val.accessor === 'tanggal' ? 160 : undefined,
             };
             return column;
           });
@@ -159,7 +176,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
               columns: [...accessor],
               defaultColumnRender: (record, _, accesor) => {
                 const data = record[accesor as keyof typeof record];
-                if (accesor === 'is_ritage_problematic') {
+                if (accesor === 'apakah ritase bermasalah') {
                   return (
                     <GlobalBadgeStatus
                       color={data === 'TRUE' ? 'gray.6' : 'brand.6'}
@@ -171,24 +188,30 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
                     />
                   );
                 }
-                if (accesor === 'from_time') {
+                if (accesor === 'waktu dari asal') {
                   return hourFromat(data, 'hh:mm:ss A');
                 }
-                if (accesor === 'arrive_time') {
+                if (accesor === 'waktu sampai') {
                   return hourFromat(data, 'hh:mm:ss A');
                 }
-                if (accesor === 'date') {
-                  return formatDate(data);
+                if (accesor === 'tanggal') {
+                  const date = formatDate(data);
+                  return date ?? '-';
                 }
-                if (accesor === 'close_dome') {
+                if (accesor === 'tutup dome') {
                   return (
                     <GlobalBadgeStatus
                       color={data === 'TRUE' ? 'gray.6' : 'brand.6'}
-                      label={data === 'TRUE' ? 'Close' : 'Open'}
+                      label={data === 'TRUE' ? 'Tutup' : 'Buka'}
                     />
                   );
                 }
                 return data ? data : '-';
+              },
+              defaultColumnProps: {
+                titleStyle: {
+                  textTransform: 'capitalize',
+                },
               },
             }}
           />
@@ -200,6 +223,25 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
   }, [data, accessor]);
 
   const renderFaildTable: JSX.Element | undefined = React.useMemo(() => {
+    const keywordCount = {};
+    const transformedAccessor = accessor.map((item) => {
+      const { accessor, title, ...rest } = item;
+      const keywords = ['slug jenis waktu hilang', 'jam mulai', 'jam selesai'];
+
+      for (const keyword of keywords) {
+        if (accessor.includes(keyword)) {
+          const count = (keywordCount[keyword] || 0) + 1;
+          keywordCount[keyword] = count;
+
+          const newAccessor = `${keyword} ${count}`;
+
+          return { accessor: newAccessor, title, ...rest };
+        }
+      }
+
+      return { accessor, title };
+    });
+
     if (faildData && faildData.length > 0) {
       return (
         <MantineDataTable
@@ -211,10 +253,34 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
               const key = faildData && faildData.indexOf(record) + 1;
               return `${key}`;
             },
-            columns: [...accessor],
+            columns: [
+              ...(usedWhere === 'heavy-equipment-prod'
+                ? transformedAccessor
+                : accessor),
+              {
+                accessor: 'errors',
+                width: 300,
+                title: t('commonTypography.errorDescription', {
+                  ns: 'default',
+                }),
+                render: ({ errors }: any) => {
+                  return (
+                    <Stack spacing={2}>
+                      {errors?.map(({ message }, i: number) => {
+                        return (
+                          <Text key={i} color="red">
+                            {message}
+                          </Text>
+                        );
+                      })}
+                    </Stack>
+                  );
+                },
+              },
+            ],
             defaultColumnRender: (record, _, accesor) => {
               const rowData = record[accesor as keyof typeof record];
-              if (accesor === 'is_ritage_problematic') {
+              if (accesor === 'apakah ritase bermasalah') {
                 return (
                   <GlobalBadgeStatus
                     color={rowData || rowData === 'TRUE' ? 'gray.6' : 'brand.6'}
@@ -226,24 +292,30 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
                   />
                 );
               }
-              if (accesor === 'date') {
-                return formatDate(rowData);
+              if (accesor === 'tanggal') {
+                const date = formatDate(rowData);
+                return date ?? '-';
               }
-              if (accesor === 'from_time') {
+              if (accesor === 'waktu dari asal') {
                 return hourFromat(rowData, 'hh:mm:ss A');
               }
-              if (accesor === 'arrive_time') {
+              if (accesor === 'waktu sampai') {
                 return hourFromat(rowData, 'hh:mm:ss A');
               }
-              if (accesor === 'close_dome') {
+              if (accesor === 'tutup dome') {
                 return (
                   <GlobalBadgeStatus
-                    color={rowData === 'TRUE' ? 'gray.6' : 'brand.6'}
-                    label={rowData === 'TRUE' ? 'Close' : 'Open'}
+                    color={rowData === 'TRUE' || rowData ? 'gray.6' : 'brand.6'}
+                    label={rowData === 'TRUE' || rowData ? 'Tutup' : 'Buka'}
                   />
                 );
               }
               return rowData ? rowData : '-';
+            },
+            defaultColumnProps: {
+              titleStyle: {
+                textTransform: 'capitalize',
+              },
             },
           }}
         />
@@ -251,7 +323,7 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
     }
     return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [faildData, accessor]);
+  }, [faildData, accessor, usedWhere]);
 
   return (
     <Stack spacing={8}>

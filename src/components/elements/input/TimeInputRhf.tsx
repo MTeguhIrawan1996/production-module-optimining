@@ -11,6 +11,7 @@ import { CommonProps } from '@/types/global';
 export type ITimeInputRhfProps = {
   control: 'time-input';
   name: string;
+  labelWithTranslate?: boolean;
 } & Omit<TimeInputProps, 'name'> &
   CommonProps;
 
@@ -19,6 +20,7 @@ const TimeInputRhf: React.FC<ITimeInputRhfProps> = ({
   control,
   label,
   placeholder,
+  labelWithTranslate = true,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -31,7 +33,13 @@ const TimeInputRhf: React.FC<ITimeInputRhfProps> = ({
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
       data-control={control}
-      label={label ? t(`components.field.${label}`) : null}
+      label={
+        labelWithTranslate
+          ? label
+            ? t(`components.field.${label}`)
+            : null
+          : label
+      }
       placeholder={
         placeholder
           ? t(`commonTypography.${placeholder}`, { ns: 'default' })

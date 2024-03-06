@@ -1,7 +1,6 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,16 +14,24 @@ import {
 
 import { useDeleteStockpileMaster } from '@/services/graphql/mutation/stockpile-master/useDeleteStockpileMaster';
 import { useReadAllStockpileMaster } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const StockpileMasterBook = () => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+  const page = Number(router.query['page']) || 1;
+  const url = `/master-data/stockpile?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const isPermissionCreate = permissions?.includes('create-stockpile');
+  const isPermissionUpdate = permissions?.includes('update-stockpile');
+  const isPermissionDelete = permissions?.includes('delete-stockpile');
+  const isPermissionRead = permissions?.includes('read-stockpile');
 
   /* #   /**=========== Query =========== */
   const {
@@ -117,25 +124,39 @@ const StockpileMasterBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/stockpile/read/${id}`);
-                      },
-                    }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/stockpile/update/${id}`);
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(`/master-data/stockpile/read/${id}`);
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/stockpile/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -144,10 +165,12 @@ const StockpileMasterBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('stockpile.createStockpile'),
-            onClick: () => router.push('/master-data/stockpile/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('stockpile.createStockpile'),
+                onClick: () => router.push('/master-data/stockpile/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -159,21 +182,35 @@ const StockpileMasterBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stockpilesData, stockpilesDataLoading]);
+  }, [
+    stockpilesData,
+    stockpilesDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('stockpile.createStockpile'),
-        onClick: () => router.push('/master-data/stockpile/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('stockpile.createStockpile'),
+              onClick: () => router.push('/master-data/stockpile/create'),
+            }
+          : undefined
+      }
       searchBar={{
         placeholder: t('stockpile.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
         searchQuery: searchQuery,
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
+        },
       }}
     >
       {renderTable}

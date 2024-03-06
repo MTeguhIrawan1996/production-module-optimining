@@ -3,7 +3,6 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,18 +18,22 @@ import {
 import { useDeleteBlockPitMaster } from '@/services/graphql/mutation/block/useDeleteBlockPitMaster';
 import { useReadAllBlockPitMaster } from '@/services/graphql/query/block/useReadAllBlockPitMaster';
 import { useReadOneBlockMaster } from '@/services/graphql/query/block/useReadOneBlockMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ReadBlockMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const pageParams = useSearchParams();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
-  const page = Number(pageParams.get('page')) || 1;
+  const page = Number(router.query['page']) || 1;
   const url = `/master-data/block/read/${id}?page=1`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [pitId, setPitId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const isPermissionUpdate = permissions?.includes('update-block');
 
   /* #   /**=========== Query =========== */
   const { blockMaster, blockMasterLoading } = useReadOneBlockMaster({
@@ -98,7 +101,6 @@ const ReadBlockMasterBook = () => {
         tableProps={{
           highlightOnHover: true,
           shadow: 'none',
-          withColumnBorders: false,
           columns: [
             {
               accessor: 'handBookId',
@@ -161,10 +163,14 @@ const ReadBlockMasterBook = () => {
   return (
     <DashboardCard
       title={t('commonTypography.block')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () => router.push(`/master-data/block/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () => router.push(`/master-data/block/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,
@@ -194,7 +200,7 @@ const ReadBlockMasterBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          <Stack spacing="sm" mt="lg">
+          <Stack spacing="sm" mt="sm">
             <Text fz={24} fw={600} color="brand">
               {t('block.readBlock')}
             </Text>
@@ -210,14 +216,6 @@ const ReadBlockMasterBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />

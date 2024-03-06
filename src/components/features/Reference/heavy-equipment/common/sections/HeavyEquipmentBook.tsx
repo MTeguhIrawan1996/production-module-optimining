@@ -2,7 +2,6 @@ import { SelectProps } from '@mantine/core';
 import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,8 +22,8 @@ import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 const HeavyEquipmentBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const page = Number(router.query['page']) || 1;
+  const url = `/reference/heavy-equipment?page=1`;
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -256,6 +255,9 @@ const HeavyEquipmentBook = () => {
           setSearchQuery(e.currentTarget.value);
         },
         searchQuery,
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
+        },
         placeholder: t('heavyEquipment.searchPlaceholder'),
       }}
       MultipleFilter={{

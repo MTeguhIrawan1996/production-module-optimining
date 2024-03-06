@@ -15,7 +15,7 @@ const ReadCompanyPositionHistoryBook: React.FC<IProps> = ({ employe }) => {
   const { t } = useTranslation('default');
 
   return (
-    <Stack spacing="sm" mt="md">
+    <Stack spacing="sm" mt="sm">
       <Text fz={24} fw={600} color="brand">
         {t('commonTypography.positionDetail')}
       </Text>
@@ -49,18 +49,17 @@ const ReadCompanyPositionHistoryBook: React.FC<IProps> = ({ employe }) => {
             {
               accessor: 'startdate',
               title: t('commonTypography.dateOfOffice'),
-              render: ({ startDate }) => formatDate(startDate),
+              render: ({ startDate }) => formatDate(startDate) ?? '-',
               width: '30%',
             },
             {
               accessor: 'endDate',
               title: t('commonTypography.dateComplateOffice'),
-              render: ({ endDate }) => formatDate(endDate),
+              render: ({ endDate }) => formatDate(endDate) ?? '-',
               width: '30%',
             },
           ],
           withBorder: false,
-          withColumnBorders: false,
           shadow: 'none',
           emptyState: undefined,
           minHeight: 150,

@@ -1,11 +1,9 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import 'dayjs/locale/id';
 
 import {
   DashboardCard,
@@ -17,16 +15,24 @@ import {
 import { useDeleteShiftMaster } from '@/services/graphql/mutation/shift/useDeleteShiftMaster';
 import { useReadAllShiftMaster } from '@/services/graphql/query/shift/useReadAllShiftMaster';
 import { hourFromat } from '@/utils/helper/hourFromat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ShiftBook = () => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+  const page = Number(router.query['page']) || 1;
+  const url = `/master-data/shift?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const isPermissionCreate = permissions?.includes('create-shift');
+  const isPermissionUpdate = permissions?.includes('update-shift');
+  const isPermissionDelete = permissions?.includes('delete-shift');
+  const isPermissionRead = permissions?.includes('read-shift');
 
   /* #   /**=========== Query =========== */
   const { shiftsData, shiftsDataLoading, refetchShifts, shiftsDataMeta } =
@@ -121,25 +127,37 @@ const ShiftBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/shift/read/${id}`);
-                      },
-                    }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/shift/update/${id}`);
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(`/master-data/shift/read/${id}`);
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(`/master-data/shift/update/${id}`);
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -148,10 +166,12 @@ const ShiftBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('shift.createShift'),
-            onClick: () => router.push('/master-data/shift/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('shift.createShift'),
+                onClick: () => router.push('/master-data/shift/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -163,21 +183,35 @@ const ShiftBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shiftsData, shiftsDataLoading]);
+  }, [
+    shiftsData,
+    shiftsDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('shift.createShift'),
-        onClick: () => router.push('/master-data/shift/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('shift.createShift'),
+              onClick: () => router.push('/master-data/shift/create'),
+            }
+          : undefined
+      }
       searchBar={{
         placeholder: t('shift.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
         searchQuery: searchQuery,
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
+        },
       }}
     >
       {renderTable}

@@ -35,13 +35,16 @@ const NavbarCollapseLinksGroup: React.FC<IMenuItem> = ({
     return item.subMenu ? (
       <NavbarCollapseLinksGroupLevel2 {...item} key={i} />
     ) : (
-      <Link href={item.href ?? ''} key={`${item.label} + ${i}`}>
+      <Link href={item.href ?? ''} key={`${item.label}${i}`}>
         <Menu.Item
           className={cx(classes.item, {
             [classes.linkActive]: isActiveSubMenu,
           })}
+          py={8}
         >
-          <Text component="span">{t(`sideBar.${item.label}`)}</Text>
+          <Text component="span" fz="sm">
+            {t(`sideBar.${item.label}`)}
+          </Text>
         </Menu.Item>
       </Link>
     );
@@ -49,20 +52,20 @@ const NavbarCollapseLinksGroup: React.FC<IMenuItem> = ({
 
   return (
     <Menu shadow="md" width={250} position="right-start">
-      <Tooltip.Floating label={t(`sideBar.${label}`)} position="right">
+      <Tooltip label={t(`sideBar.${label}`)} position="right">
         <Menu.Target>
           <ActionIcon
             radius="md"
-            w={50}
-            h={50}
+            w={40}
+            h={40}
             className={cx(classes.link, {
               [classes.linkActive]: isActive,
             })}
           >
-            <Icon icon={icon ?? ''} style={{ fontSize: '20px' }} />
+            <Icon icon={icon ?? ''} style={{ fontSize: '18px' }} />
           </ActionIcon>
         </Menu.Target>
-      </Tooltip.Floating>
+      </Tooltip>
       <Menu.Dropdown>
         <Menu.Label>{t(`sideBar.${label}`)}</Menu.Label>
         {renderItems}

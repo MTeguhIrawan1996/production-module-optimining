@@ -21,12 +21,15 @@ import { useUpdateIsValidateBargingRitage } from '@/services/graphql/mutation/ba
 import { useReadOneBargingRitage } from '@/services/graphql/query/barging-ritage/useReadOneBargingRitage';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { IElementWithValue, IFile, IUpdateStatusValues } from '@/types/global';
 
 const ReadRitageBargingBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
 
   const methods = useForm<IUpdateStatusValues>({
@@ -190,22 +193,28 @@ const ReadRitageBargingBook = () => {
   const includesValid = [`${process.env.NEXT_PUBLIC_STATUS_VALID}`];
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
+  const isPermissionValidation = permissions?.includes(
+    'validate-barging-ritage'
+  );
   const isShowButtonValidation = includesWaiting.includes(
     bargingRitage?.status?.id ?? ''
   );
-
   const isShowButtonInvalidation = includesWaiting.includes(
     bargingRitage?.status?.id ?? ''
   );
 
+  const isPermissionDetermination = permissions?.includes(
+    'determine-barging-ritage'
+  );
   const isShowButtonDetermined = includesValid.includes(
     bargingRitage?.status?.id ?? ''
   );
-
   const isShowButtonReject = includesValid.includes(
     bargingRitage?.status?.id ?? ''
   );
-  const isHiddenButtonEdit = includesDetermined.includes(
+
+  const isPermissionEdit = permissions?.includes('update-barging-ritage');
+  const isIncludeDetermination = includesDetermined.includes(
     bargingRitage?.status?.id ?? ''
   );
 
@@ -213,18 +222,18 @@ const ReadRitageBargingBook = () => {
     <DashboardCard
       title={t('ritageBarging.readRitageBarging')}
       updateButton={
-        isHiddenButtonEdit
-          ? undefined
-          : {
+        isPermissionEdit && !isIncludeDetermination
+          ? {
               label: 'Edit',
               onClick: () =>
                 router.push(
                   `/input-data/production/data-ritage/barging/update/${id}`
                 ),
             }
+          : undefined
       }
       validationButton={
-        isShowButtonValidation
+        isPermissionValidation && isShowButtonValidation
           ? {
               onClickValid: handleIsValid,
               loading: loading,
@@ -232,7 +241,7 @@ const ReadRitageBargingBook = () => {
           : undefined
       }
       determinedButton={
-        isShowButtonDetermined
+        isPermissionDetermination && isShowButtonDetermined
           ? {
               onClickDetermined: handleIsDetermined,
               loading: determinedLoading,
@@ -240,7 +249,7 @@ const ReadRitageBargingBook = () => {
           : undefined
       }
       notValidButton={
-        isShowButtonInvalidation
+        isPermissionValidation && isShowButtonInvalidation
           ? {
               methods: methods,
               submitForm: handleInvalidForm,
@@ -251,7 +260,7 @@ const ReadRitageBargingBook = () => {
           : undefined
       }
       rejectButton={
-        isShowButtonReject
+        isPermissionDetermination && isShowButtonReject
           ? {
               methods: methods,
               submitForm: handleRejectForm,
@@ -297,7 +306,7 @@ const ReadRitageBargingBook = () => {
               description={bargingRitage?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           {bargingRitage?.status?.id ===
@@ -306,26 +315,18 @@ const ReadRitageBargingBook = () => {
               description={bargingRitage?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
-          <Stack spacing="sm" mt="md">
+          <Stack spacing="sm" mt="sm">
             <KeyValueList
               data={[
                 {
                   dataKey: t('commonTypography.date'),
-                  value: formatDate(bargingRitage?.date),
+                  value: formatDate(bargingRitage?.date) ?? '-',
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           {!bargingRitageLoading && bargingRitage ? (
@@ -386,14 +387,6 @@ const ReadRitageBargingBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -405,11 +398,12 @@ const ReadRitageBargingBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.fromAt'),
-                  value: formatDate(bargingRitage?.fromAt, 'hh:mm:ss A'),
+                  value: formatDate(bargingRitage?.fromAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.arriveAt'),
-                  value: formatDate(bargingRitage?.arriveAt, 'hh:mm:ss A'),
+                  value:
+                    formatDate(bargingRitage?.arriveAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.ritageDuration'),
@@ -417,14 +411,6 @@ const ReadRitageBargingBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -446,16 +432,12 @@ const ReadRitageBargingBook = () => {
                   dataKey: t('commonTypography.toBarging'),
                   value: bargingRitage?.barging?.name,
                 },
+                {
+                  dataKey: t('commonTypography.bargeCode'),
+                  value: bargingRitage?.bargeCompanyHeavyEquipment?.hullNumber,
+                },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -483,14 +465,6 @@ const ReadRitageBargingBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -499,18 +473,7 @@ const ReadRitageBargingBook = () => {
               {t('commonTypography.rate')}
             </Text>
             {renderOtherElement.length > 0 ? (
-              <KeyValueList
-                data={[...renderOtherElement]}
-                type="grid"
-                keyStyleText={{
-                  fw: 400,
-                  fz: 20,
-                }}
-                valueStyleText={{
-                  fw: 600,
-                  fz: 20,
-                }}
-              />
+              <KeyValueList data={[...renderOtherElement]} type="grid" />
             ) : (
               <Text color="gray.6">{t(`commonTypography.rateNotFound`)}</Text>
             )}
@@ -525,14 +488,6 @@ const ReadRitageBargingBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
         </Tabs.Panel>

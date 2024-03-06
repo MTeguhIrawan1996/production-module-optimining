@@ -20,12 +20,15 @@ import { useUpdateIsValidateQuarryRitage } from '@/services/graphql/mutation/qua
 import { useReadOneQuarryRitage } from '@/services/graphql/query/quarry-ritage/useReadOneQuarryRitage';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { IFile, IUpdateStatusValues } from '@/types/global';
 
 const ReadRitageQuarryBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
 
   const methods = useForm<IUpdateStatusValues>({
@@ -172,22 +175,28 @@ const ReadRitageQuarryBook = () => {
   const includesValid = [`${process.env.NEXT_PUBLIC_STATUS_VALID}`];
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
+  const isPermissionValidation = permissions?.includes(
+    'validate-quarry-ritage'
+  );
   const isShowButtonValidation = includesWaiting.includes(
     quarryRitage?.status?.id ?? ''
   );
-
   const isShowButtonInvalidation = includesWaiting.includes(
     quarryRitage?.status?.id ?? ''
   );
 
+  const isPermissionDetermination = permissions?.includes(
+    'determine-quarry-ritage'
+  );
   const isShowButtonDetermined = includesValid.includes(
     quarryRitage?.status?.id ?? ''
   );
-
   const isShowButtonReject = includesValid.includes(
     quarryRitage?.status?.id ?? ''
   );
-  const isHiddenButtonEdit = includesDetermined.includes(
+
+  const isPermissionEdit = permissions?.includes('update-quarry-ritage');
+  const isIncludeDetermination = includesDetermined.includes(
     quarryRitage?.status?.id ?? ''
   );
 
@@ -195,18 +204,18 @@ const ReadRitageQuarryBook = () => {
     <DashboardCard
       title={t('ritageQuarry.readRitageQuarry')}
       updateButton={
-        isHiddenButtonEdit
-          ? undefined
-          : {
+        isPermissionEdit && !isIncludeDetermination
+          ? {
               label: 'Edit',
               onClick: () =>
                 router.push(
                   `/input-data/production/data-ritage/quarry/update/${id}`
                 ),
             }
+          : undefined
       }
       validationButton={
-        isShowButtonValidation
+        isPermissionValidation && isShowButtonValidation
           ? {
               onClickValid: handleIsValid,
               loading: loading,
@@ -214,7 +223,7 @@ const ReadRitageQuarryBook = () => {
           : undefined
       }
       determinedButton={
-        isShowButtonDetermined
+        isPermissionDetermination && isShowButtonDetermined
           ? {
               onClickDetermined: handleIsDetermined,
               loading: determinedLoading,
@@ -222,7 +231,7 @@ const ReadRitageQuarryBook = () => {
           : undefined
       }
       notValidButton={
-        isShowButtonInvalidation
+        isPermissionValidation && isShowButtonInvalidation
           ? {
               methods: methods,
               submitForm: handleInvalidForm,
@@ -233,7 +242,7 @@ const ReadRitageQuarryBook = () => {
           : undefined
       }
       rejectButton={
-        isShowButtonReject
+        isPermissionDetermination && isShowButtonReject
           ? {
               methods: methods,
               submitForm: handleRejectForm,
@@ -279,7 +288,7 @@ const ReadRitageQuarryBook = () => {
               description={quarryRitage?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           {quarryRitage?.status?.id ===
@@ -288,26 +297,18 @@ const ReadRitageQuarryBook = () => {
               description={quarryRitage?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
-          <Stack spacing="sm" mt="md">
+          <Stack spacing="sm" mt="sm">
             <KeyValueList
               data={[
                 {
                   dataKey: t('commonTypography.date'),
-                  value: formatDate(quarryRitage?.date),
+                  value: formatDate(quarryRitage?.date) ?? '-',
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           {!quarryRitageLoading && quarryRitage ? (
@@ -359,23 +360,11 @@ const ReadRitageQuarryBook = () => {
                   value: quarryRitage?.material?.name,
                 },
                 {
-                  dataKey: t('commonTypography.subMaterial'),
-                  value: quarryRitage?.subMaterial?.name,
-                },
-                {
                   dataKey: t('commonTypography.weather'),
                   value: quarryRitage?.weather?.name,
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -387,11 +376,12 @@ const ReadRitageQuarryBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.fromAt'),
-                  value: formatDate(quarryRitage?.fromAt, 'hh:mm:ss A'),
+                  value: formatDate(quarryRitage?.fromAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.arriveAt'),
-                  value: formatDate(quarryRitage?.arriveAt, 'hh:mm:ss A'),
+                  value:
+                    formatDate(quarryRitage?.arriveAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.ritageDuration'),
@@ -399,14 +389,6 @@ const ReadRitageQuarryBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -442,14 +424,6 @@ const ReadRitageQuarryBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -469,14 +443,6 @@ const ReadRitageQuarryBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -500,14 +466,6 @@ const ReadRitageQuarryBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -520,14 +478,6 @@ const ReadRitageQuarryBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
         </Tabs.Panel>

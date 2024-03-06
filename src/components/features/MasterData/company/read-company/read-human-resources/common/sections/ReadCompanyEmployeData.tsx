@@ -15,7 +15,7 @@ const ReadCompanyEmployeBook: React.FC<IProps> = ({ employe }) => {
   const { t } = useTranslation('default');
 
   return (
-    <Stack spacing="sm" mt="md">
+    <Stack spacing="sm" mt="sm">
       <Text fz={24} fw={600} color="brand">
         {t('commonTypography.employeDetail')}
       </Text>
@@ -31,22 +31,14 @@ const ReadCompanyEmployeBook: React.FC<IProps> = ({ employe }) => {
           },
           {
             dataKey: t('commonTypography.entryDate'),
-            value: formatDate(employe?.entryDate ?? ''),
+            value: formatDate(employe?.entryDate ?? '-'),
           },
           {
             dataKey: t('commonTypography.quitDate'),
-            value: formatDate(employe?.quitDate ?? ''),
+            value: formatDate(employe?.quitDate ?? '-'),
           },
         ]}
         type="grid"
-        keyStyleText={{
-          fw: 400,
-          fz: 20,
-        }}
-        valueStyleText={{
-          fw: 600,
-          fz: 20,
-        }}
       />
     </Stack>
   );

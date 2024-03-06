@@ -6,24 +6,41 @@ import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/inp
 import { IEmployeeSelectInputRhfProps } from '@/components/elements/input/EmployeeSelectInputRhf';
 import { IHeavyEquipmentSelectInputRhfProps } from '@/components/elements/input/HeavyEquipmentSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
+import { IInputAverageArrayProps } from '@/components/elements/input/InputAverageArray';
+import { IInputSumArrayProps } from '@/components/elements/input/InputSumArray';
 import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
 import { ILocationSelectInputRhfProps } from '@/components/elements/input/LocationSelectInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
-import { IMaterialSelectnputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
+import { IMaterialSelectInputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
+import { IMultipleSelectLocationRhfProps } from '@/components/elements/input/MultipleSelectLocationRhf';
+import { IMultipleSelectMaterialRhfProps } from '@/components/elements/input/MultipleSelectMaterialRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
+import { IPdfOrInputDropzoneRhfProps } from '@/components/elements/input/PdfOrImageInputDropzoneRhf';
 import { IPitSelectInputRhfProps } from '@/components/elements/input/PitSelectInputRhf';
 import { IPositionSelectInputRhfProps } from '@/components/elements/input/PositionSelectInputRhf';
 import { IProvinceSelectInputRhfProps } from '@/components/elements/input/ProvinceSelectInputRhf';
 import { IRegencySelectInputRhfProps } from '@/components/elements/input/RegencySelectInputRhf';
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
+import { ISelectActivityCategoryRhfProps } from '@/components/elements/input/SelectActivityCategoryRhf';
+import { ISelectActivityFormRhfProps } from '@/components/elements/input/SelectActivityFormRhf';
+import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
+import { ISelectCompanyRhfProps } from '@/components/elements/input/SelectCompanyRhf';
+import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
+import { ISelectMonthRhfProps } from '@/components/elements/input/SelectMonthRhf';
+import { ISelectWeekRhfProps } from '@/components/elements/input/SelectWeekRhf';
+import { ISelectWorkingHoursPlanRhfProps } from '@/components/elements/input/SelectWorkingHoursPlanRhf';
+import { ISelectYearRhfProps } from '@/components/elements/input/SelectYearRhf';
 import { ISubDistrictSelectInputRhfProps } from '@/components/elements/input/SubDistrictSelectInputRhf';
+import { ITextAreaInput } from '@/components/elements/input/TextAreaInputRhf';
 import { ITextInputProps } from '@/components/elements/input/TextInputRhf';
 import { ITimeInputRhfProps } from '@/components/elements/input/TimeInputRhf';
 import { ITypeSelectInputRhfProps } from '@/components/elements/input/TypeSelectInputRhf';
 import { IVillageInputRhfProps } from '@/components/elements/input/VillageSelectInputRhf';
+import { IWeatherConditionSelectInputRhfProps } from '@/components/elements/input/WeatherConditionSelectInputRhf';
 import { IWeatherSelectInputRhfProps } from '@/components/elements/input/WeatherSelectInputRhf';
+import { IDisplayQuietNumber } from '@/components/elements/ui/DisplayQuietNumber';
 
 import { ControllerProps } from '@/types/global';
 
@@ -183,10 +200,11 @@ export const isWniRadio: ControllerProps = {
 export const bloodTypeSelect: ControllerProps = {
   control: 'select-input',
   name: 'bloodType',
-  withAsterisk: true,
+  withAsterisk: false,
   label: 'bloodType',
   placeholder: 'chooseBloodType',
   colSpan: 6,
+  clearable: true,
   data: [
     {
       label: 'A',
@@ -214,6 +232,7 @@ export const resusSelect: ControllerProps = {
   label: 'resus',
   placeholder: 'chooseResus',
   colSpan: 6,
+  clearable: true,
   data: [
     {
       label: '+',
@@ -542,6 +561,23 @@ export const globalText = ({
   };
   return field;
 };
+export const globalTextArea = ({
+  name = 'globalTextArea',
+  label = 'globalTextArea',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ITextAreaInput>) => {
+  const field: ControllerProps = {
+    control: 'text-area-input',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
 
 export const globalNumberInput = ({
   name = 'globalNumberInput',
@@ -552,6 +588,59 @@ export const globalNumberInput = ({
 }: Partial<INumberInputProps>) => {
   const field: ControllerProps = {
     control: 'number-input',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const displayQuietNumber = ({
+  name = 'displayQuietNumber',
+  label = 'displayQuietNumber',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IDisplayQuietNumber>) => {
+  const field: ControllerProps = {
+    control: 'display-quiet-number',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalInputSumArray = ({
+  name = 'numberInputSum',
+  label = 'numberInputSum',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IInputSumArrayProps>) => {
+  const field: ControllerProps = {
+    control: 'input-sum-array',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalInputaverageArray = ({
+  name = 'numberInputaverage',
+  label = 'numberInputaverage',
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IInputAverageArrayProps>) => {
+  const field: ControllerProps = {
+    control: 'input-average-array',
     name,
     label,
     withAsterisk,
@@ -685,6 +774,25 @@ export const locationCategorySelect = ({
   };
   return field;
 };
+export const weatherConditionSelect = ({
+  name = 'conditionId',
+  label = 'condition',
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IWeatherConditionSelectInputRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'weather-condition-select-input',
+    name,
+    label,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
 
 export const globalSelect = ({
   name = 'globalSelect',
@@ -731,7 +839,7 @@ export const materialSelect = ({
   withAsterisk = true,
   colSpan = 6,
   ...rest
-}: Partial<IMaterialSelectnputRhfProps>) => {
+}: Partial<IMaterialSelectInputRhfProps>) => {
   const field: ControllerProps = {
     control: 'material-select-input',
     name,
@@ -805,6 +913,23 @@ export const weatherSelect = ({
   };
   return field;
 };
+export const selectActivityForm = ({
+  name = 'activityId',
+  label = 'formsOfActivity',
+  clearable = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectActivityFormRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-activity-form-rhf',
+    name,
+    label,
+    colSpan,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
 
 export const pitSelect = ({
   name = 'fromPitId',
@@ -845,6 +970,240 @@ export const locationSelect = ({
     clearable,
     withAsterisk,
     colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalMultipleSelectLocation = ({
+  name = 'locationIds',
+  label = 'location',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IMultipleSelectLocationRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'multiple-select-location',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalMultipleSelectMaterial = ({
+  name = 'materialIds',
+  label = 'material',
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IMultipleSelectMaterialRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'multiple-select-material',
+    name,
+    label,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectArriveBargeRhf = ({
+  name = 'destinationTypeId',
+  searchable = false,
+  clearable = true,
+  ...rest
+}: Partial<IArriveBargeRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-arrive-barge-rhf',
+    name,
+    searchable,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectFactoryRhf = ({
+  name = 'factoryId',
+  label = 'factoryName',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectFactoryRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-factory-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectWorkingHoursPlanRhf = ({
+  name = 'whpId',
+  label,
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectWorkingHoursPlanRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-working-hours-plan-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectActivityCategoryRhf = ({
+  name = 'categoryId',
+  label,
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectActivityCategoryRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-activity-category-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectCompanyRhf = ({
+  name = 'companyId',
+  label,
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectCompanyRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-company-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectYearRhf = ({
+  name = 'year',
+  label,
+  searchable = false,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectYearRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-year-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectMonthRhf = ({
+  name = 'month',
+  label,
+  searchable = false,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectMonthRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-month-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectWeekRhf = ({
+  name = 'week',
+  label,
+  searchable = false,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectWeekRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-week-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalDropzonePdfOrImageRhf = ({
+  name = 'uploadFile',
+  label,
+  withAsterisk = true,
+  colSpan = 6,
+  maxSize = 10 * 1024 ** 2,
+  multiple = false,
+  onDrop = () => {},
+  onReject = () => {},
+  ...rest
+}: Partial<IPdfOrInputDropzoneRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'pdf-image-dropzone',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    maxSize,
+    multiple,
+    onDrop,
+    onReject,
     ...rest,
   };
   return field;

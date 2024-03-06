@@ -45,7 +45,7 @@ const UpdateCompanyPositionHistoryBook = () => {
         },
       ],
     },
-    mode: 'onBlur',
+    mode: 'onSubmit',
   });
 
   const { fields, append, remove, update } = useFieldArray({
@@ -111,23 +111,26 @@ const UpdateCompanyPositionHistoryBook = () => {
     },
   });
 
-  const arrayField = fields.map((_, index) => {
+  const arrayField = fields.map((val, index) => {
     const positionItem = positionSelectRhf({
       name: `positionHistories.${index}.positionId`,
       colSpan: 6,
       dropdownPosition: 'bottom',
       withAsterisk: true,
+      key: `positionHistories.${index}.positionId.${val.id}`,
     });
     const divisionItem = divisionSelectRhf({
       name: `positionHistories.${index}.divisionId`,
       colSpan: 6,
       dropdownPosition: 'bottom',
       withAsterisk: true,
+      key: `positionHistories.${index}.divisionId.${val.id}`,
     });
     const startDateItem = globalDate({
       name: `positionHistories.${index}.startDate`,
       label: 'dateOfOffice',
       colSpan: 6,
+      key: `positionHistories.${index}.startDate.${val.id}`,
     });
     const endDateItem = globalDate({
       name: `positionHistories.${index}.endDate`,
@@ -135,7 +138,7 @@ const UpdateCompanyPositionHistoryBook = () => {
       withAsterisk: false,
       colSpan: 6,
       disabled: positionHistories[index].isStill,
-      value: positionHistories[index].endDate as Date,
+      key: `positionHistories.${index}.endDate.${val.id}`,
     });
     const group: ControllerGroup = {
       group: t('commonTypography.positionDetail'),
@@ -155,7 +158,7 @@ const UpdateCompanyPositionHistoryBook = () => {
             : methods.setValue(`positionHistories.${index}.isStill`, true);
           methods.setValue(`positionHistories.${index}.endDate`, null);
         },
-        checked: positionHistories[index].isStill,
+        checked: methods.watch(`positionHistories.${index}.isStill`),
         label: t('commonTypography.isStillOffice'),
       },
       formControllers: [positionItem, divisionItem, startDateItem, endDateItem],

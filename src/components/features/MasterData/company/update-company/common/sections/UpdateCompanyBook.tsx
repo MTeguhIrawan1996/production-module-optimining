@@ -80,7 +80,7 @@ const UpdateCompanyBook = () => {
       permissionTypeDate: undefined,
       permissionTypeDocument: [],
     },
-    mode: 'onBlur',
+    mode: 'all',
   });
   const permissionTypeId = methods.watch('permissionTypeId');
   const provinceId = methods.watch('provinceId');
@@ -217,7 +217,7 @@ const UpdateCompanyBook = () => {
     });
     const companyPermissionItem = companyPermissionTypesSelact({
       colSpan: 12,
-      withAsterisk: true,
+      withAsterisk: false,
       onSearchChange: setCompanyPermissionType,
       onChange: (value) => {
         methods.setValue('permissionTypeId', value ?? '');
@@ -367,7 +367,7 @@ const UpdateCompanyBook = () => {
       },
       {
         group: t('commonTypography.companyPermissionType'),
-        enableGroupLabel: true,
+        enableGroupLabel: false,
         formControllers: [
           companyPermissionItem,
           ...(permissionTypeId ? bussinesPermit : []),

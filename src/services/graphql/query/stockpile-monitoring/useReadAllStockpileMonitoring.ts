@@ -1,6 +1,8 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
-import { GResponse, IGlobalMetaRequest } from '@/types/global';
+import { IReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
+
+import { GResponse, IGlobalMetaRequest, IStatus } from '@/types/global';
 
 export const READ_ALL_STOCKPILE_MONITORING_MASTER = gql`
   query ReadAllStockpileMonitoring(
@@ -10,6 +12,10 @@ export const READ_ALL_STOCKPILE_MONITORING_MASTER = gql`
     $orderBy: String
     $orderDir: String
     $stockpileId: String
+    $year: Float
+    $month: Float
+    $week: Float
+    $domeStatus: String
   ) {
     monitoringStockpiles(
       findAllMonitoringStockpileInput: {
@@ -19,6 +25,10 @@ export const READ_ALL_STOCKPILE_MONITORING_MASTER = gql`
         orderBy: $orderBy
         orderDir: $orderDir
         stockpileId: $stockpileId
+        year: $year
+        month: $month
+        week: $week
+        domeStatus: $domeStatus
       }
     ) {
       meta {
@@ -29,25 +39,29 @@ export const READ_ALL_STOCKPILE_MONITORING_MASTER = gql`
       }
       data {
         id
-        stockpile {
-          id
-          name
-        }
         dome {
           id
           name
           handBookId
+          stockpile {
+            id
+            name
+          }
         }
         material {
           id
           name
         }
-        currentSample {
+        ritageSamples {
+          additional
+        }
+        tonByRitage
+        currentTonSurvey
+        domeStatus
+        status {
           id
-          elements {
-            elementName
-            value
-          }
+          name
+          color
         }
       }
     }
@@ -56,28 +70,26 @@ export const READ_ALL_STOCKPILE_MONITORING_MASTER = gql`
 
 export interface IMonitoringStockpilesData {
   id: string;
-  stockpile: {
-    id: string;
-    name: string;
-  } | null;
-  dome: {
-    id: string;
-    name: string;
-    handBookId: string;
-  } | null;
+  dome: IReadOneStockpileDomeMaster | null;
   material: {
     id: string;
     name: string;
   } | null;
-  currentSample: {
-    id: string;
-    elements:
-      | {
-          elementName: string;
-          value: string;
-        }[]
-      | null;
+  ritageSamples: {
+    additional: {
+      averageSamples: {
+        element: {
+          id: string;
+          name: string | null;
+        };
+        value: number | null;
+      }[];
+    };
   };
+  tonByRitage: number | null;
+  domeStatus: string | null;
+  currentTonSurvey: number | null;
+  status: IStatus | null;
 }
 
 interface IMonitoringStockpilesResponse {
@@ -86,8 +98,9 @@ interface IMonitoringStockpilesResponse {
 
 interface IMonitoringStockpilesRequest extends IGlobalMetaRequest {
   stockpileId: string | null;
-  year: string | null;
-  month: string | null;
+  year: number | null;
+  month: number | null;
+  week: number | null;
 }
 
 export const useReadAllStockpileMonitoring = ({

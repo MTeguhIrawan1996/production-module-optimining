@@ -118,6 +118,30 @@ export const READ_ONE_ORE_RITAGE = gql`
 `;
 
 interface IReadOneOreRitage {
+  fromPit: {
+    id: string;
+    name: string;
+  } | null;
+  fromFront: {
+    id: string;
+    name: string;
+  } | null;
+  fromBlock: {
+    id: string;
+    name: string;
+  } | null;
+  fromGrid: {
+    id: string;
+    name: string;
+  } | null;
+  fromSequence: {
+    id: string;
+    name: string;
+  } | null;
+  fromElevation: {
+    id: string;
+    name: string;
+  } | null;
   fromLevel: string | null;
   toLevel: string | null;
   stockpile: Pick<IStockpilesData, 'id' | 'name'> | null;

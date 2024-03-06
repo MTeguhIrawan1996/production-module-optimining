@@ -1,5 +1,4 @@
 import { DataTableColumn } from 'mantine-datatable';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +10,7 @@ import {
 } from '@/components/elements';
 
 import { globalDateNative } from '@/utils/constants/Field/native-field';
-import { formatDate, formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 
 import {
   IDumpTruckRitagesData,
@@ -42,9 +41,8 @@ export default function ListDataRitageDumptruckBook<
   columns,
 }: IRitageDTProps<T>) {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('rp')) || 1;
-  const heavyEquipmentPage = Number(pageParams.get('hp')) || 1;
+  const page = Number(router.query['rp']) || 1;
+  const heavyEquipmentPage = Number(router.query['hp']) || 1;
   const url = `/input-data/production/data-ritage?rp=${page}&hp=1&tabs=${tabs}`;
   const { t } = useTranslation('default');
 
@@ -57,11 +55,10 @@ export default function ListDataRitageDumptruckBook<
     const stockpileNameItem = globalDateNative({
       label: 'date',
       placeholder: 'chooseDate',
-      radius: 'lg',
       clearable: true,
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });
-        const date = formatDate2(value, 'YYYY-MM-DD');
+        const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
     });
@@ -78,7 +75,6 @@ export default function ListDataRitageDumptruckBook<
           records: data,
           fetching: fetching,
           highlightOnHover: true,
-          withColumnBorders: false,
           idAccessor: (record) => {
             const key = data && data.indexOf(record) + 1;
             return `${key}`;
@@ -94,7 +90,7 @@ export default function ListDataRitageDumptruckBook<
               accessor: 'date',
               title: t('commonTypography.date'),
               width: 160,
-              render: ({ date }) => formatDate(date),
+              render: ({ date }) => formatDate(date) ?? '-',
             },
             {
               accessor: 'hullNumber',
@@ -105,7 +101,13 @@ export default function ListDataRitageDumptruckBook<
             {
               accessor: 'operatorName',
               title: t('commonTypography.operatorName'),
-              // render: ({ checkerTo }) => checkerTo?.humanResource?.name ?? '-',
+              width: 250,
+              render: ({ operators }) => {
+                const operator = operators?.map((val) => val);
+                const value =
+                  operators && operators.length ? operator.join(', ') : '-';
+                return value;
+              },
             },
             {
               accessor: 'shift',
@@ -134,7 +136,7 @@ export default function ListDataRitageDumptruckBook<
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `${urlDetail}/${date}/${shift?.id}/${companyHeavyEquipment?.id}?p=1&op=OperatorName&shift=${shift?.name}&c=${companyHeavyEquipment?.hullNumber}&tabs=${tabs}`
+                          `${urlDetail}/${date}/${shift?.id}/${companyHeavyEquipment?.id}?p=1&tabs=${tabs}`
                         );
                       },
                     }}

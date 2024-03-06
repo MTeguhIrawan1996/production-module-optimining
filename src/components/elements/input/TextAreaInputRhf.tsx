@@ -5,10 +5,13 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
+import { CommonProps } from '@/types/global';
+
 export type ITextAreaInput = {
   name: string;
   control: 'text-area-input';
-} & Omit<TextareaProps, 'name'>;
+} & Omit<TextareaProps, 'name'> &
+  CommonProps;
 
 const TextAreaInput: React.FC<ITextAreaInput> = ({
   name,

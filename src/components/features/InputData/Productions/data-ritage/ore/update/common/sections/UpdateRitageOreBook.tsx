@@ -32,7 +32,7 @@ import {
 } from '@/utils/constants/Field/stockpile-field';
 import { ritageOreMutationValidation } from '@/utils/form-validation/ritage/ritage-ore-validation';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
-import { formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -98,6 +98,7 @@ const UpdateRitageOreBook = () => {
       companyHeavyEquipmentChangeId: '',
     },
     mode: 'onBlur',
+    shouldFocusError: true,
   });
   const fromPitId = methods.watch('fromPitId');
   const stockpileId = methods.watch('stockpileId');
@@ -106,7 +107,11 @@ const UpdateRitageOreBook = () => {
   const closeDome = methods.watch('closeDome');
 
   React.useEffect(() => {
-    const ritageDuration = hourDiff(newFromTime, newArriveTime);
+    const ritageDuration = hourDiff({
+      startTime: newFromTime,
+      endTime: newArriveTime,
+      functionIsBeforeEndTime: true,
+    });
     const amount = countTonByRitage(newBucketVolume, newBulkSamplingDensity);
     methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
     methods.setValue('ritageDuration', ritageDuration ?? '');
@@ -124,8 +129,8 @@ const UpdateRitageOreBook = () => {
     skip: !router.isReady,
     onCompleted: ({ oreRitage }) => {
       const ritageDate = stringToDate(oreRitage.date ?? null);
-      const fromTime = formatDate2(oreRitage.fromAt, 'HH:mm:ss');
-      const arriveTime = formatDate2(oreRitage.arriveAt, 'HH:mm:ss');
+      const fromTime = formatDate(oreRitage.fromAt, 'HH:mm:ss');
+      const arriveTime = formatDate(oreRitage.arriveAt, 'HH:mm:ss');
       methods.setValue('isRitageProblematic', oreRitage.isRitageProblematic);
       methods.setValue('date', ritageDate);
       methods.setValue('checkerFromId', oreRitage.checkerFrom?.id ?? '');
@@ -181,6 +186,7 @@ const UpdateRitageOreBook = () => {
     onCompleted: ({ pit }) => {
       methods.setValue('block', pit.block.name);
     },
+    fetchPolicy: 'cache-first',
   });
 
   const { mutate, isLoading } = useUpdateRitageOre({
@@ -264,7 +270,7 @@ const UpdateRitageOreBook = () => {
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: oreRitage?.companyHeavyEquipment?.id,
       labelValue: oreRitage?.companyHeavyEquipment?.hullNumber ?? '',
     });
@@ -273,7 +279,7 @@ const UpdateRitageOreBook = () => {
       name: 'companyHeavyEquipmentChangeId',
       label: 'heavyEquipmentCodeSubstitution',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: oreRitage?.companyHeavyEquipmentChange?.id,
       labelValue: oreRitage?.companyHeavyEquipmentChange?.hullNumber ?? '',
     });
@@ -394,6 +400,7 @@ const UpdateRitageOreBook = () => {
       label: 'toLevel',
       withAsterisk: false,
     });
+    const newStockpileId = stockpileId || null;
     const stockpileItem = stockpileNameSelect({
       colSpan: 6,
       name: 'stockpileId',
@@ -401,6 +408,12 @@ const UpdateRitageOreBook = () => {
       withAsterisk: false,
       defaultValue: oreRitage?.stockpile?.id,
       labelValue: oreRitage?.stockpile?.name,
+      onChange: (value) => {
+        methods.setValue('stockpileId', value ?? '');
+        methods.setValue('domeId', '');
+        methods.trigger('stockpileId');
+        methods.trigger('domeId');
+      },
     });
     const domeItem = domeNameSelect({
       colSpan: 6,
@@ -408,6 +421,7 @@ const UpdateRitageOreBook = () => {
       label: 'domeName',
       stockpileId: stockpileId,
       withAsterisk: false,
+      disabled: !newStockpileId,
       defaultValue: oreRitage?.dome?.id,
       labelValue: oreRitage?.dome?.name,
     });
@@ -646,7 +660,12 @@ const UpdateRitageOreBook = () => {
         submitButton={{
           label: t('commonTypography.save'),
           type: 'button',
-          onClick: () => setIsOpenConfirmation((prev) => !prev),
+          onClick: async () => {
+            const output = await methods.trigger(undefined, {
+              shouldFocus: true,
+            });
+            if (output) setIsOpenConfirmation((prev) => !prev);
+          },
         }}
         backButton={{
           onClick: () =>

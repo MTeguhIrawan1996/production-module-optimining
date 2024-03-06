@@ -1,7 +1,6 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,16 +14,23 @@ import {
 
 import { useDeleteMasterDataCompany } from '@/services/graphql/mutation/master-data-company/useDeleteMasterDataCompany';
 import { useReadAllCompaniesMasterData } from '@/services/graphql/query/master-data-company/useReadAllMasterDataCompany';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const CompanyBook = () => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+  const page = Number(router.query['page']) || 1;
+  const url = `/master-data/company?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const isPermissionCreate = permissions?.includes('create-company');
+  const isPermissionDelete = permissions?.includes('delete-company');
+  const isPermissionRead = permissions?.includes('read-company');
 
   /* #   /**=========== Query =========== */
   const {
@@ -120,7 +126,7 @@ const CompanyBook = () => {
               accessor: 'director',
               title: t('commonTypography.director'),
               render: ({ presidentDirector }) =>
-                presidentDirector?.humanResource?.name,
+                presidentDirector?.humanResource?.name || '-',
             },
             {
               accessor: 'action',
@@ -128,19 +134,27 @@ const CompanyBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/company/read/${id}`);
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(`/master-data/company/read/${id}`);
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -149,10 +163,12 @@ const CompanyBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('company.createCompany'),
-            onClick: () => router.push('/master-data/company/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('company.createCompany'),
+                onClick: () => router.push('/master-data/company/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -164,19 +180,32 @@ const CompanyBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [companiesData, companiesDataLoading]);
+  }, [
+    companiesData,
+    companiesDataLoading,
+    isPermissionRead,
+    isPermissionDelete,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('company.createCompany'),
-        onClick: () => router.push('/master-data/company/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('company.createCompany'),
+              onClick: () => router.push('/master-data/company/create'),
+            }
+          : undefined
+      }
       searchBar={{
         placeholder: t('company.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
+        },
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
         },
         searchQuery: searchQuery,
       }}

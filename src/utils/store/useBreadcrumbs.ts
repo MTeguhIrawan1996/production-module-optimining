@@ -1,16 +1,20 @@
-import { create } from 'zustand';
+import { create, StoreApi } from 'zustand';
+import PubStore from 'zustand-pub';
+
 type Breadcrumb = {
   label: string;
   path: string;
 };
 
-interface BreadcrumbsProps {
+type BreadcrumbsState = {
   breadcrumbs: Breadcrumb[];
   setBreadcrumbs: (breadcrumbs: Breadcrumb[]) => void;
   updateBreadcrumbsByIndex: (index: number, breadcrumb: Breadcrumb) => void;
-}
+};
 
-export const useBreadcrumbs = create<BreadcrumbsProps>((set) => ({
+const pubStore = new PubStore('key');
+
+const store = pubStore.defineStore<BreadcrumbsState>('breadcrumbs', (set) => ({
   breadcrumbs: [],
   setBreadcrumbs: (breadcrumbs: Breadcrumb[]) => set({ breadcrumbs }),
   updateBreadcrumbsByIndex: (index: number, breadcrumb: Breadcrumb) =>
@@ -20,3 +24,5 @@ export const useBreadcrumbs = create<BreadcrumbsProps>((set) => ({
       return { breadcrumbs };
     }),
 }));
+
+export const useBreadcrumbs = create<StoreApi<BreadcrumbsState>>(store);

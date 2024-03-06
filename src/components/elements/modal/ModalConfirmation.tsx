@@ -42,7 +42,7 @@ const ModalConfirmation: React.FC<IModalConfirmationProps> = ({
   isOpenModalConfirmation,
   actionModalConfirmation,
   size = 'lg',
-  radius = 'xs',
+  radius = 'md',
   actionButton,
   backButton,
   withDivider,
@@ -62,11 +62,10 @@ const ModalConfirmation: React.FC<IModalConfirmationProps> = ({
     <Modal.Root
       opened={isOpenModalConfirmation}
       onClose={actionModalConfirmation}
-      centered
       radius={radius}
       size={size}
     >
-      <Modal.Overlay />
+      <Modal.Overlay opacity={0.2} />
       <Modal.Content px="md" py="md">
         <Modal.Header p={p} {...restModalHeader}>
           {modalType.type === 'default' ? (

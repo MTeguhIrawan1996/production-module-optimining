@@ -3,18 +3,15 @@ import {
   LoadingOverlay,
   Paper,
   PaperProps,
+  SegmentedControl,
+  SegmentedControlProps,
   SimpleGrid,
   Stack,
   StackProps,
   Title,
   TitleProps,
 } from '@mantine/core';
-import {
-  IconChevronLeft,
-  IconDownload,
-  IconPencil,
-  IconPlus,
-} from '@tabler/icons-react';
+import { IconDownload } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -68,6 +65,7 @@ interface IDashboardCardProps extends PaperProps {
   childrenStackProps?: StackProps;
   titleStyle?: TitleProps;
   downloadButton?: IDownloadButtonProps[];
+  segmentedControl?: SegmentedControlProps;
 }
 
 const DashboardCard: React.FC<IDashboardCardProps> = ({
@@ -94,6 +92,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
   titleStyle,
   downloadButton,
   filterDateWithSelect,
+  segmentedControl,
   ...restPaper
 }) => {
   const router = useRouter();
@@ -116,7 +115,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
           {enebleBack && (
             <PrimaryButton
               label={t('commonTypography.back')}
-              leftIcon={<IconChevronLeft size="12px" />}
+              // leftIcon={<IconChevronLeft size="12px" />}
               variant="subtle"
               size="xs"
               w="fit-content"
@@ -142,23 +141,33 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
                   {title}
                 </Title>
               )}
-              <Group spacing="xs">
-                {addButton && (
-                  <PrimaryButton
-                    leftIcon={<IconPlus size="20px" />}
-                    label={label ?? ''}
-                    {...rest}
-                  />
-                )}
-                {updateButton && (
-                  <PrimaryButton
-                    leftIcon={<IconPencil size="20px" />}
-                    label={labelUpdateButton}
-                    {...restUpdateButton}
-                  />
-                )}
-              </Group>
+              {addButton || updateButton ? (
+                <Group spacing="xs">
+                  {addButton && (
+                    <PrimaryButton
+                      // leftIcon={<IconPlus size="20px" />}
+                      label={label ?? ''}
+                      {...rest}
+                    />
+                  )}
+                  {updateButton && (
+                    <PrimaryButton
+                      // leftIcon={<IconPencil size="20px" />}
+                      label={labelUpdateButton}
+                      {...restUpdateButton}
+                    />
+                  )}
+                </Group>
+              ) : undefined}
             </Group>
+          ) : null}
+          {segmentedControl ? (
+            <SegmentedControl
+              w={220}
+              size="sm"
+              radius={4}
+              {...segmentedControl}
+            />
           ) : null}
           {searchBar && <SearchBar {...searchBar} />}
           <Stack {...childrenStackProps}>
@@ -201,7 +210,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
           <PrimaryButton
             type="button"
             variant="outline"
-            leftIcon={<IconChevronLeft size="1rem" />}
+            // leftIcon={<IconChevronLeft size="1rem" />}
             label={t('commonTypography.back')}
             mt="lg"
             {...enebleBackBottomInner}
@@ -217,7 +226,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
           <PrimaryButton
             type="button"
             variant="outline"
-            leftIcon={<IconChevronLeft size="1rem" />}
+            // leftIcon={<IconChevronLeft size="1rem" />}
             label={t('commonTypography.back')}
             {...enebleBackBottomOuter}
           />

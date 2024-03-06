@@ -1,7 +1,6 @@
 import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,17 +24,16 @@ import {
   globalDateNative,
   globalSelectNative,
 } from '@/utils/constants/Field/native-field';
-import { formatDate, formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { InputControllerNativeProps } from '@/types/global';
 
 const ListDataObRitageBook = () => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const tabs = pageParams.get('tabs') || '';
-  const page = Number(pageParams.get('rp')) || 1;
-  const heavyEquipmentPage = Number(pageParams.get('hp')) || 1;
+  const tabs = router.query['tabs'] || '';
+  const page = Number(router.query['rp']) || 1;
+  const heavyEquipmentPage = Number(router.query['hp']) || 1;
   const url = `/input-data/production/data-ritage?rp=1&hp=${heavyEquipmentPage}&tabs=ob`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
@@ -75,7 +73,7 @@ const ListDataObRitageBook = () => {
       search:
         heavyEquipmentSearchQuery === '' ? null : heavyEquipmentSearchQuery,
       isComplete: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
     },
     skip: tabs !== 'ob',
   });
@@ -166,11 +164,10 @@ const ListDataObRitageBook = () => {
     const dateItem = globalDateNative({
       label: 'date',
       placeholder: 'chooseDate',
-      radius: 'lg',
       clearable: true,
       onChange: (value) => {
         router.push(url, undefined, { shallow: true });
-        const date = formatDate2(value, 'YYYY-MM-DD');
+        const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
     });
@@ -235,7 +232,6 @@ const ListDataObRitageBook = () => {
           records: overburdenRitagesData,
           fetching: overburdenRitagesDataLoading,
           highlightOnHover: true,
-          withColumnBorders: false,
           columns: [
             {
               accessor: 'index',
@@ -249,7 +245,7 @@ const ListDataObRitageBook = () => {
               accessor: 'date',
               title: t('commonTypography.date'),
               width: 160,
-              render: ({ date }) => formatDate(date),
+              render: ({ date }) => formatDate(date) ?? '-',
             },
             {
               accessor: 'shift',
@@ -270,7 +266,7 @@ const ListDataObRitageBook = () => {
             {
               accessor: 'fromAt',
               title: t('commonTypography.fromAt'),
-              render: ({ fromAt }) => formatDate(fromAt, 'hh:mm:ss A'),
+              render: ({ fromAt }) => formatDate(fromAt, 'hh:mm:ss A') ?? '-',
             },
             {
               accessor: 'fromPit',

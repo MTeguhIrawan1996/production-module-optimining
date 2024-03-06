@@ -29,7 +29,7 @@ import {
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { ritageQuarryMutationValidation } from '@/utils/form-validation/ritage/ritage-quarry-validation';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
-import { formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -97,7 +97,11 @@ const UpdateRitageQuarryBook = () => {
   const isRitageProblematic = methods.watch('isRitageProblematic');
 
   React.useEffect(() => {
-    const ritageDuration = hourDiff(newFromTime, newArriveTime);
+    const ritageDuration = hourDiff({
+      startTime: newFromTime,
+      endTime: newArriveTime,
+      functionIsBeforeEndTime: true,
+    });
     const amount = countTonByRitage(newBucketVolume, newBulkSamplingDensity);
     methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
     methods.setValue('ritageDuration', ritageDuration ?? '');
@@ -115,8 +119,8 @@ const UpdateRitageQuarryBook = () => {
     skip: !router.isReady,
     onCompleted: ({ quarryRitage }) => {
       const ritageDate = stringToDate(quarryRitage.date ?? null);
-      const fromTime = formatDate2(quarryRitage.fromAt, 'HH:mm:ss');
-      const arriveTime = formatDate2(quarryRitage.arriveAt, 'HH:mm:ss');
+      const fromTime = formatDate(quarryRitage.fromAt, 'HH:mm:ss');
+      const arriveTime = formatDate(quarryRitage.arriveAt, 'HH:mm:ss');
       methods.setValue('isRitageProblematic', quarryRitage.isRitageProblematic);
       methods.setValue('date', ritageDate);
       methods.setValue('checkerFromId', quarryRitage.checkerFrom?.id ?? '');
@@ -173,6 +177,7 @@ const UpdateRitageQuarryBook = () => {
     onCompleted: ({ pit }) => {
       methods.setValue('block', pit.block.name);
     },
+    fetchPolicy: 'cache-first',
   });
 
   const { mutate, isLoading } = useUpdateRitageQuarry({
@@ -256,7 +261,7 @@ const UpdateRitageQuarryBook = () => {
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: quarryRitage?.companyHeavyEquipment?.id,
       labelValue: quarryRitage?.companyHeavyEquipment?.hullNumber ?? '',
     });
@@ -265,7 +270,7 @@ const UpdateRitageQuarryBook = () => {
       name: 'companyHeavyEquipmentChangeId',
       label: 'heavyEquipmentCodeSubstitution',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: quarryRitage?.companyHeavyEquipmentChange?.id,
       labelValue: quarryRitage?.companyHeavyEquipmentChange?.hullNumber ?? '',
     });
@@ -602,7 +607,12 @@ const UpdateRitageQuarryBook = () => {
         submitButton={{
           label: t('commonTypography.save'),
           type: 'button',
-          onClick: () => setIsOpenConfirmation((prev) => !prev),
+          onClick: async () => {
+            const output = await methods.trigger(undefined, {
+              shouldFocus: true,
+            });
+            if (output) setIsOpenConfirmation((prev) => !prev);
+          },
         }}
         backButton={{
           onClick: () =>

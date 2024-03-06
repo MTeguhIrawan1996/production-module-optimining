@@ -99,7 +99,11 @@ const CreateRitageOreBook = () => {
   const closeDome = methods.watch('closeDome');
 
   React.useEffect(() => {
-    const ritageDuration = hourDiff(newFromTime, newArriveTime);
+    const ritageDuration = hourDiff({
+      startTime: newFromTime,
+      endTime: newArriveTime,
+      functionIsBeforeEndTime: true,
+    });
     const amount = countTonByRitage(newBucketVolume, newBulkSamplingDensity);
     methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
     methods.setValue('ritageDuration', ritageDuration ?? '');
@@ -118,6 +122,7 @@ const CreateRitageOreBook = () => {
     onCompleted: ({ pit }) => {
       methods.setValue('block', pit.block.name);
     },
+    fetchPolicy: 'cache-first',
   });
 
   // eslint-disable-next-line unused-imports/no-unused-vars
@@ -197,14 +202,14 @@ const CreateRitageOreBook = () => {
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
     });
     const hullNumberSubstitution = heavyEquipmentSelect({
       colSpan: 6,
       name: 'companyHeavyEquipmentChangeId',
       label: 'heavyEquipmentCodeSubstitution',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
     });
     const materialItem = materialSelect({
       colSpan: 6,
@@ -323,19 +328,33 @@ const CreateRitageOreBook = () => {
       name: 'stockpileId',
       label: 'stockpileName',
       withAsterisk: false,
+      onChange: (value) => {
+        methods.setValue('stockpileId', value ?? '');
+        methods.setValue('domeId', '');
+        methods.trigger('stockpileId');
+        methods.trigger('domeId');
+      },
     });
+    const newStockpileId = stockpileId || null;
     const domeItem = domeNameSelect({
       colSpan: 6,
       name: 'domeId',
       label: 'domeName',
       stockpileId: stockpileId,
       withAsterisk: false,
+      disabled: !newStockpileId,
     });
     const bulkSamplingDensityItem = globalNumberInput({
       colSpan: 6,
       name: 'bulkSamplingDensity',
       label: 'bulkSamplingDensity',
       withAsterisk: true,
+      // formatter: (value) =>
+      //   !Number.isNaN(parseFloat(value))
+      //     ? `${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, '.')
+      //     : '',
+      // decimalSeparator: ',',
+      // thousandsSeparator: '.',
       onChange: (value) => {
         methods.setValue('bulkSamplingDensity', value);
         setNewBulkSamplingDensity(`${value}`);

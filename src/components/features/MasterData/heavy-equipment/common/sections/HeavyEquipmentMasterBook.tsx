@@ -2,7 +2,6 @@ import { SelectProps } from '@mantine/core';
 import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,12 +20,15 @@ import { useReadAllHeavyEquipmentMasterData } from '@/services/graphql/query/hea
 import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
 import { useReadAllHeavyEquipmentClass } from '@/services/graphql/query/heavy-equipment-class/useReadAllHeavyEquipmentClass';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const HeavyEquipmentMasterBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const page = Number(router.query['page']) || 1;
+  const url = `/master-data/heavy-equipment?page=1`;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -43,6 +45,11 @@ const HeavyEquipmentMasterBook = () => {
   const [classSearchTerm, setClassSearchTerm] = React.useState<string>('');
   const [classSearchQuery] = useDebouncedValue<string>(classSearchTerm, 400);
   const [classId, setClasslId] = React.useState<string | null>(null);
+
+  const isPermissionCreate = permissions?.includes('create-heavy-equipment');
+  const isPermissionUpdate = permissions?.includes('update-heavy-equipment');
+  const isPermissionDelete = permissions?.includes('delete-heavy-equipment');
+  const isPermissionRead = permissions?.includes('read-heavy-equipment');
 
   const {
     heavyEquipmentsMasterData,
@@ -293,27 +300,41 @@ const HeavyEquipmentMasterBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/heavy-equipment/read/${id}`);
-                      },
-                    }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/master-data/heavy-equipment/update/${id}`
-                        );
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/heavy-equipment/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/heavy-equipment/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -324,10 +345,13 @@ const HeavyEquipmentMasterBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('heavyEquipment.createHeavyEquipment'),
-            onClick: () => router.push('/master-data/heavy-equipment/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('heavyEquipment.createHeavyEquipment'),
+                onClick: () =>
+                  router.push('/master-data/heavy-equipment/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -339,18 +363,32 @@ const HeavyEquipmentMasterBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [heavyEquipmentsMasterData, heavyEquipmentMasterDataLoading]);
+  }, [
+    heavyEquipmentsMasterData,
+    heavyEquipmentMasterDataLoading,
+    isPermissionRead,
+    isPermissionDelete,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('heavyEquipment.createHeavyEquipment'),
-        onClick: () => router.push('/master-data/heavy-equipment/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('heavyEquipment.createHeavyEquipment'),
+              onClick: () => router.push('/master-data/heavy-equipment/create'),
+            }
+          : undefined
+      }
       searchBar={{
         placeholder: t('heavyEquipment.searchPlaceholderMaster'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
+        },
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
         },
         searchQuery: searchQuery,
       }}

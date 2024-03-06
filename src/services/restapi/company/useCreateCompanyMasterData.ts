@@ -9,8 +9,8 @@ import { AxiosRestErrorResponse } from '@/types/global';
 export interface ICompanyMutationValues {
   name: string;
   alias: string;
-  typeId: string;
-  businessTypeId: string;
+  typeId: string | null;
+  businessTypeId: string | null;
   provinceId: string | null;
   regencyId: string | null;
   subdistrictId: string | null;

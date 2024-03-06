@@ -1,7 +1,16 @@
 import * as React from 'react';
-import 'dayjs/locale/id';
 
-import { DateInputNative, SelectInputNative } from '@/components/elements';
+import {
+  DateInputNative,
+  SelectArriveBargeNative,
+  SelectCompanyNative,
+  SelectHeavyEquipmentNative,
+  SelectInputNative,
+  SelectMonthNative,
+  SelectStatusNative,
+  SelectWeekNative,
+  SelectYearNative,
+} from '@/components/elements';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -13,6 +22,20 @@ const InputControllerNative: React.FC<InputControllerNativeProps> = (props) => {
       return <DateInputNative {...props} />;
     case 'select-input-native':
       return <SelectInputNative {...props} />;
+    case 'select-year-native':
+      return <SelectYearNative {...props} />;
+    case 'select-month-native':
+      return <SelectMonthNative {...props} />;
+    case 'select-week-native':
+      return <SelectWeekNative {...props} />;
+    case 'select-arrive-barge-native':
+      return <SelectArriveBargeNative {...props} />;
+    case 'select-heavy-equipment-native':
+      return <SelectHeavyEquipmentNative {...props} />;
+    case 'select-status-native':
+      return <SelectStatusNative {...props} />;
+    case 'select-company-native':
+      return <SelectCompanyNative {...props} />;
     default:
       return null;
   }

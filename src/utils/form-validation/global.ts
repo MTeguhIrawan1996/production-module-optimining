@@ -1,3 +1,4 @@
+import { IMAGE_MIME_TYPE, PDF_MIME_TYPE } from '@mantine/dropzone';
 import { z } from 'zod';
 
 export const zRequiredString = z
@@ -19,7 +20,7 @@ export const zArrayOfString = z.string().array();
 
 export const zRequiredNumber = z.number({
   required_error: 'Kolom tidak boleh kosong',
-  invalid_type_error: 'Harus angka',
+  invalid_type_error: 'Kolom tidak boleh kosong',
 });
 
 export const zOptionalNumber = z.number().or(z.literal(''));
@@ -44,6 +45,13 @@ export const zPasswordValidation = z
   .regex(/^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]*$/, {
     message: 'Format kata sandi salah',
   });
+
+export const zTimeValidation = z
+  .string()
+  .regex(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/, {
+    message: 'Format salah',
+  })
+  .or(z.literal(''));
 
 export const zEmailValidation = z
   .string()
@@ -123,23 +131,6 @@ export const zImageOptional = z
   )
   .or(z.literal(null));
 
-export const zImageArrayRequired = z
-  .custom<File>()
-  .refine(
-    (file) =>
-      file &&
-      ['image/png', 'image/jpeg', 'image/png', 'image/webp'].includes(
-        file.type
-      ),
-    {
-      message: 'File harus Foto',
-    }
-  )
-  .array()
-  .nonempty({
-    message: 'Foto wajib diisi',
-  });
-
 export const zImageArrayOptional = z
   .custom<File>()
   .refine(
@@ -159,4 +150,15 @@ export const zPdfArrayOptional = z
   .refine((file) => file && ['application/pdf'].includes(file.type), {
     message: 'File harus pdf',
   })
+  .array();
+
+export const zImageOrPDFArrayOptional = z
+  .custom<File>()
+  .refine(
+    (file) =>
+      file && [...PDF_MIME_TYPE, ...IMAGE_MIME_TYPE].includes(file.type as any),
+    {
+      message: 'Format file tidak sesuai',
+    }
+  )
   .array();

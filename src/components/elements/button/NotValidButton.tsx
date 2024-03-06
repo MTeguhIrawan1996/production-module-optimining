@@ -31,7 +31,6 @@ const NotValidButton: React.FC<INotValidButtonProps> = (props) => {
 
   const handleIsNotValid = async () => {
     await methods.handleSubmit(submitForm)();
-    setIsOpenNotValidationConfirmation((prev) => !prev);
   };
 
   return (

@@ -16,9 +16,11 @@ export type IClassSelectInputRhfProps = {
   control: 'class-select-input';
   name: string;
   labelValue?: string;
+  limit?: number | null;
+  skipQuery?: boolean;
 } & Omit<
   SelectProps,
-  'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
+  'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder' | 'limit'
 > &
   CommonProps;
 
@@ -28,6 +30,8 @@ const ClassSelectInputRhf: React.FC<IClassSelectInputRhfProps> = ({
   label,
   labelValue,
   defaultValue,
+  limit = 15,
+  skipQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -38,9 +42,10 @@ const ClassSelectInputRhf: React.FC<IClassSelectInputRhfProps> = ({
 
   const { heavyEquipmentClassesData } = useReadAllHeavyEquipmentClass({
     variables: {
-      limit: 15,
+      limit: limit,
       search: searchQuery === '' ? null : searchQuery,
     },
+    skip: skipQuery,
   });
 
   const { combinedItems, uncombinedItem } = useCombineFilterItems({
@@ -59,14 +64,6 @@ const ClassSelectInputRhf: React.FC<IClassSelectInputRhfProps> = ({
       defaultValue={defaultValue}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
-      styles={(theme) => ({
-        item: {
-          borderRadius: theme.spacing.xs,
-        },
-        dropdown: {
-          borderRadius: theme.spacing.xs,
-        },
-      })}
       onSearchChange={setSearchTerm}
       searchValue={searchTerm}
       data-control={control}

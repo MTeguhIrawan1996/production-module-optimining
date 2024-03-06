@@ -181,12 +181,6 @@ const ReadCompanyHeavyEquipmentBook = () => {
                     '-',
                 },
                 {
-                  dataKey: t('heavyEquipment.productionYear'),
-                  value:
-                    heavyEquipmentCompanyData?.heavyEquipment?.createdYear ??
-                    '-',
-                },
-                {
                   dataKey: t('commonTypography.startDate'),
                   value:
                     formatDate(heavyEquipmentCompanyData?.startDate ?? '') ??
@@ -199,14 +193,6 @@ const ReadCompanyHeavyEquipmentBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
         </Tabs.Panel>

@@ -39,6 +39,7 @@ export const READ_ALL_RITAGE_BARGING_DT = gql`
           id
           name
         }
+        operators
         ritageCount
         tonByRitage
       }

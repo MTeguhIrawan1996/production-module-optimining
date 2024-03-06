@@ -20,12 +20,15 @@ import { useUpdateIsValidateSampleHouseLab } from '@/services/graphql/mutation/s
 import { useReadOneSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadOneSampleHouseLab';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { IElementWithValue, IUpdateStatusValues } from '@/types/global';
 
 const ReadSampleHouseLabBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
   const [bulkSamplingCategory, setBulkSamplingCategory] = React.useState<
     Pick<IKeyValueItemProps, 'value' | 'dataKey'>[]
@@ -226,23 +229,28 @@ const ReadSampleHouseLabBook = () => {
   const includesValid = [`${process.env.NEXT_PUBLIC_STATUS_VALID}`];
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
+  const isPermissionValidation = permissions?.includes(
+    'validate-house-sample-and-lab'
+  );
   const isShowButtonValidation = includesWaiting.includes(
     houseSampleAndLab?.status?.id ?? ''
   );
-
   const isShowButtonInvalidation = includesWaiting.includes(
     houseSampleAndLab?.status?.id ?? ''
   );
 
+  const isPermissionDetermination = permissions?.includes(
+    'determine-house-sample-and-lab'
+  );
   const isShowButtonDetermined = includesValid.includes(
     houseSampleAndLab?.status?.id ?? ''
   );
-
   const isShowButtonReject = includesValid.includes(
     houseSampleAndLab?.status?.id ?? ''
   );
 
-  const isHiddenButtonEdit = includesDetermined.includes(
+  const isPermissionEdit = permissions?.includes('update-house-sample-and-lab');
+  const isIncludeDetermination = includesDetermined.includes(
     houseSampleAndLab?.status?.id ?? ''
   );
 
@@ -250,18 +258,18 @@ const ReadSampleHouseLabBook = () => {
     <DashboardCard
       title={t('sampleHouseLab.readSampleHouseLab')}
       updateButton={
-        isHiddenButtonEdit
-          ? undefined
-          : {
+        isPermissionEdit && !isIncludeDetermination
+          ? {
               label: 'Edit',
               onClick: () =>
                 router.push(
                   `/input-data/quality-control-management/sample-house-lab/update/${id}`
                 ),
             }
+          : undefined
       }
       validationButton={
-        isShowButtonValidation
+        isPermissionValidation && isShowButtonValidation
           ? {
               onClickValid: handleIsValid,
               loading: loading,
@@ -269,7 +277,7 @@ const ReadSampleHouseLabBook = () => {
           : undefined
       }
       determinedButton={
-        isShowButtonDetermined
+        isPermissionDetermination && isShowButtonDetermined
           ? {
               onClickDetermined: handleIsDetermined,
               loading: determinedLoading,
@@ -277,7 +285,7 @@ const ReadSampleHouseLabBook = () => {
           : undefined
       }
       notValidButton={
-        isShowButtonInvalidation
+        isPermissionValidation && isShowButtonInvalidation
           ? {
               methods: methods,
               submitForm: handleInvalidForm,
@@ -288,7 +296,7 @@ const ReadSampleHouseLabBook = () => {
           : undefined
       }
       rejectButton={
-        isShowButtonReject
+        isPermissionDetermination && isShowButtonReject
           ? {
               methods: methods,
               submitForm: handleRejectForm,
@@ -336,7 +344,7 @@ const ReadSampleHouseLabBook = () => {
               description={houseSampleAndLab?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           {houseSampleAndLab?.status?.id ===
@@ -345,7 +353,7 @@ const ReadSampleHouseLabBook = () => {
               description={houseSampleAndLab?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           {!houseSampleAndLabLoading && houseSampleAndLab ? (
@@ -370,7 +378,7 @@ const ReadSampleHouseLabBook = () => {
                 },
                 {
                   dataKey: t('commonTypography.sampleDate'),
-                  value: formatDate(houseSampleAndLab?.sampleDate),
+                  value: formatDate(houseSampleAndLab?.sampleDate) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.shift'),
@@ -407,25 +415,18 @@ const ReadSampleHouseLabBook = () => {
                 },
                 {
                   dataKey: t('commonTypography.sampleEnterLabAt'),
-                  value: formatDate(houseSampleAndLab?.sampleEnterLabAt),
+                  value: formatDate(houseSampleAndLab?.sampleEnterLabAt) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.sampleEnterLabHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.sampleEnterLabAt,
-                    'hh:mm A'
-                  ),
+                  value:
+                    formatDate(
+                      houseSampleAndLab?.sampleEnterLabAt,
+                      'hh:mm A'
+                    ) ?? '-',
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -434,18 +435,7 @@ const ReadSampleHouseLabBook = () => {
               {t('commonTypography.rate')}
             </Text>
             {renderOtherGcElement.length > 0 ? (
-              <KeyValueList
-                data={[...renderOtherGcElement]}
-                type="grid"
-                keyStyleText={{
-                  fw: 400,
-                  fz: 20,
-                }}
-                valueStyleText={{
-                  fw: 600,
-                  fz: 20,
-                }}
-              />
+              <KeyValueList data={[...renderOtherGcElement]} type="grid" />
             ) : (
               <Text color="gray.6">{t(`commonTypography.rateNotFound`)}</Text>
             )}
@@ -460,14 +450,6 @@ const ReadSampleHouseLabBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -479,36 +461,32 @@ const ReadSampleHouseLabBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.preparationStartDate'),
-                  value: formatDate(houseSampleAndLab?.preparationStartAt),
+                  value:
+                    formatDate(houseSampleAndLab?.preparationStartAt) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.preparationStartHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.preparationStartAt,
-                    'hh:mm A'
-                  ),
+                  value:
+                    formatDate(
+                      houseSampleAndLab?.preparationStartAt,
+                      'hh:mm A'
+                    ) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.preparationEndDate'),
-                  value: formatDate(houseSampleAndLab?.preparationFinishAt),
+                  value:
+                    formatDate(houseSampleAndLab?.preparationFinishAt) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.preparationEndHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.preparationFinishAt,
-                    'hh:mm A'
-                  ),
+                  value:
+                    formatDate(
+                      houseSampleAndLab?.preparationFinishAt,
+                      'hh:mm A'
+                    ) ?? '-',
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -520,36 +498,28 @@ const ReadSampleHouseLabBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.analysisStartDate'),
-                  value: formatDate(houseSampleAndLab?.analysisStartAt),
+                  value: formatDate(houseSampleAndLab?.analysisStartAt) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.analysisStartHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.analysisStartAt,
-                    'hh:mm A'
-                  ),
+                  value:
+                    formatDate(houseSampleAndLab?.analysisStartAt, 'hh:mm A') ??
+                    '-',
                 },
                 {
                   dataKey: t('commonTypography.analysisEndDate'),
-                  value: formatDate(houseSampleAndLab?.analysisFinishAt),
+                  value: formatDate(houseSampleAndLab?.analysisFinishAt) ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.analysisEndHour'),
-                  value: formatDate(
-                    houseSampleAndLab?.analysisFinishAt,
-                    'hh:mm A'
-                  ),
+                  value:
+                    formatDate(
+                      houseSampleAndLab?.analysisFinishAt,
+                      'hh:mm A'
+                    ) ?? '-',
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -558,18 +528,7 @@ const ReadSampleHouseLabBook = () => {
               {t('commonTypography.rate')}
             </Text>
             {renderOtherLabElement.length > 0 ? (
-              <KeyValueList
-                data={[...renderOtherLabElement]}
-                type="grid"
-                keyStyleText={{
-                  fw: 400,
-                  fz: 20,
-                }}
-                valueStyleText={{
-                  fw: 600,
-                  fz: 20,
-                }}
-              />
+              <KeyValueList data={[...renderOtherLabElement]} type="grid" />
             ) : (
               <Text color="gray.6">{t(`commonTypography.rateNotFound`)}</Text>
             )}

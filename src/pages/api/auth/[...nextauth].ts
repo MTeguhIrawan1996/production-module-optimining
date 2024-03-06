@@ -42,14 +42,20 @@ const client = new GraphQLClient(
 // );
 
 async function refreshToken(token: JWT) {
-  const authorization = token ? `Bearer ${token.login.refreshToken.token}` : '';
+  const authorization = token
+    ? `Bearer ${token.login?.refreshToken?.token}`
+    : '';
 
   client.setHeaders({
     authorization,
   });
-  const { refreshToken } = await client.request<IRefreshToken>(REFRESH_TOKEN);
 
-  return refreshToken;
+  try {
+    const { refreshToken } = await client.request<IRefreshToken>(REFRESH_TOKEN);
+    return refreshToken;
+  } catch (err) {
+    return null;
+  }
 }
 // async function permission(token: JWT) {
 //   const authorization = token ? `Bearer ${token.login.accessToken.token}` : '';
@@ -70,7 +76,7 @@ async function refreshToken(token: JWT) {
 
 export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: '/',
+    signIn: '/auth/signin',
   },
   providers: [
     // Email & Password

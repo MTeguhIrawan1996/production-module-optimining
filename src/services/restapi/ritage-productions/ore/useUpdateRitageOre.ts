@@ -26,7 +26,7 @@ const UpdateRitageOre = async ({
 }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
-  const exclude = ['tonByRitage', 'ritageDuration'];
+  const exclude = ['tonByRitage', 'ritageDuration', 'block'];
   bodyFormData.append('id', id);
   if (deletedPhotoIds) {
     deletedPhotoIds.forEach((deletedId) => {

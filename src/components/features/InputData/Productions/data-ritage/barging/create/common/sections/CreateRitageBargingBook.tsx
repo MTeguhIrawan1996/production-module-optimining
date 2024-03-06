@@ -70,6 +70,8 @@ const CreateRitageBargingBook = () => {
       domeId: '',
       stockpileName: '',
       bargingId: '',
+      closeDome: false,
+      bargeCompanyHeavyEquipmentId: '',
       bulkSamplingDensity: '',
       bucketVolume: '',
       tonByRitage: '',
@@ -84,9 +86,14 @@ const CreateRitageBargingBook = () => {
   const domeId = methods.watch('domeId');
   const photos = methods.watch('photos');
   const isRitageProblematic = methods.watch('isRitageProblematic');
+  const closeDome = methods.watch('closeDome');
 
   React.useEffect(() => {
-    const ritageDuration = hourDiff(newFromTime, newArriveTime);
+    const ritageDuration = hourDiff({
+      startTime: newFromTime,
+      endTime: newArriveTime,
+      functionIsBeforeEndTime: true,
+    });
     const amount = countTonByRitage(newBucketVolume, newBulkSamplingDensity);
     methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
     methods.setValue('ritageDuration', ritageDuration ?? '');
@@ -107,7 +114,6 @@ const CreateRitageBargingBook = () => {
     },
   });
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
   const { mutate, isLoading } = useCreateRitageBarging({
     onError: (err) => {
       if (err.response) {
@@ -184,14 +190,14 @@ const CreateRitageBargingBook = () => {
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
     });
     const hullNumberSubstitution = heavyEquipmentSelect({
       colSpan: 6,
       name: 'companyHeavyEquipmentChangeId',
       label: 'heavyEquipmentCodeSubstitution',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
     });
     const materialItem = materialSelect({
       colSpan: 6,
@@ -267,6 +273,13 @@ const CreateRitageBargingBook = () => {
       label: 'toBarging',
       withAsterisk: false,
       categoryId: `${process.env.NEXT_PUBLIC_BARGING_ID}`,
+    });
+    const bargeCodeItem = heavyEquipmentSelect({
+      colSpan: 6,
+      name: 'bargeCompanyHeavyEquipmentId',
+      label: 'bargeCode',
+      withAsterisk: false,
+      categoryId: `${process.env.NEXT_PUBLIC_BARGE_ID}`,
     });
     const bulkSamplingDensityItem = globalNumberInput({
       colSpan: 6,
@@ -372,7 +385,15 @@ const CreateRitageBargingBook = () => {
       {
         group: t('commonTypography.arrive'),
         enableGroupLabel: true,
-        formControllers: [domeItem, stockpileItem, bargingItem],
+        groupCheckbox: {
+          onChange: () => {
+            closeDome === true
+              ? methods.setValue('closeDome', false)
+              : methods.setValue('closeDome', true);
+          },
+          label: t('commonTypography.closeDome'),
+        },
+        formControllers: [domeItem, stockpileItem, bargingItem, bargeCodeItem],
       },
       {
         group: t('commonTypography.detail'),
@@ -398,7 +419,7 @@ const CreateRitageBargingBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photos, isRitageProblematic, materialId]);
+  }, [photos, isRitageProblematic, materialId, closeDome]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */

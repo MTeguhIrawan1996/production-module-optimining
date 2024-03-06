@@ -1,16 +1,17 @@
-import { ActionIcon, Box, Group, Menu, Stack, Text } from '@mantine/core';
-import { IconMenu2, IconUser } from '@tabler/icons-react';
-import { useRouter } from 'next/router';
-import { signOut } from 'next-auth/react';
+import { ActionIcon, Box, Group } from '@mantine/core';
+import { IconMenu2 } from '@tabler/icons-react';
+import i18n from 'i18n';
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
-import { KeyValueList, PrimaryButton } from '@/components/elements';
+import { ProfileCard } from '@/components/layouts/Dashboard/ProfileCard';
 
 import {
   IAuthUserData,
   useReadAuthUser,
 } from '@/services/graphql/query/auth/useReadAuthUser';
+import { useReadPermissionUser } from '@/services/graphql/query/auth/useReadPermission';
+import { usePermissions } from '@/utils/store/usePermissions';
 
 interface IHeaderlayoutProps {
   isExpand: boolean;
@@ -18,8 +19,10 @@ interface IHeaderlayoutProps {
 }
 
 const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
-  const router = useRouter();
-  const { t } = useTranslation('default');
+  const [setPermissions, permissions] = usePermissions(
+    (state) => [state.setPermissions, state.permissions],
+    shallow
+  );
   const [authUser, setAUthUser] = React.useState<IAuthUserData | null>(null);
   useReadAuthUser({
     skip: authUser !== null,
@@ -28,77 +31,42 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
     },
   });
 
-  const renderName = React.useMemo(() => {
-    return (
-      <Group spacing="xs">
-        <Text component="span">{authUser?.name}</Text>
-        <ActionIcon color="brand.5" variant="filled" radius={4} size="lg">
-          <IconUser size="1.625rem" />
-        </ActionIcon>
-      </Group>
-    );
-  }, [authUser?.name]);
+  const { userPermission } = useReadPermissionUser({});
+
+  React.useEffect(() => {
+    if (
+      (userPermission?.role.permissions.data.length ?? 0 > 0) &&
+      permissions.length === 0
+    ) {
+      setPermissions(
+        userPermission?.role.permissions.data.map((v) => v.slug) ?? []
+      );
+    }
+  }, [userPermission, setPermissions, permissions]);
+
+  React.useEffect(() => {
+    i18n.changeLanguage('id');
+  }, []);
 
   return (
     <Box top={0} p={0} pos="sticky" w="100%" sx={{ zIndex: 10 }}>
-      <Group position="apart" h={64} px={26} bg="#FFFFFF" className="shadow">
+      <Group
+        position="apart"
+        h={64}
+        pr={26}
+        pl={12}
+        bg="#FFFFFF"
+        className="shadow"
+      >
         <ActionIcon
-          color="dark"
-          size="lg"
-          className="primaryHover"
+          variant="light"
+          color="brand.6"
+          radius={4}
           onClick={onHandleExpand}
         >
-          <IconMenu2 size="1.5rem" />
+          <IconMenu2 size="1rem" />
         </ActionIcon>
-        <Menu shadow="md" width={350} position="bottom-end">
-          <Menu.Target>{renderName}</Menu.Target>
-          <Menu.Dropdown>
-            <Stack p="xs" spacing="xs">
-              <KeyValueList
-                data={[
-                  {
-                    dataKey: 'Nama',
-                    value: authUser?.name,
-                  },
-                  {
-                    dataKey: 'Email',
-                    value: authUser?.email,
-                  },
-                  {
-                    dataKey: 'Role',
-                    value: authUser?.role.name,
-                  },
-                ]}
-                type="flex"
-                align="center"
-                justify="center"
-                keyStyleText={{
-                  sx: {
-                    flex: 2,
-                  },
-                  fz: 14,
-                }}
-                valueStyleText={{
-                  sx: {
-                    flex: 10,
-                  },
-                  fz: 14,
-                  fw: 600,
-                  truncate: true,
-                }}
-              />
-              <PrimaryButton
-                label={t('commonTypography.edit')}
-                variant="light"
-                onClick={() => router.push('/profile')}
-              />
-              <PrimaryButton
-                label="Logout"
-                onClick={() => signOut({ redirect: true, callbackUrl: '/' })}
-              />
-            </Stack>
-          </Menu.Dropdown>
-        </Menu>
+        <ProfileCard />
       </Group>
     </Box>
   );

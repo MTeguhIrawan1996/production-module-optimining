@@ -1,6 +1,5 @@
 import { Stack } from '@mantine/core';
 import { DataTableColumn } from 'mantine-datatable';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,10 +14,16 @@ import { IImageModalProps } from '@/components/elements/modal/ImageModal';
 
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
 
-import { IListDetailRitageDTData, IMeta, ITabs } from '@/types/global';
+import {
+  IListDetailRitageDTData,
+  IMeta,
+  IReadOneRitageDTOperators,
+  ITabs,
+} from '@/types/global';
 
-interface IListDetailsRitageDTProps<T> {
+interface IListDetailsRitageDTProps<T, D> {
   data?: T[];
+  operatorDetail?: D;
   columns?: DataTableColumn<T>[];
   subMaterialHidden?: boolean;
   meta?: IMeta;
@@ -28,29 +33,29 @@ interface IListDetailsRitageDTProps<T> {
   onOpenModal: (id: string) => Promise<void>;
 }
 
-export default function ListDetailsRitageDT<T extends IListDetailRitageDTData>({
+export default function ListDetailsRitageDT<
+  T extends IListDetailRitageDTData,
+  D extends IReadOneRitageDTOperators
+>({
   data,
   meta,
   fetching,
   tabs,
   columns,
+  operatorDetail,
   modalProps,
   subMaterialHidden = false,
   onOpenModal,
-}: IListDetailsRitageDTProps<T>) {
+}: IListDetailsRitageDTProps<T, D>) {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('p')) || 1;
-  const operatorName = pageParams.get('op') || '-';
-  const heavyEquipmentCode = pageParams.get('c') || '-';
-  const shift = pageParams.get('shift') || '-';
+  const page = Number(router.query['p']) || 1;
   const date = router.query?.id?.[0] as string;
   const shiftId = router.query?.id?.[1] as string;
   const companyHeavyEquipmentId = router.query?.id?.[2] as string;
 
   const handleSetPage = (newPage: number) => {
-    const urlSet = `/input-data/production/data-ritage/${tabs}/read/dump-truck/${date}/${shiftId}/${companyHeavyEquipmentId}?p=${newPage}&op=OperatorName&shift=${shift}&c=${heavyEquipmentCode}&tabs=${tabs}`;
+    const urlSet = `/input-data/production/data-ritage/${tabs}/read/dump-truck/${date}/${shiftId}/${companyHeavyEquipmentId}?p=${newPage}&tabs=${tabs}`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
@@ -61,7 +66,6 @@ export default function ListDetailsRitageDT<T extends IListDetailRitageDTData>({
           records: data,
           fetching: fetching,
           highlightOnHover: true,
-          withColumnBorders: false,
           columns: [
             {
               accessor: 'index',
@@ -88,12 +92,13 @@ export default function ListDetailsRitageDT<T extends IListDetailRitageDTData>({
             {
               accessor: 'fromAt',
               title: t('commonTypography.fromAt'),
-              render: ({ fromAt }) => formatDate(fromAt, 'hh:mm:ss A'),
+              render: ({ fromAt }) => formatDate(fromAt, 'hh:mm:ss A') ?? '-',
             },
             {
               accessor: 'arriveAt',
               title: t('commonTypography.arriveAt'),
-              render: ({ arriveAt }) => formatDate(arriveAt, 'hh:mm:ss A'),
+              render: ({ arriveAt }) =>
+                formatDate(arriveAt, 'hh:mm:ss A') ?? '-',
             },
             {
               accessor: 'ritageDuration',
@@ -140,6 +145,12 @@ export default function ListDetailsRitageDT<T extends IListDetailRitageDTData>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, columns, fetching, subMaterialHidden]);
 
+  const operator = operatorDetail?.operators?.map((val) => val);
+  const newOperatorName =
+    operatorDetail && operatorDetail.operators?.length
+      ? operator?.join(', ')
+      : '-';
+
   return (
     <>
       <Stack spacing="xs">
@@ -147,32 +158,24 @@ export default function ListDetailsRitageDT<T extends IListDetailRitageDTData>({
           data={[
             {
               dataKey: t('commonTypography.heavyEquipmentCode'),
-              value: heavyEquipmentCode,
+              value: operatorDetail?.companyHeavyEquipment?.hullNumber,
             },
             {
               dataKey: t('commonTypography.operatorName'),
-              value: operatorName,
+              value: newOperatorName,
             },
             {
               dataKey: t('commonTypography.date'),
-              value: formatDate(date) ?? '-',
+              value: formatDate(operatorDetail?.date) ?? '-',
             },
             {
               dataKey: t('commonTypography.shift'),
-              value: shift,
+              value: operatorDetail?.shift?.name,
             },
           ]}
           type="grid"
           keySpan={3}
           valueSpan={9}
-          keyStyleText={{
-            fw: 400,
-            fz: 18,
-          }}
-          valueStyleText={{
-            fw: 400,
-            fz: 18,
-          }}
         />
       </Stack>
       {renderTable}

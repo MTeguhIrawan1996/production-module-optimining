@@ -7,11 +7,16 @@ import { DashboardCard, KeyValueList } from '@/components/elements';
 
 import { ISubmaterials } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { useReadOneMaterialMaster } from '@/services/graphql/query/material/useReadOneMaterialMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ReadMaterialMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
+
+  const isPermissionUpdate = permissions?.includes('update-material');
 
   /* #   /**=========== Query =========== */
   const { materialMaster, materialMasterLoading } = useReadOneMaterialMaster({
@@ -34,10 +39,14 @@ const ReadMaterialMasterBook = () => {
   return (
     <DashboardCard
       title={t('commonTypography.material')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () => router.push(`/master-data/material/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () => router.push(`/master-data/material/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,
@@ -67,7 +76,7 @@ const ReadMaterialMasterBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          <Stack spacing="sm" mt="lg">
+          <Stack spacing="sm" mt="sm">
             <Text fz={24} fw={600} color="brand">
               {t('material.readMaterial')}
             </Text>
@@ -80,14 +89,6 @@ const ReadMaterialMasterBook = () => {
                 ...(subMaterial ?? []),
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
         </Tabs.Panel>

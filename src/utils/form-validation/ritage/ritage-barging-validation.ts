@@ -29,6 +29,8 @@ export const ritageBargingMutationValidation: z.ZodType<IMutationRitageBarging> 
       weatherId: zOptionalString.nullable(),
       domeId: zOptionalString.nullable(),
       stockpileName: zOptionalString,
+      closeDome: z.boolean(),
+      bargeCompanyHeavyEquipmentId: zOptionalString.nullable(),
       bargingId: zOptionalString.nullable(),
       bulkSamplingDensity: zRequiredNumber,
       bucketVolume: zRequiredNumber,

@@ -64,6 +64,7 @@ export const READ_DETAILS_OB_RITAGE_DT = gql`
           id
           name
         }
+        desc
         disposal {
           id
           name

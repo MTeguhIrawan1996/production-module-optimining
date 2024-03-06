@@ -10,24 +10,26 @@ import ListDataMovingRitageBook from '@/components/features/InputData/Production
 import ListDataObRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataObRitageBook';
 import ListDataOreRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataOreRitageBook';
 import ListDataQuarryRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataQuarryRitageBook';
+import ListDataTopsoilRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataTopsoilRitageBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const DataRitagePage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const [permission] = usePermissions((state) => [state.permissions], shallow);
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
     shallow
   );
-
-  const isPremissionOre = permission.includes('read-ore-ritage');
-  const isPremissionOb = permission.includes('read-overburden-ritage');
-  const isPremissionQuarry = permission.includes('read-quarry-ritage');
-  const isPremissionBarging = permission.includes('read-barging-ritage');
-  const isPremissionMoving = permission.includes('read-moving-ritage');
+  const isPremissionOre = permissions?.includes('read-ore-ritage');
+  const isPremissionOb = permissions?.includes('read-overburden-ritage');
+  const isPremissionQuarry = permissions?.includes('read-quarry-ritage');
+  const isPremissionBarging = permissions?.includes('read-barging-ritage');
+  const isPremissionMoving = permissions?.includes('read-moving-ritage');
+  const isPremissionTopsoil = permissions?.includes('read-topsoil-ritage');
 
   React.useEffect(() => {
     setBreadcrumbs([
@@ -36,6 +38,7 @@ const DataRitagePage = () => {
         path: router.asPath,
       },
     ]);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
@@ -54,12 +57,13 @@ const DataRitagePage = () => {
       >
         <GlobalTabs
           tabs={{
+            keepMounted: false,
             value: router.query.tabs as string,
             onTabChange: (value) => handleChangeTab(value),
           }}
           tabsData={[
             {
-              label: 'Ore (Ore/HGO/LGO)',
+              label: 'Ore',
               value: 'ore',
               component: <ListDataOreRitageBook />,
               isShowItem: isPremissionOre,
@@ -81,6 +85,12 @@ const DataRitagePage = () => {
               value: 'barging',
               component: <ListDataBargingRitageBook />,
               isShowItem: isPremissionBarging,
+            },
+            {
+              label: 'Topsoil',
+              value: 'topsoil',
+              component: <ListDataTopsoilRitageBook />,
+              isShowItem: isPremissionTopsoil,
             },
             {
               label: 'Moving',

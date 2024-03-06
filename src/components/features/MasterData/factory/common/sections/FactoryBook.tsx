@@ -1,7 +1,6 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,16 +14,24 @@ import {
 
 import { useDeleteFactoryMaster } from '@/services/graphql/mutation/factory/useDeleteFactoryMaster';
 import { useReadAllFactoryMaster } from '@/services/graphql/query/factory/useReadAllFactoryMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const FactoryBook = () => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+  const page = Number(router.query['page']) || 1;
+  const url = `/master-data/factory?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const isPermissionCreate = permissions?.includes('create-factory');
+  const isPermissionUpdate = permissions?.includes('update-factory');
+  const isPermissionDelete = permissions?.includes('delete-factory');
+  const isPermissionRead = permissions?.includes('read-factory');
 
   /* #   /**=========== Query =========== */
   const {
@@ -114,38 +121,54 @@ const FactoryBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/factory/read/${id}`);
-                      },
-                    }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/factory/update/${id}`);
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(`/master-data/factory/read/${id}`);
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(`/master-data/factory/update/${id}`);
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
             },
           ],
         }}
-        emptyStateProps={{
-          title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('factory.createFactory'),
-            onClick: () => router.push('/master-data/factory/create'),
-          },
-        }}
+        emptyStateProps={
+          isPermissionCreate
+            ? {
+                title: t('commonTypography.dataNotfound'),
+                actionButton: {
+                  label: t('factory.createFactory'),
+                  onClick: () => router.push('/master-data/factory/create'),
+                },
+              }
+            : undefined
+        }
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
@@ -156,21 +179,35 @@ const FactoryBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [factoriesData, factoriesDataLoading]);
+  }, [
+    factoriesData,
+    factoriesDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('factory.createFactory'),
-        onClick: () => router.push('/master-data/factory/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('factory.createFactory'),
+              onClick: () => router.push('/master-data/factory/create'),
+            }
+          : undefined
+      }
       searchBar={{
         placeholder: t('factory.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
         searchQuery: searchQuery,
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
+        },
       }}
     >
       {renderTable}

@@ -31,7 +31,6 @@ const RejectButton: React.FC<IRejectButtonProps> = (props) => {
 
   const handleIsReject = async () => {
     await methods.handleSubmit(submitForm)();
-    setIsOpenRejectationConfirmation((prev) => !prev);
   };
 
   return (

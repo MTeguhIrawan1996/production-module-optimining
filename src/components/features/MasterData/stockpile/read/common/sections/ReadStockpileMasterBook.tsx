@@ -3,7 +3,6 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,18 +18,22 @@ import {
 import { useDeleteStockpileDomeMaster } from '@/services/graphql/mutation/stockpile-master/useDeleteStockpileDomeMaster';
 import { useReadAllStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadAllStockpileDomeMaster';
 import { useReadOneStockpileMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ReadStockpileMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const pageParams = useSearchParams();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
-  const page = Number(pageParams.get('page')) || 1;
+  const page = Number(router.query['page']) || 1;
   const url = `/master-data/stockpile/read/${id}?page=1`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [domeId, setDomeId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const isPermissionUpdate = permissions?.includes('update-stockpile');
 
   /* #   /**=========== Query =========== */
   const { stockpileMaster, stockpileMasterLoading } = useReadOneStockpileMaster(
@@ -100,7 +103,6 @@ const ReadStockpileMasterBook = () => {
         tableProps={{
           highlightOnHover: true,
           shadow: 'none',
-          withColumnBorders: false,
           columns: [
             {
               accessor: 'handBookId',
@@ -164,10 +166,14 @@ const ReadStockpileMasterBook = () => {
   return (
     <DashboardCard
       title={t('commonTypography.stockpile')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () => router.push(`/master-data/stockpile/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () => router.push(`/master-data/stockpile/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,
@@ -197,7 +203,7 @@ const ReadStockpileMasterBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          <Stack spacing="sm" mt="lg">
+          <Stack spacing="sm" mt="sm">
             <Text fz={24} fw={600} color="brand">
               {t('stockpile.readStockpile')}
             </Text>
@@ -213,14 +219,6 @@ const ReadStockpileMasterBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />

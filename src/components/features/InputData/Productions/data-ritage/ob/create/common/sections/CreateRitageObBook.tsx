@@ -89,7 +89,11 @@ const CreateRitageObBook = () => {
   const isRitageProblematic = methods.watch('isRitageProblematic');
 
   React.useEffect(() => {
-    const ritageDuration = hourDiff(newFromTime, newArriveTime);
+    const ritageDuration = hourDiff({
+      startTime: newFromTime,
+      endTime: newArriveTime,
+      functionIsBeforeEndTime: true,
+    });
     const amount = countTonByRitage(newBucketVolume, newBulkSamplingDensity);
     methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
     methods.setValue('ritageDuration', ritageDuration ?? '');
@@ -108,6 +112,7 @@ const CreateRitageObBook = () => {
     onCompleted: ({ pit }) => {
       methods.setValue('block', pit.block.name);
     },
+    fetchPolicy: 'cache-first',
   });
 
   // eslint-disable-next-line unused-imports/no-unused-vars
@@ -187,14 +192,14 @@ const CreateRitageObBook = () => {
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
     });
     const hullNumberSubstitution = heavyEquipmentSelect({
       colSpan: 6,
       name: 'companyHeavyEquipmentChangeId',
       label: 'heavyEquipmentCodeSubstitution',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
     });
     const materialItem = materialSelect({
       colSpan: 6,

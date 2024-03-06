@@ -2,7 +2,6 @@ import { SelectProps } from '@mantine/core';
 import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,11 +17,14 @@ import { useDeleteLocationMaster } from '@/services/graphql/mutation/location/us
 import { useReadAllLocationCategory } from '@/services/graphql/query/global-select/useReadAllLocationCategory ';
 import { useReadAllLocationsMaster } from '@/services/graphql/query/location/useReadAllLocationMaster';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const LocationBook = () => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+  const page = Number(router.query['page']) || 1;
+  const url = `/master-data/location?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -35,6 +37,11 @@ const LocationBook = () => {
     400
   );
   const [categoryId, setCategoryId] = React.useState<string | null>(null);
+
+  const isPermissionCreate = permissions?.includes('create-location');
+  const isPermissionUpdate = permissions?.includes('update-location');
+  const isPermissionDelete = permissions?.includes('delete-location');
+  const isPermissionRead = permissions?.includes('read-location');
 
   /* #   /**=========== Query =========== */
   const {
@@ -176,25 +183,37 @@ const LocationBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/location/read/${id}`);
-                      },
-                    }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/location/update/${id}`);
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(`/master-data/location/read/${id}`);
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(`/master-data/location/update/${id}`);
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -203,10 +222,12 @@ const LocationBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('location.createLocation'),
-            onClick: () => router.push('/master-data/location/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('location.createLocation'),
+                onClick: () => router.push('/master-data/location/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -218,21 +239,35 @@ const LocationBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationsData, locationsDataLoading]);
+  }, [
+    locationsData,
+    locationsDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('location.createLocation'),
-        onClick: () => router.push('/master-data/location/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('location.createLocation'),
+              onClick: () => router.push('/master-data/location/create'),
+            }
+          : undefined
+      }
       searchBar={{
         placeholder: t('location.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
         searchQuery: searchQuery,
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
+        },
       }}
       MultipleFilter={{
         MultipleFilterData: filter,

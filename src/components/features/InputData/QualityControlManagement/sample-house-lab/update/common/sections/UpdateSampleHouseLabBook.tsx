@@ -3,17 +3,19 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import {
+  FieldArrayWithId,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import { useReadOneSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadOneSampleHouseLab';
-import {
-  IElementRhf,
-  IMutationSampleHousePlanValues,
-} from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
+import { IMutationSampleHousePlanValues } from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
 import { useUpdateSampleHousePlan } from '@/services/restapi/sample-house-plan/useUpdateSampleHousePlan';
 import {
   employeeSelect,
@@ -30,7 +32,7 @@ import {
   shiftSelect,
 } from '@/utils/constants/Field/sample-house-field';
 import { sampleHouseLabMutationValidation } from '@/utils/form-validation/sample-house-lab/sample-house-lab-mutation-validation';
-import { formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -137,7 +139,7 @@ const UpdateSampleHouseLabPage = () => {
     skip: !router.isReady || !isOwnElemntsData,
     onCompleted: ({ houseSampleAndLab }) => {
       const isOwnSubMaterial = houseSampleAndLab.subMaterial !== null;
-      fields.map((o, i) => {
+      fields.forEach((o, i) => {
         const valueGCElements = houseSampleAndLab?.gradeControlElements?.find(
           (val) => val.element?.id === o.elementId
         );
@@ -146,48 +148,46 @@ const UpdateSampleHouseLabPage = () => {
         );
         methods.setValue(
           `gradeControlElements.${i}.value`,
-          valueGCElements && valueGCElements.value
-            ? `${valueGCElements.value}`
-            : ''
+          valueGCElements && valueGCElements.value ? valueGCElements.value : ''
         );
         methods.setValue(
           `elements.${i}.value`,
-          valueElements && valueElements.value ? `${valueElements.value}` : ''
+          valueElements && valueElements.value ? valueElements.value : ''
         );
       });
       const sampleDate = stringToDate(houseSampleAndLab.sampleDate ?? null);
       const sampleEnterLabDate = stringToDate(
         houseSampleAndLab.sampleEnterLabAt ?? null
       );
-      const sampleEnterLabTime = formatDate2(
+      const sampleEnterLabTime = formatDate(
         houseSampleAndLab.sampleEnterLabAt,
         'HH:mm:ss'
       );
       const preparationStartDate = stringToDate(
         houseSampleAndLab.preparationStartAt ?? null
       );
-      const preparationStartTime = formatDate2(
+      const preparationStartTime = formatDate(
         houseSampleAndLab.preparationStartAt,
         'HH:mm:ss'
       );
       const preparationFinishDate = stringToDate(
         houseSampleAndLab.preparationFinishAt ?? null
       );
-      const preparationFinishTime = formatDate2(
+      const preparationFinishTime = formatDate(
         houseSampleAndLab.preparationFinishAt,
         'HH:mm:ss'
       );
       const analysisStartDate = stringToDate(
         houseSampleAndLab.analysisStartAt ?? null
       );
-      const analysisStartTime = formatDate2(
+      const analysisStartTime = formatDate(
         houseSampleAndLab.analysisStartAt,
         'HH:mm:ss'
       );
       const analysisFinishDate = stringToDate(
         houseSampleAndLab.analysisFinishAt ?? null
       );
-      const analysisFinishTime = formatDate2(
+      const analysisFinishTime = formatDate(
         houseSampleAndLab.analysisFinishAt,
         'HH:mm:ss'
       );
@@ -267,13 +267,21 @@ const UpdateSampleHouseLabPage = () => {
 
   /* #   /**=========== Field =========== */
   const fieldGradeControlElements = React.useCallback(
-    (val: IElementRhf, index: number) => {
-      const elementItem = globalText({
+    (
+      val: FieldArrayWithId<
+        IMutationSampleHousePlanValues,
+        'gradeControlElements',
+        'id'
+      >,
+      index: number
+    ) => {
+      const elementItem = globalNumberInput({
         name: `gradeControlElements.${index}.value`,
         label: `${val.name} ${t('commonTypography.estimationGC')}`,
         colSpan: 6,
         withAsterisk: false,
         labelWithTranslate: false,
+        key: `gradeControlElements.${index}.value.${val.id}`,
       });
 
       return elementItem;
@@ -284,13 +292,17 @@ const UpdateSampleHouseLabPage = () => {
   const fieldGradeControlElementsItem = fields.map(fieldGradeControlElements);
 
   const fieldElements = React.useCallback(
-    (val: IElementRhf, index: number) => {
-      const elementItem = globalText({
+    (
+      val: FieldArrayWithId<IMutationSampleHousePlanValues, 'elements', 'id'>,
+      index: number
+    ) => {
+      const elementItem = globalNumberInput({
         name: `elements.${index}.value`,
         label: `${val.name} ${t('commonTypography.percentageLab')}`,
         colSpan: 6,
         withAsterisk: false,
         labelWithTranslate: false,
+        key: `elements.${index}.value.${val.id}`,
       });
 
       return elementItem;
@@ -485,6 +497,7 @@ const UpdateSampleHouseLabPage = () => {
       onDrop: (value) => {
         methods.setValue('photo', value);
         methods.clearErrors('photo');
+        setServerPhoto([]);
       },
       onReject: (files) =>
         handleRejectFile<IMutationSampleHousePlanValues>({
@@ -581,7 +594,6 @@ const UpdateSampleHouseLabPage = () => {
   ) => {
     methods.clearErrors('gradeControlElements');
     methods.clearErrors('elements');
-
     const values = objectToArrayValue(data);
     const dateValue = [
       'sampleDate',
@@ -592,7 +604,6 @@ const UpdateSampleHouseLabPage = () => {
       'analysisFinishDate',
     ];
     const numberValue = ['density'];
-
     const valuesWithDateString = values.map((val) => {
       if (dateValue.includes(val.name)) {
         const date = dateToString(val.value);
@@ -634,7 +645,12 @@ const UpdateSampleHouseLabPage = () => {
         submitButton={{
           label: t('commonTypography.save'),
           type: 'button',
-          onClick: () => setIsOpenConfirmation((prev) => !prev),
+          onClick: async () => {
+            const output = await methods.trigger(undefined, {
+              shouldFocus: true,
+            });
+            if (output) setIsOpenConfirmation((prev) => !prev);
+          },
         }}
         backButton={{
           onClick: () =>

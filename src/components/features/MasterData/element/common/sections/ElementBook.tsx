@@ -1,7 +1,6 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,16 +14,24 @@ import {
 
 import { useDeleteElementMaster } from '@/services/graphql/mutation/element/useDeleteElementMaster';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ElementBook = () => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+  const page = Number(router.query['page']) || 1;
+  const url = `/master-data/element?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const isPermissionCreate = permissions?.includes('create-element');
+  const isPermissionUpdate = permissions?.includes('update-element');
+  const isPermissionDelete = permissions?.includes('delete-element');
+  const isPermissionRead = permissions?.includes('read-element');
 
   /* #   /**=========== Query =========== */
   const {
@@ -114,25 +121,37 @@ const ElementBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/element/read/${id}`);
-                      },
-                    }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/element/update/${id}`);
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(`/master-data/element/read/${id}`);
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(`/master-data/element/update/${id}`);
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -141,10 +160,12 @@ const ElementBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('element.createElement'),
-            onClick: () => router.push('/master-data/element/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('element.createElement'),
+                onClick: () => router.push('/master-data/element/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -156,21 +177,35 @@ const ElementBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [elementsData, elementsDataLoading]);
+  }, [
+    elementsData,
+    elementsDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('element.createElement'),
-        onClick: () => router.push('/master-data/element/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('element.createElement'),
+              onClick: () => router.push('/master-data/element/create'),
+            }
+          : undefined
+      }
       searchBar={{
         placeholder: t('element.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
         searchQuery: searchQuery,
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
+        },
       }}
     >
       {renderTable}

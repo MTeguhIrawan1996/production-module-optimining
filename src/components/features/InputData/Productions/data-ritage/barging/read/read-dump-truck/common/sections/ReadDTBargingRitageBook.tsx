@@ -1,5 +1,4 @@
 import { DataTableColumn } from 'mantine-datatable';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +10,7 @@ import {
   useReadDetailsBargingRitageDT,
 } from '@/services/graphql/query/barging-ritage/useReadDetailsBargingRitageDT';
 import { useReadOneFotoBargingRitageDT } from '@/services/graphql/query/barging-ritage/useReadOneBargingRitageDT';
+import { useReadOneBargingRitageDTOperators } from '@/services/graphql/query/barging-ritage/useReadOneBargingRitageDTOperators';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 
 import { IElementsData, IListDetailRitageDTData } from '@/types/global';
@@ -18,8 +18,7 @@ import { IElementsData, IListDetailRitageDTData } from '@/types/global';
 const ReadDTBargingRitageBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('p')) || 1;
+  const page = Number(router.query['p']) || 1;
   const date = router.query?.id?.[0] as string;
   const shiftId = router.query?.id?.[1] as string;
   const companyHeavyEquipmentId = router.query?.id?.[2] as string;
@@ -43,6 +42,16 @@ const ReadDTBargingRitageBook = () => {
     skip: !router.isReady,
   });
 
+  const { bargingDumpTruckRitageDetail, bargingDumpTruckRitageDetailLoading } =
+    useReadOneBargingRitageDTOperators({
+      variables: {
+        date: date,
+        shiftId: shiftId,
+        companyHeavyEquipmentId: companyHeavyEquipmentId,
+      },
+      skip: !router.isReady,
+    });
+
   const { getData, bargingRitage, bargingRitageLoading } =
     useReadOneFotoBargingRitageDT({});
 
@@ -61,7 +70,7 @@ const ReadDTBargingRitageBook = () => {
         title: `${element.name}`,
         render: ({ houseSampleAndLab }) => {
           const value = houseSampleAndLab?.elements?.find(
-            (val) => val.element?.name === element.name
+            (val) => val.element?.id === element.id
           );
           return value?.value ?? '-';
         },
@@ -92,9 +101,11 @@ const ReadDTBargingRitageBook = () => {
       childrenStackProps={{
         spacing: 'xl',
       }}
+      isLoading={bargingDumpTruckRitageDetailLoading}
     >
       <ListDetailsRitageDT
         data={detailsBargingRitagesDT}
+        operatorDetail={bargingDumpTruckRitageDetail}
         columns={[
           {
             accessor: 'fromStockpile',

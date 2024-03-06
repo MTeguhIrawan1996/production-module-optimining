@@ -1,7 +1,6 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,16 +14,24 @@ import {
 
 import { useDeleteWHPMaster } from '@/services/graphql/mutation/working-hours-plan/useDeleteWHPMaster';
 import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const WorkingHoursPlanBook = () => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const page = Number(router.query['page']) || 1;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+  const url = `/master-data/working-hours-plan?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const isPermissionCreate = permissions?.includes('create-working-hour-plan');
+  const isPermissionUpdate = permissions?.includes('update-working-hour-plan');
+  const isPermissionDelete = permissions?.includes('delete-working-hour-plan');
+  const isPermissionRead = permissions?.includes('read-working-hour-plan');
 
   /* #   /**=========== Query =========== */
   const {
@@ -116,29 +123,41 @@ const WorkingHoursPlanBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/master-data/working-hours-plan/read/${id}`
-                        );
-                      },
-                    }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/master-data/working-hours-plan/update/${id}`
-                        );
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/working-hours-plan/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/working-hours-plan/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -147,11 +166,13 @@ const WorkingHoursPlanBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('workingHoursPlan.createWorkingHoursPlan'),
-            onClick: () =>
-              router.push('/master-data/working-hours-plan/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('workingHoursPlan.createWorkingHoursPlan'),
+                onClick: () =>
+                  router.push('/master-data/working-hours-plan/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -163,21 +184,36 @@ const WorkingHoursPlanBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workingHourPlansData, workingHourPlansDataLoading]);
+  }, [
+    workingHourPlansData,
+    workingHourPlansDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('workingHoursPlan.createWorkingHoursPlan'),
-        onClick: () => router.push('/master-data/working-hours-plan/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('workingHoursPlan.createWorkingHoursPlan'),
+              onClick: () =>
+                router.push('/master-data/working-hours-plan/create'),
+            }
+          : undefined
+      }
       searchBar={{
         placeholder: t('workingHoursPlan.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
         searchQuery: searchQuery,
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
+        },
       }}
     >
       {renderTable}

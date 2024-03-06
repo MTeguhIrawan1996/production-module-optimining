@@ -3,7 +3,7 @@
  * @see https://github.com/iamvishnusankar/next-sitemap#readme
  */
 module.exports = {
-  siteUrl: 'https://yourwebsite.com',
+  siteUrl: process.env.NEXT_PUBLIC_URL,
   generateRobotsTxt: true,
   robotsTxtOptions: {
     policies: [{ userAgent: '*', allow: '/' }],

@@ -28,7 +28,7 @@ import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { domeNameSelect } from '@/utils/constants/Field/stockpile-field';
 import { ritageBargingMutationValidation } from '@/utils/form-validation/ritage/ritage-barging-validation';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
-import { formatDate2 } from '@/utils/helper/dateFormat';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -77,6 +77,8 @@ const UpdateRitageBargingBook = () => {
       domeId: '',
       stockpileName: '',
       bargingId: '',
+      closeDome: false,
+      bargeCompanyHeavyEquipmentId: '',
       bulkSamplingDensity: '',
       bucketVolume: '',
       tonByRitage: '',
@@ -91,9 +93,14 @@ const UpdateRitageBargingBook = () => {
   const domeId = methods.watch('domeId');
   const photos = methods.watch('photos');
   const isRitageProblematic = methods.watch('isRitageProblematic');
+  const closeDome = methods.watch('closeDome');
 
   React.useEffect(() => {
-    const ritageDuration = hourDiff(newFromTime, newArriveTime);
+    const ritageDuration = hourDiff({
+      startTime: newFromTime,
+      endTime: newArriveTime,
+      functionIsBeforeEndTime: true,
+    });
     const amount = countTonByRitage(newBucketVolume, newBulkSamplingDensity);
     methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
     methods.setValue('ritageDuration', ritageDuration ?? '');
@@ -111,8 +118,8 @@ const UpdateRitageBargingBook = () => {
     skip: !router.isReady,
     onCompleted: ({ bargingRitage }) => {
       const ritageDate = stringToDate(bargingRitage.date ?? null);
-      const fromTime = formatDate2(bargingRitage.fromAt, 'HH:mm:ss');
-      const arriveTime = formatDate2(bargingRitage.arriveAt, 'HH:mm:ss');
+      const fromTime = formatDate(bargingRitage.fromAt, 'HH:mm:ss');
+      const arriveTime = formatDate(bargingRitage.arriveAt, 'HH:mm:ss');
       methods.setValue(
         'isRitageProblematic',
         bargingRitage.isRitageProblematic
@@ -146,6 +153,11 @@ const UpdateRitageBargingBook = () => {
       methods.setValue('weatherId', bargingRitage.weather?.id ?? '');
       methods.setValue('domeId', bargingRitage.dome?.id ?? '');
       methods.setValue('bargingId', bargingRitage.barging?.id ?? '');
+      methods.setValue('closeDome', bargingRitage.closeDome ?? false);
+      methods.setValue(
+        'bargeCompanyHeavyEquipmentId',
+        bargingRitage.bargeCompanyHeavyEquipment?.id ?? ''
+      );
       methods.setValue(
         'bulkSamplingDensity',
         bargingRitage.bulkSamplingDensity ?? ''
@@ -249,7 +261,7 @@ const UpdateRitageBargingBook = () => {
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: bargingRitage?.companyHeavyEquipment?.id,
       labelValue: bargingRitage?.companyHeavyEquipment?.hullNumber ?? '',
     });
@@ -258,7 +270,7 @@ const UpdateRitageBargingBook = () => {
       name: 'companyHeavyEquipmentChangeId',
       label: 'heavyEquipmentCodeSubstitution',
       withAsterisk: true,
-      categorySlug: 'dump-truck',
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: bargingRitage?.companyHeavyEquipmentChange?.id,
       labelValue: bargingRitage?.companyHeavyEquipmentChange?.hullNumber ?? '',
     });
@@ -339,6 +351,15 @@ const UpdateRitageBargingBook = () => {
       categoryId: `${process.env.NEXT_PUBLIC_BARGING_ID}`,
       defaultValue: bargingRitage?.barging?.id,
       labelValue: bargingRitage?.barging?.name,
+    });
+    const bargeCodeItem = heavyEquipmentSelect({
+      colSpan: 6,
+      name: 'bargeCompanyHeavyEquipmentId',
+      label: 'bargeCode',
+      withAsterisk: false,
+      categoryId: `${process.env.NEXT_PUBLIC_BARGE_ID}`,
+      defaultValue: bargingRitage?.bargeCompanyHeavyEquipment?.id,
+      labelValue: bargingRitage?.bargeCompanyHeavyEquipment?.hullNumber ?? '',
     });
     const bulkSamplingDensityItem = globalNumberInput({
       colSpan: 6,
@@ -453,7 +474,16 @@ const UpdateRitageBargingBook = () => {
       {
         group: t('commonTypography.arrive'),
         enableGroupLabel: true,
-        formControllers: [domeItem, stockpileItem, bargingItem],
+        groupCheckbox: {
+          onChange: () => {
+            closeDome === true
+              ? methods.setValue('closeDome', false)
+              : methods.setValue('closeDome', true);
+          },
+          checked: closeDome,
+          label: t('commonTypography.closeDome'),
+        },
+        formControllers: [domeItem, stockpileItem, bargingItem, bargeCodeItem],
       },
       {
         group: t('commonTypography.detail'),
@@ -486,6 +516,7 @@ const UpdateRitageBargingBook = () => {
     serverPhotos,
     deletedPhotoIds,
     materialId,
+    closeDome,
   ]);
   /* #endregion  /**======== Field =========== */
 
@@ -546,7 +577,12 @@ const UpdateRitageBargingBook = () => {
         submitButton={{
           label: t('commonTypography.save'),
           type: 'button',
-          onClick: () => setIsOpenConfirmation((prev) => !prev),
+          onClick: async () => {
+            const output = await methods.trigger(undefined, {
+              shouldFocus: true,
+            });
+            if (output) setIsOpenConfirmation((prev) => !prev);
+          },
         }}
         backButton={{
           onClick: () =>

@@ -16,9 +16,12 @@ export type IDomeNameSelectInputRhfProps = {
   name: string;
   labelValue?: string;
   stockpileId?: string | null;
+  limit?: number | null;
+  skipQuery?: boolean;
+  skipSearchQuery?: boolean;
 } & Omit<
   SelectProps,
-  'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
+  'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder' | 'limit'
 > &
   CommonProps;
 
@@ -29,6 +32,9 @@ const DomeNameSelectInputRhf: React.FC<IDomeNameSelectInputRhfProps> = ({
   labelValue,
   defaultValue,
   stockpileId = null,
+  limit = 15,
+  skipQuery = false,
+  skipSearchQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -39,12 +45,13 @@ const DomeNameSelectInputRhf: React.FC<IDomeNameSelectInputRhfProps> = ({
 
   const { domeData } = useReadAllDome({
     variables: {
-      limit: 15,
+      limit: limit,
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       stockpileId: stockpileId === '' ? null : stockpileId,
     },
+    skip: skipQuery,
   });
 
   const { combinedItems, uncombinedItem } = useCombineFilterItems({
@@ -61,16 +68,8 @@ const DomeNameSelectInputRhf: React.FC<IDomeNameSelectInputRhfProps> = ({
       defaultValue={defaultValue}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
-      styles={(theme) => ({
-        item: {
-          borderRadius: theme.spacing.xs,
-        },
-        dropdown: {
-          borderRadius: theme.spacing.xs,
-        },
-      })}
-      onSearchChange={setSearchTerm}
-      searchValue={searchTerm}
+      onSearchChange={!skipSearchQuery ? setSearchTerm : undefined}
+      searchValue={!skipSearchQuery ? searchTerm : undefined}
       data-control={control}
       placeholder={t('commonTypography.chooseDomeName', {
         ns: 'default',

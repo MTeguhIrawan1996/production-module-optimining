@@ -20,12 +20,15 @@ import { useUpdateIsValidateObRitage } from '@/services/graphql/mutation/ob-rita
 import { useReadOneObRitage } from '@/services/graphql/query/ob-ritage/useReadOneObRitage';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { IFile, IUpdateStatusValues } from '@/types/global';
 
 const ReadRitageObBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
 
   const methods = useForm<IUpdateStatusValues>({
@@ -172,22 +175,28 @@ const ReadRitageObBook = () => {
   const includesValid = [`${process.env.NEXT_PUBLIC_STATUS_VALID}`];
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
+  const isPermissionValidation = permissions?.includes(
+    'validate-overburden-ritage'
+  );
   const isShowButtonValidation = includesWaiting.includes(
     overburdenRitage?.status?.id ?? ''
   );
-
   const isShowButtonInvalidation = includesWaiting.includes(
     overburdenRitage?.status?.id ?? ''
   );
 
+  const isPermissionDetermination = permissions?.includes(
+    'determine-overburden-ritage'
+  );
   const isShowButtonDetermined = includesValid.includes(
     overburdenRitage?.status?.id ?? ''
   );
-
   const isShowButtonReject = includesValid.includes(
     overburdenRitage?.status?.id ?? ''
   );
-  const isHiddenButtonEdit = includesDetermined.includes(
+
+  const isPermissionEdit = permissions?.includes('update-overburden-ritage');
+  const isIncludeDetermination = includesDetermined.includes(
     overburdenRitage?.status?.id ?? ''
   );
 
@@ -195,18 +204,18 @@ const ReadRitageObBook = () => {
     <DashboardCard
       title={t('ritageOb.readRitageOb')}
       updateButton={
-        isHiddenButtonEdit
-          ? undefined
-          : {
+        isPermissionEdit && !isIncludeDetermination
+          ? {
               label: 'Edit',
               onClick: () =>
                 router.push(
                   `/input-data/production/data-ritage/ob/update/${id}`
                 ),
             }
+          : undefined
       }
       validationButton={
-        isShowButtonValidation
+        isPermissionValidation && isShowButtonValidation
           ? {
               onClickValid: handleIsValid,
               loading: loading,
@@ -214,7 +223,7 @@ const ReadRitageObBook = () => {
           : undefined
       }
       determinedButton={
-        isShowButtonDetermined
+        isPermissionDetermination && isShowButtonDetermined
           ? {
               onClickDetermined: handleIsDetermined,
               loading: determinedLoading,
@@ -222,7 +231,7 @@ const ReadRitageObBook = () => {
           : undefined
       }
       notValidButton={
-        isShowButtonInvalidation
+        isPermissionValidation && isShowButtonInvalidation
           ? {
               methods: methods,
               submitForm: handleInvalidForm,
@@ -233,7 +242,7 @@ const ReadRitageObBook = () => {
           : undefined
       }
       rejectButton={
-        isShowButtonReject
+        isPermissionDetermination && isShowButtonReject
           ? {
               methods: methods,
               submitForm: handleRejectForm,
@@ -279,7 +288,7 @@ const ReadRitageObBook = () => {
               description={overburdenRitage?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           {overburdenRitage?.status?.id ===
@@ -288,26 +297,18 @@ const ReadRitageObBook = () => {
               description={overburdenRitage?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
-          <Stack spacing="sm" mt="md">
+          <Stack spacing="sm" mt="sm">
             <KeyValueList
               data={[
                 {
                   dataKey: t('commonTypography.date'),
-                  value: formatDate(overburdenRitage?.date),
+                  value: formatDate(overburdenRitage?.date) ?? '-',
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           {!overburdenRitageLoading && overburdenRitage ? (
@@ -369,14 +370,6 @@ const ReadRitageObBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -388,11 +381,13 @@ const ReadRitageObBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.fromAt'),
-                  value: formatDate(overburdenRitage?.fromAt, 'hh:mm:ss A'),
+                  value:
+                    formatDate(overburdenRitage?.fromAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.arriveAt'),
-                  value: formatDate(overburdenRitage?.arriveAt, 'hh:mm:ss A'),
+                  value:
+                    formatDate(overburdenRitage?.arriveAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.ritageDuration'),
@@ -400,14 +395,6 @@ const ReadRitageObBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -443,14 +430,6 @@ const ReadRitageObBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -466,14 +445,6 @@ const ReadRitageObBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -497,14 +468,6 @@ const ReadRitageObBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -517,14 +480,6 @@ const ReadRitageObBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
         </Tabs.Panel>

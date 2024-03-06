@@ -6,11 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, KeyValueList } from '@/components/elements';
 
 import { useReadOneElementMaster } from '@/services/graphql/query/element/useReadOneElementMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ReadElementMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionUpdate = permissions?.includes('update-element');
 
   /* #   /**=========== Query =========== */
   const { elementMaster, elementMasterLoading } = useReadOneElementMaster({
@@ -24,10 +29,14 @@ const ReadElementMasterBook = () => {
   return (
     <DashboardCard
       title={t('commonTypography.element')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () => router.push(`/master-data/element/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () => router.push(`/master-data/element/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,
@@ -57,7 +66,7 @@ const ReadElementMasterBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          <Stack spacing="sm" mt="lg">
+          <Stack spacing="sm" mt="sm">
             <KeyValueList
               data={[
                 {
@@ -66,14 +75,6 @@ const ReadElementMasterBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
         </Tabs.Panel>

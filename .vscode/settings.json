@@ -6,5 +6,25 @@
     "source.fixAll": "explicit"
   },
   "headwind.runOnSave": false,
-  "typescript.preferences.importModuleSpecifier": "non-relative"
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#602443",
+    "activityBar.background": "#602443",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#51742b",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#602443",
+    "statusBar.background": "#3b1629",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#602443",
+    "statusBarItem.remoteBackground": "#3b1629",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#3b1629",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#3b162999",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "3B1629"
 }

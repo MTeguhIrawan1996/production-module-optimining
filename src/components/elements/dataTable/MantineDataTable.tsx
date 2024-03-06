@@ -1,5 +1,4 @@
 import { Box, createStyles, Stack, Text, useMantineTheme } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
 import { DataTable, DataTableProps } from 'mantine-datatable';
 import * as React from 'react';
 
@@ -14,12 +13,18 @@ import GlobalPagination, {
 import { EmptyStateImage } from '@/utils/constants/image';
 
 const useStyles = createStyles((theme) => ({
+  root: {
+    '&& td': {
+      color: theme.colors.dark[6],
+      fontSize: theme.fontSizes.xs,
+    },
+  },
   header: {
     '&& th': {
-      backgroundColor: theme.colors.gray[1],
-      color: theme.colors.dark[6],
+      color: `${theme.colors.dark[7]}`,
       fontWeight: 500,
-      fontSize: 16,
+      fontSize: theme.fontSizes.xs,
+      backgroundColor: `${theme.colors.dark[1]}`,
     },
   },
   figure: {
@@ -55,19 +60,20 @@ export default function MantineDataTable<T>({
   const {
     fetching,
     loaderBackgroundBlur = 2,
-    fontSize = 12,
+    fontSize = 14,
     horizontalSpacing = 'xs',
     verticalSpacing = 'xs',
-    borderRadius = 6,
+    borderRadius = 0,
     shadow = 'xs',
-    highlightOnHover = false,
+    highlightOnHover = true,
     withBorder = true,
-    withColumnBorders = true,
-    borderColor = theme.colors.gray[3],
-    rowBorderColor = theme.colors.gray[3],
+    withColumnBorders = false,
+    borderColor = theme.colors.gray[2],
+    rowBorderColor = theme.colors.gray[2],
     verticalAlignment = 'center',
     defaultColumnProps,
     minHeight = 520,
+    styles,
     ...rest
   } = tableProps;
 
@@ -93,14 +99,27 @@ export default function MantineDataTable<T>({
             ? minHeight
             : fetching
             ? 280
-            : 160
+            : minHeight !== 520
+            ? minHeight
+            : 0
         }
+        styles={{
+          root: {
+            overflow: 'visible',
+          },
+          ...styles,
+        }}
+        scrollAreaProps={{
+          sx: {
+            overflow: 'visible',
+          },
+        }}
         defaultColumnProps={{
           textAlignment: 'center',
           ...defaultColumnProps,
         }}
         defaultColumnRender={(row, _, accessor) => {
-          const data = row[accessor as keyof typeof row];
+          const data = row[accessor as keyof typeof row] as React.ReactNode;
           return data ? data : '-';
         }}
         noRecordsIcon={<></>}
@@ -125,7 +144,7 @@ export default function MantineDataTable<T>({
                         }}
                       >
                         <PrimaryButton
-                          leftIcon={<IconPlus size="20px" />}
+                          // leftIcon={<IconPlus size="20px" />}
                           {...emptyStateProps?.actionButton}
                         />
                       </Box>

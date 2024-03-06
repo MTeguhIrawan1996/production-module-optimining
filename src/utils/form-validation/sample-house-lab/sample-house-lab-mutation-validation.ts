@@ -6,7 +6,6 @@ import {
   zDateValidation,
   zImageArrayOptional,
   zOptionalNumber,
-  zOptionalNumberOfString,
   zOptionalString,
   zRequiredSelectInput,
   zRequiredString,
@@ -34,7 +33,7 @@ export const sampleHouseLabMutationValidation: z.ZodType<IMutationSampleHousePla
         .object({
           elementId: zRequiredString,
           name: zRequiredString,
-          value: zOptionalNumberOfString,
+          value: zOptionalNumber,
         })
         .array(),
       density: zOptionalNumber,
@@ -50,7 +49,7 @@ export const sampleHouseLabMutationValidation: z.ZodType<IMutationSampleHousePla
         .object({
           elementId: zRequiredString,
           name: zRequiredString,
-          value: zOptionalNumberOfString,
+          value: zOptionalNumber,
         })
         .array(),
       photo: zImageArrayOptional,

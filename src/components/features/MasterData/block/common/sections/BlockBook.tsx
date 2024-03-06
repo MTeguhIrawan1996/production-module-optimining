@@ -1,7 +1,6 @@
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,16 +14,24 @@ import {
 
 import { useDeleteBlockMaster } from '@/services/graphql/mutation/block/useDeleteBlockMaster';
 import { useReadAllBlocksMaster } from '@/services/graphql/query/block/useReadAllBlockMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const BlockBook = () => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+  const page = Number(router.query['page']) || 1;
+  const url = `/master-data/block?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const isPermissionCreate = permissions?.includes('create-block');
+  const isPermissionUpdate = permissions?.includes('update-block');
+  const isPermissionDelete = permissions?.includes('delete-block');
+  const isPermissionRead = permissions?.includes('read-block');
 
   /* #   /**=========== Query =========== */
   const { blocksData, blocksDataLoading, blocksDataMeta, refetchBlocks } =
@@ -112,25 +119,37 @@ const BlockBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/block/read/${id}`);
-                      },
-                    }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/block/update/${id}`);
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(`/master-data/block/read/${id}`);
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(`/master-data/block/update/${id}`);
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -139,10 +158,12 @@ const BlockBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('block.createBlock'),
-            onClick: () => router.push('/master-data/block/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('block.createBlock'),
+                onClick: () => router.push('/master-data/block/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -154,19 +175,33 @@ const BlockBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blocksData, blocksDataLoading]);
+  }, [
+    blocksData,
+    blocksDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('block.createBlock'),
-        onClick: () => router.push('/master-data/block/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('block.createBlock'),
+              onClick: () => router.push('/master-data/block/create'),
+            }
+          : undefined
+      }
       searchBar={{
         placeholder: t('block.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
+        },
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
         },
         searchQuery: searchQuery,
       }}

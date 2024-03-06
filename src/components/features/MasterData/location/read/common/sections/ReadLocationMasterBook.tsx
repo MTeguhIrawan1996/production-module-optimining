@@ -6,11 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, KeyValueList } from '@/components/elements';
 
 import { useReadOneLocationMaster } from '@/services/graphql/query/location/useReadOneLocationMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ReadLocationMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
+
+  const isPermissionUpdate = permissions?.includes('update-location');
 
   /* #   /**=========== Query =========== */
   const { locationMaster, locationMasterLoading } = useReadOneLocationMaster({
@@ -24,10 +29,14 @@ const ReadLocationMasterBook = () => {
   return (
     <DashboardCard
       title={t('commonTypography.location')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () => router.push(`/master-data/location/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () => router.push(`/master-data/location/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,
@@ -57,7 +66,7 @@ const ReadLocationMasterBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          <Stack spacing="sm" mt="lg">
+          <Stack spacing="sm" mt="sm">
             <Text fz={24} fw={600} color="brand">
               {t('location.readLocation')}
             </Text>
@@ -77,14 +86,6 @@ const ReadLocationMasterBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
         </Tabs.Panel>

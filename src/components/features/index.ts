@@ -1,13 +1,20 @@
 import AuthPage from '@/components/features/Auth/common';
 import DashboardPage from '@/components/features/Dashboard/common';
-import ComponentsPage from '@/components/features/Example/components/common';
-import DataTablePage from '@/components/features/Example/datatable/common';
+import FrontProductionPage from '@/components/features/InputData/Productions/data-front/common';
+import CreateFrontProductionPage from '@/components/features/InputData/Productions/data-front/create/common';
+import ReadFrontProductionPage from '@/components/features/InputData/Productions/data-front/read/common';
+import UpdateFrontProductionPage from '@/components/features/InputData/Productions/data-front/update/common';
 import CreateRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/create/common';
 import ReadRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/read/common';
 import ReadDTBargingRitagePage from '@/components/features/InputData/Productions/data-ritage/barging/read/read-dump-truck/common';
 import UpdateRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/update/common';
 import UploadRitageBargingPage from '@/components/features/InputData/Productions/data-ritage/barging/upload/common';
 import DataRitagePage from '@/components/features/InputData/Productions/data-ritage/common';
+import CreateRitageMovingPage from '@/components/features/InputData/Productions/data-ritage/moving/create/common';
+import ReadRitageMovingPage from '@/components/features/InputData/Productions/data-ritage/moving/read/common';
+import ReadDTMovingRitagePage from '@/components/features/InputData/Productions/data-ritage/moving/read/read-dump-truck/common';
+import UpdateRitageMovingPage from '@/components/features/InputData/Productions/data-ritage/moving/update/common';
+import UploadRitageMovingPage from '@/components/features/InputData/Productions/data-ritage/moving/upload/common';
 import CreateRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/create/common';
 import ReadRitageObPage from '@/components/features/InputData/Productions/data-ritage/ob/read/common';
 import ReadDTObRitagePage from '@/components/features/InputData/Productions/data-ritage/ob/read/read-dump-truck/common';
@@ -23,12 +30,40 @@ import ReadRitageQuarryPage from '@/components/features/InputData/Productions/da
 import ReadDTQuarryRitagePage from '@/components/features/InputData/Productions/data-ritage/quarry/read/read-dump-truck/common';
 import UpdateRitageQuarryPage from '@/components/features/InputData/Productions/data-ritage/quarry/update/common';
 import UploadRitageQuarryPage from '@/components/features/InputData/Productions/data-ritage/quarry/upload/common';
+import CreateRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/create/common';
+import ReadRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/read/common';
+import ReadDTTopsoilRitagePage from '@/components/features/InputData/Productions/data-ritage/topsoil/read/read-dump-truck/common';
+import UpdateRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/update/common';
+import UploadRitageTopsoilPage from '@/components/features/InputData/Productions/data-ritage/topsoil/upload/common';
+import HeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/common';
+import CreateHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/create/common';
+import ReadHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/read/common';
+import UpdateHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/update/common';
+import UploadHeavyEquipmentProductionPage from '@/components/features/InputData/Productions/heavy-equipment/upload/common';
+import MapProductionPage from '@/components/features/InputData/Productions/map/common';
+import WeatherProductionPage from '@/components/features/InputData/Productions/weather/common';
+import CreateWeatherProductionPage from '@/components/features/InputData/Productions/weather/create/common';
+import ReadWeatherProductionPage from '@/components/features/InputData/Productions/weather/read/common';
+import UpdateWeatherProductionPage from '@/components/features/InputData/Productions/weather/update/common';
 import SampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/common';
 import CreateSmapleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/create/common';
 import ReadSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/read/common';
 import UpdateSampleHouseLabPage from '@/components/features/InputData/QualityControlManagement/sample-house-lab/update/common';
+import ShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/common';
+import CreateShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/create/common';
+import ReadShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/read/common';
+import UpdateShippingMonitoringPage from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/update/common';
 import StockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/common';
-import CreateStockpilePage from '@/components/features/InputData/QualityControlManagement/stockpile/create/common';
+import ReadStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/read/common';
+import UpdateStockpileMonitoringPage from '@/components/features/InputData/QualityControlManagement/stockpile/update/common';
+import CreateCalculationCategoryPage from '@/components/features/MasterData/activity-category/calculation-category/create/common';
+import ReadCalculationCategoryPage from '@/components/features/MasterData/activity-category/calculation-category/read/common';
+import UpdateCalculationCategoryPage from '@/components/features/MasterData/activity-category/calculation-category/update/common';
+import ActivityCategoryMasterPage from '@/components/features/MasterData/activity-category/common';
+import ReadHeavyEquipmentFormulaPage from '@/components/features/MasterData/activity-category/heavy-equipment-formula/read/common';
+import UpdateHeavyEquipmentFormulaPage from '@/components/features/MasterData/activity-category/heavy-equipment-formula/update/common';
+import ReadLoseTimeCategoryPage from '@/components/features/MasterData/activity-category/lose-time-category/read/common';
+import UpdateLoseTimeActivityPage from '@/components/features/MasterData/activity-category/lose-time-category/update/common';
 import ActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/common';
 import CreateActivityPlanMasterPage from '@/components/features/MasterData/activity-plan/create/common';
 import ReadActivityPlanPage from '@/components/features/MasterData/activity-plan/read/common';
@@ -89,6 +124,24 @@ import WorkingHoursPlanMasterPage from '@/components/features/MasterData/working
 import CreateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/create/common';
 import ReadWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/read/common';
 import UpdateWorkingHoursPlanMasterPage from '@/components/features/MasterData/working-hours-plan/update/common';
+import MonthlyPlanPage from '@/components/features/Plan/monthly/common';
+import CreateMonthlyPlanInformationPage from '@/components/features/Plan/monthly/create/common';
+import CreateMonthlyPlanGroupPage from '@/components/features/Plan/monthly/create/monthly-plan-group/common';
+import ReadMonthlyPlanPage from '@/components/features/Plan/monthly/read/common';
+import ReadMonthlyPlanGroupPage from '@/components/features/Plan/monthly/read/monthly-plan-group';
+import ReadMonthlyPlanInformationPage from '@/components/features/Plan/monthly/read/monthly-plan-infromation/common';
+import UpdateMonthlyPlanPage from '@/components/features/Plan/monthly/update/common';
+import UpdateMonthlyPlanGroupPage from '@/components/features/Plan/monthly/update/monthly-plan-group/common';
+import UpdateMonthlyPlanInformationPage from '@/components/features/Plan/monthly/update/monthly-plan-information/common';
+import WeeklyPlanPage from '@/components/features/Plan/weekly/common';
+import CreateWeeklyPlanInformationPage from '@/components/features/Plan/weekly/create/common';
+import CreateWeeklyPlanGroupPage from '@/components/features/Plan/weekly/create/weekly-plan-group/common';
+import ReadWeeklyPlanPage from '@/components/features/Plan/weekly/read/common';
+import ReadWeeklyPlanGroupPage from '@/components/features/Plan/weekly/read/weekly-plan-group/common';
+import ReadWeeklyPlanInformationPage from '@/components/features/Plan/weekly/read/weekly-plan-information/common';
+import UpdateWeeklyPlanPage from '@/components/features/Plan/weekly/update/common';
+import UpdateWeeklyPlanGroupPage from '@/components/features/Plan/weekly/update/weekly-plan-group/common';
+import UpdateWeeklyPlanInformationPage from '@/components/features/Plan/weekly/update/weekly-plan-information/common';
 import ProfilePage from '@/components/features/Profile/common';
 import CompanyTypePage from '@/components/features/Reference/company-type/common';
 import HeavyEquipmentPage from '@/components/features/Reference/heavy-equipment/common';
@@ -99,121 +152,160 @@ import HeavyEquipmentClassPage from '@/components/features/Reference/heavy-equip
 import CreateHeavyEquipmentClassPage from '@/components/features/Reference/heavy-equipment-class/create/common';
 import ReadHeavyEquipmentClassPage from '@/components/features/Reference/heavy-equipment-class/read/common';
 import UpdateHeavyEquipmentClassPage from '@/components/features/Reference/heavy-equipment-class/update/common';
-import ManagementRolePage from '@/components/features/Setting/management-role/common';
-import CreateManagementRolePage from '@/components/features/Setting/management-role/create-management-role/common';
-import ReadManagementRolePage from '@/components/features/Setting/management-role/read-management-role/common';
-import UpdateManagementRolePage from '@/components/features/Setting/management-role/update-management-role/common';
-import UserPage from '@/components/features/Setting/user/common';
-import CreateUserPage from '@/components/features/Setting/user/create-user/common';
-import UpdateUserPage from '@/components/features/Setting/user/update-user/common';
 
 export {
+  ActivityCategoryMasterPage,
   ActivityPlanMasterPage,
   AuthPage,
   BlockPage,
   CompanyPage,
   CompanyTypePage,
-  ComponentsPage,
   CreateActivityPlanMasterPage,
   CreateBlockMasterPage,
   CreateBlockPitMasterPage,
+  CreateCalculationCategoryPage,
   CreateCompanyHeavyEquipmentPage,
   CreateCompanyHumanResourcesPage,
   CreateCompanyPage,
   CreateElementMasterPage,
   CreateFactoryMasterPage,
+  CreateFrontProductionPage,
   CreateHeavyEquipmentAvailablePage,
   CreateHeavyEquipmentClassPage,
   CreateHeavyEquipmentMasterPage,
   CreateHeavyEquipmentPage,
+  CreateHeavyEquipmentProductionPage,
   CreateHumanResourcesAvailablePage,
   CreateHumanResourcesPage,
   CreateLocationMasterPage,
-  CreateManagementRolePage,
   CreateMaterialMasterPage,
+  CreateMonthlyPlanGroupPage,
+  CreateMonthlyPlanInformationPage,
   CreateRitageBargingPage,
+  CreateRitageMovingPage,
   CreateRitageObPage,
   CreateRitageOrePage,
   CreateRitageQuarryPage,
+  CreateRitageTopsoilPage,
   CreateShiftMasterPage,
+  CreateShippingMonitoringPage,
   CreateSmapleHouseLabPage,
   CreateStockpileDomeMasterPage,
   CreateStockpileMasterPage,
-  CreateStockpilePage,
-  CreateUserPage,
+  CreateWeatherProductionPage,
+  CreateWeeklyPlanGroupPage,
+  CreateWeeklyPlanInformationPage,
   CreateWorkingHoursPlanMasterPage,
   DashboardPage,
   DataRitagePage,
-  DataTablePage,
   ElementMasterPage,
   FactoryMasterPage,
+  FrontProductionPage,
   HeavyEquipmentClassPage,
   HeavyEquipmentMasterPage,
   HeavyEquipmentPage,
+  HeavyEquipmentProductionPage,
   HumanResourcesPage,
   LocationPage,
-  ManagementRolePage,
+  MapProductionPage,
   MaterialMasterPage,
+  MonthlyPlanPage,
   ProfilePage,
   ReadActivityPlanPage,
   ReadBlockMasterPage,
+  ReadCalculationCategoryPage,
   ReadCompanyHeavyEquipmentPage,
   ReadCompanyHumanResourcesPage,
   ReadCompanyPage,
   ReadDTBargingRitagePage,
+  ReadDTMovingRitagePage,
   ReadDTObRitagePage,
   ReadDTOreRitagePage,
   ReadDTQuarryRitagePage,
+  ReadDTTopsoilRitagePage,
   ReadElementMasterPage,
   ReadFactoryMasterPage,
+  ReadFrontProductionPage,
   ReadHeavyEquipmentClassPage,
+  ReadHeavyEquipmentFormulaPage,
   ReadHeavyEquipmentMasterPage,
   ReadHeavyEquipmentPage,
+  ReadHeavyEquipmentProductionPage,
   ReadHumanResourcesPage,
   ReadLocationMasterPage,
-  ReadManagementRolePage,
+  ReadLoseTimeCategoryPage,
   ReadMaterialMasterPage,
+  ReadMonthlyPlanGroupPage,
+  ReadMonthlyPlanInformationPage,
+  ReadMonthlyPlanPage,
   ReadRitageBargingPage,
+  ReadRitageMovingPage,
   ReadRitageObPage,
   ReadRitageOrePage,
   ReadRitageQuarryPage,
+  ReadRitageTopsoilPage,
   ReadSampleHouseLabPage,
   ReadShiftMasterPage,
+  ReadShippingMonitoringPage,
   ReadStockpileMasterPage,
+  ReadStockpileMonitoringPage,
+  ReadWeatherProductionPage,
+  ReadWeeklyPlanGroupPage,
+  ReadWeeklyPlanInformationPage,
+  ReadWeeklyPlanPage,
   ReadWorkingHoursPlanMasterPage,
   SampleHouseLabPage,
   ShiftMasterPage,
+  ShippingMonitoringPage,
   StockpileMasterPage,
   StockpilePage,
   UpdateActivityPlanMasterPage,
   UpdateBlockMasterPage,
   UpdateBlockPitMasterPage,
+  UpdateCalculationCategoryPage,
   UpdateCompanyHeavyEquipmentPage,
   UpdateCompanyHumanResourcesPage,
   UpdateCompanyPage,
   UpdateElementMasterPage,
   UpdateFactoryMasterPage,
+  UpdateFrontProductionPage,
   UpdateHeavyEquipmentClassPage,
+  UpdateHeavyEquipmentFormulaPage,
   UpdateHeavyEquipmentMasterPage,
   UpdateHeavyEquipmentPage,
+  UpdateHeavyEquipmentProductionPage,
   UpdateHumanResourcesPage,
   UpdateLocationMasterPage,
-  UpdateManagementRolePage,
+  UpdateLoseTimeActivityPage,
   UpdateMaterialMasterPage,
+  UpdateMonthlyPlanGroupPage,
+  UpdateMonthlyPlanInformationPage,
+  UpdateMonthlyPlanPage,
   UpdateRitageBargingPage,
+  UpdateRitageMovingPage,
   UpdateRitageObPage,
   UpdateRitageOrePage,
   UpdateRitageQuarryPage,
+  UpdateRitageTopsoilPage,
   UpdateSampleHouseLabPage,
   UpdateShiftMasterPage,
+  UpdateShippingMonitoringPage,
   UpdateStockpileDomeMasterPage,
   UpdateStockpileMasterPage,
-  UpdateUserPage,
+  UpdateStockpileMonitoringPage,
+  UpdateWeatherProductionPage,
+  UpdateWeeklyPlanGroupPage,
+  UpdateWeeklyPlanInformationPage,
+  UpdateWeeklyPlanPage,
   UpdateWorkingHoursPlanMasterPage,
+  UploadHeavyEquipmentProductionPage,
   UploadRitageBargingPage,
+  UploadRitageMovingPage,
   UploadRitageObPage,
   UploadRitageOrePage,
   UploadRitageQuarryPage,
-  UserPage,
+  UploadRitageTopsoilPage,
+  WeatherProductionPage,
+  WeeklyPlanPage,
   WorkingHoursPlanMasterPage,
 };

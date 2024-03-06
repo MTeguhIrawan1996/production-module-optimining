@@ -1,6 +1,7 @@
 import {
   Checkbox,
   Flex,
+  FlexProps,
   Grid,
   Group,
   Paper,
@@ -10,11 +11,6 @@ import {
   SwitchProps,
   Text,
 } from '@mantine/core';
-import {
-  IconChevronLeft,
-  IconChevronRight,
-  IconPlus,
-} from '@tabler/icons-react';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -44,6 +40,7 @@ interface IGlobalFormGroupProps {
     label: string;
   };
   children?: React.ReactNode;
+  flexProps?: FlexProps;
 }
 
 const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
@@ -58,6 +55,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
   modalConfirmation,
   switchProps,
   children,
+  flexProps,
 }) => {
   const { t } = useTranslation('default');
   const {
@@ -82,10 +80,18 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
     ...restOuterButtonLabel
   } = outerButton || {};
 
+  const { p = 22, ...restFlexProps } = flexProps || {};
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(submitForm)}>
-        <Flex gap={32} direction="column" align="flex-end" p={32}>
+        <Flex
+          gap={32}
+          direction="column"
+          align="flex-end"
+          p={p}
+          {...restFlexProps}
+        >
           {switchProps ? (
             <Stack justify="flex-start" align="flex-start" w="100%" spacing={8}>
               <Text component="label" fw={400} fz={16}>
@@ -110,7 +116,7 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
           {outerButton ? (
             <PrimaryButton
               label={outerButtonLabel}
-              leftIcon={<IconPlus size="20px" />}
+              // leftIcon={<IconPlus size="20px" />}
               {...restOuterButtonLabel}
             />
           ) : null}
@@ -121,78 +127,138 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
                 groupCheckbox,
                 group,
                 enableGroupLabel,
+                paperProps,
                 actionGroup,
+                actionOuterGroup,
+                renderItem,
               },
               i
             ) => {
               const { addButton, deleteButton } = actionGroup || {};
+              const {
+                addButton: addButtonOuter,
+                deleteButton: deleteButtonOuter,
+                updateButton: updateButtonOuter,
+              } = actionOuterGroup || {};
+              const {
+                withBorder = true,
+                p: pPaper = 24,
+                w: wPaper = '100%',
+                ...restPaperProps
+              } = paperProps || {};
               return (
-                <Paper p={24} key={i} withBorder w="100%">
-                  <Stack spacing={8}>
-                    {enableGroupLabel || actionGroup ? (
-                      <SimpleGrid cols={2} mb="sm">
-                        {enableGroupLabel && (
-                          <Text
-                            component="span"
-                            fw={500}
-                            fz={16}
-                            sx={{ alignSelf: 'center' }}
-                          >
-                            {group}
-                          </Text>
+                <Flex
+                  key={`${i}${group}`}
+                  gap={22}
+                  direction="column"
+                  align="flex-end"
+                  w="100%"
+                >
+                  {addButtonOuter || deleteButtonOuter || updateButtonOuter ? (
+                    <Group spacing="xs" position="right">
+                      {addButtonOuter ? (
+                        <PrimaryButton
+                          // leftIcon={<IconPlus size="20px" />}
+                          {...addButtonOuter}
+                        />
+                      ) : null}
+                      {updateButtonOuter ? (
+                        <PrimaryButton
+                          // leftIcon={<IconPencil size="20px" />}
+                          {...updateButtonOuter}
+                        />
+                      ) : null}
+                      {deleteButtonOuter ? (
+                        <PrimaryButton
+                          color="red.5"
+                          variant="light"
+                          styles={(theme) => ({
+                            root: {
+                              border: `1px solid ${theme.colors.red[3]}`,
+                            },
+                          })}
+                          {...deleteButtonOuter}
+                        />
+                      ) : null}
+                    </Group>
+                  ) : null}
+                  <Paper
+                    p={pPaper}
+                    withBorder={withBorder}
+                    w={wPaper}
+                    {...restPaperProps}
+                  >
+                    <Stack spacing="md">
+                      {enableGroupLabel || actionGroup ? (
+                        <SimpleGrid cols={enableGroupLabel ? 2 : 1}>
+                          {enableGroupLabel && (
+                            <Text
+                              component="span"
+                              fw={500}
+                              fz={16}
+                              sx={{ alignSelf: 'center' }}
+                            >
+                              {group}
+                            </Text>
+                          )}
+                          {actionGroup ? (
+                            <Group spacing="xs" position="right">
+                              {addButton ? (
+                                <PrimaryButton
+                                  // leftIcon={<IconPlus size="20px" />}
+                                  {...addButton}
+                                />
+                              ) : null}
+                              {deleteButton ? (
+                                <PrimaryButton
+                                  color="red.5"
+                                  variant="light"
+                                  styles={(theme) => ({
+                                    root: {
+                                      border: `1px solid ${theme.colors.red[3]}`,
+                                    },
+                                  })}
+                                  {...deleteButton}
+                                />
+                              ) : null}
+                            </Group>
+                          ) : null}
+                        </SimpleGrid>
+                      ) : null}
+                      <Grid gutter="md">
+                        {formControllers.map(
+                          ({ colSpan = 12, key, name, ...rest }, index) => {
+                            const indexName = `${index + 1}.${name}`;
+                            return (
+                              <Grid.Col
+                                span={colSpan}
+                                key={key ? `${key}` : indexName}
+                              >
+                                <FormController name={name} {...rest} />
+                              </Grid.Col>
+                            );
+                          }
                         )}
-                        {actionGroup ? (
-                          <Group spacing="xs" position="right">
-                            {addButton ? (
-                              <PrimaryButton
-                                leftIcon={<IconPlus size="20px" />}
-                                {...addButton}
-                              />
-                            ) : null}
-                            {deleteButton ? (
-                              <PrimaryButton
-                                color="red.5"
-                                variant="light"
-                                styles={(theme) => ({
-                                  root: {
-                                    border: `1px solid ${theme.colors.red[3]}`,
-                                  },
-                                })}
-                                {...deleteButton}
-                              />
-                            ) : null}
-                          </Group>
-                        ) : null}
-                      </SimpleGrid>
-                    ) : null}
-                    <Grid gutter="md">
-                      {formControllers.map(
-                        ({ colSpan = 12, name, ...rest }, index) => {
-                          return (
-                            <Grid.Col span={colSpan} key={index}>
-                              <FormController name={name} {...rest} />
-                            </Grid.Col>
-                          );
-                        }
+                        {renderItem ? renderItem() : null}
+                      </Grid>
+                      {groupCheckbox && (
+                        <Checkbox
+                          styles={(theme) => ({
+                            label: {
+                              paddingLeft: theme.spacing.xs,
+                            },
+                          })}
+                          size="xs"
+                          fz={14}
+                          fw={400}
+                          radius={2}
+                          mt={22}
+                          {...groupCheckbox}
+                        />
                       )}
-                    </Grid>
-                    {groupCheckbox && (
-                      <Checkbox
-                        styles={(theme) => ({
-                          label: {
-                            paddingLeft: theme.spacing.xs,
-                          },
-                        })}
-                        size="xs"
-                        fz={14}
-                        fw={400}
-                        radius={2}
-                        mt={22}
-                        {...groupCheckbox}
-                      />
-                    )}
-                  </Stack>
-                </Paper>
+                    </Stack>
+                  </Paper>
+                </Flex>
               );
             }
           )}
@@ -202,39 +268,39 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
             </Paper>
           )}
           {/* Submit Button */}
-          <Group w="100%" position={backButton ? 'apart' : 'right'}>
-            {backButton ? (
-              <PrimaryButton
-                label={backButtonLabel}
-                type="button"
-                variant="outline"
-                leftIcon={<IconChevronLeft size="1rem" />}
-                {...restBackButton}
-              />
-            ) : null}
-            <Group spacing="xs">
-              {validationButton ? (
+          {backButton || validationButton || nextButton || submitButton ? (
+            <Group w="100%" position={backButton ? 'apart' : 'right'}>
+              {backButton ? (
                 <PrimaryButton
-                  label={validationButtonLabel}
+                  label={backButtonLabel}
                   type="button"
                   variant="outline"
-                  {...restValidationButton}
+                  {...restBackButton}
                 />
               ) : null}
-              {nextButton ? (
-                <PrimaryButton
-                  label={nextButtonLabel}
-                  type="button"
-                  variant="outline"
-                  rightIcon={<IconChevronRight size="1rem" />}
-                  {...restNextButton}
-                />
-              ) : null}
-              {submitButton ? (
-                <PrimaryButton label={label} type={type} {...rest} />
-              ) : null}
+              <Group spacing="xs">
+                {validationButton ? (
+                  <PrimaryButton
+                    label={validationButtonLabel}
+                    type="button"
+                    variant="outline"
+                    {...restValidationButton}
+                  />
+                ) : null}
+                {nextButton ? (
+                  <PrimaryButton
+                    label={nextButtonLabel}
+                    type="button"
+                    variant="outline"
+                    {...restNextButton}
+                  />
+                ) : null}
+                {submitButton ? (
+                  <PrimaryButton label={label} type={type} {...rest} />
+                ) : null}
+              </Group>
             </Group>
-          </Group>
+          ) : null}
         </Flex>
         {modalConfirmation ? (
           <ModalConfirmation {...modalConfirmation} />

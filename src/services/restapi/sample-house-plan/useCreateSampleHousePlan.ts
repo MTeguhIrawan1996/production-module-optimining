@@ -3,13 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import axiosClient from '@/services/restapi/axiosClient';
 
-import { AxiosRestErrorResponse } from '@/types/global';
-
-export type IElementRhf = {
-  elementId: string;
-  name: string;
-  value: string;
-};
+import { AxiosRestErrorResponse, IElementRhf } from '@/types/global';
 
 export interface IMutationSampleHousePlanValues {
   laboratoriumName: string;
@@ -71,14 +65,14 @@ const CreateSampleHousePlan = async ({ data }: IPropsRequest) => {
           );
           bodyFormData.append(
             `gradeControlElements[${index}][value]`,
-            value.value
+            `${value.value}`
           );
         });
       }
       if (name === 'elements') {
         (value as IElementRhf[]).forEach((value, index: number) => {
           bodyFormData.append(`elements[${index}][elementId]`, value.elementId);
-          bodyFormData.append(`elements[${index}][value]`, value.value);
+          bodyFormData.append(`elements[${index}][value]`, `${value.value}`);
         });
       }
       if (!exclude.includes(name) && typeof value === 'string') {

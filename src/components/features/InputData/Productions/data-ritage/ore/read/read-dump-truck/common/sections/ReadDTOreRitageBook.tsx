@@ -1,5 +1,4 @@
 import { DataTableColumn } from 'mantine-datatable';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,14 +11,14 @@ import {
   useReadDetailsOreRitageDT,
 } from '@/services/graphql/query/ore-ritage/useReadDetailsOreritageDT';
 import { useReadOneFotoOreRitageDT } from '@/services/graphql/query/ore-ritage/useReadOneOreRitageDT';
+import { useReadOneOreRitageDTOperators } from '@/services/graphql/query/ore-ritage/useReadOneOreRitageDTOperators';
 
 import { IElementsData, IListDetailRitageDTData } from '@/types/global';
 
 const ReadDTOreRitageBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('p')) || 1;
+  const page = Number(router.query['p']) || 1;
   const date = router.query?.id?.[0] as string;
   const shiftId = router.query?.id?.[1] as string;
   const companyHeavyEquipmentId = router.query?.id?.[2] as string;
@@ -43,6 +42,16 @@ const ReadDTOreRitageBook = () => {
     skip: !router.isReady,
   });
 
+  const { oreDumpTruckRitageDetail, oreDumpTruckRitageDetailLoading } =
+    useReadOneOreRitageDTOperators({
+      variables: {
+        date: date,
+        shiftId: shiftId,
+        companyHeavyEquipmentId: companyHeavyEquipmentId,
+      },
+      skip: !router.isReady,
+    });
+
   const { getData, oreRitage, oreRitageLoading } = useReadOneFotoOreRitageDT(
     {}
   );
@@ -62,7 +71,7 @@ const ReadDTOreRitageBook = () => {
         title: `${element.name}`,
         render: ({ houseSampleAndLab }) => {
           const value = houseSampleAndLab?.elements?.find(
-            (val) => val.element?.name === element.name
+            (val) => val.element?.id === element.id
           );
           return value?.value ?? '-';
         },
@@ -93,9 +102,11 @@ const ReadDTOreRitageBook = () => {
       childrenStackProps={{
         spacing: 'xl',
       }}
+      isLoading={oreDumpTruckRitageDetailLoading}
     >
       <ListDetailsRitageDT
         data={detailsOreRitageDTData}
+        operatorDetail={oreDumpTruckRitageDetail}
         columns={[
           {
             accessor: 'fromLevel',

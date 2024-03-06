@@ -14,7 +14,7 @@ import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
 
-export type IMaterialSelectnputRhfProps = {
+export type IMaterialSelectInputRhfProps = {
   control: 'material-select-input';
   name: string;
   labelValue?: string;
@@ -22,6 +22,7 @@ export type IMaterialSelectnputRhfProps = {
   parentId?: string | null;
   includeIds?: string[];
   isHaveParent?: boolean | null;
+  skipQuery?: boolean;
 } & Omit<
   SelectProps,
   | 'name'
@@ -33,7 +34,7 @@ export type IMaterialSelectnputRhfProps = {
 > &
   CommonProps;
 
-const MaterialSelectInput: React.FC<IMaterialSelectnputRhfProps> = ({
+const MaterialSelectInput: React.FC<IMaterialSelectInputRhfProps> = ({
   name,
   control,
   label,
@@ -43,6 +44,7 @@ const MaterialSelectInput: React.FC<IMaterialSelectnputRhfProps> = ({
   isHaveParent = false,
   parentId = null,
   includeIds = null,
+  skipQuery = false,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -62,6 +64,7 @@ const MaterialSelectInput: React.FC<IMaterialSelectnputRhfProps> = ({
       parentId: parentId === '' ? null : parentId,
       includeIds: includeIds ? includeIds : null,
     },
+    skip: skipQuery,
   });
 
   const { uncombinedItem } = useFilterItems({
@@ -81,19 +84,12 @@ const MaterialSelectInput: React.FC<IMaterialSelectnputRhfProps> = ({
             style: { fontWeight: 400, fontSize: 16, marginBottom: 8 },
           }}
           descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
-          styles={(theme) => ({
-            item: {
-              borderRadius: theme.spacing.xs,
-            },
-            dropdown: {
-              borderRadius: theme.spacing.xs,
-            },
-          })}
           data-control={control}
           placeholder={t('commonTypography.chooseMaterial', {
             ns: 'default',
           })}
           label={label ? t(`components.field.${label}`) : null}
+          error={fieldState && fieldState.error ? true : false}
           {...rest}
         />
         {deleteButtonField ? (

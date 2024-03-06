@@ -1,39 +1,39 @@
-import { SelectProps } from '@mantine/core';
+import { rem } from '@mantine/core';
 import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
-import { notifications } from '@mantine/notifications';
-import { IconCheck, IconX } from '@tabler/icons-react';
+import { IconPencil } from '@tabler/icons-react';
 import { DataTableColumn } from 'mantine-datatable';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import 'dayjs/locale/id';
 
 import {
   DashboardCard,
+  GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
-  ModalConfirmation,
 } from '@/components/elements';
 
-import { useDeleteShiftMaster } from '@/services/graphql/mutation/shift/useDeleteShiftMaster';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
-import { useReadAllLocationsMaster } from '@/services/graphql/query/location/useReadAllLocationMaster';
+import { useReadAllLocationselect } from '@/services/graphql/query/global-select/useReadAllLocationSelect';
 import {
   IMonitoringStockpilesData,
   useReadAllStockpileMonitoring,
 } from '@/services/graphql/query/stockpile-monitoring/useReadAllStockpileMonitoring';
-import { globalSelect } from '@/utils/constants/Field/global-field';
+import {
+  globalSelectMonthNative,
+  globalSelectNative,
+  globalSelectWeekNative,
+  globalSelectYearNative,
+} from '@/utils/constants/Field/native-field';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
-import { IElementsData } from '@/types/global';
+import { IElementsData, InputControllerNativeProps } from '@/types/global';
 
 const StockpileBook = () => {
   const router = useRouter();
-  const pageParams = useSearchParams();
-  const page = Number(pageParams.get('page')) || 1;
+  const page = Number(router.query['page']) || 1;
+  const url = `/input-data/quality-control-management/stockpile-monitoring?page=1`;
   const { t } = useTranslation('default');
-  const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [stockpileNameSerachTerm, setStockpileNameSerachTerm] =
     React.useState<string>('');
@@ -42,8 +42,9 @@ const StockpileBook = () => {
     400
   );
   const [stockpileId, setStockpileId] = React.useState<string | null>(null);
-  const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
-    React.useState<boolean>(false);
+  const [year, setYear] = React.useState<number | null>(null);
+  const [month, setMonth] = React.useState<number | null>(null);
+  const [week, setWeek] = React.useState<number | null>(null);
 
   /* #   /**=========== Query =========== */
   const { elementsData } = useReadAllElementMaster({
@@ -52,11 +53,10 @@ const StockpileBook = () => {
     },
   });
 
-  const { locationsData } = useReadAllLocationsMaster({
+  const { allLocationsData } = useReadAllLocationselect({
     variables: {
       limit: 15,
       orderDir: 'desc',
-      orderBy: 'createdAt',
       search: stockpileNameSearchQuery === '' ? null : stockpileNameSearchQuery,
       categoryId: `${process.env.NEXT_PUBLIC_STOCKPILE_ID}`,
     },
@@ -66,52 +66,27 @@ const StockpileBook = () => {
     monitoringStockpilesData,
     monitoringStockpilesDataLoading,
     monitoringStockpilesDataMeta,
-    refetchMonitoringStockpiles,
   } = useReadAllStockpileMonitoring({
     variables: {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       stockpileId,
+      year,
+      month,
+      week,
     },
   });
 
-  const [executeDelete, { loading }] = useDeleteShiftMaster({
-    onCompleted: () => {
-      refetchMonitoringStockpiles();
-      setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push({
-        href: router.asPath,
-        query: {
-          page: 1,
-        },
-      });
-      notifications.show({
-        color: 'green',
-        title: 'Selamat',
-        message: t('stockpileMonitoring.successDeleteMessage'),
-        icon: <IconCheck />,
-      });
-    },
-    onError: ({ message }) => {
-      notifications.show({
-        color: 'red',
-        title: 'Gagal',
-        message: message,
-        icon: <IconX />,
-      });
-    },
-  });
   /* #endregion  /**======== Query =========== */
 
   const { uncombinedItem: locationItems } = useFilterItems({
-    data: locationsData ?? [],
+    data: allLocationsData ?? [],
   });
 
   const filter = React.useMemo(() => {
-    const stockpileNameItem = globalSelect({
+    const stockpileNameItem = globalSelectNative({
       label: 'stockpileName',
       data: locationItems,
       searchable: true,
@@ -119,35 +94,49 @@ const StockpileBook = () => {
       onSearchChange: setStockpileNameSerachTerm,
       searchValue: stockpileNameSerachTerm,
       onChange: (value) => {
-        router.push({
-          href: router.asPath,
-          query: {
-            page: 1,
-          },
-        });
+        router.push(url, undefined, { shallow: true });
         setStockpileId(value);
       },
     });
-    const item: SelectProps[] = [stockpileNameItem];
+    const selectYearItem = globalSelectYearNative({
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setYear(value ? Number(value) : null);
+        setMonth(null);
+        setWeek(null);
+      },
+    });
+    const selectMonthItem = globalSelectMonthNative({
+      disabled: !year,
+      value: month ? `${month}` : null,
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setMonth(value ? Number(value) : null);
+      },
+    });
+    const selectWeekItem = globalSelectWeekNative({
+      disabled: !year,
+      value: week ? `${week}` : null,
+      year: year,
+      onChange: (value) => {
+        router.push(url, undefined, { shallow: true });
+        setWeek(value ? Number(value) : null);
+      },
+    });
+
+    const item: InputControllerNativeProps[] = [
+      stockpileNameItem,
+      selectYearItem,
+      selectMonthItem,
+      selectWeekItem,
+    ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationItems]);
-
-  const handleDelete = async () => {
-    await executeDelete({
-      variables: {
-        id,
-      },
-    });
-  };
+  }, [locationItems, year, month, week]);
 
   const handleSetPage = (page: number) => {
-    router.push({
-      href: router.asPath,
-      query: {
-        page: page,
-      },
-    });
+    const urlSet = `/input-data/quality-control-management/stockpile-monitoring?page=${page}`;
+    router.push(urlSet, undefined, { shallow: true });
   };
 
   const renderOtherColumnCallback = React.useCallback(
@@ -155,11 +144,11 @@ const StockpileBook = () => {
       const column: DataTableColumn<IMonitoringStockpilesData> = {
         accessor: element.name,
         title: element.name,
-        render: ({ currentSample }) => {
-          const value = currentSample.elements?.find(
-            (val) => val.elementName === element.name
+        render: ({ ritageSamples }) => {
+          const value = ritageSamples.additional.averageSamples?.find(
+            (val) => val.element?.id === element.id
           );
-          return value?.value;
+          return value?.value ?? '-';
         },
       };
       return column;
@@ -174,10 +163,9 @@ const StockpileBook = () => {
     return (
       <MantineDataTable
         tableProps={{
-          records: monitoringStockpilesData ?? [],
+          records: monitoringStockpilesData,
           fetching: monitoringStockpilesDataLoading,
           highlightOnHover: true,
-          withColumnBorders: false,
           columns: [
             {
               accessor: 'index',
@@ -190,46 +178,50 @@ const StockpileBook = () => {
             {
               accessor: 'name',
               title: t('commonTypography.stockpileName'),
-              render: ({ stockpile }) => stockpile?.name,
-            },
-            {
-              accessor: 'domeId',
-              title: t('commonTypography.domeId'),
-              render: ({ dome }) => dome?.handBookId,
+              render: ({ dome }) => dome?.stockpile.name ?? '-',
             },
             {
               accessor: 'domeName',
               title: t('commonTypography.domeName'),
-              render: ({ dome }) => dome?.name,
+              render: ({ dome }) => dome?.name ?? '-',
             },
             {
               accessor: 'materialType',
               title: t('commonTypography.materialType'),
-              render: ({ material }) => material?.name,
+              render: ({ material }) => material?.name ?? '-',
             },
             {
               accessor: 'tonByRitage',
               title: t('commonTypography.tonByRitage'),
             },
             {
-              accessor: 'tonBySurvey',
+              accessor: 'tonBySurveys',
               title: t('commonTypography.tonBySurvey'),
+              render: ({ currentTonSurvey }) => currentTonSurvey ?? '-',
             },
             ...(renderOtherColumn ?? []),
             {
               accessor: 'domeStatus',
               title: t('commonTypography.domeStatus'),
+              render: ({ domeStatus }) => domeStatus ?? '-',
             },
             {
               accessor: 'status',
               title: t('commonTypography.status'),
-              // render: ({ material }) => material?.name,
+              render: ({ status }) => {
+                return (
+                  <GlobalBadgeStatus
+                    color={status?.color}
+                    label={status?.name ?? ''}
+                  />
+                );
+              },
             },
             {
               accessor: 'action',
               title: t('commonTypography.action'),
               width: 100,
-              render: ({ id }) => {
+              render: ({ id, status }) => {
                 return (
                   <GlobalKebabButton
                     actionRead={{
@@ -240,21 +232,38 @@ const StockpileBook = () => {
                         );
                       },
                     }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/quality-control-management/stockpile-monitoring/update/${id}`
-                        );
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionOther={
+                      status?.id ===
+                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                        ? {
+                            label: 'createSample',
+                            icon: (
+                              <IconPencil
+                                style={{ width: rem(14), height: rem(14) }}
+                              />
+                            ),
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/quality-control-management/stockpile-monitoring/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      status?.id !==
+                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/quality-control-management/stockpile-monitoring/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -263,13 +272,6 @@ const StockpileBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('stockpileMonitoring.createDome'),
-            onClick: () =>
-              router.push(
-                '/input-data/quality-control-management/stockpile-monitoring/create'
-              ),
-          },
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -286,47 +288,22 @@ const StockpileBook = () => {
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('stockpileMonitoring.createDome'),
-        onClick: () =>
-          router.push(
-            '/input-data/quality-control-management/stockpile-monitoring/create'
-          ),
-      }}
       searchBar={{
         placeholder: t('stockpileMonitoring.searchPlaceholder'),
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
         searchQuery: searchQuery,
+        onSearch: () => {
+          router.push(url, undefined, { shallow: true });
+        },
       }}
-      MultipleFilter={{
-        MultipleFilterData: filter,
+      filterDateWithSelect={{
+        items: filter,
         colSpan: 4,
       }}
     >
       {renderTable}
-      <ModalConfirmation
-        isOpenModalConfirmation={isOpenDeleteConfirmation}
-        actionModalConfirmation={() =>
-          setIsOpenDeleteConfirmation((prev) => !prev)
-        }
-        actionButton={{
-          label: t('commonTypography.yesDelete'),
-          color: 'red',
-          onClick: handleDelete,
-          loading: loading,
-        }}
-        backButton={{
-          label: 'Batal',
-        }}
-        modalType={{
-          type: 'default',
-          title: t('commonTypography.alertTitleConfirmDelete'),
-          description: t('commonTypography.alertDescConfirmDeleteMasterData'),
-        }}
-        withDivider
-      />
     </DashboardCard>
   );
 };

@@ -2,12 +2,9 @@ import { FileWithPath } from '@mantine/dropzone';
 import { useMutation } from '@tanstack/react-query';
 
 import axiosClient from '@/services/restapi/axiosClient';
-import {
-  IElementRhf,
-  IMutationSampleHousePlanValues,
-} from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
+import { IMutationSampleHousePlanValues } from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
 
-import { AxiosRestErrorResponse } from '@/types/global';
+import { AxiosRestErrorResponse, IElementRhf } from '@/types/global';
 
 interface IUpdateSampleHousePlanResponse {
   message: string;
@@ -49,14 +46,14 @@ const UpdateSampleHousePlan = async ({
           );
           bodyFormData.append(
             `gradeControlElements[${index}][value]`,
-            value.value
+            `${value.value}`
           );
         });
       }
       if (name === 'elements') {
         (value as IElementRhf[]).forEach((value, index: number) => {
           bodyFormData.append(`elements[${index}][elementId]`, value.elementId);
-          bodyFormData.append(`elements[${index}][value]`, value.value);
+          bodyFormData.append(`elements[${index}][value]`, `${value.value}`);
         });
       }
       if (!exclude.includes(name) && typeof value === 'string') {

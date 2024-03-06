@@ -1,5 +1,4 @@
 import * as React from 'react';
-import 'dayjs/locale/id';
 
 import {
   BrandSelectInputRhf,
@@ -8,6 +7,7 @@ import {
   CompanyPermissionTypeSelectInputRhf,
   CompanyTypeSelectInputRhf,
   DateInputRhf,
+  DisplayQuietNumber,
   DivisionSelectInputRhf,
   DomeNameSelectInputRhf,
   EligibilityStatusSelectInputRhf,
@@ -16,14 +16,20 @@ import {
   HeavyEquipmentSelectInputRhf,
   IdentityRadioInputRhf,
   ImageInputDropzoneRhf,
+  InputAverageArray,
+  InputSumArray,
   LocationCategorySelectInputRhf,
   LocationSelectInputRhf,
   MarriageSelectInputRhf,
   MaterialSelectInput,
   ModelSelectInputRhf,
+  MultipleSelectLocationRhf,
+  MultipleSelectMaterialRhf,
   NumberInputRhf,
+  NumberInputTableRhf,
   PasswordInputRhf,
   PdfInputDropzoneRhf,
+  PdfOrImageInputDropzoneRhf,
   PitSelectInputRhf,
   PositionSelectInputRhf,
   ProvinceSelectInputRhf,
@@ -31,16 +37,27 @@ import {
   RegencySelectInputRhf,
   RelegionSelectInputRhf,
   SampleTypeSelectInput,
+  SelectActivityCategoryRhf,
+  SelectActivityFormRhf,
+  SelectArriveBargeRhf,
+  SelectCompanyRhf,
+  SelectFactoryRhf,
   SelectHeavyEquipmentReferenceInput,
   SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
+  SelectMonthRhf,
+  SelectWeekRhf,
+  SelectWorkingHoursPlanRhf,
+  SelectYearRhf,
   ShiftSelectInputRhf,
   StockpileNameSelectInputRhf,
   SubDistrictSelectInputRhf,
+  TextAreaInput,
   TextInputRhf,
   TimeInputRhf,
   TypeSelectInputRhf,
   VillageSelectInputRhf,
+  WeatherConditionSelectInputRhf,
   WeatherSelectInputRhf,
 } from '@/components/elements';
 
@@ -52,6 +69,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
   switch (control) {
     case 'text-input':
       return <TextInputRhf {...props} />;
+    case 'text-area-input':
+      return <TextAreaInput {...props} />;
     case 'select-input':
       return <SelectInputRhf {...props} />;
     case 'password-input':
@@ -60,6 +79,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <ImageInputDropzoneRhf {...props} />;
     case 'pdf-dropzone':
       return <PdfInputDropzoneRhf {...props} />;
+    case 'pdf-image-dropzone':
+      return <PdfOrImageInputDropzoneRhf {...props} />;
     case 'excel-dropzone':
       return <ExcelInputDropzoneRhf {...props} />;
     case 'number-input':
@@ -130,6 +151,38 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <PitSelectInputRhf {...props} />;
     case 'location-select-input':
       return <LocationSelectInputRhf {...props} />;
+    case 'weather-condition-select-input':
+      return <WeatherConditionSelectInputRhf {...props} />;
+    case 'select-arrive-barge-rhf':
+      return <SelectArriveBargeRhf {...props} />;
+    case 'select-factory-rhf':
+      return <SelectFactoryRhf {...props} />;
+    case 'select-working-hours-plan-rhf':
+      return <SelectWorkingHoursPlanRhf {...props} />;
+    case 'select-activity-category-rhf':
+      return <SelectActivityCategoryRhf {...props} />;
+    case 'select-company-rhf':
+      return <SelectCompanyRhf {...props} />;
+    case 'select-year-rhf':
+      return <SelectYearRhf {...props} />;
+    case 'select-week-rhf':
+      return <SelectWeekRhf {...props} />;
+    case 'select-month-rhf':
+      return <SelectMonthRhf {...props} />;
+    case 'select-activity-form-rhf':
+      return <SelectActivityFormRhf {...props} />;
+    case 'number-input-table-rhf':
+      return <NumberInputTableRhf {...props} />;
+    case 'multiple-select-location':
+      return <MultipleSelectLocationRhf {...props} />;
+    case 'multiple-select-material':
+      return <MultipleSelectMaterialRhf {...props} />;
+    case 'input-sum-array':
+      return <InputSumArray {...props} />;
+    case 'input-average-array':
+      return <InputAverageArray {...props} />;
+    case 'display-quiet-number':
+      return <DisplayQuietNumber {...props} />;
     default:
       return null;
   }

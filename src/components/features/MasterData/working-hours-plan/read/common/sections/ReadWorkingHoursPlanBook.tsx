@@ -6,11 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, KeyValueList } from '@/components/elements';
 
 import { useReadOneWHPMaster } from '@/services/graphql/query/working-hours-plan/useReadOneWHPMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ReadWorkingHoursPlanBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionUpdate = permissions?.includes('update-working-hour-plan');
 
   /* #   /**=========== Query =========== */
   const { workingHourPlanMaster, workingHourPlanMasterLoading } =
@@ -25,11 +30,15 @@ const ReadWorkingHoursPlanBook = () => {
   return (
     <DashboardCard
       title={t('commonTypography.workingHoursPlan')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () =>
-          router.push(`/master-data/working-hours-plan/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () =>
+                router.push(`/master-data/working-hours-plan/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,
@@ -59,7 +68,7 @@ const ReadWorkingHoursPlanBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          <Stack spacing="sm" mt="lg">
+          <Stack spacing="sm" mt="sm">
             <KeyValueList
               data={[
                 {
@@ -68,14 +77,6 @@ const ReadWorkingHoursPlanBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
         </Tabs.Panel>

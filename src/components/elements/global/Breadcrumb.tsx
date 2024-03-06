@@ -1,56 +1,44 @@
-import {
-  Breadcrumbs as MantineBreadcrumbs,
-  createStyles,
-  Text,
-} from '@mantine/core';
+import { Breadcrumbs as MantineBreadcrumbs } from '@mantine/core';
+import { IconChevronRight } from '@tabler/icons-react';
 import Link from 'next/link';
 import * as React from 'react';
+import { shallow } from 'zustand/shallow';
 
-type Breadcrumbs = {
-  label: string;
-  path: string;
-};
+import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
-interface IBreadcrumbProps {
-  breadcrumbs: Breadcrumbs[];
-}
-
-const useStyles = createStyles((theme) => ({
-  breadcrumbStyle: {
-    cursor: 'pointer',
-    textDecoration: 'none',
-    color: theme.colors.dark[1],
-    fontSize: 12,
-    fontWeight: 400,
-  },
-}));
-
-const Breadcrumb: React.FC<IBreadcrumbProps> = ({ breadcrumbs }) => {
-  const { classes, cx } = useStyles();
-
-  const breadCrumbCallback = React.useCallback(
-    (value: Breadcrumbs, index: number) => {
-      const { label, path } = value;
-      return (
-        <Link href={path} key={label} prefetch={false}>
-          <Text
-            fw={index === breadcrumbs.length - 1 ? 600 : 400}
-            className={cx('textPrimaryHover', classes.breadcrumbStyle)}
-          >
-            {label}
-          </Text>
-        </Link>
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [breadcrumbs]
-  );
-
-  const breadcrumbLinks = breadcrumbs.map(breadCrumbCallback);
+const Breadcrumb: React.FC = () => {
+  const { breadcrumbs } = useBreadcrumbs((state) => state, shallow);
 
   return (
-    <MantineBreadcrumbs separator={<span> / </span>}>
-      {breadcrumbLinks}
+    <MantineBreadcrumbs
+      separator={<IconChevronRight size={16} />}
+      styles={(theme) => ({
+        separator: {
+          color: theme.colors.dark[6],
+          marginLeft: 8,
+          marginRight: 8,
+        },
+        breadcrumb: {
+          cursor: 'pointer',
+          textDecoration: 'none',
+          color: theme.colors.dark[6],
+          fontSize: 14,
+          '&:hover': {
+            color: theme.colors.brand[6],
+          },
+          '&:last-of-type': {
+            color: theme.colors.brand[6],
+          },
+        },
+      })}
+    >
+      {breadcrumbs?.map(({ label, path }) => {
+        return (
+          <Link href={path} key={label} prefetch={false}>
+            {label}
+          </Link>
+        );
+      })}
     </MantineBreadcrumbs>
   );
 };

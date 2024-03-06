@@ -21,12 +21,15 @@ import { useUpdateIsValidateOreRitage } from '@/services/graphql/mutation/ore-ri
 import { useReadOneOreRitage } from '@/services/graphql/query/ore-ritage/useReadOneOreRitage';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { IElementWithValue, IFile, IUpdateStatusValues } from '@/types/global';
 
 const ReadRitageOreBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
 
   const methods = useForm<IUpdateStatusValues>({
@@ -189,22 +192,26 @@ const ReadRitageOreBook = () => {
   const includesValid = [`${process.env.NEXT_PUBLIC_STATUS_VALID}`];
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
+  const isPermissionValidation = permissions?.includes('validate-ore-ritage');
   const isShowButtonValidation = includesWaiting.includes(
     oreRitage?.status?.id ?? ''
   );
-
   const isShowButtonInvalidation = includesWaiting.includes(
     oreRitage?.status?.id ?? ''
   );
 
+  const isPermissionDetermination = permissions?.includes(
+    'determine-ore-ritage'
+  );
   const isShowButtonDetermined = includesValid.includes(
     oreRitage?.status?.id ?? ''
   );
-
   const isShowButtonReject = includesValid.includes(
     oreRitage?.status?.id ?? ''
   );
-  const isHiddenButtonEdit = includesDetermined.includes(
+
+  const isPermissionEdit = permissions?.includes('update-ore-ritage');
+  const isIncludeDetermination = includesDetermined.includes(
     oreRitage?.status?.id ?? ''
   );
 
@@ -212,18 +219,18 @@ const ReadRitageOreBook = () => {
     <DashboardCard
       title={t('ritageOre.readRitageOre')}
       updateButton={
-        isHiddenButtonEdit
-          ? undefined
-          : {
+        isPermissionEdit && !isIncludeDetermination
+          ? {
               label: 'Edit',
               onClick: () =>
                 router.push(
                   `/input-data/production/data-ritage/ore/update/${id}`
                 ),
             }
+          : undefined
       }
       validationButton={
-        isShowButtonValidation
+        isPermissionValidation && isShowButtonValidation
           ? {
               onClickValid: handleIsValid,
               loading: loading,
@@ -231,7 +238,7 @@ const ReadRitageOreBook = () => {
           : undefined
       }
       determinedButton={
-        isShowButtonDetermined
+        isPermissionDetermination && isShowButtonDetermined
           ? {
               onClickDetermined: handleIsDetermined,
               loading: determinedLoading,
@@ -239,7 +246,7 @@ const ReadRitageOreBook = () => {
           : undefined
       }
       notValidButton={
-        isShowButtonInvalidation
+        isPermissionValidation && isShowButtonInvalidation
           ? {
               methods: methods,
               submitForm: handleInvalidForm,
@@ -250,7 +257,7 @@ const ReadRitageOreBook = () => {
           : undefined
       }
       rejectButton={
-        isShowButtonReject
+        isPermissionDetermination && isShowButtonReject
           ? {
               methods: methods,
               submitForm: handleRejectForm,
@@ -295,7 +302,7 @@ const ReadRitageOreBook = () => {
               description={oreRitage?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
           {oreRitage?.status?.id === '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
@@ -303,26 +310,18 @@ const ReadRitageOreBook = () => {
               description={oreRitage?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
-              mt="md"
+              mt="xs"
             />
           ) : null}
-          <Stack spacing="sm" mt="md">
+          <Stack spacing="sm" mt="sm">
             <KeyValueList
               data={[
                 {
                   dataKey: t('commonTypography.date'),
-                  value: formatDate(oreRitage?.date),
+                  value: formatDate(oreRitage?.date) ?? '-',
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           {!oreRitageLoading && oreRitage ? (
@@ -383,14 +382,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -402,11 +393,11 @@ const ReadRitageOreBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.fromAt'),
-                  value: formatDate(oreRitage?.fromAt, 'hh:mm:ss A'),
+                  value: formatDate(oreRitage?.fromAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.arriveAt'),
-                  value: formatDate(oreRitage?.arriveAt, 'hh:mm:ss A'),
+                  value: formatDate(oreRitage?.arriveAt, 'hh:mm:ss A') ?? '-',
                 },
                 {
                   dataKey: t('commonTypography.ritageDuration'),
@@ -414,14 +405,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -457,14 +440,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -484,14 +459,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -511,14 +478,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -546,14 +505,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -562,18 +513,7 @@ const ReadRitageOreBook = () => {
               {t('commonTypography.rate')}
             </Text>
             {renderOtherElement.length > 0 ? (
-              <KeyValueList
-                data={[...renderOtherElement]}
-                type="grid"
-                keyStyleText={{
-                  fw: 400,
-                  fz: 20,
-                }}
-                valueStyleText={{
-                  fw: 600,
-                  fz: 20,
-                }}
-              />
+              <KeyValueList data={[...renderOtherElement]} type="grid" />
             ) : (
               <Text color="gray.6">{t(`commonTypography.rateNotFound`)}</Text>
             )}
@@ -588,14 +528,6 @@ const ReadRitageOreBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
         </Tabs.Panel>

@@ -82,14 +82,6 @@ const ReadHEavyEquipmentClassBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
             <Stack spacing="sm">
               {modelItems ? (
@@ -98,18 +90,7 @@ const ReadHEavyEquipmentClassBook = () => {
                     {t('commonTypography.heavyEquipmentModel')}
                   </Text>
                   <Stack spacing="sm">
-                    <KeyValueList
-                      data={modelItems}
-                      type="grid"
-                      keyStyleText={{
-                        fw: 400,
-                        fz: 20,
-                      }}
-                      valueStyleText={{
-                        fw: 600,
-                        fz: 20,
-                      }}
-                    />
+                    <KeyValueList data={modelItems} type="grid" />
                   </Stack>
                 </>
               ) : null}

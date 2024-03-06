@@ -26,14 +26,6 @@ const MultipleFilter: React.FC<IMultipleFilterProps> = ({
               ? t(`commonTypography.${placeholder}`, { ns: 'default' })
               : undefined
           }
-          styles={(theme) => ({
-            item: {
-              borderRadius: theme.spacing.xs,
-            },
-            dropdown: {
-              borderRadius: theme.spacing.xs,
-            },
-          })}
           {...value}
         />
       );

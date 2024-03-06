@@ -36,11 +36,11 @@ const getClient = (tokenServer?: ISessionServer | null) => {
     if (isRefreshRequest(operation)) {
       return tokenServer
         ? tokenServer?.refreshToken.token
-        : session?.user.login.refreshToken.token;
+        : session?.user?.login?.refreshToken.token;
     }
     return tokenServer
       ? tokenServer?.accessToken.token
-      : session?.user.login.accessToken.token;
+      : session?.user.login?.accessToken.token;
   }
 
   const httpLink = new HttpLink({
@@ -72,7 +72,7 @@ const getClient = (tokenServer?: ISessionServer | null) => {
   });
 
   const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
-    const blackList = [
+    const blackList: string[] = [
       'ReadAllBrand',
       'ReadAllHeavyEquipmentType',
       'ReadAllHeavyEquipmentModel',
@@ -97,6 +97,13 @@ const getClient = (tokenServer?: ISessionServer | null) => {
       'ReadAllPit',
       'ReadAllDome',
       'ReadAllLocationSelect',
+      'ReadAllYearSelect',
+      'ReadAllMonthSelect',
+      'ReadAllWeekSelect',
+      'ReadAllWeatherCondition',
+      'ReadAllArriveBargeSelect',
+      'ReadAllStatusSelect',
+      'ReadAllActivityWorkTimePlan',
     ];
 
     if (blackList.includes(operation.operationName)) {
@@ -110,14 +117,14 @@ const getClient = (tokenServer?: ISessionServer | null) => {
           case 'UNAUTHENTICATED':
             if (orignalCode === 'TOKEN_EXPIRED') {
               if (isRefreshRequest(operation)) {
-                signOut({ redirect: true, callbackUrl: '/' });
+                signOut({ redirect: true, callbackUrl: '/auth/signin' });
                 return;
               }
             }
-            signOut({ redirect: true, callbackUrl: '/' });
+            signOut({ redirect: true, callbackUrl: '/auth/signin' });
             return;
           case 'FORBIDDEN':
-            signOut({ redirect: true, callbackUrl: '/' });
+            // signOut({ redirect: true, callbackUrl: '/auth/signin' });
             return;
           case 'INTERNAL_SERVER_ERROR':
             notifications.show({
@@ -133,12 +140,13 @@ const getClient = (tokenServer?: ISessionServer | null) => {
     }
 
     if (networkError) {
-      if (!server)
+      if (!server && process.env.NODE_ENV === 'development') {
         notifications.show({
           color: 'red',
-          title: 'Gagal',
-          message: 'Terjadi kesalahan',
+          title: 'Error',
+          message: `${operation.operationName} [${networkError.message}}]`,
         });
+      }
     }
   });
 

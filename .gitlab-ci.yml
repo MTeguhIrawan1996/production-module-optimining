@@ -2,7 +2,7 @@ include: '.gitlab-ci/node.yml'
 
 variables:
   GIT_STRATEGY: fetch
-  GIT_CLEAN_FLAGS: -ffdx -e node_modules/ -e .npm/ -e .yarn/
+  GIT_CLEAN_FLAGS: -ffdx -e node_modules/
 
 dev:
   extends: .yarn # or .npm
@@ -53,6 +53,39 @@ bsa:
   tags:
     - ns1.optimap.id-dev01-ssh
 
+federation:
+  variables:
+    GIT_CLONE_PATH: $CI_BUILDS_DIR/federation/$CI_CONCURRENT_ID/$CI_PROJECT_PATH
+  extends: .yarn # or .npm
+  stage: deploy
+  only:
+    - federation
+  script:
+    - rm -f .env && ln -s .gitlab-ci/federation.env .env
+    - rm -f ecosystem.config.js && ln -s .gitlab-ci/federation.ecosystem.config.js ecosystem.config.js
+    - bash .gitlab-ci/dev.script.sh
+    - pm2 restart ecosystem.config.js
+  after_script:
+    - pm2 save
+  tags:
+    - ns1.optimap.id-dev01-ssh
+
+demo:
+  variables:
+    GIT_CLONE_PATH: $CI_BUILDS_DIR/demo/$CI_CONCURRENT_ID/$CI_PROJECT_PATH
+  extends: .yarn # or .npm
+  stage: deploy
+  only:
+    - demo
+  script:
+    - rm -f .env && ln -s .gitlab-ci/demo.env .env
+    - rm -f ecosystem.config.js && ln -s .gitlab-ci/demo.ecosystem.config.js ecosystem.config.js
+    - bash .gitlab-ci/dev.script.sh
+    - pm2 restart ecosystem.config.js
+  after_script:
+    - pm2 save
+  tags:
+    - ns1.optimap.id-dev01-ssh
 # preview:
 #   image: node:18.6.0-slim
 #   variables:

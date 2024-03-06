@@ -14,62 +14,70 @@ export const linksDashboard: IMenuItem[] = [
       {
         label: 'company',
         href: '/master-data/company',
-        access: ['create-company'],
+        access: ['read-company'],
       },
       {
         label: 'humanResources',
         href: '/master-data/human-resources',
-        access: ['create-human-resource'],
+        access: ['read-human-resource'],
       },
       {
         label: 'heavyEquipment',
         href: '/master-data/heavy-equipment',
-        access: ['create-heavy-equipment'],
+        access: ['read-heavy-equipment'],
       },
       {
         label: 'location',
         href: '/master-data/location',
-        access: ['create-location'],
+        access: ['read-location'],
       },
       {
         label: 'block',
         href: '/master-data/block',
-        access: ['create-block'],
+        access: ['read-block'],
       },
       {
         label: 'stockpile',
         href: '/master-data/stockpile',
-        access: ['create-stockpile'],
+        access: ['read-stockpile'],
       },
       {
         label: 'material',
         href: '/master-data/material',
-        access: ['create-material'],
+        access: ['read-material'],
       },
       {
         label: 'workingHoursPlan',
         href: '/master-data/working-hours-plan',
-        access: ['create-working-hour-plan'],
+        access: ['read-working-hour-plan'],
       },
       {
         label: 'activityPlan',
         href: '/master-data/activity-plan',
-        access: ['create-activity-plan'],
+        access: ['read-activity-plan'],
       },
       {
         label: 'element',
         href: '/master-data/element',
-        access: ['create-element'],
+        access: ['read-element'],
       },
       {
         label: 'shift',
         href: '/master-data/shift',
-        access: ['create-shift'],
+        access: ['read-shift'],
       },
       {
         label: 'factory',
         href: '/master-data/factory',
-        access: ['create-factory'],
+        access: ['read-factory'],
+      },
+      {
+        label: 'activityCategory',
+        href: '/master-data/activity-category',
+        access: [
+          'read-working-hour-plan-category',
+          'read-heavy-equipment-data-formula',
+        ],
       },
     ],
   },
@@ -80,17 +88,17 @@ export const linksDashboard: IMenuItem[] = [
       {
         label: 'companyType',
         href: '/reference/company-type',
-        access: ['create-company-type'],
+        access: ['read-company-type'],
       },
       {
         label: 'heavyEquipmentClass',
         href: '/reference/heavy-equipment-class',
-        access: ['create-heavy-equipment-class'],
+        access: ['read-heavy-equipment-class'],
       },
       {
         label: 'heavyEquipment',
         href: '/reference/heavy-equipment',
-        access: ['create-heavy-equipment-reference'],
+        access: ['read-heavy-equipment-reference'],
       },
     ],
   },
@@ -104,72 +112,73 @@ export const linksDashboard: IMenuItem[] = [
           {
             label: 'dataRitage',
             href: '/input-data/production/data-ritage',
-            access: ['create-house-sample-and-lab'],
+            access: [
+              'read-ore-ritage',
+              'read-overburden-ritage',
+              'read-quarry-ritage',
+              'read-barging-ritage',
+              'read-moving-ritage',
+              'read-topsoil-ritage',
+            ],
+          },
+          {
+            label: 'dataHeavyEquipment',
+            href: '/input-data/production/data-heavy-equipment',
+            access: ['read-heavy-equipment-data'],
+          },
+          {
+            label: 'dataWeather',
+            href: '/input-data/production/data-weather',
+            access: ['read-weather-data'],
+          },
+          {
+            label: 'dataFront',
+            href: '/input-data/production/data-front',
+            access: ['read-front-data'],
+          },
+          {
+            label: 'map',
+            href: '/input-data/production/map',
+            access: ['all'],
           },
         ],
       },
       {
         label: 'qualityControlManagement',
         subMenu: [
-          // {
-          //   label: 'stockpileMonitoring',
-          //   href: '/input-data/quality-control-management/stockpile-monitoring',
-          //   access: ['create-monitoring-stockpile'],
-          // },
           {
             label: 'sampleHouseLab',
             href: '/input-data/quality-control-management/sample-house-lab',
-            access: ['create-house-sample-and-lab'],
+            access: ['read-house-sample-and-lab'],
+          },
+          {
+            label: 'stockpileMonitoring',
+            href: '/input-data/quality-control-management/stockpile-monitoring',
+            access: ['read-monitoring-stockpile'],
+          },
+          {
+            label: 'shippingMonitoring',
+            href: '/input-data/quality-control-management/shipping-monitoring',
+            access: ['read-monitoring-barging'],
           },
         ],
       },
     ],
   },
   {
-    label: 'setting',
-    icon: 'bi:gear-fill',
+    label: 'plan',
+    icon: 'tabler:calendar-event',
     subMenu: [
       {
-        label: 'managementRole',
-        href: '/setting/management-role',
-        access: ['create-role'],
+        label: 'weekly',
+        href: '/plan/weekly',
+        access: ['read-weekly-plan'],
       },
       {
-        label: 'user',
-        href: '/setting/user',
-        access: ['create-user'],
+        label: 'monthly',
+        href: '/plan/monthly',
+        access: ['read-monthly-plan'],
       },
     ],
   },
-  // {
-  //   label: 'Example',
-  //   icon: 'tabler:briefcase',
-  //   subMenu: [
-  //     {
-  //       label: 'Sub Example',
-  //       subMenu: [
-  //         {
-  //           label: 'Sub Sub Example',
-  //           href: '/example/sub-example/coba',
-  //           access: ['all'],
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       label: 'Data Table',
-  //       href: '/example/data-table',
-  //       access: ['all'],
-  //     },
-  //     {
-  //       label: 'Form Example',
-  //       href: '/example/form-example',
-  //       access: ['all'],
-  //     },
-  //     {
-  //       label: 'Components',
-  //       href: '/example/c-example',
-  //       access: ['all'],
-  //     },
-  //   ],
-  // },
 ];

@@ -11,11 +11,16 @@ import {
 
 import { useReadOneHumanResource } from '@/services/graphql/query/master-data-human-resources/useReadOneHumanResource';
 import { formatDate } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ReadHumanResourceBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
+
+  const isPermissionUpdate = permissions?.includes('update-human-resource');
 
   /* #   /**=========== Query =========== */
   const { humanResourceData, humanResourceDataLoading } =
@@ -52,10 +57,15 @@ const ReadHumanResourceBook = () => {
   return (
     <DashboardCard
       title={t('commonTypography.humanResources2')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () => router.push(`/master-data/human-resources/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () =>
+                router.push(`/master-data/human-resources/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,
@@ -131,7 +141,7 @@ const ReadHumanResourceBook = () => {
                 },
                 {
                   dataKey: t('commonTypography.dob'),
-                  value: formatDate(humanResourceData?.dob ?? ''),
+                  value: formatDate(humanResourceData?.dob ?? '-'),
                 },
                 {
                   dataKey: t('commonTypography.gender'),
@@ -151,14 +161,6 @@ const ReadHumanResourceBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -191,14 +193,6 @@ const ReadHumanResourceBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -231,14 +225,6 @@ const ReadHumanResourceBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -258,14 +244,6 @@ const ReadHumanResourceBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
           <Divider my="md" />
@@ -285,14 +263,6 @@ const ReadHumanResourceBook = () => {
                 },
               ]}
               type="grid"
-              keyStyleText={{
-                fw: 400,
-                fz: 20,
-              }}
-              valueStyleText={{
-                fw: 600,
-                fz: 20,
-              }}
             />
           </Stack>
         </Tabs.Panel>

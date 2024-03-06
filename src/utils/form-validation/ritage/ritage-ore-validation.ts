@@ -50,6 +50,8 @@ export const ritageOreMutationValidation: z.ZodType<IMutationRitageOre> = z
       arg.companyHeavyEquipmentChangeId === ''
         ? null
         : arg.companyHeavyEquipmentChangeId;
+    const newStockpileId = arg.stockpileId || null;
+    const newDomeId = arg.domeId || null;
     if (arg.isRitageProblematic) {
       if (!newHeavyequipmentContinueId) {
         ctx.addIssue({
@@ -58,7 +60,14 @@ export const ritageOreMutationValidation: z.ZodType<IMutationRitageOre> = z
           message: 'Kolom tidak boleh kosong',
         });
       }
-
       return z.NEVER; // The return value is not used, but we need to return something to satisfy the typing
+    }
+    if (newStockpileId && !newDomeId) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom, // customize your issue
+        path: ['domeId'],
+        message: 'Kolom tidak boleh kosong',
+      });
+      return z.NEVER;
     }
   });

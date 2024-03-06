@@ -29,24 +29,17 @@ const NavbarLinksGroupLevel2: React.FC<INavbarLinksGroupLevel2Props> = ({
   const router = useRouter();
   const { t } = useTranslation('default');
   const { classes, cx } = useDashboardLayoutStyle();
-  const [opened, setOpened] = React.useState(initiallyOpened || false);
+  const [opened, setOpened] = React.useState(false);
   const cleanedPathSubMenuLevel2 = router.pathname
     .split('/')
     .slice(0, 4)
     .join('/');
 
-  const renderItems = subMenu?.map((item, i) => {
-    return (
-      <PrimaryLink
-        className={cx(classes.subLinksGroup, {
-          [classes.linkActive]: item.href === cleanedPathSubMenuLevel2,
-        })}
-        href={item.href ?? ''}
-        key={`${item.label} + ${i}`}
-        label={t(`sideBar.${item.label}`)}
-      />
-    );
-  });
+  React.useEffect(() => {
+    const currentOpen =
+      subMenu?.some((val) => val.href === cleanedPathSubMenuLevel2) || false;
+    setOpened(initiallyOpened || currentOpen);
+  }, [initiallyOpened, subMenu, cleanedPathSubMenuLevel2]);
 
   return (
     <Box>
@@ -57,7 +50,9 @@ const NavbarLinksGroupLevel2: React.FC<INavbarLinksGroupLevel2Props> = ({
           className={classes.controlSubLinksGroup}
         >
           <Group spacing={0}>
-            <Text component="span">{t(`sideBar.${label}`)}</Text>
+            <Text component="span" fz="sm">
+              {t(`sideBar.${label}`)}
+            </Text>
           </Group>
           <IconChevronRight
             className={classes.chevron}
@@ -69,7 +64,21 @@ const NavbarLinksGroupLevel2: React.FC<INavbarLinksGroupLevel2Props> = ({
         </Group>
       </UnstyledButton>
       <Collapse in={opened}>
-        <Stack spacing={0}>{renderItems}</Stack>
+        <Stack spacing={0}>
+          {subMenu?.map((item, i) => {
+            return (
+              <PrimaryLink
+                className={cx(classes.subLinksGroup, {
+                  [classes.linkActive]: item.href === cleanedPathSubMenuLevel2,
+                })}
+                href={item.href ?? ''}
+                key={`${item.label} + ${i}`}
+                label={t(`sideBar.${item.label}`)}
+                fz="sm"
+              />
+            );
+          })}
+        </Stack>
       </Collapse>
     </Box>
   );
