@@ -9,6 +9,8 @@ import {
 } from '@/components/elements';
 
 import { useReadAllActivityCategory } from '@/services/graphql/query/activity-category/useReadAllActivityCategoryMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 interface ILoseTimeCategoryProps {
   tab?: string;
@@ -18,9 +20,17 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
   tab: tabProps,
 }) => {
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const page = Number(router.query['page']) || 1;
   const tab = router.query['tab'] || 'lose-time-category';
   const { t } = useTranslation('default');
+
+  const isPermissionUpdate = permissions?.includes(
+    'update-working-hour-plan-category'
+  );
+  const isPermissionRead = permissions?.includes(
+    'read-working-hour-plan-category'
+  );
 
   /* #   /**=========== Query =========== */
   const {
@@ -68,22 +78,30 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/master-data/activity-category/lose-time-category/read/${id}`
-                        );
-                      },
-                    }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/master-data/activity-category/lose-time-category/update/${id}`
-                        );
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/activity-category/lose-time-category/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/activity-category/lose-time-category/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -103,7 +121,12 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [readAllActivityCategoryData, readAllActivityCategoryDataLoading]);
+  }, [
+    readAllActivityCategoryData,
+    readAllActivityCategoryDataLoading,
+    isPermissionRead,
+    isPermissionUpdate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return <DashboardCard>{renderTable}</DashboardCard>;

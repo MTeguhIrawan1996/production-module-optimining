@@ -60,125 +60,129 @@ export async function middleware(request: NextRequest) {
       },
       {
         path: '/master-data/company',
-        allowedPermissions: ['create-company'],
+        allowedPermissions: ['read-company'],
       },
       {
         path: '/master-data/human-resources',
-        allowedPermissions: ['create-human-resource'],
+        allowedPermissions: ['read-human-resource'],
       },
       {
         path: '/master-data/heavy-equipment',
-        allowedPermissions: ['create-heavy-equipment'],
+        allowedPermissions: ['read-heavy-equipment'],
       },
       {
         path: '/master-data/location',
-        allowedPermissions: ['create-location'],
+        allowedPermissions: ['read-location'],
       },
       {
         path: '/master-data/block',
-        allowedPermissions: ['create-block'],
+        allowedPermissions: ['read-block'],
       },
       {
         path: '/master-data/stockpile',
-        allowedPermissions: ['create-stockpile'],
+        allowedPermissions: ['read-stockpile'],
       },
       {
         path: '/master-data/material',
-        allowedPermissions: ['create-material'],
+        allowedPermissions: ['read-material'],
       },
       {
         path: '/master-data/material',
-        allowedPermissions: ['create-material'],
+        allowedPermissions: ['read-material'],
       },
       {
         path: '/master-data/working-hours-plan',
-        allowedPermissions: ['create-working-hour-plan'],
+        allowedPermissions: ['read-working-hour-plan'],
       },
       {
         path: '/master-data/activity-plan',
-        allowedPermissions: ['create-activity-plan'],
+        allowedPermissions: ['read-activity-plan'],
       },
       {
         path: '/master-data/element',
-        allowedPermissions: ['create-element'],
+        allowedPermissions: ['read-element'],
       },
       {
         path: '/master-data/shift',
-        allowedPermissions: ['create-shift'],
+        allowedPermissions: ['read-shift'],
       },
       {
         path: '/master-data/factory',
-        allowedPermissions: ['create-factory'],
+        allowedPermissions: ['read-factory'],
       },
       {
         path: '/master-data/activity-category',
         allowedPermissions: [
-          'create-working-hour-plan-category',
-          'create-heavy-equipment-data-formula',
+          'read-working-hour-plan-category',
+          'read-heavy-equipment-data-formula',
         ],
       },
       {
         path: '/reference/company-type',
-        allowedPermissions: ['create-company-type'],
+        allowedPermissions: ['read-company-type'],
       },
       {
         path: '/reference/heavy-equipment-class',
-        allowedPermissions: ['create-heavy-equipment-class'],
+        allowedPermissions: ['read-heavy-equipment-class'],
       },
       {
         path: '/reference/heavy-equipment',
-        allowedPermissions: ['create-heavy-equipment-reference'],
+        allowedPermissions: ['read-heavy-equipment-reference'],
       },
       {
         path: '/input-data/quality-control-management/stockpile-monitoring',
-        allowedPermissions: ['update-monitoring-stockpile'],
+        allowedPermissions: ['read-monitoring-stockpile'],
       },
       {
         path: '/input-data/quality-control-management/sample-house-lab',
-        allowedPermissions: ['create-house-sample-and-lab'],
+        allowedPermissions: ['read-house-sample-and-lab'],
       },
       {
         path: '/input-data/quality-control-management/shipping-monitoring',
-        allowedPermissions: ['create-monitoring-barging'],
+        allowedPermissions: ['read-monitoring-barging'],
       },
       {
         path: '/input-data/production/data-ritage',
         allowedPermissions: [
-          'create-ore-ritage',
-          'create-overburden-ritage',
-          'create-quarry-ritage',
-          'create-barging-ritage',
-          'create-moving-ritage',
-          'create-topsoil-ritage',
+          'read-ore-ritage',
+          'read-overburden-ritage',
+          'read-quarry-ritage',
+          'read-barging-ritage',
+          'read-moving-ritage',
+          'read-topsoil-ritage',
         ],
       },
       {
         path: '/input-data/production/data-heavy-equipment',
-        allowedPermissions: ['create-heavy-equipment-data'],
+        allowedPermissions: ['read-heavy-equipment-data'],
       },
       {
         path: '/input-data/production/data-weather',
-        allowedPermissions: ['create-weather-data'],
+        allowedPermissions: ['read-weather-data'],
       },
       {
         path: '/input-data/production/data-front',
-        allowedPermissions: ['create-front-data'],
+        allowedPermissions: ['read-front-data'],
+      },
+      {
+        path: '/input-data/production/map',
+        allowedPermissions: ['all'],
       },
       {
         path: '/plan/weekly',
-        allowedPermissions: ['create-weekly-plan'],
+        allowedPermissions: ['read-weekly-plan'],
       },
       {
         path: '/plan/monthly',
-        allowedPermissions: ['create-monthly-plan'],
+        allowedPermissions: ['read-monthly-plan'],
       },
       {
         path: '/setting/management-role',
-        allowedPermissions: ['create-role'],
+        allowedPermissions: ['read-role'],
       },
       {
         path: '/setting/user',
-        allowedPermissions: ['create-user'],
+        allowedPermissions: ['read-user'],
       },
     ];
 

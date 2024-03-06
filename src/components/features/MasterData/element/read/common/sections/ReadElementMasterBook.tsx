@@ -6,11 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, KeyValueList } from '@/components/elements';
 
 import { useReadOneElementMaster } from '@/services/graphql/query/element/useReadOneElementMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ReadElementMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionUpdate = permissions?.includes('update-element');
 
   /* #   /**=========== Query =========== */
   const { elementMaster, elementMasterLoading } = useReadOneElementMaster({
@@ -24,10 +29,14 @@ const ReadElementMasterBook = () => {
   return (
     <DashboardCard
       title={t('commonTypography.element')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () => router.push(`/master-data/element/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () => router.push(`/master-data/element/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,

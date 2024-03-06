@@ -6,11 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, KeyValueList } from '@/components/elements';
 
 import { useReadOneFactoryMaster } from '@/services/graphql/query/factory/useReadOneFactoryMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ReadFactoryMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
+
+  const isPermissionUpdate = permissions?.includes('update-factory');
 
   /* #   /**=========== Query =========== */
   const { factoryMaster, factoryMasterLoading } = useReadOneFactoryMaster({
@@ -24,10 +29,14 @@ const ReadFactoryMasterBook = () => {
   return (
     <DashboardCard
       title={t('commonTypography.factory')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () => router.push(`/master-data/factory/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () => router.push(`/master-data/factory/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,

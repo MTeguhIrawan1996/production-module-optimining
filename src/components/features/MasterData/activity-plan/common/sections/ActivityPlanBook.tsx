@@ -14,9 +14,12 @@ import {
 
 import { useDeleteActivityPlanMaster } from '@/services/graphql/mutation/activity-plan/useDeleteActivityPlanMaster';
 import { useReadAllActivityPlanMaster } from '@/services/graphql/query/activity-plan/useReadAllActivityPlanMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ActivityPlanBook = () => {
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const page = Number(router.query['page']) || 1;
   const url = `/master-data/activity-plan?page=1`;
   const { t } = useTranslation('default');
@@ -24,6 +27,11 @@ const ActivityPlanBook = () => {
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const isPermissionCreate = permissions?.includes('create-activity-plan');
+  const isPermissionUpdate = permissions?.includes('update-activity-plan');
+  const isPermissionDelete = permissions?.includes('delete-activity-plan');
+  const isPermissionRead = permissions?.includes('read-activity-plan');
 
   /* #   /**=========== Query =========== */
   const {
@@ -114,25 +122,41 @@ const ActivityPlanBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/activity-plan/read/${id}`);
-                      },
-                    }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/master-data/activity-plan/update/${id}`);
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/activity-plan/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/master-data/activity-plan/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -141,10 +165,12 @@ const ActivityPlanBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('activityPlan.createActivityPlan'),
-            onClick: () => router.push('/master-data/activity-plan/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('activityPlan.createActivityPlan'),
+                onClick: () => router.push('/master-data/activity-plan/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -156,15 +182,26 @@ const ActivityPlanBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activityPlansData, activityPlansDataLoading]);
+  }, [
+    activityPlansData,
+    activityPlansDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('activityPlan.createActivityPlan'),
-        onClick: () => router.push('/master-data/activity-plan/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('activityPlan.createActivityPlan'),
+              onClick: () => router.push('/master-data/activity-plan/create'),
+            }
+          : undefined
+      }
       searchBar={{
         placeholder: t('activityPlan.searchPlaceholder'),
         onChange: (e) => {
