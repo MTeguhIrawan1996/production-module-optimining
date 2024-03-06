@@ -20,12 +20,15 @@ import { useUpdateIsDeterminedFrontProduction } from '@/services/graphql/mutatio
 import { useUpdateIsValidateFrontProduction } from '@/services/graphql/mutation/front-production/useIsValidateFrontProduction';
 import { useReadOneFrontProduction } from '@/services/graphql/query/front-production/useReadOneFrontProduction';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { IUpdateStatusValues } from '@/types/global';
 
 const ReadFrontProductionBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
 
   const methods = useForm<IUpdateStatusValues>({
@@ -161,22 +164,26 @@ const ReadFrontProductionBook = () => {
   const includesValid = [`${process.env.NEXT_PUBLIC_STATUS_VALID}`];
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
+  const isPermissionValidation = permissions?.includes('validate-front-data');
   const isShowButtonValidation = includesWaiting.includes(
     frontData?.status?.id ?? ''
   );
-
   const isShowButtonInvalidation = includesWaiting.includes(
     frontData?.status?.id ?? ''
   );
 
+  const isPermissionDetermination = permissions?.includes(
+    'determine-front-data'
+  );
   const isShowButtonDetermined = includesValid.includes(
     frontData?.status?.id ?? ''
   );
-
   const isShowButtonReject = includesValid.includes(
     frontData?.status?.id ?? ''
   );
-  const isHiddenButtonEdit = includesDetermined.includes(
+
+  const isPermissionEdit = permissions?.includes('update-front-data');
+  const isIncludeDetermination = includesDetermined.includes(
     frontData?.status?.id ?? ''
   );
 
@@ -184,18 +191,18 @@ const ReadFrontProductionBook = () => {
     <DashboardCard
       title={t('frontProduction.readFrontProduction')}
       updateButton={
-        isHiddenButtonEdit
-          ? undefined
-          : {
+        isPermissionEdit && !isIncludeDetermination
+          ? {
               label: 'Edit',
               onClick: () =>
                 router.push(
                   `/input-data/production/data-front/update/${id}?segment=${frontData?.type}`
                 ),
             }
+          : undefined
       }
       validationButton={
-        isShowButtonValidation
+        isPermissionValidation && isShowButtonValidation
           ? {
               onClickValid: handleIsValid,
               loading: loading,
@@ -203,7 +210,7 @@ const ReadFrontProductionBook = () => {
           : undefined
       }
       determinedButton={
-        isShowButtonDetermined
+        isPermissionDetermination && isShowButtonDetermined
           ? {
               onClickDetermined: handleIsDetermined,
               loading: determinedLoading,
@@ -211,7 +218,7 @@ const ReadFrontProductionBook = () => {
           : undefined
       }
       notValidButton={
-        isShowButtonInvalidation
+        isPermissionValidation && isShowButtonInvalidation
           ? {
               methods: methods,
               submitForm: handleInvalidForm,
@@ -222,7 +229,7 @@ const ReadFrontProductionBook = () => {
           : undefined
       }
       rejectButton={
-        isShowButtonReject
+        isPermissionDetermination && isShowButtonReject
           ? {
               methods: methods,
               submitForm: handleRejectForm,

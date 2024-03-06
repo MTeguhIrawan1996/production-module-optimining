@@ -23,12 +23,15 @@ import {
 } from '@/services/graphql/query/heavy-equipment-production/useReadOneHeavyEquipmentProduction';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { IUpdateStatusValues } from '@/types/global';
 
 const ReadHeavyEquipmentProductionBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
 
   const methods = useForm<IUpdateStatusValues>({
@@ -159,22 +162,28 @@ const ReadHeavyEquipmentProductionBook = () => {
   const includesValid = [`${process.env.NEXT_PUBLIC_STATUS_VALID}`];
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
+  const isPermissionValidation = permissions?.includes(
+    'validate-heavy-equipment-data'
+  );
   const isShowButtonValidation = includesWaiting.includes(
     heavyEquipmentData?.status?.id ?? ''
   );
-
   const isShowButtonInvalidation = includesWaiting.includes(
     heavyEquipmentData?.status?.id ?? ''
   );
 
+  const isPermissionDetermination = permissions?.includes(
+    'determine-heavy-equipment-data'
+  );
   const isShowButtonDetermined = includesValid.includes(
     heavyEquipmentData?.status?.id ?? ''
   );
-
   const isShowButtonReject = includesValid.includes(
     heavyEquipmentData?.status?.id ?? ''
   );
-  const isHiddenButtonEdit = includesDetermined.includes(
+
+  const isPermissionEdit = permissions?.includes('update-heavy-equipment-data');
+  const isIncludeDetermination = includesDetermined.includes(
     heavyEquipmentData?.status?.id ?? ''
   );
 
@@ -254,18 +263,18 @@ const ReadHeavyEquipmentProductionBook = () => {
     <DashboardCard
       title={t('heavyEquipmentProd.readHeavyEquipmentProd')}
       updateButton={
-        isHiddenButtonEdit
-          ? undefined
-          : {
+        isPermissionEdit && !isIncludeDetermination
+          ? {
               label: 'Edit',
               onClick: () =>
                 router.push(
                   `/input-data/production/data-heavy-equipment/update/${id}`
                 ),
             }
+          : undefined
       }
       validationButton={
-        isShowButtonValidation
+        isPermissionValidation && isShowButtonValidation
           ? {
               onClickValid: handleIsValid,
               loading: loading,
@@ -273,7 +282,7 @@ const ReadHeavyEquipmentProductionBook = () => {
           : undefined
       }
       determinedButton={
-        isShowButtonDetermined
+        isPermissionDetermination && isShowButtonDetermined
           ? {
               onClickDetermined: handleIsDetermined,
               loading: determinedLoading,
@@ -281,7 +290,7 @@ const ReadHeavyEquipmentProductionBook = () => {
           : undefined
       }
       notValidButton={
-        isShowButtonInvalidation
+        isPermissionValidation && isShowButtonInvalidation
           ? {
               methods: methods,
               submitForm: handleInvalidForm,
@@ -292,7 +301,7 @@ const ReadHeavyEquipmentProductionBook = () => {
           : undefined
       }
       rejectButton={
-        isShowButtonReject
+        isPermissionDetermination && isShowButtonReject
           ? {
               methods: methods,
               submitForm: handleRejectForm,

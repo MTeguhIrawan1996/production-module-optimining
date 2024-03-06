@@ -20,12 +20,15 @@ import { useUpdateIsValidateSampleHouseLab } from '@/services/graphql/mutation/s
 import { useReadOneSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadOneSampleHouseLab';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { IElementWithValue, IUpdateStatusValues } from '@/types/global';
 
 const ReadSampleHouseLabBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
   const [bulkSamplingCategory, setBulkSamplingCategory] = React.useState<
     Pick<IKeyValueItemProps, 'value' | 'dataKey'>[]
@@ -226,23 +229,28 @@ const ReadSampleHouseLabBook = () => {
   const includesValid = [`${process.env.NEXT_PUBLIC_STATUS_VALID}`];
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
+  const isPermissionValidation = permissions?.includes(
+    'validate-house-sample-and-lab'
+  );
   const isShowButtonValidation = includesWaiting.includes(
     houseSampleAndLab?.status?.id ?? ''
   );
-
   const isShowButtonInvalidation = includesWaiting.includes(
     houseSampleAndLab?.status?.id ?? ''
   );
 
+  const isPermissionDetermination = permissions?.includes(
+    'determine-house-sample-and-lab'
+  );
   const isShowButtonDetermined = includesValid.includes(
     houseSampleAndLab?.status?.id ?? ''
   );
-
   const isShowButtonReject = includesValid.includes(
     houseSampleAndLab?.status?.id ?? ''
   );
 
-  const isHiddenButtonEdit = includesDetermined.includes(
+  const isPermissionEdit = permissions?.includes('update-house-sample-and-lab');
+  const isIncludeDetermination = includesDetermined.includes(
     houseSampleAndLab?.status?.id ?? ''
   );
 
@@ -250,18 +258,18 @@ const ReadSampleHouseLabBook = () => {
     <DashboardCard
       title={t('sampleHouseLab.readSampleHouseLab')}
       updateButton={
-        isHiddenButtonEdit
-          ? undefined
-          : {
+        isPermissionEdit && !isIncludeDetermination
+          ? {
               label: 'Edit',
               onClick: () =>
                 router.push(
                   `/input-data/quality-control-management/sample-house-lab/update/${id}`
                 ),
             }
+          : undefined
       }
       validationButton={
-        isShowButtonValidation
+        isPermissionValidation && isShowButtonValidation
           ? {
               onClickValid: handleIsValid,
               loading: loading,
@@ -269,7 +277,7 @@ const ReadSampleHouseLabBook = () => {
           : undefined
       }
       determinedButton={
-        isShowButtonDetermined
+        isPermissionDetermination && isShowButtonDetermined
           ? {
               onClickDetermined: handleIsDetermined,
               loading: determinedLoading,
@@ -277,7 +285,7 @@ const ReadSampleHouseLabBook = () => {
           : undefined
       }
       notValidButton={
-        isShowButtonInvalidation
+        isPermissionValidation && isShowButtonInvalidation
           ? {
               methods: methods,
               submitForm: handleInvalidForm,
@@ -288,7 +296,7 @@ const ReadSampleHouseLabBook = () => {
           : undefined
       }
       rejectButton={
-        isShowButtonReject
+        isPermissionDetermination && isShowButtonReject
           ? {
               methods: methods,
               submitForm: handleRejectForm,
