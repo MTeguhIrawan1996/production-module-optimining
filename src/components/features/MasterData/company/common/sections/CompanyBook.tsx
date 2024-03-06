@@ -178,7 +178,12 @@ const CompanyBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [companiesData, companiesDataLoading]);
+  }, [
+    companiesData,
+    companiesDataLoading,
+    isPermissionRead,
+    isPermissionDelete,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
