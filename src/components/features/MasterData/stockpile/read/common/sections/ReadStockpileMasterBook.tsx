@@ -18,10 +18,13 @@ import {
 import { useDeleteStockpileDomeMaster } from '@/services/graphql/mutation/stockpile-master/useDeleteStockpileDomeMaster';
 import { useReadAllStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadAllStockpileDomeMaster';
 import { useReadOneStockpileMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ReadStockpileMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
   const page = Number(router.query['page']) || 1;
   const url = `/master-data/stockpile/read/${id}?page=1`;
@@ -29,6 +32,8 @@ const ReadStockpileMasterBook = () => {
   const [domeId, setDomeId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const isPermissionUpdate = permissions?.includes('update-stockpile');
 
   /* #   /**=========== Query =========== */
   const { stockpileMaster, stockpileMasterLoading } = useReadOneStockpileMaster(
@@ -161,10 +166,14 @@ const ReadStockpileMasterBook = () => {
   return (
     <DashboardCard
       title={t('commonTypography.stockpile')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () => router.push(`/master-data/stockpile/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () => router.push(`/master-data/stockpile/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,
