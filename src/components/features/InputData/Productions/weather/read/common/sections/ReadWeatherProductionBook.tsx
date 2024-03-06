@@ -20,6 +20,8 @@ import { useUpdateIsValidateWeatherProduction } from '@/services/graphql/mutatio
 import { useReadOneWeatherProduction } from '@/services/graphql/query/weather-production/useReadOneWeatherProduction';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { formatDate } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { IUpdateStatusValues } from '@/types/global';
 
@@ -27,6 +29,7 @@ const ReadWeatherProductionBook = () => {
   const { t } = useTranslation('default');
   const theme = useMantineTheme();
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
 
   const methods = useForm<IUpdateStatusValues>({
@@ -156,22 +159,26 @@ const ReadWeatherProductionBook = () => {
   const includesValid = [`${process.env.NEXT_PUBLIC_STATUS_VALID}`];
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
+  const isPermissionValidation = permissions?.includes('validate-weather-data');
   const isShowButtonValidation = includesWaiting.includes(
     weatherData?.status?.id ?? ''
   );
-
   const isShowButtonInvalidation = includesWaiting.includes(
     weatherData?.status?.id ?? ''
   );
 
+  const isPermissionDetermination = permissions?.includes(
+    'determine-weather-data'
+  );
   const isShowButtonDetermined = includesValid.includes(
     weatherData?.status?.id ?? ''
   );
-
   const isShowButtonReject = includesValid.includes(
     weatherData?.status?.id ?? ''
   );
-  const isHiddenButtonEdit = includesDetermined.includes(
+
+  const isPermissionEdit = permissions?.includes('update-weather-data');
+  const isIncludeDetermination = includesDetermined.includes(
     weatherData?.status?.id ?? ''
   );
 
@@ -179,16 +186,16 @@ const ReadWeatherProductionBook = () => {
     <DashboardCard
       title={t('weatherProd.readWeatherProd')}
       updateButton={
-        isHiddenButtonEdit
-          ? undefined
-          : {
+        isPermissionEdit && !isIncludeDetermination
+          ? {
               label: 'Edit',
               onClick: () =>
                 router.push(`/input-data/production/data-weather/update/${id}`),
             }
+          : undefined
       }
       validationButton={
-        isShowButtonValidation
+        isPermissionValidation && isShowButtonValidation
           ? {
               onClickValid: handleIsValid,
               loading: loading,
@@ -196,7 +203,7 @@ const ReadWeatherProductionBook = () => {
           : undefined
       }
       determinedButton={
-        isShowButtonDetermined
+        isPermissionDetermination && isShowButtonDetermined
           ? {
               onClickDetermined: handleIsDetermined,
               loading: determinedLoading,
@@ -204,7 +211,7 @@ const ReadWeatherProductionBook = () => {
           : undefined
       }
       notValidButton={
-        isShowButtonInvalidation
+        isPermissionValidation && isShowButtonInvalidation
           ? {
               methods: methods,
               submitForm: handleInvalidForm,
@@ -215,7 +222,7 @@ const ReadWeatherProductionBook = () => {
           : undefined
       }
       rejectButton={
-        isShowButtonReject
+        isPermissionDetermination && isShowButtonReject
           ? {
               methods: methods,
               submitForm: handleRejectForm,
