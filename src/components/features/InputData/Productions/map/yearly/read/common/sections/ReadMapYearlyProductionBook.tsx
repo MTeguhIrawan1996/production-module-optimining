@@ -12,17 +12,14 @@ import {
   DashboardCard,
   GlobalAlert,
   KeyValueList,
+  MantineDataTable,
 } from '@/components/elements';
 import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
-import { useDeterminedHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useDeterminedHeavyEquipmentProduction';
-import { useValidateHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useValidateHeavyEquipmentProduction';
-import {
-  IProductiveIndicator,
-  useReadOneHeavyEquipmentProduction,
-} from '@/services/graphql/query/heavy-equipment-production/useReadOneHeavyEquipmentProduction';
+import { useUpdateIsDeterminedFrontProduction } from '@/services/graphql/mutation/front-production/useIsDeterminedFrontProduction';
+import { useUpdateIsValidateFrontProduction } from '@/services/graphql/mutation/front-production/useIsValidateFrontProduction';
+import { useReadOneFrontProduction } from '@/services/graphql/query/front-production/useReadOneFrontProduction';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
-import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
 
 import { IUpdateStatusValues } from '@/types/global';
 
@@ -40,33 +37,35 @@ const ReadMapYearlyProductionBook = () => {
   });
 
   /* #   /**=========== Query =========== */
-  const { heavyEquipmentData, heavyEquipmentDataLoading } =
-    useReadOneHeavyEquipmentProduction({
+  const { frontData, frontDataGrouping, frontDataLoading } =
+    useReadOneFrontProduction({
       variables: {
         id,
       },
       skip: !router.isReady,
     });
 
-  const [executeUpdateStatus, { loading }] =
-    useValidateHeavyEquipmentProduction({
+  const [executeUpdateStatus, { loading }] = useUpdateIsValidateFrontProduction(
+    {
       onCompleted: (data) => {
         const message = {
           '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
-            'heavyEquipmentProd.successIsValidateMessage'
+            'frontProduction.successIsValidateMessage'
           ),
           'af06163a-2ba3-45ee-a724-ab3af0c97cc9': t(
-            'heavyEquipmentProd.successIsNotValidateMessage'
+            'frontProduction.successIsNotValidateMessage'
           ),
-          default: t('commonTypography.heavyEquipment'),
+          default: t('commonTypography.front'),
         };
         notifications.show({
           color: 'green',
           title: 'Selamat',
-          message: message[data.validateHeavyEquipmentData.status.id],
+          message: message[data.validateFrontData.status.id],
           icon: <IconCheck />,
         });
-        router.push('/input-data/production/data-heavy-equipment');
+        router.push(
+          `/input-data/production/data-front?page=1&segment=${frontData?.type}`
+        );
       },
       onError: (error) => {
         if (error.graphQLErrors) {
@@ -78,27 +77,30 @@ const ReadMapYearlyProductionBook = () => {
           });
         }
       },
-    });
+    }
+  );
 
   const [executeUpdateStatusDetermiend, { loading: determinedLoading }] =
-    useDeterminedHeavyEquipmentProduction({
+    useUpdateIsDeterminedFrontProduction({
       onCompleted: (data) => {
         const message = {
           'f5f644d9-8810-44f7-8d42-36b5222b97d1': t(
-            'heavyEquipmentProd.successIsDeterminedMessage'
+            'frontProduction.successIsDeterminedMessage'
           ),
           '7848a063-ae40-4a80-af86-dfc532cbb688': t(
-            'heavyEquipmentProd.successIsRejectMessage'
+            'frontProduction.successIsRejectMessage'
           ),
-          default: t('commonTypography.heavyEquipment'),
+          default: t('commonTypography.front'),
         };
         notifications.show({
           color: 'green',
           title: 'Selamat',
-          message: message[data.determineHeavyEquipmentData.status.id],
+          message: message[data.determineFrontData.status.id],
           icon: <IconCheck />,
         });
-        router.push('/input-data/production/data-heavy-equipment');
+        router.push(
+          `/input-data/production/data-front?page=1&segment=${frontData?.type}`
+        );
       },
       onError: (error) => {
         if (error.graphQLErrors) {
@@ -160,99 +162,27 @@ const ReadMapYearlyProductionBook = () => {
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
   const isShowButtonValidation = includesWaiting.includes(
-    heavyEquipmentData?.status?.id ?? ''
+    frontData?.status?.id ?? ''
   );
 
   const isShowButtonInvalidation = includesWaiting.includes(
-    heavyEquipmentData?.status?.id ?? ''
+    frontData?.status?.id ?? ''
   );
 
   const isShowButtonDetermined = includesValid.includes(
-    heavyEquipmentData?.status?.id ?? ''
+    frontData?.status?.id ?? ''
   );
 
   const isShowButtonReject = includesValid.includes(
-    heavyEquipmentData?.status?.id ?? ''
+    frontData?.status?.id ?? ''
   );
   const isHiddenButtonEdit = includesDetermined.includes(
-    heavyEquipmentData?.status?.id ?? ''
+    frontData?.status?.id ?? ''
   );
-
-  const loseTimeItem = heavyEquipmentData?.loseTimes?.map((val, i) => {
-    const label = val.workingHourPlan?.activityName.replace(
-      /\b(?:Jam|jam|hour|Hour)\b/g,
-      ''
-    );
-    return (
-      <React.Fragment key={`${val.id}${i}`}>
-        {val.details && val.details.length ? (
-          <>
-            <Stack spacing="sm">
-              <Text fz={24} fw={600} color="brand">
-                {val.workingHourPlan?.activityName}
-              </Text>
-              {val.details.map((obj, index) => {
-                const numberOfLabel =
-                  val.details && val.details.length > 1 ? index + 1 : '';
-
-                return (
-                  <KeyValueList
-                    data={[
-                      {
-                        dataKey: `${t(
-                          'commonTypography.startHour'
-                        )} ${label} ${numberOfLabel}`,
-                        value: formatDate(obj.startAt, 'hh:mm:ss A') ?? '-',
-                      },
-                      {
-                        dataKey: `${t(
-                          'commonTypography.endHour'
-                        )} ${label}  ${numberOfLabel}`,
-                        value: formatDate(obj.finishAt, 'hh:mm:ss A') ?? '-',
-                      },
-                    ]}
-                    type="grid"
-                    key={index}
-                  />
-                );
-              })}
-              <KeyValueList
-                data={[
-                  {
-                    dataKey: `${t('commonTypography.hourAmount')} ${label}`,
-                    value: secondsDuration(val.totalDuration ?? null),
-                  },
-                ]}
-                type="grid"
-              />
-            </Stack>
-            <Divider my="md" />
-          </>
-        ) : null}
-      </React.Fragment>
-    );
-  });
-
-  const renderOtherHeavyEquipmentPreformanceCallback = React.useCallback(
-    (obj: IProductiveIndicator) => {
-      const column: Pick<IKeyValueItemProps, 'value' | 'dataKey'> = {
-        dataKey: `${obj.formula.name}`,
-        value: `${obj.value ?? '-'}`,
-      };
-      return column;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  const renderOtherHeavyEquipmentPreformance =
-    heavyEquipmentData?.productiveIndicators?.map(
-      renderOtherHeavyEquipmentPreformanceCallback
-    ) ?? [];
 
   return (
     <DashboardCard
-      title={t('heavyEquipmentProd.readHeavyEquipmentProd')}
+      title={t('frontProduction.readFrontProduction')}
       updateButton={
         isHiddenButtonEdit
           ? undefined
@@ -260,7 +190,7 @@ const ReadMapYearlyProductionBook = () => {
               label: 'Edit',
               onClick: () =>
                 router.push(
-                  `/input-data/production/data-heavy-equipment/update/${id}`
+                  `/input-data/production/data-front/update/${id}?segment=${frontData?.type}`
                 ),
             }
       }
@@ -309,10 +239,12 @@ const ReadMapYearlyProductionBook = () => {
       withBorder
       enebleBackBottomOuter={{
         onClick: () =>
-          router.push('/input-data/production/data-heavy-equipment'),
+          router.push(
+            `/input-data/production/data-front?page=1&segment=${frontData?.type}`
+          ),
       }}
       shadow="xs"
-      isLoading={heavyEquipmentDataLoading}
+      isLoading={frontDataLoading}
       paperStackProps={{
         spacing: 'sm',
       }}
@@ -332,153 +264,76 @@ const ReadMapYearlyProductionBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          {heavyEquipmentData?.status?.id ===
-          'af06163a-2ba3-45ee-a724-ab3af0c97cc9' ? (
+          {frontData?.status?.id === 'af06163a-2ba3-45ee-a724-ab3af0c97cc9' ? (
             <GlobalAlert
-              description={heavyEquipmentData?.statusMessage ?? ''}
+              description={frontData?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
               mt="xs"
             />
           ) : null}
-          {heavyEquipmentData?.status?.id ===
-          '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
+          {frontData?.status?.id === '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
             <GlobalAlert
-              description={heavyEquipmentData?.statusMessage ?? ''}
+              description={frontData?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
               mt="xs"
             />
           ) : null}
-          <Stack spacing="sm" mt="sm">
-            <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.checkerInformation')}
-            </Text>
-            <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.foreman'),
-                  value: heavyEquipmentData?.foreman?.humanResource?.name,
-                },
-                {
-                  dataKey: t('commonTypography.date'),
-                  value: formatDate(heavyEquipmentData?.date) ?? '-',
-                },
-                {
-                  dataKey: t('commonTypography.heavyEquipmentCode'),
-                  value: heavyEquipmentData?.companyHeavyEquipment?.hullNumber,
-                },
-                {
-                  dataKey: t('commonTypography.heavyEquipmentType'),
-                  value:
-                    heavyEquipmentData?.companyHeavyEquipment?.heavyEquipment
-                      ?.reference?.type?.name,
-                },
-                {
-                  dataKey: t('commonTypography.shift'),
-                  value: heavyEquipmentData?.shift?.name,
-                },
-                {
-                  dataKey: t('commonTypography.operator'),
-                  value: heavyEquipmentData?.operator?.humanResource?.name,
-                },
-                {
-                  dataKey: t('commonTypography.amountFuel'),
-                  value: `${heavyEquipmentData?.fuel ?? '0'} Ltr`,
-                },
-              ]}
-              type="grid"
-            />
-          </Stack>
-          <Divider my="md" />
+          {frontDataGrouping.map((val, i) => {
+            const keyValueData: Pick<
+              IKeyValueItemProps,
+              'value' | 'dataKey'
+            >[] = val.itemValue.map((obj) => {
+              return {
+                dataKey: t(`commonTypography.${obj.name}`),
+                value: obj.value,
+              };
+            });
+            return (
+              <React.Fragment key={i}>
+                <Stack
+                  spacing="sm"
+                  mt={i === 0 ? 'sm' : undefined}
+                  mb={i === 0 ? 'sm' : undefined}
+                >
+                  {val.enableTitle && (
+                    <Text fz={24} fw={600} color="brand">
+                      {t(`commonTypography.${val.group}`)}
+                    </Text>
+                  )}
+                  <KeyValueList data={keyValueData} type="grid" />
+                </Stack>
+                {val.withDivider && <Divider my="md" />}
+              </React.Fragment>
+            );
+          })}
           <Stack spacing="sm">
             <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.workingHour')}
+              {t('commonTypography.supportingHeavyEquipment')}
             </Text>
-            <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.workingHourStart'),
-                  value:
-                    formatDate(heavyEquipmentData?.workStartAt, 'hh:mm:ss A') ??
-                    '-',
-                },
-                {
-                  dataKey: t('commonTypography.workingHourFinish'),
-                  value:
-                    formatDate(
-                      heavyEquipmentData?.workFinishAt,
-                      'hh:mm:ss A'
-                    ) ?? '-',
-                },
-                {
-                  dataKey: t('commonTypography.workingHourAmount'),
-                  value: secondsDuration(
-                    heavyEquipmentData?.workDuration ?? null
-                  ),
-                },
-              ]}
-              type="grid"
-            />
-          </Stack>
-          <Divider my="md" />
-          <Stack spacing="sm">
-            <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.hourMeter')}
-            </Text>
-            <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.hourMeterBefore'),
-                  value: `${heavyEquipmentData?.hourMeterBefore ?? '-'}`,
-                },
-                {
-                  dataKey: t('commonTypography.hourMeterAfter'),
-                  value: `${heavyEquipmentData?.hourMeterAfter ?? '-'}`,
-                },
-                {
-                  dataKey: t('commonTypography.amountHourMeter'),
-                  value: `${heavyEquipmentData?.hourMeterTotal ?? '-'}`,
-                },
-              ]}
-              type="grid"
-            />
-          </Stack>
-          <Divider my="md" />
-          {loseTimeItem}
-          <Stack spacing="sm">
-            <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.amountEffectiveWorkingHours'),
-                  value: secondsDuration(
-                    heavyEquipmentData?.effectiveHour ?? null
-                  ),
-                },
-              ]}
-              type="grid"
-            />
-          </Stack>
-          <Divider my="md" />
-          <Stack spacing="sm">
-            <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.equipmentPerformance')}
-            </Text>
-            <KeyValueList
-              data={[...renderOtherHeavyEquipmentPreformance]}
-              type="grid"
-            />
-          </Stack>
-          <Divider my="md" />
-          <Stack spacing="sm">
-            <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.desc'),
-                  value: heavyEquipmentData?.desc,
-                },
-              ]}
-              type="grid"
+            <MantineDataTable
+              tableProps={{
+                records: frontData?.supportingHeavyEquipments ?? [],
+                columns: [
+                  {
+                    accessor: 'activity',
+                    title: t('commonTypography.activity'),
+                    noWrap: false,
+                    render: ({ activityPlan }) => activityPlan?.name || '-',
+                  },
+                  {
+                    accessor: 'heavyEquipmentCode',
+                    title: t('commonTypography.heavyEquipmentCode'),
+                    render: ({ companyHeavyEquipment }) =>
+                      companyHeavyEquipment?.hullNumber || '-',
+                  },
+                ],
+                shadow: 'none',
+              }}
+              emptyStateProps={{
+                title: t('commonTypography.dataNotfound'),
+              }}
             />
           </Stack>
         </Tabs.Panel>

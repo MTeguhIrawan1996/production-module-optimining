@@ -100,8 +100,7 @@ const ListWeeklyMapBook = () => {
     <DashboardCard
       addButton={{
         label: t('mapProduction.createMapProd'),
-        onClick: () =>
-          router.push('/input-data/production/map/create?mapType=weekly'),
+        onClick: () => router.push('/input-data/production/map/weekly/create'),
       }}
       filterDateWithSelect={{
         colSpan: 4,

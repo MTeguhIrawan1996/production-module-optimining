@@ -88,8 +88,7 @@ const ListYearlyMapBook = () => {
     <DashboardCard
       addButton={{
         label: t('mapProduction.createMapProd'),
-        onClick: () =>
-          router.push('/input-data/production/map/create?mapType=yearly'),
+        onClick: () => router.push('/input-data/production/map/yearly/create'),
       }}
       filterDateWithSelect={{
         colSpan: 4,

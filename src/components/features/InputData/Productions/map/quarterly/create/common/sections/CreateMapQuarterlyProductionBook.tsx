@@ -1,155 +1,93 @@
 /* eslint-disable unused-imports/no-unused-vars */
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useDebouncedState } from '@mantine/hooks';
+import { FileWithPath } from '@mantine/dropzone';
 import { notifications } from '@mantine/notifications';
-import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
-import {
-  FieldArrayWithId,
-  SubmitHandler,
-  useFieldArray,
-  useForm,
-} from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAllMapCategory } from '@/services/graphql/query/input-data-map/useReadAllMapCategory';
+import { useUploadMapImage } from '@/services/restapi/input-data-map/useUploadMapImage';
 import {
-  IMutationHeavyEquipmentDataProdValues,
-  useCreateHeavyEquipmentProduction,
-} from '@/services/graphql/mutation/heavy-equipment-production/useCreateHeavyEquipmentProduction';
-import { useReadOneHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentCompany';
-import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
-import {
-  globalMultipleSelectLocation,
+  globalMultipleSelectMapLocation,
   globalSelect,
+  globalSelectCompanyRhf,
+  globalSelectYearRhf,
   globalText,
-  globalTimeInput,
 } from '@/utils/constants/Field/global-field';
-import { heavyEquipmentProductionMutationValidation } from '@/utils/form-validation/heavy-equipment-production/heavy-equipment-production-validation';
-import { secondsDuration } from '@/utils/helper/dateFormat';
-import { dateToString } from '@/utils/helper/dateToString';
-import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
-import { hourDiff, timeToSecond } from '@/utils/helper/hourDiff';
+import { createMapQuarterValidation } from '@/utils/form-validation/input-data-map/input-data-map-validation';
+import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 
-import { ControllerGroup } from '@/types/global';
+import { ControllerGroup, ControllerProps } from '@/types/global';
+type FormValues = {
+  mapDataCategoryId: string;
+  name: string;
+  companyId: string;
+  location: string[];
+  year: string;
+  quarter: string;
+  mapImage: FileWithPath[] | null;
+};
+import { LoadingOverlay } from '@mantine/core';
+import { IconCheck, IconX } from '@tabler/icons-react';
+
+import {
+  IMutationMapValues,
+  useCreateMap,
+} from '@/services/graphql/mutation/input-data-map/useCreateMap';
+import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 const CreateMapQuarterlyProductionBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const [newWorkStartTime, setNewWorkStartTime] = useDebouncedState<string>(
-    '',
-    400
-  );
-  const [newWorkFinishTime, setNewWorkFinishTime] = useDebouncedState<string>(
-    '',
-    400
-  );
-  const [newHourMeterBefore, setNewHourMeterBefore] = useDebouncedState<
-    number | ''
-  >('', 400);
-  const [newHourMeterAfter, setNewHourMeterAfter] = useDebouncedState<
-    number | ''
-  >('', 400);
-  const [mapType] = useQueryState('mapType');
 
-  /* #   /**=========== Methods =========== */
-  const methods = useForm<IMutationHeavyEquipmentDataProdValues>({
-    resolver: zodResolver(heavyEquipmentProductionMutationValidation),
-    defaultValues: {
-      date: undefined,
-      foremanId: '',
-      operatorId: '',
-      companyHeavyEquipmentId: '',
-      shiftId: '',
-      workStartTime: '',
-      workFinishTime: '',
-      amountWorkTime: '',
-      desc: '',
-      heavyEquipmentType: '',
-      hourMeterBefore: '',
-      hourMeterAfter: '',
-      amountHourMeter: '',
-      fuel: '',
-      loseTimes: [],
-    },
-    mode: 'onBlur',
-  });
+  const [fileId, setFileId] = React.useState<string | null>(null);
+  const [mapCategoryList, setMapCategoryList] = React.useState<
+    Array<{
+      label: string;
+      value: string;
+    }>
+  >([]);
 
-  const companyHeavyEquipmentId = methods.watch('companyHeavyEquipmentId');
-  const loseTimeWatch = methods.watch('loseTimes');
-
-  const {
-    fields: loseTimeFields,
-    replace: loseTimeReplaces,
-    update: loseTimeUpdate,
-  } = useFieldArray({
-    name: 'loseTimes',
-    control: methods.control,
-  });
-
-  React.useEffect(() => {
-    const amountWorkTime = hourDiff(newWorkStartTime, newWorkFinishTime);
-    methods.setValue('amountWorkTime', amountWorkTime ?? '');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newWorkStartTime, newWorkFinishTime]);
-  const amountHourMeter = React.useMemo(() => {
-    if (newHourMeterAfter && newHourMeterBefore) {
-      const amountHourMeterValue = newHourMeterAfter - newHourMeterBefore;
-      return amountHourMeterValue;
-    }
-    return '';
-  }, [newHourMeterAfter, newHourMeterBefore]);
-  /* #endregion  /**======== Methods =========== */
-
-  /* #   /**=========== Query =========== */
-  useReadAllWHPsMaster({
+  useReadAllMapCategory({
     variables: {
-      limit: null,
+      limit: 100,
     },
     onCompleted: (data) => {
-      const otherloseTime = data.workingHourPlans.data.map((val) => {
-        return {
-          workingHourPlanId: val.id,
-          name: val.activityName,
-          amountHour: '',
-          details: [],
-        };
-      });
-      loseTimeReplaces(otherloseTime);
-    },
-  });
-
-  useReadOneHeavyEquipmentCompany({
-    variables: {
-      id: companyHeavyEquipmentId as string,
-    },
-    skip: companyHeavyEquipmentId === '' || !companyHeavyEquipmentId,
-    onCompleted: ({ companyHeavyEquipment }) => {
-      methods.setValue(
-        'heavyEquipmentType',
-        companyHeavyEquipment.heavyEquipment?.reference?.type?.name ?? ''
+      setMapCategoryList(
+        data?.mapDataCategories.data.map((item) => {
+          return {
+            label: item.name,
+            value: item.id,
+          };
+        }) || []
       );
     },
   });
 
-  const [executeCreate, { loading }] = useCreateHeavyEquipmentProduction({
+  const [executeCreate, { loading }] = useCreateMap({
     onCompleted: () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('heavyEquipmentProd.successCreateMessage'),
+        message: t('mapProduction.successQuarterlyCreateMessage'),
         icon: <IconCheck />,
       });
       methods.reset();
-      router.push('/input-data/production/data-heavy-equipment');
+      router.push('/input-data/production/map?tabs=quarterly');
     },
     onError: (error) => {
       if (error.graphQLErrors) {
         const errorArry =
-          errorBadRequestField<IMutationHeavyEquipmentDataProdValues>(error);
+          errorBadRequestField<
+            Omit<
+              IMutationMapValues,
+              'fileId' | 'dateType' | 'month' | 'week' | 'companyId'
+            >
+          >(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
             methods.setError(name, { type, message });
@@ -165,188 +103,164 @@ const CreateMapQuarterlyProductionBook = () => {
       }
     },
   });
-  /* #endregion  /**======== Query =========== */
 
-  /* #   /**=========== Field =========== */
-  const loseTimeGroup = React.useCallback(
-    (
-      val: FieldArrayWithId<
-        IMutationHeavyEquipmentDataProdValues,
-        'loseTimes',
-        'id'
-      >,
-      index: number
-    ) => {
-      const label = val.name?.replace(/\b(?:Jam|jam|hour|Hour)\b/g, '');
-      const totalSeconds = loseTimeWatch?.[index].details?.reduce(
-        (acc, curr) => {
-          const durationInSeconds =
-            timeToSecond(curr.startTime, curr.finishTime) || 0;
-          const currentValue = acc + durationInSeconds;
-
-          return currentValue;
-        },
-        0
-      );
-
-      const returnItem = val.details?.map((_, i: number) => {
-        const startTimeItem = globalTimeInput({
-          name: `loseTimes.${index}.details.${i}.startTime`,
-          label: `${t('commonTypography.startHour')} ${label ?? ''}`,
-          labelWithTranslate: false,
-          withAsterisk: true,
-          key: `loseTimes.${val.id}.details.${i}.startTime`,
-          colSpan: 6,
-        });
-        const finishTimeItem = globalTimeInput({
-          name: `loseTimes.${index}.details.${i}.finishTime`,
-          label: `${t('commonTypography.endHour')} ${label ?? ''}`,
-          labelWithTranslate: false,
-          withAsterisk: true,
-          key: `loseTimes.${val.id}.details.${i}.finishTime`,
-          colSpan: 6,
-        });
-        return { startTimeItem, finishTimeItem };
+  const { mutateAsync: uploadMapImage } = useUploadMapImage({
+    onError: (error) => {
+      notifications.show({
+        title: 'Error',
+        message: error.message,
       });
-
-      const itemController = returnItem?.flatMap(
-        ({ startTimeItem, finishTimeItem }) => [startTimeItem, finishTimeItem]
-      );
-      const amountHourItem = globalText({
-        colSpan: 12,
-        name: `loseTimes.${index}.amountHour`,
-        label: `${t('commonTypography.hourAmount')} ${label ?? ''}`,
-        withAsterisk: false,
-        disabled: true,
-        labelWithTranslate: false,
-        key: `loseTimes.${val.id}.amountHour`,
-        value: `${
-          !totalSeconds || totalSeconds === 0
-            ? ''
-            : secondsDuration(totalSeconds ?? null)
-        }`,
-      });
-
-      const group: ControllerGroup = {
-        group: val.name ?? '',
-        enableGroupLabel: true,
-        actionGroup: {
-          addButton: {
-            label: `${t('commonTypography.create')} ${val.name}`,
-            onClick: () => {
-              loseTimeUpdate(index, {
-                workingHourPlanId: val.workingHourPlanId,
-                name: val.name,
-                amountHour: val.amountHour,
-                details: [
-                  ...(val.details ?? []),
-                  {
-                    startTime: '',
-                    finishTime: '',
-                  },
-                ],
-              });
-            },
-          },
-          deleteButton: {
-            label: t('commonTypography.delete'),
-            onClick: () => {
-              const copyArray = val.details?.slice();
-              copyArray?.pop();
-              loseTimeUpdate(index, {
-                workingHourPlanId: val.workingHourPlanId,
-                name: val.name,
-                amountHour: val.amountHour,
-                details: copyArray ?? [],
-              });
-            },
-          },
-        },
-        formControllers: [...(itemController ?? []), amountHourItem],
-      };
-      return group;
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [loseTimeWatch]
-  );
+    onSuccess: (data) => {
+      setFileId(data.fileId);
+    },
+  });
 
-  const sampleGroupItem = loseTimeFields.map(loseTimeGroup);
+  const handleUploadMapImage = async () => {
+    const { mapImage } = methods.getValues();
+    try {
+      const res = await uploadMapImage({
+        data: {
+          file: mapImage,
+        },
+      });
+      setFileId(res.fileId);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  /* #   /**=========== Methods =========== */
+  const methods = useForm<FormValues>({
+    resolver: zodResolver(createMapQuarterValidation),
+    defaultValues: {
+      name: '',
+      mapDataCategoryId: '',
+      location: [],
+      year: '',
+      mapImage: [],
+      quarter: '',
+    },
+    mode: 'onBlur',
+  });
 
   const fieldRhf = React.useMemo(() => {
-    const date = globalSelect({
-      name: 'mapType',
-      label: 'mapType',
-      withAsterisk: true,
+    const company = globalSelectCompanyRhf({
+      name: 'companyId',
+      label: 'company',
+      withAsterisk: false,
       clearable: true,
       colSpan: 6,
     });
 
-    const formanItem = globalText({
+    const mapCategory = globalSelect({
+      name: 'mapDataCategoryId',
+      label: 'mapType',
+      withAsterisk: true,
       colSpan: 6,
-      name: 'mapName',
+      data: mapCategoryList,
+    });
+
+    const name = globalText({
+      colSpan: 6,
+      name: 'name',
       label: 'mapName',
       withAsterisk: true,
     });
-    const location = globalMultipleSelectLocation({
+    const location = globalMultipleSelectMapLocation({
       colSpan: 6,
       name: 'location',
       label: 'location',
       withAsterisk: true,
     });
 
-    const year = globalSelect({
+    const year = globalSelectYearRhf({
       colSpan: 6,
       name: 'year',
       label: 'year',
       withAsterisk: false,
-      disabled: true,
+      disabled: false,
     });
 
-    const time = globalSelect({
+    const quarter = globalSelect({
       colSpan: 6,
       name: 'quarter',
       label: 'quarter',
       withAsterisk: false,
-      disabled: true,
+      disabled: false,
+      data: [
+        {
+          label: '1',
+          value: '1',
+        },
+        {
+          label: '2',
+          value: '2',
+        },
+        {
+          label: '3',
+          value: '3',
+        },
+        {
+          label: '4',
+          value: '4',
+        },
+      ],
     });
+
+    const mapImage: ControllerProps = {
+      control: 'image-dropzone',
+      name: 'mapImage',
+      label: 'mapFile',
+      withAsterisk: true,
+      description: 'mapFileDescription',
+      maxSize: 10 * 1024 ** 2 /* 10MB */,
+      multiple: true,
+      maxFiles: 5,
+      onDrop: async (value) => {
+        methods.setValue('mapImage', value);
+        await handleUploadMapImage();
+      },
+      accept: ['image/*'],
+      onReject: (files) =>
+        handleRejectFile<FormValues>({
+          methods,
+          files,
+          field: 'mapImage',
+        }),
+    };
 
     const field: ControllerGroup[] = [
       {
         group: t('commonTypography.mapInformation'),
         enableGroupLabel: true,
-        formControllers: [formanItem, date, location, year, time],
+        formControllers: [company, name, mapCategory, location, year, quarter],
+      },
+      {
+        group: 'File Peta',
+        enableGroupLabel: false,
+        formControllers: [mapImage],
       },
     ];
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sampleGroupItem, amountHourMeter]);
-  /* #endregion  /**======== Field =========== */
+  }, [mapCategoryList]);
 
   /* #   /**=========== HandleSubmitFc =========== */
-  const handleSubmitForm: SubmitHandler<
-    IMutationHeavyEquipmentDataProdValues
-  > = async (data) => {
-    const {
-      heavyEquipmentType,
-      amountWorkTime,
-      amountHourMeter,
-      loseTimes,
-      date,
-      fuel,
-      ...restValue
-    } = data;
-    const newLoseTimes = loseTimes.map(({ workingHourPlanId, details }) => ({
-      workingHourPlanId,
-      details,
-    }));
-
+  const handleSubmitForm: SubmitHandler<IMutationMapValues> = async (data) => {
+    const { name, mapDataCategoryId, location, year, companyId, quarter } =
+      methods.getValues();
     await executeCreate({
       variables: {
-        loseTimes: newLoseTimes,
-        date: dateToString(date ?? null),
-        fuel: fuel || null,
-        ...restValue,
+        dateType: 'QUARTER',
+        name: name,
+        mapDataCategoryId: mapDataCategoryId,
+        location: location,
+        year: Number(year),
+        quarter: Number(quarter),
+        fileId: fileId || '',
+        companyId: companyId,
       },
     });
   };
@@ -354,6 +268,7 @@ const CreateMapQuarterlyProductionBook = () => {
 
   return (
     <DashboardCard p={0}>
+      <LoadingOverlay visible={loading} />
       <GlobalFormGroup
         field={fieldRhf}
         methods={methods}
@@ -363,7 +278,8 @@ const CreateMapQuarterlyProductionBook = () => {
           loading: loading,
         }}
         backButton={{
-          onClick: () => router.push('/input-data/production/mzp/create'),
+          onClick: () =>
+            router.push('/input-data/production/map?tabs=quarterly'),
         }}
       />
     </DashboardCard>

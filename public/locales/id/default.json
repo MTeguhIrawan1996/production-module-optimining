@@ -461,7 +461,8 @@
     "tonByDraft": "Ton Berdasarkan Draft",
     "chooseMapType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.map) $t(commonTypography.type)",
     "quarterly": "Triwulan",
-    "mapInformation": "Informasi Peta"
+    "mapInformation": "Informasi Peta",
+    "yearly": "Tahunan"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -1038,6 +1039,10 @@
   "mapProduction": {
     "title": "$t(commonTypography.inputData) $t(commonTypography.map)",
     "createMapProd": "$t(commonTypography.create) $t(commonTypography.map)",
-    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.map)"
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.map)",
+    "successYearlyCreateMessage": "$t(commonTypography.map) $t(commonTypography.yearly) berhasil dibuat",
+    "successMonthlyCreateMessage": "$t(commonTypography.map) $t(commonTypography.monthly) berhasil dibuat",
+    "successQuarterlyCreateMessage": "$t(commonTypography.map) $t(commonTypography.quarterly) berhasil dibuat",
+    "successWeeklyCreateMessage": "$t(commonTypography.map) $t(commonTypography.weekly) berhasil dibuat"
   }
 }

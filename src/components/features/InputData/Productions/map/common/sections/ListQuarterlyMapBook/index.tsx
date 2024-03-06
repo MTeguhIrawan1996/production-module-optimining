@@ -101,7 +101,7 @@ const ListQuarterlyMapBook = () => {
       addButton={{
         label: t('mapProduction.createMapProd'),
         onClick: () =>
-          router.push('/input-data/production/map/create?mapType=quarterly'),
+          router.push('/input-data/production/map/quarterly/create'),
       }}
       filterDateWithSelect={{
         colSpan: 4,

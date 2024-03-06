@@ -34,6 +34,16 @@ export type IPdfOrInputDropzoneRhfProps = {
 } & Omit<DropzoneProps, 'name' | 'children'> &
   CommonProps;
 
+export type IImageInputDropzoneRhfProps = {
+  control: 'image-dropzone';
+  name: string;
+  label?: string;
+  description?: string;
+  withAsterisk?: boolean;
+  serverFile?: Partial<IFile>[] | null;
+} & Omit<DropzoneProps, 'name' | 'children'> &
+  CommonProps;
+
 const useStyles = createStyles(() => ({
   image: {
     objectFit: 'cover',

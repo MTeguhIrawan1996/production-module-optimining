@@ -28,6 +28,7 @@ import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/Marria
 import { IMaterialSelectInputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { IMultipleSelectLocationRhfProps } from '@/components/elements/input/MultipleSelectLocationRhf';
+import { IMultipleSelectMapLocationRhfProps } from '@/components/elements/input/MultipleSelectMapLocationRhf';
 import { IMultipleSelectMaterialRhfProps } from '@/components/elements/input/MultipleSelectMaterialRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { INumberInputTableRhfProps } from '@/components/elements/input/NumberInputTableRhf';
@@ -149,7 +150,8 @@ export type ControllerProps =
   | IMultipleSelectMaterialRhfProps
   | IDisplayQuietNumber
   | ISelectMonthRhfProps
-  | IWeatherConditionSelectInputRhfProps;
+  | IWeatherConditionSelectInputRhfProps
+  | IMultipleSelectMapLocationRhfProps;
 
 export type InputControllerNativeProps =
   | IDateInputNativeProps
