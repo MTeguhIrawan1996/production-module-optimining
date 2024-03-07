@@ -258,7 +258,7 @@ const CreateRitageQuarryBook = () => {
       name: 'fromFrontId',
       label: 'fromFront',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_FRONT_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_FRONT_ID}`],
     });
     const block = globalText({
       colSpan: 6,
@@ -272,21 +272,21 @@ const CreateRitageQuarryBook = () => {
       name: 'fromGridId',
       label: 'fromGrid',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_GRID_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_GRID_ID}`],
     });
     const sequenceItem = locationSelect({
       colSpan: 6,
       name: 'fromSequenceId',
       label: 'fromSequence',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_SEQUENCE_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_SEQUENCE_ID}`],
     });
     const elevasiItem = locationSelect({
       colSpan: 6,
       name: 'fromElevationId',
       label: 'fromElevasi',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_ELEVASI_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_ELEVASI_ID}`],
     });
     const bulkSamplingDensityItem = globalNumberInput({
       colSpan: 6,
@@ -317,7 +317,7 @@ const CreateRitageQuarryBook = () => {
       label: 'locationName',
       withAsterisk: false,
       disabled: !newLocationCategoryId,
-      categoryId: locationCategoryId,
+      categoryIds: locationCategoryId ? [locationCategoryId] : null,
     });
     const bucketVolumeItem = globalNumberInput({
       colSpan: 6,

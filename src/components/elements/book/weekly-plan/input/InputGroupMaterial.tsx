@@ -191,7 +191,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 control="location-select-input"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.frontId`}
                 label="front"
-                categoryId={`${process.env.NEXT_PUBLIC_FRONT_ID}`}
+                categoryIds={[`${process.env.NEXT_PUBLIC_FRONT_ID}`]}
                 withAsterisk
                 clearable
                 searchable

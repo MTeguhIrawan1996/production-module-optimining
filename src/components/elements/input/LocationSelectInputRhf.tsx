@@ -15,7 +15,7 @@ export type ILocationSelectInputRhfProps = {
   control: 'location-select-input';
   name: string;
   labelValue?: string;
-  categoryId?: string | null;
+  categoryIds?: string[] | null;
   limit?: number | null;
   skipQuery?: boolean;
   skipSearchQuery?: boolean;
@@ -31,7 +31,7 @@ const LocationSelectInputRhf: React.FC<ILocationSelectInputRhfProps> = ({
   label,
   labelValue,
   defaultValue,
-  categoryId = null,
+  categoryIds = null,
   limit = 15,
   skipQuery = false,
   skipSearchQuery = false,
@@ -48,7 +48,7 @@ const LocationSelectInputRhf: React.FC<ILocationSelectInputRhfProps> = ({
       limit: limit,
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
-      categoryId: categoryId === '' ? null : categoryId,
+      categoryIds: categoryIds && categoryIds.length > 0 ? categoryIds : null,
     },
     skip: skipQuery,
   });

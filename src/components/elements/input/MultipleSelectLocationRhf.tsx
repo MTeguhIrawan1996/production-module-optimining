@@ -14,7 +14,7 @@ import { CommonProps } from '@/types/global';
 export type IMultipleSelectLocationRhfProps = {
   control: 'multiple-select-location';
   name: string;
-  categoryId?: string | null;
+  categoryIds?: string[] | null;
   skipQuery?: boolean;
   skipSearchQuery?: boolean;
 } & Omit<
@@ -27,7 +27,7 @@ const MultipleSelectLocationRhf: React.FC<IMultipleSelectLocationRhfProps> = ({
   name,
   control,
   label,
-  categoryId = null,
+  categoryIds = null,
   skipQuery = false,
   skipSearchQuery = true,
   ...rest
@@ -43,7 +43,7 @@ const MultipleSelectLocationRhf: React.FC<IMultipleSelectLocationRhfProps> = ({
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
-      categoryId: categoryId === '' ? null : categoryId,
+      categoryIds: categoryIds && categoryIds.length > 0 ? categoryIds : null,
     },
     skip: skipQuery,
   });
