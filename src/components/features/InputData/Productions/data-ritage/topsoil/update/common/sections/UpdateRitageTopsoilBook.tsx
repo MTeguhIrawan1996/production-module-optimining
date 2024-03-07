@@ -97,7 +97,11 @@ const UpdateRitageTopsoilBook = () => {
   const isRitageProblematic = methods.watch('isRitageProblematic');
 
   React.useEffect(() => {
-    const ritageDuration = hourDiff(newFromTime, newArriveTime);
+    const ritageDuration = hourDiff({
+      startTime: newFromTime,
+      endTime: newArriveTime,
+      functionIsBeforeEndTime: true,
+    });
     const amount = countTonByRitage(newBucketVolume, newBulkSamplingDensity);
     methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
     methods.setValue('ritageDuration', ritageDuration ?? '');
@@ -335,7 +339,7 @@ const UpdateRitageTopsoilBook = () => {
       name: 'fromFrontId',
       label: 'fromFront',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_FRONT_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_FRONT_ID}`],
       defaultValue: topsoilRitage?.fromFront?.id,
       labelValue: topsoilRitage?.fromFront?.name,
     });
@@ -351,7 +355,7 @@ const UpdateRitageTopsoilBook = () => {
       name: 'fromGridId',
       label: 'fromGrid',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_GRID_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_GRID_ID}`],
       defaultValue: topsoilRitage?.fromGrid?.id,
       labelValue: topsoilRitage?.fromGrid?.name,
     });
@@ -360,7 +364,7 @@ const UpdateRitageTopsoilBook = () => {
       name: 'fromSequenceId',
       label: 'fromSequence',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_SEQUENCE_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_SEQUENCE_ID}`],
       defaultValue: topsoilRitage?.fromSequence?.id,
       labelValue: topsoilRitage?.fromSequence?.name,
     });
@@ -369,7 +373,7 @@ const UpdateRitageTopsoilBook = () => {
       name: 'fromElevationId',
       label: 'fromElevasi',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_ELEVASI_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_ELEVASI_ID}`],
       defaultValue: topsoilRitage?.fromElevation?.id,
       labelValue: topsoilRitage?.fromElevation?.name,
     });
@@ -395,7 +399,7 @@ const UpdateRitageTopsoilBook = () => {
       defaultValue: topsoilRitage?.toLocation?.id,
       labelValue: topsoilRitage?.toLocation?.name,
       disabled: !newToLocationCategoryId,
-      categoryId: toLocationCategoryId,
+      categoryIds: toLocationCategoryId ? [toLocationCategoryId] : null,
     });
     const bulkSamplingDensityItem = globalNumberInput({
       colSpan: 6,

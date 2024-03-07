@@ -1,7 +1,5 @@
 import { ApolloError, gql, useMutation } from '@apollo/client';
 
-import { ICreateWeeklyPlanInformationValues } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyPlanInformation';
-
 export const CREATE_WEEKLY_UNIT_CAPACITY_PLAN = gql`
   mutation CreateWeeklyUnitCapacityPlan(
     $weeklyPlanId: String
@@ -46,8 +44,7 @@ export interface IUnitCapacityPlanProps {
   materials: IMaterialsGroup[];
 }
 
-export interface IUnitCapacityPlanValues
-  extends ICreateWeeklyPlanInformationValues<string> {
+export interface IUnitCapacityPlanValues {
   unitCapacityPlans: IUnitCapacityPlanProps[];
 }
 

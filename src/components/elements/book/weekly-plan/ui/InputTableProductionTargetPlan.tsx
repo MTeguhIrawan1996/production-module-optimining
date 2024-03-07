@@ -1,6 +1,4 @@
 import { Text } from '@mantine/core';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumnGroup } from 'mantine-datatable';
 import * as React from 'react';
 import { FieldArrayWithId, useFieldArray } from 'react-hook-form';
@@ -16,15 +14,16 @@ import {
   IWeeklyProductionTargetPlanValues,
 } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyProductionTargetPlan';
 import { productionTarget } from '@/utils/constants/DefaultValues/production-target-plan';
-
-dayjs.extend(isoWeek);
+import dayjs from '@/utils/helper/dayjs.config';
 
 interface IInputTableProductionProps {
   mutationType?: 'create' | 'update' | 'read';
+  isLoading?: boolean;
 }
 
 const InputTableProductionPlan = ({
   mutationType,
+  isLoading,
 }: IInputTableProductionProps) => {
   const { t } = useTranslation('default');
 
@@ -254,6 +253,7 @@ const InputTableProductionPlan = ({
       tableProps={{
         highlightOnHover: true,
         withColumnBorders: true,
+        fetching: isLoading,
         idAccessor: (record) => {
           return record.materialId || record.materialName;
         },

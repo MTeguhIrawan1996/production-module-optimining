@@ -141,22 +141,24 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
                   {title}
                 </Title>
               )}
-              <Group spacing="xs">
-                {addButton && (
-                  <PrimaryButton
-                    // leftIcon={<IconPlus size="20px" />}
-                    label={label ?? ''}
-                    {...rest}
-                  />
-                )}
-                {updateButton && (
-                  <PrimaryButton
-                    // leftIcon={<IconPencil size="20px" />}
-                    label={labelUpdateButton}
-                    {...restUpdateButton}
-                  />
-                )}
-              </Group>
+              {addButton || updateButton ? (
+                <Group spacing="xs">
+                  {addButton && (
+                    <PrimaryButton
+                      // leftIcon={<IconPlus size="20px" />}
+                      label={label ?? ''}
+                      {...rest}
+                    />
+                  )}
+                  {updateButton && (
+                    <PrimaryButton
+                      // leftIcon={<IconPencil size="20px" />}
+                      label={labelUpdateButton}
+                      {...restUpdateButton}
+                    />
+                  )}
+                </Group>
+              ) : undefined}
             </Group>
           ) : null}
           {segmentedControl ? (

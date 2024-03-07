@@ -3,7 +3,7 @@ import { ApolloError, gql, useMutation } from '@apollo/client';
 export const CREATE_WEEKLY_WORK_TIME_PLAN = gql`
   mutation CreateWeeklyWorkTimePlan(
     $weeklyPlanId: String
-    $workTimePlanActivities: [UpdateWorkTimePlanActivity!]
+    $workTimePlanActivities: [UpdateWeeklyWorkTimePlanActivity!]
   ) {
     updateWeeklyWorkTimePlan(
       updateDto: {

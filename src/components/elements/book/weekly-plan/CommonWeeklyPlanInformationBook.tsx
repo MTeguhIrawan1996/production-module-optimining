@@ -18,6 +18,8 @@ import {
 } from '@/utils/constants/Field/global-field';
 import { weeklyPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -31,6 +33,8 @@ const CommonWeeklyPlanInformationBook: React.FC<
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+  const isPermissionUpdate = permissions?.includes('update-weekly-plan');
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateWeeklyPlanInformationValues<string>>({
@@ -113,7 +117,7 @@ const CommonWeeklyPlanInformationBook: React.FC<
         enableGroupLabel: true,
         actionOuterGroup: {
           updateButton:
-            type === 'read'
+            isPermissionUpdate && type === 'read'
               ? {
                   label: 'Edit',
                   onClick: () =>
@@ -129,7 +133,7 @@ const CommonWeeklyPlanInformationBook: React.FC<
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year, weeklyPlanData, type]);
+  }, [year, weeklyPlanData, type, isPermissionUpdate]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */

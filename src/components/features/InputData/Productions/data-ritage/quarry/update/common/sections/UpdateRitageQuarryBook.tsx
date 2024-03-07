@@ -97,7 +97,11 @@ const UpdateRitageQuarryBook = () => {
   const isRitageProblematic = methods.watch('isRitageProblematic');
 
   React.useEffect(() => {
-    const ritageDuration = hourDiff(newFromTime, newArriveTime);
+    const ritageDuration = hourDiff({
+      startTime: newFromTime,
+      endTime: newArriveTime,
+      functionIsBeforeEndTime: true,
+    });
     const amount = countTonByRitage(newBucketVolume, newBulkSamplingDensity);
     methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
     methods.setValue('ritageDuration', ritageDuration ?? '');
@@ -329,7 +333,7 @@ const UpdateRitageQuarryBook = () => {
       name: 'fromFrontId',
       label: 'fromFront',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_FRONT_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_FRONT_ID}`],
       defaultValue: quarryRitage?.fromFront?.id,
       labelValue: quarryRitage?.fromFront?.name,
     });
@@ -345,7 +349,7 @@ const UpdateRitageQuarryBook = () => {
       name: 'fromGridId',
       label: 'fromGrid',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_GRID_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_GRID_ID}`],
       defaultValue: quarryRitage?.fromGrid?.id,
       labelValue: quarryRitage?.fromGrid?.name,
     });
@@ -354,7 +358,7 @@ const UpdateRitageQuarryBook = () => {
       name: 'fromSequenceId',
       label: 'fromSequence',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_SEQUENCE_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_SEQUENCE_ID}`],
       defaultValue: quarryRitage?.fromSequence?.id,
       labelValue: quarryRitage?.fromSequence?.name,
     });
@@ -363,7 +367,7 @@ const UpdateRitageQuarryBook = () => {
       name: 'fromElevationId',
       label: 'fromElevasi',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_ELEVASI_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_ELEVASI_ID}`],
       defaultValue: quarryRitage?.fromElevation?.id,
       labelValue: quarryRitage?.fromElevation?.name,
     });
@@ -389,7 +393,7 @@ const UpdateRitageQuarryBook = () => {
       defaultValue: quarryRitage?.toLocation?.id,
       labelValue: quarryRitage?.toLocation?.name,
       disabled: !newLocationCategoryId,
-      categoryId: locationCategoryId,
+      categoryIds: locationCategoryId ? [locationCategoryId] : null,
     });
     const bulkSamplingDensityItem = globalNumberInput({
       colSpan: 6,

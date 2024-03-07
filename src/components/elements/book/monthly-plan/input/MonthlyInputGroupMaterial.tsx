@@ -7,8 +7,6 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumnGroup } from 'mantine-datatable';
 import * as React from 'react';
 import { useFieldArray } from 'react-hook-form';
@@ -22,8 +20,6 @@ import {
 import { IPrimaryButtonProps } from '@/components/elements/button/PrimaryButton';
 
 import { IMonthlyTargetPlan } from '@/services/graphql/mutation/plan/monthly/useCreateMonthlyUnitcapacityPlan';
-
-dayjs.extend(isoWeek);
 
 export type IMonthlyInputGroupMaterialProps = {
   addButtonOuter?: Partial<IPrimaryButtonProps>;
@@ -198,7 +194,7 @@ const MonthlyInputGroupMaterial: React.FunctionComponent<
                 control="location-select-input"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.frontId`}
                 label="front"
-                categoryId={`${process.env.NEXT_PUBLIC_FRONT_ID}`}
+                categoryIds={[`${process.env.NEXT_PUBLIC_FRONT_ID}`]}
                 withAsterisk
                 clearable
                 searchable

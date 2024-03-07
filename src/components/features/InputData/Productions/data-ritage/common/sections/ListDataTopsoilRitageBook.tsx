@@ -26,6 +26,8 @@ import {
 } from '@/utils/constants/Field/native-field';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -56,6 +58,13 @@ const ListDataTopsoilRitageBook = () => {
   const [heavyEquipmentId, setHeavyEquipmentId] = React.useState<string | null>(
     null
   );
+
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionCreate = permissions?.includes('create-topsoil-ritage');
+  const isPermissionUpdate = permissions?.includes('update-topsoil-ritage');
+  const isPermissionDelete = permissions?.includes('delete-topsoil-ritage');
+  const isPermissionRead = permissions?.includes('read-topsoil-ritage');
 
   /* #   /**=========== Query =========== */
   const { shiftsData } = useReadAllShiftMaster({
@@ -303,19 +312,24 @@ const ListDataTopsoilRitageBook = () => {
               title: t('commonTypography.action'),
               width: 100,
               render: ({ id, status }) => {
+                const isDetermination =
+                  status?.id === `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`;
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/production/data-ritage/topsoil/read/${id}`
-                        );
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/data-ritage/topsoil/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
                     actionUpdate={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionUpdate && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -327,8 +341,7 @@ const ListDataTopsoilRitageBook = () => {
                         : undefined
                     }
                     actionDelete={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionDelete && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -344,13 +357,17 @@ const ListDataTopsoilRitageBook = () => {
             },
           ],
         }}
-        emptyStateProps={{
-          title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('ritageTopsoil.createRitageTopsoil'),
-            onClick: () => setIsOpenSelectionModal((prev) => !prev),
-          },
-        }}
+        emptyStateProps={
+          isPermissionCreate
+            ? {
+                title: t('commonTypography.dataNotfound'),
+                actionButton: {
+                  label: t('ritageTopsoil.createRitageTopsoil'),
+                  onClick: () => setIsOpenSelectionModal((prev) => !prev),
+                },
+              }
+            : undefined
+        }
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
@@ -361,15 +378,26 @@ const ListDataTopsoilRitageBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topsoilRitagesData, topsoilRitagesDataLoading]);
+  }, [
+    topsoilRitagesData,
+    topsoilRitagesDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('ritageTopsoil.createRitageTopsoil'),
-        onClick: () => setIsOpenSelectionModal((prev) => !prev),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('ritageTopsoil.createRitageTopsoil'),
+              onClick: () => setIsOpenSelectionModal((prev) => !prev),
+            }
+          : undefined
+      }
       filterDateWithSelect={{
         colSpan: 4,
         items: filter,

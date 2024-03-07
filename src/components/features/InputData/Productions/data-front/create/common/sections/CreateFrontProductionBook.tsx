@@ -193,7 +193,7 @@ const CreateFrontProductionBook = () => {
       name: 'frontId',
       label: 'front',
       withAsterisk: true,
-      categoryId: `${process.env.NEXT_PUBLIC_FRONT_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_FRONT_ID}`],
     });
     const materialItem = materialSelect({
       colSpan: 6,
@@ -230,14 +230,14 @@ const CreateFrontProductionBook = () => {
       name: 'gridId',
       label: 'grid',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_GRID_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_GRID_ID}`],
     });
     const elevasiItem = locationSelect({
       colSpan: 6,
       name: 'elevationId',
       label: 'elevation',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_ELEVASI_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_ELEVASI_ID}`],
     });
     const coordinateX = globalNumberInput({
       name: 'x',

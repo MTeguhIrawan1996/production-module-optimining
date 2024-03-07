@@ -7,11 +7,16 @@ import { DashboardCard, KeyValueList } from '@/components/elements';
 
 import { useReadOneShiftMaster } from '@/services/graphql/query/shift/useReadOneElementMaster';
 import { hourFromat } from '@/utils/helper/hourFromat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ReadShiftMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
+
+  const isPermissionUpdate = permissions?.includes('update-shift');
 
   /* #   /**=========== Query =========== */
   const { shiftMaster, shiftMasterLoading } = useReadOneShiftMaster({
@@ -25,10 +30,14 @@ const ReadShiftMasterBook = () => {
   return (
     <DashboardCard
       title={t('commonTypography.shift')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () => router.push(`/master-data/shift/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () => router.push(`/master-data/shift/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,

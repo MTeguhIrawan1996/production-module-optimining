@@ -30,6 +30,7 @@ const GlobalKebabButton: React.FC<IGlobalKebabButtonProps> = ({
   actionDelete,
   actionUpdate,
   actionOther,
+  width = 120,
   ...menuProps
 }) => {
   const { t } = useTranslation('default');
@@ -38,7 +39,7 @@ const GlobalKebabButton: React.FC<IGlobalKebabButtonProps> = ({
     <Center>
       <Menu
         shadow="sm"
-        width={120}
+        width={width}
         position="left"
         radius="sm"
         styles={{

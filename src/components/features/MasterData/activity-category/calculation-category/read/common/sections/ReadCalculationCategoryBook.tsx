@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, KeyValueList } from '@/components/elements';
 
 import { useReadOneActivityCategory } from '@/services/graphql/query/activity-category/useReadOneActivityCategory';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 interface IReadCalculationCategoryBookProps {
   tab?: string;
@@ -16,8 +18,13 @@ const ReadCalculationCategoryBook: React.FC<
 > = ({ tab: tabProps }) => {
   const router = useRouter();
   const id = router.query.id as string;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const tab = router.query['tab'] || 'calculation-category';
   const { t } = useTranslation('default');
+
+  const isPermissionUpdate = permissions?.includes(
+    'update-working-hour-plan-category'
+  );
 
   /* #   /**=========== Query =========== */
   const {
@@ -46,13 +53,17 @@ const ReadCalculationCategoryBook: React.FC<
   return (
     <DashboardCard
       title={t('activityCategory.readCalculationCategory')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () =>
-          router.push(
-            `/master-data/activity-category/calculation-category/update/${id}`
-          ),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () =>
+                router.push(
+                  `/master-data/activity-category/calculation-category/update/${id}`
+                ),
+            }
+          : undefined
+      }
       enebleBackBottomOuter={{
         onClick: () =>
           router.push(`/master-data/activity-category?tab=${tabProps}`),

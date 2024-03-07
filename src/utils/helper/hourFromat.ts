@@ -1,11 +1,13 @@
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
-import 'dayjs/locale/id';
+// import dayjs from 'dayjs';
+// // import customParseFormat from 'dayjs/plugin/customParseFormat';
+// // import localizedFormat from 'dayjs/plugin/localizedFormat';
+// // import 'dayjs/locale/id';
 
-dayjs.locale('id');
-dayjs.extend(localizedFormat);
-dayjs.extend(customParseFormat);
+// // dayjs.locale('id');
+// // dayjs.extend(localizedFormat);
+// // dayjs.extend(customParseFormat);
+
+import dayjs from './dayjs.config';
 
 export const hourFromat = (
   value: string | Date | undefined | null,

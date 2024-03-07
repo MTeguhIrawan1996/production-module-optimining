@@ -7,8 +7,6 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumn } from 'mantine-datatable';
 import * as React from 'react';
 import { useFieldArray } from 'react-hook-form';
@@ -22,8 +20,6 @@ import {
 import { IPrimaryButtonProps } from '@/components/elements/button/PrimaryButton';
 
 import { IMutationMonthlyHeavyEquipmentRequirement } from '@/services/graphql/mutation/plan/monthly/useCreateMonthlyHeavyEquipmentReqPlan';
-
-dayjs.extend(isoWeek);
 
 export type IMonthlyInputGroupActivityProps = {
   addButtonOuter?: Partial<IPrimaryButtonProps>;

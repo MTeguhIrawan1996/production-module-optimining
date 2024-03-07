@@ -1,6 +1,4 @@
 import { Stack, Text, useMantineTheme } from '@mantine/core';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumnGroup } from 'mantine-datatable';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -19,8 +17,7 @@ import {
   IReadOneTargetPlan,
   useReadOneUnitCapacityPlan,
 } from '@/services/graphql/query/plan/weekly/useReadOneUnitCapacityPlan';
-
-dayjs.extend(isoWeek);
+import dayjs from '@/utils/helper/dayjs.config';
 
 const UnitCapacityPlanData = () => {
   const { t } = useTranslation('default');
@@ -94,7 +91,7 @@ const UnitCapacityPlanData = () => {
   return (
     <>
       <WeeklyPlanInformationData />
-      <DashboardCard p={0} isLoading={weeklyUnitCapacityPlanDataLoading}>
+      <DashboardCard p={0}>
         <Stack spacing="sm">
           <Text fz={24} fw={600} color="brand">
             {t('commonTypography.unitCapacityPlanInformation')}
@@ -102,6 +99,7 @@ const UnitCapacityPlanData = () => {
           <MantineDataTable
             tableProps={{
               records: data ?? [],
+              fetching: weeklyUnitCapacityPlanDataLoading,
               columns: [
                 {
                   accessor: 'locations',

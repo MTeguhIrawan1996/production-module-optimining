@@ -89,7 +89,11 @@ const CreateRitageObBook = () => {
   const isRitageProblematic = methods.watch('isRitageProblematic');
 
   React.useEffect(() => {
-    const ritageDuration = hourDiff(newFromTime, newArriveTime);
+    const ritageDuration = hourDiff({
+      startTime: newFromTime,
+      endTime: newArriveTime,
+      functionIsBeforeEndTime: true,
+    });
     const amount = countTonByRitage(newBucketVolume, newBulkSamplingDensity);
     methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
     methods.setValue('ritageDuration', ritageDuration ?? '');
@@ -262,7 +266,7 @@ const CreateRitageObBook = () => {
       name: 'fromFrontId',
       label: 'fromFront',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_FRONT_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_FRONT_ID}`],
     });
     const block = globalText({
       colSpan: 6,
@@ -276,28 +280,28 @@ const CreateRitageObBook = () => {
       name: 'fromGridId',
       label: 'fromGrid',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_GRID_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_GRID_ID}`],
     });
     const sequenceItem = locationSelect({
       colSpan: 6,
       name: 'fromSequenceId',
       label: 'fromSequence',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_SEQUENCE_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_SEQUENCE_ID}`],
     });
     const elevasiItem = locationSelect({
       colSpan: 6,
       name: 'fromElevationId',
       label: 'fromElevasi',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_ELEVASI_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_ELEVASI_ID}`],
     });
     const disposalItem = locationSelect({
       colSpan: 12,
       name: 'disposalId',
       label: 'toDisposal',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_DISPOSAL_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_DISPOSAL_ID}`],
     });
 
     const bulkSamplingDensityItem = globalNumberInput({

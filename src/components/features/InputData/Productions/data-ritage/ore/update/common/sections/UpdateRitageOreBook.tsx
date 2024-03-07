@@ -107,7 +107,11 @@ const UpdateRitageOreBook = () => {
   const closeDome = methods.watch('closeDome');
 
   React.useEffect(() => {
-    const ritageDuration = hourDiff(newFromTime, newArriveTime);
+    const ritageDuration = hourDiff({
+      startTime: newFromTime,
+      endTime: newArriveTime,
+      functionIsBeforeEndTime: true,
+    });
     const amount = countTonByRitage(newBucketVolume, newBulkSamplingDensity);
     methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
     methods.setValue('ritageDuration', ritageDuration ?? '');
@@ -346,7 +350,7 @@ const UpdateRitageOreBook = () => {
       name: 'fromFrontId',
       label: 'fromFront',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_FRONT_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_FRONT_ID}`],
       defaultValue: oreRitage?.fromFront?.id,
       labelValue: oreRitage?.fromFront?.name,
     });
@@ -362,7 +366,7 @@ const UpdateRitageOreBook = () => {
       name: 'fromGridId',
       label: 'fromGrid',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_GRID_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_GRID_ID}`],
       defaultValue: oreRitage?.fromGrid?.id,
       labelValue: oreRitage?.fromGrid?.name,
     });
@@ -371,7 +375,7 @@ const UpdateRitageOreBook = () => {
       name: 'fromSequenceId',
       label: 'fromSequence',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_SEQUENCE_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_SEQUENCE_ID}`],
       defaultValue: oreRitage?.fromSequence?.id,
       labelValue: oreRitage?.fromSequence?.name,
     });
@@ -380,7 +384,7 @@ const UpdateRitageOreBook = () => {
       name: 'fromElevationId',
       label: 'fromElevasi',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_ELEVASI_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_ELEVASI_ID}`],
       defaultValue: oreRitage?.fromElevation?.id,
       labelValue: oreRitage?.fromElevation?.name,
     });

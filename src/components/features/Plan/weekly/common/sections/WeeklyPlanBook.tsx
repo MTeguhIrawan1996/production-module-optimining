@@ -20,6 +20,8 @@ import {
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -35,6 +37,13 @@ const WeeklyPlanBook = () => {
   const [week, setWeek] = React.useState<number | null>(null);
   const [status, setStatus] = React.useState<string | null>(null);
   const [companyId, setCompanyId] = React.useState<string | null>(null);
+
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionCreate = permissions?.includes('create-weekly-plan');
+  const isPermissionUpdate = permissions?.includes('update-weekly-plan');
+  const isPermissionDelete = permissions?.includes('delete-weekly-plan');
+  const isPermissionRead = permissions?.includes('read-weekly-plan');
 
   /* #   /**=========== Query =========== */
   const {
@@ -164,17 +173,22 @@ const WeeklyPlanBook = () => {
               title: t('commonTypography.action'),
               width: 100,
               render: ({ id, status }) => {
+                const isDetermination =
+                  status?.id === `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`;
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/plan/weekly/read/${id}`);
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(`/plan/weekly/read/${id}`);
+                            },
+                          }
+                        : undefined
+                    }
                     actionUpdate={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionUpdate && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -184,8 +198,7 @@ const WeeklyPlanBook = () => {
                         : undefined
                     }
                     actionDelete={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionDelete && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -203,10 +216,12 @@ const WeeklyPlanBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('weeklyPlan.create'),
-            onClick: () => router.push('/plan/weekly/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('weeklyPlan.create'),
+                onClick: () => router.push('/plan/weekly/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -218,15 +233,26 @@ const WeeklyPlanBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [weeklyPlanData, weeklyPlanDataLoading]);
+  }, [
+    weeklyPlanData,
+    weeklyPlanDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('weeklyPlan.create'),
-        onClick: () => router.push('/plan/weekly/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('weeklyPlan.create'),
+              onClick: () => router.push('/plan/weekly/create'),
+            }
+          : undefined
+      }
       filterDateWithSelect={{
         colSpan: 4,
         items: filter,

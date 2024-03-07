@@ -89,7 +89,11 @@ const CreateRitageBargingBook = () => {
   const closeDome = methods.watch('closeDome');
 
   React.useEffect(() => {
-    const ritageDuration = hourDiff(newFromTime, newArriveTime);
+    const ritageDuration = hourDiff({
+      startTime: newFromTime,
+      endTime: newArriveTime,
+      functionIsBeforeEndTime: true,
+    });
     const amount = countTonByRitage(newBucketVolume, newBulkSamplingDensity);
     methods.setValue('tonByRitage', `${!amount ? '' : amount}`);
     methods.setValue('ritageDuration', ritageDuration ?? '');
@@ -268,7 +272,7 @@ const CreateRitageBargingBook = () => {
       name: 'bargingId',
       label: 'toBarging',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_BARGING_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_BARGING_ID}`],
     });
     const bargeCodeItem = heavyEquipmentSelect({
       colSpan: 6,

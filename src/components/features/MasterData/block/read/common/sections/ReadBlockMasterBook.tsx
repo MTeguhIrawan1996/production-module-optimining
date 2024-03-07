@@ -18,10 +18,13 @@ import {
 import { useDeleteBlockPitMaster } from '@/services/graphql/mutation/block/useDeleteBlockPitMaster';
 import { useReadAllBlockPitMaster } from '@/services/graphql/query/block/useReadAllBlockPitMaster';
 import { useReadOneBlockMaster } from '@/services/graphql/query/block/useReadOneBlockMaster';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ReadBlockMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
   const page = Number(router.query['page']) || 1;
   const url = `/master-data/block/read/${id}?page=1`;
@@ -29,6 +32,8 @@ const ReadBlockMasterBook = () => {
   const [pitId, setPitId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const isPermissionUpdate = permissions?.includes('update-block');
 
   /* #   /**=========== Query =========== */
   const { blockMaster, blockMasterLoading } = useReadOneBlockMaster({
@@ -158,10 +163,14 @@ const ReadBlockMasterBook = () => {
   return (
     <DashboardCard
       title={t('commonTypography.block')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () => router.push(`/master-data/block/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () => router.push(`/master-data/block/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,

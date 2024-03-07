@@ -14,19 +14,31 @@ import {
 
 import { useDeleteHeavyEquipmentClass } from '@/services/graphql/mutation/heavy-equipment-class/useDeleteHeavyEquipmentClass';
 import { useReadAllHeavyEquipmentClass } from '@/services/graphql/query/heavy-equipment-class/useReadAllHeavyEquipmentClass';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const HeavyEquipmentClassBook = () => {
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const query = router.query;
-
   const { t } = useTranslation('default');
-
   const page = Number(query['page']) || 1;
   const url = `/reference/heavy-equipment-class?page=1`;
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+
+  const isPermissionCreate = permissions?.includes(
+    'create-heavy-equipment-class'
+  );
+  const isPermissionUpdate = permissions?.includes(
+    'update-heavy-equipment-class'
+  );
+  const isPermissionDelete = permissions?.includes(
+    'delete-heavy-equipment-class'
+  );
+  const isPermissionRead = permissions?.includes('read-heavy-equipment-class');
 
   /* #   /**=========== Query =========== */
   const {
@@ -119,29 +131,41 @@ const HeavyEquipmentClassBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/reference/heavy-equipment-class/read/${id}`
-                        );
-                      },
-                    }}
-                    actionUpdate={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/reference/heavy-equipment-class/update/${id}`
-                        );
-                      },
-                    }}
-                    actionDelete={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        setIsOpenDeleteConfirmation((prev) => !prev);
-                        setId(id);
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/reference/heavy-equipment-class/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/reference/heavy-equipment-class/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -152,11 +176,13 @@ const HeavyEquipmentClassBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('heavyEquipmentClass.createHeavyEquipmentClass'),
-            onClick: () =>
-              router.push('/reference/heavy-equipment-class/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('heavyEquipmentClass.createHeavyEquipmentClass'),
+                onClick: () =>
+                  router.push('/reference/heavy-equipment-class/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -168,14 +194,26 @@ const HeavyEquipmentClassBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [heavyEquipmentClassesData, heavyEquipmentClassesDataLoading]);
+  }, [
+    heavyEquipmentClassesData,
+    heavyEquipmentClassesDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('heavyEquipmentClass.createHeavyEquipmentClass'),
-        onClick: () => router.push('/reference/heavy-equipment-class/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('heavyEquipmentClass.createHeavyEquipmentClass'),
+              onClick: () =>
+                router.push('/reference/heavy-equipment-class/create'),
+            }
+          : undefined
+      }
       searchBar={{
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);

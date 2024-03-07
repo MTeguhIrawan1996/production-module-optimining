@@ -1,30 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Flex, Group, Text } from '@mantine/core';
+import { Flex, Grid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
-import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import {
-  FieldArrayWithId,
-  FormProvider,
-  SubmitHandler,
-  useFieldArray,
-  useForm,
-} from 'react-hook-form';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import {
-  DashboardCard,
-  FormController,
-  MantineDataTable,
-  ModalConfirmation,
-  PrimaryButton,
-} from '@/components/elements';
+import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 import CommonWeeklyPlanInformation from '@/components/elements/book/weekly-plan/ui/CommonWeeklyPlanInformation';
-import DisplayLoseTimeAndEffectiveWork from '@/components/elements/book/weekly-plan/ui/DisplayLoseTimeAndEffectiveWork';
+import InputTableWorkTimePlan from '@/components/elements/book/weekly-plan/ui/InputTableWorkTimePlan';
 
 import {
   IWorkTimeDay,
@@ -39,7 +24,7 @@ import { workTimeDay } from '@/utils/constants/DefaultValues/work-time-plans';
 import { weeklyWorkTimePlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-work-time-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
-dayjs.extend(isoWeek);
+import { ControllerGroup } from '@/types/global';
 
 interface IMutationWorkTimePlanBook {
   mutationType?: 'create' | 'update' | 'read';
@@ -68,17 +53,17 @@ const MutationWorkTimePlanBook = ({
       totalEffectiveWorkHourWeek: '',
       workTimePlanActivities: [
         {
-          id: 'loseTime',
+          id: null,
           isLoseTime: false,
-          activityId: null,
+          activityId: 'loseTime',
           loseTimeId: null,
           name: t('commonTypography.loseTime'),
           weeklyWorkTimes: workTimeDay,
         },
         {
-          id: 'amountEffectiveWorkingHours',
+          id: null,
           isLoseTime: false,
-          activityId: null,
+          activityId: 'amountEffectiveWorkingHours',
           loseTimeId: null,
           name: t('commonTypography.amountEffectiveWorkingHours'),
           weeklyWorkTimes: workTimeDay,
@@ -88,10 +73,7 @@ const MutationWorkTimePlanBook = ({
     mode: 'onSubmit',
   });
 
-  const {
-    fields: workTimePlanActivityFields,
-    replace: workTimePlanActivityReplace,
-  } = useFieldArray({
+  const { fields: workTimePlanActivityFields } = useFieldArray({
     name: 'workTimePlanActivities',
     control: methods.control,
     keyName: 'workTimePlanActivityId',
@@ -118,7 +100,7 @@ const MutationWorkTimePlanBook = ({
         ...workTimePlanActivities,
         ...workTimePlanActivityFields,
       ];
-      workTimePlanActivityReplace(defaultValue);
+      methods.setValue('workTimePlanActivities', defaultValue);
       setSkipWorkingHourPlansData(true);
     },
   });
@@ -144,7 +126,7 @@ const MutationWorkTimePlanBook = ({
         ...workTimePlanActivities,
         ...workTimePlanActivityFields,
       ];
-      workTimePlanActivityReplace(defaultValue);
+      methods.setValue('workTimePlanActivities', defaultValue);
       setSkipActivityWorkTimePlan(true);
     },
   });
@@ -228,132 +210,32 @@ const MutationWorkTimePlanBook = ({
     },
   });
 
-  const recordsWithoutLoseTime = workTimePlanActivityFields.filter(
-    (
-      val: FieldArrayWithId<
-        IWorkTimePlanValues,
-        'workTimePlanActivities',
-        'workTimePlanActivityId'
-      >
-    ) => !val.isLoseTime
-  );
-  const recordsWithLoseTime = workTimePlanActivityFields.filter(
-    (
-      val: FieldArrayWithId<
-        IWorkTimePlanValues,
-        'workTimePlanActivities',
-        'workTimePlanActivityId'
-      >
-    ) => val.isLoseTime
-  );
-
-  const renderOtherColumnActivityCallback = React.useCallback(
-    (obj: IWorkTimeDay, index: number) => {
-      const group: DataTableColumn<IWorkTimePlanActivities> = {
-        accessor: `${obj['day']}.activity`,
-        width: 100,
-        title: dayjs()
-          .isoWeekday(Number(obj['day'] || 0))
-          .format('dddd'),
-        render: ({ id }, i: number) => {
-          if (id === 'loseTime') {
-            return (
-              <DisplayLoseTimeAndEffectiveWork
-                name="workTimePlanActivities"
-                indexOfHour={index}
-                variant="unstyled"
-                disabled={false}
-                readOnly
-                calculationType="loseTime"
-                styles={{
-                  input: {
-                    textAlign: 'center',
-                  },
-                }}
-              />
-            );
-          }
-          if (id === 'amountEffectiveWorkingHours') {
-            return (
-              <DisplayLoseTimeAndEffectiveWork
-                name="workTimePlanActivities"
-                indexOfHour={index}
-                variant="unstyled"
-                disabled={false}
-                readOnly
-                calculationType="amountEffectiveWorkingHours"
-                styles={{
-                  input: {
-                    textAlign: 'center',
-                  },
-                }}
-              />
-            );
-          }
+  const fieldRhf = React.useMemo(() => {
+    const field: ControllerGroup[] = [
+      {
+        group: t('commonTypography.productionTargetPlan'),
+        enableGroupLabel: false,
+        formControllers: [],
+        paperProps: {
+          withBorder: false,
+          p: 0,
+        },
+        renderItem: () => {
           return (
-            <FormController
-              control="number-input-table-rhf"
-              name={`workTimePlanActivities.${i}.weeklyWorkTimes.${index}.hour`}
-              readOnly={mutationType === 'read' ? true : false}
-              variant={mutationType === 'read' ? 'unstyled' : 'default'}
-              styles={{
-                input: {
-                  textAlign: 'center',
-                },
-              }}
-            />
+            <Grid.Col span={12}>
+              <InputTableWorkTimePlan
+                mutationType={mutationType}
+                isLoading={weeklyWorkTimePlanLoading}
+              />
+            </Grid.Col>
           );
         },
-      };
-      return group;
-    },
-    [mutationType]
-  );
+      },
+    ];
 
-  const renderOtherColumnActivityDay = workTimeDay?.map(
-    renderOtherColumnActivityCallback
-  );
-
-  const renderOtherColumnLosetimeCallback = React.useCallback(
-    (obj: IWorkTimeDay, index: number) => {
-      const group: DataTableColumn<IWorkTimePlanActivities> = {
-        accessor: `${obj['day']}.loseTime`,
-        width: 100,
-        title: dayjs()
-          .isoWeekday(Number(obj['day'] || 0))
-          .format('dddd'),
-        render: (_, i) => {
-          const activityWorkTimePlan = recordsWithoutLoseTime.filter(
-            (val) =>
-              val.id !== 'loseTime' && val.id !== 'amountEffectiveWorkingHours'
-          );
-          const activityWorkTImePlanLength = activityWorkTimePlan?.length || 0;
-
-          return (
-            <FormController
-              control="number-input-table-rhf"
-              name={`workTimePlanActivities.${
-                i + activityWorkTImePlanLength
-              }.weeklyWorkTimes.${index}.hour`}
-              readOnly={mutationType === 'read' ? true : false}
-              variant={mutationType === 'read' ? 'unstyled' : 'default'}
-              styles={{
-                input: {
-                  textAlign: 'center',
-                },
-              }}
-            />
-          );
-        },
-      };
-      return group;
-    },
-    [recordsWithoutLoseTime, mutationType]
-  );
-
-  const renderOtherColumnLosetimeDay = workTimeDay?.map(
-    renderOtherColumnLosetimeCallback
-  );
+    return field;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mutationType, weeklyWorkTimePlanLoading]);
 
   const handleSubmitForm: SubmitHandler<IWorkTimePlanValues> = async (data) => {
     const newWorkTimeActivity = data.workTimePlanActivities
@@ -376,7 +258,9 @@ const MutationWorkTimePlanBook = ({
         return newValue;
       })
       .filter(
-        (v) => v.id !== 'loseTime' && v.id !== 'amountEffectiveWorkingHours'
+        (v) =>
+          v.activityId !== 'loseTime' &&
+          v.activityId !== 'amountEffectiveWorkingHours'
       );
     await executeUpdate({
       variables: {
@@ -391,342 +275,67 @@ const MutationWorkTimePlanBook = ({
   };
 
   return (
-    <DashboardCard p={0} isLoading={weeklyWorkTimePlanLoading}>
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(handleSubmitForm)}>
-          <Flex
-            gap={32}
-            direction="column"
-            p={mutationType === 'read' ? 0 : 22}
-          >
-            {mutationType === 'read' ? undefined : (
-              <CommonWeeklyPlanInformation />
-            )}
-            <MantineDataTable
-              tableProps={{
-                highlightOnHover: true,
-                withColumnBorders: true,
-                idAccessor: (record) => {
-                  return record.id ? record.id : record.workTimePlanActivityId;
-                },
-                groups: [
-                  {
-                    id: 'no',
-                    title: 'No',
-                    style: { textAlign: 'center' },
-                    columns: [
-                      {
-                        accessor: 'index',
-                        title: '',
-                        render: (record) => {
-                          return (
-                            recordsWithoutLoseTime &&
-                            recordsWithoutLoseTime.indexOf(record) + 1
-                          );
-                        },
-                        width: 60,
-                      },
-                    ],
-                  },
-                  {
-                    id: 'activity',
-                    title: t('commonTypography.activity'),
-                    columns: [
-                      {
-                        accessor: 'name',
-                        title: '',
-                        width: 260,
-                        textAlignment: 'left',
-                        render: ({ name, activityId }) => {
-                          if (
-                            activityId ===
-                            `${process.env.NEXT_PUBLIC_WORKING_TIME_ID}`
-                          ) {
-                            return (
-                              <Text component="label">
-                                {name}
-                                <Text
-                                  component="span"
-                                  color="red"
-                                  aria-hidden="true"
-                                >
-                                  {' '}
-                                  *
-                                </Text>
-                              </Text>
-                            );
-                          }
-                          return name;
-                        },
-                      },
-                    ],
-                  },
-                  {
-                    id: 'day',
-                    title: t('commonTypography.day'),
-                    style: { textAlign: 'center' },
-                    columns: renderOtherColumnActivityDay ?? [],
-                  },
-                  {
-                    id: 'amount',
-                    title: 'Total',
-                    style: { textAlign: 'center' },
-                    columns: [
-                      {
-                        accessor: 'amount',
-                        title: '',
-                        render: ({ id }, index) => {
-                          if (id === 'loseTime') {
-                            return (
-                              <FormController
-                                control="number-input"
-                                name="totalLoseTimeWeek"
-                                variant="unstyled"
-                                disabled={false}
-                                readOnly
-                                styles={{
-                                  input: {
-                                    textAlign: 'center',
-                                  },
-                                }}
-                              />
-                            );
-                          }
-                          if (id === 'amountEffectiveWorkingHours') {
-                            return (
-                              <FormController
-                                control="number-input"
-                                name="totalEffectiveWorkHourWeek"
-                                variant="unstyled"
-                                disabled={false}
-                                readOnly
-                                styles={{
-                                  input: {
-                                    textAlign: 'center',
-                                  },
-                                }}
-                              />
-                            );
-                          }
-                          return (
-                            <FormController
-                              control="input-sum-array"
-                              name={`workTimePlanActivities.${index}.weeklyWorkTimes`}
-                              keyObj="hour"
-                              variant="unstyled"
-                              disabled={false}
-                              readOnly
-                              styles={{
-                                input: {
-                                  textAlign: 'center',
-                                },
-                              }}
-                            />
-                          );
-                        },
-                        width: 100,
-                      },
-                    ],
-                  },
-                  {
-                    id: 'unit',
-                    title: 'Unit',
-                    style: { textAlign: 'center' },
-                    columns: [
-                      {
-                        accessor: 'unit',
-                        title: '',
-                        render: (_, index) => {
-                          return (
-                            <Text>{index === 0 ? 'Jam/Hari' : 'Jam'}</Text>
-                          );
-                        },
-                        width: 100,
-                      },
-                    ],
-                  },
-                ],
-                rowExpansion: {
-                  allowMultiple: true,
-                  expanded: {
-                    recordIds: ['loseTime'],
-                  },
-                  content: () => (
-                    <MantineDataTable
-                      tableProps={{
-                        noHeader: true,
-                        shadow: '0',
-                        withBorder: false,
-                        borderRadius: 0,
-                        idAccessor: (record) => {
-                          return record.id
-                            ? record.id
-                            : record.workTimePlanActivityId;
-                        },
-                        groups: [
-                          {
-                            id: 'no',
-                            title: 'No',
-                            style: { textAlign: 'center' },
-                            columns: [
-                              {
-                                accessor: 'index',
-                                title: '',
-                                render: () => null,
-                                width: 60,
-                              },
-                            ],
-                          },
-                          {
-                            id: 'activity',
-                            title: t('commonTypography.activity'),
-                            columns: [
-                              {
-                                accessor: 'name',
-                                title: '',
-                                textAlignment: 'left',
-                                render: ({ name }, index) => {
-                                  const indextoAlphabet = String.fromCharCode(
-                                    65 + index
-                                  );
-                                  return (
-                                    <Text>{`${indextoAlphabet}. ${name}`}</Text>
-                                  );
-                                },
-                                width: 260,
-                              },
-                            ],
-                          },
-                          {
-                            id: 'day',
-                            title: t('commonTypography.day'),
-                            style: { textAlign: 'center' },
-                            columns: renderOtherColumnLosetimeDay ?? [],
-                          },
-                          {
-                            id: 'amount',
-                            title: 'Total',
-                            style: { textAlign: 'center' },
-                            columns: [
-                              {
-                                accessor: 'amount',
-                                title: '',
-                                render: (_, index) => {
-                                  const activityWorkTimePlan =
-                                    recordsWithoutLoseTime.filter(
-                                      (val) =>
-                                        val.id !== 'loseTime' &&
-                                        val.id !== 'amountEffectiveWorkingHours'
-                                    );
-                                  const activityWorkTImePlanLength =
-                                    activityWorkTimePlan?.length || 0;
-                                  return (
-                                    <FormController
-                                      control="input-sum-array"
-                                      name={`workTimePlanActivities.${
-                                        index + activityWorkTImePlanLength
-                                      }.weeklyWorkTimes`}
-                                      keyObj="hour"
-                                      variant="unstyled"
-                                      disabled={false}
-                                      readOnly
-                                      styles={{
-                                        input: {
-                                          textAlign: 'center',
-                                        },
-                                      }}
-                                    />
-                                  );
-                                },
-                                width: 100,
-                              },
-                            ],
-                          },
-                          {
-                            id: 'unit',
-                            title: 'Unit',
-                            style: { textAlign: 'center' },
-                            columns: [
-                              {
-                                accessor: 'unit',
-                                title: '',
-
-                                render: () => {
-                                  return <Text>Jam</Text>;
-                                },
-                                width: 100,
-                              },
-                            ],
-                          },
-                        ],
-                        records: recordsWithLoseTime ?? [],
-                        emptyState: undefined,
-                      }}
-                    />
-                  ),
-                },
-                records: recordsWithoutLoseTime ?? [],
-              }}
-              emptyStateProps={{
-                title: t('commonTypography.dataNotfound'),
-              }}
-            />
-            {mutationType === 'read' ? undefined : (
-              <Group w="100%" position="apart">
-                <PrimaryButton
-                  label={t('commonTypography.back')}
-                  type="button"
-                  variant="outline"
-                  onClick={() => {
+    <DashboardCard p={0}>
+      <Flex gap={32} direction="column" p={mutationType === 'read' ? 0 : 22}>
+        {mutationType === 'read' ? undefined : <CommonWeeklyPlanInformation />}
+        <GlobalFormGroup
+          flexProps={{
+            p: 0,
+          }}
+          field={fieldRhf}
+          methods={methods}
+          submitForm={handleSubmitForm}
+          submitButton={
+            mutationType === 'read'
+              ? undefined
+              : {
+                  label: t('commonTypography.save'),
+                  loading: mutationType === 'create' ? loading : undefined,
+                  type: mutationType === 'create' ? 'submit' : 'button',
+                  onClick:
+                    mutationType === 'update'
+                      ? async () => {
+                          const output = await methods.trigger(undefined, {
+                            shouldFocus: true,
+                          });
+                          if (output) setIsOpenConfirmation((prev) => !prev);
+                        }
+                      : undefined,
+                }
+          }
+          backButton={
+            mutationType === 'read'
+              ? undefined
+              : {
+                  onClick: () =>
                     router.push(
                       mutationType === 'update'
                         ? `/plan/weekly/${mutationType}/${id}`
                         : `/plan/weekly`
-                    );
-                  }}
-                />
-                <Group spacing="xs">
-                  <PrimaryButton
-                    label={t('commonTypography.save')}
-                    loading={mutationType === 'create' ? loading : undefined}
-                    type={mutationType === 'create' ? 'submit' : 'button'}
-                    onClick={
-                      mutationType === 'update'
-                        ? async () => {
-                            const output = await methods.trigger(undefined, {
-                              shouldFocus: true,
-                            });
-                            if (output) setIsOpenConfirmation((prev) => !prev);
-                          }
-                        : undefined
-                    }
-                  />
-                </Group>
-              </Group>
-            )}
-          </Flex>
-          <ModalConfirmation
-            isOpenModalConfirmation={isOpenConfirmation}
-            actionModalConfirmation={() =>
-              setIsOpenConfirmation((prev) => !prev)
-            }
-            actionButton={{
+                    ),
+                }
+          }
+          modalConfirmation={{
+            isOpenModalConfirmation: isOpenConfirmation,
+            actionModalConfirmation: () =>
+              setIsOpenConfirmation((prev) => !prev),
+            actionButton: {
               label: t('commonTypography.yes'),
               type: 'button',
               onClick: handleConfirmation,
               loading: loading,
-            }}
-            backButton={{
+            },
+            backButton: {
               label: 'Batal',
-            }}
-            modalType={{
+            },
+            modalType: {
               type: 'default',
               title: t('commonTypography.alertTitleConfirmUpdate'),
-            }}
-            withDivider={true}
-          />
-        </form>
-      </FormProvider>
+            },
+            withDivider: true,
+          }}
+        />
+      </Flex>
     </DashboardCard>
   );
 };

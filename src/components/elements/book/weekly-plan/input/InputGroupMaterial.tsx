@@ -7,8 +7,6 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import { DataTableColumnGroup } from 'mantine-datatable';
 import * as React from 'react';
 import { useFieldArray } from 'react-hook-form';
@@ -21,7 +19,7 @@ import {
 } from '@/components/elements';
 import { IPrimaryButtonProps } from '@/components/elements/button/PrimaryButton';
 
-dayjs.extend(isoWeek);
+import dayjs from '@/utils/helper/dayjs.config';
 
 export type IInputGroupMaterialProps = {
   addButtonOuter?: Partial<IPrimaryButtonProps>;
@@ -193,7 +191,7 @@ const InputGroupMaterial: React.FunctionComponent<IInputGroupMaterialProps> = ({
                 control="location-select-input"
                 name={`unitCapacityPlans.${unitCapacityPlanIndex}.materials.${materialIndex}.frontId`}
                 label="front"
-                categoryId={`${process.env.NEXT_PUBLIC_FRONT_ID}`}
+                categoryIds={[`${process.env.NEXT_PUBLIC_FRONT_ID}`]}
                 withAsterisk
                 clearable
                 searchable

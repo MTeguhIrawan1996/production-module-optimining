@@ -26,6 +26,8 @@ import {
 } from '@/utils/constants/Field/native-field';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -56,6 +58,13 @@ const ListDataObRitageBook = () => {
   const [heavyEquipmentId, setHeavyEquipmentId] = React.useState<string | null>(
     null
   );
+
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionCreate = permissions?.includes('create-overburden-ritage');
+  const isPermissionUpdate = permissions?.includes('update-overburden-ritage');
+  const isPermissionDelete = permissions?.includes('delete-overburden-ritage');
+  const isPermissionRead = permissions?.includes('read-overburden-ritage');
 
   /* #   /**=========== Query =========== */
   const { shiftsData } = useReadAllShiftMaster({
@@ -310,19 +319,24 @@ const ListDataObRitageBook = () => {
               title: t('commonTypography.action'),
               width: 100,
               render: ({ id, status }) => {
+                const isDetermination =
+                  status?.id === `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`;
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/production/data-ritage/ob/read/${id}`
-                        );
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/data-ritage/ob/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
                     actionUpdate={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionUpdate && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -334,8 +348,7 @@ const ListDataObRitageBook = () => {
                         : undefined
                     }
                     actionDelete={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionDelete && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -353,10 +366,12 @@ const ListDataObRitageBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('ritageOb.createRitageOb'),
-            onClick: () => setIsOpenSelectionModal((prev) => !prev),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('ritageOb.createRitageOb'),
+                onClick: () => setIsOpenSelectionModal((prev) => !prev),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -368,15 +383,26 @@ const ListDataObRitageBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [overburdenRitagesData, overburdenRitagesDataLoading]);
+  }, [
+    overburdenRitagesData,
+    overburdenRitagesDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('ritageOb.createRitageOb'),
-        onClick: () => setIsOpenSelectionModal((prev) => !prev),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('ritageOb.createRitageOb'),
+              onClick: () => setIsOpenSelectionModal((prev) => !prev),
+            }
+          : undefined
+      }
       filterDateWithSelect={{
         colSpan: 4,
         items: filter,

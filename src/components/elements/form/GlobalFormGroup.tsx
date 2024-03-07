@@ -268,37 +268,39 @@ const GlobalFormGroup: React.FC<IGlobalFormGroupProps> = ({
             </Paper>
           )}
           {/* Submit Button */}
-          <Group w="100%" position={backButton ? 'apart' : 'right'}>
-            {backButton ? (
-              <PrimaryButton
-                label={backButtonLabel}
-                type="button"
-                variant="outline"
-                {...restBackButton}
-              />
-            ) : null}
-            <Group spacing="xs">
-              {validationButton ? (
+          {backButton || validationButton || nextButton || submitButton ? (
+            <Group w="100%" position={backButton ? 'apart' : 'right'}>
+              {backButton ? (
                 <PrimaryButton
-                  label={validationButtonLabel}
+                  label={backButtonLabel}
                   type="button"
                   variant="outline"
-                  {...restValidationButton}
+                  {...restBackButton}
                 />
               ) : null}
-              {nextButton ? (
-                <PrimaryButton
-                  label={nextButtonLabel}
-                  type="button"
-                  variant="outline"
-                  {...restNextButton}
-                />
-              ) : null}
-              {submitButton ? (
-                <PrimaryButton label={label} type={type} {...rest} />
-              ) : null}
+              <Group spacing="xs">
+                {validationButton ? (
+                  <PrimaryButton
+                    label={validationButtonLabel}
+                    type="button"
+                    variant="outline"
+                    {...restValidationButton}
+                  />
+                ) : null}
+                {nextButton ? (
+                  <PrimaryButton
+                    label={nextButtonLabel}
+                    type="button"
+                    variant="outline"
+                    {...restNextButton}
+                  />
+                ) : null}
+                {submitButton ? (
+                  <PrimaryButton label={label} type={type} {...rest} />
+                ) : null}
+              </Group>
             </Group>
-          </Group>
+          ) : null}
         </Flex>
         {modalConfirmation ? (
           <ModalConfirmation {...modalConfirmation} />

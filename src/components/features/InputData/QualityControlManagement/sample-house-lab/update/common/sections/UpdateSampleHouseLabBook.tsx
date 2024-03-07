@@ -400,7 +400,7 @@ const UpdateSampleHouseLabPage = () => {
       name: 'locationId',
       label: 'locationName',
       withAsterisk: true,
-      categoryId: locationCategoryId,
+      categoryIds: locationCategoryId ? [locationCategoryId] : null,
     });
     const location = globalText({
       name: 'locationName',

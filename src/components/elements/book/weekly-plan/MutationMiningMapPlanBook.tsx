@@ -76,7 +76,7 @@ const MutationMiningMapPlanBook = ({
 
   const miningMapPlans = methods.watch('miningMapPlans');
 
-  const { weeklyMiningPlanDataLoading } = useReadOneMiningMapPlan({
+  useReadOneMiningMapPlan({
     variables: {
       weeklyPlanId: id,
       orderBy: 'createdAt',
@@ -155,7 +155,7 @@ const MutationMiningMapPlanBook = ({
       label: 'location',
       key: `${obj.miningMapPlanId}.locationId.${index}`,
       disabled: !newLocationCategoryId,
-      categoryId: newLocationCategoryId || null,
+      categoryIds: newLocationCategoryId ? [newLocationCategoryId] : null,
       limit: null,
       skipQuery: tabs !== 'miningMapPlan',
     });
@@ -233,7 +233,7 @@ const MutationMiningMapPlanBook = ({
   };
 
   return (
-    <DashboardCard p={0} isLoading={weeklyMiningPlanDataLoading}>
+    <DashboardCard p={0}>
       <Flex gap={32} direction="column" p={22}>
         <CommonWeeklyPlanInformation />
         <GlobalFormGroup
