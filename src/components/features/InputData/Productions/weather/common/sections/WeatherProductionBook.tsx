@@ -20,6 +20,8 @@ import {
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -35,6 +37,13 @@ const WeatherProductionBook = () => {
   const [week, setWeek] = React.useState<number | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionCreate = permissions?.includes('create-weather-data');
+  const isPermissionUpdate = permissions?.includes('update-weather-data');
+  const isPermissionDelete = permissions?.includes('delete-weather-data');
+  const isPermissionRead = permissions?.includes('read-weather-data');
 
   /* #   /**=========== Query =========== */
   const {
@@ -180,19 +189,24 @@ const WeatherProductionBook = () => {
               title: t('commonTypography.action'),
               width: 100,
               render: ({ id, status }) => {
+                const isDetermination =
+                  status?.id === `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`;
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/production/data-weather/read/${id}`
-                        );
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/data-weather/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
                     actionUpdate={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionUpdate && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -204,8 +218,7 @@ const WeatherProductionBook = () => {
                         : undefined
                     }
                     actionDelete={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionDelete && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -223,11 +236,13 @@ const WeatherProductionBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('weatherProd.createWeatherProd'),
-            onClick: () =>
-              router.push('/input-data/production/data-weather/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('weatherProd.createWeatherProd'),
+                onClick: () =>
+                  router.push('/input-data/production/data-weather/create'),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -239,16 +254,27 @@ const WeatherProductionBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [weatherData, weatherDataLoading]);
+  }, [
+    weatherData,
+    weatherDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('weatherProd.createWeatherProd'),
-        onClick: () =>
-          router.push('/input-data/production/data-weather/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('weatherProd.createWeatherProd'),
+              onClick: () =>
+                router.push('/input-data/production/data-weather/create'),
+            }
+          : undefined
+      }
       filterDateWithSelect={{
         colSpan: 3,
         items: filter,
