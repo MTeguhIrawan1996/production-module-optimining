@@ -243,7 +243,7 @@ const CreateMapWeeklyProductionBook = () => {
         year: Number(year),
         week: Number(week),
         fileId: fileId || '',
-        companyId: companyId,
+        companyId: companyId === '' ? undefined : companyId,
       },
     });
   };

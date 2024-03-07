@@ -140,6 +140,7 @@ const CreateMapQuarterlyProductionBook = () => {
       year: '',
       mapImage: [],
       quarter: '',
+      companyId: '',
     },
     mode: 'onBlur',
   });
@@ -151,6 +152,7 @@ const CreateMapQuarterlyProductionBook = () => {
       withAsterisk: false,
       clearable: true,
       colSpan: 6,
+      required: false,
     });
 
     const mapCategory = globalSelect({
@@ -260,7 +262,7 @@ const CreateMapQuarterlyProductionBook = () => {
         year: Number(year),
         quarter: Number(quarter),
         fileId: fileId || '',
-        companyId: companyId,
+        companyId: companyId === '' ? undefined : companyId,
       },
     });
   };

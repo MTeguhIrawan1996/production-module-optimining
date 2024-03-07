@@ -7,7 +7,7 @@ export const CREATE_MAP = gql`
     $fileId: String!
     $mapDataCategoryId: String!
     $location: [String!]!
-    $companyId: String!
+    $companyId: String
     $year: Float!
     $quarter: Float
     $month: Float
@@ -38,7 +38,7 @@ export interface IMutationMapValues {
   fileId: string;
   mapDataCategoryId: string;
   location: Array<string>;
-  companyId: string;
+  companyId?: string;
   year: number;
   quarter?: number;
   month?: number;

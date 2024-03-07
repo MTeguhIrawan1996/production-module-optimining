@@ -231,7 +231,7 @@ const CreateMapYearlyProductionBook = () => {
         location: location,
         year: Number(year),
         fileId: fileId || '',
-        companyId: companyId,
+        companyId: companyId === '' ? undefined : companyId,
       },
     });
   };

@@ -243,7 +243,7 @@ const CreateMapMonthlyProductionBook = () => {
         year: Number(year),
         month: Number(month),
         fileId: fileId || '',
-        companyId: companyId,
+        companyId: companyId === '' ? undefined : companyId,
       },
     });
   };
