@@ -26,6 +26,8 @@ import {
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { IElementsData, InputControllerNativeProps } from '@/types/global';
 
@@ -45,6 +47,13 @@ const StockpileBook = () => {
   const [year, setYear] = React.useState<number | null>(null);
   const [month, setMonth] = React.useState<number | null>(null);
   const [week, setWeek] = React.useState<number | null>(null);
+
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionUpdate = permissions?.includes(
+    'update-monitoring-stockpile'
+  );
+  const isPermissionRead = permissions?.includes('read-monitoring-stockpile');
 
   /* #   /**=========== Query =========== */
   const { elementsData } = useReadAllElementMaster({
@@ -222,19 +231,25 @@ const StockpileBook = () => {
               title: t('commonTypography.action'),
               width: 100,
               render: ({ id, status }) => {
+                const isDetermination =
+                  status?.id === `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`;
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/quality-control-management/stockpile-monitoring/read/${id}`
-                        );
-                      },
-                    }}
+                    width={isDetermination ? 160 : 120}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/quality-control-management/stockpile-monitoring/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
                     actionOther={
-                      status?.id ===
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isDetermination
                         ? {
                             label: 'createSample',
                             icon: (
@@ -252,8 +267,7 @@ const StockpileBook = () => {
                         : undefined
                     }
                     actionUpdate={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionUpdate && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -283,7 +297,12 @@ const StockpileBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monitoringStockpilesData, monitoringStockpilesDataLoading]);
+  }, [
+    monitoringStockpilesData,
+    monitoringStockpilesDataLoading,
+    isPermissionRead,
+    isPermissionUpdate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (

@@ -22,6 +22,8 @@ import {
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -43,6 +45,13 @@ const ShippingMonitoringBook = () => {
   const [week, setWeek] = React.useState<number | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionCreate = permissions?.includes('create-monitoring-barging');
+  const isPermissionUpdate = permissions?.includes('update-monitoring-barging');
+  const isPermissionDelete = permissions?.includes('delete-monitoring-barging');
+  const isPermissionRead = permissions?.includes('read-monitoring-barging');
 
   /* #   /**=========== Query =========== */
   const {
@@ -187,19 +196,24 @@ const ShippingMonitoringBook = () => {
               title: t('commonTypography.action'),
               width: 100,
               render: ({ id, status }) => {
+                const isDetermination =
+                  status?.id === `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`;
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/quality-control-management/shipping-monitoring/read/${id}`
-                        );
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/quality-control-management/shipping-monitoring/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
                     actionUpdate={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionUpdate && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -211,8 +225,7 @@ const ShippingMonitoringBook = () => {
                         : undefined
                     }
                     actionDelete={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionDelete && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -230,13 +243,15 @@ const ShippingMonitoringBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('shippingMonitoring.createShippingMonitoring'),
-            onClick: () =>
-              router.push(
-                '/input-data/quality-control-management/shipping-monitoring/create'
-              ),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('shippingMonitoring.createShippingMonitoring'),
+                onClick: () =>
+                  router.push(
+                    '/input-data/quality-control-management/shipping-monitoring/create'
+                  ),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -248,18 +263,29 @@ const ShippingMonitoringBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monitoringBargingData, monitoringBargingDataLoading]);
+  }, [
+    monitoringBargingData,
+    monitoringBargingDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('shippingMonitoring.createShippingMonitoring'),
-        onClick: () =>
-          router.push(
-            '/input-data/quality-control-management/shipping-monitoring/create'
-          ),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('shippingMonitoring.createShippingMonitoring'),
+              onClick: () =>
+                router.push(
+                  '/input-data/quality-control-management/shipping-monitoring/create'
+                ),
+            }
+          : undefined
+      }
       filterDateWithSelect={{
         colSpan: 5,
         items: filter,

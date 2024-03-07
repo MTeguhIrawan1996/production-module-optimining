@@ -16,6 +16,8 @@ import {
 import { useDeleteSampleHouseLab } from '@/services/graphql/mutation/sample-house-lab/useDeleteSampleHouseLab';
 import { useReadAllSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadAllSampleHouseLab';
 import { formatDate } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const SampleHouseLabBook = () => {
   const router = useRouter();
@@ -26,6 +28,19 @@ const SampleHouseLabBook = () => {
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionCreate = permissions?.includes(
+    'create-house-sample-and-lab'
+  );
+  const isPermissionUpdate = permissions?.includes(
+    'update-house-sample-and-lab'
+  );
+  const isPermissionDelete = permissions?.includes(
+    'delete-house-sample-and-lab'
+  );
+  const isPermissionRead = permissions?.includes('read-house-sample-and-lab');
 
   /* #   /**=========== Query =========== */
 
@@ -143,19 +158,24 @@ const SampleHouseLabBook = () => {
               title: t('commonTypography.action'),
               width: 100,
               render: ({ id, status }) => {
+                const isDetermination =
+                  status?.id === `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`;
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/quality-control-management/sample-house-lab/read/${id}`
-                        );
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/quality-control-management/sample-house-lab/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
                     actionUpdate={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionUpdate && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -167,8 +187,7 @@ const SampleHouseLabBook = () => {
                         : undefined
                     }
                     actionDelete={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionDelete && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -186,13 +205,15 @@ const SampleHouseLabBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('sampleHouseLab.createSample'),
-            onClick: () =>
-              router.push(
-                '/input-data/quality-control-management/sample-house-lab/create'
-              ),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('sampleHouseLab.createSample'),
+                onClick: () =>
+                  router.push(
+                    '/input-data/quality-control-management/sample-house-lab/create'
+                  ),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -204,18 +225,29 @@ const SampleHouseLabBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [houseSampleAndLabsData, houseSampleAndLabsDataLoading]);
+  }, [
+    houseSampleAndLabsData,
+    houseSampleAndLabsDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('sampleHouseLab.createSample'),
-        onClick: () =>
-          router.push(
-            '/input-data/quality-control-management/sample-house-lab/create'
-          ),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('sampleHouseLab.createSample'),
+              onClick: () =>
+                router.push(
+                  '/input-data/quality-control-management/sample-house-lab/create'
+                ),
+            }
+          : undefined
+      }
       searchBar={{
         placeholder: t('sampleHouseLab.searchPlaceholder'),
         onChange: (e) => {
