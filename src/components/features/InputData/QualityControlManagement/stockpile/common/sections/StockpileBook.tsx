@@ -67,7 +67,7 @@ const StockpileBook = () => {
       limit: 15,
       orderDir: 'desc',
       search: stockpileNameSearchQuery === '' ? null : stockpileNameSearchQuery,
-      categoryId: `${process.env.NEXT_PUBLIC_STOCKPILE_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_STOCKPILE_ID}`],
     },
   });
 

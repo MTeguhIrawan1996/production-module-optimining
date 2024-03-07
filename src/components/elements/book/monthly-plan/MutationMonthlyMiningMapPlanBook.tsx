@@ -154,7 +154,7 @@ const MutationMonthlyMiningMapPlanBook = ({
       label: 'location',
       key: `${obj.miningMapPlanId}.locationId.${index}`,
       disabled: !newLocationCategoryId,
-      categoryId: newLocationCategoryId || null,
+      categoryIds: newLocationCategoryId ? [newLocationCategoryId] : null,
       limit: null,
       skipQuery: tabs !== 'miningMapPlan',
     });

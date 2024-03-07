@@ -9,7 +9,7 @@ export const READ_ALL_LOCATION_SELECT = gql`
     $search: String
     $orderBy: String
     $orderDir: String
-    $categoryId: String
+    $categoryIds: [String!]
   ) {
     allLocations(
       findAllLocationInput: {
@@ -18,7 +18,7 @@ export const READ_ALL_LOCATION_SELECT = gql`
         search: $search
         orderBy: $orderBy
         orderDir: $orderDir
-        categoryId: $categoryId
+        categoryIds: $categoryIds
       }
     ) {
       meta {
@@ -55,7 +55,7 @@ interface ILocationSelectResponse {
 }
 
 interface IAllLocationsRequest extends Partial<IGlobalMetaRequest> {
-  categoryId?: string | null;
+  categoryIds?: string[] | null;
 }
 
 export const useReadAllLocationselect = ({

@@ -274,7 +274,7 @@ const UpdateFrontProductionBook = () => {
       name: 'frontId',
       label: 'front',
       withAsterisk: true,
-      categoryId: `${process.env.NEXT_PUBLIC_FRONT_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_FRONT_ID}`],
       defaultValue: frontData?.front?.id,
       labelValue: frontData?.front?.name ?? '',
     });
@@ -317,7 +317,7 @@ const UpdateFrontProductionBook = () => {
       name: 'gridId',
       label: 'grid',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_GRID_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_GRID_ID}`],
       defaultValue: frontData?.grid?.id,
       labelValue: frontData?.grid?.name,
     });
@@ -326,7 +326,7 @@ const UpdateFrontProductionBook = () => {
       name: 'elevationId',
       label: 'elevation',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_ELEVASI_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_ELEVASI_ID}`],
       defaultValue: frontData?.elevation?.id,
       labelValue: frontData?.elevation?.name,
     });

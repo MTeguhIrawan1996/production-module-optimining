@@ -217,7 +217,7 @@ const CreateWeatherProductionBook = () => {
       label: 'location',
       withAsterisk: true,
       disabled: !newLocationCategoryId,
-      categoryId: locationCategoryId,
+      categoryIds: locationCategoryId ? [locationCategoryId] : null,
     });
 
     const desc = globalText({
