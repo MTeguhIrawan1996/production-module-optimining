@@ -9,11 +9,18 @@ import {
   IHeavyEquipmentClassModel,
   useReadOneHeavyEquipmentClass,
 } from '@/services/graphql/query/heavy-equipment-class/useReadOneHeavyEquipmentClass';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const ReadHEavyEquipmentClassBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
+
+  const isPermissionUpdate = permissions?.includes(
+    'update-heavy-equipment-class'
+  );
 
   /* #   /**=========== Query =========== */
   const { heavyEquipmentClassData, heavyEquipmentClassDataLoading } =
@@ -39,11 +46,15 @@ const ReadHEavyEquipmentClassBook = () => {
   return (
     <DashboardCard
       title={t('heavyEquipmentClass.heavyEquipmentClassTitle')}
-      updateButton={{
-        label: 'Edit',
-        onClick: () =>
-          router.push(`/reference/heavy-equipment-class/update/${id}`),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () =>
+                router.push(`/reference/heavy-equipment-class/update/${id}`),
+            }
+          : undefined
+      }
       titleStyle={{
         fw: 700,
         fz: 30,
