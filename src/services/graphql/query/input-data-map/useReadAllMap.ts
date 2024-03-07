@@ -12,6 +12,10 @@ export const READ_ALL_MAP = gql`
     $dateType: MapDataDate!
     $mapDataCategoryId: String
     $mapDataLocationId: String
+    $year: Float
+    $week: Float
+    $month: Float
+    $quarter: Float
   ) {
     mapDatas(
       input: {
@@ -23,6 +27,10 @@ export const READ_ALL_MAP = gql`
         dateType: $dateType
         mapDataCategoryId: $mapDataCategoryId
         mapDataLocationId: $mapDataLocationId
+        year: $year
+        week: $week
+        month: $month
+        quarter: $quarter
       }
     ) {
       data {
@@ -38,6 +46,10 @@ export const READ_ALL_MAP = gql`
           locationId
           name
           category
+        }
+        mapDataCategory {
+          id
+          name
         }
       }
       additional
@@ -60,11 +72,11 @@ export interface IMapData {
   quarter: string;
   month: string;
   week: string;
-  mapDataLocation: {
+  mapDataLocation: Array<{
     locationId: string;
     name: string;
     category: string;
-  };
+  }>;
   mapDataCategory: {
     id: string;
     name: string;
@@ -75,12 +87,22 @@ interface IMapDataResponse {
   mapDatas: GResponse<IMapData>;
 }
 
+interface IMapDataRequest extends IGlobalMetaRequest {
+  dateType: 'YEAR' | 'QUARTER' | 'MONTH' | 'WEEK';
+  mapDataCategoryId?: string;
+  mapDataLocationId?: string;
+  year?: number;
+  week?: number;
+  month?: number;
+  quarter?: number;
+}
+
 export const useReadAllMap = ({
   variables,
   onCompleted,
   skip,
 }: {
-  variables?: Partial<IGlobalMetaRequest>;
+  variables?: Partial<IMapDataRequest>;
   onCompleted?: (data: IMapDataResponse) => void;
   skip?: boolean;
 }) => {

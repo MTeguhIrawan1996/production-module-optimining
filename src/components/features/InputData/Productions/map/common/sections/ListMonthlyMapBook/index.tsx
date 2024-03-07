@@ -1,34 +1,77 @@
+import { Badge } from '@mantine/core';
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { match } from 'ts-pattern';
 
 import {
   DashboardCard,
-  GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
 
-import { globalSelectNative } from '@/utils/constants/Field/native-field';
-import { formatDate } from '@/utils/helper/dateFormat';
+import { useReadAllMap } from '@/services/graphql/query/input-data-map/useReadAllMap';
+import { useReadAllMapCategory } from '@/services/graphql/query/input-data-map/useReadAllMapCategory';
+import {
+  globalSelectLocationNative,
+  globalSelectMonthNative,
+  globalSelectNative,
+  globalSelectYearNative,
+} from '@/utils/constants/Field/native-field';
 
 import { InputControllerNativeProps } from '@/types/global';
 
 const ListMonthlyMapBook = () => {
   const router = useRouter();
   const page = Number(router.query['monthlyMapPage']) || 1;
-  const url = `/input-data/map?monthlyMapPage=${page}&tabs=monthly`;
+  const url = `/input-data/production/map?monthlyMapPage=${page}&tabs=monthly`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const { t } = useTranslation('default');
+  const [mapCategory, setMapCategory] = React.useState<string | undefined>(
+    undefined
+  );
+  const [year, setYear] = React.useState<string | undefined>(undefined);
+  const [month, setMonth] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+  const { mapData, mapMeta, mapDataLoading } = useReadAllMap({
+    variables: {
+      page: page,
+      limit: 10,
+      search: searchQuery === '' ? null : searchQuery,
+      dateType: 'MONTH',
+      mapDataCategoryId: mapCategory,
+      year: Number(year),
+      month: Number(month),
+    },
+    skip: false,
+  });
+  const [mapCategoryList, setMapCategoryList] = React.useState<
+    Array<{
+      label: string;
+      value: string;
+    }>
+  >([]);
 
-  const [monthlyMapSearchTerm, setMonthlyMapSearchTerm] =
-    React.useState<string>('');
+  useReadAllMapCategory({
+    variables: {
+      limit: 100,
+    },
+    onCompleted: (data) => {
+      setMapCategoryList(
+        data?.mapDataCategories.data.map((item) => {
+          return {
+            label: item.name,
+            value: item.id,
+          };
+        }) || []
+      );
+    },
+  });
 
   const handleDelete = async () => {
     notifications.show({
@@ -40,7 +83,7 @@ const ListMonthlyMapBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/map?monthlyMapPage=${page}&tabs=barging`;
+    const urlSet = `/input-data/production/map?monthlyMapPage=${page}&tabs=monthly`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
@@ -49,40 +92,32 @@ const ListMonthlyMapBook = () => {
       placeholder: 'chooseMapType',
       label: 'mapType',
       searchable: false,
-      data: [],
-      onChange: () => {
-        router.push(url, undefined, { shallow: true });
+      data: mapCategoryList,
+      onChange: (v) => {
+        setMapCategory(v || undefined);
       },
     });
-    const locationItem = globalSelectNative({
-      placeholder: 'location',
+    const locationItem = globalSelectLocationNative({
       label: 'location',
-      searchable: false,
-      data: [],
+      searchable: true,
       onChange: () => {
         router.push(url, undefined, { shallow: true });
       },
     });
-    const yearItem = globalSelectNative({
+    const yearItem = globalSelectYearNative({
       placeholder: 'year',
       label: 'year',
       searchable: true,
-      data: [],
-      onSearchChange: setMonthlyMapSearchTerm,
-      searchValue: monthlyMapSearchTerm,
-      onChange: () => {
-        router.push(url, undefined, { shallow: true });
+      onChange: (v) => {
+        setYear(v || undefined);
       },
     });
-    const monthItem = globalSelectNative({
+    const monthItem = globalSelectMonthNative({
       placeholder: 'month',
       label: 'month',
       searchable: true,
-      data: [],
-      onSearchChange: setMonthlyMapSearchTerm,
-      searchValue: monthlyMapSearchTerm,
-      onChange: () => {
-        router.push(url, undefined, { shallow: true });
+      onChange: (v) => {
+        setMonth(v || undefined);
       },
     });
 
@@ -94,7 +129,7 @@ const ListMonthlyMapBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+  }, [url, mapCategoryList]);
 
   return (
     <DashboardCard
@@ -119,8 +154,8 @@ const ListMonthlyMapBook = () => {
     >
       <MantineDataTable
         tableProps={{
-          records: [],
-          fetching: false,
+          records: mapData,
+          fetching: mapDataLoading,
           highlightOnHover: true,
           columns: [
             {
@@ -129,18 +164,18 @@ const ListMonthlyMapBook = () => {
               width: 60,
             },
             {
-              accessor: 'date',
+              accessor: 'name',
               title: `${t('commonTypography.name')} ${t(
                 'commonTypography.map'
               )}`,
               width: 160,
-              render: ({ date }) => formatDate(date) ?? '-',
             },
             {
-              accessor: 'shift',
+              accessor: 'type',
               title: `${t('commonTypography.type')} ${t(
                 'commonTypography.map'
               )}`,
+              render: (v) => v.mapDataCategory.name,
             },
             {
               accessor: 'year',
@@ -153,14 +188,33 @@ const ListMonthlyMapBook = () => {
             {
               accessor: 'location',
               title: t('commonTypography.location'),
-              render: ({ fromAt }) => formatDate(fromAt, 'hh:mm:ss A') ?? '-',
+              render: (v) =>
+                v.mapDataLocation.map((e) => (
+                  <Badge key={e.locationId}>{e.name}</Badge>
+                )),
             },
             {
               accessor: 'status',
               title: t('commonTypography.status'),
-              render: () => {
-                return <GlobalBadgeStatus color="red" label="" />;
-              },
+              render: (v) =>
+                match(v.status)
+                  .with('WAITING_FOR_CONFIRMATION', () => (
+                    <Badge color="orange">
+                      {t('commonTypography.waitingForConfirmation')}
+                    </Badge>
+                  ))
+                  .with('VALID', () => (
+                    <Badge color="green">{t('commonTypography.valid')}</Badge>
+                  ))
+                  .with('INVALID', () => (
+                    <Badge color="red">{t('commonTypography.notValid')}</Badge>
+                  ))
+                  .with('ACCEPTED', () => (
+                    <Badge color="red">{t('commonTypography.accepted')}</Badge>
+                  ))
+                  .otherwise(() => (
+                    <Badge color="gray">{t('commonTypography.unknown')}</Badge>
+                  )),
             },
             {
               accessor: 'action',
@@ -193,9 +247,9 @@ const ListMonthlyMapBook = () => {
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: 0,
-          totalData: 0,
-          totalPage: 0,
+          totalAllData: mapMeta?.totalAllData ?? 0,
+          totalData: mapMeta?.totalData ?? 0,
+          totalPage: mapMeta?.totalPage ?? 0,
         }}
       />
       <ModalConfirmation
@@ -218,14 +272,6 @@ const ListMonthlyMapBook = () => {
         }}
         withDivider
       />
-      {/* <SelectionButtonModal
-        isOpenSelectionModal={isOpenSelectionModal}
-        actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
-        firstButton={{
-          label: t('commonTypography.inputDataRitage'),
-          onClick: () => router.push('/input-data/production/map/create'),
-        }}
-      /> */}
     </DashboardCard>
   );
 };

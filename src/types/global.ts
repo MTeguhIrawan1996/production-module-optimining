@@ -23,6 +23,7 @@ import { IImageInputDropzoneRhfProps } from '@/components/elements/input/ImageIn
 import { IInputAverageArrayProps } from '@/components/elements/input/InputAverageArray';
 import { IInputSumArrayProps } from '@/components/elements/input/InputSumArray';
 import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
+import { ILocationNativeProps } from '@/components/elements/input/LocationSelectInputNative';
 import { ILocationSelectInputRhfProps } from '@/components/elements/input/LocationSelectInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import { IMaterialSelectInputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
@@ -162,7 +163,8 @@ export type InputControllerNativeProps =
   | ISelectHeavyEquipmentNativeProps
   | IStatusNativeProps
   | ICompanyNativeProps
-  | ISelectWeekNativeProps;
+  | ISelectWeekNativeProps
+  | ILocationNativeProps;
 
 export type ControllerGroup = {
   group: string;

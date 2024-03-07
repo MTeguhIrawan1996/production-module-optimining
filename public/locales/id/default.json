@@ -463,7 +463,10 @@
     "chooseMapType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.map) $t(commonTypography.type)",
     "quarterly": "Triwulan",
     "mapInformation": "Informasi Peta",
-    "yearly": "Tahunan"
+    "yearly": "Tahunan",
+    "waitingForConfirmation": "Menunggu Konfirmasi",
+    "valid": "Valid",
+    "accepted": "Diterima"
   },
   "sideBar": {
     "dashboard": "Dashboard",

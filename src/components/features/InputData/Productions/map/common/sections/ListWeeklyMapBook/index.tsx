@@ -1,34 +1,77 @@
+import { Badge } from '@mantine/core';
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { match } from 'ts-pattern';
 
 import {
   DashboardCard,
-  GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
 
-import { globalSelectNative } from '@/utils/constants/Field/native-field';
-import { formatDate } from '@/utils/helper/dateFormat';
+import { useReadAllMap } from '@/services/graphql/query/input-data-map/useReadAllMap';
+import { useReadAllMapCategory } from '@/services/graphql/query/input-data-map/useReadAllMapCategory';
+import {
+  globalSelectLocationNative,
+  globalSelectNative,
+  globalSelectWeekNative,
+  globalSelectYearNative,
+} from '@/utils/constants/Field/native-field';
 
 import { InputControllerNativeProps } from '@/types/global';
 
 const ListWeeklyMapBook = () => {
   const router = useRouter();
   const page = Number(router.query['weeklyMapPage']) || 1;
-  const url = `/input-data/map?weeklyMapPage=${page}&tabs=weekly`;
+  const url = `/input-data/production/map?weeklyMapPage=${page}&tabs=weekly`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const { t } = useTranslation('default');
+  const [mapCategory, setMapCategory] = React.useState<string | undefined>(
+    undefined
+  );
+  const [year, setYear] = React.useState<string | undefined>(undefined);
+  const [week, setWeek] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+  const { mapData, mapMeta, mapDataLoading } = useReadAllMap({
+    variables: {
+      page: page,
+      limit: 10,
+      search: searchQuery === '' ? null : searchQuery,
+      dateType: 'WEEK',
+      mapDataCategoryId: mapCategory,
+      year: Number(year),
+      week: Number(week),
+    },
+    skip: false,
+  });
+  const [mapCategoryList, setMapCategoryList] = React.useState<
+    Array<{
+      label: string;
+      value: string;
+    }>
+  >([]);
 
-  const [weeklyMapSearchTerm, setWeeklyMapSearchTerm] =
-    React.useState<string>('');
+  useReadAllMapCategory({
+    variables: {
+      limit: 100,
+    },
+    onCompleted: (data) => {
+      setMapCategoryList(
+        data?.mapDataCategories.data.map((item) => {
+          return {
+            label: item.name,
+            value: item.id,
+          };
+        }) || []
+      );
+    },
+  });
 
   const handleDelete = async () => {
     notifications.show({
@@ -40,7 +83,7 @@ const ListWeeklyMapBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/map?weeklyMapPage=${page}&tabs=barging`;
+    const urlSet = `/input-data/production/map?weeklyMapPage=${page}&tabs=weekly`;
     router.push(urlSet, undefined, { shallow: true });
   };
 
@@ -49,40 +92,32 @@ const ListWeeklyMapBook = () => {
       placeholder: 'chooseMapType',
       label: 'mapType',
       searchable: false,
-      data: [],
-      onChange: () => {
-        router.push(url, undefined, { shallow: true });
+      data: mapCategoryList,
+      onChange: (v) => {
+        setMapCategory(v || undefined);
       },
     });
-    const locationItem = globalSelectNative({
-      placeholder: 'location',
+    const locationItem = globalSelectLocationNative({
       label: 'location',
-      searchable: false,
-      data: [],
+      searchable: true,
       onChange: () => {
         router.push(url, undefined, { shallow: true });
       },
     });
-    const yearItem = globalSelectNative({
+    const yearItem = globalSelectYearNative({
       placeholder: 'year',
       label: 'year',
       searchable: true,
-      data: [],
-      onSearchChange: setWeeklyMapSearchTerm,
-      searchValue: weeklyMapSearchTerm,
-      onChange: () => {
-        router.push(url, undefined, { shallow: true });
+      onChange: (v) => {
+        setYear(v || undefined);
       },
     });
-    const weekItem = globalSelectNative({
+    const weekItem = globalSelectWeekNative({
       placeholder: 'week',
       label: 'week',
       searchable: true,
-      data: [],
-      onSearchChange: setWeeklyMapSearchTerm,
-      searchValue: weeklyMapSearchTerm,
-      onChange: () => {
-        router.push(url, undefined, { shallow: true });
+      onChange: (v) => {
+        setWeek(v || undefined);
       },
     });
 
@@ -94,7 +129,7 @@ const ListWeeklyMapBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+  }, [url, mapCategoryList]);
 
   return (
     <DashboardCard
@@ -119,8 +154,8 @@ const ListWeeklyMapBook = () => {
     >
       <MantineDataTable
         tableProps={{
-          records: [],
-          fetching: false,
+          records: mapData,
+          fetching: mapDataLoading,
           highlightOnHover: true,
           columns: [
             {
@@ -129,18 +164,18 @@ const ListWeeklyMapBook = () => {
               width: 60,
             },
             {
-              accessor: 'date',
+              accessor: 'name',
               title: `${t('commonTypography.name')} ${t(
                 'commonTypography.map'
               )}`,
               width: 160,
-              render: ({ date }) => formatDate(date) ?? '-',
             },
             {
-              accessor: 'shift',
+              accessor: 'type',
               title: `${t('commonTypography.type')} ${t(
                 'commonTypography.map'
               )}`,
+              render: (v) => v.mapDataCategory.name,
             },
             {
               accessor: 'year',
@@ -153,14 +188,33 @@ const ListWeeklyMapBook = () => {
             {
               accessor: 'location',
               title: t('commonTypography.location'),
-              render: ({ fromAt }) => formatDate(fromAt, 'hh:mm:ss A') ?? '-',
+              render: (v) =>
+                v.mapDataLocation.map((e) => (
+                  <Badge key={e.locationId}>{e.name}</Badge>
+                )),
             },
             {
               accessor: 'status',
               title: t('commonTypography.status'),
-              render: () => {
-                return <GlobalBadgeStatus color="red" label="" />;
-              },
+              render: (v) =>
+                match(v.status)
+                  .with('WAITING_FOR_CONFIRMATION', () => (
+                    <Badge color="orange">
+                      {t('commonTypography.waitingForConfirmation')}
+                    </Badge>
+                  ))
+                  .with('VALID', () => (
+                    <Badge color="green">{t('commonTypography.valid')}</Badge>
+                  ))
+                  .with('INVALID', () => (
+                    <Badge color="red">{t('commonTypography.notValid')}</Badge>
+                  ))
+                  .with('ACCEPTED', () => (
+                    <Badge color="red">{t('commonTypography.accepted')}</Badge>
+                  ))
+                  .otherwise(() => (
+                    <Badge color="gray">{t('commonTypography.unknown')}</Badge>
+                  )),
             },
             {
               accessor: 'action',
@@ -193,9 +247,9 @@ const ListWeeklyMapBook = () => {
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: 0,
-          totalData: 0,
-          totalPage: 0,
+          totalAllData: mapMeta?.totalAllData ?? 0,
+          totalData: mapMeta?.totalData ?? 0,
+          totalPage: mapMeta?.totalPage ?? 0,
         }}
       />
       <ModalConfirmation
@@ -218,14 +272,6 @@ const ListWeeklyMapBook = () => {
         }}
         withDivider
       />
-      {/* <SelectionButtonModal
-        isOpenSelectionModal={isOpenSelectionModal}
-        actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
-        firstButton={{
-          label: t('commonTypography.inputDataRitage'),
-          onClick: () => router.push('/input-data/production/map/create'),
-        }}
-      /> */}
     </DashboardCard>
   );
 };
