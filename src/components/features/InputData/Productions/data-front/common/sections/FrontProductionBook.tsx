@@ -16,6 +16,8 @@ import {
 
 import { useDeleteFrontProduction } from '@/services/graphql/mutation/front-production/useDeleteFrontProduction';
 import { useReadAllFrontProduction } from '@/services/graphql/query/front-production/useReadAllFrontProduction';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 const FrontProductionBook = () => {
   const router = useRouter();
@@ -27,9 +29,15 @@ const FrontProductionBook = () => {
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
-  // const [segmented, setSegmented] = React.useState<string>('pit');
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
+
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionCreate = permissions?.includes('create-front-data');
+  const isPermissionUpdate = permissions?.includes('update-front-data');
+  const isPermissionDelete = permissions?.includes('delete-front-data');
+  const isPermissionRead = permissions?.includes('read-front-data');
 
   /* #   /**=========== Query =========== */
   const {
@@ -123,19 +131,24 @@ const FrontProductionBook = () => {
               title: t('commonTypography.action'),
               width: 100,
               render: ({ id, status }) => {
+                const isDetermination =
+                  status?.id === `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`;
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/production/data-front/read/${id}`
-                        );
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/data-front/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
                     actionUpdate={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionUpdate && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -147,8 +160,7 @@ const FrontProductionBook = () => {
                         : undefined
                     }
                     actionDelete={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionDelete && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -166,10 +178,12 @@ const FrontProductionBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('frontProduction.createFrontProduction'),
-            onClick: () => setIsOpenSelectionModal((prev) => !prev),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('frontProduction.createFrontProduction'),
+                onClick: () => setIsOpenSelectionModal((prev) => !prev),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -181,15 +195,26 @@ const FrontProductionBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [frontProductionData, frontProductionDataLoading]);
+  }, [
+    frontProductionData,
+    frontProductionDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('frontProduction.createFrontProduction'),
-        onClick: () => setIsOpenSelectionModal((prev) => !prev),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('frontProduction.createFrontProduction'),
+              onClick: () => setIsOpenSelectionModal((prev) => !prev),
+            }
+          : undefined
+      }
       searchBar={{
         placeholder: `${t('frontProduction.searchPlaceholder')} ${(
           segment as string

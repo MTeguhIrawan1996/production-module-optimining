@@ -26,6 +26,8 @@ import {
 } from '@/utils/constants/Field/native-field';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -56,6 +58,13 @@ const ListDataQuarryRitageBook = () => {
   const [heavyEquipmentId, setHeavyEquipmentId] = React.useState<string | null>(
     null
   );
+
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionCreate = permissions?.includes('create-quarry-ritage');
+  const isPermissionUpdate = permissions?.includes('update-quarry-ritage');
+  const isPermissionDelete = permissions?.includes('delete-quarry-ritage');
+  const isPermissionRead = permissions?.includes('read-quarry-ritage');
 
   /* #   /**=========== Query =========== */
   const { shiftsData } = useReadAllShiftMaster({
@@ -309,19 +318,24 @@ const ListDataQuarryRitageBook = () => {
               title: t('commonTypography.action'),
               width: 100,
               render: ({ id, status }) => {
+                const isDetermination =
+                  status?.id === `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`;
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/production/data-ritage/quarry/read/${id}`
-                        );
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/data-ritage/quarry/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
                     actionUpdate={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionUpdate && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -333,8 +347,7 @@ const ListDataQuarryRitageBook = () => {
                         : undefined
                     }
                     actionDelete={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionDelete && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -352,10 +365,12 @@ const ListDataQuarryRitageBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('ritageQuarry.createRitageQuarry'),
-            onClick: () => setIsOpenSelectionModal((prev) => !prev),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('ritageQuarry.createRitageQuarry'),
+                onClick: () => setIsOpenSelectionModal((prev) => !prev),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -367,15 +382,26 @@ const ListDataQuarryRitageBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quarryRitagesData, quarryRitagesDataLoading]);
+  }, [
+    quarryRitagesData,
+    quarryRitagesDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('ritageQuarry.createRitageQuarry'),
-        onClick: () => setIsOpenSelectionModal((prev) => !prev),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('ritageQuarry.createRitageQuarry'),
+              onClick: () => setIsOpenSelectionModal((prev) => !prev),
+            }
+          : undefined
+      }
       filterDateWithSelect={{
         colSpan: 4,
         items: filter,

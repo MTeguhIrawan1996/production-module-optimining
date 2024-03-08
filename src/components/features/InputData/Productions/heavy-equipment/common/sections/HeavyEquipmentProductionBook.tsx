@@ -18,6 +18,8 @@ import { useDeleteHeavyEquipmentProduction } from '@/services/graphql/mutation/h
 import { useReadAllHeavyEquipmentProduction } from '@/services/graphql/query/heavy-equipment-production/useReadAllHeavyEquipmentProduction';
 import { globalDateNative } from '@/utils/constants/Field/native-field';
 import { formatDate } from '@/utils/helper/dateFormat';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -33,6 +35,19 @@ const HeavyEquipmentProductionBook = () => {
     React.useState<boolean>(false);
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
+
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionCreate = permissions?.includes(
+    'create-heavy-equipment-data'
+  );
+  const isPermissionUpdate = permissions?.includes(
+    'update-heavy-equipment-data'
+  );
+  const isPermissionDelete = permissions?.includes(
+    'delete-heavy-equipment-data'
+  );
+  const isPermissionRead = permissions?.includes('read-heavy-equipment-data');
 
   /* #   /**=========== Query =========== */
   const {
@@ -171,19 +186,24 @@ const HeavyEquipmentProductionBook = () => {
               title: t('commonTypography.action'),
               width: 100,
               render: ({ id, status }) => {
+                const isDetermination =
+                  status?.id === `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`;
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/production/data-heavy-equipment/read/${id}`
-                        );
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/data-heavy-equipment/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
                     actionUpdate={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionUpdate && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -195,8 +215,7 @@ const HeavyEquipmentProductionBook = () => {
                         : undefined
                     }
                     actionDelete={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionDelete && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -214,11 +233,15 @@ const HeavyEquipmentProductionBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('heavyEquipmentProd.createHeavyEquipmentProd'),
-            onClick: () =>
-              router.push('/input-data/production/data-heavy-equipment/create'),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('heavyEquipmentProd.createHeavyEquipmentProd'),
+                onClick: () =>
+                  router.push(
+                    '/input-data/production/data-heavy-equipment/create'
+                  ),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -230,15 +253,26 @@ const HeavyEquipmentProductionBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [heavyEquipmentData, heavyEquipmentDataLoading]);
+  }, [
+    heavyEquipmentData,
+    heavyEquipmentDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('heavyEquipmentProd.createHeavyEquipmentProd'),
-        onClick: () => setIsOpenSelectionModal((prev) => !prev),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('heavyEquipmentProd.createHeavyEquipmentProd'),
+              onClick: () => setIsOpenSelectionModal((prev) => !prev),
+            }
+          : undefined
+      }
       filterDateWithSelect={{
         colSpan: 3,
         items: filter,
