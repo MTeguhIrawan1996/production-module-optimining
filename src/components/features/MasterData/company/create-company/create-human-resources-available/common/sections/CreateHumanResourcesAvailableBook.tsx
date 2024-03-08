@@ -33,6 +33,7 @@ const CreateHumanResourcesAvailableBook = () => {
     nonEmployeedHumanResourcesData,
     nonEmployeedHumanResourcesDataLoading,
     nonEmployeedHumanResourcesDataMeta,
+    refetchNonEmployeedHumanResources,
   } = useReadAllNonEmployeedHumanResourcesMasterData({
     variables: {
       limit: 10,
@@ -228,6 +229,9 @@ const CreateHumanResourcesAvailableBook = () => {
           searchQuery,
           onSearch: () => {
             setPage(1);
+            refetchNonEmployeedHumanResources({
+              page: 1,
+            });
           },
         }}
       >
