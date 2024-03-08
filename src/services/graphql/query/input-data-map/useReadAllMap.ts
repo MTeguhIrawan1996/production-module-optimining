@@ -67,7 +67,11 @@ export interface IMapData {
   id: string;
   name: string;
   dateType: string;
-  status: 'WAITING_FOR_CONFIRMATION' | 'VALID' | 'INVALID' | 'ACCEPTED';
+  status:
+    | 'WAITING_FOR_CONFIRMATION'
+    | 'WAITING_FOR_VALIDATION'
+    | 'INVALID'
+    | 'DETERMINED';
   year: string;
   quarter: string;
   month: string;
@@ -117,7 +121,7 @@ export const useReadAllMap = ({
       return err;
     },
     onCompleted,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   });
 
   return {

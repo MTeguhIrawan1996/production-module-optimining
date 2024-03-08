@@ -1,5 +1,6 @@
 import { TabsValue } from '@mantine/core';
 import { useRouter } from 'next/router';
+import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
@@ -16,6 +17,7 @@ import ListYearlyMapBook from './sections/ListYearlyMapBook';
 const MapProductionPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
+  const [_, setTabs] = useQueryState('tabs');
 
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
@@ -34,8 +36,7 @@ const MapProductionPage = () => {
   }, [router]);
 
   const handleChangeTab = (tabs: TabsValue) => {
-    const url = `/input-data/production/map?tabs=${tabs}`;
-    router.push(url, undefined, { shallow: true });
+    setTabs(tabs);
   };
 
   return (

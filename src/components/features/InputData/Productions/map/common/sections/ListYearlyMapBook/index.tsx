@@ -1,47 +1,151 @@
-import { useDebouncedState } from '@mantine/hooks';
+import { Badge } from '@mantine/core';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
-import { IconCheck } from '@tabler/icons-react';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import {
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { match } from 'ts-pattern';
 
 import {
   DashboardCard,
-  GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
 
-import { globalSelectNative } from '@/utils/constants/Field/native-field';
-import { formatDate } from '@/utils/helper/dateFormat';
+import { useDeleteMap } from '@/services/graphql/mutation/input-data-map/useDeleteMap';
+import { useReadAllMap } from '@/services/graphql/query/input-data-map/useReadAllMap';
+import { useReadAllMapCategory } from '@/services/graphql/query/input-data-map/useReadAllMapCategory';
+import {
+  globalSelectLocationNative,
+  globalSelectNative,
+  globalSelectYearNative,
+} from '@/utils/constants/Field/native-field';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { InputControllerNativeProps } from '@/types/global';
 
+const locationIds = [
+  process.env.NEXT_PUBLIC_GRID_ID,
+  process.env.NEXT_PUBLIC_BLOCK_ID,
+  process.env.NEXT_PUBLIC_PIT_ID,
+];
+
 const ListYearlyMapBook = () => {
   const router = useRouter();
-  const page = Number(router.query['yearlyMapPage']) || 1;
-  const url = `/input-data/map?yearlyMapPage=${page}&tabs=yearly`;
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionCreate = permissions?.includes('create-map-data');
+  const isPermissionUpdate = permissions?.includes('update-map-data');
+  const isPermissionDelete = permissions?.includes('delete-map-data');
+  const isPermissionRead = permissions?.includes('read-map-data');
+
+  const [mapYearlyPage, setMapYearlyPage] = useQueryState(
+    'mapYearlyPage',
+    parseAsInteger
+  );
+  const [mapYearlyLocation, setMapYearlyLocation] = useQueryState(
+    'mapYearlyLocation',
+    parseAsString
+  );
+  const [mapYearlyYear, setMapYearlyYear] = useQueryState(
+    'mapYearlyYear',
+    parseAsString
+  );
+
+  const [mapYearlySearch, setMapYearlySearch] = useQueryState(
+    'mapYearlySearch',
+    parseAsString
+  );
+
+  const [searchQuery] = useDebouncedValue<string>(
+    (mapYearlySearch as string) || '',
+    500
+  );
+
   const { t } = useTranslation('default');
+  const [mapYearlyCategory, setMapYearlyCategory] = useQueryState(
+    'mapYearlyCategory',
+    parseAsString
+  );
+
+  const [id, setId] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+  const { mapData, mapMeta, mapDataLoading, refetchMap } = useReadAllMap({
+    variables: {
+      page: mapYearlyPage || 1,
+      limit: 10,
+      search: searchQuery === '' ? null : searchQuery,
+      dateType: 'YEAR',
+      mapDataCategoryId: mapYearlyCategory || undefined,
+      year: Number(mapYearlyYear) === 0 ? undefined : Number(mapYearlyYear),
+      mapDataLocationId: (mapYearlyLocation as string) || undefined,
+    },
+    skip: false,
+  });
 
-  const [yearlyMapSearchTerm, setYearlyMapSearchTerm] =
-    React.useState<string>('');
+  const [executeDelete, { loading }] = useDeleteMap({
+    onCompleted: () => {
+      refetchMap();
+      setIsOpenDeleteConfirmation((prev) => !prev);
+      notifications.show({
+        color: 'green',
+        title: 'Selamat',
+        message: t('location.successDeleteMessage'),
+        icon: <IconCheck />,
+      });
+    },
+    onError: ({ message }) => {
+      notifications.show({
+        color: 'red',
+        title: 'Gagal',
+        message: message,
+        icon: <IconX />,
+      });
+    },
+  });
+
+  const [mapCategoryList, setMapCategoryList] = React.useState<
+    Array<{
+      label: string;
+      value: string;
+    }>
+  >([]);
+
+  useReadAllMapCategory({
+    variables: {
+      limit: 100,
+    },
+    onCompleted: (data) => {
+      setMapCategoryList(
+        data?.mapDataCategories.data.map((item) => {
+          return {
+            label: item.name,
+            value: item.id,
+          };
+        }) || []
+      );
+    },
+  });
 
   const handleDelete = async () => {
-    notifications.show({
-      title: t('deleteSuccess'),
-      message: t('deleteSuccessMessage'),
-      color: 'teal',
-      icon: <IconCheck />,
+    await executeDelete({
+      variables: {
+        id: id as string,
+      },
     });
+    setId(undefined);
   };
-
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/map?yearlyMapPage=${page}&tabs=barging`;
-    router.push(urlSet, undefined, { shallow: true });
+    setMapYearlyPage(page);
   };
 
   const filter = React.useMemo(() => {
@@ -49,29 +153,27 @@ const ListYearlyMapBook = () => {
       placeholder: 'chooseMapType',
       label: 'mapType',
       searchable: false,
-      data: [],
-      onChange: () => {
-        router.push(url, undefined, { shallow: true });
+      data: mapCategoryList,
+      onChange: (v) => {
+        setMapYearlyCategory(v);
       },
+      value: mapYearlyCategory,
     });
-    const locationItem = globalSelectNative({
-      placeholder: 'location',
+    const locationItem = globalSelectLocationNative({
       label: 'location',
-      searchable: false,
-      data: [],
-      onChange: () => {
-        router.push(url, undefined, { shallow: true });
+      searchable: true,
+      onChange: (v) => {
+        setMapYearlyLocation(v);
       },
+      categoryIds: (locationIds as string[]) || [],
+      value: mapYearlyLocation,
     });
-    const yearItem = globalSelectNative({
+    const yearItem = globalSelectYearNative({
       placeholder: 'year',
       label: 'year',
       searchable: true,
-      data: [],
-      onSearchChange: setYearlyMapSearchTerm,
-      searchValue: yearlyMapSearchTerm,
-      onChange: () => {
-        router.push(url, undefined, { shallow: true });
+      onChange: (v) => {
+        setMapYearlyYear(v);
       },
     });
 
@@ -82,14 +184,20 @@ const ListYearlyMapBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+  }, [mapCategoryList]);
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('mapProduction.createMapProd'),
-        onClick: () => router.push('/input-data/production/map/yearly/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              onClick: () => {
+                router.push('/input-data/production/map/yearly/create');
+              },
+              label: t('mapProduction.createMapProd'),
+            }
+          : undefined
+      }
       filterDateWithSelect={{
         colSpan: 4,
         items: filter,
@@ -97,38 +205,43 @@ const ListYearlyMapBook = () => {
       searchBar={{
         placeholder: t('mapProduction.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setMapYearlySearch(e.target.value);
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          router.push(url, undefined, { shallow: true });
+          setMapYearlyPage(1);
         },
       }}
     >
       <MantineDataTable
         tableProps={{
-          records: [],
-          fetching: false,
+          records: mapData,
+          fetching: mapDataLoading,
           highlightOnHover: true,
           columns: [
             {
               accessor: 'index',
               title: 'No',
+              render: (record) => mapData && mapData.indexOf(record) + 1,
               width: 60,
             },
             {
-              accessor: 'date',
+              accessor: 'name',
               title: `${t('commonTypography.name')} ${t(
                 'commonTypography.map'
               )}`,
               width: 160,
-              render: ({ date }) => formatDate(date) ?? '-',
             },
             {
-              accessor: 'shift',
+              accessor: 'type',
               title: `${t('commonTypography.type')} ${t(
                 'commonTypography.map'
               )}`,
+              render: (v) => v.mapDataCategory.name,
+            },
+            {
+              accessor: 'year',
+              title: t('commonTypography.year'),
             },
             {
               accessor: 'year',
@@ -137,14 +250,33 @@ const ListYearlyMapBook = () => {
             {
               accessor: 'location',
               title: t('commonTypography.location'),
-              render: ({ fromAt }) => formatDate(fromAt, 'hh:mm:ss A') ?? '-',
+              render: (v) =>
+                v.mapDataLocation.map((e) => (
+                  <Badge key={e.locationId}>{e.name}</Badge>
+                )),
             },
             {
               accessor: 'status',
               title: t('commonTypography.status'),
-              render: () => {
-                return <GlobalBadgeStatus color="red" label="" />;
-              },
+              render: (v) =>
+                match(v.status)
+                  .with('WAITING_FOR_CONFIRMATION', () => (
+                    <Badge color="orange">
+                      {t('commonTypography.waitingForConfirmation')}
+                    </Badge>
+                  ))
+                  .with('DETERMINED', () => (
+                    <Badge color="green">{t('commonTypography.valid')}</Badge>
+                  ))
+                  .with('WAITING_FOR_VALIDATION', () => (
+                    <Badge color="red">{t('commonTypography.notValid')}</Badge>
+                  ))
+                  .with('INVALID', () => (
+                    <Badge color="red">{t('commonTypography.accepted')}</Badge>
+                  ))
+                  .otherwise(() => (
+                    <Badge color="gray">{t('commonTypography.unknown')}</Badge>
+                  )),
             },
             {
               accessor: 'action',
@@ -153,14 +285,41 @@ const ListYearlyMapBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/input-data/production/map/read/${id}`);
-                      },
-                    }}
-                    actionUpdate={undefined}
-                    actionDelete={undefined}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/map/yearly/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/map/yearly/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -176,10 +335,10 @@ const ListYearlyMapBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: page,
-          totalAllData: 0,
-          totalData: 0,
-          totalPage: 0,
+          currentPage: (mapYearlyPage as number) || 1,
+          totalAllData: mapMeta?.totalAllData ?? 0,
+          totalData: mapMeta?.totalData ?? 0,
+          totalPage: mapMeta?.totalPage ?? 0,
         }}
       />
       <ModalConfirmation
@@ -191,6 +350,7 @@ const ListYearlyMapBook = () => {
           label: t('commonTypography.yesDelete'),
           color: 'red',
           onClick: handleDelete,
+          loading: loading,
         }}
         backButton={{
           label: 'Batal',
@@ -202,14 +362,6 @@ const ListYearlyMapBook = () => {
         }}
         withDivider
       />
-      {/* <SelectionButtonModal
-        isOpenSelectionModal={isOpenSelectionModal}
-        actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
-        firstButton={{
-          label: t('commonTypography.inputDataRitage'),
-          onClick: () => router.push('/input-data/production/map/create'),
-        }}
-      /> */}
     </DashboardCard>
   );
 };

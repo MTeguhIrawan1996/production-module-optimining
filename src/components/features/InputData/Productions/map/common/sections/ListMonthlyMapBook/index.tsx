@@ -1,8 +1,12 @@
 import { Badge } from '@mantine/core';
-import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
-import { IconCheck } from '@tabler/icons-react';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import {
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
@@ -14,6 +18,7 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
+import { useDeleteMap } from '@/services/graphql/mutation/input-data-map/useDeleteMap';
 import { useReadAllMap } from '@/services/graphql/query/input-data-map/useReadAllMap';
 import { useReadAllMapCategory } from '@/services/graphql/query/input-data-map/useReadAllMapCategory';
 import {
@@ -22,34 +27,95 @@ import {
   globalSelectNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import { useDebounce } from '@/utils/hooks/useDebounce';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { InputControllerNativeProps } from '@/types/global';
 
+const locationIds = [
+  process.env.NEXT_PUBLIC_GRID_ID,
+  process.env.NEXT_PUBLIC_BLOCK_ID,
+  process.env.NEXT_PUBLIC_PIT_ID,
+];
+
 const ListMonthlyMapBook = () => {
   const router = useRouter();
-  const page = Number(router.query['monthlyMapPage']) || 1;
-  const url = `/input-data/production/map?monthlyMapPage=${page}&tabs=monthly`;
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
-  const { t } = useTranslation('default');
-  const [mapCategory, setMapCategory] = React.useState<string | undefined>(
-    undefined
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionCreate = permissions?.includes('create-map-data');
+  const isPermissionUpdate = permissions?.includes('update-map-data');
+  const isPermissionDelete = permissions?.includes('delete-map-data');
+  const isPermissionRead = permissions?.includes('read-map-data');
+
+  const [mapMonthlyPage, setMapMonthlyPage] = useQueryState(
+    'mapMonthlyPage',
+    parseAsInteger
   );
-  const [year, setYear] = React.useState<string | undefined>(undefined);
-  const [month, setMonth] = React.useState<string | undefined>(undefined);
+  const [mapMonthlyLocation, setMapMonthlyLocation] = useQueryState(
+    'mapMonthlyLocation',
+    parseAsString
+  );
+  const [mapMonthlyYear, setMapMonthlyYear] = useQueryState(
+    'mapMonthlyYear',
+    parseAsString
+  );
+  const [mapMonthlyMonth, setMapMonthlyMonth] = useQueryState(
+    'mapMonthlyMonth',
+    parseAsString
+  );
+  const [mapMonthlySearch, setMapMonthlySearch] = useQueryState(
+    'mapMonthlySearch',
+    parseAsString
+  );
+
+  const searchQuery = useDebounce((mapMonthlySearch as string) || '', 500);
+
+  const { t } = useTranslation('default');
+  const [mapMonthlyCategory, setMapMonthlyCategory] = useQueryState(
+    'mapMonthlyCategory',
+    parseAsString
+  );
+
+  const [id, setId] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
-  const { mapData, mapMeta, mapDataLoading } = useReadAllMap({
+  const { mapData, mapMeta, mapDataLoading, refetchMap } = useReadAllMap({
     variables: {
-      page: page,
-      limit: 10,
+      page: mapMonthlyPage || 1,
+      limit: 2,
       search: searchQuery === '' ? null : searchQuery,
       dateType: 'MONTH',
-      mapDataCategoryId: mapCategory,
-      year: Number(year),
-      month: Number(month),
+      mapDataCategoryId: mapMonthlyCategory || undefined,
+      year: Number(mapMonthlyYear) === 0 ? undefined : Number(mapMonthlyYear),
+      month:
+        Number(mapMonthlyMonth) === 0 ? undefined : Number(mapMonthlyMonth),
+      mapDataLocationId: (mapMonthlyLocation as string) || undefined,
     },
     skip: false,
   });
+
+  const [executeDelete, { loading }] = useDeleteMap({
+    onCompleted: () => {
+      refetchMap();
+      setIsOpenDeleteConfirmation((prev) => !prev);
+      notifications.show({
+        color: 'green',
+        title: 'Selamat',
+        message: t('location.successDeleteMessage'),
+        icon: <IconCheck />,
+      });
+    },
+    onError: ({ message }) => {
+      notifications.show({
+        color: 'red',
+        title: 'Gagal',
+        message: message,
+        icon: <IconX />,
+      });
+    },
+  });
+
   const [mapCategoryList, setMapCategoryList] = React.useState<
     Array<{
       label: string;
@@ -74,17 +140,15 @@ const ListMonthlyMapBook = () => {
   });
 
   const handleDelete = async () => {
-    notifications.show({
-      title: t('deleteSuccess'),
-      message: t('deleteSuccessMessage'),
-      color: 'teal',
-      icon: <IconCheck />,
+    await executeDelete({
+      variables: {
+        id: id as string,
+      },
     });
+    setId(undefined);
   };
-
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/map?monthlyMapPage=${page}&tabs=monthly`;
-    router.push(urlSet, undefined, { shallow: true });
+    setMapMonthlyPage(page);
   };
 
   const filter = React.useMemo(() => {
@@ -94,22 +158,25 @@ const ListMonthlyMapBook = () => {
       searchable: false,
       data: mapCategoryList,
       onChange: (v) => {
-        setMapCategory(v || undefined);
+        setMapMonthlyCategory(v);
       },
+      value: mapMonthlyCategory,
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
       searchable: true,
-      onChange: () => {
-        router.push(url, undefined, { shallow: true });
+      onChange: (v) => {
+        setMapMonthlyLocation(v);
       },
+      categoryIds: (locationIds as string[]) || [],
+      value: mapMonthlyLocation,
     });
     const yearItem = globalSelectYearNative({
       placeholder: 'year',
       label: 'year',
       searchable: true,
       onChange: (v) => {
-        setYear(v || undefined);
+        setMapMonthlyYear(v);
       },
     });
     const monthItem = globalSelectMonthNative({
@@ -117,8 +184,9 @@ const ListMonthlyMapBook = () => {
       label: 'month',
       searchable: true,
       onChange: (v) => {
-        setMonth(v || undefined);
+        setMapMonthlyMonth(v);
       },
+      value: mapMonthlyMonth,
     });
 
     const item: InputControllerNativeProps[] = [
@@ -129,14 +197,20 @@ const ListMonthlyMapBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url, mapCategoryList]);
+  }, [mapCategoryList]);
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('mapProduction.createMapProd'),
-        onClick: () => router.push('/input-data/production/map/monthly/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              onClick: () => {
+                router.push('/input-data/production/map/monthly/create');
+              },
+              label: t('mapProduction.createMapProd'),
+            }
+          : undefined
+      }
       filterDateWithSelect={{
         colSpan: 4,
         items: filter,
@@ -144,11 +218,11 @@ const ListMonthlyMapBook = () => {
       searchBar={{
         placeholder: t('mapProduction.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setMapMonthlySearch(e.target.value);
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          router.push(url, undefined, { shallow: true });
+          setMapMonthlyPage(1);
         },
       }}
     >
@@ -161,6 +235,7 @@ const ListMonthlyMapBook = () => {
             {
               accessor: 'index',
               title: 'No',
+              render: (record) => mapData && mapData.indexOf(record) + 1,
               width: 60,
             },
             {
@@ -203,13 +278,13 @@ const ListMonthlyMapBook = () => {
                       {t('commonTypography.waitingForConfirmation')}
                     </Badge>
                   ))
-                  .with('VALID', () => (
+                  .with('DETERMINED', () => (
                     <Badge color="green">{t('commonTypography.valid')}</Badge>
                   ))
-                  .with('INVALID', () => (
+                  .with('WAITING_FOR_VALIDATION', () => (
                     <Badge color="red">{t('commonTypography.notValid')}</Badge>
                   ))
-                  .with('ACCEPTED', () => (
+                  .with('INVALID', () => (
                     <Badge color="red">{t('commonTypography.accepted')}</Badge>
                   ))
                   .otherwise(() => (
@@ -223,14 +298,41 @@ const ListMonthlyMapBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/input-data/production/map/read/${id}`);
-                      },
-                    }}
-                    actionUpdate={undefined}
-                    actionDelete={undefined}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/map/monthly/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/map/monthly/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -246,7 +348,7 @@ const ListMonthlyMapBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: page,
+          currentPage: (mapMonthlyPage as number) || 1,
           totalAllData: mapMeta?.totalAllData ?? 0,
           totalData: mapMeta?.totalData ?? 0,
           totalPage: mapMeta?.totalPage ?? 0,
@@ -261,6 +363,7 @@ const ListMonthlyMapBook = () => {
           label: t('commonTypography.yesDelete'),
           color: 'red',
           onClick: handleDelete,
+          loading: loading,
         }}
         backButton={{
           label: 'Batal',

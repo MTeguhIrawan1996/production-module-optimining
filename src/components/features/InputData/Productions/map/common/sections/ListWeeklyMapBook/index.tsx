@@ -1,8 +1,13 @@
 import { Badge } from '@mantine/core';
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
-import { IconCheck } from '@tabler/icons-react';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import {
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { match } from 'ts-pattern';
@@ -14,6 +19,7 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 
+import { useDeleteMap } from '@/services/graphql/mutation/input-data-map/useDeleteMap';
 import { useReadAllMap } from '@/services/graphql/query/input-data-map/useReadAllMap';
 import { useReadAllMapCategory } from '@/services/graphql/query/input-data-map/useReadAllMapCategory';
 import {
@@ -22,34 +28,96 @@ import {
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { InputControllerNativeProps } from '@/types/global';
 
+const locationIds = [
+  process.env.NEXT_PUBLIC_GRID_ID,
+  process.env.NEXT_PUBLIC_BLOCK_ID,
+  process.env.NEXT_PUBLIC_PIT_ID,
+];
+
 const ListWeeklyMapBook = () => {
   const router = useRouter();
-  const page = Number(router.query['weeklyMapPage']) || 1;
-  const url = `/input-data/production/map?weeklyMapPage=${page}&tabs=weekly`;
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
-  const { t } = useTranslation('default');
-  const [mapCategory, setMapCategory] = React.useState<string | undefined>(
-    undefined
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionCreate = permissions?.includes('create-map-data');
+  const isPermissionUpdate = permissions?.includes('update-map-data');
+  const isPermissionDelete = permissions?.includes('delete-map-data');
+  const isPermissionRead = permissions?.includes('read-map-data');
+
+  const [mapWeeklyPage, setMapWeeklyPage] = useQueryState(
+    'mapWeeklyPage',
+    parseAsInteger
   );
-  const [year, setYear] = React.useState<string | undefined>(undefined);
-  const [week, setWeek] = React.useState<string | undefined>(undefined);
+  const [mapWeeklyLocation, setMapWeeklyLocation] = useQueryState(
+    'mapWeeklyLocation',
+    parseAsString
+  );
+  const [mapWeeklyYear, setMapWeeklyYear] = useQueryState(
+    'mapWeeklyYear',
+    parseAsString
+  );
+  const [mapWeeklyWeek, setMapWeeklyWeek] = useQueryState(
+    'mapWeeklyWeek',
+    parseAsString
+  );
+  const [mapWeeklySearch, setMapWeeklySearch] = useQueryState(
+    'mapWeeklySearch',
+    parseAsString
+  );
+
+  const [searchQuery] = useDebouncedValue<string>(
+    (mapWeeklySearch as string) || '',
+    500
+  );
+
+  const { t } = useTranslation('default');
+  const [mapWeeklyCategory, setMapWeeklyCategory] = useQueryState(
+    'mapWeeklyCategory',
+    parseAsString
+  );
+
+  const [id, setId] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
-  const { mapData, mapMeta, mapDataLoading } = useReadAllMap({
+  const { mapData, mapMeta, mapDataLoading, refetchMap } = useReadAllMap({
     variables: {
-      page: page,
+      page: mapWeeklyPage || 1,
       limit: 10,
       search: searchQuery === '' ? null : searchQuery,
       dateType: 'WEEK',
-      mapDataCategoryId: mapCategory,
-      year: Number(year),
-      week: Number(week),
+      mapDataCategoryId: mapWeeklyCategory || undefined,
+      year: Number(mapWeeklyYear) === 0 ? undefined : Number(mapWeeklyYear),
+      week: Number(mapWeeklyWeek) === 0 ? undefined : Number(mapWeeklyWeek),
+      mapDataLocationId: (mapWeeklyLocation as string) || undefined,
     },
     skip: false,
   });
+
+  const [executeDelete, { loading }] = useDeleteMap({
+    onCompleted: () => {
+      refetchMap();
+      setIsOpenDeleteConfirmation((prev) => !prev);
+      notifications.show({
+        color: 'green',
+        title: 'Selamat',
+        message: t('location.successDeleteMessage'),
+        icon: <IconCheck />,
+      });
+    },
+    onError: ({ message }) => {
+      notifications.show({
+        color: 'red',
+        title: 'Gagal',
+        message: message,
+        icon: <IconX />,
+      });
+    },
+  });
+
   const [mapCategoryList, setMapCategoryList] = React.useState<
     Array<{
       label: string;
@@ -74,17 +142,15 @@ const ListWeeklyMapBook = () => {
   });
 
   const handleDelete = async () => {
-    notifications.show({
-      title: t('deleteSuccess'),
-      message: t('deleteSuccessMessage'),
-      color: 'teal',
-      icon: <IconCheck />,
+    await executeDelete({
+      variables: {
+        id: id as string,
+      },
     });
+    setId(undefined);
   };
-
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/map?weeklyMapPage=${page}&tabs=weekly`;
-    router.push(urlSet, undefined, { shallow: true });
+    setMapWeeklyPage(page);
   };
 
   const filter = React.useMemo(() => {
@@ -94,22 +160,25 @@ const ListWeeklyMapBook = () => {
       searchable: false,
       data: mapCategoryList,
       onChange: (v) => {
-        setMapCategory(v || undefined);
+        setMapWeeklyCategory(v);
       },
+      value: mapWeeklyCategory,
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
       searchable: true,
-      onChange: () => {
-        router.push(url, undefined, { shallow: true });
+      onChange: (v) => {
+        setMapWeeklyLocation(v);
       },
+      categoryIds: (locationIds as string[]) || [],
+      value: mapWeeklyLocation,
     });
     const yearItem = globalSelectYearNative({
       placeholder: 'year',
       label: 'year',
       searchable: true,
       onChange: (v) => {
-        setYear(v || undefined);
+        setMapWeeklyYear(v);
       },
     });
     const weekItem = globalSelectWeekNative({
@@ -117,8 +186,9 @@ const ListWeeklyMapBook = () => {
       label: 'week',
       searchable: true,
       onChange: (v) => {
-        setWeek(v || undefined);
+        setMapWeeklyWeek(v);
       },
+      value: mapWeeklyWeek,
     });
 
     const item: InputControllerNativeProps[] = [
@@ -129,14 +199,20 @@ const ListWeeklyMapBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url, mapCategoryList]);
+  }, [mapCategoryList]);
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('mapProduction.createMapProd'),
-        onClick: () => router.push('/input-data/production/map/weekly/create'),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              onClick: () => {
+                router.push('/input-data/production/map/weekly/create');
+              },
+              label: t('mapProduction.createMapProd'),
+            }
+          : undefined
+      }
       filterDateWithSelect={{
         colSpan: 4,
         items: filter,
@@ -144,11 +220,11 @@ const ListWeeklyMapBook = () => {
       searchBar={{
         placeholder: t('mapProduction.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setMapWeeklySearch(e.target.value);
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          router.push(url, undefined, { shallow: true });
+          setMapWeeklyPage(1);
         },
       }}
     >
@@ -161,6 +237,7 @@ const ListWeeklyMapBook = () => {
             {
               accessor: 'index',
               title: 'No',
+              render: (record) => mapData && mapData.indexOf(record) + 1,
               width: 60,
             },
             {
@@ -203,13 +280,13 @@ const ListWeeklyMapBook = () => {
                       {t('commonTypography.waitingForConfirmation')}
                     </Badge>
                   ))
-                  .with('VALID', () => (
+                  .with('DETERMINED', () => (
                     <Badge color="green">{t('commonTypography.valid')}</Badge>
                   ))
-                  .with('INVALID', () => (
+                  .with('WAITING_FOR_VALIDATION', () => (
                     <Badge color="red">{t('commonTypography.notValid')}</Badge>
                   ))
-                  .with('ACCEPTED', () => (
+                  .with('INVALID', () => (
                     <Badge color="red">{t('commonTypography.accepted')}</Badge>
                   ))
                   .otherwise(() => (
@@ -223,14 +300,41 @@ const ListWeeklyMapBook = () => {
               render: ({ id }) => {
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(`/input-data/production/map/read/${id}`);
-                      },
-                    }}
-                    actionUpdate={undefined}
-                    actionDelete={undefined}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/map/weekly/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionUpdate={
+                      isPermissionUpdate
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/map/weekly/update/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
+                    actionDelete={
+                      isPermissionDelete
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              setIsOpenDeleteConfirmation((prev) => !prev);
+                              setId(id);
+                            },
+                          }
+                        : undefined
+                    }
                   />
                 );
               },
@@ -246,7 +350,7 @@ const ListWeeklyMapBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: page,
+          currentPage: (mapWeeklyPage as number) || 1,
           totalAllData: mapMeta?.totalAllData ?? 0,
           totalData: mapMeta?.totalData ?? 0,
           totalPage: mapMeta?.totalPage ?? 0,
@@ -261,6 +365,7 @@ const ListWeeklyMapBook = () => {
           label: t('commonTypography.yesDelete'),
           color: 'red',
           onClick: handleDelete,
+          loading: loading,
         }}
         backButton={{
           label: 'Batal',

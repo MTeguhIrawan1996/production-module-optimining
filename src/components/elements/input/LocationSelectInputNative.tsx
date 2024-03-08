@@ -8,11 +8,13 @@ import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 export type ILocationNativeProps = {
   control: 'select-location-native';
+  categoryIds?: string[] | null;
 } & Omit<SelectProps, 'data' | 'onSearchChange' | 'searchValue'>;
 
 const LocationSelectInputNative: React.FC<ILocationNativeProps> = ({
   control,
   label = 'location',
+  categoryIds,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -23,6 +25,7 @@ const LocationSelectInputNative: React.FC<ILocationNativeProps> = ({
     variables: {
       search: searchQuery === '' ? null : searchQuery,
       limit: 15,
+      categoryIds: categoryIds && categoryIds.length > 0 ? categoryIds : null,
     },
   });
 

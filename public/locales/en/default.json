@@ -1042,12 +1042,13 @@
     "successIsRejectMessage": "$t(monthlyPlan.title) berhasil $t(commonTypography.reject)"
   },
   "mapProduction": {
-    "title": "$t(commonTypography.inputData) $t(commonTypography.map)",
+    "title": "$t(commonTypography.inputData) $t(commonTypography.commonTypography)",
     "createMapProd": "$t(commonTypography.create) $t(commonTypography.map)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.map)",
     "successYearlyCreateMessage": "$t(commonTypography.map) $t(commonTypography.yearly) berhasil dibuat",
     "successMonthlyCreateMessage": "$t(commonTypography.map) $t(commonTypography.monthly) berhasil dibuat",
     "successQuarterlyCreateMessage": "$t(commonTypography.map) $t(commonTypography.quarterly) berhasil dibuat",
-    "successWeeklyCreateMessage": "$t(commonTypography.map) $t(commonTypography.weekly) berhasil dibuat"
+    "successWeeklyCreateMessage": "$t(commonTypography.map) $t(commonTypography.weekly) berhasil dibuat",
+    "successDeleteMessage": "$t(commonTypography.map) berhasil dihapus"
   }
 }
