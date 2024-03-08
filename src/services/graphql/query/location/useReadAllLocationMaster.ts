@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { GResponse, IGlobalMetaRequest } from '@/types/global';
 
@@ -62,10 +67,12 @@ export const useReadAllLocationsMaster = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: ILocationsRequest;
   onCompleted?: (data: ILocationsResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: locationsData,
@@ -80,7 +87,7 @@ export const useReadAllLocationsMaster = ({
         return err;
       },
       onCompleted,
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy,
     }
   );
 

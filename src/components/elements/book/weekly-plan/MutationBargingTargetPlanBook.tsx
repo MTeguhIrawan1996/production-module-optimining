@@ -94,6 +94,7 @@ const MutationBargingTargetPlanBook = ({
       includeIds: null,
     },
     skip: tabs !== 'bargingTargetPlan',
+    fetchPolicy: 'cache-and-network',
     onCompleted: ({ materials }) => {
       const newBargingtargetPlan: IBargingTargetPlan[] = materials.data.map(
         (Obj) => {

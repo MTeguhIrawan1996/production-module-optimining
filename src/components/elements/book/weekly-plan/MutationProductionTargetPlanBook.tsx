@@ -111,6 +111,7 @@ const MutationProductionTargetPlanBook = ({
       includeIds: null,
     },
     skip: skipMaterialQuery || tabs !== 'productionTargetPlan',
+    fetchPolicy: 'cache-and-network',
     onCompleted: ({ materials }) => {
       const oreMaterial = materials.data.find(
         (v) => v.id === `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`

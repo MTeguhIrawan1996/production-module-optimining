@@ -85,6 +85,7 @@ const MutationWorkTimePlanBook = ({
       limit: null,
     },
     skip: tabs !== 'workTimePlan' || skipWorkingHourPlansData,
+    fetchPolicy: 'cache-and-network',
     onCompleted: ({ workingHourPlans }) => {
       const workTimePlanActivities = workingHourPlans.data.map((obj) => {
         const value = {

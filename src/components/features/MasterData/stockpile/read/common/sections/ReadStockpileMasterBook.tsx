@@ -4,6 +4,7 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -26,8 +27,7 @@ const ReadStockpileMasterBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
-  const page = Number(router.query['page']) || 1;
-  const url = `/master-data/stockpile/read/${id}?page=1`;
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [domeId, setDomeId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -64,7 +64,7 @@ const ReadStockpileMasterBook = () => {
     onCompleted: () => {
       refetchStockpiles();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push(url, undefined, { shallow: true });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -84,8 +84,7 @@ const ReadStockpileMasterBook = () => {
   /* #endregion  /**======== Query =========== */
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/master-data/stockpile/read/${id}?page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   const handleDeleteDome = async () => {
@@ -160,7 +159,7 @@ const ReadStockpileMasterBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stockpileDomeMaster, stockpileDomeMasterLoading]);
+  }, [stockpileDomeMaster, stockpileDomeMasterLoading, page]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
@@ -236,7 +235,10 @@ const ReadStockpileMasterBook = () => {
               },
               searchQuery,
               onSearch: () => {
-                router.push(url, undefined, { shallow: true });
+                setPage(1);
+                refetchStockpiles({
+                  page: 1,
+                });
               },
               placeholder: t('stockpile.searchDomePlaceholder'),
             }}
