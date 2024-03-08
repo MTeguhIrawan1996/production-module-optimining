@@ -29,7 +29,7 @@ export type IInputGroupDomeProps = {
   label?: string;
   bargingDomePlanIndex: number;
   uniqKey?: string | null;
-  tabs?: string;
+  tabs?: string | null;
 };
 
 const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({

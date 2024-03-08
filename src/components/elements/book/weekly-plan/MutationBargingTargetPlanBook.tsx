@@ -3,6 +3,7 @@ import { Flex, Grid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -42,7 +43,7 @@ const MutationBargingTargetPlanBook = ({
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const tabs = router.query.tabs as string;
+  const [tabs] = useQueryState('tabs');
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
 
@@ -112,7 +113,7 @@ const MutationBargingTargetPlanBook = ({
     variables: {
       weeklyPlanId: id,
     },
-    skip: !router.isReady || !materialsData || tabs !== 'bargingTargetPlan',
+    skip: !materialsData || tabs !== 'bargingTargetPlan',
     onCompleted: (data) => {
       if (
         data.weeklyBargingPlan &&
@@ -226,7 +227,7 @@ const MutationBargingTargetPlanBook = ({
                 <InputTableBargingTargetPlan />
               </Grid.Col>
               {domeGroup.map(
-                ({ bargingDomePlanIndex, uniqKey, ...restDome }) => (
+                ({ tabs, bargingDomePlanIndex, uniqKey, ...restDome }) => (
                   <Grid.Col
                     span={12}
                     key={`${bargingDomePlanIndex}.${uniqKey}`}

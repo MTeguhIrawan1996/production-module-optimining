@@ -3,6 +3,7 @@ import { Flex, Grid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { useQueryState } from 'next-usequerystate';
 import React from 'react';
 import {
   FieldArrayWithId,
@@ -51,7 +52,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const tabs = router.query.tabs as string;
+  const [tabs, setTabs] = useQueryState('tabs');
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
 
@@ -93,9 +94,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
         message: mutationSuccessMassage,
         icon: <IconCheck />,
       });
-      router.push(
-        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=heavyEquipmentAvailabilityPlan`
-      );
+      setTabs('heavyEquipmentAvailabilityPlan');
       if (mutationType === 'update') {
         setIsOpenConfirmation(false);
       }
@@ -125,7 +124,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
       weeklyPlanId: id,
       limit: null,
     },
-    skip: !router.isReady || tabs !== 'heavyEquipmentReqPlan',
+    skip: tabs !== 'heavyEquipmentReqPlan',
     onCompleted: (data) => {
       if (data.weeklyHeavyEquipmentRequirementPlans.data.length > 0) {
         const weeklyHeavyEquipmentRequirementPlans: IMutationHeavyEquipmentReqPlan[] =
