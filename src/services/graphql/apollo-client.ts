@@ -154,22 +154,22 @@ const getClient = (tokenServer?: ISessionServer | null) => {
     ssrMode: true,
     cache: new InMemoryCache({ addTypename: !server }),
     link: from([authLink, errorLink, httpLink]),
-    defaultOptions: {
-      watchQuery: {
-        nextFetchPolicy(currentFetchPolicy, { initialFetchPolicy, reason }) {
-          if (reason === 'variables-changed') {
-            return initialFetchPolicy;
-          }
-          if (
-            currentFetchPolicy === 'network-only' ||
-            currentFetchPolicy === 'cache-and-network'
-          ) {
-            return 'cache-first';
-          }
-          return currentFetchPolicy;
-        },
-      },
-    },
+    // defaultOptions: {
+    //   watchQuery: {
+    //     nextFetchPolicy(currentFetchPolicy, { initialFetchPolicy, reason }) {
+    //       if (reason === 'variables-changed') {
+    //         return initialFetchPolicy;
+    //       }
+    //       if (
+    //         currentFetchPolicy === 'network-only' ||
+    //         currentFetchPolicy === 'cache-and-network'
+    //       ) {
+    //         return 'cache-first';
+    //       }
+    //       return currentFetchPolicy;
+    //     },
+    //   },
+    // },
   });
 
   return { client };

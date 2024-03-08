@@ -3,6 +3,7 @@ import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -27,9 +28,7 @@ const ReadHeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const page = Number(router.query['hp']) || 1;
-  const companyPage = Number(router.query['cp']) || 1;
-  const url = `/master-data/company/read/${id}?cp=${companyPage}&hp=1`;
+  const [page, setPage] = useQueryState('hp', parseAsInteger.withDefault(1));
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -101,7 +100,7 @@ const ReadHeavyEquipmentBook = () => {
     onCompleted: () => {
       refetchHeavyEquipmentCompany();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push(url, undefined, { shallow: true });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -149,15 +148,14 @@ const ReadHeavyEquipmentBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/master-data/company/read/${id}?cp=${companyPage}&hp=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   const filter = React.useMemo(() => {
     const item: SelectProps[] = [
       {
         onChange: (value) => {
-          router.push(url, undefined, { shallow: true });
+          setPage(1);
           setBrandId(value);
           setTypeId(null);
           setModelId(null);
@@ -173,7 +171,7 @@ const ReadHeavyEquipmentBook = () => {
       },
       {
         onChange: (value) => {
-          router.push(url, undefined, { shallow: true });
+          setPage(1);
           setTypeId(value);
           setModelId(null);
         },
@@ -189,7 +187,7 @@ const ReadHeavyEquipmentBook = () => {
       },
       {
         onChange: (value) => {
-          router.push(url, undefined, { shallow: true });
+          setPage(1);
           setModelId(value);
         },
         value: modelId,
@@ -204,7 +202,7 @@ const ReadHeavyEquipmentBook = () => {
       },
       {
         onChange: (value) => {
-          router.push(url, undefined, { shallow: true });
+          setPage(1);
           setClasslId(value);
         },
         value: classId,
@@ -339,7 +337,7 @@ const ReadHeavyEquipmentBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [heavyEquipmentsCompany, heavyEquipmentCompanyLoading]);
+  }, [heavyEquipmentsCompany, heavyEquipmentCompanyLoading, page]);
 
   return (
     <DashboardCard
@@ -354,7 +352,7 @@ const ReadHeavyEquipmentBook = () => {
           setSearchQuery(e.currentTarget.value);
         },
         onSearch: () => {
-          router.push(url, undefined, { shallow: true });
+          setPage(1);
         },
         searchQuery: searchQuery,
       }}

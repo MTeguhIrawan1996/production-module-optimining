@@ -3,6 +3,7 @@ import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -31,11 +32,8 @@ import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 const ReadCompanyHumanResourceBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-
-  const page = Number(router.query['cp']) || 1;
-  const heavyEquipmentPage = Number(router.query['hp']) || 1;
+  const [page, setPage] = useQueryState('cp', parseAsInteger.withDefault(1));
   const id = router.query.id as string;
-  const url = `/master-data/company/read/${id}?cp=1&hp=${heavyEquipmentPage}`;
   const [employeId, setIdEmploye] = React.useState<string>('');
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
@@ -113,7 +111,7 @@ const ReadCompanyHumanResourceBook = () => {
     onCompleted: () => {
       refetchEmployees();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push(url, undefined, { shallow: true });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -139,7 +137,7 @@ const ReadCompanyHumanResourceBook = () => {
       searchValue: divisionSearchTerm,
       placeholder: 'chooseDivision',
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setDivisionId(value);
       },
     });
@@ -149,7 +147,7 @@ const ReadCompanyHumanResourceBook = () => {
       searchValue: positionSearchTerm,
       placeholder: 'choosePosition',
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setPositionId(value);
       },
     });
@@ -157,7 +155,7 @@ const ReadCompanyHumanResourceBook = () => {
       data: employeStatusFilter,
       placeholder: 'chooseEmployeStatus',
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setEmployeStatusId(value);
       },
     });
@@ -174,7 +172,7 @@ const ReadCompanyHumanResourceBook = () => {
         },
       ],
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setFormStatus(value ? (value === 'true' ? true : false) : null);
       },
     });
@@ -203,8 +201,7 @@ const ReadCompanyHumanResourceBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/master-data/company/read/${id}?cp=${page}&hp=${heavyEquipmentPage}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -308,7 +305,7 @@ const ReadCompanyHumanResourceBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [employeesData, employeesDataLoading]);
+  }, [employeesData, employeesDataLoading, page]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
@@ -325,7 +322,7 @@ const ReadCompanyHumanResourceBook = () => {
         },
         searchQuery,
         onSearch: () => {
-          router.push(url, undefined, { shallow: true });
+          setPage(1);
         },
         placeholder: 'Cari berdasarkan Nama dan NIP',
       }}
