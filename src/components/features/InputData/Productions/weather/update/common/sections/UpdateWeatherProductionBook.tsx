@@ -256,7 +256,7 @@ const UpdateWeatherProductionBook = () => {
       label: 'location',
       withAsterisk: true,
       disabled: !newLocationCategoryId,
-      categoryId: locationCategoryId,
+      categoryIds: locationCategoryId ? [locationCategoryId] : null,
       defaultValue: weatherData?.location?.id,
       labelValue: weatherData?.location?.name,
     });

@@ -26,6 +26,8 @@ import {
 } from '@/utils/constants/Field/native-field';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -56,6 +58,13 @@ const ListDataMovingRitageBook = () => {
   const [heavyEquipmentId, setHeavyEquipmentId] = React.useState<string | null>(
     null
   );
+
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const isPermissionCreate = permissions?.includes('create-moving-ritage');
+  const isPermissionUpdate = permissions?.includes('update-moving-ritage');
+  const isPermissionDelete = permissions?.includes('delete-moving-ritage');
+  const isPermissionRead = permissions?.includes('read-moving-ritage');
 
   /* #   /**=========== Query =========== */
   const { shiftsData } = useReadAllShiftMaster({
@@ -323,19 +332,24 @@ const ListDataMovingRitageBook = () => {
               title: t('commonTypography.action'),
               width: 100,
               render: ({ id, status }) => {
+                const isDetermination =
+                  status?.id === `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`;
                 return (
                   <GlobalKebabButton
-                    actionRead={{
-                      onClick: (e) => {
-                        e.stopPropagation();
-                        router.push(
-                          `/input-data/production/data-ritage/moving/read/${id}`
-                        );
-                      },
-                    }}
+                    actionRead={
+                      isPermissionRead
+                        ? {
+                            onClick: (e) => {
+                              e.stopPropagation();
+                              router.push(
+                                `/input-data/production/data-ritage/moving/read/${id}`
+                              );
+                            },
+                          }
+                        : undefined
+                    }
                     actionUpdate={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionUpdate && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -347,8 +361,7 @@ const ListDataMovingRitageBook = () => {
                         : undefined
                     }
                     actionDelete={
-                      status?.id !==
-                      `${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`
+                      isPermissionDelete && !isDetermination
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -366,10 +379,12 @@ const ListDataMovingRitageBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: {
-            label: t('ritageMoving.createRitageMoving'),
-            onClick: () => setIsOpenSelectionModal((prev) => !prev),
-          },
+          actionButton: isPermissionCreate
+            ? {
+                label: t('ritageMoving.createRitageMoving'),
+                onClick: () => setIsOpenSelectionModal((prev) => !prev),
+              }
+            : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -381,15 +396,26 @@ const ListDataMovingRitageBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [movingRitagesData, movingRitagesDataLoading]);
+  }, [
+    movingRitagesData,
+    movingRitagesDataLoading,
+    isPermissionDelete,
+    isPermissionRead,
+    isPermissionUpdate,
+    isPermissionCreate,
+  ]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
     <DashboardCard
-      addButton={{
-        label: t('ritageMoving.createRitageMoving'),
-        onClick: () => setIsOpenSelectionModal((prev) => !prev),
-      }}
+      addButton={
+        isPermissionCreate
+          ? {
+              label: t('ritageMoving.createRitageMoving'),
+              onClick: () => setIsOpenSelectionModal((prev) => !prev),
+            }
+          : undefined
+      }
       filterDateWithSelect={{
         colSpan: 4,
         items: filter,

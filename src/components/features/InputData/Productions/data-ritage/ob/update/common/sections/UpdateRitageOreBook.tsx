@@ -349,7 +349,7 @@ const UpdateRitageObBook = () => {
       name: 'fromFrontId',
       label: 'fromFront',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_FRONT_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_FRONT_ID}`],
       defaultValue: overburdenRitage?.fromFront?.id,
       labelValue: overburdenRitage?.fromFront?.name,
     });
@@ -365,7 +365,7 @@ const UpdateRitageObBook = () => {
       name: 'fromGridId',
       label: 'fromGrid',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_GRID_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_GRID_ID}`],
       defaultValue: overburdenRitage?.fromGrid?.id,
       labelValue: overburdenRitage?.fromGrid?.name,
     });
@@ -374,7 +374,7 @@ const UpdateRitageObBook = () => {
       name: 'fromSequenceId',
       label: 'fromSequence',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_SEQUENCE_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_SEQUENCE_ID}`],
       defaultValue: overburdenRitage?.fromSequence?.id,
       labelValue: overburdenRitage?.fromSequence?.name,
     });
@@ -383,7 +383,7 @@ const UpdateRitageObBook = () => {
       name: 'fromElevationId',
       label: 'fromElevasi',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_ELEVASI_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_ELEVASI_ID}`],
       defaultValue: overburdenRitage?.fromElevation?.id,
       labelValue: overburdenRitage?.fromElevation?.name,
     });
@@ -392,7 +392,7 @@ const UpdateRitageObBook = () => {
       name: 'disposalId',
       label: 'toDisposal',
       withAsterisk: false,
-      categoryId: `${process.env.NEXT_PUBLIC_DISPOSAL_ID}`,
+      categoryIds: [`${process.env.NEXT_PUBLIC_DISPOSAL_ID}`],
       defaultValue: overburdenRitage?.disposal?.id,
       labelValue: overburdenRitage?.disposal?.name,
     });

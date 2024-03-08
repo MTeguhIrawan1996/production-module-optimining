@@ -12,11 +12,16 @@ import ProductionTargetPlanData from '@/components/features/Plan/weekly/read/wee
 import UnitCapacityPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/UnitCapacityPlanData';
 import WorkTimePlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/WorkTimePlanData';
 
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
+
 const ReadWeeklyPlanGroupBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const id = router.query.id as string;
   const tabs = router.query.tabs as string;
+  const permissions = useStore(usePermissions, (state) => state.permissions);
+  const isPermissionUpdate = permissions?.includes('update-weekly-plan');
 
   const handleChangeTab = (tabs: TabsValue) => {
     const url = `/plan/weekly/read/weekly-plan-group/${id}?tabs=${tabs}`;
@@ -38,13 +43,17 @@ const ReadWeeklyPlanGroupBook = () => {
       enebleBackBottomOuter={{
         onClick: () => router.push(`/plan/weekly/read/${id}`),
       }}
-      updateButton={{
-        label: 'Edit',
-        onClick: () =>
-          router.push(
-            `/plan/weekly/update/weekly-plan-group/${id}?tabs=${tabs}`
-          ),
-      }}
+      updateButton={
+        isPermissionUpdate
+          ? {
+              label: 'Edit',
+              onClick: () =>
+                router.push(
+                  `/plan/weekly/update/weekly-plan-group/${id}?tabs=${tabs}`
+                ),
+            }
+          : undefined
+      }
     >
       <GlobalTabs
         tabs={{
