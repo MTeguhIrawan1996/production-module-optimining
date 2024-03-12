@@ -60,6 +60,7 @@ const StockpileBook = () => {
     variables: {
       limit: null,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const { allLocationsData } = useReadAllLocationselect({

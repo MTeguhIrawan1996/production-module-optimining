@@ -61,6 +61,7 @@ const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({
       limit: null,
     },
     skip: tabs !== 'bargingTargetPlan',
+    fetchPolicy: 'cache-and-network',
   });
 
   const { stockpileDomeMaster } = useReadOneStockpileDomeMaster({

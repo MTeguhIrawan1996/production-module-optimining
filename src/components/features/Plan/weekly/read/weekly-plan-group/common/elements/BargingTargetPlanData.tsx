@@ -32,6 +32,7 @@ const BargingTargetPlanData = () => {
       limit: null,
     },
     skip: tabs !== 'bargingTargetPlan',
+    fetchPolicy: 'cache-and-network',
   });
 
   const { weeklyBargingTargetPlanData, weeklyBargingTargetPlanDataLoading } =

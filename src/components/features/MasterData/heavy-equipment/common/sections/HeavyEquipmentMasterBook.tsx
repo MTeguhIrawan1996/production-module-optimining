@@ -89,12 +89,14 @@ const HeavyEquipmentMasterBook = () => {
         brandId,
         typeId,
       },
+      fetchPolicy: 'cache-and-network',
     });
   const { heavyEquipmentClassesData } = useReadAllHeavyEquipmentClass({
     variables: {
       limit: 15,
       search: classSearchQuery === '' ? null : classSearchQuery,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const [executeDelete, { loading }] = useDeleteMasterHeavyEquipment({

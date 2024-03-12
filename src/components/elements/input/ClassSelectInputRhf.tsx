@@ -46,6 +46,7 @@ const ClassSelectInputRhf: React.FC<IClassSelectInputRhfProps> = ({
       search: searchQuery === '' ? null : searchQuery,
     },
     skip: skipQuery,
+    fetchPolicy: 'cache-and-network',
   });
 
   const { combinedItems, uncombinedItem } = useCombineFilterItems({

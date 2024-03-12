@@ -59,6 +59,7 @@ const ReadDTBargingRitageBook = () => {
     variables: {
       limit: null,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const renderOtherColumnCallback = React.useCallback(

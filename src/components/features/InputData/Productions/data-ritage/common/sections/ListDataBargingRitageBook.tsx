@@ -74,6 +74,7 @@ const ListDataBargingRitageBook = () => {
       orderBy: 'createdAt',
     },
     skip: tabs !== 'barging',
+    fetchPolicy: 'cache-and-network',
   });
 
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({

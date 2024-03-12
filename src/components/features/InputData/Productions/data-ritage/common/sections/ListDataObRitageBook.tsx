@@ -74,6 +74,7 @@ const ListDataObRitageBook = () => {
       orderBy: 'createdAt',
     },
     skip: tabs !== 'ob',
+    fetchPolicy: 'cache-and-network',
   });
 
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({

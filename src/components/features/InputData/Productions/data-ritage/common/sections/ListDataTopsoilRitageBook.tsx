@@ -74,6 +74,7 @@ const ListDataTopsoilRitageBook = () => {
       orderBy: 'createdAt',
     },
     skip: tabs !== 'topsoil',
+    fetchPolicy: 'cache-and-network',
   });
 
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({

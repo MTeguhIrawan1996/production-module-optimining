@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { simpleOtherColumn } from '@/utils/helper/simpleOtherColumn';
 
@@ -63,10 +68,12 @@ export const useReadAllActivityCategory = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: Partial<IReadAllActivityCategoryRequest>;
   onCompleted?: (data: IReadAllActivityCategoryResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: readAllActivityCategoryData,
@@ -82,7 +89,7 @@ export const useReadAllActivityCategory = ({
       return err;
     },
     onCompleted,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy,
   });
 
   const simplifiedData: ISimpleKeyType[] | undefined =

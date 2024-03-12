@@ -41,7 +41,7 @@ const WorkingHoursPlanBook = () => {
     refetchWorkingHourPlans,
   } = useReadAllWHPsMaster({
     variables: {
-      limit: 1,
+      limit: 10,
       page: page,
       orderDir: 'desc',
       orderBy: 'createdAt',

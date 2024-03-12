@@ -74,6 +74,7 @@ const SelectHeavyEquipmentReferenceInput: React.FC<
       limit: 15,
       search: searchQuery === '' ? null : searchQuery,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const heavyEquipmentItem = heavyEquipmentsData?.map((val) => {

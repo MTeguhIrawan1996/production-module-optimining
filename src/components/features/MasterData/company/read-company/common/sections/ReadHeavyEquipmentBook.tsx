@@ -87,12 +87,14 @@ const ReadHeavyEquipmentBook = () => {
         brandId,
         typeId,
       },
+      fetchPolicy: 'cache-and-network',
     });
   const { heavyEquipmentClassesData } = useReadAllHeavyEquipmentClass({
     variables: {
       limit: 15,
       search: classSearchQuery === '' ? null : classSearchQuery,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   // eslint-disable-next-line unused-imports/no-unused-vars

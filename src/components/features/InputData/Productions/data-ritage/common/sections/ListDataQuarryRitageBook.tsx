@@ -74,6 +74,7 @@ const ListDataQuarryRitageBook = () => {
       orderBy: 'createdAt',
     },
     skip: tabs !== 'quarry',
+    fetchPolicy: 'cache-and-network',
   });
 
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({

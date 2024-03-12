@@ -74,6 +74,7 @@ const ListDataMovingRitageBook = () => {
       orderBy: 'createdAt',
     },
     skip: tabs !== 'moving',
+    fetchPolicy: 'cache-and-network',
   });
 
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
