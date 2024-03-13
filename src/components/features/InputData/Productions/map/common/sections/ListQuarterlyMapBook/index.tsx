@@ -186,7 +186,7 @@ const ListQuarterlyMapBook = () => {
     });
     const quarterItem = globalSelectNative({
       placeholder: 'quarter',
-      label: 'quarterly',
+      label: 'quarter',
       searchable: true,
       onChange: (v) => {
         setMapQuarterlyQuarter(v);

@@ -26,7 +26,7 @@ import { ControllerGroup, ControllerProps } from '@/types/global';
 type FormValues = {
   mapDataCategoryId: string;
   name: string;
-  companyId: string;
+  companyId?: string;
   location: string[];
   year: string;
   week: string;
@@ -105,17 +105,18 @@ const CreateMapWeeklyProductionBook = () => {
     },
   });
 
-  const { mutateAsync: uploadMapImage } = useUploadMapImage({
-    onError: (error) => {
-      notifications.show({
-        title: 'Error',
-        message: error.message,
-      });
-    },
-    onSuccess: (data) => {
-      setFileId(data.fileId);
-    },
-  });
+  const { mutateAsync: uploadMapImage, isLoading: isLoadingUpload } =
+    useUploadMapImage({
+      onError: (error) => {
+        notifications.show({
+          title: 'Error',
+          message: error.message,
+        });
+      },
+      onSuccess: (data) => {
+        setFileId(data.fileId);
+      },
+    });
 
   const handleUploadMapImage = async () => {
     const { mapImage } = methods.getValues();
@@ -152,6 +153,10 @@ const CreateMapWeeklyProductionBook = () => {
       withAsterisk: false,
       clearable: true,
       colSpan: 6,
+      onChange: (value) =>
+        value
+          ? methods.setValue('companyId', value)
+          : methods.setValue('companyId', ''),
     });
 
     const mapCategory = globalSelect({
@@ -251,7 +256,7 @@ const CreateMapWeeklyProductionBook = () => {
 
   return (
     <DashboardCard p={0}>
-      <LoadingOverlay visible={loading} />
+      <LoadingOverlay visible={loading || isLoadingUpload} />
       <GlobalFormGroup
         field={fieldRhf}
         methods={methods}
