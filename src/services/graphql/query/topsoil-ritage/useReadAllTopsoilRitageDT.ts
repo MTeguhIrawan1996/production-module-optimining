@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import {
   GResponse,
@@ -55,10 +60,12 @@ export const useReadAllRitageTopsoilDT = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: IDumpTruckRitagesRequest;
   onCompleted?: (data: ITopsoilDumpTruckRitagesResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: topsoilDumpTruckRitagesData,
@@ -73,7 +80,7 @@ export const useReadAllRitageTopsoilDT = ({
         return err;
       },
       onCompleted,
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy,
     }
   );
 

@@ -3,6 +3,7 @@ import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { IconPencil } from '@tabler/icons-react';
 import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -33,8 +34,7 @@ import { IElementsData, InputControllerNativeProps } from '@/types/global';
 
 const StockpileBook = () => {
   const router = useRouter();
-  const page = Number(router.query['page']) || 1;
-  const url = `/input-data/quality-control-management/stockpile-monitoring?page=1`;
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const { t } = useTranslation('default');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [stockpileNameSerachTerm, setStockpileNameSerachTerm] =
@@ -60,6 +60,7 @@ const StockpileBook = () => {
     variables: {
       limit: null,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const { allLocationsData } = useReadAllLocationselect({
@@ -75,6 +76,7 @@ const StockpileBook = () => {
     monitoringStockpilesData,
     monitoringStockpilesDataLoading,
     monitoringStockpilesDataMeta,
+    refetchMonitoringStockpiles,
   } = useReadAllStockpileMonitoring({
     variables: {
       limit: 10,
@@ -103,13 +105,13 @@ const StockpileBook = () => {
       onSearchChange: setStockpileNameSerachTerm,
       searchValue: stockpileNameSerachTerm,
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setStockpileId(value);
       },
     });
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setYear(value ? Number(value) : null);
         setMonth(null);
         setWeek(null);
@@ -119,7 +121,7 @@ const StockpileBook = () => {
       disabled: !year,
       value: month ? `${month}` : null,
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setMonth(value ? Number(value) : null);
       },
     });
@@ -128,7 +130,7 @@ const StockpileBook = () => {
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setWeek(value ? Number(value) : null);
       },
     });
@@ -144,8 +146,7 @@ const StockpileBook = () => {
   }, [locationItems, year, month, week]);
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/quality-control-management/stockpile-monitoring?page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   const renderOtherColumnCallback = React.useCallback(
@@ -298,6 +299,7 @@ const StockpileBook = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    page,
     monitoringStockpilesData,
     monitoringStockpilesDataLoading,
     isPermissionRead,
@@ -314,7 +316,10 @@ const StockpileBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          router.push(url, undefined, { shallow: true });
+          setPage(1);
+          refetchMonitoringStockpiles({
+            page: 1,
+          });
         },
       }}
       filterDateWithSelect={{

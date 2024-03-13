@@ -4,7 +4,6 @@ import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { theme } from 'mantine';
-import { ContextMenuProvider } from 'mantine-contextmenu';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -97,9 +96,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                   colorScheme: state.value as DeepPartial<ColorScheme>,
                 }}
               >
-                <ContextMenuProvider>
-                  {getLayout(<Component {...pageProps} />)}
-                </ContextMenuProvider>
+                {getLayout(<Component {...pageProps} />)}
                 <Notifications
                   position="top-center"
                   notificationMaxHeight={400}

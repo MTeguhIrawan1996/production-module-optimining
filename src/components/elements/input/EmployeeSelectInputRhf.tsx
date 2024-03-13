@@ -50,6 +50,7 @@ const EmployeeSelectInputRhf: React.FC<IEmployeeSelectInputRhfProps> = ({
       isComplete: true,
       positionId: positionId === '' ? null : positionId,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const renderItems = React.useCallback((value: IEmployeesData) => {

@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
 import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
@@ -98,10 +103,12 @@ export const useReadAllRitageOre = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: IOreRitagesRequest;
   onCompleted?: (data: IOreRitagesResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: oreRitagesData,
@@ -114,7 +121,7 @@ export const useReadAllRitageOre = ({
       return err;
     },
     onCompleted,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy,
   });
 
   return {

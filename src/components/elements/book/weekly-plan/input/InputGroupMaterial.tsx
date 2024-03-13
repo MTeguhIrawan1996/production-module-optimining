@@ -28,7 +28,7 @@ export type IInputGroupMaterialProps = {
   unitCapacityPlanIndex: number;
   materialIndex: number;
   uniqKey?: string | null;
-  tabs?: string;
+  tabs?: string | null;
 };
 
 const table = [

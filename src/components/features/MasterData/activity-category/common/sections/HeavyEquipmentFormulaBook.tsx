@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from 'zustand';
@@ -21,8 +22,8 @@ const HeavyEquipmentFormulaBook: React.FC<IHeavyEquipmentFormulaBookProps> = ({
 }) => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const page = Number(router.query['page']) || 1;
-  const tab = router.query['tab'] || 'lose-time-category';
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [tab] = useQueryState('tab');
   const { t } = useTranslation('default');
 
   const isPermissionUpdate = permissions?.includes(
@@ -48,8 +49,7 @@ const HeavyEquipmentFormulaBook: React.FC<IHeavyEquipmentFormulaBookProps> = ({
   });
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/master-data/activity-category?page=${page}&tab=${tabProps}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -121,6 +121,7 @@ const HeavyEquipmentFormulaBook: React.FC<IHeavyEquipmentFormulaBookProps> = ({
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    page,
     readAllHeavyEquipmentFormulaData,
     readAllHeavyEquipmentFormulaDataLoading,
     isPermissionRead,

@@ -1,6 +1,7 @@
 import { Stack, Text } from '@mantine/core';
 import { IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -22,8 +23,8 @@ const MiningMapPlanData = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const tabs = router.query.tabs as string;
-  const page = Number(router.query.page) || 1;
+  const [tabs] = useQueryState('tabs');
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const [modalData, setModalData] = React.useState<
     IReadOneMiningMapPlanData | undefined
   >(undefined);
@@ -40,12 +41,11 @@ const MiningMapPlanData = () => {
       orderBy: 'createdAt',
       orderDir: 'desc',
     },
-    skip: !router.isReady || tabs !== 'miningMapPlan',
+    skip: tabs !== 'miningMapPlan',
   });
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/plan/weekly/read/weekly-plan-group/${id}?tabs=${tabs}&page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   return (

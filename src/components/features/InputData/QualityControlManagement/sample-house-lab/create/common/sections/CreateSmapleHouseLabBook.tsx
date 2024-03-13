@@ -109,6 +109,7 @@ const CreateSmapleHouseLabBook = () => {
     variables: {
       limit: null,
     },
+    fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
       const otherElements = data.elements.data.map((val) => {
         return {

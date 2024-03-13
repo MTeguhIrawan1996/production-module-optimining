@@ -3,6 +3,7 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconChevronLeft, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -19,10 +20,9 @@ import { useReadAllNonEmployeedHumanResourcesMasterData } from '@/services/graph
 
 const CreateHumanResourcesAvailableBook = () => {
   const router = useRouter();
-  const page = Number(router.query['page']) || 1;
   const { t } = useTranslation('default');
   const companyId = router.query?.id as string;
-  const url = `/master-data/company/create/human-resources-available/${companyId}?page=1`;
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const urlCreate = `/master-data/company/read/${companyId}`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [choosesHumanResources, setChooseHumanResources] = React.useState<
@@ -33,6 +33,7 @@ const CreateHumanResourcesAvailableBook = () => {
     nonEmployeedHumanResourcesData,
     nonEmployeedHumanResourcesDataLoading,
     nonEmployeedHumanResourcesDataMeta,
+    refetchNonEmployeedHumanResources,
   } = useReadAllNonEmployeedHumanResourcesMasterData({
     variables: {
       limit: 10,
@@ -40,6 +41,7 @@ const CreateHumanResourcesAvailableBook = () => {
       search: searchQuery === '' ? null : searchQuery,
       excludeIds: choosesHumanResources.map((val) => val.id) ?? null,
     },
+    // fetchPolicy: 'cache-and-network',
   });
 
   const [executeCreate, { loading }] = useCreateEmployeeBulk({
@@ -82,8 +84,7 @@ const CreateHumanResourcesAvailableBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/master-data/company/create/human-resources-available/${companyId}?page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -154,7 +155,11 @@ const CreateHumanResourcesAvailableBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nonEmployeedHumanResourcesData]);
+  }, [
+    nonEmployeedHumanResourcesData,
+    nonEmployeedHumanResourcesDataLoading,
+    page,
+  ]);
 
   const choosetable = React.useMemo(() => {
     return (
@@ -223,7 +228,10 @@ const CreateHumanResourcesAvailableBook = () => {
           },
           searchQuery,
           onSearch: () => {
-            router.push(url, undefined, { shallow: true });
+            setPage(1);
+            refetchNonEmployeedHumanResources({
+              page: 1,
+            });
           },
         }}
       >

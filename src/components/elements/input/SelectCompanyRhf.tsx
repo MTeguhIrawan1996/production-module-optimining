@@ -41,6 +41,7 @@ const SelectCompanyRhf: React.FC<ISelectCompanyRhfProps> = ({
       limit: 15,
     },
     skip: skipQuery,
+    fetchPolicy: 'cache-and-network',
   });
 
   const { uncombinedItem, combinedItems } = useCombineFilterItems({

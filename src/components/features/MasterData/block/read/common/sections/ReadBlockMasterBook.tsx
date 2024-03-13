@@ -4,6 +4,7 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -26,8 +27,7 @@ const ReadBlockMasterBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
-  const page = Number(router.query['page']) || 1;
-  const url = `/master-data/block/read/${id}?page=1`;
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [pitId, setPitId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -62,7 +62,7 @@ const ReadBlockMasterBook = () => {
     onCompleted: () => {
       refetchBlocks();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push(url, undefined, { shallow: true });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -82,8 +82,7 @@ const ReadBlockMasterBook = () => {
   /* #endregion  /**======== Query =========== */
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/master-data/block/read/${id}?page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   const handleDeletePit = async () => {
@@ -136,7 +135,6 @@ const ReadBlockMasterBook = () => {
               },
             },
           ],
-
           fetching: blockPitMasterLoading,
           records: blockPitMaster,
         }}
@@ -157,7 +155,7 @@ const ReadBlockMasterBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blockPitMaster, blockPitMasterLoading]);
+  }, [blockPitMaster, blockPitMasterLoading, page]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (
@@ -232,7 +230,10 @@ const ReadBlockMasterBook = () => {
               },
               searchQuery,
               onSearch: () => {
-                router.push(url, undefined, { shallow: true });
+                setPage(1);
+                refetchBlocks({
+                  page: 1,
+                });
               },
               placeholder: t('block.searchPitPlaceholder'),
             }}

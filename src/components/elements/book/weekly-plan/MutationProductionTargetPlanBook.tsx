@@ -3,6 +3,7 @@ import { Flex, Grid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -38,7 +39,7 @@ const MutationProductionTargetPlanBook = ({
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const tabs = router.query.tabs as string;
+  const [tabs, setTabs] = useQueryState('tabs');
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
   const [skipMaterialQuery, setSkipMaterialQuery] =
@@ -75,9 +76,7 @@ const MutationProductionTargetPlanBook = ({
         message: mutationSuccessMassage,
         icon: <IconCheck />,
       });
-      router.push(
-        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=miningMapPlan`
-      );
+      setTabs('miningMapPlan');
       if (mutationType === 'update') {
         setIsOpenConfirmation(false);
       }
@@ -102,7 +101,7 @@ const MutationProductionTargetPlanBook = ({
     },
   });
 
-  const { materialsDataLoading } = useReadAllMaterialsMaster({
+  useReadAllMaterialsMaster({
     variables: {
       limit: null,
       orderDir: 'asc',
@@ -112,6 +111,7 @@ const MutationProductionTargetPlanBook = ({
       includeIds: null,
     },
     skip: skipMaterialQuery || tabs !== 'productionTargetPlan',
+    fetchPolicy: 'cache-and-network',
     onCompleted: ({ materials }) => {
       const oreMaterial = materials.data.find(
         (v) => v.id === `${process.env.NEXT_PUBLIC_MATERIAL_ORE_ID}`
@@ -151,60 +151,62 @@ const MutationProductionTargetPlanBook = ({
     },
   });
 
-  useReadOneProductionTargetPlan({
-    variables: {
-      weeklyPlanId: id,
-    },
-    skip:
-      !router.isReady || !skipMaterialQuery || tabs !== 'productionTargetPlan',
-    onCompleted: ({ weeklyProductionTargetPlans }) => {
-      if (
-        weeklyProductionTargetPlans.data &&
-        weeklyProductionTargetPlans.data.length > 0
-      ) {
-        weeklyProductionTargetPlans.data.forEach((val) => {
-          const newWeeklyProductionTarget: IWeeklyProductionTarget[] =
-            val.weeklyProductionTargets.map((wObj) => {
-              return {
-                id: wObj.id || null,
-                day: wObj.day,
-                rate: wObj.rate || '',
-                ton: wObj.ton || '',
-              };
-            });
-          const productionTargetPlanIndex =
-            productionTargetPlanFields.findIndex(
-              (item) => item.materialId === val.material.id
+  const { weeklyProductionTargetPlanDataLoading } =
+    useReadOneProductionTargetPlan({
+      variables: {
+        weeklyPlanId: id,
+      },
+      skip: !skipMaterialQuery || tabs !== 'productionTargetPlan',
+      onCompleted: ({ weeklyProductionTargetPlans }) => {
+        if (
+          weeklyProductionTargetPlans.data &&
+          weeklyProductionTargetPlans.data.length > 0
+        ) {
+          weeklyProductionTargetPlans.data.forEach((val) => {
+            const newWeeklyProductionTarget: IWeeklyProductionTarget[] =
+              val.weeklyProductionTargets.map((wObj) => {
+                return {
+                  id: wObj.id || null,
+                  day: wObj.day,
+                  rate: wObj.rate || '',
+                  ton: wObj.ton || '',
+                };
+              });
+            const productionTargetPlanIndex =
+              productionTargetPlanFields.findIndex(
+                (item) => item.materialId === val.material.id
+              );
+            methods.setValue(
+              `productionTargetPlans.${productionTargetPlanIndex}.id`,
+              val.id
+            );
+            methods.setValue(
+              `productionTargetPlans.${productionTargetPlanIndex}.weeklyProductionTargets`,
+              newWeeklyProductionTarget
+            );
+          });
+        }
+        if (mutationType === 'read') {
+          const newSR: IWeeklyProductionTarget[] =
+            weeklyProductionTargetPlans.additional.strippingRatio.map(
+              (sObj) => {
+                return {
+                  id: null,
+                  day: sObj.day,
+                  rate: 0,
+                  ton: sObj.ton || '',
+                };
+              }
             );
           methods.setValue(
-            `productionTargetPlans.${productionTargetPlanIndex}.id`,
-            val.id
+            `productionTargetPlans.${
+              productionTargetPlanFields.length - 1
+            }.weeklyProductionTargets`,
+            newSR
           );
-          methods.setValue(
-            `productionTargetPlans.${productionTargetPlanIndex}.weeklyProductionTargets`,
-            newWeeklyProductionTarget
-          );
-        });
-      }
-      if (mutationType === 'read') {
-        const newSR: IWeeklyProductionTarget[] =
-          weeklyProductionTargetPlans.additional.strippingRatio.map((sObj) => {
-            return {
-              id: null,
-              day: sObj.day,
-              rate: 0,
-              ton: sObj.ton || '',
-            };
-          });
-        methods.setValue(
-          `productionTargetPlans.${
-            productionTargetPlanFields.length - 1
-          }.weeklyProductionTargets`,
-          newSR
-        );
-      }
-    },
-  });
+        }
+      },
+    });
 
   const fieldRhf = React.useMemo(() => {
     const field: ControllerGroup[] = [
@@ -221,7 +223,7 @@ const MutationProductionTargetPlanBook = ({
             <Grid.Col span={12}>
               <InputTableProductionPlan
                 mutationType={mutationType}
-                isLoading={materialsDataLoading}
+                isLoading={weeklyProductionTargetPlanDataLoading}
               />
             </Grid.Col>
           );
@@ -231,7 +233,7 @@ const MutationProductionTargetPlanBook = ({
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabs, mutationType, materialsDataLoading]);
+  }, [tabs, mutationType, weeklyProductionTargetPlanDataLoading]);
 
   const handleSubmitForm: SubmitHandler<
     IWeeklyProductionTargetPlanValues

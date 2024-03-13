@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { formatDate } from '@/utils/helper/dateFormat';
 import { simpleOtherColumn } from '@/utils/helper/simpleOtherColumn';
@@ -115,10 +120,12 @@ export const useReadAllShippingMonitoring = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: Partial<IReadAllShippingMonitoringRequest>;
   onCompleted?: (data: IReadAllShippingMonitoringResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: monitoringBargingData,
@@ -134,7 +141,7 @@ export const useReadAllShippingMonitoring = ({
       return err;
     },
     onCompleted,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy,
   });
 
   const simplifiedData: ISimpleKeyType[] | undefined =

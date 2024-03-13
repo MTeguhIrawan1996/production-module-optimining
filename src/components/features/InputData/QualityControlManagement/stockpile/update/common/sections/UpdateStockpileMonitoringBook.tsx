@@ -180,6 +180,7 @@ const UpdateStockpileMonitoringBook = () => {
     variables: {
       limit: null,
     },
+    fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
       const other = data.elements.data.map((val) => {
         return {

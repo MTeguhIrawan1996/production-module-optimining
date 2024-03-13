@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { simpleOtherColumn } from '@/utils/helper/simpleOtherColumn';
 
@@ -131,10 +136,12 @@ export const useReadAllHeavyEquipmentFormula = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: Partial<IGlobalMetaRequest>;
   onCompleted?: (data: IReadAllHeavyEquipmentFormulaResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: readAllHeavyEquipmentFormulaData,
@@ -150,7 +157,7 @@ export const useReadAllHeavyEquipmentFormula = ({
       return err;
     },
     onCompleted,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy,
   });
 
   const simplifiedData: ISimpleKeyType[] | undefined =
