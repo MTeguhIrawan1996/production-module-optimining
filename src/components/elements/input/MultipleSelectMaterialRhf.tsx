@@ -51,6 +51,7 @@ const MultipleSelectMaterialRhf: React.FC<IMultipleSelectMaterialRhfProps> = ({
       includeIds: includeIds ? includeIds : null,
     },
     skip: skipQuery,
+    fetchPolicy: 'cache-and-network',
   });
 
   const { uncombinedItem } = useCombineFilterItems({

@@ -48,6 +48,7 @@ const ModelSelectInputRhf: React.FC<IModelSelectInputRhfProps> = ({
         brandId: brandId === '' ? null : brandId,
         typeId: typeId === '' ? null : typeId,
       },
+      fetchPolicy: 'cache-and-network',
     });
   const heavyEquipmentItem = modelRefrence?.map((val) => {
     return {

@@ -25,6 +25,7 @@ const SelectCompanyNative: React.FC<ICompanyNativeProps> = ({
       search: searchQuery === '' ? null : searchQuery,
       limit: 15,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const { uncombinedItem } = useFilterItems({

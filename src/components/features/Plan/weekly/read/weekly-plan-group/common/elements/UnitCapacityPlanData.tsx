@@ -1,6 +1,7 @@
 import { Stack, Text, useMantineTheme } from '@mantine/core';
 import { DataTableColumnGroup } from 'mantine-datatable';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -24,8 +25,8 @@ const UnitCapacityPlanData = () => {
   const theme = useMantineTheme();
   const router = useRouter();
   const id = router.query.id as string;
-  const tabs = router.query.tabs as string;
-  const page = Number(router.query.page) || 1;
+  const [tabs] = useQueryState('tabs');
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const [materials, setMaterials] = React.useState<
     IReadOneMaterialUnitCapacityPlan[] | undefined
   >(undefined);
@@ -44,12 +45,11 @@ const UnitCapacityPlanData = () => {
       weeklyPlanId: id,
       limit: 10,
     },
-    skip: !router.isReady || tabs !== 'unitCapacityPlan',
+    skip: tabs !== 'unitCapacityPlan',
   });
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/plan/weekly/read/weekly-plan-group/${id}?tabs=${tabs}&page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   const renderOtherColumnCallback = React.useCallback(

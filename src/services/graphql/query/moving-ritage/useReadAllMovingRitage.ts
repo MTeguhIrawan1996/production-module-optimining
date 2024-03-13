@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { IStockpilesData } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
@@ -113,10 +118,12 @@ export const useReadAllRitageMoving = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: IReadAllRitageMovingRequest;
   onCompleted?: (data: IReadAllRitageMovingResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: movingRitagesData,
@@ -131,7 +138,7 @@ export const useReadAllRitageMoving = ({
         return err;
       },
       onCompleted,
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy,
     }
   );
 

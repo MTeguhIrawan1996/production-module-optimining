@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { GResponse, IGlobalMetaRequest } from '@/types/global';
 
@@ -58,10 +63,12 @@ export const useReadAllNonEmployeedHumanResourcesMasterData = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: Partial<INonEmployeedHumanResourcesRequest>;
   onCompleted?: (data: INonEmployeedHumanResourcesResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: nonEmployeedHumanResourcesData,
@@ -77,7 +84,7 @@ export const useReadAllNonEmployeedHumanResourcesMasterData = ({
       return err;
     },
     onCompleted,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy,
   });
 
   return {

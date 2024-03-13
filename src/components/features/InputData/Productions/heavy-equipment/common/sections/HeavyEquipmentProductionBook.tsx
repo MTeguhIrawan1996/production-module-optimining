@@ -2,6 +2,7 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -25,8 +26,7 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const HeavyEquipmentProductionBook = () => {
   const router = useRouter();
-  const page = Number(router.query['page']) || 1;
-  const url = `/input-data/production/data-heavy-equipment?page=1`;
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [date, setDate] = React.useState('');
@@ -69,7 +69,7 @@ const HeavyEquipmentProductionBook = () => {
     onCompleted: () => {
       refetchHeavyEquipmentData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push(url, undefined, { shallow: true });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -97,8 +97,7 @@ const HeavyEquipmentProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/data-heavy-equipment?page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   const filter = React.useMemo(() => {
@@ -107,7 +106,7 @@ const HeavyEquipmentProductionBook = () => {
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
@@ -116,7 +115,7 @@ const HeavyEquipmentProductionBook = () => {
     const item: InputControllerNativeProps[] = [dateItem];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+  }, []);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -254,6 +253,7 @@ const HeavyEquipmentProductionBook = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    page,
     heavyEquipmentData,
     heavyEquipmentDataLoading,
     isPermissionDelete,
@@ -284,7 +284,10 @@ const HeavyEquipmentProductionBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          router.push(url, undefined, { shallow: true });
+          setPage(1);
+          refetchHeavyEquipmentData({
+            page: 1,
+          });
         },
       }}
     >

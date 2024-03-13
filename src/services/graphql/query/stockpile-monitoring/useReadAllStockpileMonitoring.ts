@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { IReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 
@@ -107,10 +112,12 @@ export const useReadAllStockpileMonitoring = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: Partial<IMonitoringStockpilesRequest>;
   onCompleted?: (data: IMonitoringStockpilesResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: monitoringStockpilesData,
@@ -126,7 +133,7 @@ export const useReadAllStockpileMonitoring = ({
       return err;
     },
     onCompleted,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy,
   });
 
   return {

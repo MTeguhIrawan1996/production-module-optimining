@@ -1,5 +1,10 @@
 import { TabsValue } from '@mantine/core';
 import { useRouter } from 'next/router';
+import {
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
@@ -20,6 +25,15 @@ const DataRitagePage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const permissions = useStore(usePermissions, (state) => state.permissions);
+  const [tabs, setTabs] = useQueryState(
+    'tabs',
+    parseAsString.withDefault('ore')
+  );
+  const [_, setPage] = useQueryState('rp', parseAsInteger.withDefault(1));
+  const [__, setHeavyEquipmentPage] = useQueryState(
+    'hp',
+    parseAsInteger.withDefault(1)
+  );
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
     shallow
@@ -43,8 +57,9 @@ const DataRitagePage = () => {
   }, [router]);
 
   const handleChangeTab = (tabs: TabsValue) => {
-    const url = `/input-data/production/data-ritage?tabs=${tabs}`;
-    router.push(url, undefined, { shallow: true });
+    setTabs(tabs);
+    setPage(1);
+    setHeavyEquipmentPage(1);
   };
 
   return (
@@ -57,8 +72,9 @@ const DataRitagePage = () => {
       >
         <GlobalTabs
           tabs={{
+            defaultValue: 'ore',
             keepMounted: false,
-            value: router.query.tabs as string,
+            value: tabs,
             onTabChange: (value) => handleChangeTab(value),
           }}
           tabsData={[

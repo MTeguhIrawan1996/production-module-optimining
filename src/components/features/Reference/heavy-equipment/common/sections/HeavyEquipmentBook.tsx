@@ -3,6 +3,7 @@ import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -25,8 +26,7 @@ const HeavyEquipmentBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const page = Number(router.query['page']) || 1;
-  const url = `/reference/heavy-equipment?page=1`;
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -74,6 +74,8 @@ const HeavyEquipmentBook = () => {
     variables: {
       limit: 10,
       page: page,
+      orderDir: 'desc',
+      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       brandId,
       typeId,
@@ -83,12 +85,7 @@ const HeavyEquipmentBook = () => {
     onCompleted: () => {
       refetchHeavyEquipments();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push({
-        href: router.asPath,
-        query: {
-          page: 1,
-        },
-      });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -122,12 +119,7 @@ const HeavyEquipmentBook = () => {
     const item: SelectProps[] = [
       {
         onChange: (value) => {
-          router.push({
-            href: router.asPath,
-            query: {
-              page: 1,
-            },
-          });
+          setPage(1);
           setBrandId(value);
           setTypeId(null);
         },
@@ -142,12 +134,7 @@ const HeavyEquipmentBook = () => {
       },
       {
         onChange: (value) => {
-          router.push({
-            href: router.asPath,
-            query: {
-              page: 1,
-            },
-          });
+          setPage(1);
           setTypeId(value);
         },
         value: typeId,
@@ -175,12 +162,7 @@ const HeavyEquipmentBook = () => {
     });
   };
   const handleSetPage = (page: number) => {
-    router.push({
-      href: router.asPath,
-      query: {
-        page: page,
-      },
-    });
+    setPage(page);
   };
   /* #endregion  /**======== HandleClickFc =========== */
 
@@ -277,6 +259,7 @@ const HeavyEquipmentBook = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    page,
     heavyEquipmentsData,
     heavyEquipmentDataLoading,
     isPermissionDelete,
@@ -301,7 +284,10 @@ const HeavyEquipmentBook = () => {
         },
         searchQuery,
         onSearch: () => {
-          router.push(url, undefined, { shallow: true });
+          setPage(1);
+          refetchHeavyEquipments({
+            page: 1,
+          });
         },
         placeholder: t('heavyEquipment.searchPlaceholder'),
       }}

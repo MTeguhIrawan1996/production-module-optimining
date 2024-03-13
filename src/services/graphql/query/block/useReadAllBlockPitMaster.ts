@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { GResponse, IGlobalMetaRequest } from '@/types/global';
 
@@ -12,6 +17,7 @@ export const READ_ALL_BLOCK_PIT_MASTER = gql`
     $orderDir: String
   ) {
     block(id: $id) {
+      id
       pits(
         findAllPitInput: {
           page: $page
@@ -57,10 +63,12 @@ export const useReadAllBlockPitMaster = ({
   variables,
   skip,
   onCompleted,
+  fetchPolicy = 'cache-first',
 }: {
   variables: IReadAllBlockPitMasterRequest;
   skip?: boolean;
   onCompleted?: (data: IReadAllBlockPitMasterResponse) => void;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: blockPitMaster,
@@ -75,7 +83,7 @@ export const useReadAllBlockPitMaster = ({
       },
       onCompleted: onCompleted,
       skip,
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy,
     }
   );
 

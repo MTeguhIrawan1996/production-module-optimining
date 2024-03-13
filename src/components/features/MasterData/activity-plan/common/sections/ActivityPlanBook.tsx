@@ -2,6 +2,7 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -20,8 +21,7 @@ import useStore from '@/utils/store/useStore';
 const ActivityPlanBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const page = Number(router.query['page']) || 1;
-  const url = `/master-data/activity-plan?page=1`;
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -53,12 +53,7 @@ const ActivityPlanBook = () => {
     onCompleted: () => {
       refetchActivityPlans();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push({
-        href: router.asPath,
-        query: {
-          page: 1,
-        },
-      });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -86,12 +81,7 @@ const ActivityPlanBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    router.push({
-      href: router.asPath,
-      query: {
-        page: page,
-      },
-    });
+    setPage(page);
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -183,6 +173,7 @@ const ActivityPlanBook = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    page,
     activityPlansData,
     activityPlansDataLoading,
     isPermissionDelete,
@@ -208,7 +199,10 @@ const ActivityPlanBook = () => {
           setSearchQuery(e.currentTarget.value);
         },
         onSearch: () => {
-          router.push(url, undefined, { shallow: true });
+          setPage(1);
+          refetchActivityPlans({
+            page: 1,
+          });
         },
         searchQuery: searchQuery,
       }}

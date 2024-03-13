@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { GResponse, IGlobalMetaRequest } from '@/types/global';
 
@@ -46,10 +51,12 @@ export const useReadAllActivityPlanMaster = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: Partial<IGlobalMetaRequest>;
   onCompleted?: (data: IActivityPlansResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: activityPlansData,
@@ -64,7 +71,7 @@ export const useReadAllActivityPlanMaster = ({
         return err;
       },
       onCompleted,
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy,
     }
   );
 

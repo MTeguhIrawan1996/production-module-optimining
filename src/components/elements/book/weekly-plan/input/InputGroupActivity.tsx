@@ -28,7 +28,7 @@ export type IInputGroupActivityProps = {
   heavyEquipmentRequirementPlanIndex: number;
   activityIndex: number;
   uniqKey?: string | null;
-  tabs?: string;
+  tabs?: string | null;
 };
 
 const table = [

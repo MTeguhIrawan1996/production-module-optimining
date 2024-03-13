@@ -88,6 +88,7 @@ const MutationMonthlyWorkTimePlanBook = ({
       limit: null,
     },
     skip: tabs !== 'workTimePlan' || skipWorkingHourPlansData,
+    fetchPolicy: 'cache-and-network',
     onCompleted: ({ workingHourPlans }) => {
       const newWeekInMonth = weeklyInMonthly.map((val) => ({
         id: null,

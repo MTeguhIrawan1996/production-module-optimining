@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { GResponse, IGlobalMetaRequest } from '@/types/global';
 
@@ -12,6 +17,7 @@ export const READ_ALL_STOCKPILE_DOME_MASTER = gql`
     $orderDir: String
   ) {
     stockpile(id: $id) {
+      id
       domes(
         findAllDomeInput: {
           page: $page
@@ -58,10 +64,12 @@ export const useReadAllStockpileDomeMaster = ({
   variables,
   skip,
   onCompleted,
+  fetchPolicy = 'cache-first',
 }: {
   variables: IReadAllStockpileDomeMasterRequest;
   skip?: boolean;
   onCompleted?: (data: IReadAllStockpileDomeMasterResponse) => void;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: stockpileDomeMaster,
@@ -77,7 +85,7 @@ export const useReadAllStockpileDomeMaster = ({
     },
     onCompleted: onCompleted,
     skip,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy,
   });
 
   return {

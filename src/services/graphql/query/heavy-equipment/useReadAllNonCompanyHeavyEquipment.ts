@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { IHeavyEquipmentMasterData } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentMasterData';
 
@@ -64,10 +69,12 @@ export const useReadAllNonCompanyHeavyEquipment = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: Partial<INonOwnedByCompanyHeavyEquipmentsRequest>;
   onCompleted?: (data: INonCompanyHeavyEquipmentResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: nonOwnedByCompanyHeavyEquipmentsData,
@@ -83,7 +90,7 @@ export const useReadAllNonCompanyHeavyEquipment = ({
       return err;
     },
     onCompleted,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy,
   });
 
   return {

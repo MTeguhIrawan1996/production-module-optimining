@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
 
@@ -80,10 +85,12 @@ export const useReadAllWeatherProduction = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: Partial<IReadAllWeatherProductionRequest>;
   onCompleted?: (data: IReadAllWeatherProductionResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: weatherData,
@@ -99,7 +106,7 @@ export const useReadAllWeatherProduction = ({
       return err;
     },
     onCompleted,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy,
   });
 
   return {

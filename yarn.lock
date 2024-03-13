@@ -4492,11 +4492,6 @@ make-error@^1.1.1:
   resolved "https://registry.yarnpkg.com/make-error/-/make-error-1.3.6.tgz#2eb2e37ea9b67c4891f684a1394799af484cf7a2"
   integrity sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==
 
-mantine-contextmenu@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/mantine-contextmenu/-/mantine-contextmenu-6.0.1.tgz#88d06c7f06474adab51a5ccc138eb4fa9b60f3f6"
-  integrity sha512-SdHUEESkLns/pkiGnGIJlJ7uIj48GCP9Yk8u+MS1exQ7twZC/ir9oATWhmMIyfQCBPvOaxd5kUosP2UuaKFpBA==
-
 mantine-datatable@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/mantine-datatable/-/mantine-datatable-6.0.2.tgz#a2bcba092205b49712467e4486d0bbae14b3a1e5"
@@ -4741,10 +4736,10 @@ next-sitemap@^3.1.55:
     "@corex/deepmerge" "^4.0.29"
     minimist "^1.2.7"
 
-next-usequerystate@^1.9.1:
-  version "1.17.1"
-  resolved "https://registry.yarnpkg.com/next-usequerystate/-/next-usequerystate-1.17.1.tgz#3b24b69a437c3c9ed8b70a8798b26f44603d1ebf"
-  integrity sha512-gRUswW1OIFJY+ncQKq2GH0BEIFX63JhC5+hKSkQr8s48jib7ffdx7sCivmssFmRJrIfhyawRyBUaCSPaSyPMgw==
+next-usequerystate@1.9.1:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/next-usequerystate/-/next-usequerystate-1.9.1.tgz#afe3a5b2c32d375978fa85cd10aa26b8f031a95f"
+  integrity sha512-6QrUBqj4hl68j0PHBkWPE3OZiWZyA28rMmLVkPxUIVR1Sac6VYp66+iyWsS/8roykNm8wHkAb16E1gshS9SMBA==
   dependencies:
     mitt "^3.0.1"
 
