@@ -463,7 +463,10 @@
     "chooseMapType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.map) $t(commonTypography.type)",
     "quarterly": "Triwulan",
     "mapInformation": "Informasi Peta",
-    "yearly": "Tahunan"
+    "yearly": "Tahunan",
+    "waitingForConfirmation": "Menunggu Konfirmasi",
+    "valid": "Valid",
+    "accepted": "Diterima"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -500,11 +503,7 @@
     "weekly": "$t(commonTypography.weekly)",
     "monthly": "$t(commonTypography.monthly)",
     "map": "$t(commonTypography.map)",
-    "quarter": "Triwulan",
-    "waitingForConfirmation": "Menunggu Konfirmasi",
-    "valid": "Valid",
-    "determined": "Ditetapkan",
-    "accepted": "Diterima"
+    "quarter": "Triwulan"
   },
   "auth": {
     "button": {
