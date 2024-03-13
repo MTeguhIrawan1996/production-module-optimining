@@ -184,6 +184,27 @@ export async function middleware(request: NextRequest) {
         path: '/setting/user',
         allowedPermissions: ['read-user'],
       },
+      {
+        path: '/setting/user',
+        allowedPermissions: ['create-user'],
+      },
+      // input data-map
+      {
+        path: '/input-data/production/map/weekly',
+        allowedPermissions: ['create-map-data'],
+      },
+      {
+        path: '/input-data/production/map/monthly',
+        allowedPermissions: ['create-map-data'],
+      },
+      {
+        path: '/input-data/production/map/quarterly',
+        allowedPermissions: ['create-map-data'],
+      },
+      {
+        path: '/input-data/production/map/yearly',
+        allowedPermissions: ['create-map-data'],
+      },
     ];
 
     const matchProtectedPath = protectedPaths.find(
