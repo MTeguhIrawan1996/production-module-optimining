@@ -2,6 +2,7 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -21,8 +22,7 @@ import useStore from '@/utils/store/useStore';
 
 const SampleHouseLabBook = () => {
   const router = useRouter();
-  const page = Number(router.query['page']) || 1;
-  const url = `/input-data/quality-control-management/sample-house-lab?page=1`;
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -54,6 +54,7 @@ const SampleHouseLabBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
+      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
     },
   });
@@ -62,7 +63,7 @@ const SampleHouseLabBook = () => {
     onCompleted: () => {
       refetchHouseSampleAndLabs();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push(url, undefined, { shallow: true });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -90,12 +91,7 @@ const SampleHouseLabBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    router.push({
-      href: router.asPath,
-      query: {
-        page: page,
-      },
-    });
+    setPage(page);
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -226,6 +222,7 @@ const SampleHouseLabBook = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    page,
     houseSampleAndLabsData,
     houseSampleAndLabsDataLoading,
     isPermissionDelete,
@@ -255,7 +252,10 @@ const SampleHouseLabBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          router.push(url, undefined, { shallow: true });
+          setPage(1);
+          refetchHouseSampleAndLabs({
+            page: 1,
+          });
         },
       }}
     >

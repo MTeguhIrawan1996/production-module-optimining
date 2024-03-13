@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
 import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
@@ -123,10 +128,12 @@ export const useReadAllFrontProduction = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: Partial<IReadAllFrontProductionRequest>;
   onCompleted?: (data: IReadAllFrontProductionResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: frontProductionData,
@@ -142,7 +149,7 @@ export const useReadAllFrontProduction = ({
       return err;
     },
     onCompleted,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy,
   });
 
   const simplifiedData: ISimpleKeyType[] | undefined =

@@ -1,6 +1,6 @@
 import { TabsValue } from '@mantine/core';
 import { useRouter } from 'next/router';
-import { useQueryState } from 'next-usequerystate';
+import { parseAsString, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
@@ -24,7 +24,10 @@ import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 const CreateWeeklyPlanGroupPage = () => {
   const router = useRouter();
   const isRouterReady = useRouterReady();
-  const [tabs, setTabs] = useQueryState('tabs');
+  const [tabs, setTabs] = useQueryState(
+    'tabs',
+    parseAsString.withDefault("'workTimePlan'")
+  );
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
@@ -52,14 +55,15 @@ const CreateWeeklyPlanGroupPage = () => {
 
   return (
     <RootWrapper>
-      <InnerWrapper
-        titleProps={{ title: t('weeklyPlan.formCreate'), mb: 'xs' }}
-      >
-        {isRouterReady ? (
+      {isRouterReady ? (
+        <InnerWrapper
+          titleProps={{ title: t('weeklyPlan.formCreate'), mb: 'xs' }}
+        >
           <GlobalTabs
             tabs={{
+              defaultValue: 'workTimePlan',
               keepMounted: false,
-              value: tabs || 'workTimePlan',
+              value: tabs,
               onTabChange: (value) => handleChangeTab(value),
             }}
             tabsData={[
@@ -156,8 +160,8 @@ const CreateWeeklyPlanGroupPage = () => {
               },
             ]}
           />
-        ) : null}
-      </InnerWrapper>
+        </InnerWrapper>
+      ) : null}
     </RootWrapper>
   );
 };

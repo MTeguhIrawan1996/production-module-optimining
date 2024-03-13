@@ -2,6 +2,7 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -33,10 +34,12 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const ListDataTopsoilRitageBook = () => {
   const router = useRouter();
-  const tabs = router.query['tabs'] || '';
-  const page = Number(router.query['rp']) || 1;
-  const heavyEquipmentPage = Number(router.query['hp']) || 1;
-  const url = `/input-data/production/data-ritage?rp=1&hp=${heavyEquipmentPage}&tabs=topsoil`;
+  const [tabs] = useQueryState('tabs');
+  const [page, setPage] = useQueryState('rp', parseAsInteger.withDefault(1));
+  const [heavyEquipmentPage] = useQueryState(
+    'hp',
+    parseAsInteger.withDefault(1)
+  );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -138,7 +141,7 @@ const ListDataTopsoilRitageBook = () => {
     onCompleted: () => {
       refetchTopsoilRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push(url, undefined, { shallow: true });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -166,8 +169,7 @@ const ListDataTopsoilRitageBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/data-ritage?rp=${page}&hp=${heavyEquipmentPage}&tabs=topsoil`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   const filter = React.useMemo(() => {
@@ -176,7 +178,7 @@ const ListDataTopsoilRitageBook = () => {
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
@@ -195,7 +197,7 @@ const ListDataTopsoilRitageBook = () => {
         },
       ],
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setIsRitageProblematic(
           value ? (value === 'true' ? false : true) : null
         );
@@ -207,7 +209,7 @@ const ListDataTopsoilRitageBook = () => {
       searchable: false,
       data: shiftFilterItem,
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setShiftId(value);
       },
     });
@@ -219,7 +221,7 @@ const ListDataTopsoilRitageBook = () => {
       onSearchChange: setHeavyEquipmentSeacrhTerm,
       searchValue: heavyEquipmentSeacrhTerm,
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setHeavyEquipmentId(value);
       },
     });
@@ -232,7 +234,7 @@ const ListDataTopsoilRitageBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url, heavyEquipmentItemFilter, shiftFilterItem]);
+  }, [heavyEquipmentItemFilter, shiftFilterItem]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -380,6 +382,7 @@ const ListDataTopsoilRitageBook = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    page,
     topsoilRitagesData,
     topsoilRitagesDataLoading,
     isPermissionDelete,

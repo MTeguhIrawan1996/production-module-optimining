@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import {
   GResponse,
@@ -143,10 +148,12 @@ export const useReadAllSampleHouseLab = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: Partial<IGlobalMetaRequest>;
   onCompleted?: (data: IHouseSampleAndLabsResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: houseSampleAndLabsData,
@@ -161,7 +168,7 @@ export const useReadAllSampleHouseLab = ({
         return err;
       },
       onCompleted,
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy,
     }
   );
 

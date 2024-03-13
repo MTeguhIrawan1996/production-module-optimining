@@ -1,6 +1,6 @@
 import { TabsValue } from '@mantine/core';
 import { useRouter } from 'next/router';
-import { useQueryState } from 'next-usequerystate';
+import { parseAsString, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -22,13 +22,18 @@ const ReadWeeklyPlanGroupBook = () => {
   const { t } = useTranslation('default');
   const id = router.query.id as string;
   const isRouterReady = useRouterReady();
-  const [tabs, setTabs] = useQueryState('tabs');
+  const [tabs, setTabs] = useQueryState(
+    'tabs',
+    parseAsString.withDefault('workTimePlan')
+  );
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const isPermissionUpdate = permissions?.includes('update-weekly-plan');
 
   const handleChangeTab = (tabs: TabsValue) => {
     setTabs(tabs);
   };
+
+  if (!isRouterReady) return null;
 
   return (
     <DashboardCard
@@ -57,59 +62,58 @@ const ReadWeeklyPlanGroupBook = () => {
           : undefined
       }
     >
-      {isRouterReady ? (
-        <GlobalTabs
-          tabs={{
-            keepMounted: false,
-            value: tabs || 'workTimePlan',
-            onTabChange: (value) => handleChangeTab(value),
-          }}
-          tabsData={[
-            {
-              label: t('commonTypography.workTimePlan'),
-              value: 'workTimePlan',
-              component: <WorkTimePlanData />,
-              isShowItem: true,
-            },
-            {
-              label: t('commonTypography.unitCapacityPlan'),
-              value: 'unitCapacityPlan',
-              component: <UnitCapacityPlanData />,
-              isShowItem: true,
-            },
-            {
-              label: t('commonTypography.heavyEquipmentReqPlan'),
-              value: 'heavyEquipmentReqPlan',
-              component: <HeavyEquipmentReqPlanData />,
-              isShowItem: true,
-            },
-            {
-              label: t('commonTypography.heavyEquipmentAvailabilityPlan'),
-              value: 'heavyEquipmentAvailabilityPlan',
-              component: <HeavyEquipmentAvailabilityPlanData />,
-              isShowItem: true,
-            },
-            {
-              label: t('commonTypography.productionTargetPlan'),
-              value: 'productionTargetPlan',
-              component: <ProductionTargetPlanData />,
-              isShowItem: true,
-            },
-            {
-              label: t('commonTypography.miningMapPlan'),
-              value: 'miningMapPlan',
-              component: <MiningMapPlanData />,
-              isShowItem: true,
-            },
-            {
-              label: t('commonTypography.bargingTargetPlan'),
-              value: 'bargingTargetPlan',
-              component: <BargingTargetPlanData />,
-              isShowItem: true,
-            },
-          ]}
-        />
-      ) : null}
+      <GlobalTabs
+        tabs={{
+          defaultValue: 'workTimePlan',
+          keepMounted: false,
+          value: tabs,
+          onTabChange: (value) => handleChangeTab(value),
+        }}
+        tabsData={[
+          {
+            label: t('commonTypography.workTimePlan'),
+            value: 'workTimePlan',
+            component: <WorkTimePlanData />,
+            isShowItem: true,
+          },
+          {
+            label: t('commonTypography.unitCapacityPlan'),
+            value: 'unitCapacityPlan',
+            component: <UnitCapacityPlanData />,
+            isShowItem: true,
+          },
+          {
+            label: t('commonTypography.heavyEquipmentReqPlan'),
+            value: 'heavyEquipmentReqPlan',
+            component: <HeavyEquipmentReqPlanData />,
+            isShowItem: true,
+          },
+          {
+            label: t('commonTypography.heavyEquipmentAvailabilityPlan'),
+            value: 'heavyEquipmentAvailabilityPlan',
+            component: <HeavyEquipmentAvailabilityPlanData />,
+            isShowItem: true,
+          },
+          {
+            label: t('commonTypography.productionTargetPlan'),
+            value: 'productionTargetPlan',
+            component: <ProductionTargetPlanData />,
+            isShowItem: true,
+          },
+          {
+            label: t('commonTypography.miningMapPlan'),
+            value: 'miningMapPlan',
+            component: <MiningMapPlanData />,
+            isShowItem: true,
+          },
+          {
+            label: t('commonTypography.bargingTargetPlan'),
+            value: 'bargingTargetPlan',
+            component: <BargingTargetPlanData />,
+            isShowItem: true,
+          },
+        ]}
+      />
     </DashboardCard>
   );
 };

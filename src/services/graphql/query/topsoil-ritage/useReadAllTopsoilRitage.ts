@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
 import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
@@ -97,11 +102,13 @@ export const useReadAllRitageTopsoil = ({
   onCompleted,
   onError,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: ITopsoilRitagesRequest;
   onCompleted?: (data: ITopsoilRitagesResponse) => void;
   onError?: ({ graphQLErrors }: ApolloError) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: topsoilRitagesData,
@@ -114,7 +121,7 @@ export const useReadAllRitageTopsoil = ({
       skip: skip,
       onError,
       onCompleted,
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy,
     }
   );
 
