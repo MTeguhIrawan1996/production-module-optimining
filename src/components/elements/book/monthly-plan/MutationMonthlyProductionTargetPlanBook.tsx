@@ -119,6 +119,7 @@ const MutationMonthlyProductionTargetPlanBook = ({
       weeklyInMonthly.length === 0 ||
       skipMaterialQuery ||
       tabs !== 'productionTargetPlan',
+    fetchPolicy: 'cache-and-network',
     onCompleted: ({ materials }) => {
       const newWeekInMonth: IMonthlyProductionTarget[] = weeklyInMonthly.map(
         (val) => ({

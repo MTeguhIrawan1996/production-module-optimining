@@ -53,6 +53,7 @@ const SelectWorkingHoursPlanRhf: React.FC<ISelectWorkingHoursPlanRhfProps> = ({
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const { combinedItems, uncombinedItem } = useCombineFilterItems({

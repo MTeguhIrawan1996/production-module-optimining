@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { IShiftsData } from '@/services/graphql/query/shift/useReadAllShiftMaster';
 
@@ -142,10 +147,12 @@ export const useReadAllHeavyEquipmentProduction = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: IReadAllHeavyEquipmentProductionRequest;
   onCompleted?: (data: IReadAllHeavyEquipmentProductionResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: heavyEquipmentDatasData,
@@ -161,7 +168,7 @@ export const useReadAllHeavyEquipmentProduction = ({
       return err;
     },
     onCompleted,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy,
   });
 
   return {

@@ -107,7 +107,7 @@ export const useReadAllMonthlyPlan = ({
       return err;
     },
     onCompleted,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   });
 
   const simplifiedData: ISimpleTableKeyValue[] | undefined =

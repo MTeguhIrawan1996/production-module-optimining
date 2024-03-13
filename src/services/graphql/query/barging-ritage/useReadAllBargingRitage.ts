@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
 import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
@@ -112,10 +117,12 @@ export const useReadAllRitageBarging = ({
   variables,
   onCompleted,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: IBargingRitagesRequest;
   onCompleted?: (data: IBargingRitagesResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: bargingRitagesData,
@@ -130,7 +137,7 @@ export const useReadAllRitageBarging = ({
         return err;
       },
       onCompleted,
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy,
     }
   );
 

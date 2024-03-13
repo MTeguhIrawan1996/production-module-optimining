@@ -1,6 +1,7 @@
 import { Stack, Text } from '@mantine/core';
 import { DataTableColumn, DataTableColumnGroup } from 'mantine-datatable';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -23,14 +24,15 @@ const BargingTargetPlanData = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const tabs = router.query.tabs as string;
-  const page = Number(router.query.page) || 1;
+  const [tabs] = useQueryState('tabs');
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
 
   const { elementsData } = useReadAllElementMaster({
     variables: {
       limit: null,
     },
     skip: tabs !== 'bargingTargetPlan',
+    fetchPolicy: 'cache-and-network',
   });
 
   const { weeklyBargingTargetPlanData, weeklyBargingTargetPlanDataLoading } =
@@ -38,7 +40,7 @@ const BargingTargetPlanData = () => {
       variables: {
         weeklyPlanId: id,
       },
-      skip: !router.isReady || tabs !== 'bargingTargetPlan',
+      skip: tabs !== 'bargingTargetPlan',
     });
 
   const renderOtherGroupCallback = React.useCallback(
@@ -96,8 +98,7 @@ const BargingTargetPlanData = () => {
   const renderOtherColumn = elementsData?.map(renderOtherColumnCallback);
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/plan/weekly/read/weekly-plan-group/${id}?tabs=${tabs}&page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   return (

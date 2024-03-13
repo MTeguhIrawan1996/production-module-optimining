@@ -1,6 +1,7 @@
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -27,10 +28,9 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const WeeklyPlanBook = () => {
   const router = useRouter();
-  const page = Number(router.query['page']) || 1;
-  const url = `/plan/weekly?page=1`;
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const [year, setYear] = React.useState<number | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -69,7 +69,7 @@ const WeeklyPlanBook = () => {
     onCompleted: () => {
       refetchWeeklyPlanData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push(url, undefined, { shallow: true });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -97,14 +97,13 @@ const WeeklyPlanBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/plan/weekly?page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   const filter = React.useMemo(() => {
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setYear(value ? Number(value) : null);
         setWeek(null);
       },
@@ -114,17 +113,19 @@ const WeeklyPlanBook = () => {
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setWeek(value ? Number(value) : null);
       },
     });
     const selectStatusItem = globalSelectStatusNative({
       onChange: (value) => {
+        setPage(1);
         setStatus(value);
       },
     });
     const selectCompanyItem = globalSelectCompanyNative({
       onChange: (value) => {
+        setPage(1);
         setCompanyId(value);
       },
     });
@@ -137,7 +138,7 @@ const WeeklyPlanBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url, year, week]);
+  }, [year, week]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -234,6 +235,7 @@ const WeeklyPlanBook = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    page,
     weeklyPlanData,
     weeklyPlanDataLoading,
     isPermissionDelete,

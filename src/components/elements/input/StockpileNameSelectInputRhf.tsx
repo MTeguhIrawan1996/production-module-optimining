@@ -37,6 +37,7 @@ const StockpileNameSelectInputRhf: React.FC<
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const { combinedItems, uncombinedItem } = useCombineFilterItems({

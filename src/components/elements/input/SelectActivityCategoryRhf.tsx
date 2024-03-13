@@ -59,6 +59,7 @@ const SelectActivityCategoryRhf: React.FC<ISelectActivityCategoryRhfProps> = ({
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const { combinedItems, uncombinedItem } = useCombineFilterItems({

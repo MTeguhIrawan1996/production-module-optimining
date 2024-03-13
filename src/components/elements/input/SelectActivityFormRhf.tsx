@@ -43,6 +43,7 @@ const SelectActivityFormRhf: React.FC<ISelectActivityFormRhfProps> = ({
       orderBy: 'createdAt',
     },
     skip: skipQuery,
+    fetchPolicy: 'cache-and-network',
   });
 
   const { uncombinedItem } = useFilterItems({

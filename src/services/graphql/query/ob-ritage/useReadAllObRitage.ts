@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
 
@@ -96,11 +101,13 @@ export const useReadAllRitageOB = ({
   onCompleted,
   onError,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: IOverburdenRitagesRequest;
   onCompleted?: (data: IOverburdenRitagesResponse) => void;
   onError?: ({ graphQLErrors }: ApolloError) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: overburdenRitagesData,
@@ -113,7 +120,7 @@ export const useReadAllRitageOB = ({
       skip: skip,
       onError,
       onCompleted,
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy,
     }
   );
 

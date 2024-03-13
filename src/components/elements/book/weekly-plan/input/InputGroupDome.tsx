@@ -29,7 +29,7 @@ export type IInputGroupDomeProps = {
   label?: string;
   bargingDomePlanIndex: number;
   uniqKey?: string | null;
-  tabs?: string;
+  tabs?: string | null;
 };
 
 const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({
@@ -61,6 +61,7 @@ const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({
       limit: null,
     },
     skip: tabs !== 'bargingTargetPlan',
+    fetchPolicy: 'cache-and-network',
   });
 
   const { stockpileDomeMaster } = useReadOneStockpileDomeMaster({

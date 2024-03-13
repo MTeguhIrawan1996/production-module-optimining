@@ -1,4 +1,9 @@
 import { useRouter } from 'next/router';
+import {
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -21,8 +26,11 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
 }) => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const page = Number(router.query['page']) || 1;
-  const tab = router.query['tab'] || 'lose-time-category';
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [tab] = useQueryState(
+    'tab',
+    parseAsString.withDefault('lose-time-category')
+  );
   const { t } = useTranslation('default');
 
   const isPermissionUpdate = permissions?.includes(
@@ -49,8 +57,7 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
   });
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/master-data/activity-category?page=${page}&tab=${tabProps}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -122,6 +129,7 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    page,
     readAllActivityCategoryData,
     readAllActivityCategoryDataLoading,
     isPermissionRead,

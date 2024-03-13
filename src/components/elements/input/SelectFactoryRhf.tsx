@@ -43,6 +43,7 @@ const SelectFactoryRhf: React.FC<ISelectFactoryRhfProps> = ({
       search: searchQuery === '' ? null : searchQuery,
       categoryId: categoryId === '' ? null : categoryId,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const { combinedItems, uncombinedItem } = useCombineFilterItems({

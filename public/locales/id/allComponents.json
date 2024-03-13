@@ -253,7 +253,10 @@
       "mapName": "Nama Peta",
       "miningMap": "Peta Penambangan,",
       "uploadFile": "Unggah File",
-      "tonByDraft": "Ton Berdasarkan Draft"
+      "tonByDraft": "Ton Berdasarkan Draft",
+      "mapType": "Jenis Peta",
+      "quarter": "Triwulan",
+      "mapFile": "File Peta"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",
@@ -264,7 +267,8 @@
       "uploadExcelDescription": "Unggah Dokumen Maksimal 100MB dengan format .xlsx dan .CSV",
       "uploadFileMax10Mb": "Maksimal Ukuran File 10MB",
       "dragAndDropFile": "Tarik dan lepas atau cari file anda",
-      "formatPdfOrImageDesc": "Format file berupa .JPEG .JPG .PNG atau .WEBP dan PDF"
+      "formatPdfOrImageDesc": "Format file berupa .JPEG .JPG .PNG atau .WEBP dan PDF",
+      "mapFileDescription": "Maksimal 10Mb dengan ekestensi .JPEG .JPG .PNG"
     },
     "modal": {
       "updatePasswordModal": {

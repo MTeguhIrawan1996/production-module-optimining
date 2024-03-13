@@ -166,7 +166,7 @@ export async function middleware(request: NextRequest) {
       },
       {
         path: '/input-data/production/map',
-        allowedPermissions: ['all'],
+        allowedPermissions: ['read-map-data'],
       },
       {
         path: '/plan/weekly',
@@ -176,13 +176,38 @@ export async function middleware(request: NextRequest) {
         path: '/plan/monthly',
         allowedPermissions: ['read-monthly-plan'],
       },
+      // input data-map
       {
-        path: '/setting/management-role',
-        allowedPermissions: ['read-role'],
+        path: '/input-data/production/map/weekly/create',
+        allowedPermissions: ['create-map-data'],
       },
       {
-        path: '/setting/user',
-        allowedPermissions: ['read-user'],
+        path: '/input-data/production/map/monthly/create',
+        allowedPermissions: ['create-map-data'],
+      },
+      {
+        path: '/input-data/production/map/quarterly/create',
+        allowedPermissions: ['create-map-data'],
+      },
+      {
+        path: '/input-data/production/map/yearly/create',
+        allowedPermissions: ['create-map-data'],
+      },
+      {
+        path: '/input-data/production/map/weekly/update',
+        allowedPermissions: ['update-map-data'],
+      },
+      {
+        path: '/input-data/production/map/monthly/update',
+        allowedPermissions: ['update-map-data'],
+      },
+      {
+        path: '/input-data/production/map/quarterly/update',
+        allowedPermissions: ['update-map-data'],
+      },
+      {
+        path: '/input-data/production/map/yearly/update',
+        allowedPermissions: ['update-map-data'],
       },
     ];
 

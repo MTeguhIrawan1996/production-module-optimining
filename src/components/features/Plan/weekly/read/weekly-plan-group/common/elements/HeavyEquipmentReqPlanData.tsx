@@ -1,6 +1,7 @@
 import { Stack, Text } from '@mantine/core';
 import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -23,8 +24,8 @@ const HeavyEquipmentReqPlanData = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const tabs = router.query.tabs as string;
-  const page = Number(router.query.page) || 1;
+  const [tabs] = useQueryState('tabs');
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const [
     heavyEquipmentRequirementPlanActivities,
     setHeavyEquipmentRequirementPlanActivities,
@@ -43,12 +44,11 @@ const HeavyEquipmentReqPlanData = () => {
       weeklyPlanId: id,
       limit: null,
     },
-    skip: !router.isReady || tabs !== 'heavyEquipmentReqPlan',
+    skip: tabs !== 'heavyEquipmentReqPlan',
   });
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/plan/weekly/read/weekly-plan-group/${id}?tabs=${tabs}&page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   const renderOtherColumnCallback = React.useCallback(

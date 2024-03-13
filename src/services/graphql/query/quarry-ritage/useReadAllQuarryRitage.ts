@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
 import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
@@ -102,11 +107,13 @@ export const useReadAllRitageQuarry = ({
   onCompleted,
   onError,
   skip,
+  fetchPolicy = 'cache-first',
 }: {
   variables?: IQuarryRitagesRequest;
   onCompleted?: (data: IQuarryRitagesResponse) => void;
   onError?: ({ graphQLErrors }: ApolloError) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: quarryRitagesData,
@@ -119,7 +126,7 @@ export const useReadAllRitageQuarry = ({
       skip: skip,
       onError,
       onCompleted,
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy,
     }
   );
 
