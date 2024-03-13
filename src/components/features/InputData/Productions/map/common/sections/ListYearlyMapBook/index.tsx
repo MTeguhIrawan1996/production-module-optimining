@@ -156,6 +156,7 @@ const ListYearlyMapBook = () => {
       data: mapCategoryList,
       onChange: (v) => {
         setMapYearlyCategory(v);
+        setMapYearlyPage(1);
       },
       value: mapYearlyCategory,
     });
@@ -164,6 +165,7 @@ const ListYearlyMapBook = () => {
       searchable: true,
       onChange: (v) => {
         setMapYearlyLocation(v);
+        setMapYearlyPage(1);
       },
       categoryIds: (locationIds as string[]) || [],
       value: mapYearlyLocation,
@@ -174,6 +176,7 @@ const ListYearlyMapBook = () => {
       searchable: true,
       onChange: (v) => {
         setMapYearlyYear(v);
+        setMapYearlyPage(1);
       },
     });
 
@@ -238,10 +241,6 @@ const ListYearlyMapBook = () => {
                 'commonTypography.map'
               )}`,
               render: (v) => v.mapDataCategory.name,
-            },
-            {
-              accessor: 'year',
-              title: t('commonTypography.year'),
             },
             {
               accessor: 'year',
