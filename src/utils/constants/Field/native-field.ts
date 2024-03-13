@@ -1,4 +1,5 @@
 import { IDateInputNativeProps } from '@/components/elements/input/DateInputNative';
+import { ILocationNativeProps } from '@/components/elements/input/LocationSelectInputNative';
 import { IArriveBargeNativeProps } from '@/components/elements/input/SelectArriveBargeNative';
 import { ICompanyNativeProps } from '@/components/elements/input/SelectCompanyNative';
 import { ISelectHeavyEquipmentNativeProps } from '@/components/elements/input/SelectHeavyEquipmentNative';
@@ -148,6 +149,22 @@ export const globalSelectCompanyNative = ({
 }: Partial<ICompanyNativeProps>) => {
   const field: InputControllerNativeProps = {
     control: 'select-company-native',
+    name,
+    searchable,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectLocationNative = ({
+  name = 'location',
+  searchable = true,
+  clearable = true,
+  ...rest
+}: Partial<ILocationNativeProps>) => {
+  const field: InputControllerNativeProps = {
+    control: 'select-location-native',
     name,
     searchable,
     clearable,

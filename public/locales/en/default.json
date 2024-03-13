@@ -459,7 +459,14 @@
     "monthly": "Bulanan",
     "supportingHeavyEquipment": "Alat Berat Pendukung",
     "tonByDraft": "Ton Berdasarkan Draft",
-    "nthWeek": "Minggu ke-{{n}}"
+    "nthWeek": "Minggu ke-{{n}}",
+    "chooseMapType": "$t(commonTypography.choose) / Ketikan $t(commonTypography.map) $t(commonTypography.type)",
+    "quarterly": "Triwulan",
+    "mapInformation": "Informasi Peta",
+    "yearly": "Tahunan",
+    "waitingForConfirmation": "Menunggu Konfirmasi",
+    "valid": "Valid",
+    "accepted": "Diterima"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -495,7 +502,8 @@
     "plan": "$t(commonTypography.plan)",
     "weekly": "$t(commonTypography.weekly)",
     "monthly": "$t(commonTypography.monthly)",
-    "map": "$t(commonTypography.map)"
+    "map": "$t(commonTypography.map)",
+    "quarter": "Triwulan"
   },
   "auth": {
     "button": {
@@ -1033,6 +1041,13 @@
     "successIsRejectMessage": "$t(monthlyPlan.title) berhasil $t(commonTypography.reject)"
   },
   "mapProduction": {
-    "title": "$t(commonTypography.map)"
+    "title": "$t(commonTypography.inputData) $t(commonTypography.commonTypography)",
+    "createMapProd": "$t(commonTypography.create) $t(commonTypography.map)",
+    "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.map)",
+    "successYearlyCreateMessage": "$t(commonTypography.map) $t(commonTypography.yearly) berhasil dibuat",
+    "successMonthlyCreateMessage": "$t(commonTypography.map) $t(commonTypography.monthly) berhasil dibuat",
+    "successQuarterlyCreateMessage": "$t(commonTypography.map) $t(commonTypography.quarterly) berhasil dibuat",
+    "successWeeklyCreateMessage": "$t(commonTypography.map) $t(commonTypography.weekly) berhasil dibuat",
+    "successDeleteMessage": "$t(commonTypography.map) berhasil dihapus"
   }
 }

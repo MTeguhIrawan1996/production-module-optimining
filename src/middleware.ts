@@ -176,13 +176,22 @@ export async function middleware(request: NextRequest) {
         path: '/plan/monthly',
         allowedPermissions: ['read-monthly-plan'],
       },
+      // input data-map
       {
-        path: '/setting/management-role',
-        allowedPermissions: ['read-role'],
+        path: '/input-data/production/map/weekly',
+        allowedPermissions: ['create-map-data'],
       },
       {
-        path: '/setting/user',
-        allowedPermissions: ['read-user'],
+        path: '/input-data/production/map/monthly',
+        allowedPermissions: ['create-map-data'],
+      },
+      {
+        path: '/input-data/production/map/quarterly',
+        allowedPermissions: ['create-map-data'],
+      },
+      {
+        path: '/input-data/production/map/yearly',
+        allowedPermissions: ['create-map-data'],
       },
     ];
 

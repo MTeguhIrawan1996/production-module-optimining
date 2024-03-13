@@ -6,6 +6,7 @@ import { IEligibilityStatusSelectInputRhfProps } from '@/components/elements/inp
 import { IEmployeeSelectInputRhfProps } from '@/components/elements/input/EmployeeSelectInputRhf';
 import { IHeavyEquipmentSelectInputRhfProps } from '@/components/elements/input/HeavyEquipmentSelectInputRhf';
 import { IIdentityTypesRadioInputProps } from '@/components/elements/input/IdentityRadioInputRhf';
+import { IImageInputDropzoneRhfProps } from '@/components/elements/input/ImageInputDropzoneRhf';
 import { IInputAverageArrayProps } from '@/components/elements/input/InputAverageArray';
 import { IInputSumArrayProps } from '@/components/elements/input/InputSumArray';
 import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
@@ -14,6 +15,7 @@ import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/Marria
 import { IMaterialSelectInputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { IMultipleSelectLocationRhfProps } from '@/components/elements/input/MultipleSelectLocationRhf';
+import { IMultipleSelectMapLocationRhfProps } from '@/components/elements/input/MultipleSelectMapLocationRhf';
 import { IMultipleSelectMaterialRhfProps } from '@/components/elements/input/MultipleSelectMaterialRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { IPdfOrInputDropzoneRhfProps } from '@/components/elements/input/PdfOrImageInputDropzoneRhf';
@@ -997,6 +999,28 @@ export const globalMultipleSelectLocation = ({
   return field;
 };
 
+export const globalMultipleSelectMapLocation = ({
+  name = 'maplocationIds',
+  label = 'mapLocation',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<IMultipleSelectMapLocationRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'multiple-select-map-location',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
 export const globalMultipleSelectMaterial = ({
   name = 'materialIds',
   label = 'material',
@@ -1196,6 +1220,32 @@ export const globalDropzonePdfOrImageRhf = ({
 }: Partial<IPdfOrInputDropzoneRhfProps>) => {
   const field: ControllerProps = {
     control: 'pdf-image-dropzone',
+    name,
+    label,
+    withAsterisk,
+    colSpan,
+    maxSize,
+    multiple,
+    onDrop,
+    onReject,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalDropzoneImageRhf = ({
+  name = 'uploadFile',
+  label,
+  withAsterisk = true,
+  colSpan = 6,
+  maxSize = 10 * 1024 ** 2,
+  multiple = false,
+  onDrop = () => {},
+  onReject = () => {},
+  ...rest
+}: Partial<IImageInputDropzoneRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'image-dropzone',
     name,
     label,
     withAsterisk,

@@ -23,11 +23,13 @@ import { IImageInputDropzoneRhfProps } from '@/components/elements/input/ImageIn
 import { IInputAverageArrayProps } from '@/components/elements/input/InputAverageArray';
 import { IInputSumArrayProps } from '@/components/elements/input/InputSumArray';
 import { ILocationCategorySelectInputRhfProps } from '@/components/elements/input/LocationCategorySelectInputRhf';
+import { ILocationNativeProps } from '@/components/elements/input/LocationSelectInputNative';
 import { ILocationSelectInputRhfProps } from '@/components/elements/input/LocationSelectInputRhf';
 import { IMarriagaSelectInputRhfProps } from '@/components/elements/input/MarriageStatusesSelectInputRhf';
 import { IMaterialSelectInputRhfProps } from '@/components/elements/input/MaterialSelectInputRhf';
 import { IModelSelectInputRhfProps } from '@/components/elements/input/ModelSelectInputRhf';
 import { IMultipleSelectLocationRhfProps } from '@/components/elements/input/MultipleSelectLocationRhf';
+import { IMultipleSelectMapLocationRhfProps } from '@/components/elements/input/MultipleSelectMapLocationRhf';
 import { IMultipleSelectMaterialRhfProps } from '@/components/elements/input/MultipleSelectMaterialRhf';
 import { INumberInputProps } from '@/components/elements/input/NumberInputRhf';
 import { INumberInputTableRhfProps } from '@/components/elements/input/NumberInputTableRhf';
@@ -149,7 +151,8 @@ export type ControllerProps =
   | IMultipleSelectMaterialRhfProps
   | IDisplayQuietNumber
   | ISelectMonthRhfProps
-  | IWeatherConditionSelectInputRhfProps;
+  | IWeatherConditionSelectInputRhfProps
+  | IMultipleSelectMapLocationRhfProps;
 
 export type InputControllerNativeProps =
   | IDateInputNativeProps
@@ -160,7 +163,8 @@ export type InputControllerNativeProps =
   | ISelectHeavyEquipmentNativeProps
   | IStatusNativeProps
   | ICompanyNativeProps
-  | ISelectWeekNativeProps;
+  | ISelectWeekNativeProps
+  | ILocationNativeProps;
 
 export type ControllerGroup = {
   group: string;
