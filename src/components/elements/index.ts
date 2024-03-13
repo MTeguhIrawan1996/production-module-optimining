@@ -129,6 +129,8 @@ import AuthWrapper from '@/components/elements/wrapper/AuthWrapper';
 import InnerWrapper from '@/components/elements/wrapper/InnerWrapper';
 import RootWrapper from '@/components/elements/wrapper/RootWrapper';
 
+import LocationSelectInputNative from './input/LocationSelectInputNative';
+
 export {
   AuthCard,
   AuthGlobalForm,
@@ -176,6 +178,7 @@ export {
   LinkButton,
   ListDetailsRitageDT,
   LocationCategorySelectInputRhf,
+  LocationSelectInputNative,
   LocationSelectInputRhf,
   LogoutConfirmModal,
   MantineDataTable,

@@ -3,6 +3,7 @@ import { Flex, Grid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -38,7 +39,7 @@ const MutationWorkTimePlanBook = ({
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const tabs = router.query.tabs as string;
+  const [tabs, setTabs] = useQueryState('tabs');
   const [skipWorkingHourPlansData, setSkipWorkingHourPlansData] =
     React.useState<boolean>(false);
   const [skipActivityWorkTimePlan, setSkipActivityWorkTimePlan] =
@@ -84,6 +85,7 @@ const MutationWorkTimePlanBook = ({
       limit: null,
     },
     skip: tabs !== 'workTimePlan' || skipWorkingHourPlansData,
+    fetchPolicy: 'cache-and-network',
     onCompleted: ({ workingHourPlans }) => {
       const workTimePlanActivities = workingHourPlans.data.map((obj) => {
         const value = {
@@ -136,7 +138,6 @@ const MutationWorkTimePlanBook = ({
       weeklyPlanId: id,
     },
     skip:
-      !router.isReady ||
       tabs !== 'workTimePlan' ||
       !skipWorkingHourPlansData ||
       !skipActivityWorkTimePlan,
@@ -184,9 +185,7 @@ const MutationWorkTimePlanBook = ({
         message: mutationSuccessMassage,
         icon: <IconCheck />,
       });
-      router.push(
-        `/plan/weekly/${mutationType}/weekly-plan-group/${id}?tabs=unitCapacityPlan`
-      );
+      setTabs('unitCapacityPlan');
       if (mutationType === 'update') {
         setIsOpenConfirmation(false);
       }

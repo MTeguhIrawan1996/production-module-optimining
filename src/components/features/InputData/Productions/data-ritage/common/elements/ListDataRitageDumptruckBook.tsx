@@ -1,5 +1,6 @@
 import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -41,14 +42,14 @@ export default function ListDataRitageDumptruckBook<
   columns,
 }: IRitageDTProps<T>) {
   const router = useRouter();
-  const page = Number(router.query['rp']) || 1;
-  const heavyEquipmentPage = Number(router.query['hp']) || 1;
-  const url = `/input-data/production/data-ritage?rp=${page}&hp=1&tabs=${tabs}`;
+  const [heavyEquipmentPage, setHeavyEquipmentPage] = useQueryState(
+    'hp',
+    parseAsInteger.withDefault(1)
+  );
   const { t } = useTranslation('default');
 
   const handleSetPage = (newPage: number) => {
-    const urlSet = `/input-data/production/data-ritage?rp=${page}&hp=${newPage}&tabs=${tabs}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setHeavyEquipmentPage(newPage);
   };
 
   const filter = React.useMemo(() => {
@@ -57,7 +58,7 @@ export default function ListDataRitageDumptruckBook<
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setHeavyEquipmentPage(1);
         const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
@@ -65,7 +66,7 @@ export default function ListDataRitageDumptruckBook<
     const item: InputControllerNativeProps[] = [stockpileNameItem];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+  }, []);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -159,7 +160,7 @@ export default function ListDataRitageDumptruckBook<
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, columns, fetching]);
+  }, [heavyEquipmentPage, data, columns, fetching]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (

@@ -96,6 +96,7 @@ const MutationMonthlyBargingTargetPlanBook = ({
       includeIds: null,
     },
     skip: tabs !== 'bargingTargetPlan',
+    fetchPolicy: 'cache-and-network',
     onCompleted: ({ materials }) => {
       const newWeekInMonth: IMonthlyBargingTarget[] = weeklyInMonthly.map(
         (val) => ({

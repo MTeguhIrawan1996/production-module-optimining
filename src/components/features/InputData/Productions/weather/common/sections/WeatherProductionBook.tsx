@@ -2,6 +2,7 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -27,9 +28,7 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const WeatherProductionBook = () => {
   const router = useRouter();
-
-  const page = Number(router.query['page']) || 1;
-  const url = `/input-data/production/data-weather?page=1`;
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -66,7 +65,7 @@ const WeatherProductionBook = () => {
     onCompleted: () => {
       refetchWeatherData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push(url, undefined, { shallow: true });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -94,14 +93,13 @@ const WeatherProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/data-weather?page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   const filter = React.useMemo(() => {
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setYear(value ? Number(value) : null);
         setWeek(null);
       },
@@ -111,7 +109,7 @@ const WeatherProductionBook = () => {
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setWeek(value ? Number(value) : null);
       },
     });
@@ -119,7 +117,7 @@ const WeatherProductionBook = () => {
     const item: InputControllerNativeProps[] = [selectYearItem, selectWeekItem];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url, year, week]);
+  }, [year, week]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -255,6 +253,7 @@ const WeatherProductionBook = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    page,
     weatherData,
     weatherDataLoading,
     isPermissionDelete,
@@ -286,7 +285,10 @@ const WeatherProductionBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          router.push(url, undefined, { shallow: true });
+          setPage(1);
+          refetchWeatherData({
+            page: 1,
+          });
         },
       }}
     >

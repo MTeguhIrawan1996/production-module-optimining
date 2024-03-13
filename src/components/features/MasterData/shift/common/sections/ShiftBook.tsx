@@ -2,6 +2,7 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -21,8 +22,7 @@ import useStore from '@/utils/store/useStore';
 const ShiftBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const page = Number(router.query['page']) || 1;
-  const url = `/master-data/shift?page=1`;
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -38,7 +38,7 @@ const ShiftBook = () => {
   const { shiftsData, shiftsDataLoading, refetchShifts, shiftsDataMeta } =
     useReadAllShiftMaster({
       variables: {
-        limit: 10,
+        limit: 1,
         page: page,
         orderDir: 'desc',
         orderBy: 'createdAt',
@@ -50,12 +50,7 @@ const ShiftBook = () => {
     onCompleted: () => {
       refetchShifts();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push({
-        href: router.asPath,
-        query: {
-          page: 1,
-        },
-      });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -83,12 +78,7 @@ const ShiftBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    router.push({
-      href: router.asPath,
-      query: {
-        page: page,
-      },
-    });
+    setPage(page);
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -184,6 +174,7 @@ const ShiftBook = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    page,
     shiftsData,
     shiftsDataLoading,
     isPermissionDelete,
@@ -210,7 +201,10 @@ const ShiftBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          router.push(url, undefined, { shallow: true });
+          setPage(1);
+          refetchShifts({
+            page: 1,
+          });
         },
       }}
     >

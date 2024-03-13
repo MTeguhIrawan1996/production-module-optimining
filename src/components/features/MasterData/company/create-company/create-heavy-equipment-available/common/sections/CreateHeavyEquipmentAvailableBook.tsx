@@ -3,6 +3,7 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconChevronLeft, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -19,10 +20,9 @@ import { useReadAllNonCompanyHeavyEquipment } from '@/services/graphql/query/hea
 
 const CreateHeavyEquipmentAvailableBook = () => {
   const router = useRouter();
-  const page = Number(router.query['page']) || 1;
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const { t } = useTranslation('default');
   const companyId = router.query?.id as string;
-  const url = `/master-data/company/create/heavy-equipment-available/${companyId}?page=1`;
   const urlCreate = `/master-data/company/read/${companyId}`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [choosesHeavyEquipment, setChooseHeavyEquipment] = React.useState<
@@ -33,6 +33,7 @@ const CreateHeavyEquipmentAvailableBook = () => {
     nonOwnedByCompanyHeavyEquipmentsData,
     nonOwnedByCompanyHeavyEquipmentsDataLoading,
     nonOwnedByCompanyHeavyEquipmentsDataMeta,
+    refetchNonOwnedByCompanyHeavyEquipments,
   } = useReadAllNonCompanyHeavyEquipment({
     variables: {
       limit: 10,
@@ -82,8 +83,7 @@ const CreateHeavyEquipmentAvailableBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/master-data/company/create/heavy-equipment-available/${companyId}?page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -167,7 +167,11 @@ const CreateHeavyEquipmentAvailableBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nonOwnedByCompanyHeavyEquipmentsDataMeta]);
+  }, [
+    nonOwnedByCompanyHeavyEquipmentsDataMeta,
+    page,
+    nonOwnedByCompanyHeavyEquipmentsDataLoading,
+  ]);
 
   const choosetable = React.useMemo(() => {
     return (
@@ -248,7 +252,10 @@ const CreateHeavyEquipmentAvailableBook = () => {
           },
           searchQuery,
           onSearch: () => {
-            router.push(url, undefined, { shallow: true });
+            setPage(1);
+            refetchNonOwnedByCompanyHeavyEquipments({
+              page: 1,
+            });
           },
         }}
       >

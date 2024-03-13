@@ -1,5 +1,6 @@
 import { TabsValue } from '@mantine/core';
 import { useRouter } from 'next/router';
+import { parseAsString, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -12,6 +13,7 @@ import ProductionTargetPlanData from '@/components/features/Plan/weekly/read/wee
 import UnitCapacityPlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/UnitCapacityPlanData';
 import WorkTimePlanData from '@/components/features/Plan/weekly/read/weekly-plan-group/common/elements/WorkTimePlanData';
 
+import { useRouterReady } from '@/utils/hooks/useRouterReady';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -19,14 +21,19 @@ const ReadWeeklyPlanGroupBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const id = router.query.id as string;
-  const tabs = router.query.tabs as string;
+  const isRouterReady = useRouterReady();
+  const [tabs, setTabs] = useQueryState(
+    'tabs',
+    parseAsString.withDefault('workTimePlan')
+  );
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const isPermissionUpdate = permissions?.includes('update-weekly-plan');
 
   const handleChangeTab = (tabs: TabsValue) => {
-    const url = `/plan/weekly/read/weekly-plan-group/${id}?tabs=${tabs}`;
-    router.push(url, undefined, { shallow: true });
+    setTabs(tabs);
   };
+
+  if (!isRouterReady) return null;
 
   return (
     <DashboardCard
@@ -57,6 +64,7 @@ const ReadWeeklyPlanGroupBook = () => {
     >
       <GlobalTabs
         tabs={{
+          defaultValue: 'workTimePlan',
           keepMounted: false,
           value: tabs,
           onTabChange: (value) => handleChangeTab(value),

@@ -1,6 +1,7 @@
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -25,8 +26,7 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const MonthlyPlanBook = () => {
   const router = useRouter();
-  const page = Number(router.query['page']) || 1;
-  const url = `/plan/monthly?page=1`;
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [year, setYear] = React.useState<number | null>(null);
@@ -60,7 +60,7 @@ const MonthlyPlanBook = () => {
     onCompleted: () => {
       refetchMonthlyPlanData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push(url, undefined, { shallow: true });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -88,30 +88,31 @@ const MonthlyPlanBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/plan/monthly?page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   const filter = React.useMemo(() => {
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setYear(value ? Number(value) : null);
       },
     });
     const selectMonthItem = globalSelectMonthNative({
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setMonth(value ? Number(value) : null);
       },
     });
     const selectStatusItem = globalSelectStatusNative({
       onChange: (value) => {
+        setPage(1);
         setStatus(value);
       },
     });
     const selectCompanyItem = globalSelectCompanyNative({
       onChange: (value) => {
+        setPage(1);
         setCompanyId(value);
       },
     });
@@ -124,7 +125,7 @@ const MonthlyPlanBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url, month]);
+  }, [month]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -214,7 +215,7 @@ const MonthlyPlanBook = () => {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monthlyPlanData, monthlyPlanDataLoading]);
+  }, [page, monthlyPlanData, monthlyPlanDataLoading]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (

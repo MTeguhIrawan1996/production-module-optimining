@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
@@ -12,7 +13,7 @@ const ReadWeeklyPlanGroupPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const id = router.query.id as string;
-  const tabs = (router.query.tabs as string) || '';
+  const [tabs] = useQueryState('tabs');
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
     shallow

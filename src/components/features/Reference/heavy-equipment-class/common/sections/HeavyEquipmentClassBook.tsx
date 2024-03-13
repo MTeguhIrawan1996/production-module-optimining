@@ -2,6 +2,7 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { parseAsInteger, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -20,10 +21,8 @@ import useStore from '@/utils/store/useStore';
 const HeavyEquipmentClassBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const query = router.query;
   const { t } = useTranslation('default');
-  const page = Number(query['page']) || 1;
-  const url = `/reference/heavy-equipment-class?page=1`;
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -50,6 +49,8 @@ const HeavyEquipmentClassBook = () => {
     variables: {
       limit: 10,
       page: page,
+      orderDir: 'desc',
+      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
     },
   });
@@ -57,12 +58,7 @@ const HeavyEquipmentClassBook = () => {
     onCompleted: () => {
       refetchHeavyEquipmentClasses();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push({
-        href: router.asPath,
-        query: {
-          page: 1,
-        },
-      });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -91,12 +87,7 @@ const HeavyEquipmentClassBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    router.push({
-      href: router.asPath,
-      query: {
-        page: page,
-      },
-    });
+    setPage(page);
   };
   /* #endregion  /**======== HandleClickFc =========== */
 
@@ -195,6 +186,7 @@ const HeavyEquipmentClassBook = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    page,
     heavyEquipmentClassesData,
     heavyEquipmentClassesDataLoading,
     isPermissionDelete,
@@ -220,7 +212,10 @@ const HeavyEquipmentClassBook = () => {
         },
         searchQuery,
         onSearch: () => {
-          router.push(url, undefined, { shallow: true });
+          setPage(1);
+          refetchHeavyEquipmentClasses({
+            page: 1,
+          });
         },
         placeholder: t('heavyEquipmentClass.searchPlaceholder'),
       }}

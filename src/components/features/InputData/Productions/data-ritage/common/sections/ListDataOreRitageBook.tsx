@@ -2,6 +2,11 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import {
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+} from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -33,10 +38,12 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const ListDataOreRitageBook = () => {
   const router = useRouter();
-  const tabs = router.query['tabs'] || 'ore';
-  const page = Number(router.query['rp']) || 1;
-  const heavyEquipmentPage = Number(router.query['hp']) || 1;
-  const url = `/input-data/production/data-ritage?rp=1&hp=${heavyEquipmentPage}&tabs=ore`;
+  const [tabs] = useQueryState('tabs', parseAsString.withDefault('ore'));
+  const [page, setPage] = useQueryState('rp', parseAsInteger.withDefault(1));
+  const [heavyEquipmentPage] = useQueryState(
+    'hp',
+    parseAsInteger.withDefault(1)
+  );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -74,6 +81,7 @@ const ListDataOreRitageBook = () => {
       orderBy: 'createdAt',
     },
     skip: tabs !== 'ore',
+    fetchPolicy: 'cache-and-network',
   });
 
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
@@ -137,7 +145,7 @@ const ListDataOreRitageBook = () => {
     onCompleted: () => {
       refetchOreRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      router.push(url, undefined, { shallow: true });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -165,8 +173,7 @@ const ListDataOreRitageBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/production/data-ritage?rp=${page}&hp=${heavyEquipmentPage}&tabs=ore`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   const filter = React.useMemo(() => {
@@ -175,7 +182,7 @@ const ListDataOreRitageBook = () => {
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
@@ -194,7 +201,7 @@ const ListDataOreRitageBook = () => {
         },
       ],
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setIsRitageProblematic(
           value ? (value === 'true' ? false : true) : null
         );
@@ -206,7 +213,7 @@ const ListDataOreRitageBook = () => {
       searchable: false,
       data: shiftFilterItem,
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setShiftId(value);
       },
     });
@@ -218,7 +225,7 @@ const ListDataOreRitageBook = () => {
       onSearchChange: setHeavyEquipmentSeacrhTerm,
       searchValue: heavyEquipmentSeacrhTerm,
       onChange: (value) => {
-        router.push(url, undefined, { shallow: true });
+        setPage(1);
         setHeavyEquipmentId(value);
       },
     });
@@ -231,7 +238,7 @@ const ListDataOreRitageBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url, heavyEquipmentItemFilter, shiftFilterItem]);
+  }, [heavyEquipmentItemFilter, shiftFilterItem]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -383,6 +390,7 @@ const ListDataOreRitageBook = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    page,
     oreRitagesData,
     oreRitagesDataLoading,
     isPermissionDelete,

@@ -29,6 +29,7 @@ const DetailSampleData: React.FC<IDetailSampleDataProps> = ({
     variables: {
       limit: null,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const renderOtherColumnCallback = React.useCallback(

@@ -113,6 +113,7 @@ const CreateHeavyEquipmentProductionBook = () => {
     variables: {
       limit: null,
     },
+    fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
       const otherloseTime = data.workingHourPlans.data.map((val) => {
         return {

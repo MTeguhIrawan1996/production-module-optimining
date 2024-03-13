@@ -65,6 +65,7 @@ const MaterialSelectInput: React.FC<IMaterialSelectInputRhfProps> = ({
       includeIds: includeIds ? includeIds : null,
     },
     skip: skipQuery,
+    fetchPolicy: 'cache-and-network',
   });
 
   const { uncombinedItem } = useFilterItems({

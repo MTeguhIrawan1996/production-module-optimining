@@ -61,6 +61,8 @@ import {
   WeatherSelectInputRhf,
 } from '@/components/elements';
 
+import MultipleSelectMapLocationRhf from '../input/MultipleSelectMapLocationRhf';
+
 import { ControllerProps } from '@/types/global';
 
 const FormController: React.FC<ControllerProps> = (props) => {
@@ -183,6 +185,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <InputAverageArray {...props} />;
     case 'display-quiet-number':
       return <DisplayQuietNumber {...props} />;
+    case 'multiple-select-map-location':
+      return <MultipleSelectMapLocationRhf {...props} />;
     default:
       return null;
   }
