@@ -164,6 +164,7 @@ const ListQuarterlyMapBook = () => {
       data: mapCategoryList,
       onChange: (v) => {
         setMapQuarterlyCategory(v);
+        setMapQuarterlyPage(1);
       },
       value: mapQuarterlyCategory,
     });
@@ -172,6 +173,7 @@ const ListQuarterlyMapBook = () => {
       searchable: true,
       onChange: (v) => {
         setMapQuarterlyLocation(v);
+        setMapQuarterlyPage(1);
       },
       categoryIds: (locationIds as string[]) || [],
       value: mapQuarterlyLocation,
@@ -182,6 +184,7 @@ const ListQuarterlyMapBook = () => {
       searchable: true,
       onChange: (v) => {
         setMapQuarterlyYear(v);
+        setMapQuarterlyPage(1);
       },
     });
     const quarterItem = globalSelectNative({
@@ -190,6 +193,7 @@ const ListQuarterlyMapBook = () => {
       searchable: true,
       onChange: (v) => {
         setMapQuarterlyQuarter(v);
+        setMapQuarterlyPage(1);
       },
       data: [
         {
