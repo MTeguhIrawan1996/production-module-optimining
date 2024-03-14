@@ -1,7 +1,7 @@
 import { Stack, Text } from '@mantine/core';
 import { DataTableColumn, DataTableColumnGroup } from 'mantine-datatable';
 import { useRouter } from 'next/router';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -25,7 +25,10 @@ const BargingTargetPlanData = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const [tabs] = useQueryState('tabs');
-  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState(
+    'page',
+    queryTypes.integer.withDefault(1)
+  );
 
   const { elementsData } = useReadAllElementMaster({
     variables: {

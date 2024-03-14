@@ -2,7 +2,7 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -26,7 +26,10 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const HeavyEquipmentProductionBook = () => {
   const router = useRouter();
-  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState(
+    'page',
+    queryTypes.integer.withDefault(1)
+  );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [date, setDate] = React.useState('');

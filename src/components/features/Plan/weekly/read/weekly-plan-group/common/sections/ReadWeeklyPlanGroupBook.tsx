@@ -1,6 +1,6 @@
 import { TabsValue } from '@mantine/core';
 import { useRouter } from 'next/router';
-import { parseAsString, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -24,7 +24,7 @@ const ReadWeeklyPlanGroupBook = () => {
   const isRouterReady = useRouterReady();
   const [tabs, setTabs] = useQueryState(
     'tabs',
-    parseAsString.withDefault('workTimePlan')
+    queryTypes.string.withDefault('workTimePlan')
   );
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const isPermissionUpdate = permissions?.includes('update-weekly-plan');
