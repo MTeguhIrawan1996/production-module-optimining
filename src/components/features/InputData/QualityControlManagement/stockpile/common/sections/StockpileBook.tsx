@@ -79,7 +79,6 @@ const StockpileBook = () => {
     monitoringStockpilesData,
     monitoringStockpilesDataLoading,
     monitoringStockpilesDataMeta,
-    refetchMonitoringStockpiles,
   } = useReadAllStockpileMonitoring({
     variables: {
       limit: 10,
@@ -319,9 +318,8 @@ const StockpileBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchMonitoringStockpiles({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
       }}

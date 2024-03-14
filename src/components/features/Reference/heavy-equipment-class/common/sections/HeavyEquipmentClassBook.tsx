@@ -215,9 +215,8 @@ const HeavyEquipmentClassBook = () => {
         },
         searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchHeavyEquipmentClasses({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
         placeholder: t('heavyEquipmentClass.searchPlaceholder'),

@@ -300,9 +300,8 @@ const ShippingMonitoringBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchMonitoringBargingData({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
       }}

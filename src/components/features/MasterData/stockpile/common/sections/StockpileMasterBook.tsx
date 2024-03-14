@@ -203,9 +203,8 @@ const StockpileMasterBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchStockpiles({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
       }}

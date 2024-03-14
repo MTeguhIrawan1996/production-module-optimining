@@ -357,7 +357,9 @@ const ReadHeavyEquipmentBook = () => {
           setSearchQuery(e.currentTarget.value);
         },
         onSearch: () => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
         },
         searchQuery: searchQuery,
       }}

@@ -255,9 +255,8 @@ const LocationBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchLocations({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
       }}

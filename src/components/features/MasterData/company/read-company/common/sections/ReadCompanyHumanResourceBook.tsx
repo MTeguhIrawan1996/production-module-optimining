@@ -325,7 +325,9 @@ const ReadCompanyHumanResourceBook = () => {
         },
         searchQuery,
         onSearch: () => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
         },
         placeholder: 'Cari berdasarkan Nama dan NIP',
       }}

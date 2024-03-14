@@ -1,6 +1,6 @@
 import { TabsValue } from '@mantine/core';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryStates } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
@@ -21,15 +21,11 @@ const DataRitagePage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [tabs, setTabs] = useQueryState(
-    'tabs',
-    queryTypes.string.withDefault('ore')
-  );
-  const [_, setPage] = useQueryState('rp', queryTypes.integer.withDefault(1));
-  const [__, setHeavyEquipmentPage] = useQueryState(
-    'hp',
-    queryTypes.integer.withDefault(1)
-  );
+  const [params, setParams] = useQueryStates({
+    hp: queryTypes.integer.withDefault(1),
+    rp: queryTypes.integer.withDefault(1),
+    tabs: queryTypes.string.withDefault('ore'),
+  });
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
     shallow
@@ -48,14 +44,15 @@ const DataRitagePage = () => {
         path: router.asPath,
       },
     ]);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
   const handleChangeTab = (tabs: TabsValue) => {
-    setTabs(tabs);
-    setPage(1);
-    setHeavyEquipmentPage(1);
+    setParams({
+      tabs,
+      hp: 1,
+      rp: 1,
+    });
   };
 
   return (
@@ -70,7 +67,7 @@ const DataRitagePage = () => {
           tabs={{
             defaultValue: 'ore',
             keepMounted: false,
-            value: tabs,
+            value: params.tabs,
             onTabChange: (value) => handleChangeTab(value),
           }}
           tabsData={[

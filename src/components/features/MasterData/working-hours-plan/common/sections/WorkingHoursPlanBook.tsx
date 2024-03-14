@@ -206,9 +206,8 @@ const WorkingHoursPlanBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchWorkingHourPlans({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
       }}
