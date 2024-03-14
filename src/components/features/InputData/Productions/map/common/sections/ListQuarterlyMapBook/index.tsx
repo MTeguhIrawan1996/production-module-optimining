@@ -3,17 +3,13 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import {
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { match } from 'ts-pattern';
 
 import {
   DashboardCard,
+  GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
@@ -49,23 +45,19 @@ const ListQuarterlyMapBook = () => {
 
   const [mapQuarterlyPage, setMapQuarterlyPage] = useQueryState(
     'mapQuarterlyPage',
-    parseAsInteger
+    queryTypes.integer.withDefault(1)
   );
   const [mapQuarterlyLocation, setMapQuarterlyLocation] = useQueryState(
-    'mapQuarterlyLocation',
-    parseAsString
+    'mapQuarterlyLocation'
   );
-  const [mapQuarterlyYear, setMapQuarterlyYear] = useQueryState(
-    'mapQuarterlyYear',
-    parseAsString
-  );
+  const [mapQuarterlyYear, setMapQuarterlyYear] =
+    useQueryState('mapQuarterlyYear');
   const [mapQuarterlyQuarter, setMapQuarterlyQuarter] = useQueryState(
-    'mapQuarterlyQuarter',
-    parseAsString
+    'mapQuarterlyQuarter'
   );
   const [mapQuarterlySearch, setMapQuarterlySearch] = useQueryState(
     'mapQuarterlySearch',
-    parseAsString
+    queryTypes.string.withDefault('')
   );
 
   const [searchQuery] = useDebouncedValue<string>(
@@ -75,8 +67,7 @@ const ListQuarterlyMapBook = () => {
 
   const { t } = useTranslation('default');
   const [mapQuarterlyCategory, setMapQuarterlyCategory] = useQueryState(
-    'mapQuarterlyCategory',
-    parseAsString
+    'mapQuarterlyCategory'
   );
 
   const [id, setId] = React.useState<string | undefined>(undefined);
@@ -298,25 +289,12 @@ const ListQuarterlyMapBook = () => {
             {
               accessor: 'status',
               title: t('commonTypography.status'),
-              render: (v) =>
-                match(v.status)
-                  .with('WAITING_FOR_CONFIRMATION', () => (
-                    <Badge color="orange">
-                      {t('commonTypography.waitingForConfirmation')}
-                    </Badge>
-                  ))
-                  .with('DETERMINED', () => (
-                    <Badge color="green">{t('commonTypography.valid')}</Badge>
-                  ))
-                  .with('WAITING_FOR_VALIDATION', () => (
-                    <Badge color="red">{t('commonTypography.notValid')}</Badge>
-                  ))
-                  .with('INVALID', () => (
-                    <Badge color="red">{t('commonTypography.accepted')}</Badge>
-                  ))
-                  .otherwise(() => (
-                    <Badge color="gray">{t('commonTypography.unknown')}</Badge>
-                  )),
+              render: ({ mapDataStatus }) => (
+                <GlobalBadgeStatus
+                  color={mapDataStatus?.color}
+                  label={mapDataStatus?.name ?? ''}
+                />
+              ),
             },
             {
               accessor: 'action',

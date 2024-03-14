@@ -21,11 +21,13 @@ const UpdateMapWeeklyProductionPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.heavyEquipmentData'),
+        label: t('commonTypography.map'),
         path: '/input-data/production/map',
       },
       {
-        label: t('heavyEquipmentProd.createHeavyEquipmentProd'),
+        label: `${t('mapProduction.updateMapProd')} ${t(
+          'commonTypography.weekly'
+        )}`,
         path: router.asPath,
       },
     ]);
@@ -36,7 +38,7 @@ const UpdateMapWeeklyProductionPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('heavyEquipmentProd.formHeavyEquipmentProd'),
+          title: t('mapProduction.formUpdateMapWeekly'),
           mb: 'md',
         }}
       >
