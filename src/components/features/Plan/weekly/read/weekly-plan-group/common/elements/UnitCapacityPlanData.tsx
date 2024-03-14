@@ -201,7 +201,7 @@ const UnitCapacityPlanData = () => {
                   columns: [
                     {
                       accessor: 'material',
-                      render: ({ material }) => material.name ?? '-',
+                      render: ({ material }) => material?.name ?? '-',
                       footer: <Text>Total</Text>,
                     },
                     {
@@ -213,7 +213,7 @@ const UnitCapacityPlanData = () => {
                       title: t('commonTypography.heavyEquipmentClass'),
                       width: 180,
                       render: ({ class: heavyEquipmentClass }) =>
-                        heavyEquipmentClass.name ?? '-',
+                        heavyEquipmentClass?.name ?? '-',
                     },
                     {
                       accessor: 'physicalAvailability',
