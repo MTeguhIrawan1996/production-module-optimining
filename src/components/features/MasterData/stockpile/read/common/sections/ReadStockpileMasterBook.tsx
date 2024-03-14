@@ -4,7 +4,7 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -27,7 +27,10 @@ const ReadStockpileMasterBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
-  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState(
+    'page',
+    queryTypes.integer.withDefault(1)
+  );
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [domeId, setDomeId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =

@@ -3,7 +3,7 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconChevronLeft, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -20,7 +20,10 @@ import { useReadAllNonCompanyHeavyEquipment } from '@/services/graphql/query/hea
 
 const CreateHeavyEquipmentAvailableBook = () => {
   const router = useRouter();
-  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState(
+    'page',
+    queryTypes.integer.withDefault(1)
+  );
   const { t } = useTranslation('default');
   const companyId = router.query?.id as string;
   const urlCreate = `/master-data/company/read/${companyId}`;

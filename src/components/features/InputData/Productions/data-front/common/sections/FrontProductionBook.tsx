@@ -2,11 +2,7 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import {
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -28,10 +24,13 @@ import useStore from '@/utils/store/useStore';
 const FrontProductionBook = () => {
   const router = useRouter();
   const isRouterReady = useRouterReady();
-  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState(
+    'page',
+    queryTypes.integer.withDefault(1)
+  );
   const [segment, setSegment] = useQueryState(
     'segment',
-    parseAsString.withDefault('pit')
+    queryTypes.string.withDefault('pit')
   );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
