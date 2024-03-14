@@ -61,23 +61,26 @@ export const useReadOneWorkTimePlan = ({
   skip?: boolean;
   onCompleted?: (data: IReadOneWorkTimePlanResponse) => void;
 }) => {
-  const { data: weeklyWorkTimePlan, loading: weeklyWorkTimePlanLoading } =
-    useQuery<IReadOneWorkTimePlanResponse, IReadOneWorkTimePlanRequest>(
-      READ_ONE_WORK_TIME_PLAN,
-      {
-        variables,
-        onError: (err: ApolloError) => {
-          return err;
-        },
-        onCompleted: onCompleted,
-        skip,
-        fetchPolicy: 'cache-and-network',
-      }
-    );
+  const {
+    data: weeklyWorkTimePlan,
+    loading: weeklyWorkTimePlanLoading,
+    refetch,
+  } = useQuery<IReadOneWorkTimePlanResponse, IReadOneWorkTimePlanRequest>(
+    READ_ONE_WORK_TIME_PLAN,
+    {
+      variables,
+      onError: (err: ApolloError) => {
+        return err;
+      },
+      onCompleted: onCompleted,
+      skip,
+      fetchPolicy: 'cache-and-network',
+    }
+  );
 
   return {
     weeklyWorkTimePlan: weeklyWorkTimePlan?.weeklyWorkTimePlan,
-
     weeklyWorkTimePlanLoading,
+    weeklyWorkTimePlanRefetch: refetch,
   };
 };

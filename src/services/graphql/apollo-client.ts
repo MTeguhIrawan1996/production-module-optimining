@@ -156,7 +156,22 @@ const getClient = (tokenServer?: ISessionServer | null) => {
     link: from([authLink, errorLink, httpLink]),
     defaultOptions: {
       watchQuery: {
-        nextFetchPolicy(currentFetchPolicy, { initialFetchPolicy, reason }) {
+        nextFetchPolicy(
+          currentFetchPolicy,
+          { initialFetchPolicy, reason, observable }
+        ) {
+          const isAlwaysNetwork = [
+            'ReadOneWorkTimePlan',
+            'ReadOneUnitCapacityPlan',
+            'ReadOneHeavyEquipmentReqPlan',
+            'ReadOneHeavyEquipmentAvailabilityPlan',
+            'ReadOneMiningMapPlan',
+            'ReadOneBargingTargetPlan',
+          ];
+          // console.log(observable.queryName);
+          // console.log({ initialFetchPolicy, currentFetchPolicy });
+          // console.log(isAlwaysNetwork.includes(observable.queryName || ''));
+
           if (reason === 'variables-changed') {
             return initialFetchPolicy;
           }
@@ -164,6 +179,9 @@ const getClient = (tokenServer?: ISessionServer | null) => {
             currentFetchPolicy === 'network-only' ||
             currentFetchPolicy === 'cache-and-network'
           ) {
+            if (isAlwaysNetwork.includes(observable.queryName || '')) {
+              return 'cache-and-network';
+            }
             return 'cache-first';
           }
           return currentFetchPolicy;

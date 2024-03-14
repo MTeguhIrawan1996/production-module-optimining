@@ -123,6 +123,8 @@ const MutationHeavyEquipmentReqPlanBook = ({
     variables: {
       weeklyPlanId: id,
       limit: null,
+      orderDir: 'desc',
+      orderBy: 'createdAt',
     },
     skip: tabs !== 'heavyEquipmentReqPlan',
     onCompleted: (data) => {

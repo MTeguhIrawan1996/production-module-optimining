@@ -85,6 +85,8 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
     variables: {
       weeklyPlanId: id,
       limit: null,
+      orderDir: 'desc',
+      orderBy: 'createdAt',
     },
     skip: tabs !== 'unitCapacityPlan',
     onCompleted: (data) => {
