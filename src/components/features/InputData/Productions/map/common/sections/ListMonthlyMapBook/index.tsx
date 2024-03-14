@@ -159,6 +159,7 @@ const ListMonthlyMapBook = () => {
       data: mapCategoryList,
       onChange: (v) => {
         setMapMonthlyCategory(v);
+        setMapMonthlyPage(1);
       },
       value: mapMonthlyCategory,
     });
@@ -167,6 +168,7 @@ const ListMonthlyMapBook = () => {
       searchable: true,
       onChange: (v) => {
         setMapMonthlyLocation(v);
+        setMapMonthlyPage(1);
       },
       categoryIds: (locationIds as string[]) || [],
       value: mapMonthlyLocation,
@@ -177,6 +179,7 @@ const ListMonthlyMapBook = () => {
       searchable: true,
       onChange: (v) => {
         setMapMonthlyYear(v);
+        setMapMonthlyPage(1);
       },
     });
     const monthItem = globalSelectMonthNative({
@@ -185,6 +188,7 @@ const ListMonthlyMapBook = () => {
       searchable: true,
       onChange: (v) => {
         setMapMonthlyMonth(v);
+        setMapMonthlyPage(1);
       },
       value: mapMonthlyMonth,
     });

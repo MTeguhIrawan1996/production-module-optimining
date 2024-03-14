@@ -161,6 +161,7 @@ const ListWeeklyMapBook = () => {
       data: mapCategoryList,
       onChange: (v) => {
         setMapWeeklyCategory(v);
+        setMapWeeklyPage(1);
       },
       value: mapWeeklyCategory,
     });
@@ -169,6 +170,7 @@ const ListWeeklyMapBook = () => {
       searchable: true,
       onChange: (v) => {
         setMapWeeklyLocation(v);
+        setMapWeeklyPage(1);
       },
       categoryIds: (locationIds as string[]) || [],
       value: mapWeeklyLocation,
@@ -179,6 +181,7 @@ const ListWeeklyMapBook = () => {
       searchable: true,
       onChange: (v) => {
         setMapWeeklyYear(v);
+        setMapWeeklyPage(1);
       },
     });
     const weekItem = globalSelectWeekNative({
@@ -187,6 +190,7 @@ const ListWeeklyMapBook = () => {
       searchable: true,
       onChange: (v) => {
         setMapWeeklyWeek(v);
+        setMapWeeklyPage(1);
       },
       value: mapWeeklyWeek,
     });

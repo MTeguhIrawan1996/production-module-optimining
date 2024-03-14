@@ -139,7 +139,7 @@ export const linksDashboard: IMenuItem[] = [
           {
             label: 'map',
             href: '/input-data/production/map',
-            access: ['all'],
+            access: ['read-map-data'],
           },
         ],
       },
