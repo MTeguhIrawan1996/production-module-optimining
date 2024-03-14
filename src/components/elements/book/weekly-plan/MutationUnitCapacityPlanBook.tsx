@@ -104,12 +104,13 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
                 };
                 return targetPlanValue;
               });
+
               const materialValue: IMaterialsGroup = {
                 id: val.id || null,
-                materialId: val.material.id,
+                materialId: val.material?.id || null,
                 fleet: `${val.fleet}`,
-                classId: val.class.id,
-                frontId: val.front.id,
+                classId: val.class?.id || null,
+                frontId: val.front?.id || null,
                 physicalAvailability: val.physicalAvailability,
                 useOfAvailability: val.useOfAvailability,
                 effectiveWorkingHour: val.effectiveWorkingHour,
@@ -119,6 +120,7 @@ const MutationUnitCapacityPlanBook: React.FC<IMutationUnitCapacityPlanBook> = ({
               };
               return materialValue;
             });
+
             const returnValue: IUnitCapacityPlanProps = {
               id: obj.id || null,
               locationIds,
