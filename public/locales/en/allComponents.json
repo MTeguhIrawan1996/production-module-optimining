@@ -266,7 +266,8 @@
       "uploadExcelDescription": "Unggah Dokumen Maksimal 100MB dengan format .xlsx dan .CSV",
       "uploadFileMax10Mb": "Maksimal Ukuran File 10MB",
       "dragAndDropFile": "Tarik dan lepas atau cari file anda",
-      "formatPdfOrImageDesc": "Format file berupa .JPEG .JPG .PNG atau .WEBP dan PDF"
+      "formatPdfOrImageDesc": "Format file berupa .JPEG .JPG .PNG atau .WEBP dan PDF",
+      "formatImageDesc": "Format file berupa .JPEG .JPG .PNG atau .WEBP"
     },
     "modal": {
       "updatePasswordModal": {

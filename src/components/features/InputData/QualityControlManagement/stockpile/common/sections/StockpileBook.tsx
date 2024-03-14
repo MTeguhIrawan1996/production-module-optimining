@@ -3,7 +3,7 @@ import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { IconPencil } from '@tabler/icons-react';
 import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -34,7 +34,10 @@ import { IElementsData, InputControllerNativeProps } from '@/types/global';
 
 const StockpileBook = () => {
   const router = useRouter();
-  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState(
+    'page',
+    queryTypes.integer.withDefault(1)
+  );
   const { t } = useTranslation('default');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [stockpileNameSerachTerm, setStockpileNameSerachTerm] =

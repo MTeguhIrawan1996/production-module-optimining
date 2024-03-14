@@ -1,10 +1,6 @@
 import { TabsValue } from '@mantine/core';
 import { useRouter } from 'next/router';
-import {
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
@@ -27,12 +23,12 @@ const DataRitagePage = () => {
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const [tabs, setTabs] = useQueryState(
     'tabs',
-    parseAsString.withDefault('ore')
+    queryTypes.string.withDefault('ore')
   );
-  const [_, setPage] = useQueryState('rp', parseAsInteger.withDefault(1));
+  const [_, setPage] = useQueryState('rp', queryTypes.integer.withDefault(1));
   const [__, setHeavyEquipmentPage] = useQueryState(
     'hp',
-    parseAsInteger.withDefault(1)
+    queryTypes.integer.withDefault(1)
   );
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],

@@ -31,6 +31,7 @@ export type IPdfOrInputDropzoneRhfProps = {
   description?: string;
   withAsterisk?: boolean;
   serverFile?: Partial<IFile>[] | null;
+  dropzoneDescription?: 'formatImageDesc' | 'formatPdfOrImageDesc';
 } & Omit<DropzoneProps, 'name' | 'children'> &
   CommonProps;
 
@@ -48,6 +49,7 @@ const PdfOrImageInputDropzoneRhf: React.FC<IPdfOrInputDropzoneRhfProps> = ({
   label,
   withAsterisk,
   serverFile,
+  dropzoneDescription = 'formatImageDesc',
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -60,7 +62,7 @@ const PdfOrImageInputDropzoneRhf: React.FC<IPdfOrInputDropzoneRhfProps> = ({
   const localFile: FileWithPath[] = field.value;
 
   const previewLocal = React.useMemo(() => {
-    if (localFile.length > 0) {
+    if (localFile && localFile.length > 0) {
       const item: JSX.Element[] = localFile.map(
         (file: FileWithPath, index: number) => {
           const isImage = IMAGE_MIME_TYPE.includes(file.type as any);
@@ -234,7 +236,7 @@ const PdfOrImageInputDropzoneRhf: React.FC<IPdfOrInputDropzoneRhfProps> = ({
                   {t(`components.fieldDescription.dragAndDropFile`)}
                 </Text>
                 <Text component="span" fz={12} fw={500} color="gray.5">
-                  {t(`components.fieldDescription.formatPdfOrImageDesc`)}
+                  {t(`components.fieldDescription.${dropzoneDescription}`)}
                 </Text>
               </Flex>
             </Dropzone.Idle>

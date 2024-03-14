@@ -1,6 +1,6 @@
 import { TabsValue } from '@mantine/core';
 import { useRouter } from 'next/router';
-import { parseAsString, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
@@ -26,7 +26,7 @@ const CreateWeeklyPlanGroupPage = () => {
   const isRouterReady = useRouterReady();
   const [tabs, setTabs] = useQueryState(
     'tabs',
-    parseAsString.withDefault("'workTimePlan'")
+    queryTypes.string.withDefault("'workTimePlan'")
   );
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
