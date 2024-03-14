@@ -255,9 +255,8 @@ const SampleHouseLabBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchHouseSampleAndLabs({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
       }}

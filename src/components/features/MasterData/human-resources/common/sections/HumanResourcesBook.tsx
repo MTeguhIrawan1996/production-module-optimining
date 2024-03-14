@@ -212,9 +212,8 @@ const HumanResourcesBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchHumanResources({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
       }}

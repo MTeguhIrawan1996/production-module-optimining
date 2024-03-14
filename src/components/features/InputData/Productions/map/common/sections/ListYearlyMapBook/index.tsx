@@ -3,17 +3,13 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import {
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { match } from 'ts-pattern';
 
 import {
   DashboardCard,
+  GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
@@ -49,20 +45,15 @@ const ListYearlyMapBook = () => {
 
   const [mapYearlyPage, setMapYearlyPage] = useQueryState(
     'mapYearlyPage',
-    parseAsInteger
+    queryTypes.integer.withDefault(1)
   );
-  const [mapYearlyLocation, setMapYearlyLocation] = useQueryState(
-    'mapYearlyLocation',
-    parseAsString
-  );
-  const [mapYearlyYear, setMapYearlyYear] = useQueryState(
-    'mapYearlyYear',
-    parseAsString
-  );
+  const [mapYearlyLocation, setMapYearlyLocation] =
+    useQueryState('mapYearlyLocation');
+  const [mapYearlyYear, setMapYearlyYear] = useQueryState('mapYearlyYear');
 
   const [mapYearlySearch, setMapYearlySearch] = useQueryState(
     'mapYearlySearch',
-    parseAsString
+    queryTypes.string.withDefault('')
   );
 
   const [searchQuery] = useDebouncedValue<string>(
@@ -71,10 +62,8 @@ const ListYearlyMapBook = () => {
   );
 
   const { t } = useTranslation('default');
-  const [mapYearlyCategory, setMapYearlyCategory] = useQueryState(
-    'mapYearlyCategory',
-    parseAsString
-  );
+  const [mapYearlyCategory, setMapYearlyCategory] =
+    useQueryState('mapYearlyCategory');
 
   const [id, setId] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -257,25 +246,12 @@ const ListYearlyMapBook = () => {
             {
               accessor: 'status',
               title: t('commonTypography.status'),
-              render: (v) =>
-                match(v.status)
-                  .with('WAITING_FOR_CONFIRMATION', () => (
-                    <Badge color="orange">
-                      {t('commonTypography.waitingForConfirmation')}
-                    </Badge>
-                  ))
-                  .with('DETERMINED', () => (
-                    <Badge color="green">{t('commonTypography.valid')}</Badge>
-                  ))
-                  .with('WAITING_FOR_VALIDATION', () => (
-                    <Badge color="red">{t('commonTypography.notValid')}</Badge>
-                  ))
-                  .with('INVALID', () => (
-                    <Badge color="red">{t('commonTypography.accepted')}</Badge>
-                  ))
-                  .otherwise(() => (
-                    <Badge color="gray">{t('commonTypography.unknown')}</Badge>
-                  )),
+              render: ({ mapDataStatus }) => (
+                <GlobalBadgeStatus
+                  color={mapDataStatus?.color}
+                  label={mapDataStatus?.name ?? ''}
+                />
+              ),
             },
             {
               accessor: 'action',

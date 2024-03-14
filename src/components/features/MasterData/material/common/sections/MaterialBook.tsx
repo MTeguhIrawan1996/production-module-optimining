@@ -208,9 +208,8 @@ const MaterialBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchMaterials({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
       }}

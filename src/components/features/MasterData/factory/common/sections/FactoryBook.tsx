@@ -200,9 +200,8 @@ const FactoryBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchFactories({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
       }}

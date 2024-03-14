@@ -2,7 +2,7 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryStates } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -17,21 +17,15 @@ import {
 
 import { useDeleteFrontProduction } from '@/services/graphql/mutation/front-production/useDeleteFrontProduction';
 import { useReadAllFrontProduction } from '@/services/graphql/query/front-production/useReadAllFrontProduction';
-import { useRouterReady } from '@/utils/hooks/useRouterReady';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
 const FrontProductionBook = () => {
   const router = useRouter();
-  const isRouterReady = useRouterReady();
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
-  );
-  const [segment, setSegment] = useQueryState(
-    'segment',
-    queryTypes.string.withDefault('pit')
-  );
+  const [params, setParams] = useQueryStates({
+    page: queryTypes.integer.withDefault(1),
+    segment: queryTypes.string.withDefault('pit'),
+  });
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -57,10 +51,10 @@ const FrontProductionBook = () => {
   } = useReadAllFrontProduction({
     variables: {
       limit: 10,
-      page: page,
+      page: params.page,
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
-      type: segment,
+      type: params.segment,
     },
   });
 
@@ -68,7 +62,9 @@ const FrontProductionBook = () => {
     onCompleted: () => {
       refetchfrontProductionData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setParams({
+        page: 1,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -96,12 +92,16 @@ const FrontProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setParams({
+      page: page,
+    });
   };
 
   const handleChangeSegement = (value: string) => {
-    setSegment(value);
-    setPage(1);
+    setParams({
+      page: 1,
+      segment: value,
+    });
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -160,7 +160,7 @@ const FrontProductionBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/production/data-front/update/${id}?segment=${segment}`
+                                `/input-data/production/data-front/update/${id}?segment=${params.segment}`
                               );
                             },
                           }
@@ -194,7 +194,7 @@ const FrontProductionBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: page,
+          currentPage: params.page,
           totalAllData: frontProductionDataMeta?.totalAllData ?? 0,
           totalData: frontProductionDataMeta?.totalData ?? 0,
           totalPage: frontProductionDataMeta?.totalPage ?? 0,
@@ -203,7 +203,7 @@ const FrontProductionBook = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    page,
+    params.page,
     frontProductionData,
     frontProductionDataLoading,
     isPermissionDelete,
@@ -212,8 +212,6 @@ const FrontProductionBook = () => {
     isPermissionCreate,
   ]);
   /* #endregion  /**======== RenderTable =========== */
-
-  if (!isRouterReady) return null;
 
   return (
     <DashboardCard
@@ -226,23 +224,25 @@ const FrontProductionBook = () => {
           : undefined
       }
       searchBar={{
-        placeholder: `${t(
-          'frontProduction.searchPlaceholder'
-        )} ${segment.toUpperCase()}`,
+        placeholder: `${t('frontProduction.searchPlaceholder')} ${
+          params.segment ? params.segment.toUpperCase() : ''
+        }`,
         onChange: (e) => {
           setSearchQuery(e.currentTarget.value);
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchfrontProductionData({
-            page: 1,
-          });
+          setParams(
+            {
+              page: 1,
+            },
+            { shallow: true }
+          );
         },
       }}
       segmentedControl={{
         defaultValue: 'pit',
-        value: segment,
+        value: params.segment || 'pit',
         onChange: handleChangeSegement,
         data: [
           {

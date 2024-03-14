@@ -202,9 +202,8 @@ const ActivityPlanBook = () => {
           setSearchQuery(e.currentTarget.value);
         },
         onSearch: () => {
-          setPage(1);
-          refetchActivityPlans({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
         searchQuery: searchQuery,

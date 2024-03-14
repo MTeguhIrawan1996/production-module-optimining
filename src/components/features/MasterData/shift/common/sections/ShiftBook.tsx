@@ -204,9 +204,8 @@ const ShiftBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchShifts({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
       }}

@@ -288,9 +288,8 @@ const WeatherProductionBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchWeatherData({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
       }}

@@ -255,7 +255,8 @@
       "uploadFile": "Unggah File",
       "tonByDraft": "Ton Berdasarkan Draft",
       "mapType": "Jenis Peta",
-      "quarter": "Quarter"
+      "quarter": "Quarter",
+      "mapFile": "File Peta"
     },
     "fieldDescription": {
       "companyLogoDescription": "Logo Perusahaan Maksimal 10Mb dengan format .JPEG .JPG .PNG atau .WEBP",

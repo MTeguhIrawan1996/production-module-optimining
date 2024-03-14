@@ -198,9 +198,8 @@ const ElementBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchElements({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
       }}

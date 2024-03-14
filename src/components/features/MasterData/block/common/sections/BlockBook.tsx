@@ -195,9 +195,8 @@ const BlockBook = () => {
           setSearchQuery(e.currentTarget.value);
         },
         onSearch: () => {
-          setPage(1);
-          refetchBlocks({
-            page: 1,
+          setPage(1, {
+            shallow: true,
           });
         },
         searchQuery: searchQuery,
