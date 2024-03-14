@@ -1,6 +1,6 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
-import { GResponse, IGlobalMetaRequest } from '@/types/global';
+import { GResponse, IGlobalMetaRequest, IStatus } from '@/types/global';
 
 export const READ_ALL_MAP = gql`
   query mapDatas(
@@ -37,10 +37,18 @@ export const READ_ALL_MAP = gql`
         id
         name
         dateType
-        status
+        mapDataStatus {
+          id
+          name
+          slug
+          color
+        }
         year
         quarter
-        month
+        month {
+          id
+          name
+        }
         week
         mapDataLocation {
           locationId
@@ -67,14 +75,13 @@ export interface IMapData {
   id: string;
   name: string;
   dateType: string;
-  status:
-    | 'WAITING_FOR_CONFIRMATION'
-    | 'WAITING_FOR_VALIDATION'
-    | 'INVALID'
-    | 'DETERMINED';
+  mapDataStatus: IStatus | null;
   year: string;
   quarter: string;
-  month: string;
+  month: {
+    id: string;
+    name: string;
+  };
   week: string;
   mapDataLocation: Array<{
     locationId: string;

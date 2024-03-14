@@ -2,18 +2,37 @@ import { ApolloError, gql, useQuery } from '@apollo/client';
 
 export const READ_ONE_MAP = gql`
   query findOne($id: String!) {
-    mapData(id: $id) {
+    mapData(input: { id: $id }) {
       id
       name
       year
       quarter
-      month
+      month {
+        id
+        name
+      }
       week
       dateType
-      status
+      mapDataStatus {
+        id
+        name
+        slug
+      }
       file {
         id
         url
+        fileName
+        originalFileName
+      }
+      mapDataCategory {
+        id
+      }
+      mapDataLocation {
+        locationId
+      }
+      company {
+        id
+        name
       }
     }
   }
@@ -24,14 +43,33 @@ export interface IReadOneMap {
   name: string;
   year: string;
   quarter: string;
-  month: string;
+  month: {
+    id: string;
+    name: string;
+  };
   week: string;
+  mapDataStatus: {
+    id: string;
+    name: string;
+    slug: string;
+  };
   dateType: 'WEEK' | 'MONTH' | 'QUARTER' | 'YEAR';
-  status: 'WAITING_FOR_CONFIRMATION' | 'VALID' | 'INVALID' | 'ACCEPTED';
   file: {
     id: string;
     url: string;
+    fileName: string;
+    originalFileName: string;
   } | null;
+  mapDataCategory: {
+    id: string;
+  };
+  mapDataLocation: Array<{
+    locationId: string;
+  }>;
+  company: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface IReadOneMapResponse {
