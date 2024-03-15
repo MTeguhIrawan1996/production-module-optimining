@@ -1,6 +1,6 @@
 import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -44,7 +44,7 @@ export default function ListDataRitageDumptruckBook<
   const router = useRouter();
   const [heavyEquipmentPage, setHeavyEquipmentPage] = useQueryState(
     'hp',
-    parseAsInteger.withDefault(1)
+    queryTypes.integer.withDefault(1)
   );
   const { t } = useTranslation('default');
 

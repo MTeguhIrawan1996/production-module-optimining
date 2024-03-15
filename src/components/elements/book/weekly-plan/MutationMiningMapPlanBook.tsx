@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Flex } from '@mantine/core';
+import { IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -163,9 +164,11 @@ const MutationMiningMapPlanBook = ({
       label: 'uploadFile',
       withAsterisk: true,
       description: 'uploadFileMax10Mb',
+      dropzoneDescription: 'formatImageDesc',
       name: `miningMapPlans.${index}.file`,
       key: `${obj.miningMapPlanId}.file.${index}`,
       serverFile: miningMapPlans[index].serverFile,
+      accept: IMAGE_MIME_TYPE,
       onDrop: (value) => {
         methods.setValue(`miningMapPlans.${index}.serverFile`, []);
         methods.setValue(`miningMapPlans.${index}.file`, value);

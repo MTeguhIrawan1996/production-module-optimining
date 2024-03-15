@@ -7,7 +7,7 @@ import {
 
 export const createMapYearlyValidation = z.object({
   name: zRequiredString,
-  companyId: zOptionalString,
+  companyId: zOptionalString.nullable(),
   mapDataCategoryId: zRequiredString,
   location: z.array(zRequiredString),
   year: zRequiredString,
@@ -16,7 +16,7 @@ export const createMapYearlyValidation = z.object({
 
 export const createMapMonthlyValidation = z.object({
   name: zRequiredString,
-  companyId: zOptionalString,
+  companyId: zOptionalString.nullable(),
   mapDataCategoryId: zRequiredString,
   location: z.array(zRequiredString),
   year: zRequiredString,
@@ -26,7 +26,7 @@ export const createMapMonthlyValidation = z.object({
 
 export const createMapWeeklyValidation = z.object({
   name: zRequiredString,
-  companyId: zOptionalString,
+  companyId: zOptionalString.nullable(),
   mapDataCategoryId: zRequiredString,
   location: z.array(zRequiredString),
   year: zRequiredString,
@@ -36,7 +36,7 @@ export const createMapWeeklyValidation = z.object({
 
 export const createMapQuarterValidation = z.object({
   name: zRequiredString,
-  companyId: zOptionalString,
+  companyId: zOptionalString.nullable(),
   mapDataCategoryId: zRequiredString,
   location: z.array(zRequiredString),
   year: zRequiredString,

@@ -3,7 +3,7 @@ import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -32,7 +32,10 @@ import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 const ReadCompanyHumanResourceBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const [page, setPage] = useQueryState('cp', parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState(
+    'cp',
+    queryTypes.integer.withDefault(1)
+  );
   const id = router.query.id as string;
   const [employeId, setIdEmploye] = React.useState<string>('');
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
@@ -322,7 +325,9 @@ const ReadCompanyHumanResourceBook = () => {
         },
         searchQuery,
         onSearch: () => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
         },
         placeholder: 'Cari berdasarkan Nama dan NIP',
       }}

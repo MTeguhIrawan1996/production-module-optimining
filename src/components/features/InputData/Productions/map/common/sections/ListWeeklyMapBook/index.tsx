@@ -3,17 +3,13 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import {
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { match } from 'ts-pattern';
 
 import {
   DashboardCard,
+  GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
@@ -50,23 +46,15 @@ const ListWeeklyMapBook = () => {
 
   const [mapWeeklyPage, setMapWeeklyPage] = useQueryState(
     'mapWeeklyPage',
-    parseAsInteger
+    queryTypes.integer.withDefault(1)
   );
-  const [mapWeeklyLocation, setMapWeeklyLocation] = useQueryState(
-    'mapWeeklyLocation',
-    parseAsString
-  );
-  const [mapWeeklyYear, setMapWeeklyYear] = useQueryState(
-    'mapWeeklyYear',
-    parseAsString
-  );
-  const [mapWeeklyWeek, setMapWeeklyWeek] = useQueryState(
-    'mapWeeklyWeek',
-    parseAsString
-  );
+  const [mapWeeklyLocation, setMapWeeklyLocation] =
+    useQueryState('mapWeeklyLocation');
+  const [mapWeeklyYear, setMapWeeklyYear] = useQueryState('mapWeeklyYear');
+  const [mapWeeklyWeek, setMapWeeklyWeek] = useQueryState('mapWeeklyWeek');
   const [mapWeeklySearch, setMapWeeklySearch] = useQueryState(
     'mapWeeklySearch',
-    parseAsString
+    queryTypes.string.withDefault('')
   );
 
   const [searchQuery] = useDebouncedValue<string>(
@@ -75,10 +63,8 @@ const ListWeeklyMapBook = () => {
   );
 
   const { t } = useTranslation('default');
-  const [mapWeeklyCategory, setMapWeeklyCategory] = useQueryState(
-    'mapWeeklyCategory',
-    parseAsString
-  );
+  const [mapWeeklyCategory, setMapWeeklyCategory] =
+    useQueryState('mapWeeklyCategory');
 
   const [id, setId] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -277,25 +263,12 @@ const ListWeeklyMapBook = () => {
             {
               accessor: 'status',
               title: t('commonTypography.status'),
-              render: (v) =>
-                match(v.status)
-                  .with('WAITING_FOR_CONFIRMATION', () => (
-                    <Badge color="orange">
-                      {t('commonTypography.waitingForConfirmation')}
-                    </Badge>
-                  ))
-                  .with('DETERMINED', () => (
-                    <Badge color="green">{t('commonTypography.valid')}</Badge>
-                  ))
-                  .with('WAITING_FOR_VALIDATION', () => (
-                    <Badge color="red">{t('commonTypography.notValid')}</Badge>
-                  ))
-                  .with('INVALID', () => (
-                    <Badge color="red">{t('commonTypography.accepted')}</Badge>
-                  ))
-                  .otherwise(() => (
-                    <Badge color="gray">{t('commonTypography.unknown')}</Badge>
-                  )),
+              render: ({ mapDataStatus }) => (
+                <GlobalBadgeStatus
+                  color={mapDataStatus?.color}
+                  label={mapDataStatus?.name ?? ''}
+                />
+              ),
             },
             {
               accessor: 'action',

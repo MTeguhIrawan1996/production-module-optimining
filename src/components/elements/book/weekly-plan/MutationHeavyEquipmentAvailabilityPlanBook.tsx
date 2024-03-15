@@ -117,6 +117,8 @@ const MutationHeavyEquipmentAvailabilityPlanBook = ({
     variables: {
       weeklyPlanId: id,
       limit: null,
+      orderBy: 'createdAt',
+      orderDir: 'desc',
     },
     skip: tabs !== 'heavyEquipmentAvailabilityPlan',
     onCompleted: ({ weeklyHeavyEquipmentAvailabilityPlans }) => {

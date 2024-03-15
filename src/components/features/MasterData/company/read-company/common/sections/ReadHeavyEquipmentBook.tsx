@@ -3,7 +3,7 @@ import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -28,7 +28,10 @@ const ReadHeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const [page, setPage] = useQueryState('hp', parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState(
+    'hp',
+    queryTypes.integer.withDefault(1)
+  );
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -354,7 +357,9 @@ const ReadHeavyEquipmentBook = () => {
           setSearchQuery(e.currentTarget.value);
         },
         onSearch: () => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
         },
         searchQuery: searchQuery,
       }}

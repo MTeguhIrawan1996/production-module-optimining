@@ -4736,12 +4736,10 @@ next-sitemap@^3.1.55:
     "@corex/deepmerge" "^4.0.29"
     minimist "^1.2.7"
 
-next-usequerystate@1.9.1:
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/next-usequerystate/-/next-usequerystate-1.9.1.tgz#afe3a5b2c32d375978fa85cd10aa26b8f031a95f"
-  integrity sha512-6QrUBqj4hl68j0PHBkWPE3OZiWZyA28rMmLVkPxUIVR1Sac6VYp66+iyWsS/8roykNm8wHkAb16E1gshS9SMBA==
-  dependencies:
-    mitt "^3.0.1"
+next-usequerystate@1.7.3:
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/next-usequerystate/-/next-usequerystate-1.7.3.tgz#724d9d75e488b47e0942ab9d3443dfcdcd5b65b0"
+  integrity sha512-U45N1KGL7e6Rp8kRmisbM26q/sV2JFPahuV1H0SgF0VgG6970CdtheqLicytYURzgpc4twdiQ+4QgZhuFmX3Tg==
 
 "next@^12 || ^13":
   version "13.5.6"
@@ -4862,6 +4860,13 @@ npm-run-path@^5.1.0:
   integrity sha512-sJOdmRGrY2sjNTRMbSvluQqg+8X7ZK61yvzBEIDhz4f8z1TZFYABsqjjCBd/0PUNE9M6QDgHJXQkGUEm7Q+l9Q==
   dependencies:
     path-key "^4.0.0"
+
+nuqs@^1.17.1:
+  version "1.17.1"
+  resolved "https://registry.yarnpkg.com/nuqs/-/nuqs-1.17.1.tgz#26873cf91add0dc376e6a6c916ea89b1d70f5b4a"
+  integrity sha512-zJPisj8L+SzKzt57c5s3fJW0ikksPr+PyeLyNwvx0i5ggTr5XR5uFhCoX/T+Mkmb6X5UxHB/0nnuZyFiQsh0cA==
+  dependencies:
+    mitt "^3.0.1"
 
 oauth@^0.9.15:
   version "0.9.15"

@@ -1043,11 +1043,20 @@
   "mapProduction": {
     "title": "$t(commonTypography.inputData) $t(commonTypography.commonTypography)",
     "createMapProd": "$t(commonTypography.create) $t(commonTypography.map)",
+    "updateMapProd": "$t(commonTypography.update) $t(commonTypography.map)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.map)",
     "successYearlyCreateMessage": "$t(commonTypography.map) $t(commonTypography.yearly) berhasil dibuat",
     "successMonthlyCreateMessage": "$t(commonTypography.map) $t(commonTypography.monthly) berhasil dibuat",
     "successQuarterlyCreateMessage": "$t(commonTypography.map) $t(commonTypography.quarterly) berhasil dibuat",
     "successWeeklyCreateMessage": "$t(commonTypography.map) $t(commonTypography.weekly) berhasil dibuat",
-    "successDeleteMessage": "$t(commonTypography.map) berhasil dihapus"
+    "successDeleteMessage": "$t(commonTypography.map) berhasil dihapus",
+    "formUpdateMapWeekly": "$t(commonTypography.form) $t(commonTypography.update) $t(commonTypography.map) $t(commonTypography.weekly)",
+    "formUpdateMapMonthly": "$t(commonTypography.form) $t(commonTypography.update) $t(commonTypography.map) $t(commonTypography.monthly)",
+    "formUpdateMapQuarterly": "$t(commonTypography.form) $t(commonTypography.update) $t(commonTypography.map) $t(commonTypography.quarterly)",
+    "formUpdateMapYearly": "$t(commonTypography.form) $t(commonTypography.update) $t(commonTypography.map) $t(commonTypography.yearly)",
+    "successUpdateMapWeekly": "$t(commonTypography.map) $t(commonTypography.weekly) berhasil diubah",
+    "successUpdateMapMonthly": "$t(commonTypography.map) $t(commonTypography.monthly) berhasil diubah",
+    "successUpdateMapQuarterly": "$t(commonTypography.map) $t(commonTypography.quarterly) berhasil diubah",
+    "successUpdateMapYearly": "$t(commonTypography.map) $t(commonTypography.yearly) berhasil diubah"
   }
 }
