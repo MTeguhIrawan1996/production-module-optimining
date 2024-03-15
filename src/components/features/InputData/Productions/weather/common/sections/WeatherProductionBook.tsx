@@ -68,7 +68,9 @@ const WeatherProductionBook = () => {
     onCompleted: () => {
       refetchWeatherData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -96,13 +98,17 @@ const WeatherProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   const filter = React.useMemo(() => {
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setYear(value ? Number(value) : null);
         setWeek(null);
       },
@@ -112,7 +118,9 @@ const WeatherProductionBook = () => {
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setWeek(value ? Number(value) : null);
       },
     });

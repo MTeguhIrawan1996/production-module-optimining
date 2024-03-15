@@ -144,7 +144,9 @@ const ListDataBargingRitageBook = () => {
     onCompleted: () => {
       refetchBargingRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -172,7 +174,9 @@ const ListDataBargingRitageBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   const filter = React.useMemo(() => {
@@ -181,7 +185,9 @@ const ListDataBargingRitageBook = () => {
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
@@ -200,7 +206,9 @@ const ListDataBargingRitageBook = () => {
         },
       ],
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setIsRitageProblematic(
           value ? (value === 'true' ? false : true) : null
         );
@@ -212,7 +220,9 @@ const ListDataBargingRitageBook = () => {
       searchable: false,
       data: shiftFilterItem,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setShiftId(value);
       },
     });
@@ -224,7 +234,9 @@ const ListDataBargingRitageBook = () => {
       onSearchChange: setHeavyEquipmentSeacrhTerm,
       searchValue: heavyEquipmentSeacrhTerm,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setHeavyEquipmentId(value);
       },
     });

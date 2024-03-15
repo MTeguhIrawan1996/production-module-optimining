@@ -21,6 +21,7 @@ import {
 } from '@/services/restapi/plan/weekly/useCreateMiningMapPlan';
 import {
   globalDropzonePdfOrImageRhf,
+  globalSelectMapTypeRhf,
   globalText,
   locationCategorySelect,
   locationSelect,
@@ -57,6 +58,7 @@ const MutationMiningMapPlanBook = ({
           mapName: '',
           locationCategoryId: null,
           locationId: null,
+          typeId: null,
           file: [],
           serverFile: [],
         },
@@ -94,6 +96,7 @@ const MutationMiningMapPlanBook = ({
               mapName: obj.mapName,
               locationCategoryId: obj.locationCategory.id,
               locationId: obj.location.id,
+              typeId: obj.type.id,
               file: [],
               serverFile: obj.file ? [obj.file] : [],
             };
@@ -159,6 +162,12 @@ const MutationMiningMapPlanBook = ({
       limit: null,
       skipQuery: tabs !== 'miningMapPlan',
     });
+    const mapTypeItem = globalSelectMapTypeRhf({
+      name: `miningMapPlans.${index}.typeId`,
+      label: 'mapType',
+      key: `${obj.miningMapPlanId}.typeId.${index}`,
+      skipQuery: tabs !== 'miningMapPlan',
+    });
     const pdfImageItem = globalDropzonePdfOrImageRhf({
       colSpan: 12,
       label: 'uploadFile',
@@ -189,6 +198,7 @@ const MutationMiningMapPlanBook = ({
         mapNameItem,
         locationCategoryItem,
         locationItem,
+        mapTypeItem,
         pdfImageItem,
       ],
       actionOuterGroup: {
@@ -202,6 +212,7 @@ const MutationMiningMapPlanBook = ({
                     mapName: '',
                     locationCategoryId: null,
                     locationId: null,
+                    typeId: null,
                     file: [],
                     serverFile: [],
                   }),

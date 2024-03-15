@@ -144,7 +144,9 @@ const ListDataOreRitageBook = () => {
     onCompleted: () => {
       refetchOreRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -172,7 +174,9 @@ const ListDataOreRitageBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   const filter = React.useMemo(() => {
@@ -181,7 +185,9 @@ const ListDataOreRitageBook = () => {
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
@@ -200,7 +206,9 @@ const ListDataOreRitageBook = () => {
         },
       ],
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setIsRitageProblematic(
           value ? (value === 'true' ? false : true) : null
         );
@@ -212,7 +220,9 @@ const ListDataOreRitageBook = () => {
       searchable: false,
       data: shiftFilterItem,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setShiftId(value);
       },
     });
@@ -224,7 +234,9 @@ const ListDataOreRitageBook = () => {
       onSearchChange: setHeavyEquipmentSeacrhTerm,
       searchValue: heavyEquipmentSeacrhTerm,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setHeavyEquipmentId(value);
       },
     });

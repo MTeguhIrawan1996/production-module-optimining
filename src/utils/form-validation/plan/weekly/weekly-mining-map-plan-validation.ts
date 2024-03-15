@@ -18,6 +18,7 @@ export const weeklyMiningMapPlanMutationValidation: z.ZodType<IMutationMiningMap
         mapName: zRequiredString,
         locationCategoryId: zRequiredSelectInput,
         locationId: zRequiredSelectInput,
+        typeId: zRequiredSelectInput,
         file: zImageOrPDFArrayOptional,
         serverFile: z.custom<Omit<IFile, 'path'>>().array(),
       })
