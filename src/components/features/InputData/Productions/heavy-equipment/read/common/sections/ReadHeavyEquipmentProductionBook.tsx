@@ -246,7 +246,7 @@ const ReadHeavyEquipmentProductionBook = () => {
     (obj: IProductiveIndicator) => {
       const column: Pick<IKeyValueItemProps, 'value' | 'dataKey'> = {
         dataKey: `${obj.formula.name}`,
-        value: `${obj.value ?? '-'}`,
+        value: obj.value ? `${obj.value} %` : '-',
       };
       return column;
     },
