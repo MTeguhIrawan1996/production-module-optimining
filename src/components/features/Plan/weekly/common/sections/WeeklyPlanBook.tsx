@@ -1,9 +1,9 @@
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -23,6 +23,7 @@ import {
 } from '@/utils/constants/Field/native-field';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
+import { useStoreQueryState } from '@/utils/store/useStoreQueryState';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -30,9 +31,9 @@ const WeeklyPlanBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
+  const [page, setPage] = useStoreQueryState(
+    (state) => [state.page, state.setPage],
+    shallow
   );
   const [year, setYear] = React.useState<number | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -72,9 +73,7 @@ const WeeklyPlanBook = () => {
     onCompleted: () => {
       refetchWeeklyPlanData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -102,17 +101,13 @@ const WeeklyPlanBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage(page);
   };
 
   const filter = React.useMemo(() => {
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setYear(value ? Number(value) : null);
         setWeek(null);
       },
@@ -122,25 +117,19 @@ const WeeklyPlanBook = () => {
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setWeek(value ? Number(value) : null);
       },
     });
     const selectStatusItem = globalSelectStatusNative({
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setStatus(value);
       },
     });
     const selectCompanyItem = globalSelectCompanyNative({
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setCompanyId(value);
       },
     });
