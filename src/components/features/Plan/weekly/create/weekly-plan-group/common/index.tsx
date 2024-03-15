@@ -26,7 +26,7 @@ const CreateWeeklyPlanGroupPage = () => {
   const isRouterReady = useRouterReady();
   const [tabs, setTabs] = useQueryState(
     'tabs',
-    queryTypes.string.withDefault("'workTimePlan'")
+    queryTypes.string.withDefault('workTimePlan')
   );
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
