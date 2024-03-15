@@ -7,16 +7,16 @@ interface Store {
   setPage: (page: number) => void;
 }
 
-export const useStoreQueryState = create<Store>()(
+export const useStoreWeeklyQueryUrl = create<Store>()(
   querystring(
     immer((set) => ({
       page: 1,
       setPage: (page: number) => set({ page }),
     })),
     {
-      select() {
+      select(path) {
         return {
-          page: true,
+          page: '/plan/weekly' === path,
         };
       },
     }

@@ -23,7 +23,7 @@ import {
 } from '@/utils/constants/Field/native-field';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
-import { useStoreQueryState } from '@/utils/store/useStoreQueryState';
+import { useStoreWeeklyQueryUrl } from '@/utils/store/useStoreWeeklyQueryUrl';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -31,7 +31,7 @@ const WeeklyPlanBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [page, setPage] = useStoreQueryState(
+  const [page, setPage] = useStoreWeeklyQueryUrl(
     (state) => [state.page, state.setPage],
     shallow
   );
