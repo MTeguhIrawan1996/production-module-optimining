@@ -106,7 +106,9 @@ const HeavyEquipmentMasterBook = () => {
     onCompleted: () => {
       refetchHeavyEquipmentMasterData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -154,14 +156,18 @@ const HeavyEquipmentMasterBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   const filter = React.useMemo(() => {
     const item: SelectProps[] = [
       {
         onChange: (value) => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
           setBrandId(value);
           setTypeId(null);
           setModelId(null);
@@ -177,7 +183,9 @@ const HeavyEquipmentMasterBook = () => {
       },
       {
         onChange: (value) => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
           setTypeId(value);
           setModelId(null);
         },
@@ -193,7 +201,9 @@ const HeavyEquipmentMasterBook = () => {
       },
       {
         onChange: (value) => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
           setModelId(value);
         },
         value: modelId,
@@ -208,7 +218,9 @@ const HeavyEquipmentMasterBook = () => {
       },
       {
         onChange: (value) => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
           setClasslId(value);
         },
         value: classId,

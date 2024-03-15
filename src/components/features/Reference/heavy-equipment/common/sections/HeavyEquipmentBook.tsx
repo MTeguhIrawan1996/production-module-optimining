@@ -88,7 +88,9 @@ const HeavyEquipmentBook = () => {
     onCompleted: () => {
       refetchHeavyEquipments();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -122,7 +124,9 @@ const HeavyEquipmentBook = () => {
     const item: SelectProps[] = [
       {
         onChange: (value) => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
           setBrandId(value);
           setTypeId(null);
         },
@@ -137,7 +141,9 @@ const HeavyEquipmentBook = () => {
       },
       {
         onChange: (value) => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
           setTypeId(value);
         },
         value: typeId,
@@ -165,7 +171,9 @@ const HeavyEquipmentBook = () => {
     });
   };
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
   /* #endregion  /**======== HandleClickFc =========== */
 

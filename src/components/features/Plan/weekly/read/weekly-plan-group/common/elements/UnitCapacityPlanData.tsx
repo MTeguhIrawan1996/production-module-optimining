@@ -52,7 +52,9 @@ const UnitCapacityPlanData = () => {
   });
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   const renderOtherColumnCallback = React.useCallback(

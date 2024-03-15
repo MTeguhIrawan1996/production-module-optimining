@@ -114,7 +114,9 @@ const ReadCompanyHumanResourceBook = () => {
     onCompleted: () => {
       refetchEmployees();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -140,7 +142,9 @@ const ReadCompanyHumanResourceBook = () => {
       searchValue: divisionSearchTerm,
       placeholder: 'chooseDivision',
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setDivisionId(value);
       },
     });
@@ -150,7 +154,9 @@ const ReadCompanyHumanResourceBook = () => {
       searchValue: positionSearchTerm,
       placeholder: 'choosePosition',
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setPositionId(value);
       },
     });
@@ -158,7 +164,9 @@ const ReadCompanyHumanResourceBook = () => {
       data: employeStatusFilter,
       placeholder: 'chooseEmployeStatus',
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setEmployeStatusId(value);
       },
     });
@@ -175,7 +183,9 @@ const ReadCompanyHumanResourceBook = () => {
         },
       ],
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setFormStatus(value ? (value === 'true' ? true : false) : null);
       },
     });
@@ -204,7 +214,9 @@ const ReadCompanyHumanResourceBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   /* #   /**=========== RenderTable =========== */

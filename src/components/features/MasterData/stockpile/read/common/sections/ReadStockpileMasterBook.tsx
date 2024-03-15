@@ -67,7 +67,9 @@ const ReadStockpileMasterBook = () => {
     onCompleted: () => {
       refetchStockpiles();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -87,7 +89,9 @@ const ReadStockpileMasterBook = () => {
   /* #endregion  /**======== Query =========== */
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   const handleDeleteDome = async () => {
@@ -238,7 +242,9 @@ const ReadStockpileMasterBook = () => {
               },
               searchQuery,
               onSearch: () => {
-                setPage(1);
+                setPage(1, {
+                  shallow: true,
+                });
                 refetchStockpiles({
                   page: 1,
                 });

@@ -63,7 +63,9 @@ const MonthlyPlanBook = () => {
     onCompleted: () => {
       refetchMonthlyPlanData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -91,31 +93,41 @@ const MonthlyPlanBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   const filter = React.useMemo(() => {
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setYear(value ? Number(value) : null);
       },
     });
     const selectMonthItem = globalSelectMonthNative({
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setMonth(value ? Number(value) : null);
       },
     });
     const selectStatusItem = globalSelectStatusNative({
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setStatus(value);
       },
     });
     const selectCompanyItem = globalSelectCompanyNative({
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setCompanyId(value);
       },
     });

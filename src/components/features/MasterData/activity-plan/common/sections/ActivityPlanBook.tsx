@@ -56,7 +56,9 @@ const ActivityPlanBook = () => {
     onCompleted: () => {
       refetchActivityPlans();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -84,7 +86,9 @@ const ActivityPlanBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   /* #   /**=========== RenderTable =========== */

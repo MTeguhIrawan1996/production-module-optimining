@@ -72,7 +72,9 @@ const WeeklyPlanBook = () => {
     onCompleted: () => {
       refetchWeeklyPlanData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -100,13 +102,17 @@ const WeeklyPlanBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   const filter = React.useMemo(() => {
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setYear(value ? Number(value) : null);
         setWeek(null);
       },
@@ -116,19 +122,25 @@ const WeeklyPlanBook = () => {
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setWeek(value ? Number(value) : null);
       },
     });
     const selectStatusItem = globalSelectStatusNative({
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setStatus(value);
       },
     });
     const selectCompanyItem = globalSelectCompanyNative({
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setCompanyId(value);
       },
     });
