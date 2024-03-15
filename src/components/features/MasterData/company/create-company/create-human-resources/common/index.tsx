@@ -1,6 +1,6 @@
 import { Tabs, TabsValue } from '@mantine/core';
 import { useRouter } from 'next/router';
-import { parseAsString, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
@@ -19,7 +19,7 @@ const CreateCompanyHumanResourcesPage = () => {
   const isRouterReady = useRouterReady();
   const [tabs, setTabs] = useQueryState(
     'tabs',
-    parseAsString.withDefault("'human-resources-profil'")
+    queryTypes.string.withDefault("'human-resources-profil'")
   );
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],

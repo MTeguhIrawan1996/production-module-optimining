@@ -19,20 +19,28 @@ import {
   PrimaryButton,
 } from '@/components/elements';
 
-import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
+import {
+  IAuthUserData,
+  useReadAuthUser,
+} from '@/services/graphql/query/auth/useReadAuthUser';
 
 export function ProfileCard() {
-  const { userAuthData, userAuthDataLoading } = useReadAuthUser({});
   const { t } = useTranslation('default');
-
   const router = useRouter();
+  const [authUser, setAUthUser] = React.useState<IAuthUserData | null>(null);
+
+  const { userAuthDataLoading } = useReadAuthUser({
+    skip: authUser !== null,
+    onCompleted: (data) => {
+      setAUthUser(data.authUser);
+    },
+  });
 
   const [logoutModalOpened, { close, open }] = useDisclosure(false);
 
   return (
     <>
       <LogoutConfirmModal opened={logoutModalOpened} onClose={close} />
-
       <Menu shadow="md" width={350} radius="md" position="bottom-end">
         <Menu.Target>
           <UnstyledButton>
@@ -41,7 +49,7 @@ export function ProfileCard() {
                 <Skeleton w={100} h={12} radius="xl" />
               ) : (
                 <Text component="span" fz={14}>
-                  {userAuthData?.name}
+                  {authUser?.name}
                 </Text>
               )}
               <ActionIcon
@@ -63,15 +71,15 @@ export function ProfileCard() {
                 data={[
                   {
                     dataKey: 'Nama',
-                    value: userAuthData?.name,
+                    value: authUser?.name,
                   },
                   {
                     dataKey: 'Email',
-                    value: userAuthData?.email,
+                    value: authUser?.email,
                   },
                   {
                     dataKey: 'Role',
-                    value: userAuthData?.role.name,
+                    value: authUser?.role.name,
                   },
                 ]}
                 type="flex"

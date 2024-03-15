@@ -1,7 +1,7 @@
 import { Stack, Text, useMantineTheme } from '@mantine/core';
 import { DataTableColumnGroup } from 'mantine-datatable';
 import { useRouter } from 'next/router';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -26,7 +26,10 @@ const UnitCapacityPlanData = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const [tabs] = useQueryState('tabs');
-  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState(
+    'page',
+    queryTypes.integer.withDefault(1)
+  );
   const [materials, setMaterials] = React.useState<
     IReadOneMaterialUnitCapacityPlan[] | undefined
   >(undefined);
@@ -198,7 +201,7 @@ const UnitCapacityPlanData = () => {
                   columns: [
                     {
                       accessor: 'material',
-                      render: ({ material }) => material.name ?? '-',
+                      render: ({ material }) => material?.name ?? '-',
                       footer: <Text>Total</Text>,
                     },
                     {
@@ -210,7 +213,7 @@ const UnitCapacityPlanData = () => {
                       title: t('commonTypography.heavyEquipmentClass'),
                       width: 180,
                       render: ({ class: heavyEquipmentClass }) =>
-                        heavyEquipmentClass.name ?? '-',
+                        heavyEquipmentClass?.name ?? '-',
                     },
                     {
                       accessor: 'physicalAvailability',

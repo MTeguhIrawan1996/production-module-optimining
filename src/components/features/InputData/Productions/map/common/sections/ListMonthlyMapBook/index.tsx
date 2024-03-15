@@ -2,17 +2,13 @@ import { Badge } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import {
-  parseAsInteger,
-  parseAsString,
-  useQueryState,
-} from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { match } from 'ts-pattern';
 
 import {
   DashboardCard,
+  GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
@@ -50,32 +46,23 @@ const ListMonthlyMapBook = () => {
 
   const [mapMonthlyPage, setMapMonthlyPage] = useQueryState(
     'mapMonthlyPage',
-    parseAsInteger
+    queryTypes.integer.withDefault(1)
   );
-  const [mapMonthlyLocation, setMapMonthlyLocation] = useQueryState(
-    'mapMonthlyLocation',
-    parseAsString
-  );
-  const [mapMonthlyYear, setMapMonthlyYear] = useQueryState(
-    'mapMonthlyYear',
-    parseAsString
-  );
-  const [mapMonthlyMonth, setMapMonthlyMonth] = useQueryState(
-    'mapMonthlyMonth',
-    parseAsString
-  );
+  const [mapMonthlyLocation, setMapMonthlyLocation] =
+    useQueryState('mapMonthlyLocation');
+  const [mapMonthlyYear, setMapMonthlyYear] = useQueryState('mapMonthlyYear');
+  const [mapMonthlyMonth, setMapMonthlyMonth] =
+    useQueryState('mapMonthlyMonth');
   const [mapMonthlySearch, setMapMonthlySearch] = useQueryState(
     'mapMonthlySearch',
-    parseAsString
+    queryTypes.string.withDefault('')
   );
 
   const searchQuery = useDebounce((mapMonthlySearch as string) || '', 500);
 
   const { t } = useTranslation('default');
-  const [mapMonthlyCategory, setMapMonthlyCategory] = useQueryState(
-    'mapMonthlyCategory',
-    parseAsString
-  );
+  const [mapMonthlyCategory, setMapMonthlyCategory] =
+    useQueryState('mapMonthlyCategory');
 
   const [id, setId] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -83,7 +70,7 @@ const ListMonthlyMapBook = () => {
   const { mapData, mapMeta, mapDataLoading, refetchMap } = useReadAllMap({
     variables: {
       page: mapMonthlyPage || 1,
-      limit: 2,
+      limit: 15,
       search: searchQuery === '' ? null : searchQuery,
       dateType: 'MONTH',
       mapDataCategoryId: mapMonthlyCategory || undefined,
@@ -275,25 +262,12 @@ const ListMonthlyMapBook = () => {
             {
               accessor: 'status',
               title: t('commonTypography.status'),
-              render: (v) =>
-                match(v.status)
-                  .with('WAITING_FOR_CONFIRMATION', () => (
-                    <Badge color="orange">
-                      {t('commonTypography.waitingForConfirmation')}
-                    </Badge>
-                  ))
-                  .with('DETERMINED', () => (
-                    <Badge color="green">{t('commonTypography.valid')}</Badge>
-                  ))
-                  .with('WAITING_FOR_VALIDATION', () => (
-                    <Badge color="red">{t('commonTypography.notValid')}</Badge>
-                  ))
-                  .with('INVALID', () => (
-                    <Badge color="red">{t('commonTypography.accepted')}</Badge>
-                  ))
-                  .otherwise(() => (
-                    <Badge color="gray">{t('commonTypography.unknown')}</Badge>
-                  )),
+              render: ({ mapDataStatus }) => (
+                <GlobalBadgeStatus
+                  color={mapDataStatus?.color}
+                  label={mapDataStatus?.name ?? ''}
+                />
+              ),
             },
             {
               accessor: 'action',

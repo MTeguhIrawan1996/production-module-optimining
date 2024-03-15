@@ -32,7 +32,6 @@ type FormValues = {
   month: string;
   mapImage: FileWithPath[] | null;
 };
-import { LoadingOverlay } from '@mantine/core';
 import { IconCheck, IconX } from '@tabler/icons-react';
 
 import {
@@ -197,7 +196,7 @@ const CreateMapMonthlyProductionBook = () => {
     });
 
     const mapImage: ControllerProps = {
-      control: 'image-dropzone',
+      control: 'pdf-image-dropzone',
       name: 'mapImage',
       label: 'mapFile',
       withAsterisk: true,
@@ -255,8 +254,7 @@ const CreateMapMonthlyProductionBook = () => {
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0}>
-      <LoadingOverlay visible={loading || isLoadingUpload} />
+    <DashboardCard p={0} isLoading={loading || isLoadingUpload}>
       <GlobalFormGroup
         field={fieldRhf}
         methods={methods}

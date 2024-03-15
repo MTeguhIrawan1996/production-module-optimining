@@ -255,7 +255,7 @@
       "uploadFile": "Unggah File",
       "tonByDraft": "Ton Berdasarkan Draft",
       "mapType": "Jenis Peta",
-      "quarter": "Triwulan",
+      "quarter": "Quarter",
       "mapFile": "File Peta"
     },
     "fieldDescription": {
@@ -268,7 +268,7 @@
       "uploadFileMax10Mb": "Maksimal Ukuran File 10MB",
       "dragAndDropFile": "Tarik dan lepas atau cari file anda",
       "formatPdfOrImageDesc": "Format file berupa .JPEG .JPG .PNG atau .WEBP dan PDF",
-      "mapFileDescription": "Maksimal 10Mb dengan ekestensi .JPEG .JPG .PNG"
+      "formatImageDesc": "Format file berupa .JPEG .JPG .PNG atau .WEBP"
     },
     "modal": {
       "updatePasswordModal": {

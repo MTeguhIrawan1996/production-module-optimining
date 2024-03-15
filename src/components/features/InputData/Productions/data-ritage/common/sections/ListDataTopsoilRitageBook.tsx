@@ -2,7 +2,7 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { parseAsInteger, useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -35,10 +35,13 @@ import { InputControllerNativeProps } from '@/types/global';
 const ListDataTopsoilRitageBook = () => {
   const router = useRouter();
   const [tabs] = useQueryState('tabs');
-  const [page, setPage] = useQueryState('rp', parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState(
+    'rp',
+    queryTypes.integer.withDefault(1)
+  );
   const [heavyEquipmentPage] = useQueryState(
     'hp',
-    parseAsInteger.withDefault(1)
+    queryTypes.integer.withDefault(1)
   );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');

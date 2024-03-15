@@ -83,16 +83,16 @@ export interface IReadOneMaterialUnitCapacityPlan {
   material: {
     id: string;
     name: string;
-  };
+  } | null;
   fleet: string;
   class: {
     id: string;
     name: string;
-  };
+  } | null;
   front: {
     id: string;
     name: string;
-  };
+  } | null;
   physicalAvailability: number;
   useOfAvailability: number;
   effectiveWorkingHour: number;

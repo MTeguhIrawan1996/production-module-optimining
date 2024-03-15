@@ -6,10 +6,6 @@ import { shallow } from 'zustand/shallow';
 
 import { ProfileCard } from '@/components/layouts/Dashboard/ProfileCard';
 
-import {
-  IAuthUserData,
-  useReadAuthUser,
-} from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadPermissionUser } from '@/services/graphql/query/auth/useReadPermission';
 import { usePermissions } from '@/utils/store/usePermissions';
 
@@ -23,15 +19,10 @@ const HeaderLayout: React.FC<IHeaderlayoutProps> = ({ onHandleExpand }) => {
     (state) => [state.setPermissions, state.permissions],
     shallow
   );
-  const [authUser, setAUthUser] = React.useState<IAuthUserData | null>(null);
-  useReadAuthUser({
-    skip: authUser !== null,
-    onCompleted: (data) => {
-      setAUthUser(data.authUser);
-    },
-  });
 
-  const { userPermission } = useReadPermissionUser({});
+  const { userPermission } = useReadPermissionUser({
+    skip: permissions.length > 0,
+  });
 
   React.useEffect(() => {
     if (
