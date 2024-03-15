@@ -250,6 +250,7 @@ const ListMonthlyMapBook = () => {
             {
               accessor: 'month',
               title: t('commonTypography.month'),
+              render: ({ month }) => month.name,
             },
             {
               accessor: 'location',
