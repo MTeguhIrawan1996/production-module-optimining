@@ -283,7 +283,7 @@ const UpdateMapQuarterlyProductionBook = () => {
       methods.getValues();
     await executeUpdate({
       variables: {
-        dateType: 'WEEK',
+        dateType: 'QUARTER',
         name: name,
         mapDataCategoryId: mapDataCategoryId,
         location: location,

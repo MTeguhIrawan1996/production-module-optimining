@@ -26,9 +26,11 @@ export const READ_ONE_MAP = gql`
       }
       mapDataCategory {
         id
+        name
       }
       mapDataLocation {
         locationId
+        name
       }
       company {
         id
@@ -62,14 +64,17 @@ export interface IReadOneMap {
   } | null;
   mapDataCategory: {
     id: string;
+    name: string;
   };
   mapDataLocation: Array<{
     locationId: string;
+    name: string;
   }>;
   company: {
     id: string;
     name: string;
   };
+  statusMessage: string;
 }
 
 export interface IReadOneMapResponse {

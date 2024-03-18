@@ -283,7 +283,7 @@ const ListMonthlyMapBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/production/map/monthly/${id}`
+                                `/input-data/production/map/monthly/read/${id}`
                               );
                             },
                           }

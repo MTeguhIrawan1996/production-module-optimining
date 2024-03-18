@@ -466,7 +466,9 @@
     "yearly": "Tahunan",
     "waitingForConfirmation": "Menunggu Konfirmasi",
     "valid": "Valid",
-    "accepted": "Diterima"
+    "accepted": "Diterima",
+    "mapType": "$t(commonTypography.type) $t(commonTypography.map)",
+    "file": "File"
   },
   "sideBar": {
     "dashboard": "Dashboard",
@@ -1041,9 +1043,10 @@
     "successIsRejectMessage": "$t(monthlyPlan.title) berhasil $t(commonTypography.reject)"
   },
   "mapProduction": {
-    "title": "$t(commonTypography.inputData) $t(commonTypography.commonTypography)",
+    "title": "$t(commonTypography.inputData) $t(commonTypography.map)",
     "createMapProd": "$t(commonTypography.create) $t(commonTypography.map)",
     "updateMapProd": "$t(commonTypography.update) $t(commonTypography.map)",
+    "readMapProd": "$t(commonTypography.detail) $t(commonTypography.map)",
     "searchPlaceholder": "$t(commonTypography.search) berdasarkan $t(commonTypography.name) $t(commonTypography.map)",
     "successYearlyCreateMessage": "$t(commonTypography.map) $t(commonTypography.yearly) berhasil dibuat",
     "successMonthlyCreateMessage": "$t(commonTypography.map) $t(commonTypography.monthly) berhasil dibuat",
@@ -1057,6 +1060,10 @@
     "successUpdateMapWeekly": "$t(commonTypography.map) $t(commonTypography.weekly) berhasil diubah",
     "successUpdateMapMonthly": "$t(commonTypography.map) $t(commonTypography.monthly) berhasil diubah",
     "successUpdateMapQuarterly": "$t(commonTypography.map) $t(commonTypography.quarterly) berhasil diubah",
-    "successUpdateMapYearly": "$t(commonTypography.map) $t(commonTypography.yearly) berhasil diubah"
+    "successUpdateMapYearly": "$t(commonTypography.map) $t(commonTypography.yearly) berhasil diubah",
+    "successIsValidateMessage": "$t(mapProduction.title) berhasil divalidasi",
+    "successIsNotValidateMessage": "Status $t(mapProduction.title) Tidak Valid",
+    "successIsDeterminedMessage": "$t(mapProduction.title) berhasil ditetapkan",
+    "successIsRejectMessage": "$t(mapProduction.title) berhasil $t(commonTypography.reject)"
   }
 }

@@ -179,7 +179,7 @@ const ListQuarterlyMapBook = () => {
       },
     });
     const quarterItem = globalSelectNative({
-      placeholder: 'quarter',
+      placeholder: 'quarterly',
       label: 'quarter',
       searchable: true,
       onChange: (v) => {
@@ -276,7 +276,7 @@ const ListQuarterlyMapBook = () => {
             },
             {
               accessor: 'quarter',
-              title: t('commonTypography.quarter'),
+              title: t('commonTypography.quarterly'),
             },
             {
               accessor: 'location',
@@ -309,7 +309,7 @@ const ListQuarterlyMapBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/production/map/quarterly/${id}`
+                                `/input-data/production/map/quarterly/read/${id}`
                               );
                             },
                           }

@@ -242,7 +242,7 @@ const UpdateMapYearlyProductionBook = () => {
       {
         group: t('commonTypography.mapInformation'),
         enableGroupLabel: true,
-        formControllers: [company, name, mapCategory, location, year, year],
+        formControllers: [company, name, mapCategory, location, year],
       },
       {
         group: 'File Peta',
@@ -261,7 +261,7 @@ const UpdateMapYearlyProductionBook = () => {
       methods.getValues();
     await executeUpdate({
       variables: {
-        dateType: 'WEEK',
+        dateType: 'YEAR',
         name: name,
         mapDataCategoryId: mapDataCategoryId,
         location: location,

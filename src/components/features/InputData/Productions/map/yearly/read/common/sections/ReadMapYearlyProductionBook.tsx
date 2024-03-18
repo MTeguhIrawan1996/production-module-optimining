@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Divider, Stack, Tabs, Text } from '@mantine/core';
+import { Badge, createStyles, Divider, Stack, Tabs, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { IconX } from '@tabler/icons-react';
@@ -12,21 +12,28 @@ import {
   DashboardCard,
   GlobalAlert,
   KeyValueList,
-  MantineDataTable,
+  NextImageFill,
 } from '@/components/elements';
-import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
-import { useUpdateIsDeterminedFrontProduction } from '@/services/graphql/mutation/front-production/useIsDeterminedFrontProduction';
-import { useUpdateIsValidateFrontProduction } from '@/services/graphql/mutation/front-production/useIsValidateFrontProduction';
-import { useReadOneFrontProduction } from '@/services/graphql/query/front-production/useReadOneFrontProduction';
+import { useDeterminedMapDataProduction } from '@/services/graphql/mutation/input-data-map/useDetermineMap';
+import { useValidateMap } from '@/services/graphql/mutation/input-data-map/useValidateMap';
+import { useReadOneMap } from '@/services/graphql/query/input-data-map/useReadOneMap';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 
 import { IUpdateStatusValues } from '@/types/global';
+
+const useStyles = createStyles(() => ({
+  image: {
+    objectFit: 'cover',
+    backgroundPosition: 'center',
+  },
+}));
 
 const ReadMapYearlyProductionBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const { classes } = useStyles();
 
   const methods = useForm<IUpdateStatusValues>({
     resolver: zodResolver(statusValidationSchema),
@@ -37,70 +44,63 @@ const ReadMapYearlyProductionBook = () => {
   });
 
   /* #   /**=========== Query =========== */
-  const { frontData, frontDataGrouping, frontDataLoading } =
-    useReadOneFrontProduction({
-      variables: {
-        id,
-      },
-      skip: !router.isReady,
-    });
+  const { mapData, mapDataLoading } = useReadOneMap({
+    variables: {
+      id,
+    },
+    skip: !router.isReady,
+  });
 
-  const [executeUpdateStatus, { loading }] = useUpdateIsValidateFrontProduction(
-    {
-      onCompleted: (data) => {
-        const message = {
-          '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
-            'frontProduction.successIsValidateMessage'
-          ),
-          'af06163a-2ba3-45ee-a724-ab3af0c97cc9': t(
-            'frontProduction.successIsNotValidateMessage'
-          ),
-          default: t('commonTypography.front'),
-        };
+  const [executeUpdateStatus, { loading }] = useValidateMap({
+    onCompleted: (data) => {
+      const message = {
+        '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
+          'mapProduction.successIsValidateMessage'
+        ),
+        'af06163a-2ba3-45ee-a724-ab3af0c97cc9': t(
+          'mapProduction.successIsNotValidateMessage'
+        ),
+        default: t('commonTypography.map'),
+      };
+      notifications.show({
+        color: 'green',
+        title: 'Selamat',
+        message: message[data.validateMapDataStatus.mapDataStatus.id],
+        icon: <IconCheck />,
+      });
+      router.push('/input-data/production/map/yearly?tabs=yearly');
+    },
+    onError: (error) => {
+      if (error.graphQLErrors) {
         notifications.show({
-          color: 'green',
-          title: 'Selamat',
-          message: message[data.validateFrontData.status.id],
-          icon: <IconCheck />,
+          color: 'red',
+          title: 'Gagal',
+          message: error.message,
+          icon: <IconX />,
         });
-        router.push(
-          `/input-data/production/data-front?page=1&segment=${frontData?.type}`
-        );
-      },
-      onError: (error) => {
-        if (error.graphQLErrors) {
-          notifications.show({
-            color: 'red',
-            title: 'Gagal',
-            message: error.message,
-            icon: <IconX />,
-          });
-        }
-      },
-    }
-  );
+      }
+    },
+  });
 
   const [executeUpdateStatusDetermiend, { loading: determinedLoading }] =
-    useUpdateIsDeterminedFrontProduction({
+    useDeterminedMapDataProduction({
       onCompleted: (data) => {
         const message = {
           'f5f644d9-8810-44f7-8d42-36b5222b97d1': t(
-            'frontProduction.successIsDeterminedMessage'
+            'mapProduction.successIsDeterminedMessage'
           ),
           '7848a063-ae40-4a80-af86-dfc532cbb688': t(
-            'frontProduction.successIsRejectMessage'
+            'mapProduction.successIsRejectMessage'
           ),
-          default: t('commonTypography.front'),
+          default: t('commonTypography.map'),
         };
         notifications.show({
           color: 'green',
           title: 'Selamat',
-          message: message[data.determineFrontData.status.id],
+          message: message[data.determineMapDataData.mapDataStatus.id],
           icon: <IconCheck />,
         });
-        router.push(
-          `/input-data/production/data-front?page=1&segment=${frontData?.type}`
-        );
+        router.push('/input-data/production/map/yearly?tabs=yearly');
       },
       onError: (error) => {
         if (error.graphQLErrors) {
@@ -162,36 +162,34 @@ const ReadMapYearlyProductionBook = () => {
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
   const isShowButtonValidation = includesWaiting.includes(
-    frontData?.status?.id ?? ''
+    mapData?.mapDataStatus?.id ?? ''
   );
 
   const isShowButtonInvalidation = includesWaiting.includes(
-    frontData?.status?.id ?? ''
+    mapData?.mapDataStatus?.id ?? ''
   );
 
   const isShowButtonDetermined = includesValid.includes(
-    frontData?.status?.id ?? ''
+    mapData?.mapDataStatus?.id ?? ''
   );
 
   const isShowButtonReject = includesValid.includes(
-    frontData?.status?.id ?? ''
+    mapData?.mapDataStatus?.id ?? ''
   );
   const isHiddenButtonEdit = includesDetermined.includes(
-    frontData?.status?.id ?? ''
+    mapData?.mapDataStatus?.id ?? ''
   );
 
   return (
     <DashboardCard
-      title={t('frontProduction.readFrontProduction')}
+      title={t('mapProduction.readMapProd')}
       updateButton={
         isHiddenButtonEdit
           ? undefined
           : {
               label: 'Edit',
               onClick: () =>
-                router.push(
-                  `/input-data/production/data-front/update/${id}?segment=${frontData?.type}`
-                ),
+                router.push(`/input-data/production/map/yearly/update/${id}`),
             }
       }
       validationButton={
@@ -239,12 +237,10 @@ const ReadMapYearlyProductionBook = () => {
       withBorder
       enebleBackBottomOuter={{
         onClick: () =>
-          router.push(
-            `/input-data/production/data-front?page=1&segment=${frontData?.type}`
-          ),
+          router.push('/input-data/production/map/yearly?tabs=yearly'),
       }}
       shadow="xs"
-      isLoading={frontDataLoading}
+      isLoading={mapDataLoading}
       paperStackProps={{
         spacing: 'sm',
       }}
@@ -264,77 +260,81 @@ const ReadMapYearlyProductionBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          {frontData?.status?.id === 'af06163a-2ba3-45ee-a724-ab3af0c97cc9' ? (
+          {mapData?.mapDataStatus?.id ===
+          'af06163a-2ba3-45ee-a724-ab3af0c97cc9' ? (
             <GlobalAlert
-              description={frontData?.statusMessage ?? ''}
+              description={mapData?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
               mt="xs"
             />
           ) : null}
-          {frontData?.status?.id === '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
+          {mapData?.mapDataStatus?.id ===
+          '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
             <GlobalAlert
-              description={frontData?.statusMessage ?? ''}
+              description={mapData?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
               mt="xs"
             />
           ) : null}
-          {frontDataGrouping.map((val, i) => {
-            const keyValueData: Pick<
-              IKeyValueItemProps,
-              'value' | 'dataKey'
-            >[] = val.itemValue.map((obj) => {
-              return {
-                dataKey: t(`commonTypography.${obj.name}`),
-                value: obj.value,
-              };
-            });
-            return (
-              <React.Fragment key={i}>
-                <Stack
-                  spacing="sm"
-                  mt={i === 0 ? 'sm' : undefined}
-                  mb={i === 0 ? 'sm' : undefined}
-                >
-                  {val.enableTitle && (
-                    <Text fz={24} fw={600} color="brand">
-                      {t(`commonTypography.${val.group}`)}
-                    </Text>
-                  )}
-                  <KeyValueList data={keyValueData} type="grid" />
-                </Stack>
-                {val.withDivider && <Divider my="md" />}
-              </React.Fragment>
-            );
-          })}
-          <Stack spacing="sm">
+          <Stack spacing="sm" mt="sm">
             <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.supportingHeavyEquipment')}
+              {t('commonTypography.mapInformation')}
             </Text>
-            <MantineDataTable
-              tableProps={{
-                records: frontData?.supportingHeavyEquipments ?? [],
-                columns: [
-                  {
-                    accessor: 'activity',
-                    title: t('commonTypography.activity'),
-                    noWrap: false,
-                    render: ({ activityPlan }) => activityPlan?.name || '-',
-                  },
-                  {
-                    accessor: 'heavyEquipmentCode',
-                    title: t('commonTypography.heavyEquipmentCode'),
-                    render: ({ companyHeavyEquipment }) =>
-                      companyHeavyEquipment?.hullNumber || '-',
-                  },
-                ],
-                shadow: 'none',
-              }}
-              emptyStateProps={{
-                title: t('commonTypography.dataNotfound'),
-              }}
+            <KeyValueList
+              data={[
+                {
+                  dataKey: t('commonTypography.mapName'),
+                  value: mapData?.name,
+                },
+                {
+                  dataKey: t('commonTypography.mapType'),
+                  value: mapData?.mapDataCategory.name,
+                },
+                {
+                  dataKey: t('commonTypography.location'),
+                  value: mapData?.mapDataLocation?.map((e) => (
+                    <Badge mr="md" key={e.locationId}>
+                      {e?.name}
+                    </Badge>
+                  )),
+                },
+                {
+                  dataKey: t('commonTypography.year'),
+                  value: mapData?.year,
+                },
+              ]}
+              type="grid"
             />
+          </Stack>
+          <Divider my="md" />
+          <Stack spacing="xs">
+            <Text fz={24} fw={600} color="brand">
+              {`${t('commonTypography.file')} ${t('commonTypography.map')}`}
+            </Text>
+            <NextImageFill
+              alt={mapData?.file?.originalFileName || ''}
+              src={
+                `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${mapData?.file?.url}` ||
+                ''
+              }
+              figureProps={{
+                h: 400,
+                w: '100%',
+              }}
+              imageClassName={classes.image}
+            />
+            <Text
+              component="span"
+              align="center"
+              fw={400}
+              fz={12}
+              color="gray.6"
+              truncate
+            >
+              {mapData?.file?.originalFileName}
+            </Text>
           </Stack>
         </Tabs.Panel>
       </Tabs>

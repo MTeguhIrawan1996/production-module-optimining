@@ -267,7 +267,7 @@ const UpdateMapMonthlyProductionBook = () => {
       methods.getValues();
     await executeUpdate({
       variables: {
-        dateType: 'WEEK',
+        dateType: 'MONTH',
         name: name,
         mapDataCategoryId: mapDataCategoryId,
         location: location,

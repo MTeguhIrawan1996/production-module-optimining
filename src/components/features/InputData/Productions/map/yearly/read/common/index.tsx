@@ -21,10 +21,12 @@ const ReadMapYearlyProductionPage = () => {
     setBreadcrumbs([
       {
         label: t('commonTypography.map'),
-        path: '/input-data/production/map',
+        path: '/input-data/production/map?tabs=yearly',
       },
       {
-        label: t('heavyEquipmentProd.readHeavyEquipmentProd'),
+        label: `${t('mapProduction.readMapProd')} ${t(
+          'commonTypography.yearly'
+        )}`,
         path: router.asPath,
       },
     ]);
