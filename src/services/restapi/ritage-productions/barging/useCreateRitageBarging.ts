@@ -23,6 +23,7 @@ export interface IMutationRitageBarging {
   weatherId: string | null;
   stockpileName: string;
   domeId: string | null;
+  fromFrontId: string | null;
   closeDome: boolean;
   bargeCompanyHeavyEquipmentId: string | null;
   bargingId: string | null;

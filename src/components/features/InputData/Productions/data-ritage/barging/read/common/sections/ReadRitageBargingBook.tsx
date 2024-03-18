@@ -416,7 +416,7 @@ const ReadRitageBargingBook = () => {
           <Divider my="md" />
           <Stack spacing="sm">
             <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.arrive')}
+              {t('commonTypography.fromLocation')}
             </Text>
             <KeyValueList
               data={[
@@ -428,6 +428,21 @@ const ReadRitageBargingBook = () => {
                   dataKey: t('commonTypography.dome'),
                   value: bargingRitage?.dome?.name,
                 },
+                {
+                  dataKey: t('commonTypography.fromFront'),
+                  value: bargingRitage?.fromFront?.name,
+                },
+              ]}
+              type="grid"
+            />
+          </Stack>
+          <Divider my="md" />
+          <Stack spacing="sm">
+            <Text fz={24} fw={600} color="brand">
+              {t('commonTypography.arrive')}
+            </Text>
+            <KeyValueList
+              data={[
                 {
                   dataKey: t('commonTypography.toBarging'),
                   value: bargingRitage?.barging?.name,

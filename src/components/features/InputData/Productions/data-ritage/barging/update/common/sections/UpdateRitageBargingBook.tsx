@@ -77,6 +77,7 @@ const UpdateRitageBargingBook = () => {
       domeId: '',
       stockpileName: '',
       bargingId: '',
+      fromFrontId: '',
       closeDome: false,
       bargeCompanyHeavyEquipmentId: '',
       bulkSamplingDensity: '',
@@ -152,6 +153,7 @@ const UpdateRitageBargingBook = () => {
       setNewArriveTime(arriveTime ?? '');
       methods.setValue('weatherId', bargingRitage.weather?.id ?? '');
       methods.setValue('domeId', bargingRitage.dome?.id ?? '');
+      methods.setValue('fromFrontId', bargingRitage.fromFront?.id ?? '');
       methods.setValue('bargingId', bargingRitage.barging?.id ?? '');
       methods.setValue('closeDome', bargingRitage.closeDome ?? false);
       methods.setValue(
@@ -343,6 +345,13 @@ const UpdateRitageBargingBook = () => {
       defaultValue: bargingRitage?.dome?.id,
       labelValue: bargingRitage?.dome?.name,
     });
+    const fromFrontItem = locationSelect({
+      colSpan: 6,
+      name: 'fromFrontId',
+      label: 'fromFront',
+      withAsterisk: false,
+      categoryIds: [`${process.env.NEXT_PUBLIC_FRONT_ID}`],
+    });
     const bargingItem = locationSelect({
       colSpan: 6,
       name: 'bargingId',
@@ -472,7 +481,7 @@ const UpdateRitageBargingBook = () => {
         formControllers: [fromTime, arriveTime, ritageDurationItem],
       },
       {
-        group: t('commonTypography.arrive'),
+        group: t('commonTypography.fromLocation'),
         enableGroupLabel: true,
         groupCheckbox: {
           onChange: () => {
@@ -480,10 +489,14 @@ const UpdateRitageBargingBook = () => {
               ? methods.setValue('closeDome', false)
               : methods.setValue('closeDome', true);
           },
-          checked: closeDome,
           label: t('commonTypography.closeDome'),
         },
-        formControllers: [domeItem, stockpileItem, bargingItem, bargeCodeItem],
+        formControllers: [domeItem, stockpileItem, fromFrontItem],
+      },
+      {
+        group: t('commonTypography.arrive'),
+        enableGroupLabel: true,
+        formControllers: [bargingItem, bargeCodeItem],
       },
       {
         group: t('commonTypography.detail'),

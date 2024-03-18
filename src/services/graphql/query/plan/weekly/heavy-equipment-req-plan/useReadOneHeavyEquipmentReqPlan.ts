@@ -7,12 +7,16 @@ export const READ_ONE_HEAVY_EQUIPMENT_REQ_PLAN = gql`
     $weeklyPlanId: String!
     $page: Int
     $limit: Int
+    $orderBy: String
+    $orderDir: String
   ) {
     weeklyHeavyEquipmentRequirementPlans(
       findAllHeavyEquipmentRequirementPlanInput: {
         weeklyPlanId: $weeklyPlanId
         page: $page
         limit: $limit
+        orderBy: $orderBy
+        orderDir: $orderDir
       }
     ) {
       meta {
