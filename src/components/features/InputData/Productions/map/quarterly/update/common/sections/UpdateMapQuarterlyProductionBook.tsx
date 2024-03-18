@@ -98,7 +98,7 @@ const UpdateMapQuarterlyProductionBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('mapProduction.successQuarterlyUpdateMessage'),
+        message: t('mapProduction.successUpdateMapQuarterly'),
         icon: <IconCheck />,
       });
       methods.reset();

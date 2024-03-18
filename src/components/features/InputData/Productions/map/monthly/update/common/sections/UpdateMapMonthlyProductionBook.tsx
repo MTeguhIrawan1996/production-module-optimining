@@ -99,7 +99,7 @@ const UpdateMapMonthlyProductionBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('mapProduction.successMonthlyUpdateMessage'),
+        message: t('mapProduction.successUpdateMapMonthly'),
         icon: <IconCheck />,
       });
       methods.reset();

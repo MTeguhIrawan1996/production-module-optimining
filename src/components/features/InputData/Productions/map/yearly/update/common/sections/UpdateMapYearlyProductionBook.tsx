@@ -96,7 +96,7 @@ const UpdateMapYearlyProductionBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('mapProduction.successYearlyUpdateMessage'),
+        message: t('mapProduction.successUpdateMapYearly'),
         icon: <IconCheck />,
       });
       methods.reset();
