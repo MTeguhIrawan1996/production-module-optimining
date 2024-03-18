@@ -153,7 +153,14 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
         <Text fz={24} fw={600} color="brand">
           {t('commonTypography.survey')}
         </Text>
-        <ScrollArea.Autosize mah={340} offsetScrollbars type="always">
+        <ScrollArea.Autosize
+          mah={340}
+          offsetScrollbars
+          type="always"
+          sx={{
+            zIndex: 1,
+          }}
+        >
           <Box sx={{ height: 'fit-content' }}>
             <MantineDataTable
               tableProps={{
@@ -186,6 +193,11 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
                     accessor: 'tonBySurvey',
                     title: t('commonTypography.tonBySurvey'),
                     render: ({ ton }) => ton,
+                  },
+                  {
+                    accessor: 'volumeBySurvey',
+                    title: t('commonTypography.volumeBySurvey'),
+                    render: ({ volume }) => volume,
                   },
                 ],
                 horizontalSpacing: 0,
@@ -303,7 +315,14 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
         <Text fz={24} fw={600} color="brand">
           {t('commonTypography.barging')}
         </Text>
-        <ScrollArea.Autosize mah={340} offsetScrollbars type="always">
+        <ScrollArea.Autosize
+          mah={340}
+          offsetScrollbars
+          type="always"
+          sx={{
+            zIndex: 1,
+          }}
+        >
           <Box sx={{ height: 'fit-content' }}>
             <MantineDataTable
               tableProps={{
@@ -380,7 +399,14 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
         <Text fz={24} fw={600} color="brand">
           {t('commonTypography.moving')}
         </Text>
-        <ScrollArea.Autosize mah={340} offsetScrollbars type="always">
+        <ScrollArea.Autosize
+          mah={340}
+          offsetScrollbars
+          type="always"
+          sx={{
+            zIndex: 1,
+          }}
+        >
           <Box sx={{ height: 'fit-content' }}>
             <MantineDataTable
               tableProps={{
@@ -457,7 +483,14 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
         <Text fz={24} fw={600} color="brand">
           {t('commonTypography.reopen')}
         </Text>
-        <ScrollArea.Autosize mah={340} offsetScrollbars type="always">
+        <ScrollArea.Autosize
+          mah={340}
+          offsetScrollbars
+          type="always"
+          sx={{
+            zIndex: 1,
+          }}
+        >
           <Box sx={{ height: 'fit-content' }}>
             <MantineDataTable
               tableProps={{

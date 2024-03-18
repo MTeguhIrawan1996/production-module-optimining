@@ -26,6 +26,7 @@ import { IRegencySelectInputRhfProps } from '@/components/elements/input/Regency
 import { IRelegionSelectInputRhfProps } from '@/components/elements/input/RelegionSelectInputRhf';
 import { ISelectActivityCategoryRhfProps } from '@/components/elements/input/SelectActivityCategoryRhf';
 import { ISelectActivityFormRhfProps } from '@/components/elements/input/SelectActivityFormRhf';
+import { ISelectActivityTypePlanRhfProps } from '@/components/elements/input/SelectActivityTypePlanRhf';
 import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
 import { ISelectCompanyRhfProps } from '@/components/elements/input/SelectCompanyRhf';
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
@@ -1219,6 +1220,28 @@ export const globalSelectMapTypeRhf = ({
 }: Partial<ISelectMapTypeRhfProps>) => {
   const field: ControllerProps = {
     control: 'select-mapType-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectActivityTypePlanRhf = ({
+  name = 'activityTypeId',
+  label,
+  searchable = false,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectActivityTypePlanRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-activity-type-plan-rhf',
     name,
     label,
     searchable,

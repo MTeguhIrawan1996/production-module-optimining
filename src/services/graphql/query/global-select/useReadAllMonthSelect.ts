@@ -1,46 +1,63 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
 export const READ_ALL_MONTH_SELECT = gql`
-  query ReadAllMonthSelect {
-    months {
-      id
-      name
+  query ReadAllMonth2Select($year: Float, $quarter: Float) {
+    month2s(findAllMonthInput: { year: $year, quarter: $quarter }) {
+      month
+      detail {
+        startWeek
+        endWeek
+      }
     }
   }
 `;
 
 interface IMonthItem {
-  id: number;
-  name: string;
+  month: number;
+  detail: {
+    startWeek: string;
+    endWeek: string;
+  };
 }
 
-interface IReadAllMonthSelectResponse {
-  months: IMonthItem[];
+interface IReadAllMonth2selectResponse {
+  month2s: IMonthItem[];
 }
 
-export const useReadAllMonthSelect = ({
+interface IMonth2Request {
+  year: number | null;
+  month: number | null;
+}
+
+export const useReadAllMonth2Select = ({
   onCompleted,
   skip,
+  variables,
 }: {
-  onCompleted?: (data: IReadAllMonthSelectResponse) => void;
+  variables?: Partial<IMonth2Request>;
+  onCompleted?: (data: IReadAllMonth2selectResponse) => void;
   skip?: boolean;
 }) => {
   const {
-    data: monthsData,
-    loading: monthsDataLoading,
+    data: month2sData,
+    loading: month2sDataLoading,
     refetch,
-  } = useQuery<IReadAllMonthSelectResponse>(READ_ALL_MONTH_SELECT, {
-    skip: skip,
-    onError: (err: ApolloError) => {
-      return err;
-    },
-    onCompleted,
-    fetchPolicy: 'cache-first',
-  });
+  } = useQuery<IReadAllMonth2selectResponse, Partial<IMonth2Request>>(
+    READ_ALL_MONTH_SELECT,
+    {
+      variables,
+      skip: skip,
+      onError: (err: ApolloError) => {
+        return err;
+      },
+      onCompleted,
+      fetchPolicy: 'cache-first',
+    }
+  );
 
   return {
-    monthsData: monthsData?.months,
-    monthsDataLoading,
-    refetchMonthsData: refetch,
+    month2sData: month2sData?.month2s,
+    month2sDataLoading,
+    refetchMonth2sData: refetch,
   };
 };

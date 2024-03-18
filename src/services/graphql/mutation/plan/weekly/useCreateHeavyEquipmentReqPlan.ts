@@ -35,6 +35,7 @@ export interface IMutationHeavyEquipmentReqPlan {
   materialIds: string[];
   locationIds: string[];
   averageDistance: number | null | '';
+  activityTypeId: string | null;
   desc: string;
   activities: IMutationHeavyEquipmentReqPlanActivity[];
 }

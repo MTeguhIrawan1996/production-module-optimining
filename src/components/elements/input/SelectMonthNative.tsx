@@ -2,7 +2,8 @@ import { Select, SelectProps } from '@mantine/core';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useReadAllMonthSelect } from '@/services/graphql/query/global-select/useReadAllMonthSelect';
+import { useReadAllMonth2Select } from '@/services/graphql/query/global-select/useReadAllMonthSelect';
+import dayjs from '@/utils/helper/dayjs.config';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 export type ISelectMonthNativeProps = {
@@ -16,12 +17,14 @@ const SelectMonthNative: React.FC<ISelectMonthNativeProps> = ({
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
-  const { monthsData } = useReadAllMonthSelect({});
+  const { month2sData } = useReadAllMonth2Select({});
 
-  const monthsItem = monthsData?.map((val) => {
+  const monthsItem = month2sData?.map((val) => {
     return {
-      name: val.name,
-      id: `${val.id}`,
+      name: `${dayjs()
+        .month(val.month - 1)
+        .format('MMMM')}`,
+      id: `${val.month}`,
     };
   });
 

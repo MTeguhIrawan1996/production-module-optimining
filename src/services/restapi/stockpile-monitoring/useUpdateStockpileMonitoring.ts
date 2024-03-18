@@ -9,6 +9,7 @@ import { AxiosRestErrorResponse, IElementRhf } from '@/types/global';
 type tonBySurveys = {
   date?: Date | null;
   ton: string | number;
+  volume: string | number;
 };
 type bargings = {
   startDate?: Date | null;
@@ -110,6 +111,10 @@ const UpdateStockpileMonitoring = async ({
           const date = dateToString(value.date ?? null);
           if (date) bodyFormData.append(`tonSurveys[${index}][date]`, date);
           bodyFormData.append(`tonSurveys[${index}][ton]`, `${value.ton}`);
+          bodyFormData.append(
+            `tonSurveys[${index}][volume]`,
+            `${value.volume}`
+          );
         });
       }
       if (name === 'samples') {

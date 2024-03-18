@@ -33,6 +33,7 @@ import {
   globalMultipleSelectLocation,
   globalMultipleSelectMaterial,
   globalNumberInput,
+  globalSelectActivityTypePlanRhf,
   globalText,
 } from '@/utils/constants/Field/global-field';
 import { heavyEquipmentReqMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-heavy-equipment-req-validation';
@@ -66,6 +67,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
           materialIds: [],
           locationIds: [],
           averageDistance: '',
+          activityTypeId: null,
           desc: '',
           activities: activities,
         },
@@ -156,6 +158,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
               locationIds,
               materialIds,
               averageDistance: obj.averageDistance || '',
+              activityTypeId: obj.activityType.id,
               desc: obj.desc,
               activities,
             };
@@ -200,11 +203,15 @@ const MutationHeavyEquipmentReqPlanBook = ({
         withAsterisk: false,
         key: `${obj.heavyequipmentReqPlanId}.averageDistance`,
       });
+      const activityTypeItem = globalSelectActivityTypePlanRhf({
+        name: `heavyEquipmentRequirementPlans.${index}.activityTypeId`,
+        label: 'activity',
+        key: `${obj.heavyequipmentReqPlanId}.activityTypeId`,
+      });
       const descItem = globalText({
         name: `heavyEquipmentRequirementPlans.${index}.desc`,
         label: 'desc',
         withAsterisk: false,
-        colSpan: 12,
         key: `${obj.heavyequipmentReqPlanId}.desc`,
       });
 
@@ -227,6 +234,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
                       materialIds: value.materialIds,
                       locationIds: value.locationIds,
                       averageDistance: value.averageDistance,
+                      activityTypeId: value.activityTypeId,
                       desc: value.desc,
                       activities: [...value.activities, ...activities],
                     });
@@ -247,6 +255,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
                     materialIds: value.materialIds,
                     locationIds: value.locationIds,
                     averageDistance: value.averageDistance,
+                    activityTypeId: value.activityTypeId,
                     desc: value.desc,
                     activities: copyArray ?? [],
                   })
@@ -264,6 +273,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
           multipleSelectMaterialItem,
           multipleSelectLocationItem,
           averageDistanceItem,
+          activityTypeItem,
           descItem,
         ],
         renderItem: () =>
@@ -300,6 +310,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
                       materialIds: [],
                       locationIds: [],
                       averageDistance: '',
+                      activityTypeId: null,
                       desc: '',
                       activities: activities,
                     }),
@@ -356,12 +367,12 @@ const MutationHeavyEquipmentReqPlanBook = ({
             materialIds: hObj.materialIds,
             locationIds: hObj.locationIds,
             averageDistance: hObj.averageDistance || null,
+            activityTypeId: hObj.activityTypeId,
             desc: hObj.desc,
             activities: newActivities,
           };
         return newHeavyEquipmentRequirementPlanObj;
       });
-
     await executeUpdate({
       variables: {
         weeklyPlanId: id,
