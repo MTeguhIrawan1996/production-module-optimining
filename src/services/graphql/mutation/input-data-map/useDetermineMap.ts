@@ -3,17 +3,13 @@ import { ApolloError, gql, useMutation } from '@apollo/client';
 import { IUpdateStatusValues } from '@/types/global';
 
 export const UPDATE_ISDETERMINED_MAP_DATA_PRODUCTION = gql`
-  mutation determineMapDataStatus(
+  mutation determineMapData(
     $id: String!
     $status: Boolean
     $statusMessage: String
   ) {
-    determineMapDataStatus(
-      determineMapDataDataInput: {
-        id: $id
-        status: $status
-        statusMessage: $statusMessage
-      }
+    determineMapData(
+      input: { id: $id, status: $status, statusMessage: $statusMessage }
     ) {
       id
       mapDataStatus {

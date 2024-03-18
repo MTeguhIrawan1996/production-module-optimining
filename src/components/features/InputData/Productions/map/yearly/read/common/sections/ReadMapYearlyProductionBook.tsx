@@ -236,8 +236,7 @@ const ReadMapYearlyProductionBook = () => {
       }}
       withBorder
       enebleBackBottomOuter={{
-        onClick: () =>
-          router.push('/input-data/production/map/yearly?tabs=yearly'),
+        onClick: () => router.push('/input-data/production/map?tabs=yearly'),
       }}
       shadow="xs"
       isLoading={mapDataLoading}

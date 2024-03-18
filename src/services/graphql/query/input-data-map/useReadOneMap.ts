@@ -36,6 +36,7 @@ export const READ_ONE_MAP = gql`
         id
         name
       }
+      statusMessage
     }
   }
 `;
@@ -48,6 +49,7 @@ export interface IReadOneMap {
   month: {
     id: string;
     name: string;
+    statusMessage: string;
   };
   week: string;
   mapDataStatus: {

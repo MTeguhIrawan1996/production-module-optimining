@@ -236,8 +236,7 @@ const ReadMapWeeklyProductionBook = () => {
       }}
       withBorder
       enebleBackBottomOuter={{
-        onClick: () =>
-          router.push('/input-data/production/map/weekly?tabs=weekly'),
+        onClick: () => router.push('/input-data/production/map?tabs=weekly'),
       }}
       shadow="xs"
       isLoading={mapDataLoading}

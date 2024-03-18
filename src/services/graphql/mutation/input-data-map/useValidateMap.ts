@@ -9,7 +9,7 @@ export const UPDATE_ISVALID_MAP = gql`
     $statusMessage: String
   ) {
     validateMapData(
-      input: { id: $id, status: $status, statusMessage: $status }
+      input: { id: $id, status: $status, statusMessage: $statusMessage }
     ) {
       id
       mapDataStatus {
