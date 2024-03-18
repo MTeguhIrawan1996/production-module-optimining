@@ -351,6 +351,8 @@ const UpdateRitageBargingBook = () => {
       label: 'fromFront',
       withAsterisk: false,
       categoryIds: [`${process.env.NEXT_PUBLIC_FRONT_ID}`],
+      defaultValue: bargingRitage?.fromFront?.id,
+      labelValue: bargingRitage?.fromFront?.name,
     });
     const bargingItem = locationSelect({
       colSpan: 6,

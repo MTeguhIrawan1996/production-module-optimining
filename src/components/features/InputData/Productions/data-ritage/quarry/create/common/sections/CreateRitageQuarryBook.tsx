@@ -246,7 +246,7 @@ const CreateRitageQuarryBook = () => {
       colSpan: 6,
       name: 'fromPitId',
       label: 'fromPit',
-      withAsterisk: true,
+      withAsterisk: false,
       onChange: (value) => {
         methods.setValue('fromPitId', value ?? '');
         methods.setValue('block', '');
