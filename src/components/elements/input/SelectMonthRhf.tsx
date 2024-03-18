@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllMonthSelect } from '@/services/graphql/query/global-select/useReadAllMonthSelect';
+import { useReadAllMonth2Select } from '@/services/graphql/query/global-select/useReadAllMonthSelect';
+import dayjs from '@/utils/helper/dayjs.config';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
@@ -28,14 +29,16 @@ const SelectMonthRhf: React.FC<ISelectMonthRhfProps> = ({
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
 
-  const { monthsData } = useReadAllMonthSelect({
+  const { month2sData } = useReadAllMonth2Select({
     skip: skipQuery,
   });
 
-  const monthsItem = monthsData?.map((val) => {
+  const monthsItem = month2sData?.map((val) => {
     return {
-      name: val.name,
-      id: `${val.id}`,
+      name: `${dayjs()
+        .month(val.month - 1)
+        .format('MMMM')}`,
+      id: `${val.month}`,
     };
   });
 

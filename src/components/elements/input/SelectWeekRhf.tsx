@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllWeekSelect } from '@/services/graphql/query/global-select/useReadAllWeekSelect';
+import { useReadAllWeek2s } from '@/services/graphql/query/global-select/useReadAllWeekSelect';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
@@ -35,20 +35,20 @@ const SelectWeekRhf: React.FC<ISelectWeekRhfProps> = ({
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
 
-  const { weeksData } = useReadAllWeekSelect({
+  const { week2sData } = useReadAllWeek2s({
     variables: {
       year,
     },
     skip: skipQuery,
   });
 
-  const weeksItem = weeksData?.map((val) => {
+  const weeksItem = week2sData?.map((val) => {
     return {
       name: t('commonTypography.nthWeek', {
-        n: val, // week is started by 1 by default
+        n: val.week, // week is started by 1 by default
         ns: 'default',
       }),
-      id: `${val}`,
+      id: `${val.week}`,
     };
   });
 
