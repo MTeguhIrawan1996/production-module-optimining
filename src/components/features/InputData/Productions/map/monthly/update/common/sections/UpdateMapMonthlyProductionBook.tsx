@@ -99,7 +99,7 @@ const UpdateMapMonthlyProductionBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('mapProduction.successMonthlyUpdateMessage'),
+        message: t('mapProduction.successUpdateMapMonthly'),
         icon: <IconCheck />,
       });
       methods.reset();
@@ -267,7 +267,7 @@ const UpdateMapMonthlyProductionBook = () => {
       methods.getValues();
     await executeUpdate({
       variables: {
-        dateType: 'WEEK',
+        dateType: 'MONTH',
         name: name,
         mapDataCategoryId: mapDataCategoryId,
         location: location,

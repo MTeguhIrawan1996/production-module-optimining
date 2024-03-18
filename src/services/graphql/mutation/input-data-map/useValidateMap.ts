@@ -3,25 +3,36 @@ import { ApolloError, gql, useMutation } from '@apollo/client';
 import { IUpdateStatusValues } from '@/types/global';
 
 export const UPDATE_ISVALID_MAP = gql`
-  mutation validateMapDataStatus(
-    $id: String!
-    $changeStatus: MapDataStatusValidation!
+  mutation validateMapData(
+    $id: String
+    $status: Boolean
+    $statusMessage: String
   ) {
-    validateMapDataStatus(input: $input) {
+    validateMapData(
+      input: { id: $id, status: $status, statusMessage: $statusMessage }
+    ) {
       id
-      name
+      mapDataStatus {
+        id
+        name
+      }
     }
   }
 `;
 
 export interface IUpdateIsValidateMapRequest extends IUpdateStatusValues {
   id: string;
-  status: 'INVALID' | 'WAITING_FOR_CONFIRMATION';
+  status: boolean;
+  statusMessage: string | null;
 }
 
 interface IUpdateIsValidateMapResponse {
   validateMapDataStatus: {
     id: string;
+    mapDataStatus: {
+      id;
+      name;
+    };
   };
 }
 

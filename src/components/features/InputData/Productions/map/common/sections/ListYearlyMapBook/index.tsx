@@ -266,7 +266,7 @@ const ListYearlyMapBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/production/map/yearly/${id}`
+                                `/input-data/production/map/yearly/read//${id}`
                               );
                             },
                           }

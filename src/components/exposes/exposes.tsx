@@ -814,3 +814,81 @@ export const WorkingHoursPlanMasterPage = () => (
     <Pages.WorkingHoursPlanMasterPage />
   </WithProviders>
 );
+
+export const MapProductionPage = () => (
+  <WithProviders>
+    <Pages.MapProductionPage />
+  </WithProviders>
+);
+
+export const CreateMapWeeklyProductionPage = () => (
+  <WithProviders>
+    <Pages.CreateMapWeeklyProductionPage />
+  </WithProviders>
+);
+
+export const CreateMapMonthlyProductionPage = () => (
+  <WithProviders>
+    <Pages.CreateMapMonthlyProductionPage />
+  </WithProviders>
+);
+
+export const CreateMapQuarterlyProductionPage = () => (
+  <WithProviders>
+    <Pages.CreateMapQuarterlyProductionPage />
+  </WithProviders>
+);
+
+export const CreateMapYearlyProductionPage = () => (
+  <WithProviders>
+    <Pages.CreateMapYearlyProductionPage />
+  </WithProviders>
+);
+
+export const ReadMapWeeklyProductionPage = () => (
+  <WithProviders>
+    <Pages.ReadMapWeeklyProductionPage />
+  </WithProviders>
+);
+
+export const ReadMapMonthlyProductionPage = () => (
+  <WithProviders>
+    <Pages.ReadMapMonthlyProductionPage />
+  </WithProviders>
+);
+
+export const ReadMapQuarterlyProductionPage = () => (
+  <WithProviders>
+    <Pages.ReadMapQuarterlyProductionPage />
+  </WithProviders>
+);
+
+export const ReadMapYearlyProductionPage = () => (
+  <WithProviders>
+    <Pages.ReadMapYearlyProductionPage />
+  </WithProviders>
+);
+
+export const UpdateMapWeeklyProductionPage = () => (
+  <WithProviders>
+    <Pages.UpdateMapWeeklyProductionPage />
+  </WithProviders>
+);
+
+export const UpdateMapMonthlyProductionPage = () => (
+  <WithProviders>
+    <Pages.UpdateMapMonthlyProductionPage />
+  </WithProviders>
+);
+
+export const UpdateMapQuarterlyProductionPage = () => (
+  <WithProviders>
+    <Pages.UpdateMapQuarterlyProductionPage />
+  </WithProviders>
+);
+
+export const UpdateMapYearlyProductionPage = () => (
+  <WithProviders>
+    <Pages.UpdateMapYearlyProductionPage />
+  </WithProviders>
+);
