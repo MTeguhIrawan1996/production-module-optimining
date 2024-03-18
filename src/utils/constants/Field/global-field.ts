@@ -30,6 +30,7 @@ import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBa
 import { ISelectCompanyRhfProps } from '@/components/elements/input/SelectCompanyRhf';
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
+import { ISelectMapTypeRhfProps } from '@/components/elements/input/SelectMapType';
 import { ISelectMonthRhfProps } from '@/components/elements/input/SelectMonthRhf';
 import { ISelectWeekRhfProps } from '@/components/elements/input/SelectWeekRhf';
 import { ISelectWorkingHoursPlanRhfProps } from '@/components/elements/input/SelectWorkingHoursPlanRhf';
@@ -1196,6 +1197,28 @@ export const globalSelectWeekRhf = ({
 }: Partial<ISelectWeekRhfProps>) => {
   const field: ControllerProps = {
     control: 'select-week-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectMapTypeRhf = ({
+  name = 'typeId',
+  label,
+  searchable = false,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectMapTypeRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-mapType-rhf',
     name,
     label,
     searchable,
