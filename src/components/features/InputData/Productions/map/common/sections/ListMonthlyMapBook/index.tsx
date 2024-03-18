@@ -250,6 +250,7 @@ const ListMonthlyMapBook = () => {
             {
               accessor: 'month',
               title: t('commonTypography.month'),
+              render: ({ month }) => month.name,
             },
             {
               accessor: 'location',
@@ -282,7 +283,7 @@ const ListMonthlyMapBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/production/map/monthly/${id}`
+                                `/input-data/production/map/monthly/read/${id}`
                               );
                             },
                           }

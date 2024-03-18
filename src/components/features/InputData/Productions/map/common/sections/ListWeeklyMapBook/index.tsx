@@ -283,7 +283,7 @@ const ListWeeklyMapBook = () => {
                             onClick: (e) => {
                               e.stopPropagation();
                               router.push(
-                                `/input-data/production/map/weekly/${id}`
+                                `/input-data/production/map/weekly/read/${id}`
                               );
                             },
                           }

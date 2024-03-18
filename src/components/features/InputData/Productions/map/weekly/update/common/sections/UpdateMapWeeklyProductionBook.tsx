@@ -99,7 +99,7 @@ const UpdateMapWeeklyProductionBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('mapProduction.successWeeklyUpdateMessage'),
+        message: t('mapProduction.successUpdateMapWeekly'),
         icon: <IconCheck />,
       });
       methods.reset();

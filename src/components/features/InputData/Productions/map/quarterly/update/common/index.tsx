@@ -22,7 +22,7 @@ const UpdateMapQuarterlyProductionPage = () => {
     setBreadcrumbs([
       {
         label: t('commonTypography.map'),
-        path: '/input-data/production/map',
+        path: '/input-data/production/map?tabs=quarterly',
       },
       {
         label: `${t('mapProduction.updateMapProd')} ${t(
