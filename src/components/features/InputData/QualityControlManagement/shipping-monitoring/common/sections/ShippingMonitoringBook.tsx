@@ -81,7 +81,9 @@ const ShippingMonitoringBook = () => {
     onCompleted: () => {
       refetchMonitoringBargingData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -109,26 +111,34 @@ const ShippingMonitoringBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   const filter = React.useMemo(() => {
     const bargeCodeItem = globalSelectHeavyEquipmentNative({
       categoryId: `${process.env.NEXT_PUBLIC_BARGE_ID}`,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setBargeHeavyEquipmentId(value === '' ? null : value);
       },
     });
     const arriveItem = globalSelectArriveBargeNative({
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setFactoryCategoryId(value);
       },
     });
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setYear(value ? Number(value) : null);
         setMonth(null);
         setWeek(null);
@@ -138,7 +148,9 @@ const ShippingMonitoringBook = () => {
       disabled: !year,
       value: month ? `${month}` : null,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setMonth(value ? Number(value) : null);
       },
     });
@@ -147,7 +159,9 @@ const ShippingMonitoringBook = () => {
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setWeek(value ? Number(value) : null);
       },
     });

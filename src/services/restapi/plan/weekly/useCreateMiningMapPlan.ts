@@ -10,6 +10,7 @@ export interface IMiningMapPlanData {
   mapName: string;
   locationCategoryId: string | null;
   locationId: string | null;
+  typeId: string | null;
   file: FileWithPath[] | null;
   serverFile: Omit<IFile, 'path'>[];
 }
@@ -50,6 +51,7 @@ const createMiningMapPlan = async ({ data, weeklyPlanId }: IPropsRequest) => {
           `miningMapPlans[${i}][locationId]`,
           obj.locationId || ''
         );
+        bodyFormData.append(`miningMapPlans[${i}][typeId]`, obj.typeId || '');
         obj.file?.forEach((fObj) => {
           bodyFormData.append(`miningMapPlans[${i}][file]`, fObj);
         });

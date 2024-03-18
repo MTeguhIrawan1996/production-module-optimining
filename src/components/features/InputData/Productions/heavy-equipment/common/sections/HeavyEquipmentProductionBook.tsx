@@ -72,7 +72,9 @@ const HeavyEquipmentProductionBook = () => {
     onCompleted: () => {
       refetchHeavyEquipmentData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -100,7 +102,9 @@ const HeavyEquipmentProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   const filter = React.useMemo(() => {
@@ -109,7 +113,9 @@ const HeavyEquipmentProductionBook = () => {
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },

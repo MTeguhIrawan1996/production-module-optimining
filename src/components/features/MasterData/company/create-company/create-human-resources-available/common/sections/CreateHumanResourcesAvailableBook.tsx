@@ -87,7 +87,9 @@ const CreateHumanResourcesAvailableBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -231,7 +233,9 @@ const CreateHumanResourcesAvailableBook = () => {
           },
           searchQuery,
           onSearch: () => {
-            setPage(1);
+            setPage(1, {
+              shallow: true,
+            });
             refetchNonEmployeedHumanResources({
               page: 1,
             });

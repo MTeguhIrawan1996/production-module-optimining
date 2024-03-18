@@ -32,7 +32,9 @@ const HeavyEquipmentAvailabilityPlanData = () => {
   });
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   return (

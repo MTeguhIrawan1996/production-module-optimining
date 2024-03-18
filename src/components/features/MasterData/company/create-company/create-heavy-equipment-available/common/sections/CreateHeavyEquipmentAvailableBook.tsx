@@ -86,7 +86,9 @@ const CreateHeavyEquipmentAvailableBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -255,7 +257,9 @@ const CreateHeavyEquipmentAvailableBook = () => {
           },
           searchQuery,
           onSearch: () => {
-            setPage(1);
+            setPage(1, {
+              shallow: true,
+            });
             refetchNonOwnedByCompanyHeavyEquipments({
               page: 1,
             });

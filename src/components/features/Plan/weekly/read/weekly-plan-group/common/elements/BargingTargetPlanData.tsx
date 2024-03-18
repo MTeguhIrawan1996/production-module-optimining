@@ -101,7 +101,9 @@ const BargingTargetPlanData = () => {
   const renderOtherColumn = elementsData?.map(renderOtherColumnCallback);
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   return (

@@ -36,6 +36,10 @@ export const READ_ONE_MINING_MAP_PLAN = gql`
           id
           name
         }
+        type {
+          id
+          name
+        }
         file {
           id
           originalFileName
@@ -56,6 +60,10 @@ export interface IReadOneMiningMapPlanData {
     name: string;
   };
   location: {
+    id: string;
+    name: string;
+  };
+  type: {
     id: string;
     name: string;
   };

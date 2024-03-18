@@ -105,7 +105,9 @@ const ReadHeavyEquipmentBook = () => {
     onCompleted: () => {
       refetchHeavyEquipmentCompany();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -153,14 +155,18 @@ const ReadHeavyEquipmentBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   const filter = React.useMemo(() => {
     const item: SelectProps[] = [
       {
         onChange: (value) => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
           setBrandId(value);
           setTypeId(null);
           setModelId(null);
@@ -176,7 +182,9 @@ const ReadHeavyEquipmentBook = () => {
       },
       {
         onChange: (value) => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
           setTypeId(value);
           setModelId(null);
         },
@@ -192,7 +200,9 @@ const ReadHeavyEquipmentBook = () => {
       },
       {
         onChange: (value) => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
           setModelId(value);
         },
         value: modelId,
@@ -207,7 +217,9 @@ const ReadHeavyEquipmentBook = () => {
       },
       {
         onChange: (value) => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
           setClasslId(value);
         },
         value: classId,
