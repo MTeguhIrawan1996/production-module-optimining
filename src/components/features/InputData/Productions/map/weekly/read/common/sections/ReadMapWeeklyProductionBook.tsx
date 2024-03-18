@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Divider, Stack, Tabs, Text } from '@mantine/core';
+import { Badge, createStyles, Divider, Stack, Tabs, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { IconX } from '@tabler/icons-react';
@@ -12,24 +12,28 @@ import {
   DashboardCard,
   GlobalAlert,
   KeyValueList,
+  NextImageFill,
 } from '@/components/elements';
-import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
 
-import { useDeterminedHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useDeterminedHeavyEquipmentProduction';
-import { useValidateHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useValidateHeavyEquipmentProduction';
-import {
-  IProductiveIndicator,
-  useReadOneHeavyEquipmentProduction,
-} from '@/services/graphql/query/heavy-equipment-production/useReadOneHeavyEquipmentProduction';
+import { useDeterminedMapDataProduction } from '@/services/graphql/mutation/input-data-map/useDetermineMap';
+import { useValidateMap } from '@/services/graphql/mutation/input-data-map/useValidateMap';
+import { useReadOneMap } from '@/services/graphql/query/input-data-map/useReadOneMap';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
-import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
 
 import { IUpdateStatusValues } from '@/types/global';
+
+const useStyles = createStyles(() => ({
+  image: {
+    objectFit: 'cover',
+    backgroundPosition: 'center',
+  },
+}));
 
 const ReadMapWeeklyProductionBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const { classes } = useStyles();
 
   const methods = useForm<IUpdateStatusValues>({
     resolver: zodResolver(statusValidationSchema),
@@ -40,65 +44,63 @@ const ReadMapWeeklyProductionBook = () => {
   });
 
   /* #   /**=========== Query =========== */
-  const { heavyEquipmentData, heavyEquipmentDataLoading } =
-    useReadOneHeavyEquipmentProduction({
-      variables: {
-        id,
-      },
-      skip: !router.isReady,
-    });
+  const { mapData, mapDataLoading } = useReadOneMap({
+    variables: {
+      id,
+    },
+    skip: !router.isReady,
+  });
 
-  const [executeUpdateStatus, { loading }] =
-    useValidateHeavyEquipmentProduction({
-      onCompleted: (data) => {
-        const message = {
-          '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
-            'heavyEquipmentProd.successIsValidateMessage'
-          ),
-          'af06163a-2ba3-45ee-a724-ab3af0c97cc9': t(
-            'heavyEquipmentProd.successIsNotValidateMessage'
-          ),
-          default: t('commonTypography.heavyEquipment'),
-        };
+  const [executeUpdateStatus, { loading }] = useValidateMap({
+    onCompleted: (data) => {
+      const message = {
+        '4d4d646d-d0e5-4f94-ba6d-171be20032fc': t(
+          'mapProduction.successIsValidateMessage'
+        ),
+        'af06163a-2ba3-45ee-a724-ab3af0c97cc9': t(
+          'mapProduction.successIsNotValidateMessage'
+        ),
+        default: t('commonTypography.map'),
+      };
+      notifications.show({
+        color: 'green',
+        title: 'Selamat',
+        message: message[data.validateMapDataStatus.mapDataStatus.id],
+        icon: <IconCheck />,
+      });
+      router.push('/input-data/production/map/weekly?tabs=weekly');
+    },
+    onError: (error) => {
+      if (error.graphQLErrors) {
         notifications.show({
-          color: 'green',
-          title: 'Selamat',
-          message: message[data.validateHeavyEquipmentData.status.id],
-          icon: <IconCheck />,
+          color: 'red',
+          title: 'Gagal',
+          message: error.message,
+          icon: <IconX />,
         });
-        router.push('/input-data/production/data-heavy-equipment');
-      },
-      onError: (error) => {
-        if (error.graphQLErrors) {
-          notifications.show({
-            color: 'red',
-            title: 'Gagal',
-            message: error.message,
-            icon: <IconX />,
-          });
-        }
-      },
-    });
+      }
+    },
+  });
 
   const [executeUpdateStatusDetermiend, { loading: determinedLoading }] =
-    useDeterminedHeavyEquipmentProduction({
+    useDeterminedMapDataProduction({
       onCompleted: (data) => {
         const message = {
           'f5f644d9-8810-44f7-8d42-36b5222b97d1': t(
-            'heavyEquipmentProd.successIsDeterminedMessage'
+            'mapProduction.successIsDeterminedMessage'
           ),
           '7848a063-ae40-4a80-af86-dfc532cbb688': t(
-            'heavyEquipmentProd.successIsRejectMessage'
+            'mapProduction.successIsRejectMessage'
           ),
-          default: t('commonTypography.heavyEquipment'),
+          default: t('commonTypography.map'),
         };
         notifications.show({
           color: 'green',
           title: 'Selamat',
-          message: message[data.determineHeavyEquipmentData.status.id],
+          message: message[data.determineMapDataData.mapDataStatus.id],
           icon: <IconCheck />,
         });
-        router.push('/input-data/production/data-heavy-equipment');
+        router.push('/input-data/production/map/weekly?tabs=weekly');
       },
       onError: (error) => {
         if (error.graphQLErrors) {
@@ -160,108 +162,34 @@ const ReadMapWeeklyProductionBook = () => {
   const includesDetermined = [`${process.env.NEXT_PUBLIC_STATUS_DETERMINED}`];
 
   const isShowButtonValidation = includesWaiting.includes(
-    heavyEquipmentData?.status?.id ?? ''
+    mapData?.mapDataStatus?.id ?? ''
   );
 
   const isShowButtonInvalidation = includesWaiting.includes(
-    heavyEquipmentData?.status?.id ?? ''
+    mapData?.mapDataStatus?.id ?? ''
   );
 
   const isShowButtonDetermined = includesValid.includes(
-    heavyEquipmentData?.status?.id ?? ''
+    mapData?.mapDataStatus?.id ?? ''
   );
 
   const isShowButtonReject = includesValid.includes(
-    heavyEquipmentData?.status?.id ?? ''
+    mapData?.mapDataStatus?.id ?? ''
   );
   const isHiddenButtonEdit = includesDetermined.includes(
-    heavyEquipmentData?.status?.id ?? ''
+    mapData?.mapDataStatus?.id ?? ''
   );
-
-  const loseTimeItem = heavyEquipmentData?.loseTimes?.map((val, i) => {
-    const label = val.workingHourPlan?.activityName.replace(
-      /\b(?:Jam|jam|hour|Hour)\b/g,
-      ''
-    );
-    return (
-      <React.Fragment key={`${val.id}${i}`}>
-        {val.details && val.details.length ? (
-          <>
-            <Stack spacing="sm">
-              <Text fz={24} fw={600} color="brand">
-                {val.workingHourPlan?.activityName}
-              </Text>
-              {val.details.map((obj, index) => {
-                const numberOfLabel =
-                  val.details && val.details.length > 1 ? index + 1 : '';
-
-                return (
-                  <KeyValueList
-                    data={[
-                      {
-                        dataKey: `${t(
-                          'commonTypography.startHour'
-                        )} ${label} ${numberOfLabel}`,
-                        value: formatDate(obj.startAt, 'hh:mm:ss A') ?? '-',
-                      },
-                      {
-                        dataKey: `${t(
-                          'commonTypography.endHour'
-                        )} ${label}  ${numberOfLabel}`,
-                        value: formatDate(obj.finishAt, 'hh:mm:ss A') ?? '-',
-                      },
-                    ]}
-                    type="grid"
-                    key={index}
-                  />
-                );
-              })}
-              <KeyValueList
-                data={[
-                  {
-                    dataKey: `${t('commonTypography.hourAmount')} ${label}`,
-                    value: secondsDuration(val.totalDuration ?? null),
-                  },
-                ]}
-                type="grid"
-              />
-            </Stack>
-            <Divider my="md" />
-          </>
-        ) : null}
-      </React.Fragment>
-    );
-  });
-
-  const renderOtherHeavyEquipmentPreformanceCallback = React.useCallback(
-    (obj: IProductiveIndicator) => {
-      const column: Pick<IKeyValueItemProps, 'value' | 'dataKey'> = {
-        dataKey: `${obj.formula.name}`,
-        value: `${obj.value ?? '-'}`,
-      };
-      return column;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  const renderOtherHeavyEquipmentPreformance =
-    heavyEquipmentData?.productiveIndicators?.map(
-      renderOtherHeavyEquipmentPreformanceCallback
-    ) ?? [];
 
   return (
     <DashboardCard
-      title={t('heavyEquipmentProd.readHeavyEquipmentProd')}
+      title={t('mapProduction.readMapProd')}
       updateButton={
         isHiddenButtonEdit
           ? undefined
           : {
               label: 'Edit',
               onClick: () =>
-                router.push(
-                  `/input-data/production/data-heavy-equipment/update/${id}`
-                ),
+                router.push(`/input-data/production/map/weekly/update/${id}`),
             }
       }
       validationButton={
@@ -308,11 +236,10 @@ const ReadMapWeeklyProductionBook = () => {
       }}
       withBorder
       enebleBackBottomOuter={{
-        onClick: () =>
-          router.push('/input-data/production/data-heavy-equipment'),
+        onClick: () => router.push('/input-data/production/map?tabs=weekly'),
       }}
       shadow="xs"
-      isLoading={heavyEquipmentDataLoading}
+      isLoading={mapDataLoading}
       paperStackProps={{
         spacing: 'sm',
       }}
@@ -332,19 +259,19 @@ const ReadMapWeeklyProductionBook = () => {
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="information">
-          {heavyEquipmentData?.status?.id ===
+          {mapData?.mapDataStatus?.id ===
           'af06163a-2ba3-45ee-a724-ab3af0c97cc9' ? (
             <GlobalAlert
-              description={heavyEquipmentData?.statusMessage ?? ''}
+              description={mapData?.statusMessage ?? ''}
               title={t('commonTypography.invalidData')}
               color="red"
               mt="xs"
             />
           ) : null}
-          {heavyEquipmentData?.status?.id ===
+          {mapData?.mapDataStatus?.id ===
           '7848a063-ae40-4a80-af86-dfc532cbb688' ? (
             <GlobalAlert
-              description={heavyEquipmentData?.statusMessage ?? ''}
+              description={mapData?.statusMessage ?? ''}
               title={t('commonTypography.rejectedData')}
               color="red"
               mt="xs"
@@ -352,134 +279,65 @@ const ReadMapWeeklyProductionBook = () => {
           ) : null}
           <Stack spacing="sm" mt="sm">
             <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.checkerInformation')}
+              {t('commonTypography.mapInformation')}
             </Text>
             <KeyValueList
               data={[
                 {
-                  dataKey: t('commonTypography.foreman'),
-                  value: heavyEquipmentData?.foreman?.humanResource?.name,
+                  dataKey: t('commonTypography.mapName'),
+                  value: mapData?.name,
                 },
                 {
-                  dataKey: t('commonTypography.date'),
-                  value: formatDate(heavyEquipmentData?.date) ?? '-',
+                  dataKey: t('commonTypography.mapType'),
+                  value: mapData?.mapDataCategory.name,
                 },
                 {
-                  dataKey: t('commonTypography.heavyEquipmentCode'),
-                  value: heavyEquipmentData?.companyHeavyEquipment?.hullNumber,
+                  dataKey: t('commonTypography.location'),
+                  value: mapData?.mapDataLocation?.map((e) => (
+                    <Badge mr="md" key={e.locationId}>
+                      {e?.name}
+                    </Badge>
+                  )),
                 },
                 {
-                  dataKey: t('commonTypography.heavyEquipmentType'),
-                  value:
-                    heavyEquipmentData?.companyHeavyEquipment?.heavyEquipment
-                      ?.reference?.type?.name,
+                  dataKey: t('commonTypography.year'),
+                  value: mapData?.year,
                 },
                 {
-                  dataKey: t('commonTypography.shift'),
-                  value: heavyEquipmentData?.shift?.name,
-                },
-                {
-                  dataKey: t('commonTypography.operator'),
-                  value: heavyEquipmentData?.operator?.humanResource?.name,
-                },
-                {
-                  dataKey: t('commonTypography.amountFuel'),
-                  value: `${heavyEquipmentData?.fuel ?? '0'} Ltr`,
+                  dataKey: t('commonTypography.week'),
+                  value: mapData?.week,
                 },
               ]}
               type="grid"
             />
           </Stack>
           <Divider my="md" />
-          <Stack spacing="sm">
+          <Stack spacing="xs">
             <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.workingHour')}
+              {`${t('commonTypography.file')} ${t('commonTypography.map')}`}
             </Text>
-            <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.workingHourStart'),
-                  value:
-                    formatDate(heavyEquipmentData?.workStartAt, 'hh:mm:ss A') ??
-                    '-',
-                },
-                {
-                  dataKey: t('commonTypography.workingHourFinish'),
-                  value:
-                    formatDate(
-                      heavyEquipmentData?.workFinishAt,
-                      'hh:mm:ss A'
-                    ) ?? '-',
-                },
-                {
-                  dataKey: t('commonTypography.workingHourAmount'),
-                  value: secondsDuration(
-                    heavyEquipmentData?.workDuration ?? null
-                  ),
-                },
-              ]}
-              type="grid"
+            <NextImageFill
+              alt={mapData?.file?.originalFileName || ''}
+              src={
+                `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}/${mapData?.file?.url}` ||
+                ''
+              }
+              figureProps={{
+                h: 400,
+                w: '100%',
+              }}
+              imageClassName={classes.image}
             />
-          </Stack>
-          <Divider my="md" />
-          <Stack spacing="sm">
-            <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.hourMeter')}
+            <Text
+              component="span"
+              align="center"
+              fw={400}
+              fz={12}
+              color="gray.6"
+              truncate
+            >
+              {mapData?.file?.originalFileName}
             </Text>
-            <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.hourMeterBefore'),
-                  value: `${heavyEquipmentData?.hourMeterBefore ?? '-'}`,
-                },
-                {
-                  dataKey: t('commonTypography.hourMeterAfter'),
-                  value: `${heavyEquipmentData?.hourMeterAfter ?? '-'}`,
-                },
-                {
-                  dataKey: t('commonTypography.amountHourMeter'),
-                  value: `${heavyEquipmentData?.hourMeterTotal ?? '-'}`,
-                },
-              ]}
-              type="grid"
-            />
-          </Stack>
-          <Divider my="md" />
-          {loseTimeItem}
-          <Stack spacing="sm">
-            <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.amountEffectiveWorkingHours'),
-                  value: secondsDuration(
-                    heavyEquipmentData?.effectiveHour ?? null
-                  ),
-                },
-              ]}
-              type="grid"
-            />
-          </Stack>
-          <Divider my="md" />
-          <Stack spacing="sm">
-            <Text fz={24} fw={600} color="brand">
-              {t('commonTypography.equipmentPerformance')}
-            </Text>
-            <KeyValueList
-              data={[...renderOtherHeavyEquipmentPreformance]}
-              type="grid"
-            />
-          </Stack>
-          <Divider my="md" />
-          <Stack spacing="sm">
-            <KeyValueList
-              data={[
-                {
-                  dataKey: t('commonTypography.desc'),
-                  value: heavyEquipmentData?.desc,
-                },
-              ]}
-              type="grid"
-            />
           </Stack>
         </Tabs.Panel>
       </Tabs>

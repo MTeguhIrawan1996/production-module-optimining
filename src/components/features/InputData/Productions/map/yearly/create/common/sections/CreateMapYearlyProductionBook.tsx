@@ -118,12 +118,11 @@ const CreateMapYearlyProductionBook = () => {
   const handleUploadMapImage = async () => {
     const { mapImage } = methods.getValues();
     try {
-      const res = await uploadMapImage({
+      await uploadMapImage({
         data: {
           file: mapImage,
         },
       });
-      setFileId(res.fileId);
     } catch (error) {
       return error;
     }

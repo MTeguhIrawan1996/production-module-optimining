@@ -22,7 +22,7 @@ const CreateMapMonthlyProductionPage = () => {
     setBreadcrumbs([
       {
         label: t('commonTypography.map'),
-        path: '/input-data/production/map',
+        path: '/input-data/production/map?tabs=monthly',
       },
       {
         label: `${t('mapProduction.createMapProd')} ${t(

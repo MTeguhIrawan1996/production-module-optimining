@@ -98,7 +98,7 @@ const UpdateMapQuarterlyProductionBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('mapProduction.successQuarterlyUpdateMessage'),
+        message: t('mapProduction.successUpdateMapQuarterly'),
         icon: <IconCheck />,
       });
       methods.reset();
@@ -283,7 +283,7 @@ const UpdateMapQuarterlyProductionBook = () => {
       methods.getValues();
     await executeUpdate({
       variables: {
-        dateType: 'WEEK',
+        dateType: 'QUARTER',
         name: name,
         mapDataCategoryId: mapDataCategoryId,
         location: location,
