@@ -34,6 +34,7 @@ export const READ_ONE_STOCKPILE_MONITORING = gql`
         id
         date
         ton
+        volume
       }
       tonByRitage
       movings {
@@ -199,6 +200,7 @@ export interface IReadOneStockpileMonitoring {
         id: string;
         date: string | null;
         ton: number | null;
+        volume: number | null;
       }[]
     | null;
   tonByRitage: number | null;

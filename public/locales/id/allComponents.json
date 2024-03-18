@@ -194,6 +194,7 @@
       "toLevel": "Ke Level",
       "bulkSamplingDensity": "Massa Jenis Bulk Sampling",
       "bucketVolume": "Volume Bucket",
+      "volumeBySurvey": "Volume Berdasarkan Survei",
       "tonByRitage": "Ton Berdasarkan Ritase",
       "ritageStatus": "Status Ritase",
       "uploadDataRitage": "Upload Data Ritase",

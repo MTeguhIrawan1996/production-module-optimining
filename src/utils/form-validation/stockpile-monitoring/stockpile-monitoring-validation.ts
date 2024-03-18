@@ -30,6 +30,7 @@ export const stockpileMonitoringMutationValidation: z.ZodType<IMutationStockpile
       tonSurveys: z
         .object({
           ton: zRequiredNumber,
+          volume: zRequiredNumber,
           date: zDateValidation,
         })
         .array(),
