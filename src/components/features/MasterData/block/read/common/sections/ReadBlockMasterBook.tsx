@@ -65,7 +65,9 @@ const ReadBlockMasterBook = () => {
     onCompleted: () => {
       refetchBlocks();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -85,7 +87,9 @@ const ReadBlockMasterBook = () => {
   /* #endregion  /**======== Query =========== */
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   const handleDeletePit = async () => {
@@ -233,7 +237,9 @@ const ReadBlockMasterBook = () => {
               },
               searchQuery,
               onSearch: () => {
-                setPage(1);
+                setPage(1, {
+                  shallow: true,
+                });
                 refetchBlocks({
                   page: 1,
                 });

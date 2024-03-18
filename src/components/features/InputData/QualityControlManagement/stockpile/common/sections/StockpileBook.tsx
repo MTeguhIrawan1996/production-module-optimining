@@ -107,13 +107,17 @@ const StockpileBook = () => {
       onSearchChange: setStockpileNameSerachTerm,
       searchValue: stockpileNameSerachTerm,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setStockpileId(value);
       },
     });
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setYear(value ? Number(value) : null);
         setMonth(null);
         setWeek(null);
@@ -123,7 +127,9 @@ const StockpileBook = () => {
       disabled: !year,
       value: month ? `${month}` : null,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setMonth(value ? Number(value) : null);
       },
     });
@@ -132,7 +138,9 @@ const StockpileBook = () => {
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        setPage(1);
+        setPage(1, {
+          shallow: true,
+        });
         setWeek(value ? Number(value) : null);
       },
     });
@@ -148,7 +156,9 @@ const StockpileBook = () => {
   }, [locationItems, year, month, week]);
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   const renderOtherColumnCallback = React.useCallback(

@@ -60,6 +60,7 @@ import {
   WeatherConditionSelectInputRhf,
   WeatherSelectInputRhf,
 } from '@/components/elements';
+import SelectMapTypeRhf from '@/components/elements/input/SelectMapType';
 
 import MultipleSelectMapLocationRhf from '../input/MultipleSelectMapLocationRhf';
 
@@ -187,6 +188,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <DisplayQuietNumber {...props} />;
     case 'multiple-select-map-location':
       return <MultipleSelectMapLocationRhf {...props} />;
+    case 'select-mapType-rhf':
+      return <SelectMapTypeRhf {...props} />;
     default:
       return null;
   }

@@ -56,7 +56,9 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
   });
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   /* #   /**=========== RenderTable =========== */

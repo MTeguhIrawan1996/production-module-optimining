@@ -80,7 +80,9 @@ const LocationBook = () => {
     onCompleted: () => {
       refetchLocations();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage(1, {
+        shallow: true,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -108,7 +110,9 @@ const LocationBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage(page, {
+      shallow: true,
+    });
   };
 
   const { uncombinedItem: locationCategoryItems } = useFilterItems({
@@ -119,7 +123,9 @@ const LocationBook = () => {
     const item: SelectProps[] = [
       {
         onChange: (value) => {
-          setPage(1);
+          setPage(1, {
+            shallow: true,
+          });
           setCategoryId(value);
         },
         data: locationCategoryItems ?? [],

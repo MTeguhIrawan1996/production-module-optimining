@@ -55,6 +55,7 @@ import { ISelectHeavyEquipmentReferenceInputProps } from '@/components/elements/
 import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import { ISelectInputNativeProps } from '@/components/elements/input/SelectInputNative';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
+import { ISelectMapTypeRhfProps } from '@/components/elements/input/SelectMapType';
 import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
 import { ISelectMonthRhfProps } from '@/components/elements/input/SelectMonthRhf';
 import { IStatusNativeProps } from '@/components/elements/input/SelectStatusNative';
@@ -152,6 +153,7 @@ export type ControllerProps =
   | IDisplayQuietNumber
   | ISelectMonthRhfProps
   | IWeatherConditionSelectInputRhfProps
+  | ISelectMapTypeRhfProps
   | IMultipleSelectMapLocationRhfProps;
 
 export type InputControllerNativeProps =
