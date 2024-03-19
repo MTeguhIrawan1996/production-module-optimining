@@ -7,12 +7,16 @@ export const READ_ONE_HEAVY_EQUIPMENT_REQ_PLAN = gql`
     $weeklyPlanId: String!
     $page: Int
     $limit: Int
+    $orderBy: String
+    $orderDir: String
   ) {
     weeklyHeavyEquipmentRequirementPlans(
       findAllHeavyEquipmentRequirementPlanInput: {
         weeklyPlanId: $weeklyPlanId
         page: $page
         limit: $limit
+        orderBy: $orderBy
+        orderDir: $orderDir
       }
     ) {
       meta {
@@ -33,6 +37,10 @@ export const READ_ONE_HEAVY_EQUIPMENT_REQ_PLAN = gql`
           name
         }
         averageDistance
+        activityType {
+          id
+          name
+        }
         desc
         heavyEquipmentRequirementPlanActivities {
           id
@@ -86,6 +94,10 @@ export interface IReadOneHeavyEquipmentReqPlan {
     name: string;
   }[];
   averageDistance: number | null | '';
+  activityType: {
+    id: string;
+    name: string;
+  };
   desc: string;
   heavyEquipmentRequirementPlanActivities: IHeavyEquipmentRequirementPlanActivity[];
 }

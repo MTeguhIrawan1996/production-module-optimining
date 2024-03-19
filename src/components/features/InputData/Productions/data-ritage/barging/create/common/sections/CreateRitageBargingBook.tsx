@@ -69,6 +69,7 @@ const CreateRitageBargingBook = () => {
       weatherId: '',
       domeId: '',
       stockpileName: '',
+      fromFrontId: '',
       bargingId: '',
       closeDome: false,
       bargeCompanyHeavyEquipmentId: '',
@@ -267,6 +268,13 @@ const CreateRitageBargingBook = () => {
       withAsterisk: false,
       disabled: true,
     });
+    const fromFrontItem = locationSelect({
+      colSpan: 6,
+      name: 'fromFrontId',
+      label: 'fromFront',
+      withAsterisk: false,
+      categoryIds: [`${process.env.NEXT_PUBLIC_FRONT_ID}`],
+    });
     const bargingItem = locationSelect({
       colSpan: 6,
       name: 'bargingId',
@@ -383,7 +391,7 @@ const CreateRitageBargingBook = () => {
         formControllers: [fromTime, arriveTime, ritageDurationItem],
       },
       {
-        group: t('commonTypography.arrive'),
+        group: t('commonTypography.fromLocation'),
         enableGroupLabel: true,
         groupCheckbox: {
           onChange: () => {
@@ -393,7 +401,12 @@ const CreateRitageBargingBook = () => {
           },
           label: t('commonTypography.closeDome'),
         },
-        formControllers: [domeItem, stockpileItem, bargingItem, bargeCodeItem],
+        formControllers: [domeItem, stockpileItem, fromFrontItem],
+      },
+      {
+        group: t('commonTypography.arrive'),
+        enableGroupLabel: true,
+        formControllers: [bargingItem, bargeCodeItem],
       },
       {
         group: t('commonTypography.detail'),

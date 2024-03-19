@@ -27,7 +27,7 @@ export const ritageQuarryMutationValidation: z.ZodType<IMutationRitageQuarry> =
       ritageDuration: zOptionalString,
       block: zOptionalString,
       weatherId: zOptionalString.nullable(),
-      fromPitId: zRequiredSelectInput,
+      fromPitId: zOptionalString.nullable(),
       fromFrontId: zOptionalString.nullable(),
       fromGridId: zOptionalString.nullable(),
       fromSequenceId: zOptionalString.nullable(),

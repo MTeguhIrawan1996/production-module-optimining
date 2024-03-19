@@ -1,33 +1,47 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
 export const READ_ALL_WEEK_SELECT = gql`
-  query ReadAllWeekSelect($year: Float) {
-    weeks(findAllWeekInput: { year: $year })
+  query ReadAllWeek2s($year: Float, $month: Float) {
+    week2s(findAllWeekInput: { year: $year, month: $month }) {
+      week
+      detail {
+        startDate
+        endDate
+      }
+    }
   }
 `;
 
-interface IReadAllWeekSelectResponse {
-  weeks: number[];
+interface IWeek2Data {
+  week: number;
+  detail: {
+    startDate: string;
+    endDate: string;
+  };
+}
+interface IReadAllWeek2sResponse {
+  week2s: IWeek2Data[];
 }
 
 interface IWeekRequest {
   year: number | null;
+  month: number | null;
 }
 
-export const useReadAllWeekSelect = ({
+export const useReadAllWeek2s = ({
   variables,
   onCompleted,
   skip,
 }: {
   variables?: Partial<IWeekRequest>;
-  onCompleted?: (data: IReadAllWeekSelectResponse) => void;
+  onCompleted?: (data: IReadAllWeek2sResponse) => void;
   skip?: boolean;
 }) => {
   const {
-    data: weeksData,
-    loading: weeksDataLoading,
+    data: week2sData,
+    loading: week2sDataLoading,
     refetch,
-  } = useQuery<IReadAllWeekSelectResponse, Partial<IWeekRequest>>(
+  } = useQuery<IReadAllWeek2sResponse, Partial<IWeekRequest>>(
     READ_ALL_WEEK_SELECT,
     {
       variables,
@@ -41,8 +55,8 @@ export const useReadAllWeekSelect = ({
   );
 
   return {
-    weeksData: weeksData?.weeks,
-    weeksDataLoading,
-    refetchWeeksData: refetch,
+    week2sData: week2sData?.week2s,
+    week2sDataLoading,
+    refetchWeek2sData: refetch,
   };
 };

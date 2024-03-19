@@ -91,6 +91,7 @@ const UpdateStockpileMonitoringBook = () => {
         {
           date: undefined,
           ton: '',
+          volume: '',
         },
       ],
       tonByRitage: '',
@@ -290,6 +291,7 @@ const UpdateStockpileMonitoringBook = () => {
             return {
               date: date,
               ton: val.ton ?? '',
+              volume: val.volume ?? '',
             };
           });
           const movings = monitoringStockpile.movings?.map((val) => {
@@ -331,7 +333,7 @@ const UpdateStockpileMonitoringBook = () => {
           replaceSurveyFields(
             surveys && surveys.length > 0
               ? surveys
-              : { date: undefined, ton: '' }
+              : { date: undefined, ton: '', volume: '' }
           );
           replaceMovingFields(
             movings && movings.length > 0
@@ -482,11 +484,18 @@ const UpdateStockpileMonitoringBook = () => {
         withAsterisk: true,
         key: `tonSurveys.${index}.ton.${val.id}`,
       });
+      const volumeBySurveyItem = globalNumberInput({
+        colSpan: 6,
+        name: `tonSurveys.${index}.volume`,
+        label: 'volumeBySurvey',
+        withAsterisk: true,
+        key: `tonSurveys.${index}.volume.${val.id}`,
+      });
 
       const group: ControllerGroup = {
         group: t('commonTypography.survey'),
         enableGroupLabel: true,
-        formControllers: [surveyDateItem, tonBySurveyItem],
+        formControllers: [surveyDateItem, tonBySurveyItem, volumeBySurveyItem],
         actionOuterGroup: {
           addButton:
             index === 0
@@ -496,6 +505,7 @@ const UpdateStockpileMonitoringBook = () => {
                     appendSurveyFields({
                       date: undefined,
                       ton: '',
+                      volume: '',
                     });
                   },
                 }

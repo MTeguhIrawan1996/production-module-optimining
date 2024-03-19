@@ -62,6 +62,10 @@ export const READ_ONE_BARGING_RITAGE = gql`
           name
         }
       }
+      fromFront {
+        id
+        name
+      }
       barging {
         id
         name
@@ -109,6 +113,7 @@ type IDomeWithStockpile =
 interface IReadOneBargingRitage {
   dome: IDomeWithStockpile | null;
   barging: Pick<ILocationsData, 'id' | 'name'> | null;
+  fromFront: Pick<ILocationsData, 'id' | 'name'> | null;
   sampleNumber: string | null;
   closeDome: boolean | null;
   bargeCompanyHeavyEquipment: Pick<
