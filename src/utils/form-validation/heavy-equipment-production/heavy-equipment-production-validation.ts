@@ -40,8 +40,41 @@ export const heavyEquipmentProductionMutationValidation: z.ZodType<IMutationHeav
             .array(),
         })
         .array(),
+      isHeavyEquipmentProblematic: z.boolean(),
+      companyHeavyEquipmentChangeId: zOptionalString.nullable(),
+      changeTime: zOptionalString,
     })
+    .refine(
+      (data) =>
+        data.companyHeavyEquipmentChangeId !== data.companyHeavyEquipmentId,
+      {
+        message: 'Nomor lambung tidak boleh sama',
+        path: ['companyHeavyEquipmentChangeId'], // path of error
+      }
+    )
     .refine((data) => data.hourMeterBefore < data.hourMeterAfter, {
       message: 'HM awal harus lebih kecil dari HM akhir',
       path: ['hourMeterBefore'], // path of error
+    })
+    .superRefine((arg, ctx) => {
+      if (arg.isHeavyEquipmentProblematic) {
+        const newHeavyequipmentContinueId =
+          arg.companyHeavyEquipmentChangeId || null;
+        const newChangeTime = arg.changeTime || null;
+        if (!newHeavyequipmentContinueId) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom, // customize your issue
+            path: ['companyHeavyEquipmentChangeId'],
+            message: 'Kolom tidak boleh kosong',
+          });
+        }
+        if (!newChangeTime) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom, // customize your issue
+            path: ['changeTime'],
+            message: 'Kolom tidak boleh kosong',
+          });
+        }
+        return z.NEVER; // The return value is not used, but we need to return something to satisfy the typing
+      }
     });

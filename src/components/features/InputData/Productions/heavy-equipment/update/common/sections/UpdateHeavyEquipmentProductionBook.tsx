@@ -78,12 +78,18 @@ const UpdateHeavyEquipmentProductionBook = () => {
       amountHourMeter: '',
       fuel: '',
       loseTimes: [],
+      isHeavyEquipmentProblematic: false,
+      companyHeavyEquipmentChangeId: '',
+      changeTime: '',
     },
     mode: 'onBlur',
   });
 
   const companyHeavyEquipmentId = methods.watch('companyHeavyEquipmentId');
   const loseTimeWatch = methods.watch('loseTimes');
+  const isHeavyEquipmentProblematic = methods.watch(
+    'isHeavyEquipmentProblematic'
+  );
 
   const {
     fields: loseTimeFields,
@@ -98,7 +104,7 @@ const UpdateHeavyEquipmentProductionBook = () => {
     const amountWorkTime = hourDiff({
       startTime: newWorkStartTime,
       endTime: newWorkFinishTime,
-      functionIsBeforeEndTime: false,
+      functionIsBeforeEndTime: true,
     });
     methods.setValue('amountWorkTime', amountWorkTime ?? '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -147,6 +153,10 @@ const UpdateHeavyEquipmentProductionBook = () => {
           heavyEquipmentData.workFinishAt,
           'HH:mm:ss'
         );
+        methods.setValue(
+          'isHeavyEquipmentProblematic',
+          heavyEquipmentData.isHeavyEquipmentProblematic
+        );
         methods.setValue('date', date);
         methods.setValue('foremanId', heavyEquipmentData.foreman.id);
         methods.setValue('operatorId', heavyEquipmentData.operator.id);
@@ -155,6 +165,15 @@ const UpdateHeavyEquipmentProductionBook = () => {
           'companyHeavyEquipmentId',
           heavyEquipmentData.companyHeavyEquipment?.id ?? ''
         );
+        methods.setValue(
+          'companyHeavyEquipmentChangeId',
+          heavyEquipmentData.companyHeavyEquipmentChange?.id ?? ''
+        );
+        const newChangeTime = formatDate(
+          heavyEquipmentData.changeAt,
+          'HH:mm:ss'
+        );
+        methods.setValue('changeTime', newChangeTime ?? '');
         methods.setValue('workStartTime', newWorkStartTime ?? '');
         setNewWorkStartTime(newWorkStartTime ?? '');
         methods.setValue('workFinishTime', newWorkFinishTime ?? '');
@@ -361,6 +380,21 @@ const UpdateHeavyEquipmentProductionBook = () => {
         methods.trigger('companyHeavyEquipmentId');
       },
     });
+    const companyHeavyEquipmentChangeItem = heavyEquipmentSelect({
+      colSpan: 6,
+      name: 'companyHeavyEquipmentChangeId',
+      label: 'heavyEquipmentCodeSubstitution',
+      withAsterisk: true,
+      defaultValue: heavyEquipmentData?.companyHeavyEquipmentChange?.id,
+      labelValue:
+        heavyEquipmentData?.companyHeavyEquipmentChange?.hullNumber ?? '',
+    });
+    const changeTimeItem = globalTimeInput({
+      name: 'changeTime',
+      label: 'changeTime',
+      withAsterisk: true,
+      colSpan: 6,
+    });
     const shiftItem = shiftSelect({
       colSpan: 6,
       name: 'shiftId',
@@ -455,7 +489,9 @@ const UpdateHeavyEquipmentProductionBook = () => {
           formanItem,
           date,
           heavyEquipmantCodeItem,
+          companyHeavyEquipmentChangeItem,
           heavyEquipmentTypeItem,
+          changeTimeItem,
           shiftItem,
           operatorItem,
           fuelItem,
@@ -487,9 +523,19 @@ const UpdateHeavyEquipmentProductionBook = () => {
       },
     ];
 
+    isHeavyEquipmentProblematic
+      ? field
+      : field[0].formControllers.splice(3, 1) &&
+        field[0].formControllers.splice(4, 1);
+
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sampleGroupItem, heavyEquipmentData, amountHourMeter]);
+  }, [
+    sampleGroupItem,
+    heavyEquipmentData,
+    amountHourMeter,
+    isHeavyEquipmentProblematic,
+  ]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
@@ -533,6 +579,20 @@ const UpdateHeavyEquipmentProductionBook = () => {
         field={fieldRhf}
         methods={methods}
         submitForm={handleSubmitForm}
+        switchProps={{
+          label: 'problemHeavyEquipment',
+          switchItem: {
+            checked: isHeavyEquipmentProblematic,
+            onChange: (value) => {
+              methods.setValue(
+                'isHeavyEquipmentProblematic',
+                value.currentTarget.checked
+              ),
+                methods.setValue('companyHeavyEquipmentChangeId', '');
+              methods.setValue('changeTime', '');
+            },
+          },
+        }}
         submitButton={{
           label: t('commonTypography.save'),
           type: 'button',

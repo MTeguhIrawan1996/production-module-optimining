@@ -2,7 +2,6 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -26,10 +25,7 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const HeavyEquipmentProductionBook = () => {
   const router = useRouter();
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
-  );
+  const [page, setPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [date, setDate] = React.useState('');
@@ -72,9 +68,7 @@ const HeavyEquipmentProductionBook = () => {
     onCompleted: () => {
       refetchHeavyEquipmentData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -102,9 +96,7 @@ const HeavyEquipmentProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage(page);
   };
 
   const filter = React.useMemo(() => {
@@ -113,9 +105,7 @@ const HeavyEquipmentProductionBook = () => {
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
@@ -176,6 +166,20 @@ const HeavyEquipmentProductionBook = () => {
               title: t('commonTypography.foreman'),
               width: 150,
               render: ({ foreman }) => foreman.humanResource.name,
+            },
+            {
+              accessor: 'heavyEquipmentStatus',
+              title: t('commonTypography.heavyEquipmentStatus'),
+              render: ({ isHeavyEquipmentProblematic }) => (
+                <GlobalBadgeStatus
+                  color={isHeavyEquipmentProblematic ? 'red.6' : 'brand.6'}
+                  label={
+                    isHeavyEquipmentProblematic
+                      ? t('commonTypography.problem')
+                      : t('commonTypography.unProblem')
+                  }
+                />
+              ),
             },
             {
               accessor: 'status',
@@ -293,8 +297,9 @@ const HeavyEquipmentProductionBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1, {
-            shallow: true,
+          setPage(1);
+          refetchHeavyEquipmentData({
+            page: 1,
           });
         },
       }}

@@ -384,6 +384,17 @@ const ReadHeavyEquipmentProductionBook = () => {
                       ?.reference?.type?.name,
                 },
                 {
+                  dataKey: t('commonTypography.heavyEquipmentCodeSubstitution'),
+                  value:
+                    heavyEquipmentData?.companyHeavyEquipmentChange?.hullNumber,
+                },
+                {
+                  dataKey: t('commonTypography.changeTime'),
+                  value:
+                    formatDate(heavyEquipmentData?.changeAt, 'hh:mm:ss A') ??
+                    '-',
+                },
+                {
                   dataKey: t('commonTypography.shift'),
                   value: heavyEquipmentData?.shift?.name,
                 },

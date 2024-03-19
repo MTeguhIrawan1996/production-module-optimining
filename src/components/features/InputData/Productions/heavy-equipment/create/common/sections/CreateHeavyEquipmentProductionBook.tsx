@@ -77,12 +77,18 @@ const CreateHeavyEquipmentProductionBook = () => {
       amountHourMeter: '',
       fuel: '',
       loseTimes: [],
+      isHeavyEquipmentProblematic: false,
+      companyHeavyEquipmentChangeId: '',
+      changeTime: '',
     },
     mode: 'onBlur',
   });
 
   const companyHeavyEquipmentId = methods.watch('companyHeavyEquipmentId');
   const loseTimeWatch = methods.watch('loseTimes');
+  const isHeavyEquipmentProblematic = methods.watch(
+    'isHeavyEquipmentProblematic'
+  );
 
   const {
     fields: loseTimeFields,
@@ -97,7 +103,7 @@ const CreateHeavyEquipmentProductionBook = () => {
     const amountWorkTime = hourDiff({
       startTime: newWorkStartTime,
       endTime: newWorkFinishTime,
-      functionIsBeforeEndTime: false,
+      functionIsBeforeEndTime: true,
     });
     methods.setValue('amountWorkTime', amountWorkTime ?? '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -308,6 +314,18 @@ const CreateHeavyEquipmentProductionBook = () => {
         methods.trigger('companyHeavyEquipmentId');
       },
     });
+    const companyHeavyEquipmentChangeItem = heavyEquipmentSelect({
+      colSpan: 6,
+      name: 'companyHeavyEquipmentChangeId',
+      label: 'heavyEquipmentCodeSubstitution',
+      withAsterisk: true,
+    });
+    const changeTimeItem = globalTimeInput({
+      name: 'changeTime',
+      label: 'changeTime',
+      withAsterisk: true,
+      colSpan: 6,
+    });
     const shiftItem = shiftSelect({
       colSpan: 6,
       name: 'shiftId',
@@ -402,7 +420,9 @@ const CreateHeavyEquipmentProductionBook = () => {
           formanItem,
           date,
           heavyEquipmantCodeItem,
+          companyHeavyEquipmentChangeItem,
           heavyEquipmentTypeItem,
+          changeTimeItem,
           shiftItem,
           operatorItem,
           fuelItem,
@@ -434,9 +454,14 @@ const CreateHeavyEquipmentProductionBook = () => {
       },
     ];
 
+    isHeavyEquipmentProblematic
+      ? field
+      : field[0].formControllers.splice(3, 1) &&
+        field[0].formControllers.splice(4, 1);
+
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sampleGroupItem, amountHourMeter]);
+  }, [sampleGroupItem, amountHourMeter, isHeavyEquipmentProblematic]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
@@ -477,6 +502,17 @@ const CreateHeavyEquipmentProductionBook = () => {
         submitButton={{
           label: t('commonTypography.save'),
           loading: loading,
+        }}
+        switchProps={{
+          label: 'problemHeavyEquipment',
+          switchItem: {
+            checked: isHeavyEquipmentProblematic,
+            onChange: (value) =>
+              methods.setValue(
+                'isHeavyEquipmentProblematic',
+                value.currentTarget.checked
+              ),
+          },
         }}
         backButton={{
           onClick: () =>

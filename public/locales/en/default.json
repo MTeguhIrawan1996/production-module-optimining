@@ -196,6 +196,7 @@
     "disableIt": "Nonaktifkan",
     "reference": "Referensi",
     "heavyEquipment": "Alat Berat",
+    "heavyEquipmentStatus": "Status Alat Berat",
     "heavyEquipmentData": "Data Alat Berat",
     "heavyEquipmentClass": "Kelas Alat Berat",
     "user": "Pengguna",
@@ -469,7 +470,8 @@
     "valid": "Valid",
     "accepted": "Diterima",
     "mapType": "$t(commonTypography.type) $t(commonTypography.map)",
-    "file": "File"
+    "file": "File",
+    "changeTime": "Jam Pengganti"
   },
   "sideBar": {
     "dashboard": "Dashboard",
