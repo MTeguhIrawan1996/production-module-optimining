@@ -20,6 +20,7 @@ import {
   useCreateHeavyEquipmentProduction,
 } from '@/services/graphql/mutation/heavy-equipment-production/useCreateHeavyEquipmentProduction';
 import { useReadOneHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentCompany';
+import { useReadOneShiftMaster } from '@/services/graphql/query/shift/useReadOneShiftMaster';
 import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
 import {
   employeeSelect,
@@ -85,6 +86,7 @@ const CreateHeavyEquipmentProductionBook = () => {
   });
 
   const companyHeavyEquipmentId = methods.watch('companyHeavyEquipmentId');
+  const shiftId = methods.watch('shiftId');
   const loseTimeWatch = methods.watch('loseTimes');
   const isHeavyEquipmentProblematic = methods.watch(
     'isHeavyEquipmentProblematic'
@@ -143,6 +145,19 @@ const CreateHeavyEquipmentProductionBook = () => {
         'heavyEquipmentType',
         companyHeavyEquipment.heavyEquipment?.reference?.type?.name ?? ''
       );
+    },
+  });
+
+  useReadOneShiftMaster({
+    variables: {
+      id: shiftId as string,
+    },
+    skip: shiftId === '' || !shiftId,
+    onCompleted: (data) => {
+      methods.setValue('workStartTime', data.shift.startHour ?? '');
+      methods.setValue('workFinishTime', data.shift.endHour ?? '');
+      setNewWorkStartTime(data.shift.startHour ?? '');
+      setNewWorkFinishTime(data.shift.endHour ?? '');
     },
   });
 

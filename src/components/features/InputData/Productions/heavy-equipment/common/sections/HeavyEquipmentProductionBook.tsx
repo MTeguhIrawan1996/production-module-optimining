@@ -59,6 +59,7 @@ const HeavyEquipmentProductionBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
+      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       date: date === '' ? null : date,
     },

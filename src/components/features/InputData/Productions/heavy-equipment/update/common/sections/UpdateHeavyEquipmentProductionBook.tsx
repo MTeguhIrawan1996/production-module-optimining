@@ -19,6 +19,7 @@ import { IMutationHeavyEquipmentDataProdValues } from '@/services/graphql/mutati
 import { useUpdateHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useUpdateHeavyEquipmentProduction';
 import { useReadOneHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentCompany';
 import { useReadOneHeavyEquipmentProduction } from '@/services/graphql/query/heavy-equipment-production/useReadOneHeavyEquipmentProduction';
+import { useReadOneShiftMaster } from '@/services/graphql/query/shift/useReadOneShiftMaster';
 import {
   employeeSelect,
   globalDate,
@@ -40,6 +41,7 @@ const UpdateHeavyEquipmentProductionBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const [stateShiftId, setStateShiftId] = React.useState<string | null>(null);
   const [newWorkStartTime, setNewWorkStartTime] = useDebouncedState<string>(
     '',
     400
@@ -203,6 +205,19 @@ const UpdateHeavyEquipmentProductionBook = () => {
         'heavyEquipmentType',
         companyHeavyEquipment.heavyEquipment?.reference?.type?.name ?? ''
       );
+    },
+  });
+
+  useReadOneShiftMaster({
+    variables: {
+      id: stateShiftId as string,
+    },
+    skip: !stateShiftId,
+    onCompleted: (data) => {
+      methods.setValue('workStartTime', data.shift.startHour ?? '');
+      methods.setValue('workFinishTime', data.shift.endHour ?? '');
+      setNewWorkStartTime(data.shift.startHour ?? '');
+      setNewWorkFinishTime(data.shift.endHour ?? '');
     },
   });
 
@@ -398,6 +413,11 @@ const UpdateHeavyEquipmentProductionBook = () => {
     const shiftItem = shiftSelect({
       colSpan: 6,
       name: 'shiftId',
+      onChange: (value) => {
+        methods.setValue('shiftId', value ?? '');
+        setStateShiftId(value || null);
+        methods.trigger('shiftId');
+      },
     });
     const workStartTimeItem = globalTimeInput({
       name: 'workStartTime',

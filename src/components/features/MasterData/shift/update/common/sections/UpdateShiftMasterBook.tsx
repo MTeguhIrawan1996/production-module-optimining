@@ -10,7 +10,7 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { IMutationShiftValues } from '@/services/graphql/mutation/shift/useCreateShiftMaster';
 import { useUpdateShiftMaster } from '@/services/graphql/mutation/shift/useUpdateShiftMaster';
-import { useReadOneShiftMaster } from '@/services/graphql/query/shift/useReadOneElementMaster';
+import { useReadOneShiftMaster } from '@/services/graphql/query/shift/useReadOneShiftMaster';
 import {
   globalText,
   globalTimeInput,
