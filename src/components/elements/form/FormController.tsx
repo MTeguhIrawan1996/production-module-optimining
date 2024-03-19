@@ -24,6 +24,7 @@ import {
   MaterialSelectInput,
   ModelSelectInputRhf,
   MultipleSelectLocationRhf,
+  MultipleSelectMapLocationRhf,
   MultipleSelectMaterialRhf,
   NumberInputRhf,
   NumberInputTableRhf,
@@ -39,12 +40,14 @@ import {
   SampleTypeSelectInput,
   SelectActivityCategoryRhf,
   SelectActivityFormRhf,
+  SelectActivityTypePlanRhf,
   SelectArriveBargeRhf,
   SelectCompanyRhf,
   SelectFactoryRhf,
   SelectHeavyEquipmentReferenceInput,
   SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
+  SelectMapTypeRhf,
   SelectMonthRhf,
   SelectWeekRhf,
   SelectWorkingHoursPlanRhf,
@@ -60,9 +63,6 @@ import {
   WeatherConditionSelectInputRhf,
   WeatherSelectInputRhf,
 } from '@/components/elements';
-import SelectMapTypeRhf from '@/components/elements/input/SelectMapType';
-
-import MultipleSelectMapLocationRhf from '../input/MultipleSelectMapLocationRhf';
 
 import { ControllerProps } from '@/types/global';
 
@@ -190,6 +190,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <MultipleSelectMapLocationRhf {...props} />;
     case 'select-mapType-rhf':
       return <SelectMapTypeRhf {...props} />;
+    case 'select-activity-type-plan-rhf':
+      return <SelectActivityTypePlanRhf {...props} />;
     default:
       return null;
   }

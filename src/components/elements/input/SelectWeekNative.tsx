@@ -2,7 +2,7 @@ import { Select, SelectProps, Text } from '@mantine/core';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useReadAllWeekSelect } from '@/services/graphql/query/global-select/useReadAllWeekSelect';
+import { useReadAllWeek2s } from '@/services/graphql/query/global-select/useReadAllWeekSelect';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 export type ISelectWeekNativeProps = {
@@ -21,19 +21,19 @@ const SelectWeekNative: React.FC<ISelectWeekNativeProps> = ({
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
-  const { weeksData } = useReadAllWeekSelect({
+  const { week2sData } = useReadAllWeek2s({
     variables: {
       year,
     },
   });
 
-  const weeksItem = weeksData?.map((val) => {
+  const weeksItem = week2sData?.map((val) => {
     return {
       name: t('commonTypography.nthWeek', {
-        n: val, // week is started by 1 by default
+        n: val.week, // week is started by 1 by default
         ns: 'default',
       }),
-      id: `${val}`,
+      id: `${val.week}`,
     };
   });
 

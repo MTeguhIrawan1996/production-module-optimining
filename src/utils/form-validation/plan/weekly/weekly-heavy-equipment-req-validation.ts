@@ -19,6 +19,7 @@ export const heavyEquipmentReqMutationValidation: z.ZodType<IMutationHeavyEquipm
         materialIds: zArrayOfString,
         locationIds: zArrayOfString,
         averageDistance: zOptionalNumber,
+        activityTypeId: zRequiredSelectInput,
         desc: zOptionalString,
         activities: z
           .object({

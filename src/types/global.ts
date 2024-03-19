@@ -45,6 +45,7 @@ import { IRelegionSelectInputRhfProps } from '@/components/elements/input/Relegi
 import { ISampleTypesSelectnputRhfProps } from '@/components/elements/input/SampleTypeSelectInputRhf';
 import { ISelectActivityCategoryRhfProps } from '@/components/elements/input/SelectActivityCategoryRhf';
 import { ISelectActivityFormRhfProps } from '@/components/elements/input/SelectActivityFormRhf';
+import { ISelectActivityTypePlanRhfProps } from '@/components/elements/input/SelectActivityTypePlanRhf';
 import { IArriveBargeNativeProps } from '@/components/elements/input/SelectArriveBargeNative';
 import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
 import { ICompanyNativeProps } from '@/components/elements/input/SelectCompanyNative';
@@ -154,6 +155,7 @@ export type ControllerProps =
   | ISelectMonthRhfProps
   | IWeatherConditionSelectInputRhfProps
   | ISelectMapTypeRhfProps
+  | ISelectActivityTypePlanRhfProps
   | IMultipleSelectMapLocationRhfProps;
 
 export type InputControllerNativeProps =
