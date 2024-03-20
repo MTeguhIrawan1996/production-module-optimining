@@ -113,7 +113,7 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
             },
             {
               dataKey: t('commonTypography.stockMaterial'),
-              value: '-',
+              value: monitoringStockpile?.stockMaterial ?? '-',
             },
           ]}
           type="grid"
@@ -192,12 +192,12 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
                   {
                     accessor: 'tonBySurvey',
                     title: t('commonTypography.tonBySurvey'),
-                    render: ({ ton }) => ton,
+                    render: ({ ton }) => ton ?? '-',
                   },
                   {
                     accessor: 'volumeBySurvey',
                     title: t('commonTypography.volumeBySurvey'),
-                    render: ({ volume }) => volume,
+                    render: ({ volume }) => volume ?? '-',
                   },
                 ],
                 horizontalSpacing: 0,

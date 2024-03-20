@@ -25,7 +25,7 @@ const ReadStockpileMonitoringBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
-  const page = Number(router.query['page']) || 1;
+  const [page, setPage] = React.useState<number>(1);
 
   const methods = useForm<IUpdateStatusValues>({
     resolver: zodResolver(statusValidationSchema),
@@ -42,6 +42,8 @@ const ReadStockpileMonitoringBook = () => {
         id,
         limit: 10,
         page,
+        orderBy: 'createdAt',
+        orderDir: 'desc',
       },
       skip: !router.isReady,
     });
@@ -187,8 +189,7 @@ const ReadStockpileMonitoringBook = () => {
   );
 
   const handleSetPage = (page: number) => {
-    const urlSet = `/input-data/quality-control-management/stockpile-monitoring/read/${id}?page=${page}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(page);
   };
 
   return (
