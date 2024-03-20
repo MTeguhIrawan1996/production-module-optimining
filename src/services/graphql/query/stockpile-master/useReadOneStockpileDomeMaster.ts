@@ -11,6 +11,15 @@ export const READ_ONE_STOCKPILE_DOME_MASTER = gql`
         name
       }
       monitoringStockpile {
+        id
+        material {
+          id
+          name
+          parent {
+            id
+            name
+          }
+        }
         tonByRitage
         currentTonSurvey
         ritageSamples {
@@ -30,6 +39,15 @@ export interface IReadOneStockpileDomeMaster {
     name: string;
   };
   monitoringStockpile: {
+    id: string;
+    material: {
+      id: string;
+      name: string;
+      parent: {
+        id: string;
+        name: string;
+      } | null;
+    } | null;
     tonByRitage: number | null;
     currentTonSurvey: number | null;
     ritageSamples: {

@@ -26,7 +26,13 @@ const UpdateRitageBarging = async ({
 }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
-  const exclude = ['tonByRitage', 'ritageDuration', 'stockpileName'];
+  const exclude = [
+    'tonByRitage',
+    'ritageDuration',
+    'stockpileName',
+    'material',
+    'subMaterial',
+  ];
   bodyFormData.append('id', id);
   if (deletedPhotoIds) {
     deletedPhotoIds.forEach((deletedId) => {

@@ -11,7 +11,7 @@ import { useReadOneTopsoilRitageDTOperators } from '@/services/graphql/query/top
 const ReadDTTopsoilRitageBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const page = Number(router.query['p']) || 1;
+  const [page, setPage] = React.useState<number>(1);
   const date = router.query?.id?.[0] as string;
   const shiftId = router.query?.id?.[1] as string;
   const companyHeavyEquipmentId = router.query?.id?.[2] as string;
@@ -102,9 +102,11 @@ const ReadDTTopsoilRitageBook = () => {
         ]}
         subMaterialHidden
         onOpenModal={onOpenModal}
-        tabs="topsoil"
+        // tabs="topsoil"
         fetching={topsoilRitagesDTDataLoading}
         meta={topsoilRitagesDTDataMeta}
+        page={page}
+        setPage={setPage}
         modalProps={{
           actionImageModal: () => setIsOpenImageModal((prev) => !prev),
           isOpenImageModal: isOpenImageModal,
