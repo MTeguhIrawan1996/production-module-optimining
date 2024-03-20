@@ -14,6 +14,9 @@ export const CREATE_HEAVY_EQUIPMENT_PRODUCTION = gql`
     $hourMeterAfter: Float
     $fuel: Float
     $loseTimes: [CreateLoseTime!]
+    $isHeavyEquipmentProblematic: Boolean
+    $companyHeavyEquipmentChangeId: String
+    $changeTime: String
   ) {
     createHeavyEquipmentData(
       createHeavyEquipmentDataInput: {
@@ -29,6 +32,9 @@ export const CREATE_HEAVY_EQUIPMENT_PRODUCTION = gql`
         fuel: $fuel
         desc: $desc
         loseTimes: $loseTimes
+        isHeavyEquipmentProblematic: $isHeavyEquipmentProblematic
+        companyHeavyEquipmentChangeId: $companyHeavyEquipmentChangeId
+        changeTime: $changeTime
       }
     ) {
       id
@@ -64,6 +70,9 @@ export interface IMutationHeavyEquipmentDataProdValues {
   amountHourMeter: number | '';
   fuel: number | null | '';
   loseTimes: IloseTimes[];
+  isHeavyEquipmentProblematic: boolean;
+  companyHeavyEquipmentChangeId: string | null;
+  changeTime: string;
 }
 
 type ICreateHeavyEquipmentProductionRequest = Omit<

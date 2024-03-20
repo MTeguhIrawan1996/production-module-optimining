@@ -45,6 +45,16 @@ export const READ_ALL_HEAVY_EQUIPMENT_SELECT = gql`
         heavyEquipment {
           id
           vehicleNumber
+          reference {
+            id
+            type {
+              id
+              category {
+                id
+                name
+              }
+            }
+          }
         }
       }
     }
@@ -57,6 +67,16 @@ export interface IHeavyEquipmentSelect {
   heavyEquipment: {
     id: string;
     vehicleNumber: string;
+    reference: {
+      id: string;
+      type: {
+        id: string;
+        category: {
+          id: string;
+          name: string;
+        } | null;
+      };
+    };
   };
 }
 

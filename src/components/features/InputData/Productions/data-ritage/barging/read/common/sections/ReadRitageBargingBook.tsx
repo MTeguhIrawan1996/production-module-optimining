@@ -374,14 +374,6 @@ const ReadRitageBargingBook = () => {
                   value: bargingRitage?.companyHeavyEquipmentChange?.hullNumber,
                 },
                 {
-                  dataKey: t('commonTypography.material'),
-                  value: bargingRitage?.material?.name,
-                },
-                {
-                  dataKey: t('commonTypography.subMaterial'),
-                  value: bargingRitage?.subMaterial?.name,
-                },
-                {
                   dataKey: t('commonTypography.weather'),
                   value: bargingRitage?.weather?.name,
                 },
@@ -462,6 +454,14 @@ const ReadRitageBargingBook = () => {
             </Text>
             <KeyValueList
               data={[
+                {
+                  dataKey: t('commonTypography.material'),
+                  value: bargingRitage?.material?.name,
+                },
+                {
+                  dataKey: t('commonTypography.subMaterial'),
+                  value: bargingRitage?.subMaterial?.name,
+                },
                 {
                   dataKey: t('commonTypography.bucketVolume'),
                   value: `${bargingRitage?.bucketVolume ?? '-'}`,

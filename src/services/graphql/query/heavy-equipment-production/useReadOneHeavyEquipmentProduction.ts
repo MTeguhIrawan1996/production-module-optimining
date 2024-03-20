@@ -24,6 +24,10 @@ export const READ_ONE_HEAVY_EQUIPMENT_PRODUCTION = gql`
           }
         }
       }
+      companyHeavyEquipmentChange {
+        id
+        hullNumber
+      }
       shift {
         id
         name
@@ -73,6 +77,8 @@ export const READ_ONE_HEAVY_EQUIPMENT_PRODUCTION = gql`
           finishAt
         }
       }
+      isHeavyEquipmentProblematic
+      changeAt
       status {
         id
         name
@@ -108,6 +114,11 @@ interface IReadOneHeavyEquipmentProduction {
       };
     };
   };
+  companyHeavyEquipmentChange: {
+    id: string;
+    hullNumber: string | null;
+  } | null;
+  changeAt: string | null;
   shift: Pick<IShiftsData, 'id' | 'name'> | null;
   foreman: {
     id: string;
@@ -125,6 +136,7 @@ interface IReadOneHeavyEquipmentProduction {
       name: string;
     };
   };
+  isHeavyEquipmentProblematic: boolean;
   status: IStatus | null;
   statusMessage: string | null;
   workStartAt: string | null;

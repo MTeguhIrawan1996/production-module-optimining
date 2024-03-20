@@ -11,7 +11,10 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 import { IMutationFactoryValues } from '@/services/graphql/mutation/factory/useCreateFactoryMaster';
 import { useUpdateFactoryMaster } from '@/services/graphql/mutation/factory/useUpdateFactoryMaster';
 import { useReadOneFactoryMaster } from '@/services/graphql/query/factory/useReadOneFactoryMaster';
-import { globalText } from '@/utils/constants/Field/global-field';
+import {
+  globalSelectArriveBargeRhf,
+  globalText,
+} from '@/utils/constants/Field/global-field';
 import { factoryMutationValidation } from '@/utils/form-validation/factory/factory-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
@@ -25,6 +28,7 @@ const UpdateFactoryBook = () => {
     resolver: zodResolver(factoryMutationValidation),
     defaultValues: {
       name: '',
+      categoryId: null,
     },
     mode: 'onBlur',
   });
@@ -36,6 +40,7 @@ const UpdateFactoryBook = () => {
     skip: !router.isReady,
     onCompleted: (data) => {
       methods.setValue('name', data.factory.name);
+      methods.setValue('categoryId', data.factory.category.id);
     },
   });
 
@@ -69,6 +74,13 @@ const UpdateFactoryBook = () => {
   });
 
   const fieldItem = React.useMemo(() => {
+    const factoryCategoryItem = globalSelectArriveBargeRhf({
+      name: 'categoryId',
+      label: 'category',
+      placeholder: 'chooseCategory',
+      colSpan: 12,
+      withAsterisk: true,
+    });
     const factoryName = globalText({
       name: 'name',
       label: 'factoryName',
@@ -79,7 +91,7 @@ const UpdateFactoryBook = () => {
     const field: ControllerGroup[] = [
       {
         group: t('commonTypography.factory'),
-        formControllers: [factoryName],
+        formControllers: [factoryCategoryItem, factoryName],
       },
     ];
 
@@ -90,11 +102,12 @@ const UpdateFactoryBook = () => {
   const handleSubmitForm: SubmitHandler<IMutationFactoryValues> = async (
     data
   ) => {
-    const { name } = data;
+    const { name, categoryId } = data;
     await executeUpdate({
       variables: {
         id,
         name,
+        categoryId,
       },
     });
   };

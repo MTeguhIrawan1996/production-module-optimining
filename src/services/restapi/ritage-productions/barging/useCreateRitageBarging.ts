@@ -15,8 +15,8 @@ export interface IMutationRitageBarging {
   shiftId: string | null;
   companyHeavyEquipmentId: string | null;
   companyHeavyEquipmentChangeId: string | null;
-  materialId: string | null;
-  subMaterialId: string | null;
+  material: string;
+  subMaterial: string;
   fromTime: string;
   arriveTime: string;
   ritageDuration: string;
@@ -48,7 +48,13 @@ type IPropsRequest = {
 const CreateRitageBarging = async ({ data }: IPropsRequest) => {
   const axiosAuth = axiosClient();
   const bodyFormData = new FormData();
-  const exclude = ['tonByRitage', 'ritageDuration', 'stockpileName'];
+  const exclude = [
+    'tonByRitage',
+    'ritageDuration',
+    'stockpileName',
+    'material',
+    'subMaterial',
+  ];
   data.forEach(({ name, value }) => {
     if (name === 'closeDome') {
       bodyFormData.append('closeDome', String(value));

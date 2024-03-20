@@ -24,6 +24,7 @@ export const READ_ONE_STOCKPILE_MONITORING = gql`
         }
       }
       domeStatus
+      stockMaterial
       material {
         id
         name
@@ -189,6 +190,7 @@ export interface IReadOneStockpileMonitoring {
   id: string;
   dome: IReadOneStockpileDomeMaster | null;
   domeStatus: string | null;
+  stockMaterial: number | null;
   material: {
     id: string;
     name: string;

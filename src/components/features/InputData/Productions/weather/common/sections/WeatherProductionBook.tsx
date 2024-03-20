@@ -2,7 +2,6 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -28,10 +27,7 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const WeatherProductionBook = () => {
   const router = useRouter();
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
-  );
+  const [page, setPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -58,6 +54,7 @@ const WeatherProductionBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
+      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       year,
       week,
@@ -68,9 +65,7 @@ const WeatherProductionBook = () => {
     onCompleted: () => {
       refetchWeatherData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -98,17 +93,13 @@ const WeatherProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage(page);
   };
 
   const filter = React.useMemo(() => {
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setYear(value ? Number(value) : null);
         setWeek(null);
       },
@@ -118,9 +109,7 @@ const WeatherProductionBook = () => {
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setWeek(value ? Number(value) : null);
       },
     });
@@ -296,9 +285,7 @@ const WeatherProductionBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1, {
-            shallow: true,
-          });
+          setPage(1);
         },
       }}
     >

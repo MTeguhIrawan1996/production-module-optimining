@@ -5,6 +5,10 @@ export const READ_ONE_FACTORY_MASTER = gql`
     factory(id: $id) {
       id
       name
+      category {
+        id
+        name
+      }
     }
   }
 `;
@@ -12,6 +16,10 @@ export const READ_ONE_FACTORY_MASTER = gql`
 interface IReadOneFactoryMaster {
   id: string;
   name: string;
+  category: {
+    id: string;
+    name: string;
+  };
 }
 
 interface IReadOneFactoryMasterResponse {

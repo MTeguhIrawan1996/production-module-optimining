@@ -18,6 +18,7 @@ import {
   useCreateFrontProduction,
 } from '@/services/graphql/mutation/front-production/useCreateFrontProduction';
 import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
+import { useReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 import {
   globalDate,
   globalNumberInput,
@@ -62,6 +63,7 @@ const CreateFrontProductionBook = () => {
     },
     mode: 'onBlur',
   });
+  const domeId = methods.watch('domeId');
   const pitId = methods.watch('pitId');
   const {
     fields: supportingHeavyEquipmentFields,
@@ -81,6 +83,20 @@ const CreateFrontProductionBook = () => {
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
+  useReadOneStockpileDomeMaster({
+    variables: {
+      id: domeId as string,
+    },
+    skip: domeId === '' || !domeId,
+    onCompleted: ({ dome }) => {
+      const isHaveParent = dome.monitoringStockpile.material?.parent
+        ? true
+        : false;
+      const material = dome.monitoringStockpile.material?.id || '';
+      const parent = dome.monitoringStockpile.material?.parent?.id || '';
+      methods.setValue('materialId', isHaveParent ? parent : material);
+    },
+  });
   useReadOneBlockPitMaster({
     variables: {
       id: pitId as string,
@@ -200,6 +216,7 @@ const CreateFrontProductionBook = () => {
       name: 'materialId',
       label: 'material',
       withAsterisk: true,
+      disabled: segment === 'dome',
     });
     const pitItem = pitSelect({
       colSpan: 6,
@@ -217,6 +234,11 @@ const CreateFrontProductionBook = () => {
       name: 'domeId',
       label: 'dome',
       withAsterisk: true,
+      onChange: (value) => {
+        methods.setValue('domeId', value || '');
+        methods.trigger('domeId');
+        methods.setValue('materialId', '');
+      },
     });
     const block = globalText({
       colSpan: 6,
@@ -290,12 +312,12 @@ const CreateFrontProductionBook = () => {
         enableGroupLabel: false,
         formControllers: [heavyEquipmentCodeItem],
       },
+      ...(segment === 'dome' ? fieldIsDome : fieldIsPit),
       {
         group: t('commonTypography.frontInformation'),
         enableGroupLabel: true,
         formControllers: [locationItem, materialItem],
       },
-      ...(segment === 'dome' ? fieldIsDome : fieldIsPit),
       {
         group: t('commonTypography.coordinate'),
         enableGroupLabel: true,

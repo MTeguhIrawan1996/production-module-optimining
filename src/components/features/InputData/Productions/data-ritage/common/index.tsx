@@ -22,8 +22,8 @@ const DataRitagePage = () => {
   const { t } = useTranslation('default');
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const [params, setParams] = useQueryStates({
-    hp: queryTypes.integer.withDefault(1),
-    rp: queryTypes.integer.withDefault(1),
+    // hp: queryTypes.integer.withDefault(1),
+    // rp: queryTypes.integer.withDefault(1),
     tabs: queryTypes.string.withDefault('ore'),
   });
   const [setBreadcrumbs] = useBreadcrumbs(
@@ -50,8 +50,8 @@ const DataRitagePage = () => {
   const handleChangeTab = (tabs: TabsValue) => {
     setParams({
       tabs,
-      hp: 1,
-      rp: 1,
+      // hp: 1,
+      // rp: 1,
     });
   };
 
