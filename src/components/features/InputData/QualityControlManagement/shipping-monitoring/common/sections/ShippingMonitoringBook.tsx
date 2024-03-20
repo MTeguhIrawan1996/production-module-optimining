@@ -2,7 +2,6 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -30,10 +29,7 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const ShippingMonitoringBook = () => {
   const router = useRouter();
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
-  );
+  const [page, setPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -81,9 +77,7 @@ const ShippingMonitoringBook = () => {
     onCompleted: () => {
       refetchMonitoringBargingData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -111,34 +105,26 @@ const ShippingMonitoringBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage(page);
   };
 
   const filter = React.useMemo(() => {
     const bargeCodeItem = globalSelectHeavyEquipmentNative({
       categoryId: `${process.env.NEXT_PUBLIC_BARGE_ID}`,
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setBargeHeavyEquipmentId(value === '' ? null : value);
       },
     });
     const arriveItem = globalSelectArriveBargeNative({
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setFactoryCategoryId(value);
       },
     });
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setYear(value ? Number(value) : null);
         setMonth(null);
         setWeek(null);
@@ -148,9 +134,7 @@ const ShippingMonitoringBook = () => {
       disabled: !year,
       value: month ? `${month}` : null,
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setMonth(value ? Number(value) : null);
       },
     });
@@ -159,9 +143,7 @@ const ShippingMonitoringBook = () => {
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setWeek(value ? Number(value) : null);
       },
     });
@@ -314,8 +296,9 @@ const ShippingMonitoringBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1, {
-            shallow: true,
+          setPage(1);
+          refetchMonitoringBargingData({
+            page: 1,
           });
         },
       }}

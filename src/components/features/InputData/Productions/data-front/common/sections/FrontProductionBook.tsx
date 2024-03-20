@@ -23,10 +23,10 @@ import useStore from '@/utils/store/useStore';
 const FrontProductionBook = () => {
   const router = useRouter();
   const [params, setParams] = useQueryStates({
-    page: queryTypes.integer.withDefault(1),
     segment: queryTypes.string.withDefault('pit'),
   });
   const { t } = useTranslation('default');
+  const [page, setPage] = React.useState<number>(1);
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -51,7 +51,7 @@ const FrontProductionBook = () => {
   } = useReadAllFrontProduction({
     variables: {
       limit: 10,
-      page: params.page,
+      page: page,
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
       type: params.segment,
@@ -62,9 +62,7 @@ const FrontProductionBook = () => {
     onCompleted: () => {
       refetchfrontProductionData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setParams({
-        page: 1,
-      });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -92,14 +90,11 @@ const FrontProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setParams({
-      page: page,
-    });
+    setPage(page);
   };
 
   const handleChangeSegement = (value: string) => {
     setParams({
-      page: 1,
       segment: value,
     });
   };
@@ -194,7 +189,7 @@ const FrontProductionBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: params.page,
+          currentPage: page,
           totalAllData: frontProductionDataMeta?.totalAllData ?? 0,
           totalData: frontProductionDataMeta?.totalData ?? 0,
           totalPage: frontProductionDataMeta?.totalPage ?? 0,
@@ -203,7 +198,7 @@ const FrontProductionBook = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    params.page,
+    page,
     frontProductionData,
     frontProductionDataLoading,
     isPermissionDelete,
@@ -232,12 +227,10 @@ const FrontProductionBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setParams(
-            {
-              page: 1,
-            },
-            { shallow: true }
-          );
+          setPage(1);
+          refetchfrontProductionData({
+            page: 1,
+          });
         },
       }}
       segmentedControl={{

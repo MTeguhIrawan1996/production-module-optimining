@@ -20,7 +20,7 @@ const FactoryMasterPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.factory'),
+        label: t('commonTypography.factory2'),
         path: '/master-data/factory',
       },
     ]);
@@ -30,7 +30,7 @@ const FactoryMasterPage = () => {
   return (
     <RootWrapper>
       <InnerWrapper
-        titleProps={{ title: t('commonTypography.factory'), mb: 'md' }}
+        titleProps={{ title: t('commonTypography.factory2'), mb: 'md' }}
       >
         <FactoryBook />
       </InnerWrapper>

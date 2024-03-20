@@ -87,13 +87,7 @@ const UpdateStockpileMonitoringBook = () => {
       openTime: '',
       closeDate: undefined,
       closeTime: '',
-      tonSurveys: [
-        {
-          date: undefined,
-          ton: '',
-          volume: '',
-        },
-      ],
+      tonSurveys: [],
       tonByRitage: '',
       bargings: [
         {
@@ -330,11 +324,7 @@ const UpdateStockpileMonitoringBook = () => {
               closeTime: closeTime ?? '',
             };
           });
-          replaceSurveyFields(
-            surveys && surveys.length > 0
-              ? surveys
-              : { date: undefined, ton: '', volume: '' }
-          );
+          replaceSurveyFields(surveys && surveys.length > 0 ? surveys : []);
           replaceMovingFields(
             movings && movings.length > 0
               ? movings
@@ -496,26 +486,11 @@ const UpdateStockpileMonitoringBook = () => {
         group: t('commonTypography.survey'),
         enableGroupLabel: true,
         formControllers: [surveyDateItem, tonBySurveyItem, volumeBySurveyItem],
-        actionOuterGroup: {
-          addButton:
-            index === 0
-              ? {
-                  label: t('commonTypography.createSurvey'),
-                  onClick: () => {
-                    appendSurveyFields({
-                      date: undefined,
-                      ton: '',
-                      volume: '',
-                    });
-                  },
-                }
-              : undefined,
-        },
         actionGroup: {
           deleteButton: {
             label: t('commonTypography.delete'),
             onClick: () => {
-              surveyFields.length > 1 ? removeSurveyFields(index) : null;
+              removeSurveyFields(index);
             },
           },
         },
@@ -904,6 +879,18 @@ const UpdateStockpileMonitoringBook = () => {
       {
         group: t('commonTypography.time'),
         enableGroupLabel: true,
+        actionOuterGroupBottom: {
+          addButton: {
+            label: t('commonTypography.createSurvey'),
+            onClick: () => {
+              appendSurveyFields({
+                date: undefined,
+                ton: '',
+                volume: '',
+              });
+            },
+          },
+        },
         formControllers: [
           openDateItem,
           closeDateItem,

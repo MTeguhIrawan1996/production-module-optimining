@@ -45,7 +45,7 @@ export const useReadOneShiftMaster = ({
     },
     onCompleted: onCompleted,
     skip,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   });
 
   return {

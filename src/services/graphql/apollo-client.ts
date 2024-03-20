@@ -168,10 +168,6 @@ const getClient = (tokenServer?: ISessionServer | null) => {
             'ReadOneMiningMapPlan',
             'ReadOneBargingTargetPlan',
           ];
-          // console.log(observable.queryName);
-          // console.log({ initialFetchPolicy, currentFetchPolicy });
-          // console.log(isAlwaysNetwork.includes(observable.queryName || ''));
-
           if (reason === 'variables-changed') {
             return initialFetchPolicy;
           }

@@ -1,6 +1,5 @@
 import { Stack } from '@mantine/core';
 import { DataTableColumn } from 'mantine-datatable';
-import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -18,7 +17,6 @@ import {
   IListDetailRitageDTData,
   IMeta,
   IReadOneRitageDTOperators,
-  ITabs,
 } from '@/types/global';
 
 interface IListDetailsRitageDTProps<T, D> {
@@ -28,9 +26,10 @@ interface IListDetailsRitageDTProps<T, D> {
   subMaterialHidden?: boolean;
   meta?: IMeta;
   fetching?: boolean;
-  tabs: ITabs;
   modalProps?: IImageModalProps;
   onOpenModal: (id: string) => Promise<void>;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function ListDetailsRitageDT<
@@ -40,23 +39,18 @@ export default function ListDetailsRitageDT<
   data,
   meta,
   fetching,
-  tabs,
   columns,
   operatorDetail,
   modalProps,
   subMaterialHidden = false,
   onOpenModal,
+  page,
+  setPage,
 }: IListDetailsRitageDTProps<T, D>) {
   const { t } = useTranslation('default');
-  const router = useRouter();
-  const page = Number(router.query['p']) || 1;
-  const date = router.query?.id?.[0] as string;
-  const shiftId = router.query?.id?.[1] as string;
-  const companyHeavyEquipmentId = router.query?.id?.[2] as string;
 
   const handleSetPage = (newPage: number) => {
-    const urlSet = `/input-data/production/data-ritage/${tabs}/read/dump-truck/${date}/${shiftId}/${companyHeavyEquipmentId}?p=${newPage}&tabs=${tabs}`;
-    router.push(urlSet, undefined, { shallow: true });
+    setPage(newPage);
   };
 
   const renderTable = React.useMemo(() => {

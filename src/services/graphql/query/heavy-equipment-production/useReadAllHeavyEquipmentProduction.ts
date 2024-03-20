@@ -82,6 +82,7 @@ export const READ_ALL_HEAVY_EQUIPMENT_PRODUCTION = gql`
             name
           }
         }
+        isHeavyEquipmentProblematic
         status {
           id
           color
@@ -126,6 +127,7 @@ interface IReadAllHeavyEquipmentProductionData {
       name: string;
     };
   };
+  isHeavyEquipmentProblematic: boolean;
   status: IStatus | null;
 }
 
