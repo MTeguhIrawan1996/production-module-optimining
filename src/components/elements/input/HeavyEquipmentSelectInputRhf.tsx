@@ -1,4 +1,5 @@
-import { Flex, Select, SelectProps, Stack } from '@mantine/core';
+import { Flex, Group, Select, SelectProps, Stack } from '@mantine/core';
+import { Text } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import * as React from 'react';
 import { useController } from 'react-hook-form';
@@ -9,8 +10,10 @@ import PrimaryButton, {
 } from '@/components/elements/button/PrimaryButton';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
-import { useReadAllHeavyEquipmentSelect } from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
-import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import {
+  IHeavyEquipmentSelect,
+  useReadAllHeavyEquipmentSelect,
+} from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
 
 import { CommonProps } from '@/types/global';
 
@@ -27,6 +30,11 @@ export type IHeavyEquipmentSelectInputRhfProps = {
   'name' | 'data' | 'onSearchChange' | 'searchValue' | 'placeholder' | 'limit'
 > &
   CommonProps;
+
+interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
+  label: string;
+  category: string;
+}
 
 const HeavyEquipmentSelectInputRhf: React.FC<
   IHeavyEquipmentSelectInputRhfProps
@@ -63,18 +71,38 @@ const HeavyEquipmentSelectInputRhf: React.FC<
     },
   });
 
-  const heavyEquipmentItem = heavyEquipmentSelect?.map((val) => {
+  const renderItems = React.useCallback((value: IHeavyEquipmentSelect) => {
     return {
-      name: val.hullNumber ?? '',
-      id: val.id ?? '',
+      label: value.hullNumber ?? '',
+      value: value.id,
+      category: value.heavyEquipment.reference.type.category?.name || '-',
     };
-  });
+  }, []);
 
-  const { combinedItems, uncombinedItem } = useCombineFilterItems({
-    data: heavyEquipmentItem ?? [],
-    combinedId: defaultValue ?? '',
-    combinedName: labelValue,
-  });
+  const uncombinedItem = heavyEquipmentSelect?.map(renderItems) ?? [];
+
+  const Items = heavyEquipmentSelect
+    ?.filter((value) => value.id !== defaultValue ?? '')
+    .map(renderItems);
+
+  const selectedItem = {
+    label: labelValue ?? '',
+    value: defaultValue ?? '',
+  };
+  const combinedItems = [selectedItem, ...(Items ?? [])];
+
+  const SelectItem = React.forwardRef<HTMLDivElement, ItemProps>(
+    ({ label, category, ...others }: ItemProps, ref) => (
+      <div ref={ref} {...others}>
+        <Group>
+          <Text size="sm" opacity={0.65}>
+            {category}
+          </Text>
+          <Text size="sm">{label}</Text>
+        </Group>
+      </div>
+    )
+  );
 
   return (
     <Stack spacing={8}>
@@ -84,6 +112,7 @@ const HeavyEquipmentSelectInputRhf: React.FC<
           radius={8}
           data={!currentValue || !defaultValue ? uncombinedItem : combinedItems}
           defaultValue={defaultValue}
+          itemComponent={SelectItem}
           w="100%"
           labelProps={{
             style: { fontWeight: 400, fontSize: 16, marginBottom: 8 },
