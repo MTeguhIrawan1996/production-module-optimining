@@ -70,6 +70,10 @@ const ReadFactoryMasterBook = () => {
             <KeyValueList
               data={[
                 {
+                  dataKey: t('commonTypography.category'),
+                  value: factoryMaster?.category.name ?? '-',
+                },
+                {
                   dataKey: t('commonTypography.factoryName'),
                   value: factoryMaster?.name ?? '-',
                 },

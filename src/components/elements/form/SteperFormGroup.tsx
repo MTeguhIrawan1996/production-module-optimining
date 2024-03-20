@@ -9,11 +9,7 @@ import {
   Stepper,
   Text,
 } from '@mantine/core';
-import {
-  IconChevronLeft,
-  IconChevronRight,
-  IconPlus,
-} from '@tabler/icons-react';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -83,8 +79,8 @@ const SteperFormGroup: React.FC<ISteperFormGroupProps> = ({
                   gap={32}
                   direction="column"
                   align="flex-end"
-                  pb={32}
-                  px={32}
+                  p={22}
+                  // bg="red"
                 >
                   {val.fields.map(
                     (
@@ -95,6 +91,9 @@ const SteperFormGroup: React.FC<ISteperFormGroupProps> = ({
                         enableGroupLabel,
                         actionGroup,
                         actionOuterGroup,
+                        actionOuterGroupBottom,
+                        renderItem,
+                        paperProps,
                       },
                       key
                     ) => {
@@ -103,6 +102,16 @@ const SteperFormGroup: React.FC<ISteperFormGroupProps> = ({
                         addButton: addButtonOuter,
                         deleteButton: deleteButtonOuter,
                       } = actionOuterGroup || {};
+                      const {
+                        addButton: addButtonOuterBottom,
+                        deleteButton: deleteButtonOuterBottom,
+                      } = actionOuterGroupBottom || {};
+                      const {
+                        withBorder = true,
+                        p: pPaper = 24,
+                        w: wPaper = '100%',
+                        ...restPaperProps
+                      } = paperProps || {};
                       return (
                         <Flex
                           key={`${key}${group}`}
@@ -115,7 +124,7 @@ const SteperFormGroup: React.FC<ISteperFormGroupProps> = ({
                             <Group spacing="xs" position="right">
                               {addButtonOuter ? (
                                 <PrimaryButton
-                                  leftIcon={<IconPlus size="20px" />}
+                                  // leftIcon={<IconPlus size="20px" />}
                                   {...addButtonOuter}
                                 />
                               ) : null}
@@ -133,7 +142,12 @@ const SteperFormGroup: React.FC<ISteperFormGroupProps> = ({
                               ) : null}
                             </Group>
                           ) : null}
-                          <Paper p={24} withBorder w="100%">
+                          <Paper
+                            p={pPaper}
+                            withBorder={withBorder}
+                            w={wPaper}
+                            {...restPaperProps}
+                          >
                             <Stack spacing={8}>
                               {enableGroupLabel || actionGroup ? (
                                 <SimpleGrid cols={2} mb="sm">
@@ -151,7 +165,7 @@ const SteperFormGroup: React.FC<ISteperFormGroupProps> = ({
                                     <Group spacing="xs" position="right">
                                       {addButton ? (
                                         <PrimaryButton
-                                          leftIcon={<IconPlus size="20px" />}
+                                          // leftIcon={<IconPlus size="20px" />}
                                           {...addButton}
                                         />
                                       ) : null}
@@ -188,6 +202,7 @@ const SteperFormGroup: React.FC<ISteperFormGroupProps> = ({
                                     );
                                   }
                                 )}
+                                {renderItem ? renderItem() : null}
                               </Grid>
                               {groupCheckbox && (
                                 <Checkbox
@@ -206,13 +221,35 @@ const SteperFormGroup: React.FC<ISteperFormGroupProps> = ({
                               )}
                             </Stack>
                           </Paper>
+                          {addButtonOuterBottom || deleteButtonOuterBottom ? (
+                            <Group spacing="xs" position="right">
+                              {addButtonOuterBottom ? (
+                                <PrimaryButton
+                                  // leftIcon={<IconPlus size="20px" />}
+                                  {...addButtonOuterBottom}
+                                />
+                              ) : null}
+                              {deleteButtonOuterBottom ? (
+                                <PrimaryButton
+                                  color="red.5"
+                                  variant="light"
+                                  styles={(theme) => ({
+                                    root: {
+                                      border: `1px solid ${theme.colors.red[3]}`,
+                                    },
+                                  })}
+                                  {...deleteButtonOuterBottom}
+                                />
+                              ) : null}
+                            </Group>
+                          ) : null}
                         </Flex>
                       );
                     }
                   )}
                   <Group
                     w="100%"
-                    mt="lg"
+                    // mt="lg"
                     position={
                       val.backButton || val.prevButton ? 'apart' : 'right'
                     }

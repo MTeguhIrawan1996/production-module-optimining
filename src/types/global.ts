@@ -185,6 +185,11 @@ export type ControllerGroup = {
     updateButton?: IPrimaryButtonProps;
     deleteButton?: IPrimaryButtonProps;
   };
+  actionOuterGroupBottom?: {
+    addButton?: IPrimaryButtonProps;
+    updateButton?: IPrimaryButtonProps;
+    deleteButton?: IPrimaryButtonProps;
+  };
   renderItem?: () => React.ReactNode;
 };
 

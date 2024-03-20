@@ -21,7 +21,6 @@ import {
   globalTimeInput,
   heavyEquipmentSelect,
   locationSelect,
-  materialSelect,
   weatherSelect,
 } from '@/utils/constants/Field/global-field';
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
@@ -68,8 +67,8 @@ const UpdateRitageBargingBook = () => {
       shiftId: '',
       companyHeavyEquipmentId: '',
       companyHeavyEquipmentChangeId: '',
-      materialId: '',
-      subMaterialId: '',
+      material: '',
+      subMaterial: '',
       fromTime: '',
       arriveTime: '',
       ritageDuration: '',
@@ -90,7 +89,6 @@ const UpdateRitageBargingBook = () => {
     },
     mode: 'onBlur',
   });
-  const materialId = methods.watch('materialId');
   const domeId = methods.watch('domeId');
   const photos = methods.watch('photos');
   const isRitageProblematic = methods.watch('isRitageProblematic');
@@ -145,8 +143,6 @@ const UpdateRitageBargingBook = () => {
         'companyHeavyEquipmentChangeId',
         bargingRitage.companyHeavyEquipmentChange?.id ?? ''
       );
-      methods.setValue('materialId', bargingRitage.material?.id ?? '');
-      methods.setValue('subMaterialId', bargingRitage.subMaterial?.id ?? '');
       methods.setValue('fromTime', fromTime ?? '');
       setNewFromTime(fromTime ?? '');
       methods.setValue('arriveTime', arriveTime ?? '');
@@ -178,7 +174,14 @@ const UpdateRitageBargingBook = () => {
     },
     skip: domeId === '' || !domeId,
     onCompleted: ({ dome }) => {
+      const isHaveParent = dome.monitoringStockpile.material?.parent
+        ? true
+        : false;
+      const material = dome.monitoringStockpile.material?.name || '';
+      const parent = dome.monitoringStockpile.material?.parent?.name || '';
       methods.setValue('stockpileName', dome.stockpile.name);
+      methods.setValue('material', isHaveParent ? parent : material);
+      methods.setValue('subMaterial', isHaveParent ? material : 'foo');
     },
   });
 
@@ -276,26 +279,19 @@ const UpdateRitageBargingBook = () => {
       defaultValue: bargingRitage?.companyHeavyEquipmentChange?.id,
       labelValue: bargingRitage?.companyHeavyEquipmentChange?.hullNumber ?? '',
     });
-    const materialItem = materialSelect({
+    const materialItem = globalText({
       colSpan: 6,
-      name: 'materialId',
+      name: 'material',
       label: 'material',
-      withAsterisk: true,
-      onChange: (value) => {
-        methods.setValue('materialId', value ?? '');
-        methods.setValue('subMaterialId', '');
-        methods.trigger('materialId');
-      },
+      withAsterisk: false,
+      disabled: true,
     });
-    const newMaterialId = materialId === '' ? null : materialId;
-    const materialSubItem = materialSelect({
+    const materialSubItem = globalText({
       colSpan: 6,
-      name: 'subMaterialId',
+      name: 'subMaterial',
       label: 'subMaterial',
       withAsterisk: false,
-      disabled: !newMaterialId,
-      parentId: materialId,
-      isHaveParent: true,
+      disabled: true,
     });
     const fromTime = globalTimeInput({
       name: 'fromTime',
@@ -470,8 +466,6 @@ const UpdateRitageBargingBook = () => {
           toCheckerName,
           toCheckerPosition,
           shiftItem,
-          materialItem,
-          materialSubItem,
           hullNumber,
           hullNumberSubstitution,
           weatherItem,
@@ -504,6 +498,8 @@ const UpdateRitageBargingBook = () => {
         group: t('commonTypography.detail'),
         enableGroupLabel: true,
         formControllers: [
+          materialItem,
+          materialSubItem,
           bulkSamplingDensityItem,
           bucketVolumeItem,
           tonByRitageItem,
@@ -530,7 +526,6 @@ const UpdateRitageBargingBook = () => {
     photos,
     serverPhotos,
     deletedPhotoIds,
-    materialId,
     closeDome,
   ]);
   /* #endregion  /**======== Field =========== */

@@ -22,7 +22,6 @@ import {
   globalTimeInput,
   heavyEquipmentSelect,
   locationSelect,
-  materialSelect,
   weatherSelect,
 } from '@/utils/constants/Field/global-field';
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
@@ -61,8 +60,8 @@ const CreateRitageBargingBook = () => {
       shiftId: '',
       companyHeavyEquipmentId: '',
       companyHeavyEquipmentChangeId: '',
-      materialId: '',
-      subMaterialId: '',
+      material: '',
+      subMaterial: '',
       fromTime: '',
       arriveTime: '',
       ritageDuration: '',
@@ -83,7 +82,6 @@ const CreateRitageBargingBook = () => {
     },
     mode: 'onBlur',
   });
-  const materialId = methods.watch('materialId');
   const domeId = methods.watch('domeId');
   const photos = methods.watch('photos');
   const isRitageProblematic = methods.watch('isRitageProblematic');
@@ -111,7 +109,14 @@ const CreateRitageBargingBook = () => {
     },
     skip: domeId === '' || !domeId,
     onCompleted: ({ dome }) => {
+      const isHaveParent = dome.monitoringStockpile.material?.parent
+        ? true
+        : false;
+      const material = dome.monitoringStockpile.material?.name || '';
+      const parent = dome.monitoringStockpile.material?.parent?.name || '';
       methods.setValue('stockpileName', dome.stockpile.name);
+      methods.setValue('material', isHaveParent ? parent : material);
+      methods.setValue('subMaterial', isHaveParent ? material : 'foo');
     },
   });
 
@@ -200,26 +205,19 @@ const CreateRitageBargingBook = () => {
       withAsterisk: true,
       categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
     });
-    const materialItem = materialSelect({
+    const materialItem = globalText({
       colSpan: 6,
-      name: 'materialId',
+      name: 'material',
       label: 'material',
-      withAsterisk: true,
-      onChange: (value) => {
-        methods.setValue('materialId', value ?? '');
-        methods.setValue('subMaterialId', '');
-        methods.trigger('materialId');
-      },
+      withAsterisk: false,
+      disabled: true,
     });
-    const newMaterialId = materialId === '' ? null : materialId;
-    const materialSubItem = materialSelect({
+    const materialSubItem = globalText({
       colSpan: 6,
-      name: 'subMaterialId',
+      name: 'subMaterial',
       label: 'subMaterial',
       withAsterisk: false,
-      disabled: !newMaterialId,
-      parentId: materialId,
-      isHaveParent: true,
+      disabled: true,
     });
     const fromTime = globalTimeInput({
       name: 'fromTime',
@@ -260,6 +258,13 @@ const CreateRitageBargingBook = () => {
       name: 'domeId',
       label: 'domeName',
       withAsterisk: false,
+      onChange: (value) => {
+        methods.setValue('domeId', value || '');
+        methods.trigger('domeId');
+        methods.setValue('stockpileName', '');
+        methods.setValue('material', '');
+        methods.setValue('subMaterial', '');
+      },
     });
     const stockpileItem = globalText({
       colSpan: 6,
@@ -378,8 +383,6 @@ const CreateRitageBargingBook = () => {
           toCheckerName,
           toCheckerPosition,
           shiftItem,
-          materialItem,
-          materialSubItem,
           hullNumber,
           hullNumberSubstitution,
           weatherItem,
@@ -412,6 +415,8 @@ const CreateRitageBargingBook = () => {
         group: t('commonTypography.detail'),
         enableGroupLabel: true,
         formControllers: [
+          materialItem,
+          materialSubItem,
           bulkSamplingDensityItem,
           bucketVolumeItem,
           tonByRitageItem,
@@ -428,11 +433,11 @@ const CreateRitageBargingBook = () => {
       },
     ];
 
-    isRitageProblematic ? field : field[1].formControllers.splice(8, 1);
+    isRitageProblematic ? field : field[1].formControllers.splice(6, 1);
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photos, isRitageProblematic, materialId, closeDome]);
+  }, [photos, isRitageProblematic, closeDome]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */

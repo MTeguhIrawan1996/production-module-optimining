@@ -2,7 +2,7 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
+import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -35,14 +35,8 @@ import { InputControllerNativeProps } from '@/types/global';
 const ListDataObRitageBook = () => {
   const router = useRouter();
   const [tabs] = useQueryState('tabs');
-  const [page, setPage] = useQueryState(
-    'rp',
-    queryTypes.integer.withDefault(1)
-  );
-  const [heavyEquipmentPage] = useQueryState(
-    'hp',
-    queryTypes.integer.withDefault(1)
-  );
+  const [page, setPage] = React.useState<number>(1);
+  const [heavyEquipmentPage, setHeavyEquipmentPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -144,9 +138,7 @@ const ListDataObRitageBook = () => {
     onCompleted: () => {
       refetchOverburdenRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -174,9 +166,7 @@ const ListDataObRitageBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage(page);
   };
 
   const filter = React.useMemo(() => {
@@ -185,9 +175,7 @@ const ListDataObRitageBook = () => {
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
@@ -206,9 +194,7 @@ const ListDataObRitageBook = () => {
         },
       ],
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setIsRitageProblematic(
           value ? (value === 'true' ? false : true) : null
         );
@@ -220,9 +206,7 @@ const ListDataObRitageBook = () => {
       searchable: false,
       data: shiftFilterItem,
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setShiftId(value);
       },
     });
@@ -234,9 +218,7 @@ const ListDataObRitageBook = () => {
       onSearchChange: setHeavyEquipmentSeacrhTerm,
       searchValue: heavyEquipmentSeacrhTerm,
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setHeavyEquipmentId(value);
       },
     });
@@ -444,6 +426,8 @@ const ListDataObRitageBook = () => {
         data={overburdenDumpTruckRitagesData}
         meta={overburdenDumpTruckRitagesDataMeta}
         fetching={overburdenDumpTruckRitagesDataLoading}
+        page={heavyEquipmentPage}
+        setPage={setHeavyEquipmentPage}
         tabs="ob"
         setDate={setDateHeavyEquipment}
         urlDetail="/input-data/production/data-ritage/ob/read/dump-truck"

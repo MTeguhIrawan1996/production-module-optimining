@@ -35,14 +35,8 @@ import { InputControllerNativeProps } from '@/types/global';
 const ListDataOreRitageBook = () => {
   const router = useRouter();
   const [tabs] = useQueryState('tabs', queryTypes.string.withDefault('ore'));
-  const [page, setPage] = useQueryState(
-    'rp',
-    queryTypes.integer.withDefault(1)
-  );
-  const [heavyEquipmentPage] = useQueryState(
-    'hp',
-    queryTypes.integer.withDefault(1)
-  );
+  const [page, setPage] = React.useState<number>(1);
+  const [heavyEquipmentPage, setHeavyEquipmentPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -144,9 +138,7 @@ const ListDataOreRitageBook = () => {
     onCompleted: () => {
       refetchOreRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -174,9 +166,7 @@ const ListDataOreRitageBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage(page);
   };
 
   const filter = React.useMemo(() => {
@@ -185,9 +175,7 @@ const ListDataOreRitageBook = () => {
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
@@ -206,9 +194,7 @@ const ListDataOreRitageBook = () => {
         },
       ],
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setIsRitageProblematic(
           value ? (value === 'true' ? false : true) : null
         );
@@ -220,9 +206,7 @@ const ListDataOreRitageBook = () => {
       searchable: false,
       data: shiftFilterItem,
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setShiftId(value);
       },
     });
@@ -234,9 +218,7 @@ const ListDataOreRitageBook = () => {
       onSearchChange: setHeavyEquipmentSeacrhTerm,
       searchValue: heavyEquipmentSeacrhTerm,
       onChange: (value) => {
-        setPage(1, {
-          shallow: true,
-        });
+        setPage(1);
         setHeavyEquipmentId(value);
       },
     });
@@ -443,6 +425,8 @@ const ListDataOreRitageBook = () => {
         data={oreDumpTruckRitagesData}
         meta={oreDumpTruckRitagesDataMeta}
         fetching={oreDumpTruckRitagesDataLoading}
+        page={heavyEquipmentPage}
+        setPage={setHeavyEquipmentPage}
         tabs="ore"
         setDate={setDateHeavyEquipment}
         urlDetail="/input-data/production/data-ritage/ore/read/dump-truck"

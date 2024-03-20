@@ -1,6 +1,5 @@
 import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -27,6 +26,8 @@ interface IRitageDTProps<T> {
   tabs: ITabs;
   urlDetail: string;
   fetching?: boolean;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
   setDate: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -40,16 +41,14 @@ export default function ListDataRitageDumptruckBook<
   urlDetail,
   setDate,
   columns,
+  setPage,
+  page,
 }: IRitageDTProps<T>) {
   const router = useRouter();
-  const [heavyEquipmentPage, setHeavyEquipmentPage] = useQueryState(
-    'hp',
-    queryTypes.integer.withDefault(1)
-  );
   const { t } = useTranslation('default');
 
   const handleSetPage = (newPage: number) => {
-    setHeavyEquipmentPage(newPage);
+    setPage(newPage);
   };
 
   const filter = React.useMemo(() => {
@@ -58,7 +57,7 @@ export default function ListDataRitageDumptruckBook<
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        setHeavyEquipmentPage(1);
+        setPage(1);
         const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
@@ -137,7 +136,7 @@ export default function ListDataRitageDumptruckBook<
                       onClick: (e) => {
                         e.stopPropagation();
                         router.push(
-                          `${urlDetail}/${date}/${shift?.id}/${companyHeavyEquipment?.id}?p=1&tabs=${tabs}`
+                          `${urlDetail}/${date}/${shift?.id}/${companyHeavyEquipment?.id}?tabs=${tabs}`
                         );
                       },
                     }}
@@ -152,7 +151,7 @@ export default function ListDataRitageDumptruckBook<
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: heavyEquipmentPage,
+          currentPage: page,
           totalAllData: meta?.totalAllData ?? 0,
           totalData: meta?.totalData ?? 0,
           totalPage: meta?.totalPage ?? 0,
@@ -160,7 +159,7 @@ export default function ListDataRitageDumptruckBook<
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [heavyEquipmentPage, data, columns, fetching]);
+  }, [page, data, columns, fetching]);
   /* #endregion  /**======== RenderTable =========== */
 
   return (

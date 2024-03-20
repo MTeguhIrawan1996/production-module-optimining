@@ -1,8 +1,10 @@
 import { ApolloError, gql, useMutation } from '@apollo/client';
 
 export const CREATE_FACTORY_MASTER = gql`
-  mutation CreateFactoryMaster($name: String!) {
-    createFactory(createFactoryInput: { name: $name }) {
+  mutation CreateFactoryMaster($name: String, $categoryId: String) {
+    createFactory(
+      createFactoryInput: { name: $name, categoryId: $categoryId }
+    ) {
       id
     }
   }
@@ -10,6 +12,7 @@ export const CREATE_FACTORY_MASTER = gql`
 
 export interface IMutationFactoryValues {
   name: string;
+  categoryId: string | null;
 }
 
 type ICreateFactoryMasterRequest = IMutationFactoryValues;

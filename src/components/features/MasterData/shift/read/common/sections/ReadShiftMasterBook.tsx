@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, KeyValueList } from '@/components/elements';
 
-import { useReadOneShiftMaster } from '@/services/graphql/query/shift/useReadOneElementMaster';
+import { useReadOneShiftMaster } from '@/services/graphql/query/shift/useReadOneShiftMaster';
 import { hourFromat } from '@/utils/helper/hourFromat';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';

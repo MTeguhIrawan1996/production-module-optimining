@@ -24,6 +24,7 @@ import {
 } from '@/services/graphql/mutation/front-production/useUpdateFrontProduction';
 import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
 import { useReadOneFrontProduction } from '@/services/graphql/query/front-production/useReadOneFrontProduction';
+import { useReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 import {
   globalDate,
   globalNumberInput,
@@ -71,6 +72,7 @@ const UpdateFrontProductionBook = () => {
     },
     mode: 'onBlur',
   });
+  const domeId = methods.watch('domeId');
   const pitId = methods.watch('pitId');
   const {
     fields: supportingHeavyEquipmentFields,
@@ -94,6 +96,20 @@ const UpdateFrontProductionBook = () => {
       methods.setValue('block', pit.block.name);
     },
     fetchPolicy: 'cache-first',
+  });
+  useReadOneStockpileDomeMaster({
+    variables: {
+      id: domeId as string,
+    },
+    skip: domeId === '' || !domeId,
+    onCompleted: ({ dome }) => {
+      const isHaveParent = dome.monitoringStockpile.material?.parent
+        ? true
+        : false;
+      const material = dome.monitoringStockpile.material?.id || '';
+      const parent = dome.monitoringStockpile.material?.parent?.id || '';
+      methods.setValue('materialId', isHaveParent ? parent : material);
+    },
   });
   const { frontData, frontDataLoading } = useReadOneFrontProduction({
     variables: {
@@ -283,6 +299,7 @@ const UpdateFrontProductionBook = () => {
       name: 'materialId',
       label: 'material',
       withAsterisk: true,
+      disabled: segment === 'dome',
     });
     const pitItem = pitSelect({
       colSpan: 6,
@@ -304,6 +321,11 @@ const UpdateFrontProductionBook = () => {
       withAsterisk: true,
       defaultValue: frontData?.dome?.id,
       labelValue: frontData?.dome?.name,
+      onChange: (value) => {
+        methods.setValue('domeId', value || '');
+        methods.trigger('domeId');
+        methods.setValue('materialId', '');
+      },
     });
     const block = globalText({
       colSpan: 6,
@@ -376,12 +398,12 @@ const UpdateFrontProductionBook = () => {
         enableGroupLabel: false,
         formControllers: [heavyEquipmentCodeItem],
       },
+      ...(segment === 'dome' ? fieldIsDome : fieldIsPit),
       {
         group: t('commonTypography.frontInformation'),
         enableGroupLabel: true,
         formControllers: [locationItem, materialItem],
       },
-      ...(segment === 'dome' ? fieldIsDome : fieldIsPit),
       {
         group: t('commonTypography.coordinate'),
         enableGroupLabel: true,
