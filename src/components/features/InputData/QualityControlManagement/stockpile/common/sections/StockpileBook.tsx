@@ -84,6 +84,7 @@ const StockpileBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
+      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       stockpileId,
       year,
