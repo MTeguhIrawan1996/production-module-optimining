@@ -12,7 +12,10 @@ import {
   IMutationFactoryValues,
   useCreateFactoryMaster,
 } from '@/services/graphql/mutation/factory/useCreateFactoryMaster';
-import { globalText } from '@/utils/constants/Field/global-field';
+import {
+  globalSelectArriveBargeRhf,
+  globalText,
+} from '@/utils/constants/Field/global-field';
 import { factoryMutationValidation } from '@/utils/form-validation/factory/factory-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
@@ -27,6 +30,7 @@ const CreateFactoryBook = () => {
     resolver: zodResolver(factoryMutationValidation),
     defaultValues: {
       name: '',
+      categoryId: null,
     },
     mode: 'onBlur',
   });
@@ -69,6 +73,13 @@ const CreateFactoryBook = () => {
 
   /* #   /**=========== Field =========== */
   const fieldItem = React.useMemo(() => {
+    const factoryCategoryItem = globalSelectArriveBargeRhf({
+      name: 'categoryId',
+      label: 'category',
+      placeholder: 'chooseCategory',
+      colSpan: 12,
+      withAsterisk: true,
+    });
     const factoryNameItem = globalText({
       name: 'name',
       label: 'factoryName',
@@ -79,7 +90,7 @@ const CreateFactoryBook = () => {
     const field: ControllerGroup[] = [
       {
         group: t('commonTypography.factoryName'),
-        formControllers: [factoryNameItem],
+        formControllers: [factoryCategoryItem, factoryNameItem],
       },
     ];
 
@@ -96,6 +107,7 @@ const CreateFactoryBook = () => {
     await executeCreate({
       variables: {
         name: data.name,
+        categoryId: data.categoryId,
       },
     });
   };
