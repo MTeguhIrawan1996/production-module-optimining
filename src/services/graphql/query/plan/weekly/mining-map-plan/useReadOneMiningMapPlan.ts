@@ -97,7 +97,7 @@ export const useReadOneMiningMapPlan = ({
         },
         onCompleted: onCompleted,
         skip,
-        fetchPolicy: 'cache-and-network',
+        fetchPolicy: 'cache-first',
       }
     );
 
