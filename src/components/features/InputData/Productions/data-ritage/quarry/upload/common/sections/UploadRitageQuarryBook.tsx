@@ -27,6 +27,7 @@ const UploadRitageQuarryBook = () => {
   const [isDirtyFile, setIsDirtyFile] = React.useState<boolean>(false);
   const [fileId, setFileId] = React.useState<string | null>(null);
   const [mounted, setMounted] = React.useState<boolean>(false);
+  const [disabled, setDisabled] = React.useState<boolean>(false);
   const [dataFiald, setfaildData] = React.useState<unknown[]>([]);
 
   /* #   /**=========== Methods =========== */
@@ -49,12 +50,14 @@ const UploadRitageQuarryBook = () => {
       if (data.processed === data.total) {
         setfaildData(data.failedData);
         setIsDirtyFile(false);
+        setDisabled((prev) => !prev);
       }
     },
   });
 
   const { mutate, isLoading } = useUploadFileRitageQuarry({
     onError: (err) => {
+      setDisabled((prev) => !prev);
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
         if (errorArry?.length) {
@@ -74,6 +77,7 @@ const UploadRitageQuarryBook = () => {
     onSuccess: (data) => {
       setFileId(data.data.id);
       setMounted(true);
+      setDisabled((prev) => !prev);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -94,6 +98,7 @@ const UploadRitageQuarryBook = () => {
       maxSize: 100 * 1024 ** 2 /* 20MB */,
       multiple: false,
       faildData: dataFiald,
+      disabled: disabled,
       onDrop: (value) => {
         methods.setValue('file', value);
         setIsDirtyFile(true);
@@ -118,7 +123,7 @@ const UploadRitageQuarryBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataFiald]);
+  }, [disabled, dataFiald]);
   /* #endregion  /**======== Field =========== */
 
   const renderProgress = React.useMemo(() => {
@@ -194,9 +199,10 @@ const UploadRitageQuarryBook = () => {
         submitButton={{
           label: t('commonTypography.save'),
           loading: isLoading,
-          disabled: !isDirtyFile,
+          disabled: disabled || !isDirtyFile,
         }}
         backButton={{
+          disabled: disabled,
           onClick: () =>
             router.push('/input-data/production/data-ritage?tabs=quarry'),
         }}

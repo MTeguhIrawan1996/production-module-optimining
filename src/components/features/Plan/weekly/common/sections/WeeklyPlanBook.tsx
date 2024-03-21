@@ -3,7 +3,6 @@ import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -23,7 +22,6 @@ import {
 } from '@/utils/constants/Field/native-field';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
-import { useStoreWeeklyQueryUrl } from '@/utils/store/useStoreWeeklyQueryUrl';
 
 import { InputControllerNativeProps } from '@/types/global';
 
@@ -31,10 +29,7 @@ const WeeklyPlanBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [page, setPage] = useStoreWeeklyQueryUrl(
-    (state) => [state.page, state.setPage],
-    shallow
-  );
+  const [page, setPage] = React.useState<number>(1);
   const [year, setYear] = React.useState<number | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);

@@ -1,7 +1,7 @@
 import { Stack, Text } from '@mantine/core';
 import { IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
+import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -24,10 +24,8 @@ const MiningMapPlanData = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const [tabs] = useQueryState('tabs');
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
-  );
+  const [page, setPage] = React.useState<number>(1);
+
   const [modalData, setModalData] = React.useState<
     IReadOneMiningMapPlanData | undefined
   >(undefined);
@@ -43,14 +41,14 @@ const MiningMapPlanData = () => {
       weeklyPlanId: id,
       orderBy: 'createdAt',
       orderDir: 'desc',
+      page: page,
+      limit: 10,
     },
     skip: tabs !== 'miningMapPlan',
   });
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage(page);
   };
 
   return (
@@ -59,7 +57,7 @@ const MiningMapPlanData = () => {
       <DashboardCard p={0}>
         <Stack spacing="sm">
           <Text fz={24} fw={600} color="brand">
-            {t('commonTypography.unitCapacityPlanInformation')}
+            {t('commonTypography.miningMapPlanInformation')}
           </Text>
           <MantineDataTable
             tableProps={{
@@ -69,6 +67,11 @@ const MiningMapPlanData = () => {
                 {
                   accessor: 'mapName',
                   title: t('commonTypography.mapName'),
+                },
+                {
+                  accessor: 'type',
+                  title: t('commonTypography.type'),
+                  render: ({ type }) => type.name || '-',
                 },
                 {
                   accessor: 'category',
