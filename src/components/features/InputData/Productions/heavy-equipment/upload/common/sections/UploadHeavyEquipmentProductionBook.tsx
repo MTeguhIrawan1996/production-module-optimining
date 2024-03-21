@@ -27,6 +27,7 @@ const UploadHeavyEquipmentProductionBook = () => {
   const [isDirtyFile, setIsDirtyFile] = React.useState<boolean>(false);
   const [fileId, setFileId] = React.useState<string | null>(null);
   const [mounted, setMounted] = React.useState<boolean>(false);
+  const [disabled, setDisabled] = React.useState<boolean>(false);
   const [dataFiald, setfaildData] = React.useState<unknown[]>([]);
 
   /* #   /**=========== Methods =========== */
@@ -49,12 +50,14 @@ const UploadHeavyEquipmentProductionBook = () => {
       if (data.processed === data.total) {
         setfaildData(data.failedData);
         setIsDirtyFile(false);
+        setDisabled((prev) => !prev);
       }
     },
   });
 
   const { mutate, isLoading } = useUploadFileHeavyEquipmentProduction({
     onError: (err) => {
+      setDisabled((prev) => !prev);
       if (err.response) {
         const errorArry = errorRestBadRequestField(err);
         if (errorArry?.length) {
@@ -74,6 +77,7 @@ const UploadHeavyEquipmentProductionBook = () => {
     onSuccess: (data) => {
       setFileId(data.data.id);
       setMounted(true);
+      setDisabled((prev) => !prev);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -94,6 +98,7 @@ const UploadHeavyEquipmentProductionBook = () => {
       maxSize: 100 * 1024 ** 2 /* 10MB */,
       multiple: false,
       faildData: dataFiald,
+      disabled: disabled,
       usedWhere: 'heavy-equipment-prod',
       onDrop: (value) => {
         methods.setValue('file', value);
@@ -119,7 +124,7 @@ const UploadHeavyEquipmentProductionBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataFiald]);
+  }, [disabled, dataFiald]);
   /* #endregion  /**======== Field =========== */
 
   const renderProgress = React.useMemo(() => {
@@ -195,9 +200,10 @@ const UploadHeavyEquipmentProductionBook = () => {
         submitButton={{
           label: t('commonTypography.save'),
           loading: isLoading,
-          disabled: !isDirtyFile,
+          disabled: disabled || !isDirtyFile,
         }}
         backButton={{
+          disabled: disabled,
           onClick: () =>
             router.push('/input-data/production/data-heavy-equipment'),
         }}
