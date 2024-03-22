@@ -24,6 +24,9 @@ export const READ_ONE_STOCKPILE_DOME_MASTER = gql`
         currentTonSurvey
         ritageSamples {
           additional
+          data {
+            id
+          }
         }
       }
     }
