@@ -104,6 +104,11 @@ const FactoryBook = () => {
               title: t('commonTypography.factoryName'),
             },
             {
+              accessor: 'category',
+              title: t('commonTypography.category'),
+              render: ({ category }) => category.name,
+            },
+            {
               accessor: 'action',
               title: t('commonTypography.action'),
               width: 100,

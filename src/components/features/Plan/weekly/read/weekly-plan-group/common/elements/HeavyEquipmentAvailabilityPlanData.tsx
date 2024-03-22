@@ -1,6 +1,6 @@
 import { Stack, Text } from '@mantine/core';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
+import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -14,10 +14,7 @@ const HeavyEquipmentAvailabilityPlanData = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const [tabs] = useQueryState('tabs');
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
-  );
+  const [page, setPage] = React.useState<number>(1);
 
   const {
     weeklyHeavyEquipmentAvailabilityPlanData: data,
@@ -26,15 +23,14 @@ const HeavyEquipmentAvailabilityPlanData = () => {
   } = useReadOneHeavyEquipmentAvailabilityPlan({
     variables: {
       weeklyPlanId: id,
-      limit: null,
+      limit: 10,
+      page: page,
     },
     skip: !router.isReady || tabs !== 'heavyEquipmentAvailabilityPlan',
   });
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage(page);
   };
 
   return (

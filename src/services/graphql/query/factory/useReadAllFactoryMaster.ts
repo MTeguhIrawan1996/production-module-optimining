@@ -35,6 +35,10 @@ export const READ_ALL_FACTORY_MASTER = gql`
       data {
         id
         name
+        category {
+          id
+          name
+        }
       }
     }
   }
@@ -43,6 +47,10 @@ export const READ_ALL_FACTORY_MASTER = gql`
 interface IFactoriesData {
   id: string;
   name: string;
+  category: {
+    id: string;
+    name: string;
+  };
 }
 
 interface IFactoriesResponse {

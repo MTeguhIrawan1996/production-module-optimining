@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { IHouseSampleAndLabsData } from '@/services/graphql/query/sample-house-lab/useReadAllSampleHouseLab';
 
@@ -41,11 +46,13 @@ export const useReadOneSampleHouseLabByNumberSample = ({
   skip,
   onCompleted,
   onError,
+  fetchPolicy = 'cache-first',
 }: {
   variables: IReadOneSampleHouseLabByNumberSampleRequest & IFakeVariable;
   skip?: boolean;
   onCompleted?: (data: IReadOneSampleHouseLabByNumberSampleResponse) => void;
   onError?: ({ graphQLErrors }: ApolloError) => void;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: houseSampleAndLab,
@@ -60,7 +67,7 @@ export const useReadOneSampleHouseLabByNumberSample = ({
     onError: onError,
     onCompleted: onCompleted,
     skip,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy,
   });
 
   return {
