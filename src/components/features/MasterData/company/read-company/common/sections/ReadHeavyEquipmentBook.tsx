@@ -3,7 +3,6 @@ import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -28,10 +27,7 @@ const ReadHeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const [page, setPage] = useQueryState(
-    'hp',
-    queryTypes.integer.withDefault(1)
-  );
+  const [page, setPage] = React.useState<number>(1);
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -61,6 +57,7 @@ const ReadHeavyEquipmentBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
+      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       brandId,
       typeId,
@@ -105,9 +102,7 @@ const ReadHeavyEquipmentBook = () => {
     onCompleted: () => {
       refetchHeavyEquipmentCompany();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -155,18 +150,14 @@ const ReadHeavyEquipmentBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage(page);
   };
 
   const filter = React.useMemo(() => {
     const item: SelectProps[] = [
       {
         onChange: (value) => {
-          setPage(1, {
-            shallow: true,
-          });
+          setPage(1);
           setBrandId(value);
           setTypeId(null);
           setModelId(null);
@@ -182,9 +173,7 @@ const ReadHeavyEquipmentBook = () => {
       },
       {
         onChange: (value) => {
-          setPage(1, {
-            shallow: true,
-          });
+          setPage(1);
           setTypeId(value);
           setModelId(null);
         },
@@ -200,9 +189,7 @@ const ReadHeavyEquipmentBook = () => {
       },
       {
         onChange: (value) => {
-          setPage(1, {
-            shallow: true,
-          });
+          setPage(1);
           setModelId(value);
         },
         value: modelId,
@@ -217,9 +204,7 @@ const ReadHeavyEquipmentBook = () => {
       },
       {
         onChange: (value) => {
-          setPage(1, {
-            shallow: true,
-          });
+          setPage(1);
           setClasslId(value);
         },
         value: classId,
@@ -369,8 +354,9 @@ const ReadHeavyEquipmentBook = () => {
           setSearchQuery(e.currentTarget.value);
         },
         onSearch: () => {
-          setPage(1, {
-            shallow: true,
+          setPage(1);
+          refetchHeavyEquipmentCompany({
+            page: 1,
           });
         },
         searchQuery: searchQuery,
