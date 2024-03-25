@@ -1,9 +1,6 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
 import { IReadAllFrontProductionData } from '@/services/graphql/query/front-production/useReadAllFrontProduction';
-import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
-import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
-import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { formatDate } from '@/utils/helper/dateFormat';
 
 import { IGroupingDetail, IStatus } from '@/types/global';
@@ -20,6 +17,10 @@ export const READ_ONE_FRONT_PRODUCTION = gql`
       material {
         id
         name
+        parent {
+          id
+          name
+        }
       }
       front {
         id
@@ -81,11 +82,6 @@ export const READ_ONE_FRONT_PRODUCTION = gql`
 `;
 
 interface IReadOneFrontProductionData extends IReadAllFrontProductionData {
-  id: string;
-  date: string | null;
-  material: Pick<IMaterialsData, 'id' | 'name'> | null;
-  front: Pick<ILocationsData, 'id' | 'name'> | null;
-  companyHeavyEquipment: IHeavyEquipmentCompany | null;
   type: string;
   pit: {
     id: string;
@@ -159,6 +155,9 @@ export const useReadOneFrontProduction = ({
   });
 
   const isDomeType = frontData?.frontData.type === 'dome';
+  const isHaveParent = frontData?.frontData.material?.parent ? true : false;
+  const material = frontData?.frontData.material?.name || null;
+  const parent = frontData?.frontData.material?.parent?.name || null;
 
   const dome = {
     name: 'location',
@@ -180,7 +179,7 @@ export const useReadOneFrontProduction = ({
     },
     {
       name: 'material',
-      value: frontData?.frontData.material?.name,
+      value: isHaveParent ? parent : material,
     },
   ];
 

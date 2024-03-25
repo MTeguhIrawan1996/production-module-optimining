@@ -7,7 +7,6 @@ import {
 
 import { IHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
 import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
-import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { simpleOtherColumn } from '@/utils/helper/simpleOtherColumn';
 
@@ -46,6 +45,10 @@ export const READ_ALL_FRONT_PRODUCTION = gql`
         material {
           id
           name
+          parent {
+            id
+            name
+          }
         }
         front {
           id
@@ -85,7 +88,14 @@ export const READ_ALL_FRONT_PRODUCTION = gql`
 export interface IReadAllFrontProductionData {
   id: string;
   date: string | null;
-  material: Pick<IMaterialsData, 'id' | 'name'> | null;
+  material: {
+    id: string;
+    name: string;
+    parent: {
+      id: string;
+      name: string;
+    } | null;
+  } | null;
   front: Pick<ILocationsData, 'id' | 'name'> | null;
   companyHeavyEquipment: IHeavyEquipmentCompany | null;
   pit: {
@@ -153,19 +163,24 @@ export const useReadAllFrontProduction = ({
   });
 
   const simplifiedData: ISimpleKeyType[] | undefined =
-    frontProductionData?.frontDatas.data.map((item) => ({
-      id: item.id,
-      date: formatDate(item.date),
-      material: item.material?.name ?? null,
-      frontName: item.front?.name ?? null,
-      class: item.companyHeavyEquipment?.heavyEquipment?.class?.name ?? null,
-      heavyEquipmentCode: item.companyHeavyEquipment?.hullNumber ?? null,
-      dome: item.dome?.name ?? null,
-      pit: item.pit?.name ?? null,
-      coordinateX: item.x ?? null,
-      coordinateY: item.y ?? null,
-      status: item.status,
-    }));
+    frontProductionData?.frontDatas.data.map((item) => {
+      const isHaveParent = item.material?.parent ? true : false;
+      const material = item.material?.name || null;
+      const parent = item.material?.parent?.name || null;
+      return {
+        id: item.id,
+        date: formatDate(item.date),
+        material: isHaveParent ? parent : material,
+        frontName: item.front?.name ?? null,
+        class: item.companyHeavyEquipment?.heavyEquipment?.class?.name ?? null,
+        heavyEquipmentCode: item.companyHeavyEquipment?.hullNumber ?? null,
+        dome: item.dome?.name ?? null,
+        pit: item.pit?.name ?? null,
+        coordinateX: item.x ?? null,
+        coordinateY: item.y ?? null,
+        status: item.status,
+      };
+    });
   const excludeAccessor = [
     'status',
     'id',

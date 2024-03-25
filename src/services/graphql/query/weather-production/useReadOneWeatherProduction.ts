@@ -55,7 +55,7 @@ type IWeatherConditions = {
   } | null;
   startAt: string | null;
   finishAt: string | null;
-  rainfall: number;
+  rainfall: number | null;
 };
 
 interface IReadOneWeatherProduction {
