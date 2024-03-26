@@ -254,7 +254,7 @@ const UpdateMapYearlyProductionBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapCategoryList]);
+  }, [mapCategoryList, serverPhotos]);
 
   /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<FormValues> = async () => {
