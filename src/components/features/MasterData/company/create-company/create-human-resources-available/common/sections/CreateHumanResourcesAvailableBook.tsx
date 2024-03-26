@@ -3,7 +3,6 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconChevronLeft, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -22,10 +21,7 @@ const CreateHumanResourcesAvailableBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const companyId = router.query?.id as string;
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
-  );
+  const [page, setPage] = React.useState<number>(1);
   const urlCreate = `/master-data/company/read/${companyId}`;
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [choosesHumanResources, setChooseHumanResources] = React.useState<
@@ -41,6 +37,8 @@ const CreateHumanResourcesAvailableBook = () => {
     variables: {
       limit: 10,
       page: page,
+      orderDir: 'desc',
+      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       excludeIds: choosesHumanResources.map((val) => val.id) ?? null,
     },
@@ -87,9 +85,7 @@ const CreateHumanResourcesAvailableBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage(page);
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -233,9 +229,7 @@ const CreateHumanResourcesAvailableBook = () => {
           },
           searchQuery,
           onSearch: () => {
-            setPage(1, {
-              shallow: true,
-            });
+            setPage(1);
             refetchNonEmployeedHumanResources({
               page: 1,
             });

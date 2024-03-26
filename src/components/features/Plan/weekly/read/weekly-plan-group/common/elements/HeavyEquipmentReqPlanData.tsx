@@ -1,7 +1,8 @@
 import { Stack, Text } from '@mantine/core';
+import { Badge } from '@mantine/core';
 import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
+import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -25,17 +26,13 @@ const HeavyEquipmentReqPlanData = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const [tabs] = useQueryState('tabs');
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
-  );
+  const [page, setPage] = React.useState<number>(1);
   const [
     heavyEquipmentRequirementPlanActivities,
     setHeavyEquipmentRequirementPlanActivities,
   ] = React.useState<IHeavyEquipmentRequirementPlanActivity[] | undefined>(
     undefined
   );
-
   const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
 
   const {
@@ -45,15 +42,14 @@ const HeavyEquipmentReqPlanData = () => {
   } = useReadOneHeavyEquipmentReqPlan({
     variables: {
       weeklyPlanId: id,
-      limit: null,
+      limit: 10,
+      page: page,
     },
     skip: tabs !== 'heavyEquipmentReqPlan',
   });
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage(page);
   };
 
   const renderOtherColumnCallback = React.useCallback(
@@ -102,23 +98,28 @@ const HeavyEquipmentReqPlanData = () => {
                   accessor: 'materials',
                   title: t('commonTypography.material'),
                   width: 220,
-                  render: ({ materials }) => {
-                    const material = materials.map((val) => val.name);
-                    return material?.join(', ');
-                  },
+                  render: ({ materials }) =>
+                    materials.map((val) => (
+                      <Badge key={val.id}>{val.name}</Badge>
+                    )),
                 },
                 {
                   accessor: 'locations',
                   title: t('commonTypography.location'),
-                  width: 220,
-                  render: ({ locations }) => {
-                    const location = locations.map((val) => val.name);
-                    return location?.join(', ');
-                  },
+                  width: 240,
+                  render: ({ locations }) =>
+                    locations.map((val) => (
+                      <Badge key={val.id}>{val.name}</Badge>
+                    )),
                 },
                 {
                   accessor: 'averageDistance',
                   title: t('commonTypography.averageDistance'),
+                },
+                {
+                  accessor: 'activity',
+                  title: t('commonTypography.activity'),
+                  render: ({ activityType }) => activityType.name ?? '-',
                 },
                 {
                   accessor: 'desc',

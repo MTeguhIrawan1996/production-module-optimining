@@ -1,7 +1,7 @@
-import { Stack, Text, useMantineTheme } from '@mantine/core';
+import { Badge, Stack, Text, useMantineTheme } from '@mantine/core';
 import { DataTableColumnGroup } from 'mantine-datatable';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
+import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -26,10 +26,7 @@ const UnitCapacityPlanData = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const [tabs] = useQueryState('tabs');
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
-  );
+  const [page, setPage] = React.useState<number>(1);
   const [materials, setMaterials] = React.useState<
     IReadOneMaterialUnitCapacityPlan[] | undefined
   >(undefined);
@@ -47,14 +44,13 @@ const UnitCapacityPlanData = () => {
     variables: {
       weeklyPlanId: id,
       limit: 10,
+      page: page,
     },
     skip: tabs !== 'unitCapacityPlan',
   });
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage(page);
   };
 
   const renderOtherColumnCallback = React.useCallback(
@@ -111,10 +107,10 @@ const UnitCapacityPlanData = () => {
                   title: t('commonTypography.location'),
                   noWrap: false,
                   width: 300,
-                  render: ({ locations }) => {
-                    const location = locations.map((val) => val.name);
-                    return location?.join(', ');
-                  },
+                  render: ({ locations }) =>
+                    locations.map((val) => (
+                      <Badge key={val.id}>{val.name}</Badge>
+                    )),
                 },
                 {
                   accessor: 'activityName',

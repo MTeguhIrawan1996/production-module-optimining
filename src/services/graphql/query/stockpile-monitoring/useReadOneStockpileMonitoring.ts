@@ -118,6 +118,13 @@ export const READ_ONE_STOCKPILE_MONITORING = gql`
             id
             hullNumber
           }
+          operators {
+            id
+            humanResource {
+              id
+              name
+            }
+          }
           shift {
             id
             name
@@ -180,6 +187,15 @@ interface IRitageData {
     id: string;
     hullNumber: string;
   } | null;
+  operators:
+    | {
+        id: string;
+        humanResource: {
+          id: string;
+          name: string;
+        };
+      }[]
+    | null;
   shift: {
     id: string;
     name: string;

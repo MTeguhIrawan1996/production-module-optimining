@@ -3,7 +3,6 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconChevronLeft, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -20,10 +19,7 @@ import { useReadAllNonCompanyHeavyEquipment } from '@/services/graphql/query/hea
 
 const CreateHeavyEquipmentAvailableBook = () => {
   const router = useRouter();
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
-  );
+  const [page, setPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
   const companyId = router.query?.id as string;
   const urlCreate = `/master-data/company/read/${companyId}`;
@@ -41,6 +37,8 @@ const CreateHeavyEquipmentAvailableBook = () => {
     variables: {
       limit: 10,
       page: page,
+      orderDir: 'desc',
+      orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       excludeIds: choosesHeavyEquipment.map((val) => val.id) ?? null,
     },
@@ -86,9 +84,7 @@ const CreateHeavyEquipmentAvailableBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage(page);
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -257,9 +253,7 @@ const CreateHeavyEquipmentAvailableBook = () => {
           },
           searchQuery,
           onSearch: () => {
-            setPage(1, {
-              shallow: true,
-            });
+            setPage(1);
             refetchNonOwnedByCompanyHeavyEquipments({
               page: 1,
             });

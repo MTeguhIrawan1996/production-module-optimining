@@ -1,6 +1,6 @@
 import { TabsValue } from '@mantine/core';
 import { useRouter } from 'next/router';
-import { useQueryState } from 'next-usequerystate';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
@@ -18,7 +18,10 @@ const ActivityCategoryMasterPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [tab, setTab] = useQueryState('tab');
+  const [tab, setTab] = useQueryState(
+    'tab',
+    queryTypes.string.withDefault('lose-time-category')
+  );
 
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
@@ -53,8 +56,9 @@ const ActivityCategoryMasterPage = () => {
       >
         <GlobalTabs
           tabs={{
-            keepMounted: false,
-            value: tab || 'lose-time-category',
+            keepMounted: true,
+            value: tab,
+            defaultValue: 'lose-time-category',
             onTabChange: (value) => handleChangeTab(value),
           }}
           tabsData={[

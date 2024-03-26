@@ -456,6 +456,7 @@
     "createMap": "$t(commonTypography.create) Peta",
     "inputGroupDomeLabel": "Rencana List Dome Yang akan di Tongkang",
     "miningMapPlan": "Rencana Peta Penambangan",
+    "miningMapPlanInformation": "Informasi Rencana Peta Penambangan",
     "mapName": "Nama Peta",
     "miningMap": "Peta Penambangan",
     "month": "Bulan",
