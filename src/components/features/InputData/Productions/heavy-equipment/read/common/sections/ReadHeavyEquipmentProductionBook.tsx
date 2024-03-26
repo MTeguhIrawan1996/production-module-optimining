@@ -471,9 +471,7 @@ const ReadHeavyEquipmentProductionBook = () => {
               data={[
                 {
                   dataKey: t('commonTypography.amountEffectiveWorkingHours'),
-                  value: secondsDuration(
-                    heavyEquipmentData?.effectiveHour ?? null
-                  ),
+                  value: heavyEquipmentData?.effectiveHour ?? null,
                 },
               ]}
               type="grid"
