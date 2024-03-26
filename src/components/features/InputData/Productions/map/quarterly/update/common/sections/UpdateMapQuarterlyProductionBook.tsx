@@ -178,6 +178,7 @@ const UpdateMapQuarterlyProductionBook = () => {
       withAsterisk: false,
       clearable: true,
       colSpan: 6,
+      required: false,
       onChange: (value) =>
         value
           ? methods.setValue('companyId', value)
@@ -209,7 +210,7 @@ const UpdateMapQuarterlyProductionBook = () => {
       colSpan: 6,
       name: 'year',
       label: 'year',
-      withAsterisk: false,
+      withAsterisk: true,
       disabled: false,
     });
 
@@ -217,7 +218,7 @@ const UpdateMapQuarterlyProductionBook = () => {
       colSpan: 6,
       name: 'quarter',
       label: 'quarter',
-      withAsterisk: false,
+      withAsterisk: true,
       disabled: false,
       data: [
         {

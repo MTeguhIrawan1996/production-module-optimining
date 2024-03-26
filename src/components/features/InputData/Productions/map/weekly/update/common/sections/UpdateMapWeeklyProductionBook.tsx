@@ -178,6 +178,7 @@ const UpdateMapWeeklyProductionBook = () => {
       label: 'company',
       withAsterisk: false,
       clearable: true,
+      required: false,
       colSpan: 6,
       onChange: (value) =>
         value
@@ -210,7 +211,7 @@ const UpdateMapWeeklyProductionBook = () => {
       colSpan: 6,
       name: 'year',
       label: 'year',
-      withAsterisk: false,
+      withAsterisk: true,
       disabled: false,
     });
 
@@ -218,7 +219,7 @@ const UpdateMapWeeklyProductionBook = () => {
       colSpan: 6,
       name: 'week',
       label: 'week',
-      withAsterisk: false,
+      withAsterisk: true,
       disabled: false,
     });
 

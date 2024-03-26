@@ -1,45 +1,46 @@
 import { z } from 'zod';
 
 import {
-  zOptionalString,
+  zImageRequired,
+  zRequiredSelectInput,
   zRequiredString,
 } from '@/utils/form-validation/global';
 
 export const createMapYearlyValidation = z.object({
-  name: zRequiredString,
-  companyId: zOptionalString.nullable(),
-  mapDataCategoryId: zRequiredString,
-  location: z.array(zRequiredString),
-  year: zRequiredString,
-  mapImage: z.any().optional(),
+  name: zRequiredString.min(0, 'Nama peta perlu diisi'),
+  companyId: z.string().min(0).nullable(),
+  mapDataCategoryId: zRequiredSelectInput,
+  location: z.array(zRequiredSelectInput).min(1, 'Kolom tidak boleh kosong'),
+  year: zRequiredSelectInput,
+  mapImage: zImageRequired,
 });
 
 export const createMapMonthlyValidation = z.object({
   name: zRequiredString,
-  companyId: zOptionalString.nullable(),
-  mapDataCategoryId: zRequiredString,
-  location: z.array(zRequiredString),
-  year: zRequiredString,
-  month: zRequiredString,
-  mapImage: z.any().optional(),
+  companyId: z.string().min(0).nullable(),
+  mapDataCategoryId: zRequiredSelectInput,
+  location: z.array(zRequiredSelectInput).min(1, 'Kolom tidak boleh kosong'),
+  year: zRequiredSelectInput,
+  month: zRequiredSelectInput,
+  mapImage: zImageRequired,
 });
 
 export const createMapWeeklyValidation = z.object({
   name: zRequiredString,
-  companyId: zOptionalString.nullable(),
-  mapDataCategoryId: zRequiredString,
-  location: z.array(zRequiredString),
-  year: zRequiredString,
-  week: zRequiredString,
-  mapImage: z.any().optional(),
+  companyId: z.string().min(0).nullable(),
+  mapDataCategoryId: zRequiredSelectInput,
+  location: z.array(zRequiredSelectInput).min(1, 'Kolom tidak boleh kosong'),
+  year: zRequiredSelectInput,
+  week: zRequiredSelectInput,
+  mapImage: zImageRequired,
 });
 
 export const createMapQuarterValidation = z.object({
   name: zRequiredString,
-  companyId: zOptionalString.nullable(),
+  companyId: z.string().min(0).nullable(),
   mapDataCategoryId: zRequiredString,
-  location: z.array(zRequiredString),
-  year: zRequiredString,
-  quarter: zRequiredString,
-  mapImage: z.any().optional(),
+  location: z.array(zRequiredSelectInput).min(1, 'Kolom tidak boleh kosong'),
+  year: zRequiredSelectInput,
+  quarter: zRequiredSelectInput,
+  mapImage: zImageRequired,
 });
