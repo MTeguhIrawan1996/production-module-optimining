@@ -1,4 +1,5 @@
 import {
+  Badge,
   Divider,
   ScrollArea,
   Stack,
@@ -265,7 +266,16 @@ const DetailStockpileData: React.FC<IDetailStockpileDataProps> = ({
               {
                 accessor: 'operatorName',
                 title: t('commonTypography.operatorName'),
-                render: () => '-',
+                render: ({ operators }) => {
+                  const arrOperator = operators?.map((val) => (
+                    <Badge key={val.humanResource.id}>
+                      {val.humanResource.name}
+                    </Badge>
+                  ));
+                  return arrOperator && arrOperator.length > 0
+                    ? arrOperator
+                    : '-';
+                },
               },
             ],
             horizontalSpacing: 0,

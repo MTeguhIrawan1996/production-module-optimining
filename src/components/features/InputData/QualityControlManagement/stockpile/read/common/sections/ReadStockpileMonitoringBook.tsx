@@ -283,7 +283,7 @@ const ReadStockpileMonitoringBook = () => {
             isShowItem: true,
           },
           {
-            label: 'Data Sample',
+            label: 'Data Sampel',
             value: 'sampleData',
             component: (
               <DetailSampleData monitoringStockpile={monitoringStockpile} />

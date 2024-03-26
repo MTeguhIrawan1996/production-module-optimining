@@ -35,7 +35,6 @@ const ShiftSelectInputRhf: React.FC<IShiftSelectInputRhfProps> = ({
       orderDir: 'desc',
       orderBy: 'createdAt',
     },
-    fetchPolicy: 'cache-and-network',
   });
 
   const { uncombinedItem } = useFilterItems({
