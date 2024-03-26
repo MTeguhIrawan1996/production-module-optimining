@@ -66,7 +66,7 @@ const DataRitagePage = () => {
         <GlobalTabs
           tabs={{
             defaultValue: 'ore',
-            keepMounted: false,
+            keepMounted: true,
             value: params.tabs,
             onTabChange: (value) => handleChangeTab(value),
           }}
