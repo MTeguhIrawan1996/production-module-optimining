@@ -90,7 +90,7 @@ const UpdateWeatherProductionBook = () => {
             conditionId: val.condition?.id ?? '',
             startTime: startTime ?? '',
             finishTime: finishTime ?? '',
-            rainfall: val.rainfall,
+            rainfall: val.rainfall ?? '',
           };
         }
       );

@@ -365,7 +365,7 @@ const ReadWeatherProductionBook = () => {
                   {
                     accessor: 'rainfall',
                     title: t('commonTypography.rainfall'),
-                    render: ({ rainfall }) => rainfall,
+                    render: ({ rainfall }) => rainfall ?? '-',
                   },
                 ],
                 horizontalSpacing: 0,
