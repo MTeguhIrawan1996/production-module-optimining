@@ -89,7 +89,7 @@ const UpdateMapWeeklyProductionBook = () => {
       methods.setValue('year', String(data?.mapData.year));
       methods.setValue('week', String(data?.mapData.week));
       methods.setValue('companyId', data?.mapData.company.id);
-      setServerPhotos([data.mapData.file as Omit<IFile, 'mime' | 'path'>]);
+      setServerPhotos([data?.mapData.file] ?? []);
       setFileId(data?.mapData.file?.id as string);
     },
   });
@@ -178,6 +178,7 @@ const UpdateMapWeeklyProductionBook = () => {
       label: 'company',
       withAsterisk: false,
       clearable: true,
+      required: false,
       colSpan: 6,
       onChange: (value) =>
         value
@@ -210,7 +211,7 @@ const UpdateMapWeeklyProductionBook = () => {
       colSpan: 6,
       name: 'year',
       label: 'year',
-      withAsterisk: false,
+      withAsterisk: true,
       disabled: false,
     });
 
@@ -218,7 +219,7 @@ const UpdateMapWeeklyProductionBook = () => {
       colSpan: 6,
       name: 'week',
       label: 'week',
-      withAsterisk: false,
+      withAsterisk: true,
       disabled: false,
     });
 
@@ -230,7 +231,7 @@ const UpdateMapWeeklyProductionBook = () => {
       description: 'photoDescription',
       dropzoneDescription: 'formatImageDesc',
       maxSize: 10 * 1024 ** 2 /* 10MB */,
-      serverFile: serverPhotos ? serverPhotos : undefined,
+      serverFile: serverPhotos,
       onDrop: async (value) => {
         methods.setValue('mapImage', value);
         await handleUploadMapImage();
@@ -259,7 +260,7 @@ const UpdateMapWeeklyProductionBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapCategoryList]);
+  }, [mapCategoryList, serverPhotos]);
 
   /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<FormValues> = async () => {

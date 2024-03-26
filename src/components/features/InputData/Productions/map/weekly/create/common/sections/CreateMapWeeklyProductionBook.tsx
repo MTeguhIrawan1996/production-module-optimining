@@ -140,6 +140,7 @@ const CreateMapWeeklyProductionBook = () => {
       year: '',
       mapImage: [],
       week: '',
+      companyId: '',
     },
     mode: 'onBlur',
   });
@@ -151,6 +152,7 @@ const CreateMapWeeklyProductionBook = () => {
       withAsterisk: false,
       clearable: true,
       colSpan: 6,
+      required: false,
       onChange: (value) =>
         value
           ? methods.setValue('companyId', value)
@@ -182,7 +184,7 @@ const CreateMapWeeklyProductionBook = () => {
       colSpan: 6,
       name: 'year',
       label: 'year',
-      withAsterisk: false,
+      withAsterisk: true,
       disabled: false,
     });
 
@@ -190,7 +192,7 @@ const CreateMapWeeklyProductionBook = () => {
       colSpan: 6,
       name: 'week',
       label: 'week',
-      withAsterisk: false,
+      withAsterisk: true,
       disabled: false,
     });
 

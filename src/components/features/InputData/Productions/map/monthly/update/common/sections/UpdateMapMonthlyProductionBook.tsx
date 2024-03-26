@@ -179,6 +179,7 @@ const UpdateMapMonthlyProductionBook = () => {
       withAsterisk: false,
       clearable: true,
       colSpan: 6,
+      required: false,
       onChange: (value) =>
         value
           ? methods.setValue('companyId', value)
@@ -210,7 +211,7 @@ const UpdateMapMonthlyProductionBook = () => {
       colSpan: 6,
       name: 'year',
       label: 'year',
-      withAsterisk: false,
+      withAsterisk: true,
       disabled: false,
     });
 
@@ -218,7 +219,7 @@ const UpdateMapMonthlyProductionBook = () => {
       colSpan: 6,
       name: 'month',
       label: 'month',
-      withAsterisk: false,
+      withAsterisk: true,
       disabled: false,
     });
 
@@ -259,7 +260,7 @@ const UpdateMapMonthlyProductionBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapCategoryList]);
+  }, [mapCategoryList, serverPhotos]);
 
   /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<FormValues> = async () => {
