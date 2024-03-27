@@ -137,6 +137,7 @@ const CreateMapYearlyProductionBook = () => {
       location: [],
       year: '',
       mapImage: [],
+      companyId: '',
     },
     mode: 'onBlur',
   });
@@ -147,6 +148,7 @@ const CreateMapYearlyProductionBook = () => {
       label: 'company',
       withAsterisk: false,
       clearable: true,
+      required: false,
       colSpan: 6,
       onChange: (value) =>
         value
@@ -179,7 +181,7 @@ const CreateMapYearlyProductionBook = () => {
       colSpan: 6,
       name: 'year',
       label: 'year',
-      withAsterisk: false,
+      withAsterisk: true,
       disabled: false,
     });
 
