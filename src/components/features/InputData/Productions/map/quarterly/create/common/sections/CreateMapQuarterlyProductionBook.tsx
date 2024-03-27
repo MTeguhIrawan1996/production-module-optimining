@@ -256,6 +256,16 @@ const CreateMapQuarterlyProductionBook = () => {
   const handleSubmitForm: SubmitHandler<IMutationMapValues> = async (data) => {
     const { name, mapDataCategoryId, location, year, companyId, quarter } =
       methods.getValues();
+    if (!fileId) {
+      methods.setError('mapImage', {
+        message: 'File harus Foto',
+      });
+      return;
+    } else {
+      methods.setError('mapImage', {
+        message: undefined,
+      });
+    }
     await executeCreate({
       variables: {
         dateType: 'QUARTER',
