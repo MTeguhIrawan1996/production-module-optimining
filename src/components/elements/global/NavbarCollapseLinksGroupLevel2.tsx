@@ -15,21 +15,14 @@ const NavbarCollapseLinksGroupLevel2: React.FC<IMenuItem> = ({
   const router = useRouter();
   const { t } = useTranslation('default');
   const { classes, cx } = useDashboardLayoutStyle();
-  const itemLabel = React.useMemo(() => {
-    const pathname = router.pathname.split('/');
-    return pathname;
-  }, [router]);
+  const cleanedPath2 = router.pathname.split('/').slice(0, 4).join('/');
 
   const renderItems = subMenu?.map((item, i) => {
-    const isActiveSubMenu = itemLabel.some(
-      (items) =>
-        items.toLowerCase().replace(/-/g, '') === item.label.toLowerCase()
-    );
     return (
       <Link href={item.href ?? ''} key={`${item.label} + ${i}`}>
         <Menu.Item
           className={cx(classes.item, {
-            [classes.linkActive]: isActiveSubMenu,
+            [classes.linkActive]: item.href === cleanedPath2,
           })}
           py={8}
         >

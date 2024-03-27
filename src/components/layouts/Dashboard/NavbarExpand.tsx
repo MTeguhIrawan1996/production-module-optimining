@@ -36,6 +36,7 @@ const NavbarExpand: React.FC<IProps> = ({
   const { t } = useTranslation('default');
   const { classes, cx } = useDashboardLayoutStyle();
   const cleanedPath = router.pathname.split('/').slice(0, 3).join('/');
+  const cleanedPath2 = router.pathname.split('/').slice(0, 4).join('/');
 
   return (
     <MantineNavbar
@@ -67,25 +68,15 @@ const NavbarExpand: React.FC<IProps> = ({
         </Group>
       </MantineNavbar.Section>
       <MantineNavbar.Section p="xs" pt={2} grow component={ScrollArea}>
-        <Stack spacing={0}>
+        <Stack spacing={2}>
           {menuItems?.map((item: IMenuItem) => {
-            const initialOpen = router.pathname
-              .split('/')
-              .some(
-                (items) =>
-                  items.toLowerCase().replace(/-/g, '') ===
-                  item.label.toLowerCase()
-              );
             return item.subMenu ? (
-              <NavbarLinksGroup
-                {...item}
-                key={item.label}
-                initiallyOpened={initialOpen}
-              />
+              <NavbarLinksGroup {...item} key={item.label} />
             ) : (
               <Link
                 className={cx(classes.link, {
-                  [classes.linkActive]: item.href === cleanedPath,
+                  [classes.linkActive]:
+                    item.href === cleanedPath || item.href === cleanedPath2,
                 })}
                 href={item.href ?? ''}
                 key={item.label}
