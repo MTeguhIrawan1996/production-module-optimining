@@ -64,7 +64,7 @@ const NavbarLinksGroupLevel2: React.FC<INavbarLinksGroupLevel2Props> = ({
         </Group>
       </UnstyledButton>
       <Collapse in={opened}>
-        <Stack spacing={0}>
+        <Stack spacing={2}>
           {subMenu?.map((item, i) => {
             return (
               <PrimaryLink
