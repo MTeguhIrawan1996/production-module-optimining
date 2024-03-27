@@ -1,5 +1,7 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
+import { IFile } from '@/types/global';
+
 export const READ_ONE_MAP = gql`
   query findOne($id: String!) {
     mapData(input: { id: $id }) {
@@ -58,12 +60,7 @@ export interface IReadOneMap {
     slug: string;
   };
   dateType: 'WEEK' | 'MONTH' | 'QUARTER' | 'YEAR';
-  file: {
-    id: string;
-    url: string;
-    fileName: string;
-    originalFileName: string;
-  } | null;
+  file: Omit<IFile, 'mime' | 'path'>;
   mapDataCategory: {
     id: string;
     name: string;
