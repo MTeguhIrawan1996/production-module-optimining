@@ -152,7 +152,6 @@ const ListMonthlyMapBook = () => {
         setMapMonthlyCategory(v);
         setMapMonthlyPage(1);
       },
-      value: mapMonthlyCategory,
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
@@ -162,7 +161,6 @@ const ListMonthlyMapBook = () => {
         setMapMonthlyPage(1);
       },
       categoryIds: (locationIds as string[]) || [],
-      value: mapMonthlyLocation,
     });
     const yearItem = globalSelectYearNative({
       placeholder: 'year',
@@ -181,7 +179,6 @@ const ListMonthlyMapBook = () => {
         setMapMonthlyMonth(v);
         setMapMonthlyPage(1);
       },
-      value: mapMonthlyMonth,
     });
 
     const item: InputControllerNativeProps[] = [

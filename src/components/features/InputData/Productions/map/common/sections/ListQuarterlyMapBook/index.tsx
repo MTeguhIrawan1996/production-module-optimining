@@ -157,7 +157,6 @@ const ListQuarterlyMapBook = () => {
         setMapQuarterlyCategory(v);
         setMapQuarterlyPage(1);
       },
-      value: mapQuarterlyCategory,
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
@@ -167,7 +166,6 @@ const ListQuarterlyMapBook = () => {
         setMapQuarterlyPage(1);
       },
       categoryIds: (locationIds as string[]) || [],
-      value: mapQuarterlyLocation,
     });
     const yearItem = globalSelectYearNative({
       placeholder: 'year',
@@ -204,7 +202,6 @@ const ListQuarterlyMapBook = () => {
           value: '4',
         },
       ],
-      value: mapQuarterlyQuarter,
     });
 
     const item: InputControllerNativeProps[] = [
