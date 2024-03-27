@@ -318,7 +318,7 @@ const UpdateHeavyEquipmentProductionBook = () => {
         enableGroupLabel: true,
         actionGroup: {
           addButton: {
-            label: `${t('commonTypography.create')} ${val.name}`,
+            label: `${t('commonTypography.create')}`,
             onClick: () => {
               loseTimeUpdate(index, {
                 workingHourPlanId: val.workingHourPlanId,
