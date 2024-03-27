@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 import {
-  zImageRequired,
   zRequiredSelectInput,
   zRequiredString,
 } from '@/utils/form-validation/global';
@@ -12,7 +11,7 @@ export const createMapYearlyValidation = z.object({
   mapDataCategoryId: zRequiredSelectInput,
   location: z.array(zRequiredSelectInput).min(1, 'Kolom tidak boleh kosong'),
   year: zRequiredSelectInput,
-  mapImage: zImageRequired,
+  mapImage: z.any(),
 });
 
 export const createMapMonthlyValidation = z.object({
@@ -22,7 +21,7 @@ export const createMapMonthlyValidation = z.object({
   location: z.array(zRequiredSelectInput).min(1, 'Kolom tidak boleh kosong'),
   year: zRequiredSelectInput,
   month: zRequiredSelectInput,
-  mapImage: zImageRequired,
+  mapImage: z.any(),
 });
 
 export const createMapWeeklyValidation = z.object({
@@ -32,7 +31,7 @@ export const createMapWeeklyValidation = z.object({
   location: z.array(zRequiredSelectInput).min(1, 'Kolom tidak boleh kosong'),
   year: zRequiredSelectInput,
   week: zRequiredSelectInput,
-  mapImage: zImageRequired,
+  mapImage: z.any(),
 });
 
 export const createMapQuarterValidation = z.object({
@@ -42,5 +41,5 @@ export const createMapQuarterValidation = z.object({
   location: z.array(zRequiredSelectInput).min(1, 'Kolom tidak boleh kosong'),
   year: zRequiredSelectInput,
   quarter: zRequiredSelectInput,
-  mapImage: zImageRequired,
+  mapImage: z.any(),
 });
