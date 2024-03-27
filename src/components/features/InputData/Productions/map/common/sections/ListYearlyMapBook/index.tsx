@@ -47,13 +47,13 @@ const ListYearlyMapBook = () => {
     'mapYearlyPage',
     queryTypes.integer.withDefault(1)
   );
-  const [mapYearlyLocation, setMapYearlyLocation] =
-    useQueryState('mapYearlyLocation');
-  const [mapYearlyYear, setMapYearlyYear] = useQueryState('mapYearlyYear');
+  const [mapYearlyLocation, setMapYearlyLocation] = React.useState<
+    string | null
+  >(null);
+  const [mapYearlyYear, setMapYearlyYear] = React.useState<string | null>(null);
 
-  const [mapYearlySearch, setMapYearlySearch] = useQueryState(
-    'mapYearlySearch',
-    queryTypes.string.withDefault('')
+  const [mapYearlySearch, setMapYearlySearch] = React.useState<string | null>(
+    null
   );
 
   const [searchQuery] = useDebouncedValue<string>(
@@ -62,8 +62,9 @@ const ListYearlyMapBook = () => {
   );
 
   const { t } = useTranslation('default');
-  const [mapYearlyCategory, setMapYearlyCategory] =
-    useQueryState('mapYearlyCategory');
+  const [mapYearlyCategory, setMapYearlyCategory] = React.useState<
+    string | null
+  >(null);
 
   const [id, setId] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -305,7 +306,8 @@ const ListYearlyMapBook = () => {
           title: t('commonTypography.dataNotfound'),
           actionButton: {
             label: t('mapProduction.createMapProd'),
-            onClick: () => router.push('/input-data/production/map/create'),
+            onClick: () =>
+              router.push('/input-data/production/map/yearly/create'),
           },
         }}
         paginationProps={{

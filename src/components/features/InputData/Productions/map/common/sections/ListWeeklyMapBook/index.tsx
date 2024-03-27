@@ -48,13 +48,13 @@ const ListWeeklyMapBook = () => {
     'mapWeeklyPage',
     queryTypes.integer.withDefault(1)
   );
-  const [mapWeeklyLocation, setMapWeeklyLocation] =
-    useQueryState('mapWeeklyLocation');
-  const [mapWeeklyYear, setMapWeeklyYear] = useQueryState('mapWeeklyYear');
-  const [mapWeeklyWeek, setMapWeeklyWeek] = useQueryState('mapWeeklyWeek');
-  const [mapWeeklySearch, setMapWeeklySearch] = useQueryState(
-    'mapWeeklySearch',
-    queryTypes.string.withDefault('')
+  const [mapWeeklyLocation, setMapWeeklyLocation] = React.useState<
+    string | null
+  >(null);
+  const [mapWeeklyYear, setMapWeeklyYear] = React.useState<string | null>(null);
+  const [mapWeeklyWeek, setMapWeeklyWeek] = React.useState<string | null>(null);
+  const [mapWeeklySearch, setMapWeeklySearch] = React.useState<string | null>(
+    null
   );
 
   const [searchQuery] = useDebouncedValue<string>(
@@ -63,8 +63,9 @@ const ListWeeklyMapBook = () => {
   );
 
   const { t } = useTranslation('default');
-  const [mapWeeklyCategory, setMapWeeklyCategory] =
-    useQueryState('mapWeeklyCategory');
+  const [mapWeeklyCategory, setMapWeeklyCategory] = React.useState<
+    string | null
+  >(null);
 
   const [id, setId] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -322,7 +323,8 @@ const ListWeeklyMapBook = () => {
           title: t('commonTypography.dataNotfound'),
           actionButton: {
             label: t('mapProduction.createMapProd'),
-            onClick: () => router.push('/input-data/production/map/create'),
+            onClick: () =>
+              router.push('/input-data/production/map/weekly/create'),
           },
         }}
         paginationProps={{
