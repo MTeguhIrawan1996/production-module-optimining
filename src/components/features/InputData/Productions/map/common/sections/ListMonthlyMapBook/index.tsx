@@ -48,21 +48,25 @@ const ListMonthlyMapBook = () => {
     'mapMonthlyPage',
     queryTypes.integer.withDefault(1)
   );
-  const [mapMonthlyLocation, setMapMonthlyLocation] =
-    useQueryState('mapMonthlyLocation');
-  const [mapMonthlyYear, setMapMonthlyYear] = useQueryState('mapMonthlyYear');
-  const [mapMonthlyMonth, setMapMonthlyMonth] =
-    useQueryState('mapMonthlyMonth');
-  const [mapMonthlySearch, setMapMonthlySearch] = useQueryState(
-    'mapMonthlySearch',
-    queryTypes.string.withDefault('')
+  const [mapMonthlyLocation, setMapMonthlyLocation] = React.useState<
+    string | null
+  >(null);
+  const [mapMonthlyYear, setMapMonthlyYear] = React.useState<string | null>(
+    null
+  );
+  const [mapMonthlyMonth, setMapMonthlyMonth] = React.useState<string | null>(
+    null
+  );
+  const [mapMonthlySearch, setMapMonthlySearch] = React.useState<string | null>(
+    null
   );
 
   const searchQuery = useDebounce((mapMonthlySearch as string) || '', 500);
 
   const { t } = useTranslation('default');
-  const [mapMonthlyCategory, setMapMonthlyCategory] =
-    useQueryState('mapMonthlyCategory');
+  const [mapMonthlyCategory, setMapMonthlyCategory] = React.useState<
+    string | null
+  >(null);
 
   const [id, setId] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -322,7 +326,8 @@ const ListMonthlyMapBook = () => {
           title: t('commonTypography.dataNotfound'),
           actionButton: {
             label: t('mapProduction.createMapProd'),
-            onClick: () => router.push('/input-data/production/map/create'),
+            onClick: () =>
+              router.push('/input-data/production/map/monthly/create'),
           },
         }}
         paginationProps={{
