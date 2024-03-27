@@ -27,9 +27,10 @@ const NavbarCollapse: React.FC<IProps> = ({ menuItems, styles }) => {
   const { t } = useTranslation('default');
   const { classes, cx } = useDashboardLayoutStyle();
   const cleanedPath = router.pathname.split('/').slice(0, 3).join('/');
+  const cleanedPath2 = router.pathname.split('/').slice(0, 4).join('/');
 
   const linksItem = React.useCallback(
-    (item: IMenuItem, i) => {
+    (item: IMenuItem, i: number) => {
       return item.subMenu ? (
         <NavbarCollapseLinksGroup {...item} key={i} />
       ) : (
@@ -40,7 +41,8 @@ const NavbarCollapse: React.FC<IProps> = ({ menuItems, styles }) => {
               w={40}
               h={40}
               className={cx(classes.link, {
-                [classes.linkActive]: item.href === cleanedPath,
+                [classes.linkActive]:
+                  item.href === cleanedPath || item.href === cleanedPath2,
               })}
             >
               <Icon icon={item.icon ?? ''} style={{ fontSize: '18px' }} />

@@ -27,13 +27,12 @@ interface INavbarLinksGroupProps extends IMenuItem {
 const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
   icon,
   label,
-  initiallyOpened,
   subMenu,
 }) => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const { classes, cx } = useDashboardLayoutStyle();
-  const [opened, setOpened] = React.useState(initiallyOpened || false);
+  const [opened, setOpened] = React.useState(false);
   const cleanedPath = router.pathname.split('/').slice(0, 3).join('/');
   const cleanedPathSub = router.pathname.split('/').slice(0, 4).join('/');
 
@@ -48,7 +47,9 @@ const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
             flattenedArray?.some((val) => val.href === cleanedPathSub) ?? false;
           return isOpenByFlatArray;
         }
-        return val.href === cleanedPath ?? false;
+        return (
+          (val.href === cleanedPath || val.href === cleanedPathSub) ?? false
+        );
       });
       setOpened(isOpen);
     }
@@ -78,18 +79,15 @@ const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
         </Group>
       </UnstyledButton>
       <Collapse in={opened}>
-        <Stack spacing={0}>
+        <Stack spacing={2}>
           {subMenu?.map((item: IMenuItem, i) => {
             return item.subMenu ? (
-              <NavbarLinksGroupLevel2
-                key={i}
-                initiallyOpened={item.href === cleanedPath}
-                {...item}
-              />
+              <NavbarLinksGroupLevel2 key={i} {...item} />
             ) : (
               <PrimaryLink
                 className={cx(classes.linkGroup, {
-                  [classes.linkActive]: item.href === cleanedPath,
+                  [classes.linkActive]:
+                    item.href === cleanedPath || item.href === cleanedPathSub,
                 })}
                 href={item.href ?? ''}
                 key={`${item.label} + ${i}`}
