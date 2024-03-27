@@ -47,18 +47,18 @@ const ListQuarterlyMapBook = () => {
     'mapQuarterlyPage',
     queryTypes.integer.withDefault(1)
   );
-  const [mapQuarterlyLocation, setMapQuarterlyLocation] = useQueryState(
-    'mapQuarterlyLocation'
+  const [mapQuarterlyLocation, setMapQuarterlyLocation] = React.useState<
+    string | null
+  >(null);
+  const [mapQuarterlyYear, setMapQuarterlyYear] = React.useState<string | null>(
+    null
   );
-  const [mapQuarterlyYear, setMapQuarterlyYear] =
-    useQueryState('mapQuarterlyYear');
-  const [mapQuarterlyQuarter, setMapQuarterlyQuarter] = useQueryState(
-    'mapQuarterlyQuarter'
-  );
-  const [mapQuarterlySearch, setMapQuarterlySearch] = useQueryState(
-    'mapQuarterlySearch',
-    queryTypes.string.withDefault('')
-  );
+  const [mapQuarterlyQuarter, setMapQuarterlyQuarter] = React.useState<
+    string | null
+  >(null);
+  const [mapQuarterlySearch, setMapQuarterlySearch] = React.useState<
+    string | null
+  >(null);
 
   const [searchQuery] = useDebouncedValue<string>(
     (mapQuarterlySearch as string) || '',
@@ -66,9 +66,9 @@ const ListQuarterlyMapBook = () => {
   );
 
   const { t } = useTranslation('default');
-  const [mapQuarterlyCategory, setMapQuarterlyCategory] = useQueryState(
-    'mapQuarterlyCategory'
-  );
+  const [mapQuarterlyCategory, setMapQuarterlyCategory] = React.useState<
+    string | null
+  >(null);
 
   const [id, setId] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -157,7 +157,6 @@ const ListQuarterlyMapBook = () => {
         setMapQuarterlyCategory(v);
         setMapQuarterlyPage(1);
       },
-      value: mapQuarterlyCategory,
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
@@ -167,7 +166,6 @@ const ListQuarterlyMapBook = () => {
         setMapQuarterlyPage(1);
       },
       categoryIds: (locationIds as string[]) || [],
-      value: mapQuarterlyLocation,
     });
     const yearItem = globalSelectYearNative({
       placeholder: 'year',
@@ -204,7 +202,6 @@ const ListQuarterlyMapBook = () => {
           value: '4',
         },
       ],
-      value: mapQuarterlyQuarter,
     });
 
     const item: InputControllerNativeProps[] = [
@@ -348,7 +345,8 @@ const ListQuarterlyMapBook = () => {
           title: t('commonTypography.dataNotfound'),
           actionButton: {
             label: t('mapProduction.createMapProd'),
-            onClick: () => router.push('/input-data/production/map/create'),
+            onClick: () =>
+              router.push('/input-data/production/map/quarterly/create'),
           },
         }}
         paginationProps={{
