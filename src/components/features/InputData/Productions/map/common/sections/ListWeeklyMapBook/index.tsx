@@ -150,7 +150,6 @@ const ListWeeklyMapBook = () => {
         setMapWeeklyCategory(v);
         setMapWeeklyPage(1);
       },
-      value: mapWeeklyCategory,
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
@@ -160,7 +159,6 @@ const ListWeeklyMapBook = () => {
         setMapWeeklyPage(1);
       },
       categoryIds: (locationIds as string[]) || [],
-      value: mapWeeklyLocation,
     });
     const yearItem = globalSelectYearNative({
       placeholder: 'year',
@@ -179,7 +177,6 @@ const ListWeeklyMapBook = () => {
         setMapWeeklyWeek(v);
         setMapWeeklyPage(1);
       },
-      value: mapWeeklyWeek,
     });
 
     const item: InputControllerNativeProps[] = [

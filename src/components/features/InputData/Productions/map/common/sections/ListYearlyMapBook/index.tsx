@@ -148,7 +148,6 @@ const ListYearlyMapBook = () => {
         setMapYearlyCategory(v);
         setMapYearlyPage(1);
       },
-      value: mapYearlyCategory,
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
@@ -158,7 +157,6 @@ const ListYearlyMapBook = () => {
         setMapYearlyPage(1);
       },
       categoryIds: (locationIds as string[]) || [],
-      value: mapYearlyLocation,
     });
     const yearItem = globalSelectYearNative({
       placeholder: 'year',
