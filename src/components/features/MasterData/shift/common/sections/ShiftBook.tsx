@@ -2,7 +2,6 @@ import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -22,10 +21,7 @@ import useStore from '@/utils/store/useStore';
 const ShiftBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
-  );
+  const [page, setPage] = React.useState(1);
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
@@ -41,7 +37,7 @@ const ShiftBook = () => {
   const { shiftsData, shiftsDataLoading, refetchShifts, shiftsDataMeta } =
     useReadAllShiftMaster({
       variables: {
-        limit: 1,
+        limit: 10,
         page: page,
         orderDir: 'desc',
         orderBy: 'createdAt',
@@ -53,9 +49,7 @@ const ShiftBook = () => {
     onCompleted: () => {
       refetchShifts();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setPage(1);
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -83,9 +77,7 @@ const ShiftBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage(page);
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -208,8 +200,9 @@ const ShiftBook = () => {
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1, {
-            shallow: true,
+          setPage(1);
+          refetchShifts({
+            page: 1,
           });
         },
       }}

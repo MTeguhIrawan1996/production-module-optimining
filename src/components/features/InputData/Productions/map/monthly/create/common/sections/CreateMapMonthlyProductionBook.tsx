@@ -140,6 +140,7 @@ const CreateMapMonthlyProductionBook = () => {
       year: '',
       mapImage: [],
       month: '',
+      companyId: '',
     },
     mode: 'onBlur',
   });
@@ -151,6 +152,7 @@ const CreateMapMonthlyProductionBook = () => {
       withAsterisk: false,
       clearable: true,
       colSpan: 6,
+      required: false,
       onChange: (value) =>
         value
           ? methods.setValue('companyId', value)
@@ -182,7 +184,7 @@ const CreateMapMonthlyProductionBook = () => {
       colSpan: 6,
       name: 'year',
       label: 'year',
-      withAsterisk: false,
+      withAsterisk: true,
       disabled: false,
     });
 
@@ -190,7 +192,7 @@ const CreateMapMonthlyProductionBook = () => {
       colSpan: 6,
       name: 'month',
       label: 'month',
-      withAsterisk: false,
+      withAsterisk: true,
       disabled: false,
     });
 
