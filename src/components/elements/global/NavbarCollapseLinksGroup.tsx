@@ -19,26 +19,24 @@ const NavbarCollapseLinksGroup: React.FC<IMenuItem> = ({
   const router = useRouter();
   const { t } = useTranslation('default');
   const { classes, cx } = useDashboardLayoutStyle();
-  const itemLabel = React.useMemo(() => {
-    const pathname = router.pathname.split('/');
-    return pathname;
-  }, [router]);
-  const isActive = itemLabel.some(
-    (items) => items.toLowerCase().replace(/-/g, '') === label.toLowerCase()
+  const cleanedPath = router.pathname.split('/').slice(0, 3).join('/');
+  const cleanedPathSub2 = router.pathname.split('/').slice(0, 4).join('/');
+  const isActive = subMenu?.some(
+    (val) => val.href === cleanedPath || val.href === cleanedPathSub2
   );
+  const isActiveSub2 = subMenu
+    ?.flatMap((val) => val.subMenu)
+    .some((o) => o?.href === cleanedPathSub2);
 
   const renderItems = subMenu?.map((item, i) => {
-    const isActiveSubMenu = itemLabel.some(
-      (items) =>
-        items.toLowerCase().replace(/-/g, '') === item.label.toLowerCase()
-    );
     return item.subMenu ? (
       <NavbarCollapseLinksGroupLevel2 {...item} key={i} />
     ) : (
       <Link href={item.href ?? ''} key={`${item.label}${i}`}>
         <Menu.Item
           className={cx(classes.item, {
-            [classes.linkActive]: isActiveSubMenu,
+            [classes.linkActive]:
+              item.href === cleanedPath || item.href === cleanedPathSub2,
           })}
           py={8}
         >
@@ -59,7 +57,7 @@ const NavbarCollapseLinksGroup: React.FC<IMenuItem> = ({
             w={40}
             h={40}
             className={cx(classes.link, {
-              [classes.linkActive]: isActive,
+              [classes.linkActive]: isActive || isActiveSub2,
             })}
           >
             <Icon icon={icon ?? ''} style={{ fontSize: '18px' }} />

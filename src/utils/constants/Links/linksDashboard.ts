@@ -4,28 +4,13 @@ export const linksDashboard: IMenuItem[] = [
   {
     label: 'dashboard',
     href: '/dashboard',
-    icon: 'tabler:home-2',
+    icon: 'material-symbols:dashboard-outline',
     access: ['all'],
   },
   {
-    label: 'masterData',
-    icon: 'mdi:database',
+    label: 'praPlan',
+    icon: 'tabler:template',
     subMenu: [
-      {
-        label: 'company',
-        href: '/master-data/company',
-        access: ['read-company'],
-      },
-      {
-        label: 'humanResources',
-        href: '/master-data/human-resources',
-        access: ['read-human-resource'],
-      },
-      {
-        label: 'heavyEquipment',
-        href: '/master-data/heavy-equipment',
-        access: ['read-heavy-equipment'],
-      },
       {
         label: 'location',
         href: '/master-data/location',
@@ -79,12 +64,6 @@ export const linksDashboard: IMenuItem[] = [
           'read-heavy-equipment-data-formula',
         ],
       },
-    ],
-  },
-  {
-    label: 'reference',
-    icon: 'tabler:file-text',
-    subMenu: [
       {
         label: 'companyType',
         href: '/reference/company-type',
@@ -96,72 +75,30 @@ export const linksDashboard: IMenuItem[] = [
         access: ['read-heavy-equipment-class'],
       },
       {
-        label: 'heavyEquipment',
+        label: 'heavyEquipmentCatalog',
         href: '/reference/heavy-equipment',
         access: ['read-heavy-equipment-reference'],
       },
     ],
   },
   {
-    label: 'inputData',
-    icon: 'tabler:file-symlink',
+    label: 'administration',
+    icon: 'tabler:clipboard-text',
     subMenu: [
       {
-        label: 'production',
-        subMenu: [
-          {
-            label: 'dataRitage',
-            href: '/input-data/production/data-ritage',
-            access: [
-              'read-ore-ritage',
-              'read-overburden-ritage',
-              'read-quarry-ritage',
-              'read-barging-ritage',
-              'read-moving-ritage',
-              'read-topsoil-ritage',
-            ],
-          },
-          {
-            label: 'dataHeavyEquipment',
-            href: '/input-data/production/data-heavy-equipment',
-            access: ['read-heavy-equipment-data'],
-          },
-          {
-            label: 'dataWeather',
-            href: '/input-data/production/data-weather',
-            access: ['read-weather-data'],
-          },
-          {
-            label: 'dataFront',
-            href: '/input-data/production/data-front',
-            access: ['read-front-data'],
-          },
-          {
-            label: 'map',
-            href: '/input-data/production/map',
-            access: ['read-map-data'],
-          },
-        ],
+        label: 'company',
+        href: '/master-data/company',
+        access: ['read-company'],
       },
       {
-        label: 'qualityControlManagement',
-        subMenu: [
-          {
-            label: 'sampleHouseLab',
-            href: '/input-data/quality-control-management/sample-house-lab',
-            access: ['read-house-sample-and-lab'],
-          },
-          {
-            label: 'stockpileMonitoring',
-            href: '/input-data/quality-control-management/stockpile-monitoring',
-            access: ['read-monitoring-stockpile'],
-          },
-          {
-            label: 'shippingMonitoring',
-            href: '/input-data/quality-control-management/shipping-monitoring',
-            access: ['read-monitoring-barging'],
-          },
-        ],
+        label: 'humanResources',
+        href: '/master-data/human-resources',
+        access: ['read-human-resource'],
+      },
+      {
+        label: 'heavyEquipment',
+        href: '/master-data/heavy-equipment',
+        access: ['read-heavy-equipment'],
       },
     ],
   },
@@ -178,6 +115,72 @@ export const linksDashboard: IMenuItem[] = [
         label: 'monthly',
         href: '/plan/monthly',
         access: ['read-monthly-plan'],
+      },
+    ],
+  },
+  {
+    label: 'production',
+    icon: 'material-symbols:volcano-outline',
+    subMenu: [
+      {
+        label: 'dataRitage',
+        href: '/input-data/production/data-ritage',
+        access: [
+          'read-ore-ritage',
+          'read-overburden-ritage',
+          'read-quarry-ritage',
+          'read-barging-ritage',
+          'read-moving-ritage',
+          'read-topsoil-ritage',
+        ],
+      },
+      {
+        label: 'dataHeavyEquipment',
+        href: '/input-data/production/data-heavy-equipment',
+        access: ['read-heavy-equipment-data'],
+      },
+      {
+        label: 'dataWeather',
+        href: '/input-data/production/data-weather',
+        access: ['read-weather-data'],
+      },
+      {
+        label: 'dataFront',
+        href: '/input-data/production/data-front',
+        access: ['read-front-data'],
+      },
+      {
+        label: 'map',
+        href: '/input-data/production/map',
+        access: ['read-map-data'],
+      },
+    ],
+  },
+  {
+    label: 'stockpileMonitoring',
+    icon: 'material-symbols:landslide-outline',
+    href: '/input-data/quality-control-management/stockpile-monitoring',
+    access: ['read-monitoring-stockpile'],
+  },
+  {
+    label: 'quality',
+    icon: 'material-symbols:science-outline',
+    subMenu: [
+      {
+        label: 'sampleHouseLab',
+        href: '/input-data/quality-control-management/sample-house-lab',
+        access: ['read-house-sample-and-lab'],
+      },
+    ],
+  },
+  {
+    label: 'barging',
+    icon: 'material-symbols:directions-boat-outline',
+    subMenu: [
+      {
+        label: 'shippingMonitoring',
+        href: '/input-data/quality-control-management/shipping-monitoring',
+        access: ['read-monitoring-barging'],
       },
     ],
   },
