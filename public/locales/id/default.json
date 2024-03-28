@@ -473,13 +473,16 @@
     "accepted": "Diterima",
     "mapType": "$t(commonTypography.type) $t(commonTypography.map)",
     "file": "File",
-    "changeTime": "Jam Pengganti"
+    "changeTime": "Jam Pengganti",
+    "individual": "Individu",
+    "nmIndividual": "{{n}} Individu"
   },
   "sideBar": {
     "dashboard": "Dashboard",
     "praPlan": "Pra Rencana",
     "administration": "Administrasi",
     "quality": "Quality",
+    "individual": "Individu",
     "barging": "$t(commonTypography.barging)",
     "company": "$t(commonTypography.company)",
     "companyType": "$t(commonTypography.companyType)",
