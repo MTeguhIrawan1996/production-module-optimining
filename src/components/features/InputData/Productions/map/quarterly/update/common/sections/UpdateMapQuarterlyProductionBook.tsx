@@ -13,6 +13,7 @@ import { useReadAllMapCategory } from '@/services/graphql/query/input-data-map/u
 import { useReadOneMap } from '@/services/graphql/query/input-data-map/useReadOneMap';
 import { useUploadMapImage } from '@/services/restapi/input-data-map/useUploadMapImage';
 import {
+  globalDropzonePdfOrImageRhf,
   globalMultipleSelectMapLocation,
   globalSelect,
   globalSelectCompanyRhf,
@@ -23,7 +24,7 @@ import { createMapQuarterValidation } from '@/utils/form-validation/input-data-m
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 
 import { IFile } from '@/types/global';
-import { ControllerGroup, ControllerProps } from '@/types/global';
+import { ControllerGroup } from '@/types/global';
 
 type FormValues = {
   mapDataCategoryId: string;
@@ -49,7 +50,7 @@ const UpdateMapQuarterlyProductionBook = () => {
 
   const [fileId, setFileId] = React.useState<string | null>(null);
   const [serverPhotos, setServerPhotos] = React.useState<
-    Omit<IFile, 'mime' | 'path'>[] | null
+    Omit<IFile, 'path'>[] | null
   >([]);
   const [mapCategoryList, setMapCategoryList] = React.useState<
     Array<{
@@ -87,8 +88,8 @@ const UpdateMapQuarterlyProductionBook = () => {
       );
       methods.setValue('year', String(data?.mapData.year));
       methods.setValue('quarter', String(data?.mapData.quarter));
-      methods.setValue('companyId', data?.mapData.company.id);
-      setServerPhotos([data.mapData.file as Omit<IFile, 'mime' | 'path'>]);
+      methods.setValue('companyId', data.mapData.company?.id);
+      setServerPhotos([data.mapData.file as Omit<IFile, 'path'>]);
       setFileId(data?.mapData.file?.id as string);
     },
   });
@@ -239,8 +240,9 @@ const UpdateMapQuarterlyProductionBook = () => {
         },
       ],
     });
-    const mapImage: ControllerProps = {
-      control: 'pdf-image-dropzone',
+    const mapImage = globalDropzonePdfOrImageRhf({
+      colSpan: 12,
+
       name: 'mapImage',
       label: 'mapFile',
       withAsterisk: true,
@@ -259,7 +261,7 @@ const UpdateMapQuarterlyProductionBook = () => {
           files,
           field: 'mapImage',
         }),
-    };
+    });
 
     const field: ControllerGroup[] = [
       {
