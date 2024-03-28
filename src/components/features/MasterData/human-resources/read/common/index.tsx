@@ -19,11 +19,13 @@ const ReadHumanResourcesPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.humanResources'),
+        label: t('commonTypography.individual'),
         path: '/master-data/human-resources',
       },
       {
-        label: t('humanResources.readHumanResources'),
+        label: t('commonTypography.nmIndividual', {
+          n: t('commonTypography.detail'),
+        }),
         path: router.asPath,
       },
     ]);

@@ -325,7 +325,7 @@ const ReadHeavyEquipmentBook = () => {
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
           actionButton: {
-            label: t('heavyEquipment.createHeavyEquipment'),
+            label: 'Tambah Unit Alat Berat',
             onClick: () => setIsOpenSelectionModal((prev) => !prev),
           },
         }}
@@ -343,9 +343,9 @@ const ReadHeavyEquipmentBook = () => {
 
   return (
     <DashboardCard
-      title={t('commonTypography.heavyEquipment')}
+      title={`Unit ${t('commonTypography.heavyEquipment')}`}
       addButton={{
-        label: t('heavyEquipment.createHeavyEquipment'),
+        label: 'Tambah Unit Alat Berat',
         onClick: () => setIsOpenSelectionModal((prev) => !prev),
       }}
       searchBar={{

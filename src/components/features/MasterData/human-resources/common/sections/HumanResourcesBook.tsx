@@ -198,7 +198,9 @@ const HumanResourcesBook = () => {
       addButton={
         isPermissionCreate
           ? {
-              label: t('humanResources.createHumanResources'),
+              label: t('commonTypography.nmIndividual', {
+                n: t('commonTypography.create'),
+              }),
               onClick: () => router.push('/master-data/human-resources/create'),
             }
           : undefined

@@ -108,7 +108,7 @@ const CreateHumanResourcesBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('humanResources.successCreateMessage'),
+        message: 'Individu berhasil dibuat',
         icon: <IconCheck />,
       });
       router.push('/master-data/human-resources');
@@ -258,7 +258,9 @@ const CreateHumanResourcesBook = () => {
 
     const field: ControllerGroup[] = [
       {
-        group: t('humanResources.humanResourcesIdentity'),
+        group: t('commonTypography.nmIndividual', {
+          n: 'Identitas',
+        }),
         enableGroupLabel: true,
         formControllers: [
           { ...fullname, colSpan: 6 },

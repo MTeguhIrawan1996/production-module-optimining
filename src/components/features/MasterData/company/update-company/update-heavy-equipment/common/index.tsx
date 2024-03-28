@@ -29,7 +29,7 @@ const UpdateCompanyHeavyEquipmentPage = () => {
         path: `/master-data/company/read/${companyId}`,
       },
       {
-        label: t('heavyEquipment.editHeavyEquipment'),
+        label: t('heavyEquipment.editHeavyEquipmentUnit'),
         path: router.asPath,
       },
     ]);
@@ -40,7 +40,7 @@ const UpdateCompanyHeavyEquipmentPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('heavyEquipment.formHeavyEquipmentMaster'),
+          title: t('heavyEquipment.formHeavyEquipmentUnit'),
           mb: 'md',
         }}
       >
