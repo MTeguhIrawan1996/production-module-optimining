@@ -221,7 +221,7 @@ const CreateHumanResourcesAvailableBook = () => {
   return (
     <>
       <DashboardCard
-        title={t('humanResources.masterSDM')}
+        title={t('humanResources.chooseAvailableSDM')}
         searchBar={{
           placeholder: t('humanResources.searchPlaceholder'),
           onChange: (e) => {
