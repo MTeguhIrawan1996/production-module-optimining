@@ -240,9 +240,7 @@ const UpdateFrontProductionBook = () => {
         withAsterisk: true,
         deleteButtonField: {
           onClick: () => {
-            supportingHeavyEquipmentFields.length > 1
-              ? removeSupportingHeavyEquipment(index)
-              : null;
+            removeSupportingHeavyEquipment(index);
           },
         },
       });
