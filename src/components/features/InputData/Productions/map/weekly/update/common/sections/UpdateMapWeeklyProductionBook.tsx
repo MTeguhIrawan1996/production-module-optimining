@@ -13,6 +13,7 @@ import { useReadAllMapCategory } from '@/services/graphql/query/input-data-map/u
 import { useReadOneMap } from '@/services/graphql/query/input-data-map/useReadOneMap';
 import { useUploadMapImage } from '@/services/restapi/input-data-map/useUploadMapImage';
 import {
+  globalDropzonePdfOrImageRhf,
   globalMultipleSelectMapLocation,
   globalSelect,
   globalSelectCompanyRhf,
@@ -24,7 +25,7 @@ import { createMapWeeklyValidation } from '@/utils/form-validation/input-data-ma
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 
 import { IFile } from '@/types/global';
-import { ControllerGroup, ControllerProps } from '@/types/global';
+import { ControllerGroup } from '@/types/global';
 
 type FormValues = {
   mapDataCategoryId: string;
@@ -50,7 +51,7 @@ const UpdateMapWeeklyProductionBook = () => {
 
   const [fileId, setFileId] = React.useState<string | null>(null);
   const [serverPhotos, setServerPhotos] = React.useState<
-    Omit<IFile, 'mime' | 'path'>[] | null
+    Omit<IFile, 'path'>[] | null
   >([]);
   const [mapCategoryList, setMapCategoryList] = React.useState<
     Array<{
@@ -75,22 +76,23 @@ const UpdateMapWeeklyProductionBook = () => {
     },
   });
 
-  const { mapDataLoading } = useReadOneMap({
+  const { mapData, mapDataLoading } = useReadOneMap({
     variables: {
       id: router.query.id as string,
     },
+    skip: !router.isReady,
     onCompleted: (data) => {
-      methods.setValue('name', data?.mapData.name);
-      methods.setValue('mapDataCategoryId', data?.mapData.mapDataCategory.id);
+      methods.setValue('name', data.mapData.name);
+      methods.setValue('mapDataCategoryId', data.mapData.mapDataCategory?.id);
       methods.setValue(
         'location',
-        data?.mapData.mapDataLocation.map((item) => item.locationId)
+        data.mapData.mapDataLocation.map((item) => item.locationId)
       );
-      methods.setValue('year', String(data?.mapData.year));
-      methods.setValue('week', String(data?.mapData.week));
-      methods.setValue('companyId', data?.mapData.company.id);
-      setServerPhotos([data?.mapData.file] ?? []);
-      setFileId(data?.mapData.file?.id as string);
+      methods.setValue('year', String(data.mapData.year));
+      methods.setValue('week', String(data.mapData.week));
+      methods.setValue('companyId', data.mapData.company?.id);
+      setServerPhotos([data.mapData.file]);
+      setFileId(data.mapData.file.id as string);
     },
   });
 
@@ -223,14 +225,16 @@ const UpdateMapWeeklyProductionBook = () => {
       disabled: false,
     });
 
-    const mapImage: ControllerProps = {
-      control: 'pdf-image-dropzone',
+    const mapImage = globalDropzonePdfOrImageRhf({
+      colSpan: 12,
       name: 'mapImage',
       label: 'mapFile',
+      multiple: false,
       withAsterisk: true,
       description: 'photoDescription',
       dropzoneDescription: 'formatImageDesc',
       maxSize: 10 * 1024 ** 2 /* 10MB */,
+      key: 'ada',
       serverFile: serverPhotos,
       onDrop: async (value) => {
         methods.setValue('mapImage', value);
@@ -243,7 +247,7 @@ const UpdateMapWeeklyProductionBook = () => {
           files,
           field: 'mapImage',
         }),
-    };
+    });
 
     const field: ControllerGroup[] = [
       {
@@ -260,7 +264,7 @@ const UpdateMapWeeklyProductionBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapCategoryList, serverPhotos]);
+  }, [mapCategoryList, serverPhotos, fileId, mapData]);
 
   /* #   /**=========== HandleSubmitFc =========== */
   const handleSubmitForm: SubmitHandler<FormValues> = async () => {
@@ -290,8 +294,6 @@ const UpdateMapWeeklyProductionBook = () => {
       },
     });
   };
-
-  /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
     <DashboardCard
