@@ -70,7 +70,7 @@ const ReadCompanyHeavyEquipmentBook = () => {
 
   return (
     <DashboardCard
-      title={t('commonTypography.heavyEquipment')}
+      title={`Unit ${t('commonTypography.heavyEquipment')}`}
       updateButton={{
         label: 'Edit',
         onClick: () =>

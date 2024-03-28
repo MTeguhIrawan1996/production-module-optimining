@@ -37,10 +37,10 @@ const CreateHeavyEquipmentAvailablePage = () => {
   return (
     <RootWrapper>
       <InnerWrapper
-        titleProps={{
-          title: t('heavyEquipment.chooseAvailableHeavyEquipment'),
-          mb: 'md',
-        }}
+      // titleProps={{
+      //   title: t('heavyEquipment.chooseAvailableHeavyEquipment'),
+      //   mb: 'md',
+      // }}
       >
         <CreateHeavyEquipmentAvailableBook />
       </InnerWrapper>

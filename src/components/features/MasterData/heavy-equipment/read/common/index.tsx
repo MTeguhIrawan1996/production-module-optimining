@@ -19,7 +19,7 @@ const ReadHeavyEquipmentMasterPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('heavyEquipment.heavyEquipmentMaster'),
+        label: t('commonTypography.heavyEquipment'),
         path: '/master-data/heavy-equipment',
       },
       {

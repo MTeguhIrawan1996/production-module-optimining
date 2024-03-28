@@ -68,7 +68,7 @@ const ReadHeavyEquipmentMasterBook = () => {
 
   return (
     <DashboardCard
-      title={t('heavyEquipment.heavyEquipmentTitle')}
+      title={t('heavyEquipment.readHeavyEquipment')}
       updateButton={
         isPermissionUpdate
           ? {

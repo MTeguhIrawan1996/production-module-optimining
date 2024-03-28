@@ -36,9 +36,7 @@ const CreateHumanResourcesAvailablePage = () => {
 
   return (
     <RootWrapper>
-      <InnerWrapper
-        titleProps={{ title: t('humanResources.chooseAvailableSDM'), mb: 'md' }}
-      >
+      <InnerWrapper>
         <CreateHumanResourcesAvailableBook />
       </InnerWrapper>
     </RootWrapper>

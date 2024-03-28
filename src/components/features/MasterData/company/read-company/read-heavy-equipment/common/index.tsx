@@ -28,7 +28,7 @@ const ReadCompanyHeavyEquipmentPage = () => {
         path: `/master-data/company/read/${companyId}`,
       },
       {
-        label: t('heavyEquipment.readHeavyEquipment'),
+        label: 'Detail Unit Alat Berat',
         path: router.asPath,
       },
     ]);
