@@ -56,7 +56,9 @@ const ReadHumanResourceBook = () => {
 
   return (
     <DashboardCard
-      title={t('commonTypography.humanResources2')}
+      title={t('commonTypography.nmIndividual', {
+        n: t('commonTypography.detail'),
+      })}
       updateButton={
         isPermissionUpdate
           ? {
@@ -106,7 +108,9 @@ const ReadHumanResourceBook = () => {
           ) : null}
           <Stack spacing="sm">
             <Text fz={24} fw={600} color="brand">
-              {t('humanResources.humanResourcesIdentity')}
+              {t('commonTypography.nmIndividual', {
+                n: t('commonTypography.identity'),
+              })}
             </Text>
             <KeyValueList
               data={[
@@ -120,7 +124,6 @@ const ReadHumanResourceBook = () => {
                 },
                 {
                   dataKey: t('commonTypography.country'),
-
                   value: humanResourceData
                     ? humanResourceData?.isWni === true
                       ? 'WNI'

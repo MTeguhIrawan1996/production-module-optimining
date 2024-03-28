@@ -19,7 +19,7 @@ const HumanResourcesPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.humanResources'),
+        label: t('commonTypography.individual'),
         path: router.asPath,
       },
     ]);
@@ -29,7 +29,7 @@ const HumanResourcesPage = () => {
   return (
     <RootWrapper>
       <InnerWrapper
-        titleProps={{ title: t('commonTypography.humanResources2'), mb: 'md' }}
+        titleProps={{ title: t('commonTypography.individual'), mb: 'md' }}
       >
         <HumanResourcesBook />
       </InnerWrapper>

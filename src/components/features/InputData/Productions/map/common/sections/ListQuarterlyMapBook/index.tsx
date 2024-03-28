@@ -98,7 +98,7 @@ const ListQuarterlyMapBook = () => {
       notifications.show({
         color: 'green',
         title: 'Selamat',
-        message: t('location.successDeleteMessage'),
+        message: t('mapProduction.successDeleteMessage'),
         icon: <IconCheck />,
       });
     },

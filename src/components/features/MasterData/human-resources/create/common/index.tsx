@@ -20,11 +20,13 @@ const CreateHumanResourcesPage = () => {
   React.useEffect(() => {
     setBreadcrumbs([
       {
-        label: t('commonTypography.humanResources'),
+        label: t('commonTypography.individual'),
         path: '/master-data/human-resources',
       },
       {
-        label: t('humanResources.createHumanResources'),
+        label: t('commonTypography.nmIndividual', {
+          n: t('commonTypography.create'),
+        }),
         path: router.asPath,
       },
     ]);
@@ -34,12 +36,19 @@ const CreateHumanResourcesPage = () => {
   return (
     <RootWrapper>
       <InnerWrapper
-        titleProps={{ title: t('humanResources.formHumanResources'), mb: 'md' }}
+        titleProps={{
+          title: t('commonTypography.nmIndividual', {
+            n: 'Formulir Tambah',
+          }),
+          mb: 'md',
+        }}
       >
         <Tabs defaultValue="human-resources-profil" radius={4}>
           <Tabs.List>
             <Tabs.Tab value="human-resources-profil" fz={14} fw={500}>
-              {t('humanResources.humanResourcesProfile')}
+              {t('commonTypography.nmIndividual', {
+                n: 'Profile',
+              })}
             </Tabs.Tab>
           </Tabs.List>
           <Tabs.Panel value="human-resources-profil">
