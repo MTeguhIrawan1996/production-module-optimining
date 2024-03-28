@@ -25,6 +25,7 @@ export const READ_ONE_MAP = gql`
         url
         fileName
         originalFileName
+        mime
       }
       mapDataCategory {
         id
@@ -60,7 +61,7 @@ export interface IReadOneMap {
     slug: string;
   };
   dateType: 'WEEK' | 'MONTH' | 'QUARTER' | 'YEAR';
-  file: Omit<IFile, 'mime' | 'path'>;
+  file: Omit<IFile, 'path'>;
   mapDataCategory: {
     id: string;
     name: string;
@@ -72,7 +73,7 @@ export interface IReadOneMap {
   company: {
     id: string;
     name: string;
-  };
+  } | null;
   statusMessage: string;
 }
 
