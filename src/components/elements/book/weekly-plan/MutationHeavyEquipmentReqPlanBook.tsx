@@ -205,7 +205,7 @@ const MutationHeavyEquipmentReqPlanBook = ({
       });
       const activityTypeItem = globalSelectActivityTypePlanRhf({
         name: `heavyEquipmentRequirementPlans.${index}.activityTypeId`,
-        label: 'activity',
+        label: 'activity2',
         key: `${obj.heavyequipmentReqPlanId}.activityTypeId`,
       });
       const descItem = globalText({
