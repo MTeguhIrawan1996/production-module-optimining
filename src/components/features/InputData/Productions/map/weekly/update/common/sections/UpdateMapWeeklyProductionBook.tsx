@@ -30,7 +30,7 @@ import { ControllerGroup } from '@/types/global';
 type FormValues = {
   mapDataCategoryId: string;
   name: string;
-  companyId?: string;
+  companyId: string | null;
   location: string[];
   year: string;
   week: string;
@@ -90,7 +90,7 @@ const UpdateMapWeeklyProductionBook = () => {
       );
       methods.setValue('year', String(data.mapData.year));
       methods.setValue('week', String(data.mapData.week));
-      methods.setValue('companyId', data.mapData.company?.id);
+      methods.setValue('companyId', data.mapData.company?.id ?? null);
       setServerPhotos([data.mapData.file]);
       setFileId(data.mapData.file.id as string);
     },
@@ -169,7 +169,7 @@ const UpdateMapWeeklyProductionBook = () => {
       year: '',
       mapImage: [],
       week: '',
-      companyId: '',
+      companyId: null,
     },
     mode: 'onBlur',
   });
@@ -185,7 +185,7 @@ const UpdateMapWeeklyProductionBook = () => {
       onChange: (value) =>
         value
           ? methods.setValue('companyId', value)
-          : methods.setValue('companyId', ''),
+          : methods.setValue('companyId', null),
     });
 
     const mapCategory = globalSelect({
@@ -289,7 +289,7 @@ const UpdateMapWeeklyProductionBook = () => {
         year: Number(year),
         week: Number(week),
         fileId: fileId || '',
-        companyId: companyId === '' ? undefined : companyId,
+        companyId: companyId,
         id: router.query.id as string,
       },
     });
