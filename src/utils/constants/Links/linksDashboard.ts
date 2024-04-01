@@ -91,7 +91,7 @@ export const linksDashboard: IMenuItem[] = [
         access: ['read-company'],
       },
       {
-        label: 'humanResources',
+        label: 'individual',
         href: '/master-data/human-resources',
         access: ['read-human-resource'],
       },
@@ -123,6 +123,11 @@ export const linksDashboard: IMenuItem[] = [
     icon: 'material-symbols:volcano-outline',
     subMenu: [
       {
+        label: 'dataFront',
+        href: '/input-data/production/data-front',
+        access: ['read-front-data'],
+      },
+      {
         label: 'dataRitage',
         href: '/input-data/production/data-ritage',
         access: [
@@ -143,11 +148,6 @@ export const linksDashboard: IMenuItem[] = [
         label: 'dataWeather',
         href: '/input-data/production/data-weather',
         access: ['read-weather-data'],
-      },
-      {
-        label: 'dataFront',
-        href: '/input-data/production/data-front',
-        access: ['read-front-data'],
       },
       {
         label: 'map',

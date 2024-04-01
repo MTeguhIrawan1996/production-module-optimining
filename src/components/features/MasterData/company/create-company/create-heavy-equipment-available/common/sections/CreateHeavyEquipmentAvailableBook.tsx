@@ -245,7 +245,7 @@ const CreateHeavyEquipmentAvailableBook = () => {
   return (
     <>
       <DashboardCard
-        title={t('heavyEquipment.heavyEquipmentMaster')}
+        title={t('heavyEquipment.chooseAvailableHeavyEquipment')}
         searchBar={{
           placeholder: t('heavyEquipment.searchPlaceholderMaster'),
           onChange: (e) => {

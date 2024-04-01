@@ -240,9 +240,7 @@ const UpdateFrontProductionBook = () => {
         withAsterisk: true,
         deleteButtonField: {
           onClick: () => {
-            supportingHeavyEquipmentFields.length > 1
-              ? removeSupportingHeavyEquipment(index)
-              : null;
+            removeSupportingHeavyEquipment(index);
           },
         },
       });
@@ -443,17 +441,17 @@ const UpdateFrontProductionBook = () => {
       variables: {
         id,
         date,
-        shiftId: data.shiftId === '' ? null : data.shiftId,
+        shiftId: data.shiftId || null,
         companyHeavyEquipmentId: data.companyHeavyEquipmentId,
         frontId: data.frontId,
         materialId: data.materialId,
         type: data.type,
         x: data.x || null,
         y: data.y || null,
-        domeId: data.domeId === '' ? null : data.domeId,
-        pitId: data.pitId === '' ? null : data.pitId,
-        gridId: data.gridId === '' ? null : data.gridId,
-        elevationId: data.elevationId === '' ? null : data.elevationId,
+        domeId: data.domeId || null,
+        pitId: data.pitId || null,
+        gridId: data.gridId || null,
+        elevationId: data.elevationId || null,
         supportingHeavyEquipments: data.supportingHeavyEquipments,
       },
     });

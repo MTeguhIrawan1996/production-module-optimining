@@ -30,7 +30,7 @@ const HeavyEquipmentMasterPage = () => {
     <RootWrapper>
       <InnerWrapper
         titleProps={{
-          title: t('heavyEquipment.heavyEquipmentMaster'),
+          title: t('commonTypography.heavyEquipment'),
           mb: 'md',
         }}
       >

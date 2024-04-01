@@ -118,7 +118,7 @@ const HeavyEquipmentReqPlanData = () => {
                 },
                 {
                   accessor: 'activity',
-                  title: t('commonTypography.activity'),
+                  title: t('commonTypography.activity2'),
                   render: ({ activityType }) => activityType.name ?? '-',
                 },
                 {
