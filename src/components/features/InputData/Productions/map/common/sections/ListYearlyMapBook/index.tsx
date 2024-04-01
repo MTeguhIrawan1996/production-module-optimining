@@ -256,7 +256,7 @@ const ListYearlyMapBook = () => {
               accessor: 'action',
               title: t('commonTypography.action'),
               width: 100,
-              render: ({ id }) => {
+              render: ({ id, mapDataStatus }) => {
                 return (
                   <GlobalKebabButton
                     actionRead={
@@ -272,7 +272,9 @@ const ListYearlyMapBook = () => {
                         : undefined
                     }
                     actionUpdate={
-                      isPermissionUpdate
+                      isPermissionUpdate &&
+                      mapDataStatus?.id !==
+                        process.env.NEXT_PUBLIC_STATUS_DETERMINED
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -284,7 +286,9 @@ const ListYearlyMapBook = () => {
                         : undefined
                     }
                     actionDelete={
-                      isPermissionDelete
+                      isPermissionDelete &&
+                      mapDataStatus?.id !==
+                        process.env.NEXT_PUBLIC_STATUS_DETERMINED
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
