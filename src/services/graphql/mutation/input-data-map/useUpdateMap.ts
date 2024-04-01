@@ -40,7 +40,7 @@ export interface IMutationMapValues {
   fileId: string;
   mapDataCategoryId: string;
   location: Array<string>;
-  companyId?: string;
+  companyId: string | null;
   year: number;
   quarter?: number;
   month?: number;

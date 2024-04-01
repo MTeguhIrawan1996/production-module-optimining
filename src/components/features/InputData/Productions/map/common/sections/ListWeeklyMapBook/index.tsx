@@ -272,7 +272,7 @@ const ListWeeklyMapBook = () => {
               accessor: 'action',
               title: t('commonTypography.action'),
               width: 100,
-              render: ({ id }) => {
+              render: ({ id, mapDataStatus }) => {
                 return (
                   <GlobalKebabButton
                     actionRead={
@@ -288,7 +288,9 @@ const ListWeeklyMapBook = () => {
                         : undefined
                     }
                     actionUpdate={
-                      isPermissionUpdate
+                      isPermissionUpdate &&
+                      mapDataStatus?.id !==
+                        process.env.NEXT_PUBLIC_STATUS_DETERMINED
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
@@ -300,7 +302,9 @@ const ListWeeklyMapBook = () => {
                         : undefined
                     }
                     actionDelete={
-                      isPermissionDelete
+                      isPermissionDelete &&
+                      mapDataStatus?.id !==
+                        process.env.NEXT_PUBLIC_STATUS_DETERMINED
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
