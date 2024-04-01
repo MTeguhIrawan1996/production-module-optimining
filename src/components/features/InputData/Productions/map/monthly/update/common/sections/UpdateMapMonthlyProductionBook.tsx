@@ -30,7 +30,7 @@ import { ControllerGroup } from '@/types/global';
 type FormValues = {
   mapDataCategoryId: string;
   name: string;
-  companyId?: string;
+  companyId: string | null;
   location: string[];
   year: string;
   month: string;
@@ -89,7 +89,7 @@ const UpdateMapMonthlyProductionBook = () => {
       );
       methods.setValue('year', String(data?.mapData.year));
       methods.setValue('month', String(data?.mapData.month.id));
-      methods.setValue('companyId', data.mapData.company?.id);
+      methods.setValue('companyId', data.mapData.company?.id ?? null);
       setServerPhotos([data.mapData.file as Omit<IFile, 'path'>]);
       setFileId(data?.mapData.file?.id as string);
     },
@@ -184,7 +184,7 @@ const UpdateMapMonthlyProductionBook = () => {
       onChange: (value) =>
         value
           ? methods.setValue('companyId', value)
-          : methods.setValue('companyId', ''),
+          : methods.setValue('companyId', null),
     });
 
     const mapCategory = globalSelect({
@@ -285,7 +285,7 @@ const UpdateMapMonthlyProductionBook = () => {
         year: Number(year),
         month: Number(month),
         fileId: fileId || '',
-        companyId: companyId === '' ? undefined : companyId,
+        companyId: companyId,
         id: router.query.id as string,
       },
     });
