@@ -38,9 +38,33 @@ export const READ_ONE_SHIPPING_MONITORING = gql`
       }
       statusMessage
       tonByDraft
+      totalRitages
+      tonByRitages
+      truckFactor
+      bargingRitages {
+        id
+        date
+        tonByRitage
+        shift {
+          id
+          name
+        }
+        companyHeavyEquipment {
+          id
+          hullNumber
+        }
+      }
       domes {
         id
         name
+        monitoringStockpile {
+          tonByRitage
+          ritages {
+            meta {
+              totalAllData
+            }
+          }
+        }
       }
       desc
       status {
@@ -51,7 +75,20 @@ export const READ_ONE_SHIPPING_MONITORING = gql`
   }
 `;
 
-interface IReadOneShippingMonitoringData
+export type IDomesShipping = {
+  id: string;
+  name: string;
+  monitoringStockpile: {
+    tonByRitage: number | null;
+    ritages: {
+      meta: {
+        totalAllData: number;
+      };
+    };
+  };
+};
+
+export interface IReadOneShippingMonitoringData
   extends IReadAllShippingMonitoringData {
   id: string;
   createdAt: string | null;
@@ -61,10 +98,23 @@ interface IReadOneShippingMonitoringData
   } | null;
   statusMessage: string | null;
   tonByDraft: number | null;
-  domes: {
+  totalRitages: number | null;
+  tonByRitages: number | null;
+  truckFactor: number | null;
+  bargingRitages: {
     id: string;
-    name: string;
+    date: string;
+    tonByRitage: number | null;
+    shift: {
+      id: string;
+      name: string;
+    };
+    companyHeavyEquipment: {
+      id: string;
+      hullNumber: string;
+    };
   }[];
+  domes: IDomesShipping[];
   photo: Omit<IFile, 'mime' | 'path'> | null;
   desc: string | null;
 }
@@ -119,8 +169,20 @@ export const useReadOneShippingMonitoring = ({
               ?.hullNumber,
         },
         {
+          name: 'totalRitage2',
+          value: `${monitoringBarging?.monitoringBarging.totalRitages ?? '-'}`,
+        },
+        {
+          name: 'tonByRitage',
+          value: `${monitoringBarging?.monitoringBarging.tonByRitages ?? '-'}`,
+        },
+        {
           name: 'tonByDraft',
           value: `${monitoringBarging?.monitoringBarging.tonByDraft ?? '-'}`,
+        },
+        {
+          name: 'truckFactor',
+          value: `${monitoringBarging?.monitoringBarging.truckFactor ?? '-'}`,
         },
       ],
     },
