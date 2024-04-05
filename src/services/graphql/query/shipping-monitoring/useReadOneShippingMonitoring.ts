@@ -59,6 +59,9 @@ export const READ_ONE_SHIPPING_MONITORING = gql`
         name
         monitoringStockpile {
           tonByRitage
+          ritageSamples {
+            additional
+          }
           ritages {
             meta {
               totalAllData
@@ -83,6 +86,17 @@ export type IDomesShipping = {
     ritages: {
       meta: {
         totalAllData: number;
+      };
+    };
+    ritageSamples: {
+      additional: {
+        averageSamples: {
+          element: {
+            id: string;
+            name: string | null;
+          };
+          value: number | null;
+        }[];
       };
     };
   };

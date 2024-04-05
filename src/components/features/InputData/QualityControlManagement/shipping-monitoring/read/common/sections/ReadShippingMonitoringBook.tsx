@@ -72,11 +72,12 @@ const ReadShippingMonitoringBook = () => {
         const column: DataTableColumn<IDomesShipping> = {
           accessor: element.name,
           title: element.name,
-          render: () => {
-            // const value = ritageSamples.additional.averageSamples?.find(
-            //   (val) => val.element?.id === element.id
-            // );
-            return '-';
+          render: ({ monitoringStockpile }) => {
+            const output =
+              monitoringStockpile.ritageSamples.additional.averageSamples?.find(
+                (val) => val.element?.id === element.id
+              );
+            return output?.value || '-';
           },
         };
         return column;
