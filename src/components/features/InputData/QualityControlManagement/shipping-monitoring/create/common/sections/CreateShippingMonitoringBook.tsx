@@ -56,6 +56,8 @@ const CreateShippingMonitoringBook = () => {
     mode: 'onBlur',
   });
   const factoryCategoryId = methods.watch('factoryCategoryId');
+  const palkaOpenDateValue = methods.watch('palkaOpenDate');
+  const palkaCloseDateValue = methods.watch('palkaCloseDate');
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
@@ -65,7 +67,7 @@ const CreateShippingMonitoringBook = () => {
         const errorArry = errorRestBadRequestField(err);
         if (errorArry?.length) {
           errorArry?.forEach(({ name, type, message }) => {
-            methods.setError(name, { type, message });
+            methods.setError(name, { type, message }, { shouldFocus: true });
           });
           return;
         }
@@ -120,6 +122,7 @@ const CreateShippingMonitoringBook = () => {
       label: 'openPalkaHour',
       colSpan: 6,
       withAsterisk: false,
+      disabled: !palkaOpenDateValue,
     });
     const palkaCloseDate = globalDate({
       name: 'palkaCloseDate',
@@ -133,6 +136,7 @@ const CreateShippingMonitoringBook = () => {
       label: 'closePalkaHour',
       colSpan: 6,
       withAsterisk: false,
+      disabled: !palkaCloseDateValue,
     });
     const vesselOpenDate = globalDate({
       name: 'vesselOpenDate',
@@ -267,7 +271,7 @@ const CreateShippingMonitoringBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [factoryCategoryId]);
+  }, [factoryCategoryId, palkaOpenDateValue, palkaCloseDateValue]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
