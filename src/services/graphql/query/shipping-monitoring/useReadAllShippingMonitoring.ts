@@ -53,13 +53,13 @@ export const READ_ALL_SHIPPING_MONITORING = gql`
         palkaCloseAt
         vesselOpenAt
         vesselCloseAt
+        factoryCategory {
+          id
+          name
+        }
         factory {
           id
           name
-          category {
-            id
-            name
-          }
         }
         status {
           id
@@ -81,13 +81,13 @@ export interface IReadAllShippingMonitoringData {
   palkaCloseAt: string | null;
   vesselOpenAt: string | null;
   vesselCloseAt: string | null;
+  factoryCategory: {
+    id: string;
+    name: string;
+  } | null;
   factory: {
     id: string;
     name: string;
-    category: {
-      id: string;
-      name: string;
-    };
   } | null;
   status: IStatus | null;
 }
@@ -152,7 +152,7 @@ export const useReadAllShippingMonitoring = ({
       openPalkaHour: formatDate(item.palkaOpenAt, 'hh:mm:ss A'),
       closePalka: formatDate(item.palkaCloseAt),
       closePalkaHour: formatDate(item.palkaCloseAt, 'hh:mm:ss A'),
-      arrive: item.factory?.category?.name ?? null,
+      arrive: item.factoryCategory?.name ?? null,
       vesselNameOrFactoryName: item.factory?.name ?? null,
       status: item.status,
     }));

@@ -202,7 +202,7 @@ const CreateFrontProductionBook = () => {
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
       withAsterisk: true,
-      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
+      // categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
     });
     const locationItem = locationSelect({
       colSpan: 6,

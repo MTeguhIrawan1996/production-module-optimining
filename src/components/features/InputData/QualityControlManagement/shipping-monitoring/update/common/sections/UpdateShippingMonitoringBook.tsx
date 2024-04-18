@@ -70,6 +70,8 @@ const UpdateShippingMonitoringBook = () => {
     mode: 'onBlur',
   });
   const factoryCategoryId = methods.watch('factoryCategoryId');
+  const palkaOpenDateValue = methods.watch('palkaOpenDate');
+  const palkaCloseDateValue = methods.watch('palkaCloseDate');
   /* #endregion  /**======== Methods =========== */
 
   /* #   /**=========== Query =========== */
@@ -100,7 +102,7 @@ const UpdateShippingMonitoringBook = () => {
           },
           {
             key: 'factoryCategoryId',
-            value: monitoringBarging.factory?.category?.id ?? '',
+            value: monitoringBarging.factoryCategory?.id ?? '',
           },
           { key: 'factoryId', value: monitoringBarging.factory?.id ?? '' },
           { key: 'tonByDraft', value: monitoringBarging.tonByDraft ?? '' },
@@ -197,6 +199,7 @@ const UpdateShippingMonitoringBook = () => {
       label: 'openPalkaHour',
       colSpan: 6,
       withAsterisk: false,
+      disabled: !palkaOpenDateValue,
     });
     const palkaCloseDate = globalDate({
       name: 'palkaCloseDate',
@@ -210,6 +213,7 @@ const UpdateShippingMonitoringBook = () => {
       label: 'closePalkaHour',
       colSpan: 6,
       withAsterisk: false,
+      disabled: !palkaCloseDateValue,
     });
     const vesselOpenDate = globalDate({
       name: 'vesselOpenDate',
@@ -350,7 +354,13 @@ const UpdateShippingMonitoringBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monitoringBarging, serverPhoto, factoryCategoryId]);
+  }, [
+    monitoringBarging,
+    serverPhoto,
+    factoryCategoryId,
+    palkaOpenDateValue,
+    palkaCloseDateValue,
+  ]);
   /* #endregion  /**======== Field =========== */
 
   /* #   /**=========== HandleSubmitFc =========== */
