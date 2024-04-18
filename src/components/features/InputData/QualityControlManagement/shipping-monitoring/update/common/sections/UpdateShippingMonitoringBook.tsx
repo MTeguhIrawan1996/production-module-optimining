@@ -100,7 +100,7 @@ const UpdateShippingMonitoringBook = () => {
           },
           {
             key: 'factoryCategoryId',
-            value: monitoringBarging.factory?.category?.id ?? '',
+            value: monitoringBarging.factoryCategory?.id ?? '',
           },
           { key: 'factoryId', value: monitoringBarging.factory?.id ?? '' },
           { key: 'tonByDraft', value: monitoringBarging.tonByDraft ?? '' },
