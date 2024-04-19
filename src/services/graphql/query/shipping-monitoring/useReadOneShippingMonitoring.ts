@@ -57,16 +57,18 @@ export const READ_ONE_SHIPPING_MONITORING = gql`
       domes {
         id
         name
+        totalRitages
+        tonRitages
         monitoringStockpile {
-          tonByRitage
+          # tonByRitage
           ritageSamples {
             additional
           }
-          ritages {
-            meta {
-              totalAllData
-            }
-          }
+          # ritages {
+          #   meta {
+          #     totalAllData
+          #   }
+          # }
         }
       }
       desc
@@ -81,13 +83,15 @@ export const READ_ONE_SHIPPING_MONITORING = gql`
 export type IDomesShipping = {
   id: string;
   name: string;
+  totalRitages: number | null;
+  tonRitages: number | null;
   monitoringStockpile: {
-    tonByRitage: number | null;
-    ritages: {
-      meta: {
-        totalAllData: number;
-      };
-    };
+    // tonByRitage: number | null;
+    // ritages: {
+    //   meta: {
+    //     totalAllData: number;
+    //   };
+    // };
     ritageSamples: {
       additional: {
         averageSamples: {
