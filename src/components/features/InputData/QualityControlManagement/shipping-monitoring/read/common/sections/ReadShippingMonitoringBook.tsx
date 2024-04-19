@@ -392,19 +392,14 @@ const ReadShippingMonitoringBook = () => {
                               textAlignment: 'left',
                             },
                             {
-                              accessor: 'totalRitageBarge',
+                              accessor: 'totalRitages',
                               title: 'Total Ritase Barging',
                               textAlignment: 'left',
-                              render: ({ monitoringStockpile }) =>
-                                monitoringStockpile.ritages.meta.totalAllData ||
-                                '-',
                             },
                             {
-                              accessor: 'tonRitageBarge',
+                              accessor: 'tonRitages',
                               title: 'Ton Ritase Barging',
                               textAlignment: 'left',
-                              render: ({ monitoringStockpile }) =>
-                                monitoringStockpile.tonByRitage || '-',
                             },
                             ...(otherElements ?? []),
                           ],
