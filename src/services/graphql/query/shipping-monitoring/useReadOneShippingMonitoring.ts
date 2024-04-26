@@ -22,13 +22,13 @@ export const READ_ONE_SHIPPING_MONITORING = gql`
       palkaCloseAt
       vesselOpenAt
       vesselCloseAt
+      factoryCategory {
+        id
+        name
+      }
       factory {
         id
         name
-        category {
-          id
-          name
-        }
       }
       photo {
         id
@@ -57,16 +57,18 @@ export const READ_ONE_SHIPPING_MONITORING = gql`
       domes {
         id
         name
+        totalRitages
+        tonRitages
         monitoringStockpile {
-          tonByRitage
+          # tonByRitage
           ritageSamples {
             additional
           }
-          ritages {
-            meta {
-              totalAllData
-            }
-          }
+          # ritages {
+          #   meta {
+          #     totalAllData
+          #   }
+          # }
         }
       }
       desc
@@ -81,13 +83,15 @@ export const READ_ONE_SHIPPING_MONITORING = gql`
 export type IDomesShipping = {
   id: string;
   name: string;
+  totalRitages: number | null;
+  tonRitages: number | null;
   monitoringStockpile: {
-    tonByRitage: number | null;
-    ritages: {
-      meta: {
-        totalAllData: number;
-      };
-    };
+    // tonByRitage: number | null;
+    // ritages: {
+    //   meta: {
+    //     totalAllData: number;
+    //   };
+    // };
     ritageSamples: {
       additional: {
         averageSamples: {
@@ -184,19 +188,19 @@ export const useReadOneShippingMonitoring = ({
         },
         {
           name: 'totalRitage2',
-          value: `${monitoringBarging?.monitoringBarging.totalRitages ?? '-'}`,
+          value: `${monitoringBarging?.monitoringBarging.totalRitages || '-'}`,
         },
         {
           name: 'tonByRitage',
-          value: `${monitoringBarging?.monitoringBarging.tonByRitages ?? '-'}`,
+          value: `${monitoringBarging?.monitoringBarging.tonByRitages || '-'}`,
         },
         {
           name: 'tonByDraft',
-          value: `${monitoringBarging?.monitoringBarging.tonByDraft ?? '-'}`,
+          value: `${monitoringBarging?.monitoringBarging.tonByDraft || '-'}`,
         },
         {
           name: 'truckFactor',
-          value: `${monitoringBarging?.monitoringBarging.truckFactor ?? '-'}`,
+          value: `${monitoringBarging?.monitoringBarging.truckFactor || '-'}`,
         },
       ],
     },
@@ -241,7 +245,7 @@ export const useReadOneShippingMonitoring = ({
       itemValue: [
         {
           name: 'destination',
-          value: monitoringBarging?.monitoringBarging.factory?.category.name,
+          value: monitoringBarging?.monitoringBarging.factoryCategory?.name,
         },
         {
           name: 'factoryName',

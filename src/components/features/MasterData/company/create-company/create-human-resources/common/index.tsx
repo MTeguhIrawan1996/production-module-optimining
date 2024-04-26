@@ -19,7 +19,7 @@ const CreateCompanyHumanResourcesPage = () => {
   const isRouterReady = useRouterReady();
   const [tabs, setTabs] = useQueryState(
     'tabs',
-    queryTypes.string.withDefault("'human-resources-profil'")
+    queryTypes.string.withDefault('human-resources-profil')
   );
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],

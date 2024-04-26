@@ -279,7 +279,7 @@ const UpdateFrontProductionBook = () => {
       name: 'companyHeavyEquipmentId',
       label: 'heavyEquipmentCode',
       withAsterisk: true,
-      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
+      // categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       defaultValue: frontData?.companyHeavyEquipment?.id,
       labelValue: frontData?.companyHeavyEquipment?.hullNumber ?? '',
     });
