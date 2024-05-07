@@ -33,6 +33,7 @@ import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactor
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISelectMapTypeRhfProps } from '@/components/elements/input/SelectMapType';
 import { ISelectMonthRhfProps } from '@/components/elements/input/SelectMonthRhf';
+import { ISelectNewHeavyEquipmentReferenceRhfProps } from '@/components/elements/input/SelectNewHeavyEquipmentReferenceInputRhf';
 import { ISelectWeekRhfProps } from '@/components/elements/input/SelectWeekRhf';
 import { ISelectWorkingHoursPlanRhfProps } from '@/components/elements/input/SelectWorkingHoursPlanRhf';
 import { ISelectYearRhfProps } from '@/components/elements/input/SelectYearRhf';
@@ -1070,6 +1071,28 @@ export const globalSelectFactoryRhf = ({
 }: Partial<ISelectFactoryRhfProps>) => {
   const field: ControllerProps = {
     control: 'select-factory-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectReferenceRhf = ({
+  name = 'referenceId',
+  label = 'model',
+  searchable = true,
+  clearable = true,
+  withAsterisk = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectNewHeavyEquipmentReferenceRhfProps>) => {
+  const field: ControllerProps = {
+    control: 'select-new-heavy-equipment-reference-input',
     name,
     label,
     searchable,

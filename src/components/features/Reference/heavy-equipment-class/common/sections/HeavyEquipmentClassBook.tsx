@@ -1,3 +1,4 @@
+import { Badge } from '@mantine/core';
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -116,10 +117,10 @@ const HeavyEquipmentClassBook = () => {
               noWrap: false,
               width: 450,
               render: ({ heavyEquipmentReferences }) => {
-                const type = heavyEquipmentReferences.map(
-                  (val) => val.modelName
-                );
-                return type?.join(', ');
+                const type = heavyEquipmentReferences.map((val) => (
+                  <Badge key={val.id}>{val.modelName}</Badge>
+                ));
+                return type && type.length > 0 ? type : '-';
               },
             },
             {

@@ -49,6 +49,7 @@ import {
   SelectInputRhf,
   SelectMapTypeRhf,
   SelectMonthRhf,
+  SelectNewHeavyEquipmentReferenceInputRhf,
   SelectWeekRhf,
   SelectWorkingHoursPlanRhf,
   SelectYearRhf,
@@ -192,6 +193,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <SelectMapTypeRhf {...props} />;
     case 'select-activity-type-plan-rhf':
       return <SelectActivityTypePlanRhf {...props} />;
+    case 'select-new-heavy-equipment-reference-input':
+      return <SelectNewHeavyEquipmentReferenceInputRhf {...props} />;
     default:
       return null;
   }

@@ -59,6 +59,7 @@ import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf
 import { ISelectMapTypeRhfProps } from '@/components/elements/input/SelectMapType';
 import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
 import { ISelectMonthRhfProps } from '@/components/elements/input/SelectMonthRhf';
+import { ISelectNewHeavyEquipmentReferenceRhfProps } from '@/components/elements/input/SelectNewHeavyEquipmentReferenceInputRhf';
 import { IStatusNativeProps } from '@/components/elements/input/SelectStatusNative';
 import { ISelectWeekNativeProps } from '@/components/elements/input/SelectWeekNative';
 import { ISelectWeekRhfProps } from '@/components/elements/input/SelectWeekRhf';
@@ -140,6 +141,7 @@ export type ControllerProps =
   | IPitSelectInputRhfProps
   | IArriveBargeRhfProps
   | ISelectFactoryRhfProps
+  | ISelectNewHeavyEquipmentReferenceRhfProps
   | ISelectWorkingHoursPlanRhfProps
   | ISelectActivityCategoryRhfProps
   | ISelectCompanyRhfProps

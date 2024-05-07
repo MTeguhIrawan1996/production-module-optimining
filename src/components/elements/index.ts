@@ -96,6 +96,7 @@ import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
 import SelectMapTypeRhf from '@/components/elements/input/SelectMapType';
 import SelectMonthNative from '@/components/elements/input/SelectMonthNative';
 import SelectMonthRhf from '@/components/elements/input/SelectMonthRhf';
+import SelectNewHeavyEquipmentReferenceInputRhf from '@/components/elements/input/SelectNewHeavyEquipmentReferenceInputRhf';
 import SelectStatusNative from '@/components/elements/input/SelectStatusNative';
 import SelectWeekNative from '@/components/elements/input/SelectWeekNative';
 import SelectWeekRhf from '@/components/elements/input/SelectWeekRhf';
@@ -247,6 +248,7 @@ export {
   SelectMapTypeRhf,
   SelectMonthNative,
   SelectMonthRhf,
+  SelectNewHeavyEquipmentReferenceInputRhf,
   SelectStatusNative,
   SelectWeekNative,
   SelectWeekRhf,
