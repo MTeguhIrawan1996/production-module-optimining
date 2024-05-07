@@ -52,8 +52,6 @@ import { ICompanyNativeProps } from '@/components/elements/input/SelectCompanyNa
 import { ISelectCompanyRhfProps } from '@/components/elements/input/SelectCompanyRhf';
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
 import { ISelectHeavyEquipmentNativeProps } from '@/components/elements/input/SelectHeavyEquipmentNative';
-import { ISelectHeavyEquipmentReferenceInputProps } from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
-import { ISelectHeavyEquipmentTypesInputProps } from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import { ISelectInputNativeProps } from '@/components/elements/input/SelectInputNative';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISelectMapTypeRhfProps } from '@/components/elements/input/SelectMapType';
@@ -107,7 +105,6 @@ export type ControllerProps =
   | IExcelInputDropzoneRhfProps
   | INumberInputProps
   | IRadioInputProps
-  | ISelectHeavyEquipmentTypesInputProps
   | IRelegionSelectInputRhfProps
   | IMarriagaSelectInputRhfProps
   | IProvinceSelectInputRhfProps
@@ -117,7 +114,6 @@ export type ControllerProps =
   | IIdentityTypesRadioInputProps
   | IPositionSelectInputRhfProps
   | IDivisionSelectInputRhfProps
-  | ISelectHeavyEquipmentReferenceInputProps
   | IBrandSelectInputRhfProps
   | ITypeSelectInputRhfProps
   | IModelSelectInputRhfProps

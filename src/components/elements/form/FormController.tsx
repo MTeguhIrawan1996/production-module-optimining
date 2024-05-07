@@ -44,8 +44,6 @@ import {
   SelectArriveBargeRhf,
   SelectCompanyRhf,
   SelectFactoryRhf,
-  SelectHeavyEquipmentReferenceInput,
-  SelectHeavyEquipmentTypesInput,
   SelectInputRhf,
   SelectMapTypeRhf,
   SelectMonthRhf,
@@ -93,8 +91,6 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <RadioInputRhf {...props} />;
     case 'date-input':
       return <DateInputRhf {...props} />;
-    case 'select-heavy-equipment-types-input':
-      return <SelectHeavyEquipmentTypesInput {...props} />;
     case 'relegion-select-input':
       return <RelegionSelectInputRhf {...props} />;
     case 'marriage-select-input':
@@ -113,8 +109,6 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <PositionSelectInputRhf {...props} />;
     case 'division-select-input':
       return <DivisionSelectInputRhf {...props} />;
-    case 'select-heavy-equipment-reference-input':
-      return <SelectHeavyEquipmentReferenceInput {...props} />;
     case 'brand-select-input':
       return <BrandSelectInputRhf {...props} />;
     case 'type-select-input':

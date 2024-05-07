@@ -29,15 +29,6 @@ export type IHeavyEquipmentClassValues = {
 const CreateHeavyEquipmentClassBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  // const [otherTypesField, setOtherTypesField] = React.useState<
-  //   ISelectTypesHeavyEquipment[]
-  // >([
-  //   {
-  //     key: 1,
-  //     id: '',
-  //     name: '',
-  //   },
-  // ]);
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IHeavyEquipmentClassValues>({
@@ -109,49 +100,6 @@ const CreateHeavyEquipmentClassBook = () => {
     });
   };
 
-  // const handleAddOtherTypesField = () => {
-  //   const lastIndex = otherTypesField.length - 1;
-  //   const newOtherTypesField = {
-  //     key: otherTypesField[lastIndex].key + 1,
-  //     id: '',
-  //     name: '',
-  //   };
-  //   setOtherTypesField([...otherTypesField, newOtherTypesField]);
-  // };
-
-  // const handleRemoveFieldTypes = (key: number) => {
-  //   if (otherTypesField.length > 1) {
-  //     setOtherTypesField((prev) => prev.filter((val) => val.key !== key));
-  //     const newArray = otherTypesField
-  //       .map((item) => (item.key === key ? '' : item.id))
-  //       .filter((id) => id !== '');
-  //     methods.setValue('heavyEquipmentReferenceIds', newArray);
-  //   }
-  // };
-
-  // const handleUpdateId = (key: number, newId: string, name: string) => {
-  //   setOtherTypesField((prevData) =>
-  //     prevData.map((item) =>
-  //       item.key === key ? { ...item, id: newId, name } : item
-  //     )
-  //   );
-  //   const newArray = otherTypesField
-  //     .map((item) => (item.key === key ? newId : item.id))
-  //     .filter((id) => id !== '');
-  //   methods.setValue('heavyEquipmentReferenceIds', newArray);
-  // };
-
-  // const handleClearId = (key: number) => {
-  //   setOtherTypesField((prevData) =>
-  //     prevData.map((item) =>
-  //       item.key === key ? { ...item, id: '', name: '' } : item
-  //     )
-  //   );
-  //   const newArray = otherTypesField
-  //     .map((item) => (item.key === key ? '' : item.id))
-  //     .filter((id) => id !== '');
-  //   methods.setValue('heavyEquipmentReferenceIds', newArray);
-  // };
   /* #endregion  /**======== Fc =========== */
 
   /* #   /**=========== Field =========== */
@@ -177,35 +125,6 @@ const CreateHeavyEquipmentClassBook = () => {
 
       return modelHeavyEquipmentItem;
     });
-    // const selectedTypes: ControllerProps[] = otherTypesField.map(
-    //   ({ id, key }) => ({
-    //     control: 'select-heavy-equipment-reference-input',
-    //     fields: otherTypesField,
-    //     name: 'model',
-    //     label: 'model',
-    //     value: id,
-    //     withAsterisk: true,
-    //     placeholder: t('commonTypography.chooseModel'),
-    //     handleSetValue: (value, name) => {
-    //       handleUpdateId(key, value, name ?? '');
-    //       methods.trigger('heavyEquipmentReferenceIds');
-    //     },
-    //     handleClearValue: () => {
-    //       handleClearId(key);
-    //       methods.trigger('heavyEquipmentReferenceIds');
-    //     },
-    //     deleteFieldButton: {
-    //       onDeletedField: () => {
-    //         handleRemoveFieldTypes(key);
-    //       },
-    //     },
-    //     error:
-    //       errorsHeavyEquipmentReferenceIds &&
-    //       errorsHeavyEquipmentReferenceIds.message,
-    //     nothingFound: null,
-    //   })
-    // );
-
     const field: ControllerGroup[] = [
       {
         group: t('commonTypography.heavyEquipmentClass'),

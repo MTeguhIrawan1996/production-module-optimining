@@ -89,8 +89,6 @@ import SelectCompanyNative from '@/components/elements/input/SelectCompanyNative
 import SelectCompanyRhf from '@/components/elements/input/SelectCompanyRhf';
 import SelectFactoryRhf from '@/components/elements/input/SelectFactoryRhf';
 import SelectHeavyEquipmentNative from '@/components/elements/input/SelectHeavyEquipmentNative';
-import SelectHeavyEquipmentReferenceInput from '@/components/elements/input/SelectHeavyEquipmentReferenceInput';
-import SelectHeavyEquipmentTypesInput from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 import SelectInputNative from '@/components/elements/input/SelectInputNative';
 import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
 import SelectMapTypeRhf from '@/components/elements/input/SelectMapType';
@@ -240,8 +238,6 @@ export {
   SelectCompanyRhf,
   SelectFactoryRhf,
   SelectHeavyEquipmentNative,
-  SelectHeavyEquipmentReferenceInput,
-  SelectHeavyEquipmentTypesInput,
   SelectInputNative,
   SelectInputRhf,
   SelectionButtonModal,
