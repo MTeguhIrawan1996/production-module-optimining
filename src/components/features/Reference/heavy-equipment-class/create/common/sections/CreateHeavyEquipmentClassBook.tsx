@@ -4,45 +4,49 @@ import { IconX } from '@tabler/icons-react';
 import { IconCheck } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
-import { ISelectTypesHeavyEquipment } from '@/components/elements/input/SelectHeavyEquipmentTypesInput';
 
+import { useCreateHeavyEquipmentClass } from '@/services/graphql/mutation/heavy-equipment-class/useCreateHeavyEquipmentClass';
 import {
-  ICreateHeavyEquipmentClassRequest,
-  useCreateHeavyEquipmentClass,
-} from '@/services/graphql/mutation/heavy-equipment-class/useCreateHeavyEquipmentClass';
-import { createHeavyEquipmentClassSchema } from '@/utils/form-validation/reference-heavy-equipment-class/heavy-equipment-class';
+  globalSelectReferenceRhf,
+  globalText,
+} from '@/utils/constants/Field/global-field';
+import { classHeavyEquipmentMutationValidation } from '@/utils/form-validation/reference-heavy-equipment-class/heavy-equipment-class';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
-import { ControllerGroup, ControllerProps } from '@/types/global';
+import { ControllerGroup } from '@/types/global';
+
+export type IHeavyEquipmentClassValues = {
+  name: string;
+  heavyEquipmentReference: {
+    id: string | null;
+  }[];
+};
 
 const CreateHeavyEquipmentClassBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const [otherTypesField, setOtherTypesField] = React.useState<
-    ISelectTypesHeavyEquipment[]
-  >([
-    {
-      key: 1,
-      id: '',
-      name: '',
-    },
-  ]);
 
   /* #   /**=========== Methods =========== */
-  const methods = useForm<ICreateHeavyEquipmentClassRequest>({
-    resolver: zodResolver(createHeavyEquipmentClassSchema),
+  const methods = useForm<IHeavyEquipmentClassValues>({
+    resolver: zodResolver(classHeavyEquipmentMutationValidation),
     defaultValues: {
       name: '',
-      heavyEquipmentReferenceIds: [],
+      heavyEquipmentReference: [
+        {
+          id: null,
+        },
+      ],
     },
     mode: 'onBlur',
   });
-  const errorsHeavyEquipmentReferenceIds =
-    methods.formState.errors.heavyEquipmentReferenceIds;
+  const { fields, remove, append } = useFieldArray({
+    name: 'heavyEquipmentReference',
+    control: methods.control,
+  });
 
   /* #endregion  /**======== Methods =========== */
 
@@ -61,7 +65,7 @@ const CreateHeavyEquipmentClassBook = () => {
     onError: (error) => {
       if (error.graphQLErrors) {
         const errorArry =
-          errorBadRequestField<ICreateHeavyEquipmentClassRequest>(error);
+          errorBadRequestField<IHeavyEquipmentClassValues>(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
             methods.setError(name, { type, message });
@@ -81,105 +85,50 @@ const CreateHeavyEquipmentClassBook = () => {
   /* #endregion  /**======== Query =========== */
 
   /* #   /**=========== Fc =========== */
-  const handleSubmitForm: SubmitHandler<ICreateHeavyEquipmentClassRequest> = (
+  const handleSubmitForm: SubmitHandler<IHeavyEquipmentClassValues> = (
     data
   ) => {
-    const { name, heavyEquipmentReferenceIds } = data;
+    const { name, heavyEquipmentReference } = data;
+    const filterHeavyEquipment = heavyEquipmentReference.filter((v) => v.id);
+    const normalizationData = filterHeavyEquipment.map((val) => val.id);
+
     executeCreate({
       variables: {
         name,
-        heavyEquipmentReferenceIds,
+        heavyEquipmentReferenceIds: normalizationData as string[],
       },
     });
   };
 
-  const handleAddOtherTypesField = () => {
-    const lastIndex = otherTypesField.length - 1;
-    const newOtherTypesField = {
-      key: otherTypesField[lastIndex].key + 1,
-      id: '',
-      name: '',
-    };
-    setOtherTypesField([...otherTypesField, newOtherTypesField]);
-  };
-
-  const handleRemoveFieldTypes = (key: number) => {
-    if (otherTypesField.length > 1) {
-      setOtherTypesField((prev) => prev.filter((val) => val.key !== key));
-      const newArray = otherTypesField
-        .map((item) => (item.key === key ? '' : item.id))
-        .filter((id) => id !== '');
-      methods.setValue('heavyEquipmentReferenceIds', newArray);
-    }
-  };
-
-  const handleUpdateId = (key: number, newId: string, name: string) => {
-    setOtherTypesField((prevData) =>
-      prevData.map((item) =>
-        item.key === key ? { ...item, id: newId, name } : item
-      )
-    );
-    const newArray = otherTypesField
-      .map((item) => (item.key === key ? newId : item.id))
-      .filter((id) => id !== '');
-    methods.setValue('heavyEquipmentReferenceIds', newArray);
-  };
-
-  const handleClearId = (key: number) => {
-    setOtherTypesField((prevData) =>
-      prevData.map((item) =>
-        item.key === key ? { ...item, id: '', name: '' } : item
-      )
-    );
-    const newArray = otherTypesField
-      .map((item) => (item.key === key ? '' : item.id))
-      .filter((id) => id !== '');
-    methods.setValue('heavyEquipmentReferenceIds', newArray);
-  };
   /* #endregion  /**======== Fc =========== */
 
   /* #   /**=========== Field =========== */
   const fieldCreateHeavyEquipmentClass = React.useMemo(() => {
-    const selectedTypes: ControllerProps[] = otherTypesField.map(
-      ({ id, key }) => ({
-        control: 'select-heavy-equipment-reference-input',
-        fields: otherTypesField,
-        name: 'model',
-        label: 'model',
-        value: id,
+    const className = globalText({
+      name: 'name',
+      label: 'heavyEquipmentClass',
+      colSpan: 12,
+    });
+    const selectModelItem = fields.map((val, index) => {
+      const modelHeavyEquipmentItem = globalSelectReferenceRhf({
+        colSpan: 12,
+        name: `heavyEquipmentReference.${index}.id`,
+        label: `model`,
+        key: val.id,
         withAsterisk: true,
-        placeholder: t('commonTypography.chooseModel'),
-        handleSetValue: (value, name) => {
-          handleUpdateId(key, value, name ?? '');
-          methods.trigger('heavyEquipmentReferenceIds');
-        },
-        handleClearValue: () => {
-          handleClearId(key);
-          methods.trigger('heavyEquipmentReferenceIds');
-        },
-        deleteFieldButton: {
-          onDeletedField: () => {
-            handleRemoveFieldTypes(key);
+        deleteButtonField: {
+          onClick: () => {
+            fields.length > 1 ? remove(index) : null;
           },
         },
-        error:
-          errorsHeavyEquipmentReferenceIds &&
-          errorsHeavyEquipmentReferenceIds.message,
-        nothingFound: null,
-      })
-    );
+      });
 
+      return modelHeavyEquipmentItem;
+    });
     const field: ControllerGroup[] = [
       {
         group: t('commonTypography.heavyEquipmentClass'),
-        formControllers: [
-          {
-            control: 'text-input',
-            name: 'name',
-            label: 'heavyEquipmentClass',
-            withAsterisk: true,
-          },
-        ],
+        formControllers: [className],
       },
       {
         group: t('commonTypography.heavyEquipmentModel'),
@@ -187,16 +136,19 @@ const CreateHeavyEquipmentClassBook = () => {
         actionGroup: {
           addButton: {
             label: t('heavyEquipmentClass.createHeavyEquipmentClassModel'),
-            onClick: handleAddOtherTypesField,
+            onClick: () =>
+              append({
+                id: null,
+              }),
           },
         },
-        formControllers: selectedTypes,
+        formControllers: selectModelItem,
       },
     ];
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [otherTypesField, errorsHeavyEquipmentReferenceIds]);
+  }, [fields]);
   /* #endregion  /**======== Field =========== */
 
   return (

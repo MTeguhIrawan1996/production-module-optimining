@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { IFile } from '@/types/global';
 
@@ -55,10 +60,12 @@ export const useReadOneHeavyEquipmentReference = ({
   variables,
   skip,
   onCompleted,
+  fetchPolicy = 'cache-and-network',
 }: {
   variables: IHeavyEquipmentReferenceRequest;
   skip?: boolean;
   onCompleted?: (data: IHeavyEquipmentReferenceResponse) => void;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: heavyEquipmentReferenceData,
@@ -73,7 +80,7 @@ export const useReadOneHeavyEquipmentReference = ({
     },
     onCompleted: onCompleted,
     skip,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy,
   });
 
   return {
