@@ -1,10 +1,15 @@
 import { z } from 'zod';
 
-import { zArrayOfString, zRequiredString } from '../global';
+import { IHeavyEquipmentClassValues } from '@/components/features/Reference/heavy-equipment-class/create/common/sections/CreateHeavyEquipmentClassBook';
 
-export const createHeavyEquipmentClassSchema = z.object({
-  name: zRequiredString,
-  heavyEquipmentReferenceIds: zArrayOfString.min(1, {
-    message: 'Pilih minimal 1 jenis',
-  }),
-});
+import { zRequiredSelectInput, zRequiredString } from '../global';
+
+export const classHeavyEquipmentMutationValidation: z.ZodType<IHeavyEquipmentClassValues> =
+  z.object({
+    name: zRequiredString,
+    heavyEquipmentReference: z
+      .object({
+        id: zRequiredSelectInput,
+      })
+      .array(),
+  });
