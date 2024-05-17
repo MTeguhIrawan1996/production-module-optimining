@@ -41,10 +41,10 @@ export const READ_ONE_OB_RITAGE = gql`
         id
         name
       }
-      subMaterial {
-        id
-        name
-      }
+      # subMaterial {
+      #   id
+      #   name
+      # }
       fromAt
       arriveAt
       duration

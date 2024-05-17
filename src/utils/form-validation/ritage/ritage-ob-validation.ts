@@ -20,7 +20,7 @@ export const ritageObMutationValidation: z.ZodType<IMutationRitageOb> = z
     shiftId: zRequiredSelectInput,
     companyHeavyEquipmentId: zRequiredSelectInput,
     materialId: zRequiredSelectInput,
-    subMaterialId: zRequiredSelectInput,
+    // subMaterialId: zRequiredSelectInput,
     fromTime: zRequiredString,
     arriveTime: zOptionalString,
     ritageDuration: zOptionalString,

@@ -68,7 +68,7 @@ const UpdateRitageObBook = () => {
       shiftId: '',
       companyHeavyEquipmentId: '',
       materialId: '',
-      subMaterialId: '',
+      // subMaterialId: '',
       fromTime: '',
       arriveTime: '',
       ritageDuration: '',
@@ -145,7 +145,7 @@ const UpdateRitageObBook = () => {
         overburdenRitage.companyHeavyEquipmentChange?.id ?? ''
       );
       methods.setValue('materialId', overburdenRitage.material?.id ?? '');
-      methods.setValue('subMaterialId', overburdenRitage.subMaterial?.id ?? '');
+      // methods.setValue('subMaterialId', overburdenRitage.subMaterial?.id ?? '');
       methods.setValue('fromTime', fromTime ?? '');
       setNewFromTime(fromTime ?? '');
       methods.setValue('arriveTime', arriveTime ?? '');
@@ -290,14 +290,14 @@ const UpdateRitageObBook = () => {
       disabled: true,
       includeIds: [`${process.env.NEXT_PUBLIC_MATERIAL_OB_ID}`],
     });
-    const materialSubItem = materialSelect({
-      colSpan: 6,
-      name: 'subMaterialId',
-      label: 'subMaterial',
-      withAsterisk: true,
-      parentId: `${process.env.NEXT_PUBLIC_MATERIAL_OB_ID}`,
-      isHaveParent: null,
-    });
+    // const materialSubItem = materialSelect({
+    //   colSpan: 6,
+    //   name: 'subMaterialId',
+    //   label: 'subMaterial',
+    //   withAsterisk: true,
+    //   parentId: `${process.env.NEXT_PUBLIC_MATERIAL_OB_ID}`,
+    //   isHaveParent: null,
+    // });
     const fromTime = globalTimeInput({
       name: 'fromTime',
       label: 'fromTime',
@@ -481,7 +481,7 @@ const UpdateRitageObBook = () => {
       toCheckerPosition,
       shiftItem,
       materialItem,
-      materialSubItem,
+      // materialSubItem,
       hullNumber,
       hullNumberSubstitution,
       weatherItem,

@@ -61,7 +61,7 @@ const CreateRitageObBook = () => {
       shiftId: '',
       companyHeavyEquipmentId: '',
       materialId: `${process.env.NEXT_PUBLIC_MATERIAL_OB_ID}`,
-      subMaterialId: '',
+      // subMaterialId: '',
       fromTime: '',
       arriveTime: '',
       ritageDuration: '',
@@ -209,14 +209,14 @@ const CreateRitageObBook = () => {
       disabled: true,
       includeIds: [`${process.env.NEXT_PUBLIC_MATERIAL_OB_ID}`],
     });
-    const materialSubItem = materialSelect({
-      colSpan: 6,
-      name: 'subMaterialId',
-      label: 'subMaterial',
-      withAsterisk: true,
-      parentId: `${process.env.NEXT_PUBLIC_MATERIAL_OB_ID}`,
-      isHaveParent: null,
-    });
+    // const materialSubItem = materialSelect({
+    //   colSpan: 6,
+    //   name: 'subMaterialId',
+    //   label: 'subMaterial',
+    //   withAsterisk: true,
+    //   parentId: `${process.env.NEXT_PUBLIC_MATERIAL_OB_ID}`,
+    //   isHaveParent: null,
+    // });
     const fromTime = globalTimeInput({
       name: 'fromTime',
       label: 'fromTime',
@@ -388,7 +388,7 @@ const CreateRitageObBook = () => {
           toCheckerPosition,
           shiftItem,
           materialItem,
-          materialSubItem,
+          // materialSubItem,
           hullNumber,
           hullNumberSubstitution,
           weatherItem,

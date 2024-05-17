@@ -16,7 +16,7 @@ export interface IMutationRitageOb {
   companyHeavyEquipmentId: string | null;
   companyHeavyEquipmentChangeId: string | null;
   materialId: string | null;
-  subMaterialId: string | null;
+  // subMaterialId: string | null;
   fromTime: string;
   arriveTime: string;
   ritageDuration: string;

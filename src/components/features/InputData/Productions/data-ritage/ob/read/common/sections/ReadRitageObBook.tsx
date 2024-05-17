@@ -360,10 +360,10 @@ const ReadRitageObBook = () => {
                   dataKey: t('commonTypography.material'),
                   value: overburdenRitage?.material?.name,
                 },
-                {
-                  dataKey: t('commonTypography.subMaterial'),
-                  value: overburdenRitage?.subMaterial?.name,
-                },
+                // {
+                //   dataKey: t('commonTypography.subMaterial'),
+                //   value: overburdenRitage?.subMaterial?.name,
+                // },
                 {
                   dataKey: t('commonTypography.weather'),
                   value: overburdenRitage?.weather?.name,
