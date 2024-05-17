@@ -97,6 +97,7 @@ const ReadDTObRitageBook = () => {
             render: ({ tonByRitage }) => tonByRitage ?? '-',
           },
         ]}
+        subMaterialHidden
         onOpenModal={onOpenModal}
         // tabs="ob"
         fetching={detailsObRitageDTDataLoading}
