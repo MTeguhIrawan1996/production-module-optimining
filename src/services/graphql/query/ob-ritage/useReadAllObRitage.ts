@@ -6,6 +6,7 @@ import {
 } from '@apollo/client';
 
 import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
+import { IMaterialsData } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 
 import {
   GResponse,
@@ -53,10 +54,14 @@ export const READ_ALL_RITAGE_OB = gql`
           id
           hullNumber
         }
-        subMaterial {
+        material {
           id
           name
         }
+        # subMaterial {
+        #   id
+        #   name
+        # }
         fromAt
         arriveAt
         fromPit {
@@ -82,6 +87,7 @@ export const READ_ALL_RITAGE_OB = gql`
 interface IOtherProps {
   disposal: Pick<ILocationsData, 'id' | 'name'> | null;
   fromPit: Pick<ILocationsData, 'id' | 'name'> | null;
+  material: Pick<IMaterialsData, 'id' | 'name'> | null;
 }
 
 interface IOverburdenRitagesResponse {

@@ -1,19 +1,11 @@
 import { Badge } from '@mantine/core';
 import { useDebouncedState } from '@mantine/hooks';
-import { notifications } from '@mantine/notifications';
-import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  DashboardCard,
-  GlobalKebabButton,
-  MantineDataTable,
-  ModalConfirmation,
-} from '@/components/elements';
+import { DashboardCard, MantineDataTable } from '@/components/elements';
 
-import { useDeleteMaterialMaster } from '@/services/graphql/mutation/material/useDeleteMaterialMaster';
 import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
@@ -23,10 +15,10 @@ const MaterialBook = () => {
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const [page, setPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
-  const [id, setId] = React.useState<string>('');
+  // const [id, setId] = React.useState<string>('');
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
-  const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
-    React.useState<boolean>(false);
+  // const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
+  //   React.useState<boolean>(false);
 
   const isPermissionCreate = permissions?.includes('create-material');
   const isPermissionUpdate = permissions?.includes('update-material');
@@ -50,36 +42,36 @@ const MaterialBook = () => {
     },
   });
 
-  const [executeDelete, { loading }] = useDeleteMaterialMaster({
-    onCompleted: () => {
-      refetchMaterials();
-      setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
-      notifications.show({
-        color: 'green',
-        title: 'Selamat',
-        message: t('material.successDeleteMessage'),
-        icon: <IconCheck />,
-      });
-    },
-    onError: ({ message }) => {
-      notifications.show({
-        color: 'red',
-        title: 'Gagal',
-        message: message,
-        icon: <IconX />,
-      });
-    },
-  });
+  // const [executeDelete, { loading }] = useDeleteMaterialMaster({
+  //   onCompleted: () => {
+  //     refetchMaterials();
+  //     setIsOpenDeleteConfirmation((prev) => !prev);
+  //     setPage(1);
+  //     notifications.show({
+  //       color: 'green',
+  //       title: 'Selamat',
+  //       message: t('material.successDeleteMessage'),
+  //       icon: <IconCheck />,
+  //     });
+  //   },
+  //   onError: ({ message }) => {
+  //     notifications.show({
+  //       color: 'red',
+  //       title: 'Gagal',
+  //       message: message,
+  //       icon: <IconX />,
+  //     });
+  //   },
+  // });
   /* #endregion  /**======== Query =========== */
 
-  const handleDelete = async () => {
-    await executeDelete({
-      variables: {
-        id,
-      },
-    });
-  };
+  // const handleDelete = async () => {
+  //   await executeDelete({
+  //     variables: {
+  //       id,
+  //     },
+  //   });
+  // };
 
   const handleSetPage = (page: number) => {
     setPage(page);
@@ -115,47 +107,47 @@ const MaterialBook = () => {
                 return material && material.length > 0 ? material : '-';
               },
             },
-            {
-              accessor: 'action',
-              title: t('commonTypography.action'),
-              render: ({ id }) => {
-                return (
-                  <GlobalKebabButton
-                    actionRead={
-                      isPermissionRead
-                        ? {
-                            onClick: (e) => {
-                              e.stopPropagation();
-                              router.push(`/master-data/material/read/${id}`);
-                            },
-                          }
-                        : undefined
-                    }
-                    actionUpdate={
-                      isPermissionUpdate
-                        ? {
-                            onClick: (e) => {
-                              e.stopPropagation();
-                              router.push(`/master-data/material/update/${id}`);
-                            },
-                          }
-                        : undefined
-                    }
-                    actionDelete={
-                      isPermissionDelete
-                        ? {
-                            onClick: (e) => {
-                              e.stopPropagation();
-                              setIsOpenDeleteConfirmation((prev) => !prev);
-                              setId(id);
-                            },
-                          }
-                        : undefined
-                    }
-                  />
-                );
-              },
-            },
+            // {
+            //   accessor: 'action',
+            //   title: t('commonTypography.action'),
+            //   render: ({ id }) => {
+            //     return (
+            //       <GlobalKebabButton
+            //         actionRead={
+            //           isPermissionRead
+            //             ? {
+            //                 onClick: (e) => {
+            //                   e.stopPropagation();
+            //                   router.push(`/master-data/material/read/${id}`);
+            //                 },
+            //               }
+            //             : undefined
+            //         }
+            //         actionUpdate={
+            //           isPermissionUpdate
+            //             ? {
+            //                 onClick: (e) => {
+            //                   e.stopPropagation();
+            //                   router.push(`/master-data/material/update/${id}`);
+            //                 },
+            //               }
+            //             : undefined
+            //         }
+            //         actionDelete={
+            //           isPermissionDelete
+            //             ? {
+            //                 onClick: (e) => {
+            //                   e.stopPropagation();
+            //                   setIsOpenDeleteConfirmation((prev) => !prev);
+            //                   setId(id);
+            //                 },
+            //               }
+            //             : undefined
+            //         }
+            //       />
+            //     );
+            //   },
+            // },
           ],
         }}
         emptyStateProps={{
@@ -190,14 +182,14 @@ const MaterialBook = () => {
 
   return (
     <DashboardCard
-      addButton={
-        isPermissionCreate
-          ? {
-              label: t('material.createMaterial'),
-              onClick: () => router.push('/master-data/material/create'),
-            }
-          : undefined
-      }
+      // addButton={
+      //   isPermissionCreate
+      //     ? {
+      //         label: t('material.createMaterial'),
+      //         onClick: () => router.push('/master-data/material/create'),
+      //       }
+      //     : undefined
+      // }
       searchBar={{
         placeholder: t('material.searchPlaceholder'),
         onChange: (e) => {
@@ -213,7 +205,7 @@ const MaterialBook = () => {
       }}
     >
       {renderTable}
-      <ModalConfirmation
+      {/* <ModalConfirmation
         isOpenModalConfirmation={isOpenDeleteConfirmation}
         actionModalConfirmation={() =>
           setIsOpenDeleteConfirmation((prev) => !prev)
@@ -233,7 +225,7 @@ const MaterialBook = () => {
           description: t('commonTypography.alertDescConfirmDeleteMasterData'),
         }}
         withDivider
-      />
+      /> */}
     </DashboardCard>
   );
 };
