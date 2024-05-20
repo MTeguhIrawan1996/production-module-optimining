@@ -267,9 +267,9 @@ const ListDataObRitageBook = () => {
                 companyHeavyEquipment?.hullNumber ?? '-',
             },
             {
-              accessor: 'subMaterial',
-              title: t('commonTypography.subMaterial'),
-              render: ({ subMaterial }) => subMaterial?.name ?? '-',
+              accessor: 'material',
+              title: t('commonTypography.material'),
+              render: ({ material }) => material?.name ?? '-',
             },
             {
               accessor: 'fromAt',
