@@ -1,18 +1,15 @@
 import { Badge } from '@mantine/core';
 import { useDebouncedState } from '@mantine/hooks';
-import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, MantineDataTable } from '@/components/elements';
 
 import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
-import { usePermissions } from '@/utils/store/usePermissions';
-import useStore from '@/utils/store/useStore';
 
 const MaterialBook = () => {
-  const router = useRouter();
-  const permissions = useStore(usePermissions, (state) => state.permissions);
+  // const router = useRouter();
+  // const permissions = useStore(usePermissions, (state) => state.permissions);
   const [page, setPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
   // const [id, setId] = React.useState<string>('');
@@ -20,10 +17,10 @@ const MaterialBook = () => {
   // const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
   //   React.useState<boolean>(false);
 
-  const isPermissionCreate = permissions?.includes('create-material');
-  const isPermissionUpdate = permissions?.includes('update-material');
-  const isPermissionDelete = permissions?.includes('delete-material');
-  const isPermissionRead = permissions?.includes('read-material');
+  // const isPermissionCreate = permissions?.includes('create-material');
+  // const isPermissionUpdate = permissions?.includes('update-material');
+  // const isPermissionDelete = permissions?.includes('delete-material');
+  // const isPermissionRead = permissions?.includes('read-material');
 
   /* #   /**=========== Query =========== */
   const {
@@ -152,12 +149,12 @@ const MaterialBook = () => {
         }}
         emptyStateProps={{
           title: t('commonTypography.dataNotfound'),
-          actionButton: isPermissionCreate
-            ? {
-                label: t('material.createMaterial'),
-                onClick: () => router.push('/master-data/material/create'),
-              }
-            : undefined,
+          // actionButton: isPermissionCreate
+          //   ? {
+          //       label: t('material.createMaterial'),
+          //       onClick: () => router.push('/master-data/material/create'),
+          //     }
+          //   : undefined,
         }}
         paginationProps={{
           setPage: handleSetPage,
@@ -173,10 +170,10 @@ const MaterialBook = () => {
     page,
     materialsData,
     materialsDataLoading,
-    isPermissionDelete,
-    isPermissionRead,
-    isPermissionUpdate,
-    isPermissionCreate,
+    // isPermissionDelete,
+    // isPermissionRead,
+    // isPermissionUpdate,
+    // isPermissionCreate,
   ]);
   /* #endregion  /**======== RenderTable =========== */
 
