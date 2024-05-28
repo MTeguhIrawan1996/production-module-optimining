@@ -95,10 +95,8 @@ export type IDomesShipping = {
     ritageSamples: {
       additional: {
         averageSamples: {
-          element: {
-            id: string;
-            name: string | null;
-          };
+          id: string;
+          name: string | null;
           value: number | null;
         }[];
       };
@@ -248,7 +246,7 @@ export const useReadOneShippingMonitoring = ({
           value: monitoringBarging?.monitoringBarging.factoryCategory?.name,
         },
         {
-          name: 'factoryName',
+          name: 'vesselNameOrFactoryName',
           value: monitoringBarging?.monitoringBarging.factory?.name,
         },
       ],

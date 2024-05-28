@@ -75,7 +75,7 @@ const ReadShippingMonitoringBook = () => {
           render: ({ monitoringStockpile }) => {
             const output =
               monitoringStockpile.ritageSamples.additional.averageSamples?.find(
-                (val) => val.element?.id === element.id
+                (val) => val.id === element.id
               );
             return output?.value || '-';
           },
