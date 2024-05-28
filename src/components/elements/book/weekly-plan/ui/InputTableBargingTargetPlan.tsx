@@ -12,7 +12,13 @@ import {
 import { bargingTarget } from '@/utils/constants/DefaultValues/barging-target-plan';
 import dayjs from '@/utils/helper/dayjs.config';
 
-const InputTableBargingTargetPlan = () => {
+type IInputBargingTargetPlanProps = {
+  isLoading?: boolean;
+};
+
+const InputTableBargingTargetPlan = ({
+  isLoading,
+}: IInputBargingTargetPlanProps) => {
   const { t } = useTranslation('default');
 
   const { fields } = useFieldArray({
@@ -78,6 +84,7 @@ const InputTableBargingTargetPlan = () => {
   return (
     <MantineDataTable
       tableProps={{
+        fetching: isLoading,
         highlightOnHover: true,
         withColumnBorders: true,
         idAccessor: (record) => {
