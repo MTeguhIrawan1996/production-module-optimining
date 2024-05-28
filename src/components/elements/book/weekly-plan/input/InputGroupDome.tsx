@@ -1,8 +1,8 @@
-/* eslint-disable unused-imports/no-unused-vars */
 import {
   Flex,
   Grid,
   Group,
+  LoadingOverlay,
   Paper,
   SimpleGrid,
   Stack,
@@ -30,6 +30,7 @@ export type IInputGroupDomeProps = {
   bargingDomePlanIndex: number;
   uniqKey?: string | null;
   tabs?: string | null;
+  isLoading?: boolean;
 };
 
 const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({
@@ -38,6 +39,7 @@ const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({
   label = 'inputGroupDomeLabel',
   bargingDomePlanIndex,
   tabs,
+  isLoading,
 }) => {
   const { t } = useTranslation('default');
 
@@ -82,7 +84,7 @@ const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({
           />
         ) : null}
       </Group>
-      <Paper p={24} withBorder w="100%">
+      <Paper p={24} withBorder w="100%" pos="relative">
         <Stack spacing={8}>
           <SimpleGrid cols={2} mb="sm">
             <Text
@@ -174,6 +176,11 @@ const InputGroupDome: React.FunctionComponent<IInputGroupDomeProps> = ({
             })}
           </Grid>
         </Stack>
+        <LoadingOverlay
+          visible={isLoading || false}
+          overlayBlur={2}
+          zIndex={5}
+        />
       </Paper>
     </Flex>
   );
