@@ -110,7 +110,7 @@ const MutationBargingTargetPlanBook = ({
     },
   });
 
-  useReadOneBargingTargetPlan({
+  const { weeklyBargingTargetPlanDataLoading } = useReadOneBargingTargetPlan({
     variables: {
       weeklyPlanId: id,
     },
@@ -225,7 +225,9 @@ const MutationBargingTargetPlanBook = ({
           return (
             <>
               <Grid.Col span={12}>
-                <InputTableBargingTargetPlan />
+                <InputTableBargingTargetPlan
+                  isLoading={weeklyBargingTargetPlanDataLoading}
+                />
               </Grid.Col>
               {domeGroup.map(
                 ({ tabs, bargingDomePlanIndex, uniqKey, ...restDome }) => (
@@ -236,6 +238,7 @@ const MutationBargingTargetPlanBook = ({
                     <InputGroupDome
                       bargingDomePlanIndex={bargingDomePlanIndex}
                       tabs={tabs}
+                      isLoading={weeklyBargingTargetPlanDataLoading}
                       {...restDome}
                     />
                   </Grid.Col>
@@ -249,7 +252,7 @@ const MutationBargingTargetPlanBook = ({
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bargingDomePlanFields, tabs]);
+  }, [bargingDomePlanFields, tabs, weeklyBargingTargetPlanDataLoading]);
 
   const handleSubmitForm: SubmitHandler<IBargingTargetPlanValue> = async (
     data
