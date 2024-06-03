@@ -24,7 +24,7 @@ const UpdateHeavyEquipmentProductionPage = () => {
         path: '/input-data/production/data-heavy-equipment',
       },
       {
-        label: t('heavyEquipmentProd.createHeavyEquipmentProd'),
+        label: t('heavyEquipmentProd.updateHeavyEquipmentProd'),
         path: router.asPath,
       },
     ]);
