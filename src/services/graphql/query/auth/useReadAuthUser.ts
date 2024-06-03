@@ -1,4 +1,9 @@
-import { ApolloError, gql, useQuery } from '@apollo/client';
+import {
+  ApolloError,
+  gql,
+  useQuery,
+  WatchQueryFetchPolicy,
+} from '@apollo/client';
 
 import { IFile } from '@/types/global';
 
@@ -43,9 +48,11 @@ export interface IAuthUserData {
 export const useReadAuthUser = ({
   onCompleted,
   skip,
+  fetchPolicy = 'cache-and-network',
 }: {
   onCompleted?: (data: IUserAuthResponse) => void;
   skip?: boolean;
+  fetchPolicy?: WatchQueryFetchPolicy;
 }) => {
   const {
     data: userAuthData,
@@ -57,7 +64,7 @@ export const useReadAuthUser = ({
     },
     onCompleted,
     skip,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy,
   });
 
   return {

@@ -12,11 +12,13 @@ import {
   IMutationLocationValues,
   useCreateLocationMaster,
 } from '@/services/graphql/mutation/location/useCreateLocationMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import {
   globalText,
   locationCategorySelect,
 } from '@/utils/constants/Field/global-field';
 import { locationMutationValidation } from '@/utils/form-validation/location/location-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -24,6 +26,10 @@ import { ControllerGroup } from '@/types/global';
 const CreateLocationMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationLocationValues>({
@@ -41,6 +47,14 @@ const CreateLocationMasterBook = () => {
   /* #   /**=========== Query =========== */
   const [executeCreate, { loading }] = useCreateLocationMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Pra_Rencana_Lokasi_Tambah',
+        params: {
+          category: 'Pra_Rencana',
+          subEvent: 'Pra_Rencana_Lokasi_Tambah',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
