@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'optimining.optimap.id',
+      name: 'production.modules.rc.optimining.optimap.id',
       namespace: 'optimining-rc',
       script: 'node_modules/.bin/next',
       args: 'start',
@@ -10,7 +10,7 @@ module.exports = {
       watch: false,
       env: {
         NODE_ENV: 'production',
-        PORT: 31011,
+        PORT: 31042,
       },
     },
   ],
