@@ -34,6 +34,7 @@ export const CREATE_FRONT_PRODUCTION = gql`
       }
     ) {
       id
+      type
     }
   }
 `;
@@ -69,6 +70,7 @@ type ICreateFrontProductionRequest = Omit<
 interface ICreateFrontProductionResponse {
   createFrontData: {
     id: string;
+    type: string;
   };
 }
 
