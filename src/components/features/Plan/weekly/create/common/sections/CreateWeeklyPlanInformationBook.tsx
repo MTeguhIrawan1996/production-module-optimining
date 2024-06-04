@@ -12,12 +12,14 @@ import {
   ICreateWeeklyPlanInformationValues,
   useCreateWeeklyPlanInformation,
 } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyPlanInformation';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import {
   globalSelectCompanyRhf,
   globalSelectWeekRhf,
   globalSelectYearRhf,
 } from '@/utils/constants/Field/global-field';
 import { weeklyPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-plan-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -25,6 +27,9 @@ import { ControllerGroup } from '@/types/global';
 const CreateWeeklyPlanInformationBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateWeeklyPlanInformationValues<string>>({
@@ -42,6 +47,15 @@ const CreateWeeklyPlanInformationBook = () => {
   /* #   /**=========== Query =========== */
   const [executeCreate, { loading }] = useCreateWeeklyPlanInformation({
     onCompleted: ({ createWeeklyPlan }) => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Rencana',
+          subSubCategory: '',
+          subCategory: 'Rencana - Mingguan',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

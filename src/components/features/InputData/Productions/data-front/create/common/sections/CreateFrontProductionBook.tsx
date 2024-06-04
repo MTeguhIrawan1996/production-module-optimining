@@ -17,6 +17,7 @@ import {
   IMutationFrontProductionValues,
   useCreateFrontProduction,
 } from '@/services/graphql/mutation/front-production/useCreateFrontProduction';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
 import { useReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 import {
@@ -32,6 +33,7 @@ import {
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { domeNameSelect } from '@/utils/constants/Field/stockpile-field';
 import { frontProductionMutationValidation } from '@/utils/form-validation/front-production/front-production-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { dateToString } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
@@ -41,6 +43,9 @@ const CreateFrontProductionBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const segment = router.query['segment'] || 'pit';
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationFrontProductionValues>({
@@ -108,7 +113,22 @@ const CreateFrontProductionBook = () => {
     fetchPolicy: 'cache-first',
   });
   const [executeCreate, { loading }] = useCreateFrontProduction({
-    onCompleted: () => {
+    onCompleted: ({ createFrontData }) => {
+      const segmentObj = {
+        pit: 'PIT',
+        dome: 'DOME',
+      };
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Produksi',
+          subCategory: 'Produksi - Front',
+          subSubCategory: `Produksi - Front - ${
+            segmentObj[createFrontData.type]
+          }`,
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -359,7 +379,7 @@ const CreateFrontProductionBook = () => {
         shiftId: data.shiftId || null,
         companyHeavyEquipmentId: data.companyHeavyEquipmentId,
         frontId: data.frontId,
-        materialId: data.materialId,
+        materialId: data.materialId || null,
         type: data.type,
         x: data.x || null,
         y: data.y || null,
