@@ -12,8 +12,10 @@ import {
   IMutationStockpileValues,
   useCreateStockpileMaster,
 } from '@/services/graphql/mutation/stockpile-master/useCreateStockpileMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { globalText } from '@/utils/constants/Field/global-field';
 import { stockpileMutationValidation } from '@/utils/form-validation/stockpile/stockpile-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -21,6 +23,9 @@ import { ControllerGroup } from '@/types/global';
 const CreateStockpileMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationStockpileValues>({
@@ -36,6 +41,15 @@ const CreateStockpileMasterBook = () => {
   /* #   /**=========== Query =========== */
   const [executeCreate, { loading }] = useCreateStockpileMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Stockpile',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

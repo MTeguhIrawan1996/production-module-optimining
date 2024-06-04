@@ -38,7 +38,9 @@ import {
 
 import { useCreateActivityCategory } from '@/services/graphql/mutation/activity-category/useCreateActivityCategory';
 import { IMutationCalculationValues } from '@/services/graphql/mutation/activity-category/useUpdateActivityCategory';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { calculationMutationValidation } from '@/utils/form-validation/activity-category/activity-category-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ITab } from '@/types/global';
@@ -52,6 +54,9 @@ const CreateCalculationCategoryBook: React.FC<
 > = ({ tab: tabProps }) => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationCalculationValues>({
@@ -80,6 +85,16 @@ const CreateCalculationCategoryBook: React.FC<
 
   const [executeCreate, { loading }] = useCreateActivityCategory({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Pra Rencana',
+          subCategory: 'Pra Rencana - Kategori Kegiatan',
+          subSubCategory:
+            'Pra Rencana - Kategori Kegiatan - Kategori Perhitungan',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

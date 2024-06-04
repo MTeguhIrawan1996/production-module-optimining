@@ -10,8 +10,10 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { useCreateActivityPlanMaster } from '@/services/graphql/mutation/activity-plan/useCreateActivityPlanMaster';
 import { IMutationActivityPlanValues } from '@/services/graphql/mutation/activity-plan/useUpdateActivityPlanMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { globalText } from '@/utils/constants/Field/global-field';
 import { activityPlanMutationValidation } from '@/utils/form-validation/activity-plan/activity-plan-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -19,6 +21,9 @@ import { ControllerGroup } from '@/types/global';
 const CreateActivityPlanBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationActivityPlanValues>({
@@ -35,6 +40,15 @@ const CreateActivityPlanBook = () => {
 
   const [executeCreate, { loading }] = useCreateActivityPlanMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Rencana Aktivitas',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

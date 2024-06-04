@@ -48,10 +48,11 @@ const CreateLocationMasterBook = () => {
   const [executeCreate, { loading }] = useCreateLocationMaster({
     onCompleted: () => {
       sendGAEvent({
-        event: 'Pra_Rencana_Lokasi_Tambah',
+        event: 'Tambah',
         params: {
-          category: 'Pra_Rencana',
-          subEvent: 'Pra_Rencana_Lokasi_Tambah',
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Lokasi',
           account: userAuthData?.email ?? '',
         },
       });

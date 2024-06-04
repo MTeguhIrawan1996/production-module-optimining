@@ -1,14 +1,19 @@
 import { sendGAEvent as sendGAEventGoogle } from '@next/third-parties/google';
 
 type EventParams = {
-  event: string;
+  event: 'Tambah' | 'Edit' | 'Filter' | 'Unduh';
   params: {
     category: string;
-    subEvent: string;
+    subCategory: string;
+    subSubCategory: string;
     account: string;
   };
 };
 
 export const sendGAEvent = (eventParams: EventParams) => {
-  sendGAEventGoogle('event', eventParams.event, eventParams.params);
+  try {
+    sendGAEventGoogle('event', eventParams.event, eventParams.params);
+  } catch {
+    sendGAEventGoogle('event', eventParams.event, eventParams.params);
+  }
 };

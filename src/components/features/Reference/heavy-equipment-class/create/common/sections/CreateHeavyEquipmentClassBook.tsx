@@ -10,11 +10,13 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { useCreateHeavyEquipmentClass } from '@/services/graphql/mutation/heavy-equipment-class/useCreateHeavyEquipmentClass';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import {
   globalSelectReferenceRhf,
   globalText,
 } from '@/utils/constants/Field/global-field';
 import { classHeavyEquipmentMutationValidation } from '@/utils/form-validation/reference-heavy-equipment-class/heavy-equipment-class';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -29,6 +31,9 @@ export type IHeavyEquipmentClassValues = {
 const CreateHeavyEquipmentClassBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IHeavyEquipmentClassValues>({
@@ -53,6 +58,15 @@ const CreateHeavyEquipmentClassBook = () => {
   /* #   /**=========== Query =========== */
   const [executeCreate, { loading }] = useCreateHeavyEquipmentClass({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Kelas Alat Berat',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
