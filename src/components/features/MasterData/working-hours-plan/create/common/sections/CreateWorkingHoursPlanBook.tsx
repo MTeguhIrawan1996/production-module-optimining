@@ -17,8 +17,10 @@ import {
   IMutationWHPValues,
   useCreateWHPMaster,
 } from '@/services/graphql/mutation/working-hours-plan/useCreateWHPMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { globalText } from '@/utils/constants/Field/global-field';
 import { whpMutationValidation } from '@/utils/form-validation/working-hours-plan/whp-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -28,6 +30,9 @@ const CreateWorkingHoursPlanBook = () => {
   const router = useRouter();
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationWHPValues>({
@@ -52,6 +57,15 @@ const CreateWorkingHoursPlanBook = () => {
 
   const [executeCreate, { loading }] = useCreateWHPMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Rencana Waktu Hilang',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { notifications } from '@mantine/notifications';
+import { sendGAEvent } from '@next/third-parties/google';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -12,6 +13,7 @@ import {
   IMutationShiftValues,
   useCreateShiftMaster,
 } from '@/services/graphql/mutation/shift/useCreateShiftMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import {
   globalText,
   globalTimeInput,
@@ -24,6 +26,9 @@ import { ControllerGroup } from '@/types/global';
 const CreateShiftBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationShiftValues>({
@@ -41,6 +46,15 @@ const CreateShiftBook = () => {
 
   const [executeCreate, { loading }] = useCreateShiftMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Shift',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

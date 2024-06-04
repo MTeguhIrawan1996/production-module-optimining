@@ -12,11 +12,13 @@ import {
   IMutationFactoryValues,
   useCreateFactoryMaster,
 } from '@/services/graphql/mutation/factory/useCreateFactoryMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import {
   globalSelectArriveBargeRhf,
   globalText,
 } from '@/utils/constants/Field/global-field';
 import { factoryMutationValidation } from '@/utils/form-validation/factory/factory-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -24,6 +26,9 @@ import { ControllerGroup } from '@/types/global';
 const CreateFactoryBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationFactoryValues>({
@@ -41,6 +46,15 @@ const CreateFactoryBook = () => {
 
   const [executeCreate, { loading }] = useCreateFactoryMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Pabrik / Vessel',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

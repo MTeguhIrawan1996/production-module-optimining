@@ -12,8 +12,10 @@ import {
   IMutationBlockValues,
   useCreateBlockMaster,
 } from '@/services/graphql/mutation/block/useCreateBlockMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { globalText } from '@/utils/constants/Field/global-field';
 import { blockMutationValidation } from '@/utils/form-validation/block/block-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -21,6 +23,9 @@ import { ControllerGroup } from '@/types/global';
 const CreateBlockMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationBlockValues>({
@@ -36,6 +41,16 @@ const CreateBlockMasterBook = () => {
   /* #   /**=========== Query =========== */
   const [executeCreate, { loading }] = useCreateBlockMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Block',
+          account: userAuthData?.email ?? '',
+        },
+      });
+
       notifications.show({
         color: 'green',
         title: 'Selamat',

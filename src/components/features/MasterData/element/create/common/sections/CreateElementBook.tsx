@@ -12,8 +12,10 @@ import {
   IMutationElementValues,
   useCreateElementMaster,
 } from '@/services/graphql/mutation/element/useCreateElementMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { globalText } from '@/utils/constants/Field/global-field';
 import { elementMutationValidation } from '@/utils/form-validation/element/element-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -21,6 +23,9 @@ import { ControllerGroup } from '@/types/global';
 const CreateElementBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationElementValues>({
@@ -37,6 +42,15 @@ const CreateElementBook = () => {
 
   const [executeCreate, { loading }] = useCreateElementMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Unsur Kandungan',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
