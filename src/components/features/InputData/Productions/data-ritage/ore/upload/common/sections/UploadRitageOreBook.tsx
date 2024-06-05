@@ -197,11 +197,34 @@ const UploadRitageOreBook = () => {
           label: t('ritageOre.downloadTemplateOre'),
           url: `/ore-ritages/file`,
           fileName: 'template-ore',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory: 'Produksi - Data Ritase - Ore - Template Input',
+                subCategory: 'Produksi - Data Ritase - Ore',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
         {
           label: t('commonTypography.downloadReference'),
           url: `/download/references`,
           fileName: 'referensi-ore',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Ore - Template Referensi',
+                subCategory: 'Produksi - Data Ritase - Ore',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
       ]}
     >

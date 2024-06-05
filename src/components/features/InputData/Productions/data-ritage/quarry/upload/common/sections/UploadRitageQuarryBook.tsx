@@ -9,8 +9,10 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneUploadFileTRK } from '@/services/graphql/query/file/useReadOneUploadFile';
 import { useUploadFileRitageQuarry } from '@/services/restapi/ritage-productions/quarry/useUploadFileRitageQuarry';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
@@ -29,7 +31,9 @@ const UploadRitageQuarryBook = () => {
   const [mounted, setMounted] = React.useState<boolean>(false);
   const [disabled, setDisabled] = React.useState<boolean>(false);
   const [dataFiald, setfaildData] = React.useState<unknown[]>([]);
-
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateFileProps>({
     defaultValues: {
@@ -78,6 +82,15 @@ const UploadRitageQuarryBook = () => {
       setFileId(data.data.id);
       setMounted(true);
       setDisabled((prev) => !prev);
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Produksi',
+          subSubCategory: 'Produksi - Data Ritase - Quarry - Simpan Unggah',
+          subCategory: 'Produksi - Data Ritase - Quarry',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -183,11 +196,35 @@ const UploadRitageQuarryBook = () => {
           label: t('ritageQuarry.downloadTemplateQuarry'),
           url: `/quarry-ritages/file`,
           fileName: 'template-quarry',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Quarry - Template Input',
+                subCategory: 'Produksi - Data Ritase - Quarry',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
         {
           label: t('commonTypography.downloadReference'),
           url: `/download/references`,
           fileName: 'referensi-quarry',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Quarry - Template Referensi',
+                subCategory: 'Produksi - Data Ritase - Quarry',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
       ]}
     >

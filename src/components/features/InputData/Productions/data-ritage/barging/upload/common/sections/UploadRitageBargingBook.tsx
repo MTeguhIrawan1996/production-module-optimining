@@ -9,8 +9,10 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneUploadFileTRK } from '@/services/graphql/query/file/useReadOneUploadFile';
 import { useUploadFileRitageBarging } from '@/services/restapi/ritage-productions/barging/useUploadFileRitageBarging';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
@@ -24,6 +26,9 @@ import {
 const UploadRitageBargingBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const [isDirtyFile, setIsDirtyFile] = React.useState<boolean>(false);
   const [fileId, setFileId] = React.useState<string | null>(null);
   const [mounted, setMounted] = React.useState<boolean>(false);
@@ -78,6 +83,15 @@ const UploadRitageBargingBook = () => {
       setFileId(data.data.id);
       setMounted(true);
       setDisabled((prev) => !prev);
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Produksi',
+          subSubCategory: 'Produksi - Data Ritase - Barging - Simpan Unggah',
+          subCategory: 'Produksi - Data Ritase - Barging',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -183,11 +197,35 @@ const UploadRitageBargingBook = () => {
           label: t('ritageBarging.downloadTemplateBarging'),
           url: `/barging-ritages/file`,
           fileName: 'template-barging',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Barging - Template Input',
+                subCategory: 'Produksi - Data Ritase - Barging',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
         {
           label: t('commonTypography.downloadReference'),
           url: `/download/references`,
           fileName: 'referensi-barging',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Barging - Template Referensi',
+                subCategory: 'Produksi - Data Ritase - Barging',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
       ]}
     >

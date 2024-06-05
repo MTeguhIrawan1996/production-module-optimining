@@ -197,11 +197,35 @@ const UploadRitageObBook = () => {
           label: t('ritageOb.downloadTemplateOb'),
           url: `/overburden-ritages/file`,
           fileName: 'template-ob',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory: 'Produksi - Data Ritase - OB - Template Input',
+                subCategory: 'Produksi - Data Ritase - OB',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
+
         {
           label: t('commonTypography.downloadReference'),
           url: `/download/references`,
           fileName: 'referensi-ob',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - OB - Template Referensi',
+                subCategory: 'Produksi - Data Ritase - OB',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
       ]}
     >
