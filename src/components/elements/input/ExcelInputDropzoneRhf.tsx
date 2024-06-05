@@ -188,6 +188,18 @@ const ExcelInputDropzoneRhf: React.FC<IExcelInputDropzoneRhfProps> = ({
                     />
                   );
                 }
+                if (accesor === 'apakah alat berat bermasalah') {
+                  return (
+                    <GlobalBadgeStatus
+                      color={data === 'TRUE' ? 'gray.6' : 'brand.6'}
+                      label={
+                        data === 'TRUE'
+                          ? t('commonTypography.problem', { ns: 'default' })
+                          : t('commonTypography.unProblem', { ns: 'default' })
+                      }
+                    />
+                  );
+                }
                 if (accesor === 'waktu dari asal') {
                   return hourFromat(data, 'hh:mm:ss A');
                 }
