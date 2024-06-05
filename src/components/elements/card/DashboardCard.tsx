@@ -194,6 +194,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
                     label={obj.label}
                     fileName={obj.fileName}
                     key={i}
+                    trackDownloadAction={obj.trackDownloadAction}
                   />
                 ))}
               </Group>
