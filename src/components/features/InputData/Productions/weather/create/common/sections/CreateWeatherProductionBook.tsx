@@ -17,6 +17,7 @@ import {
   IMutationWeatherProductionValues,
   useCreateWeatherProduction,
 } from '@/services/graphql/mutation/weather-production/useCreateWeatherProduction';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import {
   employeeSelect,
   globalDate,
@@ -28,6 +29,7 @@ import {
   weatherConditionSelect,
 } from '@/utils/constants/Field/global-field';
 import { weatherProductionMutationValidation } from '@/utils/form-validation/weather-production/weather-production-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { dateToString } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
@@ -36,6 +38,9 @@ import { ControllerGroup } from '@/types/global';
 const CreateWeatherProductionBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationWeatherProductionValues>({
@@ -73,6 +78,15 @@ const CreateWeatherProductionBook = () => {
   /* #   /**=========== Query =========== */
   const [executeCreate, { loading }] = useCreateWeatherProduction({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Produksi',
+          subCategory: 'Produksi - Data Cuaca',
+          subSubCategory: '',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

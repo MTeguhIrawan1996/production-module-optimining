@@ -10,6 +10,7 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { ICreateWeeklyPlanInformationValues } from '@/services/graphql/mutation/plan/weekly/useCreateWeeklyPlanInformation';
 import { useUpdateWeeklyPlanInformation } from '@/services/graphql/mutation/plan/weekly/useUpdateWeeklyPlanInformation';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadOneWeeklyPlan';
 import {
   globalSelectCompanyRhf,
@@ -17,6 +18,7 @@ import {
   globalSelectYearRhf,
 } from '@/utils/constants/Field/global-field';
 import { weeklyPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-plan-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
@@ -35,6 +37,9 @@ const CommonWeeklyPlanInformationBook: React.FC<
   const id = router.query.id as string;
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const isPermissionUpdate = permissions?.includes('update-weekly-plan');
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateWeeklyPlanInformationValues<string>>({
@@ -63,6 +68,15 @@ const CommonWeeklyPlanInformationBook: React.FC<
   });
   const [executeUpdate, { loading }] = useUpdateWeeklyPlanInformation({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Rencana',
+          subSubCategory: '',
+          subCategory: 'Rencana - Mingguan',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

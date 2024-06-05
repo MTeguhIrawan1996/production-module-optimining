@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import {
   IMutationSampleHousePlanValues,
@@ -33,6 +34,7 @@ import {
   shiftSelect,
 } from '@/utils/constants/Field/sample-house-field';
 import { sampleHouseLabMutationValidation } from '@/utils/form-validation/sample-house-lab/sample-house-lab-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { dateToString } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -43,6 +45,9 @@ import { ControllerGroup, ControllerProps } from '@/types/global';
 const CreateSmapleHouseLabBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationSampleHousePlanValues>({
@@ -142,6 +147,15 @@ const CreateSmapleHouseLabBook = () => {
       }
     },
     onSuccess: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Quality',
+          subCategory: 'Quality - Rumah Sampel dan Lab',
+          subSubCategory: '',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

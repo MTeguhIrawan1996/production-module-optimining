@@ -9,8 +9,10 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneUploadFileTRK } from '@/services/graphql/query/file/useReadOneUploadFile';
 import { useUploadFileHeavyEquipmentProduction } from '@/services/restapi/heavy-equipment-production/useUploadFileHeavyEquipmentProduction';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
@@ -29,6 +31,10 @@ const UploadHeavyEquipmentProductionBook = () => {
   const [mounted, setMounted] = React.useState<boolean>(false);
   const [disabled, setDisabled] = React.useState<boolean>(false);
   const [dataFiald, setfaildData] = React.useState<unknown[]>([]);
+
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateFileProps>({
@@ -75,6 +81,15 @@ const UploadHeavyEquipmentProductionBook = () => {
       }
     },
     onSuccess: (data) => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Produksi',
+          subCategory: 'Produksi - Alat Berat - Simpan Unggah',
+          subSubCategory: '',
+          account: userAuthData?.email ?? '',
+        },
+      });
       setFileId(data.data.id);
       setMounted(true);
       setDisabled((prev) => !prev);
@@ -184,11 +199,33 @@ const UploadHeavyEquipmentProductionBook = () => {
           label: t('heavyEquipmentProd.downloadTemplate'),
           url: `/heavy-equipment-datas/file`,
           fileName: `template`,
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subCategory: 'Produksi - Alat Berat - Template Input',
+                subSubCategory: '',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
         {
           label: t('commonTypography.downloadReference'),
           url: `/download/references`,
           fileName: `referensi`,
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subCategory: 'Produksi - Alat Berat - Template Referensi',
+                subSubCategory: '',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
       ]}
     >

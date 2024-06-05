@@ -15,8 +15,10 @@ import {
 } from '@/components/elements';
 
 import { useDeleteHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useDeleteHeavyEquipmentProduction';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadAllHeavyEquipmentProduction } from '@/services/graphql/query/heavy-equipment-production/useReadAllHeavyEquipmentProduction';
 import { globalDateNative } from '@/utils/constants/Field/native-field';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
@@ -34,6 +36,10 @@ const HeavyEquipmentProductionBook = () => {
     React.useState<boolean>(false);
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
+
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   const permissions = useStore(usePermissions, (state) => state.permissions);
 
@@ -332,13 +338,33 @@ const HeavyEquipmentProductionBook = () => {
         actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
         firstButton={{
           label: t('commonTypography.inputDataProductionHeavyEquipment'),
-          onClick: () =>
-            router.push('/input-data/production/data-heavy-equipment/create'),
+          onClick: () => {
+            sendGAEvent({
+              event: 'Tambah',
+              params: {
+                category: 'Produksi',
+                subCategory: 'Produksi - Alat Berat - Modal Input',
+                subSubCategory: '',
+                account: userAuthData?.email ?? '',
+              },
+            });
+            router.push('/input-data/production/data-heavy-equipment/create');
+          },
         }}
         secondButton={{
           label: t('commonTypography.uploadFile'),
-          onClick: () =>
-            router.push('/input-data/production/data-heavy-equipment/upload'),
+          onClick: () => {
+            sendGAEvent({
+              event: 'Tambah',
+              params: {
+                category: 'Produksi',
+                subCategory: 'Produksi - Alat Berat - Modal Unggah',
+                subSubCategory: '',
+                account: userAuthData?.email ?? '',
+              },
+            });
+            router.push('/input-data/production/data-heavy-equipment/upload');
+          },
         }}
       />
     </DashboardCard>

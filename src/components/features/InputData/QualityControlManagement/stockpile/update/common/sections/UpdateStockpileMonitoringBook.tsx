@@ -18,6 +18,7 @@ import {
   IMutationUpdateSampleMonitoringStockpileValues,
   useUpdateSampleStockpileMonitoring,
 } from '@/services/graphql/mutation/stockpile-monitoring/useUpdateSampleStockpileMonitoring';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import { useReadOneSampleHouseLabByNumberSample } from '@/services/graphql/query/sample-house-lab/useReadOneSampleHouseLabByNoSample';
 import { useReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
@@ -40,6 +41,7 @@ import {
   stockpileNameSelect,
 } from '@/utils/constants/Field/stockpile-field';
 import { stockpileMonitoringMutationValidation } from '@/utils/form-validation/stockpile-monitoring/stockpile-monitoring-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import {
@@ -74,6 +76,9 @@ const UpdateStockpileMonitoringBook = () => {
     500
   );
   const [sampleNumber, setSampleNumber] = useDebouncedState<string>('', 500);
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationStockpile>({
@@ -390,6 +395,15 @@ const UpdateStockpileMonitoringBook = () => {
       }
     },
     onSuccess: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Monitoring Stockpile',
+          subCategory: '',
+          subSubCategory: '',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -405,6 +419,15 @@ const UpdateStockpileMonitoringBook = () => {
 
   const [executeUpdate, { loading }] = useUpdateSampleStockpileMonitoring({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Monitoring Stockpile',
+          subCategory: '',
+          subSubCategory: '',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

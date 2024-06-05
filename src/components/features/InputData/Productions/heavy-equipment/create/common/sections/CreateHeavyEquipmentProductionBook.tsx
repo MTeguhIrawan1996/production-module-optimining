@@ -19,6 +19,7 @@ import {
   IMutationHeavyEquipmentDataProdValues,
   useCreateHeavyEquipmentProduction,
 } from '@/services/graphql/mutation/heavy-equipment-production/useCreateHeavyEquipmentProduction';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentCompany';
 import { useReadOneShiftMaster } from '@/services/graphql/query/shift/useReadOneShiftMaster';
 import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
@@ -32,6 +33,7 @@ import {
 } from '@/utils/constants/Field/global-field';
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { heavyEquipmentProductionMutationValidation } from '@/utils/form-validation/heavy-equipment-production/heavy-equipment-production-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { secondsDuration } from '@/utils/helper/dateFormat';
 import { dateToString } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
@@ -58,6 +60,10 @@ const CreateHeavyEquipmentProductionBook = () => {
     0,
     400
   );
+
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationHeavyEquipmentDataProdValues>({
@@ -163,6 +169,15 @@ const CreateHeavyEquipmentProductionBook = () => {
 
   const [executeCreate, { loading }] = useCreateHeavyEquipmentProduction({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Produksi',
+          subCategory: 'Produksi - Alat Berat - Simpan Input',
+          subSubCategory: '',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
