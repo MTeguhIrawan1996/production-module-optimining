@@ -9,8 +9,10 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneUploadFileTRK } from '@/services/graphql/query/file/useReadOneUploadFile';
 import { useUploadFileRitageTopsoil } from '@/services/restapi/ritage-productions/topsoil/useUploadFileRitageTopsoil';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
@@ -23,6 +25,9 @@ import {
 
 const UploadRitageTopsoilBook = () => {
   const { t } = useTranslation('default');
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const router = useRouter();
   const [isDirtyFile, setIsDirtyFile] = React.useState<boolean>(false);
   const [fileId, setFileId] = React.useState<string | null>(null);
@@ -78,6 +83,15 @@ const UploadRitageTopsoilBook = () => {
       setFileId(data.data.id);
       setMounted(true);
       setDisabled((prev) => !prev);
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Produksi',
+          subSubCategory: 'Produksi - Data Ritase - Topsoil - Simpan Unggah',
+          subCategory: 'Produksi - Data Ritase - Topsoil',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -183,11 +197,35 @@ const UploadRitageTopsoilBook = () => {
           label: t('ritageTopsoil.downloadTemplateTopsoil'),
           url: `/topsoil-ritages/file`,
           fileName: 'template-topsoil',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Topsoil - Template Input',
+                subCategory: 'Produksi - Data Ritase - Topsoil',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
         {
           label: t('commonTypography.downloadReference'),
           url: `/download/references`,
           fileName: 'referensi-topsoil',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Topsoil - Template Referensi',
+                subCategory: 'Produksi - Data Ritase - Topsoil',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
       ]}
     >

@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneBargingRitage } from '@/services/graphql/query/barging-ritage/useReadOneBargingRitage';
 import { useReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 import { IMutationRitageBarging } from '@/services/restapi/ritage-productions/barging/useCreateRitageBarging';
@@ -26,6 +27,7 @@ import {
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { domeNameSelect } from '@/utils/constants/Field/stockpile-field';
 import { ritageBargingMutationValidation } from '@/utils/form-validation/ritage/ritage-barging-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
@@ -38,6 +40,9 @@ import { ControllerGroup, ControllerProps, IFile } from '@/types/global';
 
 const UpdateRitageBargingBook = () => {
   const { t } = useTranslation('default');
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const router = useRouter();
   const id = router.query.id as string;
   const [newFromTime, setNewFromTime] = useDebouncedState<string>('', 400);
@@ -204,6 +209,15 @@ const UpdateRitageBargingBook = () => {
       }
     },
     onSuccess: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Produksi',
+          subSubCategory: '',
+          subCategory: 'Produksi - Data Ritase - Barging',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

@@ -17,6 +17,7 @@ import {
 import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
 import { useDeleteMovingRitage } from '@/services/graphql/mutation/moving-ritage/useDeleteMovingRitage';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadAllHeavyEquipmentSelect } from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
 import { useReadAllRitageMoving } from '@/services/graphql/query/moving-ritage/useReadAllMovingRitage';
 import { useReadAllRitageMovingDT } from '@/services/graphql/query/moving-ritage/useReadAllMovingRitageDT';
@@ -25,6 +26,7 @@ import {
   globalDateNative,
   globalSelectNative,
 } from '@/utils/constants/Field/native-field';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import { usePermissions } from '@/utils/store/usePermissions';
@@ -34,6 +36,9 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const ListDataMovingRitageBook = () => {
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const [tabs] = useQueryState('tabs');
   const [page, setPage] = React.useState<number>(1);
   const [heavyEquipmentPage, setHeavyEquipmentPage] = React.useState<number>(1);
@@ -425,11 +430,35 @@ const ListDataMovingRitageBook = () => {
           label: t('ritageMoving.downloadTemplateMoving'),
           url: `/moving-ritages/file`,
           fileName: 'template-moving',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Moving - Template Input',
+                subCategory: 'Produksi - Data Ritase - Moving',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
         {
           label: t('commonTypography.downloadReference'),
           url: `/download/references`,
           fileName: 'referensi-moving',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Moving - Template Referensi',
+                subCategory: 'Produksi - Data Ritase - Moving',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
       ]}
     >
@@ -470,13 +499,34 @@ const ListDataMovingRitageBook = () => {
         actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
         firstButton={{
           label: t('commonTypography.inputDataRitage'),
-          onClick: () =>
-            router.push('/input-data/production/data-ritage/moving/create'),
+          onClick: () => {
+            sendGAEvent({
+              event: 'Tambah',
+              params: {
+                category: 'Produksi',
+                subSubCategory: 'Produksi - Data Ritase - Moving - Modal Input',
+                subCategory: 'Produksi - Data Ritase - Moving',
+                account: userAuthData?.email ?? '',
+              },
+            });
+            router.push('/input-data/production/data-ritage/moving/create');
+          },
         }}
         secondButton={{
           label: t('commonTypography.uploadFile'),
-          onClick: () =>
-            router.push('/input-data/production/data-ritage/moving/upload'),
+          onClick: () => {
+            sendGAEvent({
+              event: 'Tambah',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Moving - Modal Unggah',
+                subCategory: 'Produksi - Data Ritase - Moving',
+                account: userAuthData?.email ?? '',
+              },
+            });
+            router.push('/input-data/production/data-ritage/moving/upload');
+          },
         }}
       />
     </DashboardCard>

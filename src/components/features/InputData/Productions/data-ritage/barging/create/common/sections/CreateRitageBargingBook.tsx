@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useDebouncedState } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
+import { sendGAEvent } from '@next/third-parties/google';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -9,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 import {
   IMutationRitageBarging,
@@ -39,6 +41,9 @@ import { ControllerGroup, ControllerProps } from '@/types/global';
 const CreateRitageBargingBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const [newFromTime, setNewFromTime] = useDebouncedState<string>('', 400);
   const [newArriveTime, setNewArriveTime] = useDebouncedState<string>('', 400);
   const [newBulkSamplingDensity, setNewBulkSamplingDensity] =
@@ -139,6 +144,15 @@ const CreateRitageBargingBook = () => {
       }
     },
     onSuccess: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Produksi',
+          subSubCategory: 'Produksi - Data Ritase - Barging - Simpan Input',
+          subCategory: 'Produksi - Data Ritase - Barging',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

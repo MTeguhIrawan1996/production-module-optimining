@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import {
   IMutationRitageMoving,
   useCreateRitageMoving,
@@ -26,6 +27,7 @@ import {
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { domeNameSelect } from '@/utils/constants/Field/stockpile-field';
 import { ritageMovingMutationValidation } from '@/utils/form-validation/ritage/ritage-moving-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
 import { dateToString } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
@@ -38,6 +40,9 @@ import { ControllerGroup, ControllerProps } from '@/types/global';
 const CreateRitageMovingBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const [newFromTime, setNewFromTime] = useDebouncedState<string>('', 400);
   const [newArriveTime, setNewArriveTime] = useDebouncedState<string>('', 400);
   const [newBulkSamplingDensity, setNewBulkSamplingDensity] =
@@ -116,6 +121,15 @@ const CreateRitageMovingBook = () => {
       }
     },
     onSuccess: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Produksi',
+          subSubCategory: 'Produksi - Data Ritase - Moving - Simpan Input',
+          subCategory: 'Produksi - Data Ritase - Moving',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

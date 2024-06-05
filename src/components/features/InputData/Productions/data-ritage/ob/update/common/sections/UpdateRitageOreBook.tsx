@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
 import { useReadOneObRitage } from '@/services/graphql/query/ob-ritage/useReadOneObRitage';
 import { IMutationRitageOb } from '@/services/restapi/ritage-productions/ob/useCreateRitageOb';
@@ -27,6 +28,7 @@ import {
 } from '@/utils/constants/Field/global-field';
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { ritageObMutationValidation } from '@/utils/form-validation/ritage/ritage-ob-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
@@ -40,6 +42,9 @@ import { ControllerGroup, ControllerProps, IFile } from '@/types/global';
 const UpdateRitageObBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const id = router.query.id as string;
   const [newFromTime, setNewFromTime] = useDebouncedState<string>('', 400);
   const [newArriveTime, setNewArriveTime] = useDebouncedState<string>('', 400);
@@ -206,6 +211,15 @@ const UpdateRitageObBook = () => {
       }
     },
     onSuccess: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Produksi',
+          subSubCategory: '',
+          subCategory: 'Produksi - Data Ritase - OB',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

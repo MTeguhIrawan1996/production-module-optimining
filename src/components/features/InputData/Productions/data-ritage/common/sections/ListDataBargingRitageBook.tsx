@@ -17,6 +17,7 @@ import {
 import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
 import { useDeleteBargingRitage } from '@/services/graphql/mutation/barging-ritage/useDeleteBargingRitage';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadAllRitageBarging } from '@/services/graphql/query/barging-ritage/useReadAllBargingRitage';
 import { useReadAllRitageBargingDT } from '@/services/graphql/query/barging-ritage/useReadAllBargingRitageDT';
 import { useReadAllHeavyEquipmentSelect } from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
@@ -25,6 +26,7 @@ import {
   globalDateNative,
   globalSelectNative,
 } from '@/utils/constants/Field/native-field';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import { usePermissions } from '@/utils/store/usePermissions';
@@ -34,6 +36,9 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const ListDataBargingRitageBook = () => {
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const [tabs] = useQueryState('tabs');
   const [page, setPage] = React.useState<number>(1);
   const [heavyEquipmentPage, setHeavyEquipmentPage] = React.useState<number>(1);
@@ -420,11 +425,35 @@ const ListDataBargingRitageBook = () => {
           label: t('ritageBarging.downloadTemplateBarging'),
           url: `/barging-ritages/file`,
           fileName: 'template-barging',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Barging - Template Input',
+                subCategory: 'Produksi - Data Ritase - Barging',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
         {
           label: t('commonTypography.downloadReference'),
           url: `/download/references`,
           fileName: 'referensi-barging',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Barging - Template Referensi',
+                subCategory: 'Produksi - Data Ritase - Barging',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
       ]}
     >
@@ -465,13 +494,35 @@ const ListDataBargingRitageBook = () => {
         actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
         firstButton={{
           label: t('commonTypography.inputDataRitage'),
-          onClick: () =>
-            router.push('/input-data/production/data-ritage/barging/create'),
+          onClick: () => {
+            sendGAEvent({
+              event: 'Tambah',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Barging - Modal Input',
+                subCategory: 'Produksi - Data Ritase - Barging',
+                account: userAuthData?.email ?? '',
+              },
+            });
+            router.push('/input-data/production/data-ritage/barging/create');
+          },
         }}
         secondButton={{
           label: t('commonTypography.uploadFile'),
-          onClick: () =>
-            router.push('/input-data/production/data-ritage/barging/upload'),
+          onClick: () => {
+            sendGAEvent({
+              event: 'Tambah',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Barging - Modal Unggah',
+                subCategory: 'Produksi - Data Ritase - Barging',
+                account: userAuthData?.email ?? '',
+              },
+            });
+            router.push('/input-data/production/data-ritage/barging/upload');
+          },
         }}
       />
     </DashboardCard>
