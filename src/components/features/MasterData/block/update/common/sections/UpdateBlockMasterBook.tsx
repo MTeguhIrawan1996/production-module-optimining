@@ -10,9 +10,11 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { IMutationBlockValues } from '@/services/graphql/mutation/block/useCreateBlockMaster';
 import { useUpdateBlockMaster } from '@/services/graphql/mutation/block/useUpdateBlockMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneBlockMaster } from '@/services/graphql/query/block/useReadOneBlockMaster';
 import { globalText } from '@/utils/constants/Field/global-field';
 import { blockMutationValidation } from '@/utils/form-validation/block/block-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -21,6 +23,9 @@ const UpdateBlockMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const methods = useForm<IMutationBlockValues>({
     resolver: zodResolver(blockMutationValidation),
     defaultValues: {
@@ -43,6 +48,16 @@ const UpdateBlockMasterBook = () => {
 
   const [executeUpdate, { loading }] = useUpdateBlockMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Block',
+          account: userAuthData?.email ?? '',
+        },
+      });
+
       notifications.show({
         color: 'green',
         title: 'Selamat',

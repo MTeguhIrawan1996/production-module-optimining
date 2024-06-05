@@ -10,15 +10,20 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { IMutationStockpileValues } from '@/services/graphql/mutation/stockpile-master/useCreateStockpileMaster';
 import { useUpdateStockpileMaster } from '@/services/graphql/mutation/stockpile-master/useUpdateStockpileMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneStockpileMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileMaster';
 import { globalText } from '@/utils/constants/Field/global-field';
 import { stockpileMutationValidation } from '@/utils/form-validation/stockpile/stockpile-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
 
 const UpdateStockpileMasterBook = () => {
   const { t } = useTranslation('default');
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const router = useRouter();
   const id = router.query.id as string;
   const methods = useForm<IMutationStockpileValues>({
@@ -43,6 +48,15 @@ const UpdateStockpileMasterBook = () => {
 
   const [executeUpdate, { loading }] = useUpdateStockpileMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Stockpile',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

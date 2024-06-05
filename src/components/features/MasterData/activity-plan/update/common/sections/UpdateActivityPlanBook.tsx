@@ -13,8 +13,10 @@ import {
   useUpdateActivityPlanMaster,
 } from '@/services/graphql/mutation/activity-plan/useUpdateActivityPlanMaster';
 import { useReadOneActivityPlanMaster } from '@/services/graphql/query/activity-plan/useReadOneActivityPlanMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { globalText } from '@/utils/constants/Field/global-field';
 import { activityPlanMutationValidation } from '@/utils/form-validation/activity-plan/activity-plan-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -23,6 +25,9 @@ const UpdateActivityPlanBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const methods = useForm<IMutationActivityPlanValues>({
     resolver: zodResolver(activityPlanMutationValidation),
     defaultValues: {
@@ -43,6 +48,15 @@ const UpdateActivityPlanBook = () => {
 
   const [executeUpdate, { loading }] = useUpdateActivityPlanMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Rencana Aktivitas',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

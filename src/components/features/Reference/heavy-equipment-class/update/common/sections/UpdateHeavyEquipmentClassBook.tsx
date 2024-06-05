@@ -11,12 +11,14 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 import { IHeavyEquipmentClassValues } from '@/components/features/Reference/heavy-equipment-class/create/common/sections/CreateHeavyEquipmentClassBook';
 
 import { useUpdateHeavyEquipmentClass } from '@/services/graphql/mutation/heavy-equipment-class/useUpdateHeavyEquipmentClass';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneHeavyEquipmentClass } from '@/services/graphql/query/heavy-equipment-class/useReadOneHeavyEquipmentClass';
 import {
   globalSelectReferenceRhf,
   globalText,
 } from '@/utils/constants/Field/global-field';
 import { classHeavyEquipmentMutationValidation } from '@/utils/form-validation/reference-heavy-equipment-class/heavy-equipment-class';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -25,6 +27,9 @@ const UpdateHeavyEquipmentClassBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IHeavyEquipmentClassValues>({
@@ -64,6 +69,15 @@ const UpdateHeavyEquipmentClassBook = () => {
 
   const [executeUpdate, { loading }] = useUpdateHeavyEquipmentClass({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Kelas Alat Berat',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
