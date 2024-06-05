@@ -37,11 +37,16 @@ import {
   IMutationMapValues,
   useCreateMap,
 } from '@/services/graphql/mutation/input-data-map/useCreateMap';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 const CreateMapQuarterlyProductionBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   const [fileId, setFileId] = React.useState<string | null>(null);
   const [mapCategoryList, setMapCategoryList] = React.useState<
@@ -69,6 +74,15 @@ const CreateMapQuarterlyProductionBook = () => {
 
   const [executeCreate, { loading }] = useCreateMap({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Produksi',
+          subCategory: 'Produksi - Peta',
+          subSubCategory: 'Produksi - Peta - Triwulan',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
