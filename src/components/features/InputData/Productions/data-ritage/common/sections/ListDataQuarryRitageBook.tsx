@@ -17,6 +17,7 @@ import {
 import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
 import { useDeleteQuarryRitage } from '@/services/graphql/mutation/quarry-ritage/useDeleteQuarryRitage';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadAllHeavyEquipmentSelect } from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
 import { useReadAllRitageQuarry } from '@/services/graphql/query/quarry-ritage/useReadAllQuarryRitage';
 import { useReadAllRitageQuarryDT } from '@/services/graphql/query/quarry-ritage/useReadAllQuarryRitageDT';
@@ -25,6 +26,7 @@ import {
   globalDateNative,
   globalSelectNative,
 } from '@/utils/constants/Field/native-field';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import { usePermissions } from '@/utils/store/usePermissions';
@@ -34,6 +36,9 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const ListDataQuarryRitageBook = () => {
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const [tabs] = useQueryState('tabs');
   const [page, setPage] = React.useState<number>(1);
   const [heavyEquipmentPage, setHeavyEquipmentPage] = React.useState<number>(1);
@@ -411,11 +416,35 @@ const ListDataQuarryRitageBook = () => {
           label: t('ritageQuarry.downloadTemplateQuarry'),
           url: `/quarry-ritages/file`,
           fileName: 'template-quarry',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Quarry - Template Input',
+                subCategory: 'Produksi - Data Ritase - Quarry',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
         {
           label: t('commonTypography.downloadReference'),
           url: `/download/references`,
           fileName: 'referensi-quarry',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Quarry - Template Referensi',
+                subCategory: 'Produksi - Data Ritase - Quarry',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
       ]}
     >
@@ -456,13 +485,34 @@ const ListDataQuarryRitageBook = () => {
         actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
         firstButton={{
           label: t('commonTypography.inputDataRitage'),
-          onClick: () =>
-            router.push('/input-data/production/data-ritage/quarry/create'),
+          onClick: () => {
+            sendGAEvent({
+              event: 'Tambah',
+              params: {
+                category: 'Produksi',
+                subSubCategory: 'Produksi - Data Ritase - Quarry - Modal Input',
+                subCategory: 'Produksi - Data Ritase - Quarry',
+                account: userAuthData?.email ?? '',
+              },
+            });
+            router.push('/input-data/production/data-ritage/quarry/create');
+          },
         }}
         secondButton={{
           label: t('commonTypography.uploadFile'),
-          onClick: () =>
-            router.push('/input-data/production/data-ritage/quarry/upload'),
+          onClick: () => {
+            sendGAEvent({
+              event: 'Tambah',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Quarry - Modal Unggah',
+                subCategory: 'Produksi - Data Ritase - Quarry',
+                account: userAuthData?.email ?? '',
+              },
+            });
+            router.push('/input-data/production/data-ritage/quarry/upload');
+          },
         }}
       />
     </DashboardCard>
