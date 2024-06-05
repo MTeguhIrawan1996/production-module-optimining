@@ -9,6 +9,7 @@ export type IDownloadButtonProps = {
   url: string;
   label: string;
   fileName: string;
+  trackDownloadAction?: () => void;
 } & ButtonProps;
 
 const DownloadButton: React.FC<IDownloadButtonProps> = (props) => {
@@ -22,6 +23,7 @@ const DownloadButton: React.FC<IDownloadButtonProps> = (props) => {
     url,
     label,
     fileName,
+    trackDownloadAction,
     ...rest
   } = props;
 
@@ -48,6 +50,9 @@ const DownloadButton: React.FC<IDownloadButtonProps> = (props) => {
       // Clean up the temporary URL and <a> element
       link?.parentNode?.removeChild(link);
       window.URL.revokeObjectURL(url);
+      if (trackDownloadAction) {
+        trackDownloadAction();
+      }
     } catch (error: any) {
       setLoading(false);
       notifications.show({

@@ -17,6 +17,7 @@ import {
 import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
 import { useDeleteOreRitage } from '@/services/graphql/mutation/ore-ritage/useDeleteOreRitage';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadAllHeavyEquipmentSelect } from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
 import { useReadAllRitageOre } from '@/services/graphql/query/ore-ritage/useReadAllOreRitage';
 import { useReadAllRitageOreDT } from '@/services/graphql/query/ore-ritage/useReadAllOreRitageDT';
@@ -25,6 +26,7 @@ import {
   globalDateNative,
   globalSelectNative,
 } from '@/utils/constants/Field/native-field';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import { usePermissions } from '@/utils/store/usePermissions';
@@ -34,6 +36,9 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const ListDataOreRitageBook = () => {
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const [tabs] = useQueryState('tabs', queryTypes.string.withDefault('ore'));
   const [page, setPage] = React.useState<number>(1);
   const [heavyEquipmentPage, setHeavyEquipmentPage] = React.useState<number>(1);
@@ -411,11 +416,34 @@ const ListDataOreRitageBook = () => {
           label: t('ritageOre.downloadTemplateOre'),
           url: `/ore-ritages/file`,
           fileName: 'template-ore',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory: 'Produksi - Data Ritase - Ore - Template Input',
+                subCategory: 'Produksi - Data Ritase - Ore',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
         {
           label: t('commonTypography.downloadReference'),
           url: `/download/references`,
           fileName: 'referensi-ore',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - Ore - Template Referensi',
+                subCategory: 'Produksi - Data Ritase - Ore',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
       ]}
     >
@@ -456,13 +484,33 @@ const ListDataOreRitageBook = () => {
         actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
         firstButton={{
           label: t('commonTypography.inputDataRitage'),
-          onClick: () =>
-            router.push('/input-data/production/data-ritage/ore/create'),
+          onClick: () => {
+            sendGAEvent({
+              event: 'Tambah',
+              params: {
+                category: 'Produksi',
+                subSubCategory: 'Produksi - Data Ritase - Ore - Modal Input',
+                subCategory: 'Produksi - Data Ritase - Ore',
+                account: userAuthData?.email ?? '',
+              },
+            });
+            router.push('/input-data/production/data-ritage/ore/create');
+          },
         }}
         secondButton={{
           label: t('commonTypography.uploadFile'),
-          onClick: () =>
-            router.push('/input-data/production/data-ritage/ore/upload'),
+          onClick: () => {
+            sendGAEvent({
+              event: 'Tambah',
+              params: {
+                category: 'Produksi',
+                subSubCategory: 'Produksi - Data Ritase - Ore - Modal Unggah',
+                subCategory: 'Produksi - Data Ritase - Ore',
+                account: userAuthData?.email ?? '',
+              },
+            });
+            router.push('/input-data/production/data-ritage/ore/upload');
+          },
         }}
       />
     </DashboardCard>

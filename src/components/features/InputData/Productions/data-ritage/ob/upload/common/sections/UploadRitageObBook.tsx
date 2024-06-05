@@ -9,8 +9,10 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneUploadFileTRK } from '@/services/graphql/query/file/useReadOneUploadFile';
 import { useUploadFileRitageOb } from '@/services/restapi/ritage-productions/ob/useUploadFileRitageOb';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
@@ -29,6 +31,9 @@ const UploadRitageObBook = () => {
   const [disabled, setDisabled] = React.useState<boolean>(false);
   const [mounted, setMounted] = React.useState<boolean>(false);
   const [dataFiald, setfaildData] = React.useState<unknown[]>([]);
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateFileProps>({
@@ -78,6 +83,15 @@ const UploadRitageObBook = () => {
       setFileId(data.data.id);
       setMounted(true);
       setDisabled((prev) => !prev);
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Produksi',
+          subSubCategory: 'Produksi - Data Ritase - OB - Simpan Unggah',
+          subCategory: 'Produksi - Data Ritase - OB',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

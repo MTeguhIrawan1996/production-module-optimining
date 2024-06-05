@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadAllBrand } from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
 import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
 import { useReadOneHeavyEquipmentReference } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipment';
@@ -18,6 +19,7 @@ import {
   useUpdateHeavyEquipment,
 } from '@/services/restapi/heavy-equipment/useUpdateHeavyEquipment';
 import { createHeavyEquipmentSchema } from '@/utils/form-validation/reference-heavy-equipment/heavy-equipment-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
@@ -41,6 +43,9 @@ const UpdateHeavyEquipmentBook = () => {
   const [brandSearchQuery] = useDebouncedValue<string>(brandSearchTerm, 400);
   const [typeSearchTerm, settypeSearchTerm] = React.useState<string>('');
   const [typeSearchQuery] = useDebouncedValue<string>(typeSearchTerm, 400);
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IUpdateHeavyEquipmentValues>({
@@ -114,6 +119,15 @@ const UpdateHeavyEquipmentBook = () => {
       }
     },
     onSuccess: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Alat Berat',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

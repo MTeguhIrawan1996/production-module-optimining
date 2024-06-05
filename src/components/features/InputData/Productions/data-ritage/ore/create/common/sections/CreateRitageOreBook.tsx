@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
 import {
   IMutationRitageOre,
@@ -32,6 +33,7 @@ import {
   stockpileNameSelect,
 } from '@/utils/constants/Field/stockpile-field';
 import { ritageOreMutationValidation } from '@/utils/form-validation/ritage/ritage-ore-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { countTonByRitage } from '@/utils/helper/countTonByRitage';
 import { dateToString } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
@@ -44,6 +46,9 @@ import { ControllerGroup, ControllerProps } from '@/types/global';
 const CreateRitageOreBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const [newFromTime, setNewFromTime] = useDebouncedState<string>('', 400);
   const [newArriveTime, setNewArriveTime] = useDebouncedState<string>('', 400);
   const [newBulkSamplingDensity, setNewBulkSamplingDensity] =
@@ -145,6 +150,15 @@ const CreateRitageOreBook = () => {
       }
     },
     onSuccess: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Produksi',
+          subSubCategory: 'Produksi - Data Ritase - Ore - Simpan Input',
+          subCategory: 'Produksi - Data Ritase - Ore',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import {
   ICreateCompanyHumanResource,
   useCreateCompanyHumanResource,
@@ -35,6 +36,7 @@ import {
   villageSelect,
 } from '@/utils/constants/Field/global-field';
 import { createHumanResourcesSchema } from '@/utils/form-validation/human-resources/human-resources-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 
@@ -43,6 +45,9 @@ import { ControllerGroup, ControllerProps } from '@/types/global';
 const CreateCompanyHumanResourcesBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const companyId = router.query?.id?.[0] as string;
   const methods = useForm<Omit<ICreateCompanyHumanResource, 'id'>>({
     resolver: zodResolver(createHumanResourcesSchema),
@@ -106,6 +111,15 @@ const CreateCompanyHumanResourcesBook = () => {
       }
     },
     onSuccess: ({ data }) => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Administrasi',
+          subSubCategory: 'Administrasi - Perusahaan - SDM',
+          subCategory: 'Administrasi - Perusahaan',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

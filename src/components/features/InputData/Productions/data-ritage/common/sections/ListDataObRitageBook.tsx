@@ -17,6 +17,7 @@ import {
 import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
 import { useDeleteOverburdenRitage } from '@/services/graphql/mutation/ob-ritage/useDeleteObRitage';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadAllHeavyEquipmentSelect } from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
 import { useReadAllRitageOB } from '@/services/graphql/query/ob-ritage/useReadAllObRitage';
 import { useReadAllRitageObDT } from '@/services/graphql/query/ob-ritage/useReadAllObRitageDT';
@@ -25,6 +26,7 @@ import {
   globalDateNative,
   globalSelectNative,
 } from '@/utils/constants/Field/native-field';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import { usePermissions } from '@/utils/store/usePermissions';
@@ -34,6 +36,9 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const ListDataObRitageBook = () => {
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const [tabs] = useQueryState('tabs');
   const [page, setPage] = React.useState<number>(1);
   const [heavyEquipmentPage, setHeavyEquipmentPage] = React.useState<number>(1);
@@ -412,11 +417,34 @@ const ListDataObRitageBook = () => {
           label: t('ritageOb.downloadTemplateOb'),
           url: `/overburden-ritages/file`,
           fileName: 'template-ob',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory: 'Produksi - Data Ritase - OB - Template Input',
+                subCategory: 'Produksi - Data Ritase - OB',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
         {
           label: t('commonTypography.downloadReference'),
           url: `/download/references`,
           fileName: 'referensi-ob',
+          trackDownloadAction: () => {
+            sendGAEvent({
+              event: 'Unduh',
+              params: {
+                category: 'Produksi',
+                subSubCategory:
+                  'Produksi - Data Ritase - OB - Template Referensi',
+                subCategory: 'Produksi - Data Ritase - OB',
+                account: userAuthData?.email ?? '',
+              },
+            });
+          },
         },
       ]}
     >
@@ -457,13 +485,33 @@ const ListDataObRitageBook = () => {
         actionSelectionModal={() => setIsOpenSelectionModal((prev) => !prev)}
         firstButton={{
           label: t('commonTypography.inputDataRitage'),
-          onClick: () =>
-            router.push('/input-data/production/data-ritage/ob/create'),
+          onClick: () => {
+            sendGAEvent({
+              event: 'Tambah',
+              params: {
+                category: 'Produksi',
+                subSubCategory: 'Produksi - Data Ritase - OB - Modal Input',
+                subCategory: 'Produksi - Data Ritase - OB',
+                account: userAuthData?.email ?? '',
+              },
+            });
+            router.push('/input-data/production/data-ritage/ob/create');
+          },
         }}
         secondButton={{
           label: t('commonTypography.uploadFile'),
-          onClick: () =>
-            router.push('/input-data/production/data-ritage/ob/upload'),
+          onClick: () => {
+            sendGAEvent({
+              event: 'Tambah',
+              params: {
+                category: 'Produksi',
+                subSubCategory: 'Produksi - Data Ritase - OB - Modal Unggah',
+                subCategory: 'Produksi - Data Ritase - OB',
+                account: userAuthData?.email ?? '',
+              },
+            });
+            router.push('/input-data/production/data-ritage/ob/upload');
+          },
         }}
       />
     </DashboardCard>
