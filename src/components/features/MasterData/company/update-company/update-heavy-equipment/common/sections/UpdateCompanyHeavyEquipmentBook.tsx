@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneHeavyEquipmentReference } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipment';
 import { useReadOneHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentCompany';
 import { ICreateHeavyEquipmentCompanyValues } from '@/services/restapi/heavy-equipment/useCreateHeavyEquipmentCompany';
@@ -22,6 +23,7 @@ import {
   typeSelect,
 } from '@/utils/constants/Field/global-field';
 import { createHeavyEquipmentCompanySchema } from '@/utils/form-validation/master-heavy-equipment/heavy-equipment-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -42,6 +44,9 @@ const UpdateCompanyHeavyEquipmentBook = () => {
   const [deletedPhotoIds, setDeletedPhotoIds] = React.useState<string[]>([]);
   const [serverVehicleNumberPhoto, setServerVehicleNumberPhoto] =
     React.useState<Omit<IFile, 'mime' | 'path'>[] | null>([]);
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateHeavyEquipmentCompanyValues>({
@@ -170,6 +175,15 @@ const UpdateCompanyHeavyEquipmentBook = () => {
       }
     },
     onSuccess: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Administrasi',
+          subSubCategory: 'Administrasi - Perusahaan - Unit Alat Berat',
+          subCategory: 'Administrasi - Perusahaan',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

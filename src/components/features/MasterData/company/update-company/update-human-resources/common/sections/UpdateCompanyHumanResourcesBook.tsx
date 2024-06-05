@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneEmployee } from '@/services/graphql/query/master-data-company/useReadOneCompanyHumanResource';
 import {
   IUpdateCompanyHumanResourceValues,
@@ -36,6 +37,7 @@ import {
   villageSelect,
 } from '@/utils/constants/Field/global-field';
 import { createHumanResourcesSchema } from '@/utils/form-validation/human-resources/human-resources-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -57,6 +59,9 @@ const UpdateCompanyHumanResourcesBook = () => {
   const [deletedPhotoIdentityIds, setDeletedPhotoIdentityIds] = React.useState<
     string[]
   >([]);
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const methods = useForm<Omit<IUpdateCompanyHumanResourceValues, 'id'>>({
     resolver: zodResolver(createHumanResourcesSchema),
     defaultValues: {
@@ -208,6 +213,15 @@ const UpdateCompanyHumanResourcesBook = () => {
       }
     },
     onSuccess: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Administrasi',
+          subSubCategory: 'Administrasi - Perusahaan - SDM',
+          subCategory: 'Administrasi - Perusahaan',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

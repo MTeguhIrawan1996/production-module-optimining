@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneHeavyEquipmentReference } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipment';
 import {
   ICreateHeavyEquipmentCompanyValues,
@@ -24,6 +25,7 @@ import {
   typeSelect,
 } from '@/utils/constants/Field/global-field';
 import { createHeavyEquipmentCompanySchema } from '@/utils/form-validation/master-heavy-equipment/heavy-equipment-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
@@ -64,6 +66,9 @@ const CreateCompanyHeavyEquipmentBook = () => {
   const isStill = methods.watch('isStill');
   const photos = methods.watch('photos');
   const referenceId = methods.watch('referenceId');
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #endregion  /**======== Methods =========== */
 
@@ -88,6 +93,15 @@ const CreateCompanyHeavyEquipmentBook = () => {
       }
     },
     onSuccess: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Administrasi',
+          subSubCategory: 'Administrasi - Perusahaan - Unit Alat Berat',
+          subCategory: 'Administrasi - Perusahaan',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

@@ -99,9 +99,9 @@ const CreateHeavyEquipmentMasterBook = () => {
       sendGAEvent({
         event: 'Tambah',
         params: {
-          category: 'Pra Rencana',
+          category: 'Administrasi',
           subSubCategory: '',
-          subCategory: 'Pra Rencana - Alat Berat',
+          subCategory: 'Administrasi - Alat Berat',
           account: userAuthData?.email ?? '',
         },
       });

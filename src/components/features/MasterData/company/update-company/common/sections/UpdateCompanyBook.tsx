@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneCompany } from '@/services/graphql/query/master-data-company/useReadOneCompany';
 import { ICompanyMutationValues } from '@/services/restapi/company/useCreateCompanyMasterData';
 import { useUpdateCompany } from '@/services/restapi/company/useUpdateCompanyMasterData';
@@ -27,6 +28,7 @@ import {
   villageSelect,
 } from '@/utils/constants/Field/global-field';
 import { companyMutationValidation } from '@/utils/form-validation/company/company-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
@@ -45,6 +47,9 @@ const UpdateCompanyBook = () => {
   const { classes } = useStyles();
   const { t } = useTranslation('default');
   const router = useRouter();
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const id = router.query.id as string;
   const [companyPermissionType, setCompanyPermissionType] =
     React.useState<string>('');
@@ -144,6 +149,15 @@ const UpdateCompanyBook = () => {
       }
     },
     onSuccess: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Administrasi',
+          subSubCategory: '',
+          subCategory: 'Administrasi - Perusahaan',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

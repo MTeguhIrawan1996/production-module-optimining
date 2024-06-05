@@ -14,8 +14,10 @@ import {
 } from '@/components/elements';
 
 import { useCreateEmployeeBulk } from '@/services/graphql/mutation/master-data-company/useCreateCompanySDMAvailable';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { IHumanResourcesData } from '@/services/graphql/query/master-data-human-resources/useReadAllMasterDataHumanResources';
 import { useReadAllNonEmployeedHumanResourcesMasterData } from '@/services/graphql/query/master-data-human-resources/useReadAllNonEmployeHumanResources';
+import { sendGAEvent } from '@/utils/helper/analytics';
 
 const CreateHumanResourcesAvailableBook = () => {
   const router = useRouter();
@@ -27,6 +29,9 @@ const CreateHumanResourcesAvailableBook = () => {
   const [choosesHumanResources, setChooseHumanResources] = React.useState<
     IHumanResourcesData[]
   >([]);
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   const {
     nonEmployeedHumanResourcesData,
@@ -47,6 +52,15 @@ const CreateHumanResourcesAvailableBook = () => {
 
   const [executeCreate, { loading }] = useCreateEmployeeBulk({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Administrasi',
+          subSubCategory: 'Administrasi - Perusahaan - SDM',
+          subCategory: 'Administrasi - Perusahaan',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
