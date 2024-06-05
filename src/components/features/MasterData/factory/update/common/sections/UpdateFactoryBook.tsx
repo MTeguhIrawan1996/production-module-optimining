@@ -10,12 +10,14 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { IMutationFactoryValues } from '@/services/graphql/mutation/factory/useCreateFactoryMaster';
 import { useUpdateFactoryMaster } from '@/services/graphql/mutation/factory/useUpdateFactoryMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneFactoryMaster } from '@/services/graphql/query/factory/useReadOneFactoryMaster';
 import {
   globalSelectArriveBargeRhf,
   globalText,
 } from '@/utils/constants/Field/global-field';
 import { factoryMutationValidation } from '@/utils/form-validation/factory/factory-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -24,6 +26,9 @@ const UpdateFactoryBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const methods = useForm<IMutationFactoryValues>({
     resolver: zodResolver(factoryMutationValidation),
     defaultValues: {
@@ -46,6 +51,15 @@ const UpdateFactoryBook = () => {
 
   const [executeUpdate, { loading }] = useUpdateFactoryMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Pabrik / Vessel',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

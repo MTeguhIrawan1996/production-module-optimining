@@ -10,12 +10,14 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { IMutationShiftValues } from '@/services/graphql/mutation/shift/useCreateShiftMaster';
 import { useUpdateShiftMaster } from '@/services/graphql/mutation/shift/useUpdateShiftMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneShiftMaster } from '@/services/graphql/query/shift/useReadOneShiftMaster';
 import {
   globalText,
   globalTimeInput,
 } from '@/utils/constants/Field/global-field';
 import { shiftMutationValidation } from '@/utils/form-validation/shift/shift-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -24,6 +26,9 @@ const UpdateShiftMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const methods = useForm<IMutationShiftValues>({
     resolver: zodResolver(shiftMutationValidation),
     defaultValues: {
@@ -48,6 +53,15 @@ const UpdateShiftMasterBook = () => {
 
   const [executeUpdate, { loading }] = useUpdateShiftMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Shift',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

@@ -14,8 +14,10 @@ import {
 } from '@/components/elements';
 
 import { useCreateCompanyHeavyEquipmentBulk } from '@/services/graphql/mutation/heavy-equipment/useCreateCompanyHeavyEquipmentAvailable';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { IHeavyEquipmentMasterData } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentMasterData';
 import { useReadAllNonCompanyHeavyEquipment } from '@/services/graphql/query/heavy-equipment/useReadAllNonCompanyHeavyEquipment';
+import { sendGAEvent } from '@/utils/helper/analytics';
 
 const CreateHeavyEquipmentAvailableBook = () => {
   const router = useRouter();
@@ -27,6 +29,9 @@ const CreateHeavyEquipmentAvailableBook = () => {
   const [choosesHeavyEquipment, setChooseHeavyEquipment] = React.useState<
     IHeavyEquipmentMasterData[]
   >([]);
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   const {
     nonOwnedByCompanyHeavyEquipmentsData,
@@ -46,6 +51,15 @@ const CreateHeavyEquipmentAvailableBook = () => {
 
   const [executeCreate, { loading }] = useCreateCompanyHeavyEquipmentBulk({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Tambah',
+        params: {
+          category: 'Administrasi',
+          subSubCategory: 'Administrasi - Perusahaan - Unit Alat Berat',
+          subCategory: 'Administrasi - Perusahaan',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

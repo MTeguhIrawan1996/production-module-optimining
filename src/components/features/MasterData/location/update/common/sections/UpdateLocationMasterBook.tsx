@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { notifications } from '@mantine/notifications';
+import { sendGAEvent } from '@next/third-parties/google';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -10,6 +11,7 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { IMutationLocationValues } from '@/services/graphql/mutation/location/useCreateLocationMaster';
 import { useUpdateLocationMaster } from '@/services/graphql/mutation/location/useUpdateLocationMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneLocationMaster } from '@/services/graphql/query/location/useReadOneLocationMaster';
 import {
   globalText,
@@ -24,6 +26,9 @@ const UpdateLocationMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const methods = useForm<IMutationLocationValues>({
     resolver: zodResolver(locationMutationValidation),
     defaultValues: {
@@ -48,6 +53,15 @@ const UpdateLocationMasterBook = () => {
 
   const [executeUpdate, { loading }] = useUpdateLocationMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Lokasi',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

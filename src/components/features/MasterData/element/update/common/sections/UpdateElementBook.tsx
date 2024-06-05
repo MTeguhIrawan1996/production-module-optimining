@@ -10,9 +10,11 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { IMutationElementValues } from '@/services/graphql/mutation/element/useCreateElementMaster';
 import { useUpdateElementMaster } from '@/services/graphql/mutation/element/useUpdateElementMaster';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneElementMaster } from '@/services/graphql/query/element/useReadOneElementMaster';
 import { globalText } from '@/utils/constants/Field/global-field';
 import { elementMutationValidation } from '@/utils/form-validation/element/element-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ControllerGroup } from '@/types/global';
@@ -21,6 +23,9 @@ const UpdateElementBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
   const methods = useForm<IMutationElementValues>({
     resolver: zodResolver(elementMutationValidation),
     defaultValues: {
@@ -41,6 +46,15 @@ const UpdateElementBook = () => {
 
   const [executeUpdate, { loading }] = useUpdateElementMaster({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Unsur Kandungan',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

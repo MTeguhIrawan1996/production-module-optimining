@@ -42,7 +42,9 @@ import {
   useUpdateActivityCategory,
 } from '@/services/graphql/mutation/activity-category/useUpdateActivityCategory';
 import { useReadOneActivityCategory } from '@/services/graphql/query/activity-category/useReadOneActivityCategory';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { calculationMutationValidation } from '@/utils/form-validation/activity-category/activity-category-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
 import { ITab } from '@/types/global';
@@ -59,6 +61,9 @@ const UpdateCalculationCategoryBook: React.FC<
   const id = router.query.id as string;
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationCalculationValues>({
@@ -104,6 +109,15 @@ const UpdateCalculationCategoryBook: React.FC<
   });
   const [executeUpdate, { loading }] = useUpdateActivityCategory({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Pra Rencana',
+          subSubCategory: '',
+          subCategory: 'Pra Rencana - Kategori Kegiatan',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
