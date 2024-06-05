@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import { useReadOneSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadOneSampleHouseLab';
 import { IMutationSampleHousePlanValues } from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
@@ -32,6 +33,7 @@ import {
   shiftSelect,
 } from '@/utils/constants/Field/sample-house-field';
 import { sampleHouseLabMutationValidation } from '@/utils/form-validation/sample-house-lab/sample-house-lab-mutation-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
@@ -49,6 +51,9 @@ const UpdateSampleHouseLabPage = () => {
   >([]);
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationSampleHousePlanValues>({
@@ -253,6 +258,15 @@ const UpdateSampleHouseLabPage = () => {
       }
     },
     onSuccess: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Quality',
+          subCategory: 'Quality - Rumah Sampel dan Lab',
+          subSubCategory: '',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

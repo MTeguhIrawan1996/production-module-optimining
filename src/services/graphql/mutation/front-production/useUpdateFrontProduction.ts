@@ -41,6 +41,7 @@ export const UPDATE_FRONT_PRODUCTION = gql`
       }
     ) {
       id
+      type
     }
   }
 `;
@@ -63,6 +64,7 @@ export type IFrontProductionValueProps =
 interface IUpdateFrontProductionResponse {
   updateFrontData: {
     id: string;
+    type: string;
   };
 }
 

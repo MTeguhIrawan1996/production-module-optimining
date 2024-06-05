@@ -22,6 +22,7 @@ import {
   IFrontProductionValueProps,
   useUpdateFrontProduction,
 } from '@/services/graphql/mutation/front-production/useUpdateFrontProduction';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneBlockPitMaster } from '@/services/graphql/query/block/useReadOneBlockPitMaster';
 import { useReadOneFrontProduction } from '@/services/graphql/query/front-production/useReadOneFrontProduction';
 import { useReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
@@ -38,6 +39,7 @@ import {
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { domeNameSelect } from '@/utils/constants/Field/stockpile-field';
 import { frontProductionMutationValidation } from '@/utils/form-validation/front-production/front-production-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 
@@ -50,6 +52,9 @@ const UpdateFrontProductionBook = () => {
   const segment = router.query['segment'] || 'pit';
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationFrontProductionValues>({
@@ -181,7 +186,22 @@ const UpdateFrontProductionBook = () => {
     },
   });
   const [executeUpdate, { loading }] = useUpdateFrontProduction({
-    onCompleted: () => {
+    onCompleted: ({ updateFrontData }) => {
+      const segmentObj = {
+        pit: 'PIT',
+        dome: 'DOME',
+      };
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Produksi',
+          subCategory: 'Produksi - Front',
+          subSubCategory: `Produksi - Front - ${
+            segmentObj[updateFrontData.type]
+          }`,
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

@@ -17,6 +17,7 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { IMutationHeavyEquipmentDataProdValues } from '@/services/graphql/mutation/heavy-equipment-production/useCreateHeavyEquipmentProduction';
 import { useUpdateHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useUpdateHeavyEquipmentProduction';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadOneHeavyEquipmentCompany';
 import { useReadOneHeavyEquipmentProduction } from '@/services/graphql/query/heavy-equipment-production/useReadOneHeavyEquipmentProduction';
 import { useReadOneShiftMaster } from '@/services/graphql/query/shift/useReadOneShiftMaster';
@@ -30,6 +31,7 @@ import {
 } from '@/utils/constants/Field/global-field';
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { heavyEquipmentProductionMutationValidation } from '@/utils/form-validation/heavy-equipment-production/heavy-equipment-production-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
@@ -60,6 +62,9 @@ const UpdateHeavyEquipmentProductionBook = () => {
   );
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationHeavyEquipmentDataProdValues>({
@@ -223,6 +228,15 @@ const UpdateHeavyEquipmentProductionBook = () => {
 
   const [executeUpdate, { loading }] = useUpdateHeavyEquipmentProduction({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Produksi',
+          subCategory: 'Produksi - Alat Berat - Simpan Input',
+          subSubCategory: '',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',

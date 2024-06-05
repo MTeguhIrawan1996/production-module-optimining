@@ -15,6 +15,7 @@ import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
 import { IMutationWeatherProductionValues } from '@/services/graphql/mutation/weather-production/useCreateWeatherProduction';
 import { useUpdateWeatherProduction } from '@/services/graphql/mutation/weather-production/useUpdateWeatherProduction';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadOneWeatherProduction } from '@/services/graphql/query/weather-production/useReadOneWeatherProduction';
 import {
   employeeSelect,
@@ -27,6 +28,7 @@ import {
   weatherConditionSelect,
 } from '@/utils/constants/Field/global-field';
 import { weatherProductionMutationValidation } from '@/utils/form-validation/weather-production/weather-production-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { dateToString, stringToDate } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
@@ -39,6 +41,9 @@ const UpdateWeatherProductionBook = () => {
   const id = router.query.id as string;
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationWeatherProductionValues>({
@@ -108,6 +113,15 @@ const UpdateWeatherProductionBook = () => {
 
   const [executeUpdate, { loading }] = useUpdateWeatherProduction({
     onCompleted: () => {
+      sendGAEvent({
+        event: 'Edit',
+        params: {
+          category: 'Produksi',
+          subCategory: 'Produksi - Data Cuaca',
+          subSubCategory: '',
+          account: userAuthData?.email ?? '',
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
