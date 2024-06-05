@@ -154,7 +154,7 @@ const CreateRitageOreBook = () => {
         event: 'Tambah',
         params: {
           category: 'Produksi',
-          subSubCategory: 'Produksi - Data Ritase Ore - Simpan Input',
+          subSubCategory: 'Produksi - Data Ritase - Ore - Simpan Input',
           subCategory: 'Produksi - Data Ritase - Ore',
           account: userAuthData?.email ?? '',
         },
