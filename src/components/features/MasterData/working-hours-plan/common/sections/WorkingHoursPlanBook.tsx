@@ -1,10 +1,10 @@
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -15,19 +15,20 @@ import {
 
 import { useDeleteWHPMaster } from '@/services/graphql/mutation/working-hours-plan/useDeleteWHPMaster';
 import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
 const WorkingHoursPlanBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
+  const [{ page, searchWHP }, setPage, setSearchWHP] = useControlPanel(
+    (state) => [state.whpState, state.setWHPPage, state.setSearchWHP],
+    shallow
   );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [searchQuery] = useDebouncedValue<string>(searchWHP, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
@@ -35,6 +36,10 @@ const WorkingHoursPlanBook = () => {
   const isPermissionUpdate = permissions?.includes('update-working-hour-plan');
   const isPermissionDelete = permissions?.includes('delete-working-hour-plan');
   const isPermissionRead = permissions?.includes('read-working-hour-plan');
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const {
@@ -56,9 +61,7 @@ const WorkingHoursPlanBook = () => {
     onCompleted: () => {
       refetchWorkingHourPlans();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setPage({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -86,9 +89,7 @@ const WorkingHoursPlanBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage({ page });
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -206,13 +207,12 @@ const WorkingHoursPlanBook = () => {
       searchBar={{
         placeholder: t('workingHoursPlan.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setSearchWHP({ searchWHP: e.currentTarget.value });
         },
         searchQuery: searchQuery,
+        value: searchWHP,
         onSearch: () => {
-          setPage(1, {
-            shallow: true,
-          });
+          setPage({ page: 1 });
         },
       }}
     >

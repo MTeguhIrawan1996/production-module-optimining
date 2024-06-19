@@ -22,13 +22,19 @@ import useStore from '@/utils/store/useStore';
 const BlockBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [{ page, searchBlock }, setPage, setSearchBlock] = useControlPanel(
-    (state) => [state.blockState, state.setBlockPage, state.setSearchBlock],
-    shallow
-  );
+  const [{ page, search }, setPage, setSearchBlock, resetPitState] =
+    useControlPanel(
+      (state) => [
+        state.blockState,
+        state.setBlockPage,
+        state.setSearchBlock,
+        state.resetPitState,
+      ],
+      shallow
+    );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [searchQuery] = useDebouncedValue<string>(searchBlock, 500);
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
@@ -36,6 +42,10 @@ const BlockBook = () => {
   const isPermissionUpdate = permissions?.includes('update-block');
   const isPermissionDelete = permissions?.includes('delete-block');
   const isPermissionRead = permissions?.includes('read-block');
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const { blocksData, blocksDataLoading, blocksDataMeta, refetchBlocks } =
@@ -118,6 +128,7 @@ const BlockBook = () => {
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
+                              resetPitState();
                               router.push(`/master-data/block/read/${id}`);
                             },
                           }
@@ -180,10 +191,6 @@ const BlockBook = () => {
   ]);
   /* #endregion  /**======== RenderTable =========== */
 
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-  }, []);
-
   return (
     <DashboardCard
       addButton={
@@ -197,9 +204,9 @@ const BlockBook = () => {
       searchBar={{
         placeholder: t('block.searchPlaceholder'),
         onChange: (e) => {
-          setSearchBlock({ searchBlock: e.currentTarget.value });
+          setSearchBlock({ search: e.currentTarget.value });
         },
-        value: searchBlock,
+        value: search,
         onSearch: () => {
           setPage({ page: 1 });
         },

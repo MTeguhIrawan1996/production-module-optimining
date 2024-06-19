@@ -10,6 +10,7 @@ import {
   useForm,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
@@ -20,6 +21,7 @@ import {
 import { globalText } from '@/utils/constants/Field/global-field';
 import { blockPitMutationValidation } from '@/utils/form-validation/block/block-mutation-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -27,6 +29,10 @@ const CreateBlockPitMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+  const [resetPitState] = useControlPanel(
+    (state) => [state.resetPitState],
+    shallow
+  );
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationBlockPitValues>({
@@ -56,6 +62,7 @@ const CreateBlockPitMasterBook = () => {
         message: t('block.successCreatePitMessage'),
         icon: <IconCheck />,
       });
+      resetPitState();
       methods.reset();
       router.push(`/master-data/block/read/${id}`);
     },

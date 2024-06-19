@@ -5,7 +5,7 @@ import { sliceResetFns } from '@/utils/store/useControlPanel';
 type ILocationState = {
   page: number;
   categoryId: string | null;
-  searchLoaction: string;
+  searchLocation: string;
 };
 
 export type ILocationSliceValue = {
@@ -15,14 +15,15 @@ export type ILocationSliceValue = {
 export interface ILocationSliceAction {
   setLoactionPage: (payload: Pick<ILocationState, 'page'>) => void;
   setCategoryId: (payload: Pick<ILocationState, 'categoryId'>) => void;
-  setSearchLocation: (payload: Pick<ILocationState, 'searchLoaction'>) => void;
+  setSearchLocation: (payload: Pick<ILocationState, 'searchLocation'>) => void;
+  resetLocationState: () => void;
 }
 
 const initialState: ILocationSliceValue = {
   locationState: {
     page: 1,
     categoryId: null,
-    searchLoaction: '',
+    searchLocation: '',
   },
 };
 
@@ -36,7 +37,7 @@ export const createLocationSlice: StateCreator<
       set((state) => ({
         locationState: {
           ...state.locationState,
-          searchLoaction: payload.searchLoaction,
+          searchLocation: payload.searchLocation,
         },
       })),
     setCategoryId: (payload) =>
@@ -53,5 +54,8 @@ export const createLocationSlice: StateCreator<
           page: payload.page,
         },
       })),
+    resetLocationState: () => {
+      set(initialState);
+    },
   };
 };
