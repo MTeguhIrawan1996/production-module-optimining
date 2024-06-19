@@ -14,6 +14,7 @@ export type IBlockSliceValue = {
 export interface IBlockSliceAction {
   setBlockPage: (payload: Pick<IBlockState, 'page'>) => void;
   setSearchBlock: (payload: Pick<IBlockState, 'searchBlock'>) => void;
+  resetBlockState: () => void;
 }
 
 const initialState: IBlockSliceValue = {
@@ -43,5 +44,8 @@ export const createBlockSlice: StateCreator<
           page: payload.page,
         },
       })),
+    resetBlockState: () => {
+      set(initialState);
+    },
   };
 };

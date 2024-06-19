@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
@@ -20,12 +21,17 @@ import {
 import { locationMutationValidation } from '@/utils/form-validation/location/location-mutation-validation';
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import { ControllerGroup } from '@/types/global';
 
 const CreateLocationMasterBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const [resetLocationState] = useControlPanel(
+    (state) => [state.resetLocationState],
+    shallow
+  );
 
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
@@ -62,6 +68,7 @@ const CreateLocationMasterBook = () => {
         message: t('location.successCreateMessage'),
         icon: <IconCheck />,
       });
+      resetLocationState();
       methods.reset();
       router.push('/master-data/location');
     },

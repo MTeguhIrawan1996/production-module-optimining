@@ -10,6 +10,7 @@ import {
   useForm,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
@@ -22,6 +23,7 @@ import { globalText } from '@/utils/constants/Field/global-field';
 import { whpMutationValidation } from '@/utils/form-validation/working-hours-plan/whp-mutation-validation';
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -30,6 +32,7 @@ const CreateWorkingHoursPlanBook = () => {
   const router = useRouter();
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
+  const [resetWHP] = useControlPanel((state) => [state.resetWHP], shallow);
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
@@ -74,6 +77,7 @@ const CreateWorkingHoursPlanBook = () => {
       });
       setIsOpenConfirmation((prev) => !prev);
       methods.reset();
+      resetWHP();
       router.push('/master-data/working-hours-plan');
     },
     onError: (error) => {
