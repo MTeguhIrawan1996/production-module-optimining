@@ -13,6 +13,7 @@ import { AuthGlobalForm } from '@/components/elements';
 import { ILogin, useLogin } from '@/services/next-auth/login/useLogin';
 import authField from '@/utils/constants/Field/auth-field';
 import { authValidationSchema } from '@/utils/form-validation/auth/auth-validation';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 
 import { IErrorResponseExtensionNextAuth } from '@/types/global';
@@ -72,6 +73,7 @@ const AuthBook = () => {
 
   React.useEffect(() => {
     setPermissions([]);
+    useControlPanel.persist.clearStorage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
