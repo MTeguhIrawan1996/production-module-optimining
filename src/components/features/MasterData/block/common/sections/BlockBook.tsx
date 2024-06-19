@@ -22,7 +22,7 @@ import useStore from '@/utils/store/useStore';
 const BlockBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [{ page, searchBlock }, setPage, setSearchBlock, resetPitState] =
+  const [{ page, search }, setPage, setSearchBlock, resetPitState] =
     useControlPanel(
       (state) => [
         state.blockState,
@@ -34,7 +34,7 @@ const BlockBook = () => {
     );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [searchQuery] = useDebouncedValue<string>(searchBlock, 500);
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
@@ -204,9 +204,9 @@ const BlockBook = () => {
       searchBar={{
         placeholder: t('block.searchPlaceholder'),
         onChange: (e) => {
-          setSearchBlock({ searchBlock: e.currentTarget.value });
+          setSearchBlock({ search: e.currentTarget.value });
         },
-        value: searchBlock,
+        value: search,
         onSearch: () => {
           setPage({ page: 1 });
         },

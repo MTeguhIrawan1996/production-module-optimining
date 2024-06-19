@@ -28,11 +28,11 @@ const ReadBlockMasterBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
-  const [{ page, searchPit }, setPage, setSearchPit] = useControlPanel(
+  const [{ page, search }, setPage, setSearchPit] = useControlPanel(
     (state) => [state.pitState, state.setPitPage, state.setSearchPit],
     shallow
   );
-  const [searchQuery] = useDebouncedValue<string>(searchPit, 500);
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [pitId, setPitId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -234,10 +234,10 @@ const ReadBlockMasterBook = () => {
             }}
             searchBar={{
               onChange: (e) => {
-                setSearchPit({ searchPit: e.currentTarget.value });
+                setSearchPit({ search: e.currentTarget.value });
               },
               searchQuery,
-              value: searchPit,
+              value: search,
               onSearch: () => {
                 setPage({ page: 1 });
                 refetchBlocks({

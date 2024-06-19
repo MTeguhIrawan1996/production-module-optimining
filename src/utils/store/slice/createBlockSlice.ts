@@ -4,35 +4,31 @@ import { sliceResetFns } from '@/utils/store/useControlPanel';
 
 type IBlockState = {
   page: number;
-  searchBlock: string;
-};
-type IPitState = {
-  page: number;
-  searchPit: string;
+  search: string;
 };
 
 export type IBlockSliceValue = {
   blockState: IBlockState;
-  pitState: IPitState;
+  pitState: IBlockState;
 };
 
 export interface IBlockSliceAction {
   setBlockPage: (payload: Pick<IBlockState, 'page'>) => void;
-  setSearchBlock: (payload: Pick<IBlockState, 'searchBlock'>) => void;
+  setSearchBlock: (payload: Pick<IBlockState, 'search'>) => void;
   resetBlockState: () => void;
-  setPitPage: (payload: Pick<IPitState, 'page'>) => void;
-  setSearchPit: (payload: Pick<IPitState, 'searchPit'>) => void;
+  setPitPage: (payload: Pick<IBlockState, 'page'>) => void;
+  setSearchPit: (payload: Pick<IBlockState, 'search'>) => void;
   resetPitState: () => void;
 }
 
 const initialState: IBlockSliceValue = {
   blockState: {
     page: 1,
-    searchBlock: '',
+    search: '',
   },
   pitState: {
     page: 1,
-    searchPit: '',
+    search: '',
   },
 };
 
@@ -46,7 +42,7 @@ export const createBlockSlice: StateCreator<
       set((state) => ({
         blockState: {
           ...state.blockState,
-          searchBlock: payload.searchBlock,
+          search: payload.search,
         },
       })),
     setBlockPage: (payload) =>
@@ -66,7 +62,7 @@ export const createBlockSlice: StateCreator<
       set((state) => ({
         pitState: {
           ...state.pitState,
-          searchPit: payload.searchPit,
+          search: payload.search,
         },
       })),
     setPitPage: (payload) =>
