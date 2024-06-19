@@ -22,10 +22,16 @@ import useStore from '@/utils/store/useStore';
 const BlockBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [{ page, searchBlock }, setPage, setSearchBlock] = useControlPanel(
-    (state) => [state.blockState, state.setBlockPage, state.setSearchBlock],
-    shallow
-  );
+  const [{ page, searchBlock }, setPage, setSearchBlock, resetPitState] =
+    useControlPanel(
+      (state) => [
+        state.blockState,
+        state.setBlockPage,
+        state.setSearchBlock,
+        state.resetPitState,
+      ],
+      shallow
+    );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [searchQuery] = useDebouncedValue<string>(searchBlock, 500);
@@ -36,6 +42,10 @@ const BlockBook = () => {
   const isPermissionUpdate = permissions?.includes('update-block');
   const isPermissionDelete = permissions?.includes('delete-block');
   const isPermissionRead = permissions?.includes('read-block');
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const { blocksData, blocksDataLoading, blocksDataMeta, refetchBlocks } =
@@ -118,6 +128,7 @@ const BlockBook = () => {
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
+                              resetPitState();
                               router.push(`/master-data/block/read/${id}`);
                             },
                           }
@@ -179,10 +190,6 @@ const BlockBook = () => {
     isPermissionCreate,
   ]);
   /* #endregion  /**======== RenderTable =========== */
-
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-  }, []);
 
   return (
     <DashboardCard

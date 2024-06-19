@@ -1,12 +1,12 @@
 import { Divider, Stack, Tabs, Text } from '@mantine/core';
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -19,6 +19,7 @@ import {
 import { useDeleteBlockPitMaster } from '@/services/graphql/mutation/block/useDeleteBlockPitMaster';
 import { useReadAllBlockPitMaster } from '@/services/graphql/query/block/useReadAllBlockPitMaster';
 import { useReadOneBlockMaster } from '@/services/graphql/query/block/useReadOneBlockMaster';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -27,16 +28,20 @@ const ReadBlockMasterBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
+  const [{ page, searchPit }, setPage, setSearchPit] = useControlPanel(
+    (state) => [state.pitState, state.setPitPage, state.setSearchPit],
+    shallow
   );
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [searchQuery] = useDebouncedValue<string>(searchPit, 500);
   const [pitId, setPitId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
   const isPermissionUpdate = permissions?.includes('update-block');
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const { blockMaster, blockMasterLoading } = useReadOneBlockMaster({
@@ -65,9 +70,7 @@ const ReadBlockMasterBook = () => {
     onCompleted: () => {
       refetchBlocks();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setPage({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -87,9 +90,7 @@ const ReadBlockMasterBook = () => {
   /* #endregion  /**======== Query =========== */
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage({ page });
   };
 
   const handleDeletePit = async () => {
@@ -233,13 +234,12 @@ const ReadBlockMasterBook = () => {
             }}
             searchBar={{
               onChange: (e) => {
-                setSearchQuery(e.currentTarget.value);
+                setSearchPit({ searchPit: e.currentTarget.value });
               },
               searchQuery,
+              value: searchPit,
               onSearch: () => {
-                setPage(1, {
-                  shallow: true,
-                });
+                setPage({ page: 1 });
                 refetchBlocks({
                   page: 1,
                 });
