@@ -1,10 +1,10 @@
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -15,19 +15,20 @@ import {
 
 import { useDeleteBlockMaster } from '@/services/graphql/mutation/block/useDeleteBlockMaster';
 import { useReadAllBlocksMaster } from '@/services/graphql/query/block/useReadAllBlockMaster';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
 const BlockBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
+  const [{ page, searchBlock }, setPage, setSearchBlock] = useControlPanel(
+    (state) => [state.blockState, state.setBlockPage, state.setSearchBlock],
+    shallow
   );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [searchQuery] = useDebouncedValue<string>(searchBlock, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
@@ -52,9 +53,7 @@ const BlockBook = () => {
     onCompleted: () => {
       refetchBlocks();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setPage({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -82,9 +81,7 @@ const BlockBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage({ page });
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -183,6 +180,10 @@ const BlockBook = () => {
   ]);
   /* #endregion  /**======== RenderTable =========== */
 
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
+
   return (
     <DashboardCard
       addButton={
@@ -196,12 +197,11 @@ const BlockBook = () => {
       searchBar={{
         placeholder: t('block.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setSearchBlock({ searchBlock: e.currentTarget.value });
         },
+        value: searchBlock,
         onSearch: () => {
-          setPage(1, {
-            shallow: true,
-          });
+          setPage({ page: 1 });
         },
         searchQuery: searchQuery,
       }}

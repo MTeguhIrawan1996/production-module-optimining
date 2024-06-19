@@ -1,10 +1,11 @@
 import { SelectProps } from '@mantine/core';
-import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -17,16 +18,30 @@ import { useDeleteLocationMaster } from '@/services/graphql/mutation/location/us
 import { useReadAllLocationCategory } from '@/services/graphql/query/global-select/useReadAllLocationCategory ';
 import { useReadAllLocationsMaster } from '@/services/graphql/query/location/useReadAllLocationMaster';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
 const LocationBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [page, setPage] = React.useState<number>(1);
+  const [
+    { page, categoryId, searchLoaction },
+    setPage,
+    setCategoryId,
+    setSearchLocation,
+  ] = useControlPanel(
+    (state) => [
+      state.locationState,
+      state.setLoactionPage,
+      state.setCategoryId,
+      state.setSearchLocation,
+    ],
+    shallow
+  );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [searchQuery] = useDebouncedValue<string>(searchLoaction, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
   const [catgeorySearchTerm, setCatgeorySearchTerm] =
@@ -35,12 +50,15 @@ const LocationBook = () => {
     catgeorySearchTerm,
     400
   );
-  const [categoryId, setCategoryId] = React.useState<string | null>(null);
 
   const isPermissionCreate = permissions?.includes('create-location');
   const isPermissionUpdate = permissions?.includes('update-location');
   const isPermissionDelete = permissions?.includes('delete-location');
   const isPermissionRead = permissions?.includes('read-location');
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const {
@@ -76,7 +94,7 @@ const LocationBook = () => {
     onCompleted: () => {
       refetchLocations();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -104,7 +122,7 @@ const LocationBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage({ page });
   };
 
   const { uncombinedItem: locationCategoryItems } = useFilterItems({
@@ -115,10 +133,11 @@ const LocationBook = () => {
     const item: SelectProps[] = [
       {
         onChange: (value) => {
-          setPage(1);
-          setCategoryId(value);
+          setPage({ page: 1 });
+          setCategoryId({ categoryId: value });
         },
         data: locationCategoryItems ?? [],
+        value: categoryId,
         label: 'locationCategory',
         placeholder: 'chooseLocationCategory',
         searchable: true,
@@ -130,7 +149,7 @@ const LocationBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [catgeorySearchTerm, locationCategoryItems]);
+  }, [categoryId, catgeorySearchTerm, locationCategoryItems]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -247,11 +266,12 @@ const LocationBook = () => {
       searchBar={{
         placeholder: t('location.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setSearchLocation({ searchLoaction: e.currentTarget.value });
         },
         searchQuery: searchQuery,
+        value: searchLoaction,
         onSearch: () => {
-          setPage(1);
+          setPage({ page: 1 });
           refetchLocations({
             page: 1,
           });
