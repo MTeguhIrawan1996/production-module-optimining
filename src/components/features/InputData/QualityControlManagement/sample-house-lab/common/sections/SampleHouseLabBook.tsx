@@ -53,7 +53,7 @@ const SampleHouseLabBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      orderBy: 'createdAt',
+      orderBy: 'sampleDate',
       search: searchQuery === '' ? null : searchQuery,
     },
   });
