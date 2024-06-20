@@ -37,6 +37,12 @@ import {
   IWHPSliceValue,
 } from '@/utils/store/slice/createWorkingHoursPlanSlice';
 
+import {
+  createHeavyEquipmentSlice,
+  IHeavyEquipmentSliceAction,
+  IHeavyEquipmentSliceValue,
+} from './slice/createHeavyEquipmentSlice';
+
 type ICommonProps = ILocationSliceValue &
   ILocationSliceAction &
   IBlockSliceValue &
@@ -50,7 +56,9 @@ type ICommonProps = ILocationSliceValue &
   IHeavyEquipmentClassSliceValue &
   IHeavyEquipmentClassSliceAction &
   IHumanResourcesSliceValue &
-  IHumanResourcesSliceAction;
+  IHumanResourcesSliceAction &
+  IHeavyEquipmentSliceValue &
+  IHeavyEquipmentSliceAction;
 
 export const sliceResetFns = new Set<() => void>();
 
@@ -71,6 +79,7 @@ const useControlPanel = create<ICommonProps>()(
       ...createActivityPlanSlice(...a),
       ...createHeavyEquipmentClassSlice(...a),
       ...createHumanResourcesSlice(...a),
+      ...createHeavyEquipmentSlice(...a),
     }),
     {
       name: 'control-panel-storage',
