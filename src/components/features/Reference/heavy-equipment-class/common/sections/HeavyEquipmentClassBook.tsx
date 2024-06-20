@@ -225,8 +225,8 @@ const HeavyEquipmentClassBook = () => {
         onSearch: () => {
           setPage({ page: 1 });
         },
-        placeholder: t('heavyEquipmentClass.searchPlaceholder'),
         value: search,
+        placeholder: t('heavyEquipmentClass.searchPlaceholder'),
       }}
     >
       {renderTable}

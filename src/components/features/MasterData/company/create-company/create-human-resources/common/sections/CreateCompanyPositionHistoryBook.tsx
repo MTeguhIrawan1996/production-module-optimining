@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
@@ -20,6 +21,7 @@ import {
 import { createCompanyPositionHistroySchema } from '@/utils/form-validation/company/company-employe-validation';
 import { dateToString } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -28,6 +30,10 @@ const CreateCompanyPositionHistoryBook = () => {
   const { t } = useTranslation('default');
   const companyId = router.query?.id?.[0] as string;
   const employeId = router.query?.id?.[1] as string;
+  const [resetHumanResourceCompanyState] = useControlPanel(
+    (state) => [state.resetHumanResourceCompanyState],
+    shallow
+  );
   const methods = useForm<
     Pick<IUpdateEmployeePositionsRequest, 'positionHistories'>
   >({
@@ -63,6 +69,7 @@ const CreateCompanyPositionHistoryBook = () => {
       const companyId = router.query?.id?.[0];
       const url = `/master-data/company/read/${companyId}`;
       router.push(url, undefined, { shallow: true });
+      resetHumanResourceCompanyState();
     },
     onError: (error) => {
       if (error.graphQLErrors) {

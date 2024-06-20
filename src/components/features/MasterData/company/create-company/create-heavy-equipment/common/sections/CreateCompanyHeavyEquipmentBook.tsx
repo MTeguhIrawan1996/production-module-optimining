@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
@@ -29,6 +30,7 @@ import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import { ControllerGroup, ControllerProps } from '@/types/global';
 
@@ -37,6 +39,10 @@ const CreateCompanyHeavyEquipmentBook = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const url = `/master-data/company/read/${id}`;
+  const [resetHeavyEquipmentCompanyState] = useControlPanel(
+    (state) => [state.resetHeavyEquipmentCompanyState],
+    shallow
+  );
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateHeavyEquipmentCompanyValues>({
@@ -110,6 +116,7 @@ const CreateCompanyHeavyEquipmentBook = () => {
       });
       router.push(url);
       methods.reset();
+      resetHeavyEquipmentCompanyState();
     },
   });
 

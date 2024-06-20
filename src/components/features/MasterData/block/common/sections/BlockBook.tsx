@@ -209,6 +209,7 @@ const BlockBook = () => {
         value: search,
         onSearch: () => {
           setPage({ page: 1 });
+          refetchBlocks({ page: 1 });
         },
         searchQuery: searchQuery,
       }}

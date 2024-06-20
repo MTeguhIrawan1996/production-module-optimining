@@ -26,7 +26,7 @@ const LocationBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const [
-    { page, categoryId, searchLocation },
+    { page, categoryId, search },
     setPage,
     setCategoryId,
     setSearchLocation,
@@ -41,7 +41,7 @@ const LocationBook = () => {
   );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [searchQuery] = useDebouncedValue<string>(searchLocation, 500);
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
   const [catgeorySearchTerm, setCatgeorySearchTerm] =
@@ -266,10 +266,10 @@ const LocationBook = () => {
       searchBar={{
         placeholder: t('location.searchPlaceholder'),
         onChange: (e) => {
-          setSearchLocation({ searchLocation: e.currentTarget.value });
+          setSearchLocation({ search: e.currentTarget.value });
         },
         searchQuery: searchQuery,
-        value: searchLocation,
+        value: search,
         onSearch: () => {
           setPage({ page: 1 });
           refetchLocations({
