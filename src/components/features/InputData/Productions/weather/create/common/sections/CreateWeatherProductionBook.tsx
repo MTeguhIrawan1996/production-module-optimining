@@ -10,6 +10,7 @@ import {
   useForm,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
@@ -32,6 +33,7 @@ import { weatherProductionMutationValidation } from '@/utils/form-validation/wea
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { dateToString } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -41,6 +43,10 @@ const CreateWeatherProductionBook = () => {
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
+  const [resetWeatherProductionState] = useControlPanel(
+    (state) => [state.resetWeatherProductionState],
+    shallow
+  );
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationWeatherProductionValues>({
@@ -94,6 +100,7 @@ const CreateWeatherProductionBook = () => {
         icon: <IconCheck />,
       });
       methods.reset();
+      resetWeatherProductionState();
       router.push('/input-data/production/data-weather');
     },
     onError: (error) => {
