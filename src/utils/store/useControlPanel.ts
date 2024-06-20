@@ -2,10 +2,25 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import {
+  createActivityPlanSlice,
+  IActivityPlanSliceAction,
+  IActivityPlanSliceValue,
+} from '@/utils/store/slice/createActivityPlanSlice';
+import {
   createBlockSlice,
   IBlockSliceAction,
   IBlockSliceValue,
 } from '@/utils/store/slice/createBlockSlice';
+import {
+  createHeavyEquipmentClassSlice,
+  IHeavyEquipmentClassSliceAction,
+  IHeavyEquipmentClassSliceValue,
+} from '@/utils/store/slice/createHeavyEquipmentClassSlice';
+import {
+  createHumanResourcesSlice,
+  IHumanResourcesSliceAction,
+  IHumanResourcesSliceValue,
+} from '@/utils/store/slice/createHumanResourcesSlice';
 import {
   createLocationSlice,
   ILocationSliceAction,
@@ -22,6 +37,12 @@ import {
   IWHPSliceValue,
 } from '@/utils/store/slice/createWorkingHoursPlanSlice';
 
+import {
+  createHeavyEquipmentSlice,
+  IHeavyEquipmentSliceAction,
+  IHeavyEquipmentSliceValue,
+} from './slice/createHeavyEquipmentSlice';
+
 type ICommonProps = ILocationSliceValue &
   ILocationSliceAction &
   IBlockSliceValue &
@@ -29,7 +50,15 @@ type ICommonProps = ILocationSliceValue &
   IWHPSliceValue &
   IWHPSliceAction &
   IStockpileSliceValue &
-  IStockpileSliceAction;
+  IStockpileSliceAction &
+  IActivityPlanSliceValue &
+  IActivityPlanSliceAction &
+  IHeavyEquipmentClassSliceValue &
+  IHeavyEquipmentClassSliceAction &
+  IHumanResourcesSliceValue &
+  IHumanResourcesSliceAction &
+  IHeavyEquipmentSliceValue &
+  IHeavyEquipmentSliceAction;
 
 export const sliceResetFns = new Set<() => void>();
 
@@ -47,6 +76,10 @@ const useControlPanel = create<ICommonProps>()(
       ...createBlockSlice(...a),
       ...createWHPSlice(...a),
       ...createStockpileSlice(...a),
+      ...createActivityPlanSlice(...a),
+      ...createHeavyEquipmentClassSlice(...a),
+      ...createHumanResourcesSlice(...a),
+      ...createHeavyEquipmentSlice(...a),
     }),
     {
       name: 'control-panel-storage',

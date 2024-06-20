@@ -1,11 +1,11 @@
 import { Badge } from '@mantine/core';
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -16,6 +16,7 @@ import {
 
 import { useDeleteHeavyEquipmentClass } from '@/services/graphql/mutation/heavy-equipment-class/useDeleteHeavyEquipmentClass';
 import { useReadAllHeavyEquipmentClass } from '@/services/graphql/query/heavy-equipment-class/useReadAllHeavyEquipmentClass';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -23,15 +24,19 @@ const HeavyEquipmentClassBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const { t } = useTranslation('default');
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
-  );
+
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
-
+  const [{ page, search }, setPage, setSearch] = useControlPanel(
+    (state) => [
+      state.heavyEquipmentClassState,
+      state.setHeavyEquipmentClassPage,
+      state.setSearchHeavyEquipmentClass,
+    ],
+    shallow
+  );
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const isPermissionCreate = permissions?.includes(
     'create-heavy-equipment-class'
   );
@@ -42,7 +47,9 @@ const HeavyEquipmentClassBook = () => {
     'delete-heavy-equipment-class'
   );
   const isPermissionRead = permissions?.includes('read-heavy-equipment-class');
-
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
   /* #   /**=========== Query =========== */
   const {
     heavyEquipmentClassesData,
@@ -62,9 +69,7 @@ const HeavyEquipmentClassBook = () => {
     onCompleted: () => {
       refetchHeavyEquipmentClasses();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setPage({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -93,9 +98,7 @@ const HeavyEquipmentClassBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setPage({ page });
   };
   /* #endregion  /**======== HandleClickFc =========== */
 
@@ -216,15 +219,14 @@ const HeavyEquipmentClassBook = () => {
       }
       searchBar={{
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setSearch({ search: e.currentTarget.value });
         },
         searchQuery,
         onSearch: () => {
-          setPage(1, {
-            shallow: true,
-          });
+          setPage({ page: 1 });
         },
         placeholder: t('heavyEquipmentClass.searchPlaceholder'),
+        value: search,
       }}
     >
       {renderTable}
