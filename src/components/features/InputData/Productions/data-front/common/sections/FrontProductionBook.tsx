@@ -1,10 +1,11 @@
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import { queryTypes, useQueryStates } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -17,6 +18,7 @@ import {
 
 import { useDeleteFrontProduction } from '@/services/graphql/mutation/front-production/useDeleteFrontProduction';
 import { useReadAllFrontProduction } from '@/services/graphql/query/front-production/useReadAllFrontProduction';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -25,10 +27,15 @@ const FrontProductionBook = () => {
   const [params, setParams] = useQueryStates({
     segment: queryTypes.string.withDefault('pit'),
   });
+
   const { t } = useTranslation('default');
-  const [page, setPage] = React.useState<number>(1);
   const [id, setId] = React.useState<string>('');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [{ page, search }, setFrontState] = useControlPanel(
+    (state) => [state.frontState, state.setFrontState],
+    shallow
+  );
+
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
@@ -40,6 +47,10 @@ const FrontProductionBook = () => {
   const isPermissionUpdate = permissions?.includes('update-front-data');
   const isPermissionDelete = permissions?.includes('delete-front-data');
   const isPermissionRead = permissions?.includes('read-front-data');
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const {
@@ -62,7 +73,9 @@ const FrontProductionBook = () => {
     onCompleted: () => {
       refetchfrontProductionData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setFrontState({
+        page: 1,
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -90,7 +103,9 @@ const FrontProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setFrontState({
+      page: page,
+    });
   };
 
   const handleChangeSegement = (value: string) => {
@@ -223,15 +238,17 @@ const FrontProductionBook = () => {
           params.segment ? params.segment.toUpperCase() : ''
         }`,
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setFrontState({
+            search: e.currentTarget.value,
+          });
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
-          refetchfrontProductionData({
+          setFrontState({
             page: 1,
           });
         },
+        value: search,
       }}
       segmentedControl={{
         defaultValue: 'pit',
