@@ -1,6 +1,5 @@
 import { Icon } from '@iconify/react';
 import { TextInput, TextInputProps } from '@mantine/core';
-import { useRouter } from 'next/router';
 import * as React from 'react';
 
 export interface ISerachBar extends TextInputProps {
@@ -16,20 +15,18 @@ const SearchBar: React.FC<ISerachBar> = ({
   onSearch,
   ...rest
 }) => {
-  const router = useRouter();
+  const isFirstTimeSearchQuery = React.useRef(0);
+
+  // run onSearch function when searchQuery changes
   React.useEffect(() => {
-    if (searchQuery !== '') {
-      onSearch
-        ? onSearch()
-        : router.push({
-            href: router.asPath,
-            query: {
-              page: 1,
-            },
-          });
+    if (isFirstTimeSearchQuery.current > 1) {
+      onSearch?.(); // Call the search function
+    } else {
+      isFirstTimeSearchQuery.current += 1; // Mark first render as complete
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
+
   return (
     <TextInput
       radius="sm"
