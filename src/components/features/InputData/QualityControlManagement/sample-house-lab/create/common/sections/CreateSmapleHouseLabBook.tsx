@@ -10,6 +10,7 @@ import {
   useForm,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
@@ -39,6 +40,7 @@ import { dateToString } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import { ControllerGroup, ControllerProps } from '@/types/global';
 
@@ -48,6 +50,10 @@ const CreateSmapleHouseLabBook = () => {
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
+  const [resetSampleHouseLabState] = useControlPanel(
+    (state) => [state.resetSampleHouseLabState],
+    shallow
+  );
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationSampleHousePlanValues>({
@@ -162,8 +168,9 @@ const CreateSmapleHouseLabBook = () => {
         message: t('sampleHouseLab.successCreateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/input-data/quality-control-management/sample-house-lab');
       methods.reset();
+      resetSampleHouseLabState();
+      router.push('/input-data/quality-control-management/sample-house-lab');
     },
   });
   /* #endregion  /**======== Query =========== */

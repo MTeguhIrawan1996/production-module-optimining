@@ -1,9 +1,10 @@
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -16,15 +17,19 @@ import {
 import { useDeleteSampleHouseLab } from '@/services/graphql/mutation/sample-house-lab/useDeleteSampleHouseLab';
 import { useReadAllSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadAllSampleHouseLab';
 import { formatDate } from '@/utils/helper/dateFormat';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
 const SampleHouseLabBook = () => {
   const router = useRouter();
-  const [page, setPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
+  const [{ page, search }, setSampleHouseLabState] = useControlPanel(
+    (state) => [state.sampleHouseLabState, state.setSampleHouseLabState],
+    shallow
+  );
   const [id, setId] = React.useState<string>('');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
@@ -40,6 +45,9 @@ const SampleHouseLabBook = () => {
     'delete-house-sample-and-lab'
   );
   const isPermissionRead = permissions?.includes('read-house-sample-and-lab');
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
 
@@ -62,7 +70,7 @@ const SampleHouseLabBook = () => {
     onCompleted: () => {
       refetchHouseSampleAndLabs();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setSampleHouseLabState({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -90,7 +98,7 @@ const SampleHouseLabBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setSampleHouseLabState({ page });
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -247,15 +255,16 @@ const SampleHouseLabBook = () => {
       searchBar={{
         placeholder: t('sampleHouseLab.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setSampleHouseLabState({ search: e.currentTarget.value });
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
+          setSampleHouseLabState({ page: 1 });
           refetchHouseSampleAndLabs({
             page: 1,
           });
         },
+        value: search,
       }}
     >
       {renderTable}
