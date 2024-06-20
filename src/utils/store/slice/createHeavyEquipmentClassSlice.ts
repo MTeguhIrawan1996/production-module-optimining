@@ -15,10 +15,10 @@ export interface IHeavyEquipmentClassSliceAction {
   setHeavyEquipmentClassPage: (
     payload: Pick<IHeavyEquipmentClassState, 'page'>
   ) => void;
-  setHeavyEquipmentClassSearch: (
+  setSearchHeavyEquipmentClass: (
     payload: Pick<IHeavyEquipmentClassState, 'search'>
   ) => void;
-  resetHeavyEquipmentClass: () => void;
+  resetHeavyEquipmentClassState: () => void;
 }
 
 const initialState: IHeavyEquipmentClassSliceValue = {
@@ -34,7 +34,7 @@ export const createHeavyEquipmentClassSlice: StateCreator<
   sliceResetFns.add(() => set(initialState));
   return {
     ...initialState,
-    setHeavyEquipmentClassSearch: (payload) =>
+    setSearchHeavyEquipmentClass: (payload) =>
       set((state) => ({
         heavyEquipmentClassState: {
           ...state.heavyEquipmentClassState,
@@ -48,7 +48,7 @@ export const createHeavyEquipmentClassSlice: StateCreator<
           page: payload.page,
         },
       })),
-    resetHeavyEquipmentClass: () => {
+    resetHeavyEquipmentClassState: () => {
       set(initialState);
     },
   };

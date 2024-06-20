@@ -2,6 +2,11 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import {
+  createActivityPlanSlice,
+  IActivityPlanSliceAction,
+  IActivityPlanSliceValue,
+} from '@/utils/store/slice/createActivityPlanSlice';
+import {
   createBlockSlice,
   IBlockSliceAction,
   IBlockSliceValue,
@@ -16,6 +21,16 @@ import {
   IHeavyEquipmentClassSliceAction,
   IHeavyEquipmentClassSliceValue,
 } from '@/utils/store/slice/createHeavyEquipmentClassSlice';
+import {
+  createHeavyEquipmentSlice,
+  IHeavyEquipmentSliceAction,
+  IHeavyEquipmentSliceValue,
+} from '@/utils/store/slice/createHeavyEquipmentSlice';
+import {
+  createHumanResourcesSlice,
+  IHumanResourcesSliceAction,
+  IHumanResourcesSliceValue,
+} from '@/utils/store/slice/createHumanResourcesSlice';
 import {
   createLocationSlice,
   ILocationSliceAction,
@@ -43,7 +58,15 @@ type ICommonProps = ILocationSliceValue &
   IHeavyEquipmentClassSliceValue &
   IHeavyEquipmentClassSliceAction &
   ICompanySliceValue &
-  ICompanySliceAction;
+  ICompanySliceAction &
+  IActivityPlanSliceValue &
+  IActivityPlanSliceAction &
+  IHeavyEquipmentClassSliceValue &
+  IHeavyEquipmentClassSliceAction &
+  IHumanResourcesSliceValue &
+  IHumanResourcesSliceAction &
+  IHeavyEquipmentSliceValue &
+  IHeavyEquipmentSliceAction;
 
 export const sliceResetFns = new Set<() => void>();
 
@@ -63,6 +86,10 @@ const useControlPanel = create<ICommonProps>()(
       ...createStockpileSlice(...a),
       ...createHeavyEquipmentClassSlice(...a),
       ...createCompanySlice(...a),
+      ...createActivityPlanSlice(...a),
+      ...createHeavyEquipmentClassSlice(...a),
+      ...createHumanResourcesSlice(...a),
+      ...createHeavyEquipmentSlice(...a),
     }),
     {
       name: 'control-panel-storage',

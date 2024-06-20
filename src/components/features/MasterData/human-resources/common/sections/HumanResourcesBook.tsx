@@ -1,9 +1,10 @@
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -14,16 +15,24 @@ import {
 
 import { useDeleteMasterDataHumanResource } from '@/services/graphql/mutation/master-data-human-resources/useDeleteHumanResources';
 import { useReadAllHumanResourcesMasterData } from '@/services/graphql/query/master-data-human-resources/useReadAllMasterDataHumanResources';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
 const HumanResourcesBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [page, setPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [{ page, search }, setPage, setSearch] = useControlPanel(
+    (state) => [
+      state.humanResourcesState,
+      state.setHumanResourcesPage,
+      state.setSearchHumanResources,
+    ],
+    shallow
+  );
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
@@ -31,6 +40,10 @@ const HumanResourcesBook = () => {
   const isPermissionUpdate = permissions?.includes('update-human-resource');
   const isPermissionDelete = permissions?.includes('delete-human-resource');
   const isPermissionRead = permissions?.includes('read-human-resource');
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const {
@@ -52,7 +65,7 @@ const HumanResourcesBook = () => {
     onCompleted: () => {
       refetchHumanResources();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setPage({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -80,7 +93,7 @@ const HumanResourcesBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setPage({ page });
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -208,15 +221,16 @@ const HumanResourcesBook = () => {
       searchBar={{
         placeholder: t('humanResources.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setSearch({ search: e.currentTarget.value });
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
+          setPage({ page: 1 });
           refetchHumanResources({
             page: 1,
           });
         },
+        value: search,
       }}
     >
       {renderTable}

@@ -24,19 +24,19 @@ const HeavyEquipmentClassBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const { t } = useTranslation('default');
+
+  const [id, setId] = React.useState<string>('');
+  const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
+    React.useState<boolean>(false);
   const [{ page, search }, setPage, setSearch] = useControlPanel(
     (state) => [
       state.heavyEquipmentClassState,
       state.setHeavyEquipmentClassPage,
-      state.setHeavyEquipmentClassSearch,
+      state.setSearchHeavyEquipmentClass,
     ],
     shallow
   );
-  const [id, setId] = React.useState<string>('');
-  const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
-    React.useState<boolean>(false);
   const [searchQuery] = useDebouncedValue<string>(search, 500);
-
   const isPermissionCreate = permissions?.includes(
     'create-heavy-equipment-class'
   );
@@ -47,11 +47,9 @@ const HeavyEquipmentClassBook = () => {
     'delete-heavy-equipment-class'
   );
   const isPermissionRead = permissions?.includes('read-heavy-equipment-class');
-
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
   }, []);
-
   /* #   /**=========== Query =========== */
   const {
     heavyEquipmentClassesData,
@@ -226,9 +224,6 @@ const HeavyEquipmentClassBook = () => {
         searchQuery,
         onSearch: () => {
           setPage({ page: 1 });
-          refetchHeavyEquipmentClasses({
-            page: 1,
-          });
         },
         value: search,
         placeholder: t('heavyEquipmentClass.searchPlaceholder'),

@@ -36,8 +36,8 @@ const CreateHeavyEquipmentClassBook = () => {
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
-  const [resetHeavyEquipmentClass] = useControlPanel(
-    (state) => [state.resetHeavyEquipmentClass],
+  const [resetHeavyEquipmentClassState] = useControlPanel(
+    (state) => [state.resetHeavyEquipmentClassState],
     shallow
   );
 
@@ -79,7 +79,7 @@ const CreateHeavyEquipmentClassBook = () => {
         message: t('heavyEquipmentClass.successCreateMessage'),
         icon: <IconCheck />,
       });
-      resetHeavyEquipmentClass();
+      resetHeavyEquipmentClassState();
       methods.reset();
       router.push('/reference/heavy-equipment-class');
     },
