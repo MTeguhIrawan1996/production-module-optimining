@@ -2,6 +2,11 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import {
+  createActivityPlanSlice,
+  IActivityPlanSliceAction,
+  IActivityPlanSliceValue,
+} from '@/utils/store/slice/createActivityPlanSlice';
+import {
   createBlockSlice,
   IBlockSliceAction,
   IBlockSliceValue,
@@ -29,7 +34,9 @@ type ICommonProps = ILocationSliceValue &
   IWHPSliceValue &
   IWHPSliceAction &
   IStockpileSliceValue &
-  IStockpileSliceAction;
+  IStockpileSliceAction &
+  IActivityPlanSliceValue &
+  IActivityPlanSliceAction;
 
 export const sliceResetFns = new Set<() => void>();
 
@@ -47,6 +54,7 @@ const useControlPanel = create<ICommonProps>()(
       ...createBlockSlice(...a),
       ...createWHPSlice(...a),
       ...createStockpileSlice(...a),
+      ...createActivityPlanSlice(...a),
     }),
     {
       name: 'control-panel-storage',

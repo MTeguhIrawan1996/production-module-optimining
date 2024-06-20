@@ -1,10 +1,10 @@
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -15,19 +15,16 @@ import {
 
 import { useDeleteActivityPlanMaster } from '@/services/graphql/mutation/activity-plan/useDeleteActivityPlanMaster';
 import { useReadAllActivityPlanMaster } from '@/services/graphql/query/activity-plan/useReadAllActivityPlanMaster';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
 const ActivityPlanBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
-  );
+
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
@@ -35,6 +32,15 @@ const ActivityPlanBook = () => {
   const isPermissionUpdate = permissions?.includes('update-activity-plan');
   const isPermissionDelete = permissions?.includes('delete-activity-plan');
   const isPermissionRead = permissions?.includes('read-activity-plan');
+  const [{ page, search }, setPage, setSearch] = useControlPanel(
+    (state) => [
+      state.activityPlanState,
+      state.setActivityPlanPage,
+      state.setSearchActivityPlan,
+    ],
+    shallow
+  );
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
 
   /* #   /**=========== Query =========== */
   const {
@@ -56,8 +62,8 @@ const ActivityPlanBook = () => {
     onCompleted: () => {
       refetchActivityPlans();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
+      setPage({
+        page: 1,
       });
       notifications.show({
         color: 'green',
@@ -77,6 +83,10 @@ const ActivityPlanBook = () => {
   });
   /* #endregion  /**======== Query =========== */
 
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
+
   const handleDelete = async () => {
     await executeDelete({
       variables: {
@@ -86,8 +96,8 @@ const ActivityPlanBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
+    setPage({
+      page: page,
     });
   };
 
@@ -203,14 +213,17 @@ const ActivityPlanBook = () => {
       searchBar={{
         placeholder: t('activityPlan.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setSearch({
+            search: e.currentTarget.value,
+          });
         },
         onSearch: () => {
-          setPage(1, {
-            shallow: true,
+          setPage({
+            page: 1,
           });
         },
         searchQuery: searchQuery,
+        value: search,
       }}
     >
       {renderTable}
