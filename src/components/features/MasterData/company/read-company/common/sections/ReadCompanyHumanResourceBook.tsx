@@ -1,10 +1,11 @@
 import { Divider, SelectProps } from '@mantine/core';
-import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -27,36 +28,40 @@ import {
   positionSelect,
 } from '@/utils/constants/Field/global-field';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 const ReadCompanyHumanResourceBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
-  const [page, setPage] = React.useState<number>(1);
   const id = router.query.id as string;
+  const [
+    { page, search, divisionId, employeStatusId, formStatus, positionId },
+    setHumanResourceCompanyState,
+  ] = useControlPanel(
+    (state) => [
+      state.humanResourceCompanyState,
+      state.setHumanResourceCompanyState,
+    ],
+    shallow
+  );
   const [employeId, setIdEmploye] = React.useState<string>('');
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [divisionSearchTerm, setDivisionSearchTerm] =
     React.useState<string>('');
   const [divisionSearchQuery] = useDebouncedValue<string>(
     divisionSearchTerm,
     400
   );
-  const [divisionId, setDivisionId] = React.useState<string | null>(null);
   const [positionSearchTerm, setPositionSearchTerm] =
     React.useState<string>('');
   const [positionSearchQuery] = useDebouncedValue<string>(
     positionSearchTerm,
     400
   );
-  const [positionId, setPositionId] = React.useState<string | null>(null);
-  const [employeStatusId, setEmployeStatusId] = React.useState<string | null>(
-    null
-  );
-  const [formStatus, setFormStatus] = React.useState<boolean | null>(null);
 
   /* #   /**=========== Query =========== */
   const {
@@ -72,7 +77,7 @@ const ReadCompanyHumanResourceBook = () => {
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       companyId: id,
-      isComplete: formStatus,
+      isComplete: formStatus ? (formStatus === 'true' ? true : false) : null,
       statusId: employeStatusId,
       positionId,
       divisionId,
@@ -112,7 +117,7 @@ const ReadCompanyHumanResourceBook = () => {
     onCompleted: () => {
       refetchEmployees();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setHumanResourceCompanyState({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -137,9 +142,9 @@ const ReadCompanyHumanResourceBook = () => {
       onSearchChange: setDivisionSearchTerm,
       searchValue: divisionSearchTerm,
       placeholder: 'chooseDivision',
+      value: divisionId,
       onChange: (value) => {
-        setPage(1);
-        setDivisionId(value);
+        setHumanResourceCompanyState({ page: 1, divisionId: value });
       },
     });
     const positionItem = positionSelect({
@@ -147,18 +152,18 @@ const ReadCompanyHumanResourceBook = () => {
       onSearchChange: setPositionSearchTerm,
       searchValue: positionSearchTerm,
       placeholder: 'choosePosition',
+      value: positionId,
       onChange: (value) => {
-        setPage(1);
-        setPositionId(value);
+        setHumanResourceCompanyState({ page: 1, positionId: value });
       },
     });
     const employeStatusItem = employeStatusSelect({
       data: employeStatusFilter,
       placeholder: 'chooseEmployeStatus',
       onChange: (value) => {
-        setPage(1);
-        setEmployeStatusId(value);
+        setHumanResourceCompanyState({ page: 1, employeStatusId: value });
       },
+      value: employeStatusId,
     });
     const formStatusItem = formStatusSelect({
       placeholder: 'chooseFormStatus',
@@ -172,9 +177,12 @@ const ReadCompanyHumanResourceBook = () => {
           value: 'false',
         },
       ],
+      value: formStatus,
       onChange: (value) => {
-        setPage(1);
-        setFormStatus(value ? (value === 'true' ? true : false) : null);
+        setHumanResourceCompanyState({
+          page: 1,
+          formStatus: value,
+        });
       },
     });
     const item: SelectProps[] = [
@@ -202,7 +210,7 @@ const ReadCompanyHumanResourceBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setHumanResourceCompanyState({ page });
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -319,11 +327,11 @@ const ReadCompanyHumanResourceBook = () => {
       }}
       searchBar={{
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setHumanResourceCompanyState({ search: e.currentTarget.value });
         },
         searchQuery,
         onSearch: () => {
-          setPage(1);
+          setHumanResourceCompanyState({ page: 1 });
           refetchEmployees({
             page: 1,
           });

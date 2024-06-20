@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
@@ -18,6 +19,7 @@ import {
 import { classHeavyEquipmentMutationValidation } from '@/utils/form-validation/reference-heavy-equipment-class/heavy-equipment-class';
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -34,6 +36,10 @@ const CreateHeavyEquipmentClassBook = () => {
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
+  const [resetHeavyEquipmentClassState] = useControlPanel(
+    (state) => [state.resetHeavyEquipmentClassState],
+    shallow
+  );
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IHeavyEquipmentClassValues>({
@@ -73,6 +79,7 @@ const CreateHeavyEquipmentClassBook = () => {
         message: t('heavyEquipmentClass.successCreateMessage'),
         icon: <IconCheck />,
       });
+      resetHeavyEquipmentClassState();
       methods.reset();
       router.push('/reference/heavy-equipment-class');
     },

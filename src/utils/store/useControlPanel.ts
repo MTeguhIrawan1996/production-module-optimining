@@ -12,10 +12,20 @@ import {
   IBlockSliceValue,
 } from '@/utils/store/slice/createBlockSlice';
 import {
+  createCompanySlice,
+  ICompanySliceAction,
+  ICompanySliceValue,
+} from '@/utils/store/slice/createCompanySlice';
+import {
   createHeavyEquipmentClassSlice,
   IHeavyEquipmentClassSliceAction,
   IHeavyEquipmentClassSliceValue,
 } from '@/utils/store/slice/createHeavyEquipmentClassSlice';
+import {
+  createHeavyEquipmentSlice,
+  IHeavyEquipmentSliceAction,
+  IHeavyEquipmentSliceValue,
+} from '@/utils/store/slice/createHeavyEquipmentSlice';
 import {
   createHumanResourcesSlice,
   IHumanResourcesSliceAction,
@@ -37,12 +47,6 @@ import {
   IWHPSliceValue,
 } from '@/utils/store/slice/createWorkingHoursPlanSlice';
 
-import {
-  createHeavyEquipmentSlice,
-  IHeavyEquipmentSliceAction,
-  IHeavyEquipmentSliceValue,
-} from './slice/createHeavyEquipmentSlice';
-
 type ICommonProps = ILocationSliceValue &
   ILocationSliceAction &
   IBlockSliceValue &
@@ -51,6 +55,10 @@ type ICommonProps = ILocationSliceValue &
   IWHPSliceAction &
   IStockpileSliceValue &
   IStockpileSliceAction &
+  IHeavyEquipmentClassSliceValue &
+  IHeavyEquipmentClassSliceAction &
+  ICompanySliceValue &
+  ICompanySliceAction &
   IActivityPlanSliceValue &
   IActivityPlanSliceAction &
   IHeavyEquipmentClassSliceValue &
@@ -76,6 +84,8 @@ const useControlPanel = create<ICommonProps>()(
       ...createBlockSlice(...a),
       ...createWHPSlice(...a),
       ...createStockpileSlice(...a),
+      ...createHeavyEquipmentClassSlice(...a),
+      ...createCompanySlice(...a),
       ...createActivityPlanSlice(...a),
       ...createHeavyEquipmentClassSlice(...a),
       ...createHumanResourcesSlice(...a),
