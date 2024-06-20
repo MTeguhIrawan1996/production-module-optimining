@@ -7,6 +7,11 @@ import {
   IActivityPlanSliceValue,
 } from '@/utils/store/slice/createActivityPlanSlice';
 import {
+  createBargingMonitoringSlice,
+  IBargingMonitoringAction,
+  IBargingMonitoringValue,
+} from '@/utils/store/slice/createBargingMonitoringSlice';
+import {
   createBlockSlice,
   IBlockSliceAction,
   IBlockSliceValue,
@@ -109,7 +114,9 @@ type ICommonProps = ILocationSliceValue &
   IStockpileMonitoringValue &
   IStockpileMonitoringAction &
   ISampleHouseLabValue &
-  ISampleHouseLabAction;
+  ISampleHouseLabAction &
+  IBargingMonitoringValue &
+  IBargingMonitoringAction;
 
 export const sliceResetFns = new Set<() => void>();
 
@@ -139,6 +146,7 @@ const useControlPanel = create<ICommonProps>()(
       ...createWeatherProductionSlice(...a),
       ...createStockpileMonitoringSlice(...a),
       ...createSampleHouseLabSlice(...a),
+      ...createBargingMonitoringSlice(...a),
     }),
     {
       name: 'control-panel-storage',
