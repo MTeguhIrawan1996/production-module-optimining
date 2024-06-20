@@ -1,10 +1,11 @@
 import { SelectProps } from '@mantine/core';
-import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -22,13 +23,23 @@ import { useReadAllHeavyEquipmentCompany } from '@/services/graphql/query/heavy-
 import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
 import { useReadAllHeavyEquipmentClass } from '@/services/graphql/query/heavy-equipment-class/useReadAllHeavyEquipmentClass';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 const ReadHeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
-  const [page, setPage] = React.useState<number>(1);
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [
+    { page, search, brandId, typeId, modelId, classId },
+    setHeavyEquipmentCompanyState,
+  ] = useControlPanel(
+    (state) => [
+      state.heavyEquipmentCompanyState,
+      state.setHeavyEquipmentCompanyState,
+    ],
+    shallow
+  );
+  const [searchQuery] = useDebouncedValue<string>(search || '', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
@@ -36,16 +47,16 @@ const ReadHeavyEquipmentBook = () => {
   const [heavyEquipmentId, setHeavyEquipmentId] = React.useState<string>('');
   const [brandSearchTerm, setBrandSearchTerm] = React.useState<string>('');
   const [brandSearchQuery] = useDebouncedValue<string>(brandSearchTerm, 400);
-  const [brandId, setBrandId] = React.useState<string | null>(null);
   const [typeSearchTerm, setTypeSearchTerm] = React.useState<string>('');
   const [typeSearchQuery] = useDebouncedValue<string>(typeSearchTerm, 400);
-  const [typeId, setTypeId] = React.useState<string | null>(null);
   const [modelSearchTerm, setModelSearchTerm] = React.useState<string>('');
   const [modelSearchQuery] = useDebouncedValue<string>(modelSearchTerm, 400);
-  const [modelId, setModelId] = React.useState<string | null>(null);
   const [classSearchTerm, setClassSearchTerm] = React.useState<string>('');
   const [classSearchQuery] = useDebouncedValue<string>(classSearchTerm, 400);
-  const [classId, setClasslId] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   const {
     heavyEquipmentsCompany,
@@ -97,12 +108,11 @@ const ReadHeavyEquipmentBook = () => {
     fetchPolicy: 'cache-and-network',
   });
 
-  // eslint-disable-next-line unused-imports/no-unused-vars
   const [executeDelete, { loading }] = useDeleteCompanyHeavyEquipment({
     onCompleted: () => {
       refetchHeavyEquipmentCompany();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setHeavyEquipmentCompanyState({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -150,18 +160,21 @@ const ReadHeavyEquipmentBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setHeavyEquipmentCompanyState({ page });
   };
 
   const filter = React.useMemo(() => {
     const item: SelectProps[] = [
       {
         onChange: (value) => {
-          setPage(1);
-          setBrandId(value);
-          setTypeId(null);
-          setModelId(null);
+          setHeavyEquipmentCompanyState({
+            page: 1,
+            brandId: value,
+            typeId: null,
+            modelId: null,
+          });
         },
+        value: brandId,
         data: brandItems ?? [],
         label: 'brand',
         placeholder: 'chooseBrand',
@@ -173,9 +186,11 @@ const ReadHeavyEquipmentBook = () => {
       },
       {
         onChange: (value) => {
-          setPage(1);
-          setTypeId(value);
-          setModelId(null);
+          setHeavyEquipmentCompanyState({
+            page: 1,
+            typeId: value,
+            modelId: null,
+          });
         },
         value: typeId,
         data: typeItems ?? [],
@@ -186,11 +201,11 @@ const ReadHeavyEquipmentBook = () => {
         clearable: true,
         onSearchChange: setTypeSearchTerm,
         searchValue: typeSearchTerm,
+        disabled: !brandId,
       },
       {
         onChange: (value) => {
-          setPage(1);
-          setModelId(value);
+          setHeavyEquipmentCompanyState({ page: 1, modelId: value });
         },
         value: modelId,
         data: modelItems ?? [],
@@ -201,11 +216,11 @@ const ReadHeavyEquipmentBook = () => {
         clearable: true,
         onSearchChange: setModelSearchTerm,
         searchValue: modelSearchTerm,
+        disabled: !typeId,
       },
       {
         onChange: (value) => {
-          setPage(1);
-          setClasslId(value);
+          setHeavyEquipmentCompanyState({ page: 1, classId: value });
         },
         value: classId,
         data: classItems ?? [],
@@ -331,7 +346,7 @@ const ReadHeavyEquipmentBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: page,
+          currentPage: page || 0,
           totalAllData: heavyEquipmentsCompanyMeta?.totalAllData ?? 0,
           totalData: heavyEquipmentsCompanyMeta?.totalData ?? 0,
           totalPage: heavyEquipmentsCompanyMeta?.totalPage ?? 0,
@@ -351,15 +366,16 @@ const ReadHeavyEquipmentBook = () => {
       searchBar={{
         placeholder: t('heavyEquipment.searchPlaceholderOverview'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setHeavyEquipmentCompanyState({ search: e.currentTarget.value });
         },
         onSearch: () => {
-          setPage(1);
+          setHeavyEquipmentCompanyState({ page: 1 });
           refetchHeavyEquipmentCompany({
             page: 1,
           });
         },
         searchQuery: searchQuery,
+        value: search || '',
       }}
       MultipleFilter={{
         MultipleFilterData: filter,

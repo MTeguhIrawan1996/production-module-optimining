@@ -213,6 +213,7 @@ const WorkingHoursPlanBook = () => {
         value: search,
         onSearch: () => {
           setPage({ page: 1 });
+          refetchWorkingHourPlans({ page: 1 });
         },
       }}
     >

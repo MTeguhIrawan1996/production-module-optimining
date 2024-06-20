@@ -5,6 +5,7 @@ import { IconCheck, IconChevronLeft, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -18,6 +19,7 @@ import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { IHumanResourcesData } from '@/services/graphql/query/master-data-human-resources/useReadAllMasterDataHumanResources';
 import { useReadAllNonEmployeedHumanResourcesMasterData } from '@/services/graphql/query/master-data-human-resources/useReadAllNonEmployeHumanResources';
 import { sendGAEvent } from '@/utils/helper/analytics';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 const CreateHumanResourcesAvailableBook = () => {
   const router = useRouter();
@@ -25,6 +27,10 @@ const CreateHumanResourcesAvailableBook = () => {
   const companyId = router.query?.id as string;
   const [page, setPage] = React.useState<number>(1);
   const urlCreate = `/master-data/company/read/${companyId}`;
+  const [resetHumanResourceCompanyState] = useControlPanel(
+    (state) => [state.resetHumanResourceCompanyState],
+    shallow
+  );
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [choosesHumanResources, setChooseHumanResources] = React.useState<
     IHumanResourcesData[]
@@ -67,6 +73,7 @@ const CreateHumanResourcesAvailableBook = () => {
         message: t('humanResources.successCreateMessage'),
         icon: <IconCheck />,
       });
+      resetHumanResourceCompanyState();
       router.push(urlCreate);
     },
     onError: (error) => {

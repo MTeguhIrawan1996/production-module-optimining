@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
@@ -33,6 +34,7 @@ import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import { ControllerGroup, ControllerProps } from '@/types/global';
 
@@ -47,6 +49,10 @@ const CreateCompanyBook = () => {
   const { classes } = useStyles();
   const { t } = useTranslation('default');
   const router = useRouter();
+  const [resetCompanyState] = useControlPanel(
+    (state) => [state.resetCompanyState],
+    shallow
+  );
   const [companyPermissionType, setCompanyPermissionType] =
     React.useState<string>('');
   const { userAuthData } = useReadAuthUser({
@@ -121,6 +127,7 @@ const CreateCompanyBook = () => {
       });
       router.push('/master-data/company');
       methods.reset();
+      resetCompanyState();
     },
   });
 

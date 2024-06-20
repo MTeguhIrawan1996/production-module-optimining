@@ -1,9 +1,10 @@
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -14,22 +15,40 @@ import {
 
 import { useDeleteMasterDataCompany } from '@/services/graphql/mutation/master-data-company/useDeleteMasterDataCompany';
 import { useReadAllCompaniesMasterData } from '@/services/graphql/query/master-data-company/useReadAllMasterDataCompany';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
 const CompanyBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [page, setPage] = React.useState<number>(1);
+  const [
+    { page, search },
+    setCompanyState,
+    resetHeavyEquipmentCompanyState,
+    resetHumanResourceCompanyState,
+  ] = useControlPanel(
+    (state) => [
+      state.companyState,
+      state.setCompanyState,
+      state.resetHeavyEquipmentCompanyState,
+      state.resetHumanResourceCompanyState,
+    ],
+    shallow
+  );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [searchQuery] = useDebouncedValue<string>(search || '', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
   const isPermissionCreate = permissions?.includes('create-company');
   const isPermissionDelete = permissions?.includes('delete-company');
   const isPermissionRead = permissions?.includes('read-company');
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const {
@@ -51,7 +70,7 @@ const CompanyBook = () => {
     onCompleted: () => {
       refetchCompanies();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setCompanyState({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -79,7 +98,7 @@ const CompanyBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setCompanyState({ page });
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -128,6 +147,8 @@ const CompanyBook = () => {
                         ? {
                             onClick: (e) => {
                               e.stopPropagation();
+                              resetHeavyEquipmentCompanyState();
+                              resetHumanResourceCompanyState();
                               router.push(`/master-data/company/read/${id}`);
                             },
                           }
@@ -161,7 +182,7 @@ const CompanyBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: page,
+          currentPage: page || 0,
           totalAllData: companiesDataMeta?.totalAllData ?? 0,
           totalData: companiesDataMeta?.totalData ?? 0,
           totalPage: companiesDataMeta?.totalPage ?? 0,
@@ -192,14 +213,15 @@ const CompanyBook = () => {
       searchBar={{
         placeholder: t('company.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setCompanyState({ search: e.currentTarget.value });
         },
         onSearch: () => {
-          setPage(1);
+          setCompanyState({ page: 1 });
           refetchCompanies({
             page: 1,
           });
         },
+        value: search || '',
         searchQuery: searchQuery,
       }}
     >

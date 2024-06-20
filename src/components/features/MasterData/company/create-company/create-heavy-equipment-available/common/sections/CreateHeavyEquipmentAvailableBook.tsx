@@ -5,6 +5,7 @@ import { IconCheck, IconChevronLeft, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -18,6 +19,7 @@ import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { IHeavyEquipmentMasterData } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentMasterData';
 import { useReadAllNonCompanyHeavyEquipment } from '@/services/graphql/query/heavy-equipment/useReadAllNonCompanyHeavyEquipment';
 import { sendGAEvent } from '@/utils/helper/analytics';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 const CreateHeavyEquipmentAvailableBook = () => {
   const router = useRouter();
@@ -25,6 +27,10 @@ const CreateHeavyEquipmentAvailableBook = () => {
   const { t } = useTranslation('default');
   const companyId = router.query?.id as string;
   const urlCreate = `/master-data/company/read/${companyId}`;
+  const [resetHeavyEquipmentCompanyState] = useControlPanel(
+    (state) => [state.resetHeavyEquipmentCompanyState],
+    shallow
+  );
   const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
   const [choosesHeavyEquipment, setChooseHeavyEquipment] = React.useState<
     IHeavyEquipmentMasterData[]
@@ -67,6 +73,7 @@ const CreateHeavyEquipmentAvailableBook = () => {
         icon: <IconCheck />,
       });
       router.push(urlCreate);
+      resetHeavyEquipmentCompanyState();
     },
     onError: (error) => {
       if (error.graphQLErrors) {
