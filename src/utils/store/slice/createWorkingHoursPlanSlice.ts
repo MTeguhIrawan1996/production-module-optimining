@@ -4,7 +4,7 @@ import { sliceResetFns } from '@/utils/store/useControlPanel';
 
 type IWHPState = {
   page: number;
-  searchWHP: string;
+  search: string;
 };
 
 export type IWHPSliceValue = {
@@ -13,14 +13,14 @@ export type IWHPSliceValue = {
 
 export interface IWHPSliceAction {
   setWHPPage: (payload: Pick<IWHPState, 'page'>) => void;
-  setSearchWHP: (payload: Pick<IWHPState, 'searchWHP'>) => void;
+  setSearchWHP: (payload: Pick<IWHPState, 'search'>) => void;
   resetWHP: () => void;
 }
 
 const initialState: IWHPSliceValue = {
   whpState: {
     page: 1,
-    searchWHP: '',
+    search: '',
   },
 };
 
@@ -34,7 +34,7 @@ export const createWHPSlice: StateCreator<IWHPSliceValue & IWHPSliceAction> = (
       set((state) => ({
         whpState: {
           ...state.whpState,
-          searchWHP: payload.searchWHP,
+          search: payload.search,
         },
       })),
     setWHPPage: (payload) =>

@@ -22,13 +22,13 @@ import useStore from '@/utils/store/useStore';
 const WorkingHoursPlanBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [{ page, searchWHP }, setPage, setSearchWHP] = useControlPanel(
+  const [{ page, search }, setPage, setSearchWHP] = useControlPanel(
     (state) => [state.whpState, state.setWHPPage, state.setSearchWHP],
     shallow
   );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [searchQuery] = useDebouncedValue<string>(searchWHP, 500);
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
@@ -207,10 +207,10 @@ const WorkingHoursPlanBook = () => {
       searchBar={{
         placeholder: t('workingHoursPlan.searchPlaceholder'),
         onChange: (e) => {
-          setSearchWHP({ searchWHP: e.currentTarget.value });
+          setSearchWHP({ search: e.currentTarget.value });
         },
         searchQuery: searchQuery,
-        value: searchWHP,
+        value: search,
         onSearch: () => {
           setPage({ page: 1 });
         },
