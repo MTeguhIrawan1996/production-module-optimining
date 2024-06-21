@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
@@ -18,6 +19,7 @@ import { createHeavyEquipmentSchema } from '@/utils/form-validation/reference-he
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import { ControllerGroup, ControllerProps } from '@/types/global';
 
@@ -27,6 +29,10 @@ const CreateHeavyEquipmentBook = () => {
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
+  const [resetHeavyEquipmentReferenceState] = useControlPanel(
+    (state) => [state.resetHeavyEquipmentReferenceState],
+    shallow
+  );
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<ICreateHeavyEquipmentValues>({
@@ -82,6 +88,7 @@ const CreateHeavyEquipmentBook = () => {
       });
       router.push('/reference/heavy-equipment');
       methods.reset();
+      resetHeavyEquipmentReferenceState();
     },
   });
   /* #endregion  /**======== Query =========== */

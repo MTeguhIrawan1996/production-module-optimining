@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
@@ -28,6 +29,7 @@ import { dateToString } from '@/utils/helper/dateToString';
 import { errorRestBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { handleRejectFile } from '@/utils/helper/handleRejectFile';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import { ControllerGroup, ControllerProps } from '@/types/global';
 
@@ -37,6 +39,10 @@ const CreateShippingMonitoringBook = () => {
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
+  const [resetBargingMonitoringState] = useControlPanel(
+    (state) => [state.resetBargingMonitoringState],
+    shallow
+  );
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationShippingMonitoringValues>({
@@ -100,8 +106,9 @@ const CreateShippingMonitoringBook = () => {
         message: t('shippingMonitoring.successCreateMessage'),
         icon: <IconCheck />,
       });
-      router.push('/input-data/quality-control-management/shipping-monitoring');
       methods.reset();
+      resetBargingMonitoringState();
+      router.push('/input-data/quality-control-management/shipping-monitoring');
     },
   });
   /* #endregion  /**======== Query =========== */

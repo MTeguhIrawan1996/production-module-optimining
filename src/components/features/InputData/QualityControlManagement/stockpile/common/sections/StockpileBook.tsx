@@ -1,10 +1,11 @@
 import { rem } from '@mantine/core';
-import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { IconPencil } from '@tabler/icons-react';
 import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -26,6 +27,7 @@ import {
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -33,19 +35,24 @@ import { IElementsData, InputControllerNativeProps } from '@/types/global';
 
 const StockpileBook = () => {
   const router = useRouter();
-  const [page, setPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [
+    { page, search, week, year, month, stockpileId },
+    setStockpileMonitoringState,
+  ] = useControlPanel(
+    (state) => [
+      state.stockpileMonitoringState,
+      state.setStockpileMonitoringState,
+    ],
+    shallow
+  );
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [stockpileNameSerachTerm, setStockpileNameSerachTerm] =
     React.useState<string>('');
   const [stockpileNameSearchQuery] = useDebouncedValue<string>(
     stockpileNameSerachTerm,
     400
   );
-  const [stockpileId, setStockpileId] = React.useState<string | null>(null);
-  const [year, setYear] = React.useState<number | null>(null);
-  const [month, setMonth] = React.useState<number | null>(null);
-  const [week, setWeek] = React.useState<number | null>(null);
 
   const permissions = useStore(usePermissions, (state) => state.permissions);
 
@@ -53,6 +60,9 @@ const StockpileBook = () => {
     'update-monitoring-stockpile'
   );
   const isPermissionRead = permissions?.includes('read-monitoring-stockpile');
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const { elementsData } = useReadAllElementMaster({
@@ -104,25 +114,31 @@ const StockpileBook = () => {
       placeholder: 'chooseStockpileName',
       onSearchChange: setStockpileNameSerachTerm,
       searchValue: stockpileNameSerachTerm,
+      value: stockpileId,
       onChange: (value) => {
-        setPage(1);
-        setStockpileId(value);
+        setStockpileMonitoringState({ page: 1, stockpileId: value });
       },
     });
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        setPage(1);
-        setYear(value ? Number(value) : null);
-        setMonth(null);
-        setWeek(null);
+        setStockpileMonitoringState({
+          page: 1,
+          year: value ? Number(value) : null,
+          month: null,
+          week: null,
+        });
       },
+      value: year ? `${year}` : null,
     });
     const selectMonthItem = globalSelectMonthNative({
       disabled: !year,
       value: month ? `${month}` : null,
       onChange: (value) => {
-        setPage(1);
-        setMonth(value ? Number(value) : null);
+        setStockpileMonitoringState({
+          page: 1,
+          month: value ? Number(value) : null,
+          week: null,
+        });
       },
     });
     const selectWeekItem = globalSelectWeekNative({
@@ -130,8 +146,10 @@ const StockpileBook = () => {
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        setPage(1);
-        setWeek(value ? Number(value) : null);
+        setStockpileMonitoringState({
+          page: 1,
+          week: value ? Number(value) : null,
+        });
       },
     });
 
@@ -146,7 +164,7 @@ const StockpileBook = () => {
   }, [locationItems, year, month, week]);
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setStockpileMonitoringState({ page });
   };
 
   const renderOtherColumnCallback = React.useCallback(
@@ -312,15 +330,16 @@ const StockpileBook = () => {
       searchBar={{
         placeholder: t('stockpileMonitoring.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setStockpileMonitoringState({ search: e.currentTarget.value });
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
+          setStockpileMonitoringState({ page: 1 });
           refetchMonitoringStockpiles({
             page: 1,
           });
         },
+        value: search,
       }}
       filterDateWithSelect={{
         items: filter,

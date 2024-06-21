@@ -1,9 +1,10 @@
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -22,6 +23,7 @@ import {
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -29,19 +31,24 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const ShippingMonitoringBook = () => {
   const router = useRouter();
-  const [page, setPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
+  const [
+    {
+      page,
+      search,
+      bargeHeavyEquipmentId,
+      factoryCategoryId,
+      year,
+      month,
+      week,
+    },
+    setBargingMonitoringState,
+  ] = useControlPanel(
+    (state) => [state.bargingMonitoringState, state.setBargingMonitoringState],
+    shallow
+  );
   const [id, setId] = React.useState<string>('');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
-  const [factoryCategoryId, setFactoryCategoryId] = React.useState<
-    string | null
-  >(null);
-  const [bargeHeavyEquipmentId, setBargeHeavyEquipmentId] = React.useState<
-    string | null
-  >(null);
-  const [year, setYear] = React.useState<number | null>(null);
-  const [month, setMonth] = React.useState<number | null>(null);
-  const [week, setWeek] = React.useState<number | null>(null);
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
@@ -51,6 +58,10 @@ const ShippingMonitoringBook = () => {
   const isPermissionUpdate = permissions?.includes('update-monitoring-barging');
   const isPermissionDelete = permissions?.includes('delete-monitoring-barging');
   const isPermissionRead = permissions?.includes('read-monitoring-barging');
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const {
@@ -77,7 +88,7 @@ const ShippingMonitoringBook = () => {
     onCompleted: () => {
       refetchMonitoringBargingData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setBargingMonitoringState({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -105,37 +116,48 @@ const ShippingMonitoringBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setBargingMonitoringState({ page });
   };
 
   const filter = React.useMemo(() => {
     const bargeCodeItem = globalSelectHeavyEquipmentNative({
       categoryId: `${process.env.NEXT_PUBLIC_BARGE_ID}`,
       onChange: (value) => {
-        setPage(1);
-        setBargeHeavyEquipmentId(value === '' ? null : value);
+        setBargingMonitoringState({
+          page: 1,
+          bargeHeavyEquipmentId: value,
+        });
       },
+      value: bargeHeavyEquipmentId,
     });
     const arriveItem = globalSelectArriveBargeNative({
       onChange: (value) => {
-        setPage(1);
-        setFactoryCategoryId(value);
+        setBargingMonitoringState({
+          page: 1,
+          factoryCategoryId: value,
+        });
       },
+      value: factoryCategoryId,
     });
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        setPage(1);
-        setYear(value ? Number(value) : null);
-        setMonth(null);
-        setWeek(null);
+        setBargingMonitoringState({
+          page: 1,
+          year: value ? Number(value) : null,
+          month: null,
+          week: null,
+        });
       },
+      value: year ? `${year}` : null,
     });
     const selectMonthItem = globalSelectMonthNative({
       disabled: !year,
       value: month ? `${month}` : null,
       onChange: (value) => {
-        setPage(1);
-        setMonth(value ? Number(value) : null);
+        setBargingMonitoringState({
+          page: 1,
+          month: value ? Number(value) : null,
+        });
       },
     });
     const selectWeekItem = globalSelectWeekNative({
@@ -143,8 +165,10 @@ const ShippingMonitoringBook = () => {
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        setPage(1);
-        setWeek(value ? Number(value) : null);
+        setBargingMonitoringState({
+          page: 1,
+          week: value ? Number(value) : null,
+        });
       },
     });
 
@@ -157,7 +181,7 @@ const ShippingMonitoringBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year, month, week]);
+  }, [year, month, week, factoryCategoryId, bargeHeavyEquipmentId]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -292,15 +316,16 @@ const ShippingMonitoringBook = () => {
       searchBar={{
         placeholder: t('shippingMonitoring.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setBargingMonitoringState({ search: e.currentTarget.value });
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
+          setBargingMonitoringState({ page: 1 });
           refetchMonitoringBargingData({
             page: 1,
           });
         },
+        value: search,
       }}
     >
       {renderTable}
