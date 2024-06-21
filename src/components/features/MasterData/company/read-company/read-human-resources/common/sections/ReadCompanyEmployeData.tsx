@@ -31,11 +31,11 @@ const ReadCompanyEmployeBook: React.FC<IProps> = ({ employe }) => {
           },
           {
             dataKey: t('commonTypography.entryDate'),
-            value: formatDate(employe?.entryDate ?? '-'),
+            value: formatDate(employe?.entryDate) || '-',
           },
           {
             dataKey: t('commonTypography.quitDate'),
-            value: formatDate(employe?.quitDate ?? '-'),
+            value: formatDate(employe?.quitDate) || '-',
           },
         ]}
         type="grid"

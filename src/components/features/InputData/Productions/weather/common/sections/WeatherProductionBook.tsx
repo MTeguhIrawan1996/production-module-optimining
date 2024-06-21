@@ -1,9 +1,10 @@
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -20,6 +21,7 @@ import {
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -27,12 +29,17 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const WeatherProductionBook = () => {
   const router = useRouter();
-  const [page, setPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
+  const [{ page, search, week, year }, setWeatherProductionState] =
+    useControlPanel(
+      (state) => [
+        state.weatherProductionState,
+        state.setWeatherProductionState,
+      ],
+      shallow
+    );
   const [id, setId] = React.useState<string>('');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
-  const [year, setYear] = React.useState<number | null>(null);
-  const [week, setWeek] = React.useState<number | null>(null);
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
@@ -42,6 +49,10 @@ const WeatherProductionBook = () => {
   const isPermissionUpdate = permissions?.includes('update-weather-data');
   const isPermissionDelete = permissions?.includes('delete-weather-data');
   const isPermissionRead = permissions?.includes('read-weather-data');
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const {
@@ -65,7 +76,7 @@ const WeatherProductionBook = () => {
     onCompleted: () => {
       refetchWeatherData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setWeatherProductionState({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -93,24 +104,29 @@ const WeatherProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setWeatherProductionState({ page });
   };
 
   const filter = React.useMemo(() => {
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        setPage(1);
-        setYear(value ? Number(value) : null);
-        setWeek(null);
+        setWeatherProductionState({
+          page: 1,
+          year: value ? Number(value) : null,
+          week: null,
+        });
       },
+      value: year ? `${year}` : null,
     });
     const selectWeekItem = globalSelectWeekNative({
       disabled: !year,
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        setPage(1);
-        setWeek(value ? Number(value) : null);
+        setWeatherProductionState({
+          page: 1,
+          week: value ? Number(value) : null,
+        });
       },
     });
 
@@ -281,12 +297,14 @@ const WeatherProductionBook = () => {
       searchBar={{
         placeholder: t('weatherProd.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setWeatherProductionState({ search: e.currentTarget.value });
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
+          setWeatherProductionState({ page: 1 });
+          refetchWeatherData({ page: 1 });
         },
+        value: search,
       }}
     >
       {renderTable}

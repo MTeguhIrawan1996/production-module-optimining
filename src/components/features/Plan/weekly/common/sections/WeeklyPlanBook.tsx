@@ -3,6 +3,7 @@ import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -20,6 +21,7 @@ import {
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -29,13 +31,14 @@ const WeeklyPlanBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [page, setPage] = React.useState<number>(1);
-  const [year, setYear] = React.useState<number | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
-  const [week, setWeek] = React.useState<number | null>(null);
-  const [status, setStatus] = React.useState<string | null>(null);
-  const [companyId, setCompanyId] = React.useState<string | null>(null);
+
+  const [{ page, companyId, status, week, year }, setWeeklyPlanState] =
+    useControlPanel(
+      (state) => [state.weeklyPlanState, state.setWeeklyPlanState],
+      shallow
+    );
 
   const permissions = useStore(usePermissions, (state) => state.permissions);
 
@@ -43,6 +46,10 @@ const WeeklyPlanBook = () => {
   const isPermissionUpdate = permissions?.includes('update-weekly-plan');
   const isPermissionDelete = permissions?.includes('delete-weekly-plan');
   const isPermissionRead = permissions?.includes('read-weekly-plan');
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const {
@@ -68,7 +75,7 @@ const WeeklyPlanBook = () => {
     onCompleted: () => {
       refetchWeeklyPlanData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setWeeklyPlanState({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -96,37 +103,39 @@ const WeeklyPlanBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setWeeklyPlanState({ page });
   };
 
   const filter = React.useMemo(() => {
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
-        setPage(1);
-        setYear(value ? Number(value) : null);
-        setWeek(null);
+        setWeeklyPlanState({
+          page: 1,
+          year: value ? Number(value) : null,
+          week: null,
+        });
       },
+      value: year ? `${year}` : null,
     });
     const selectWeekItem = globalSelectWeekNative({
       disabled: !year,
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        setPage(1);
-        setWeek(value ? Number(value) : null);
+        setWeeklyPlanState({ page: 1, week: value ? Number(value) : null });
       },
     });
     const selectStatusItem = globalSelectStatusNative({
       onChange: (value) => {
-        setPage(1);
-        setStatus(value);
+        setWeeklyPlanState({ page: 1, status: value });
       },
+      value: status,
     });
     const selectCompanyItem = globalSelectCompanyNative({
       onChange: (value) => {
-        setPage(1);
-        setCompanyId(value);
+        setWeeklyPlanState({ page: 1, companyId: value });
       },
+      value: companyId,
     });
 
     const item: InputControllerNativeProps[] = [
@@ -137,7 +146,7 @@ const WeeklyPlanBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year, week]);
+  }, [year, week, status, companyId]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {

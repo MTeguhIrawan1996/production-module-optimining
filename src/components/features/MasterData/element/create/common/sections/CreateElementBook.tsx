@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
@@ -17,6 +18,7 @@ import { globalText } from '@/utils/constants/Field/global-field';
 import { elementMutationValidation } from '@/utils/form-validation/element/element-mutation-validation';
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -26,6 +28,10 @@ const CreateElementBook = () => {
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
+  const [resetElementState] = useControlPanel(
+    (state) => [state.resetElementState],
+    shallow
+  );
 
   /* #   /**=========== Methods =========== */
   const methods = useForm<IMutationElementValues>({
@@ -57,7 +63,7 @@ const CreateElementBook = () => {
         message: t('element.successCreateMessage'),
         icon: <IconCheck />,
       });
-
+      resetElementState();
       methods.reset();
       router.push('/master-data/element');
     },

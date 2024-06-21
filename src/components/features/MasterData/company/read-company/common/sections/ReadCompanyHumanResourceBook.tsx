@@ -63,6 +63,10 @@ const ReadCompanyHumanResourceBook = () => {
     400
   );
 
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
+
   /* #   /**=========== Query =========== */
   const {
     employeesData,
@@ -330,6 +334,7 @@ const ReadCompanyHumanResourceBook = () => {
           setHumanResourceCompanyState({ search: e.currentTarget.value });
         },
         searchQuery,
+        value: search,
         onSearch: () => {
           setHumanResourceCompanyState({ page: 1 });
           refetchEmployees({

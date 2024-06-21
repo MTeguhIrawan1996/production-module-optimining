@@ -7,6 +7,11 @@ import {
   IActivityPlanSliceValue,
 } from '@/utils/store/slice/createActivityPlanSlice';
 import {
+  createBargingMonitoringSlice,
+  IBargingMonitoringAction,
+  IBargingMonitoringValue,
+} from '@/utils/store/slice/createBargingMonitoringSlice';
+import {
   createBlockSlice,
   IBlockSliceAction,
   IBlockSliceValue,
@@ -47,10 +52,20 @@ import {
   IDataRitageTopsoilSliceValue,
 } from '@/utils/store/slice/createDataRitageTopSoilSlice';
 import {
+  createElementSlice,
+  IElementStateAction,
+  IElementStateValue,
+} from '@/utils/store/slice/createElementSlice';
+import {
   createHeavyEquipmentClassSlice,
   IHeavyEquipmentClassSliceAction,
   IHeavyEquipmentClassSliceValue,
 } from '@/utils/store/slice/createHeavyEquipmentClassSlice';
+import {
+  createHeavyEquipmentReferenceSlice,
+  IHeavyEquipmentReferenceSliceAction,
+  IHeavyEquipmentReferenceSliceValue,
+} from '@/utils/store/slice/createHeavyEquipmentReferenceSlice';
 import {
   createHeavyEquipmentSlice,
   IHeavyEquipmentSliceAction,
@@ -67,10 +82,30 @@ import {
   ILocationSliceValue,
 } from '@/utils/store/slice/createLocationSlice';
 import {
+  createSampleHouseLabSlice,
+  ISampleHouseLabAction,
+  ISampleHouseLabValue,
+} from '@/utils/store/slice/createSampleHouseLabSlice';
+import {
+  createStockpileMonitoringSlice,
+  IStockpileMonitoringAction,
+  IStockpileMonitoringValue,
+} from '@/utils/store/slice/createStockpileMonitoringSlice';
+import {
   createStockpileSlice,
   IStockpileSliceAction,
   IStockpileSliceValue,
 } from '@/utils/store/slice/createStockpileSlice';
+import {
+  createWeatherProductionSlice,
+  IWeatherProductionAction,
+  IWeatherProductionValue,
+} from '@/utils/store/slice/createWeatherProductionSlice';
+import {
+  createWeeklyPlanSlice,
+  IWeeklyPlanAction,
+  IWeeklyPlanValue,
+} from '@/utils/store/slice/createWeeklyPlanSlice';
 import {
   createWHPSlice,
   IWHPSliceAction,
@@ -105,6 +140,20 @@ type ICommonProps = ILocationSliceValue &
   IHeavyEquipmentSliceAction &
   IFrontSliceValue &
   IFrontSliceAction &
+  IHeavyEquipmentReferenceSliceValue &
+  IHeavyEquipmentReferenceSliceAction &
+  IWeeklyPlanValue &
+  IWeeklyPlanAction &
+  IWeatherProductionValue &
+  IWeatherProductionAction &
+  IStockpileMonitoringValue &
+  IStockpileMonitoringAction &
+  ISampleHouseLabValue &
+  ISampleHouseLabAction &
+  IBargingMonitoringValue &
+  IBargingMonitoringAction &
+  IElementStateValue &
+  IElementStateAction &
   IDataRitageOBSliceValue &
   IDataRitageOBSliceAction &
   IDataRitageOreSliceValue &
@@ -141,6 +190,13 @@ const useControlPanel = create<ICommonProps>()(
       ...createHumanResourcesSlice(...a),
       ...createHeavyEquipmentSlice(...a),
       ...createFrontSlice(...a),
+      ...createHeavyEquipmentReferenceSlice(...a),
+      ...createWeeklyPlanSlice(...a),
+      ...createWeatherProductionSlice(...a),
+      ...createStockpileMonitoringSlice(...a),
+      ...createSampleHouseLabSlice(...a),
+      ...createBargingMonitoringSlice(...a),
+      ...createElementSlice(...a),
       ...createDataRitageOBSlice(...a),
       ...createDataRitageQuarrySlice(...a),
       ...createDataRitageTopsoilSlice(...a),

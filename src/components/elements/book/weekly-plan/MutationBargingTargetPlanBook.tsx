@@ -7,6 +7,7 @@ import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import InputGroupDome, {
   IInputGroupDomeProps,
@@ -28,6 +29,7 @@ import { useReadOneBargingTargetPlan } from '@/services/graphql/query/plan/weekl
 import { bargingTarget } from '@/utils/constants/DefaultValues/barging-target-plan';
 import { weeklyBargingTargetPlanMutationValidation } from '@/utils/form-validation/plan/weekly/weekly-barging-target-plan-validation';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import { ControllerGroup } from '@/types/global';
 
@@ -46,6 +48,10 @@ const MutationBargingTargetPlanBook = ({
   const [tabs] = useQueryState('tabs');
   const [isOpenConfirmation, setIsOpenConfirmation] =
     React.useState<boolean>(false);
+  const [resetWeeklyPlanState] = useControlPanel(
+    (state) => [state.resetWeeklyPlanState],
+    shallow
+  );
 
   const methods = useForm<IBargingTargetPlanValue>({
     resolver: zodResolver(weeklyBargingTargetPlanMutationValidation),
@@ -168,6 +174,9 @@ const MutationBargingTargetPlanBook = ({
         icon: <IconCheck />,
       });
       router.push(`/plan/weekly`);
+      if (mutationType === 'create') {
+        resetWeeklyPlanState();
+      }
       if (mutationType === 'update') {
         setIsOpenConfirmation(false);
       }

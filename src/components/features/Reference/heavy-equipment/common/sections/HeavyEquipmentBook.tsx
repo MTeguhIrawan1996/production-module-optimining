@@ -1,11 +1,11 @@
 import { SelectProps } from '@mantine/core';
-import { useDebouncedState, useDebouncedValue } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -19,6 +19,7 @@ import { useReadAllBrand } from '@/services/graphql/query/heavy-equipment/useRea
 import { useReadAllHeavyEquipmentRefrence } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipment';
 import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
 import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -26,20 +27,22 @@ const HeavyEquipmentBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
-  );
+  const [{ page, search, brandId, typeId }, setHeavyEquipmentReferenceState] =
+    useControlPanel(
+      (state) => [
+        state.heavyEquipmentReferenceState,
+        state.setHeavyEquipmentReferenceState,
+      ],
+      shallow
+    );
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [brandSearchTerm, setBrandSearchTerm] = React.useState<string>('');
   const [brandSearchQuery] = useDebouncedValue<string>(brandSearchTerm, 400);
-  const [brandId, setBrandId] = React.useState<string | null>(null);
   const [typeSearchTerm, settypeSearchTerm] = React.useState<string>('');
   const [typeSearchQuery] = useDebouncedValue<string>(typeSearchTerm, 400);
-  const [typeId, setTypeId] = React.useState<string | null>(null);
 
   const isPermissionCreate = permissions?.includes(
     'create-heavy-equipment-reference'
@@ -53,6 +56,10 @@ const HeavyEquipmentBook = () => {
   const isPermissionRead = permissions?.includes(
     'read-heavy-equipment-reference'
   );
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const { brandsData } = useReadAllBrand({
@@ -88,9 +95,7 @@ const HeavyEquipmentBook = () => {
     onCompleted: () => {
       refetchHeavyEquipments();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setHeavyEquipmentReferenceState({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -124,11 +129,11 @@ const HeavyEquipmentBook = () => {
     const item: SelectProps[] = [
       {
         onChange: (value) => {
-          setPage(1, {
-            shallow: true,
+          setHeavyEquipmentReferenceState({
+            page: 1,
+            brandId: value,
+            typeId: null,
           });
-          setBrandId(value);
-          setTypeId(null);
         },
         data: brandItems ?? [],
         label: 'brand',
@@ -138,13 +143,11 @@ const HeavyEquipmentBook = () => {
         clearable: true,
         onSearchChange: setBrandSearchTerm,
         searchValue: brandSearchTerm,
+        value: brandId,
       },
       {
         onChange: (value) => {
-          setPage(1, {
-            shallow: true,
-          });
-          setTypeId(value);
+          setHeavyEquipmentReferenceState({ page: 1, typeId: value });
         },
         value: typeId,
         data: typeItems ?? [],
@@ -155,6 +158,7 @@ const HeavyEquipmentBook = () => {
         clearable: true,
         onSearchChange: settypeSearchTerm,
         searchValue: typeSearchTerm,
+        disabled: !brandId,
       },
     ];
     return item;
@@ -171,9 +175,7 @@ const HeavyEquipmentBook = () => {
     });
   };
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setHeavyEquipmentReferenceState({ page });
   };
   /* #endregion  /**======== HandleClickFc =========== */
 
@@ -291,15 +293,15 @@ const HeavyEquipmentBook = () => {
       }
       searchBar={{
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setHeavyEquipmentReferenceState({ search: e.currentTarget.value });
         },
         searchQuery,
         onSearch: () => {
-          setPage(1, {
-            shallow: true,
-          });
+          setHeavyEquipmentReferenceState({ page: 1 });
+          refetchHeavyEquipments({ page: 1 });
         },
         placeholder: t('heavyEquipment.searchPlaceholder'),
+        value: search,
       }}
       MultipleFilter={{
         MultipleFilterData: filter,
