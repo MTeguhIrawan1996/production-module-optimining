@@ -346,7 +346,7 @@ const ReadHeavyEquipmentBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: page || 0,
+          currentPage: page || 1,
           totalAllData: heavyEquipmentsCompanyMeta?.totalAllData ?? 0,
           totalData: heavyEquipmentsCompanyMeta?.totalData ?? 0,
           totalPage: heavyEquipmentsCompanyMeta?.totalPage ?? 0,

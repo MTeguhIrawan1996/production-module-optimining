@@ -17,6 +17,36 @@ import {
   ICompanySliceValue,
 } from '@/utils/store/slice/createCompanySlice';
 import {
+  createDataRitageBargingSlice,
+  IDataRitageBargingSliceAction,
+  IDataRitageBargingSliceValue,
+} from '@/utils/store/slice/createDataRitageBargingSlice';
+import {
+  createDataRitageMovingSlice,
+  IDataRitageMovingSliceAction,
+  IDataRitageMovingSliceValue,
+} from '@/utils/store/slice/createDataRitageMovingSlice';
+import {
+  createDataRitageOBSlice,
+  IDataRitageOBSliceAction,
+  IDataRitageOBSliceValue,
+} from '@/utils/store/slice/createDataRitageOBSlice';
+import {
+  createDataRitageOreSlice,
+  IDataRitageOreSliceAction,
+  IDataRitageOreSliceValue,
+} from '@/utils/store/slice/createDataRitageOReSlice';
+import {
+  createDataRitageQuarrySlice,
+  IDataRitageQuarrySliceAction,
+  IDataRitageQuarrySliceValue,
+} from '@/utils/store/slice/createDataRitageQuarrySlice';
+import {
+  createDataRitageTopsoilSlice,
+  IDataRitageTopsoilSliceAction,
+  IDataRitageTopsoilSliceValue,
+} from '@/utils/store/slice/createDataRitageTopSoilSlice';
+import {
   createHeavyEquipmentClassSlice,
   IHeavyEquipmentClassSliceAction,
   IHeavyEquipmentClassSliceValue,
@@ -74,7 +104,19 @@ type ICommonProps = ILocationSliceValue &
   IHeavyEquipmentSliceValue &
   IHeavyEquipmentSliceAction &
   IFrontSliceValue &
-  IFrontSliceAction;
+  IFrontSliceAction &
+  IDataRitageOBSliceValue &
+  IDataRitageOBSliceAction &
+  IDataRitageOreSliceValue &
+  IDataRitageOreSliceAction &
+  IDataRitageQuarrySliceValue &
+  IDataRitageQuarrySliceAction &
+  IDataRitageTopsoilSliceValue &
+  IDataRitageTopsoilSliceAction &
+  IDataRitageBargingSliceValue &
+  IDataRitageBargingSliceAction &
+  IDataRitageMovingSliceValue &
+  IDataRitageMovingSliceAction;
 
 export const sliceResetFns = new Set<() => void>();
 
@@ -99,6 +141,12 @@ const useControlPanel = create<ICommonProps>()(
       ...createHumanResourcesSlice(...a),
       ...createHeavyEquipmentSlice(...a),
       ...createFrontSlice(...a),
+      ...createDataRitageOBSlice(...a),
+      ...createDataRitageQuarrySlice(...a),
+      ...createDataRitageTopsoilSlice(...a),
+      ...createDataRitageBargingSlice(...a),
+      ...createDataRitageMovingSlice(...a),
+      ...createDataRitageOreSlice(...a),
     }),
     {
       name: 'control-panel-storage',
