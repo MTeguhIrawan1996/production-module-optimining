@@ -1,10 +1,10 @@
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -15,19 +15,20 @@ import {
 
 import { useDeleteElementMaster } from '@/services/graphql/mutation/element/useDeleteElementMaster';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
 const ElementBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
+  const [{ page, search }, setElementState] = useControlPanel(
+    (state) => [state.elementState, state.setElementState],
+    shallow
   );
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
 
@@ -35,6 +36,10 @@ const ElementBook = () => {
   const isPermissionUpdate = permissions?.includes('update-element');
   const isPermissionDelete = permissions?.includes('delete-element');
   const isPermissionRead = permissions?.includes('read-element');
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const {
@@ -56,9 +61,7 @@ const ElementBook = () => {
     onCompleted: () => {
       refetchElements();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setElementState({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -86,9 +89,7 @@ const ElementBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setElementState({ page });
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -198,14 +199,14 @@ const ElementBook = () => {
       searchBar={{
         placeholder: t('element.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setElementState({ search: e.currentTarget.value });
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1, {
-            shallow: true,
-          });
+          setElementState({ page: 1 });
+          refetchElements({ page: 1 });
         },
+        value: search,
       }}
     >
       {renderTable}
