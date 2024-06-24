@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -267,6 +268,17 @@ const useControlPanel = create<ICommonProps>()(
           )
         ),
       skipHydration: true,
+      onRehydrateStorage: (_) => {
+        return (stateAfterRehydrate) => {
+          const stateString = JSON.stringify(stateAfterRehydrate);
+          const newState = JSON.parse(stateString, (_, value) => {
+            const isDateString = z.string().datetime().safeParse(value);
+            if (isDateString.success) return new Date(isDateString.data);
+            return value;
+          });
+          useControlPanel.setState(newState);
+        };
+      },
     }
   )
 );

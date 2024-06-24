@@ -1,9 +1,10 @@
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -20,6 +21,10 @@ import { useReadAllHeavyEquipmentProduction } from '@/services/graphql/query/hea
 import { globalDateNative } from '@/utils/constants/Field/native-field';
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -27,11 +32,17 @@ import { InputControllerNativeProps } from '@/types/global';
 
 const HeavyEquipmentProductionBook = () => {
   const router = useRouter();
-  const [page, setPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
+  const [{ page, search, date }, setHeavyEquipmentProductionState] =
+    useControlPanel(
+      (state) => [
+        state.heavyEquipmentProductionState,
+        state.setHeavyEquipmentProductionState,
+      ],
+      shallow
+    );
   const [id, setId] = React.useState<string>('');
-  const [date, setDate] = React.useState('');
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
@@ -53,8 +64,15 @@ const HeavyEquipmentProductionBook = () => {
     'delete-heavy-equipment-data'
   );
   const isPermissionRead = permissions?.includes('read-heavy-equipment-data');
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    resetAllSlices(
+      new Set<ISliceName>(['heavyEquipmentProductionSlice'] as ISliceName[])
+    );
+  }, []);
 
   /* #   /**=========== Query =========== */
+  const dateFormat = formatDate(date, 'YYYY-MM-DD');
   const {
     heavyEquipmentData,
     heavyEquipmentDataLoading,
@@ -67,7 +85,7 @@ const HeavyEquipmentProductionBook = () => {
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
-      date: date === '' ? null : date,
+      date: dateFormat || null,
     },
   });
 
@@ -75,7 +93,7 @@ const HeavyEquipmentProductionBook = () => {
     onCompleted: () => {
       refetchHeavyEquipmentData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setHeavyEquipmentProductionState({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -103,7 +121,7 @@ const HeavyEquipmentProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setHeavyEquipmentProductionState({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -111,17 +129,16 @@ const HeavyEquipmentProductionBook = () => {
       label: 'date',
       placeholder: 'chooseDate',
       clearable: true,
+      value: date,
       onChange: (value) => {
-        setPage(1);
-        const date = formatDate(value, 'YYYY-MM-DD');
-        setDate(date ?? '');
+        setHeavyEquipmentProductionState({ page: 1, date: value || null });
       },
     });
 
     const item: InputControllerNativeProps[] = [dateItem];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [date]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -300,15 +317,16 @@ const HeavyEquipmentProductionBook = () => {
       searchBar={{
         placeholder: t('heavyEquipmentProd.searchPlaceholder'),
         onChange: (e) => {
-          setSearchQuery(e.currentTarget.value);
+          setHeavyEquipmentProductionState({ search: e.currentTarget.value });
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage(1);
+          setHeavyEquipmentProductionState({ page: 1 });
           refetchHeavyEquipmentData({
             page: 1,
           });
         },
+        value: search,
       }}
     >
       {renderTable}
