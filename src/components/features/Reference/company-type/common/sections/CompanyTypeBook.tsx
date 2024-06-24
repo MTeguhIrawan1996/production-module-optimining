@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, MantineDataTable } from '@/components/elements';
 
 import { useReadAllCompanyTypes } from '@/services/graphql/query/company-type/useReadAllCompanyType';
+import { resetAllSlices } from '@/utils/store/useControlPanel';
 
 const CompanyTypeBook = () => {
   const theme = useMantineTheme();
@@ -18,6 +19,10 @@ const CompanyTypeBook = () => {
       search: null,
     },
   });
+
+  React.useEffect(() => {
+    resetAllSlices();
+  }, []);
 
   return (
     <DashboardCard withBorder shadow="xs">

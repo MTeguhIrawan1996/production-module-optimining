@@ -18,7 +18,10 @@ import {
 
 import { useDeleteFrontProduction } from '@/services/graphql/mutation/front-production/useDeleteFrontProduction';
 import { useReadAllFrontProduction } from '@/services/graphql/query/front-production/useReadAllFrontProduction';
-import useControlPanel from '@/utils/store/useControlPanel';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -50,6 +53,7 @@ const FrontProductionBook = () => {
 
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
+    resetAllSlices(new Set<ISliceName>(['frontSlice'] as ISliceName[]));
   }, []);
 
   /* #   /**=========== Query =========== */

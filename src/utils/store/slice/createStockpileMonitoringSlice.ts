@@ -36,7 +36,8 @@ const initialState: IStockpileMonitoringValue = {
 export const createStockpileMonitoringSlice: StateCreator<
   IStockpileMonitoringValue & IStockpileMonitoringAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'stockpileMonitoringSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setStockpileMonitoringState: (payload) =>

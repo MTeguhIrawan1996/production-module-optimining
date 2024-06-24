@@ -16,7 +16,10 @@ import {
 
 import { useDeleteHeavyEquipmentClass } from '@/services/graphql/mutation/heavy-equipment-class/useDeleteHeavyEquipmentClass';
 import { useReadAllHeavyEquipmentClass } from '@/services/graphql/query/heavy-equipment-class/useReadAllHeavyEquipmentClass';
-import useControlPanel from '@/utils/store/useControlPanel';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -49,6 +52,9 @@ const HeavyEquipmentClassBook = () => {
   const isPermissionRead = permissions?.includes('read-heavy-equipment-class');
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
+    resetAllSlices(
+      new Set<ISliceName>(['heavyEquipmentClassSlice'] as ISliceName[])
+    );
   }, []);
   /* #   /**=========== Query =========== */
   const {

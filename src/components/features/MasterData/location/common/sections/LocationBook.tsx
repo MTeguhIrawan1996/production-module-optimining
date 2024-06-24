@@ -18,7 +18,10 @@ import { useDeleteLocationMaster } from '@/services/graphql/mutation/location/us
 import { useReadAllLocationCategory } from '@/services/graphql/query/global-select/useReadAllLocationCategory ';
 import { useReadAllLocationsMaster } from '@/services/graphql/query/location/useReadAllLocationMaster';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
-import useControlPanel from '@/utils/store/useControlPanel';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -58,6 +61,7 @@ const LocationBook = () => {
 
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
+    resetAllSlices(new Set<ISliceName>(['locationSlice'] as ISliceName[]));
   }, []);
 
   /* #   /**=========== Query =========== */

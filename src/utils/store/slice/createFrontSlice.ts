@@ -26,7 +26,8 @@ const initialState: IFrontSliceValue = {
 export const createFrontSlice: StateCreator<
   IFrontSliceValue & IFrontSliceAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'frontSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setFrontState: (payload) =>

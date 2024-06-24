@@ -34,7 +34,8 @@ const initialState: IHeavyEquipmentSliceValue = {
 export const createHeavyEquipmentSlice: StateCreator<
   IHeavyEquipmentSliceValue & IHeavyEquipmentSliceAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'heavyEquipmentSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setHeavyEquipmentState: (payload) =>

@@ -27,7 +27,8 @@ const initialState: IActivityPlanSliceValue = {
 export const createActivityPlanSlice: StateCreator<
   IActivityPlanSliceValue & IActivityPlanSliceAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'activityPlanSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setSearchActivityPlan: (payload) =>

@@ -15,7 +15,10 @@ import {
 
 import { useDeleteMasterDataCompany } from '@/services/graphql/mutation/master-data-company/useDeleteMasterDataCompany';
 import { useReadAllCompaniesMasterData } from '@/services/graphql/query/master-data-company/useReadAllMasterDataCompany';
-import useControlPanel from '@/utils/store/useControlPanel';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -48,6 +51,7 @@ const CompanyBook = () => {
 
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
+    resetAllSlices(new Set<ISliceName>(['companySlice'] as ISliceName[]));
   }, []);
 
   /* #   /**=========== Query =========== */

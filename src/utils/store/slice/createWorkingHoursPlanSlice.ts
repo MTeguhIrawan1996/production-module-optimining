@@ -27,7 +27,8 @@ const initialState: IWHPSliceValue = {
 export const createWHPSlice: StateCreator<IWHPSliceValue & IWHPSliceAction> = (
   set
 ) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'workingHoursPlanSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setSearchWHP: (payload) =>

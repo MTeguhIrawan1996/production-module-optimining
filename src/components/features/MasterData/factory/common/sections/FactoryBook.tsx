@@ -14,6 +14,7 @@ import {
 
 import { useDeleteFactoryMaster } from '@/services/graphql/mutation/factory/useDeleteFactoryMaster';
 import { useReadAllFactoryMaster } from '@/services/graphql/query/factory/useReadAllFactoryMaster';
+import { resetAllSlices } from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -31,6 +32,9 @@ const FactoryBook = () => {
   const isPermissionUpdate = permissions?.includes('update-factory');
   const isPermissionDelete = permissions?.includes('delete-factory');
   const isPermissionRead = permissions?.includes('read-factory');
+  React.useEffect(() => {
+    resetAllSlices();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const {

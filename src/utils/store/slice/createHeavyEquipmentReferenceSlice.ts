@@ -32,7 +32,8 @@ const initialState: IHeavyEquipmentReferenceSliceValue = {
 export const createHeavyEquipmentReferenceSlice: StateCreator<
   IHeavyEquipmentReferenceSliceValue & IHeavyEquipmentReferenceSliceAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'heavyEquipmentReferenceSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setHeavyEquipmentReferenceState: (payload) =>

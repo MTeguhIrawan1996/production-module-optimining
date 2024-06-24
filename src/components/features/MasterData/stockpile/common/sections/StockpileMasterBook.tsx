@@ -15,7 +15,10 @@ import {
 
 import { useDeleteStockpileMaster } from '@/services/graphql/mutation/stockpile-master/useDeleteStockpileMaster';
 import { useReadAllStockpileMaster } from '@/services/graphql/query/stockpile-master/useReadAllStockpileMaster';
-import useControlPanel from '@/utils/store/useControlPanel';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -48,6 +51,7 @@ const StockpileMasterBook = () => {
 
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
+    resetAllSlices(new Set<ISliceName>(['stockpileSlice'] as ISliceName[]));
   }, []);
 
   /* #   /**=========== Query =========== */

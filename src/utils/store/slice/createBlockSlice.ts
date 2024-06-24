@@ -35,7 +35,8 @@ const initialState: IBlockSliceValue = {
 export const createBlockSlice: StateCreator<
   IBlockSliceValue & IBlockSliceAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'blockSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setSearchBlock: (payload) =>

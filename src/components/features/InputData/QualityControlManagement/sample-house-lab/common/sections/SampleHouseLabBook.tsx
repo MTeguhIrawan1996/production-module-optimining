@@ -17,7 +17,10 @@ import {
 import { useDeleteSampleHouseLab } from '@/services/graphql/mutation/sample-house-lab/useDeleteSampleHouseLab';
 import { useReadAllSampleHouseLab } from '@/services/graphql/query/sample-house-lab/useReadAllSampleHouseLab';
 import { formatDate } from '@/utils/helper/dateFormat';
-import useControlPanel from '@/utils/store/useControlPanel';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -47,6 +50,9 @@ const SampleHouseLabBook = () => {
   const isPermissionRead = permissions?.includes('read-house-sample-and-lab');
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
+    resetAllSlices(
+      new Set<ISliceName>(['sampleHouseLabSlice'] as ISliceName[])
+    );
   }, []);
 
   /* #   /**=========== Query =========== */

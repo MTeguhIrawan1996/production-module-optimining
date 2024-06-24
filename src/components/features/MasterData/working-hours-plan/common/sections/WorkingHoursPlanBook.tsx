@@ -15,7 +15,10 @@ import {
 
 import { useDeleteWHPMaster } from '@/services/graphql/mutation/working-hours-plan/useDeleteWHPMaster';
 import { useReadAllWHPsMaster } from '@/services/graphql/query/working-hours-plan/useReadAllWHPMaster';
-import useControlPanel from '@/utils/store/useControlPanel';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -39,6 +42,9 @@ const WorkingHoursPlanBook = () => {
 
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
+    resetAllSlices(
+      new Set<ISliceName>(['workingHoursPlanSlice'] as ISliceName[])
+    );
   }, []);
 
   /* #   /**=========== Query =========== */

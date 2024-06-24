@@ -26,7 +26,8 @@ const initialState: ISampleHouseLabValue = {
 export const createSampleHouseLabSlice: StateCreator<
   ISampleHouseLabValue & ISampleHouseLabAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'sampleHouseLabSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setSampleHouseLabState: (payload) =>
