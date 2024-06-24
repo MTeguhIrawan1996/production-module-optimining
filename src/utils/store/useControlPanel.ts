@@ -62,6 +62,11 @@ import {
   IHeavyEquipmentClassSliceValue,
 } from '@/utils/store/slice/createHeavyEquipmentClassSlice';
 import {
+  createHeavyEquipmentProductionSlice,
+  IHeavyEquipmentProductionStateAction,
+  IHeavyEquipmentProductionStateValue,
+} from '@/utils/store/slice/createHeavyEquipmentProductionSlice';
+import {
   createHeavyEquipmentReferenceSlice,
   IHeavyEquipmentReferenceSliceAction,
   IHeavyEquipmentReferenceSliceValue,
@@ -179,7 +184,9 @@ type ICommonProps = ILocationSliceValue &
   IManagementRoleStateValue &
   IManagementRoleStateAction &
   IUserStateValue &
-  IUserStateAction;
+  IUserStateAction &
+  IHeavyEquipmentProductionStateValue &
+  IHeavyEquipmentProductionStateAction;
 
 export type ISliceName =
   | 'locationSlice'
@@ -197,6 +204,7 @@ export type ISliceName =
   | 'stockpileMonitoringSlice'
   | 'stockpileSlice'
   | 'weatherProductionSlice'
+  | 'heavyEquipmentProductionSlice'
   | 'weeklyPlanSlice'
   | 'workingHoursPlanSlice'
   | 'ritageOreSlice'
@@ -248,6 +256,7 @@ const useControlPanel = create<ICommonProps>()(
       ...createDataRitageOreSlice(...a),
       ...createManagementRoleSlice(...a),
       ...createUserSlice(...a),
+      ...createHeavyEquipmentProductionSlice(...a),
     }),
     {
       name: 'control-panel-storage',
