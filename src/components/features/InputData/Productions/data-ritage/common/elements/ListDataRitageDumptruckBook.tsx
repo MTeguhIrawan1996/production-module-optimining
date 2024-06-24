@@ -49,8 +49,6 @@ export default function ListDataRitageDumptruckBook<
 }: IRitageDTProps<T>) {
   const router = useRouter();
   const { t } = useTranslation('default');
-  // eslint-disable-next-line no-console
-  console.log('dateDumptruck', date);
 
   const handleSetPage = (newPage: number) => {
     setPage(newPage);

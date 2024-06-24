@@ -48,7 +48,8 @@ const initialState: IDataRitageMovingSliceValue = {
 export const createDataRitageMovingSlice: StateCreator<
   IDataRitageMovingSliceValue & IDataRitageMovingSliceAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'ritageMovingSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setDataRitageMovingState: (payload) =>

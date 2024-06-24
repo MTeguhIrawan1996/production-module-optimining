@@ -48,7 +48,8 @@ const initialState: IDataRitageTopsoilSliceValue = {
 export const createDataRitageTopsoilSlice: StateCreator<
   IDataRitageTopsoilSliceValue & IDataRitageTopsoilSliceAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'ritageTopSoilSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setDataRitageTopsoilState: (payload) =>

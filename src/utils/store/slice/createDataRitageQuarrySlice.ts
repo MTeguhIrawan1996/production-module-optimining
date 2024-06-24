@@ -48,7 +48,8 @@ const initialState: IDataRitageQuarrySliceValue = {
 export const createDataRitageQuarrySlice: StateCreator<
   IDataRitageQuarrySliceValue & IDataRitageQuarrySliceAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'ritageQuarrySlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setDataRitageQuarryState: (payload) =>
