@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -29,6 +30,7 @@ import {
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -39,29 +41,38 @@ const ListDataMovingRitageBook = () => {
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
+
+  const [
+    {
+      page,
+      filterDate,
+      filterStatus,
+      filterShift,
+      filtercompanyHeavyEquipmentId,
+    },
+    { page: pageDumptruck, filterDate: filterDateDumptruck },
+    setDataRitageMovingState,
+  ] = useControlPanel(
+    (state) => [
+      state.dataRitageMovingState,
+      state.dataRitageMovingDumptruckState,
+      state.setDataRitageMovingState,
+    ],
+    shallow
+  );
   const [tabs] = useQueryState('tabs');
-  const [page, setPage] = React.useState<number>(1);
-  const [heavyEquipmentPage, setHeavyEquipmentPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
-  const [date, setDate] = React.useState('');
-  const [dateHeavyEquipment, setDateHeavyEquipment] = React.useState('');
-  const [isRitageProblematic, setIsRitageProblematic] = React.useState<
-    boolean | null
-  >(null);
-  const [shiftId, setShiftId] = React.useState<string | null>(null);
+
   const [heavyEquipmentSeacrhTerm, setHeavyEquipmentSeacrhTerm] =
     React.useState<string>('');
   const [heavyEquipmentSearchQuery] = useDebouncedValue<string>(
     heavyEquipmentSeacrhTerm,
     400
-  );
-  const [heavyEquipmentId, setHeavyEquipmentId] = React.useState<string | null>(
-    null
   );
 
   const permissions = useStore(usePermissions, (state) => state.permissions);
@@ -70,7 +81,9 @@ const ListDataMovingRitageBook = () => {
   const isPermissionUpdate = permissions?.includes('update-moving-ritage');
   const isPermissionDelete = permissions?.includes('delete-moving-ritage');
   const isPermissionRead = permissions?.includes('read-moving-ritage');
-
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
   /* #   /**=========== Query =========== */
   const { shiftsData } = useReadAllShiftMaster({
     variables: {
@@ -112,9 +125,9 @@ const ListDataMovingRitageBook = () => {
   } = useReadAllRitageMovingDT({
     variables: {
       limit: 10,
-      page: heavyEquipmentPage,
+      page: pageDumptruck,
       orderDir: 'desc',
-      date: dateHeavyEquipment === '' ? null : dateHeavyEquipment,
+      date: filterDateDumptruck === '' ? null : filterDateDumptruck,
     },
     skip: tabs !== 'moving',
   });
@@ -129,11 +142,17 @@ const ListDataMovingRitageBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      date: date === '' ? null : date,
-      shiftId: shiftId === '' ? null : shiftId,
-      isRitageProblematic: isRitageProblematic,
+      date: filterDate === '' ? null : filterDate,
+      shiftId: filterShift === '' ? null : filterShift,
+      isRitageProblematic: filterStatus
+        ? filterStatus === 'true'
+          ? false
+          : true
+        : null,
       companyHeavyEquipmentId:
-        heavyEquipmentId === '' ? null : heavyEquipmentId,
+        filtercompanyHeavyEquipmentId === ''
+          ? null
+          : filtercompanyHeavyEquipmentId,
     },
     skip: tabs !== 'moving',
   });
@@ -142,7 +161,11 @@ const ListDataMovingRitageBook = () => {
     onCompleted: () => {
       refetchMovingRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setDataRitageMovingState({
+        dataRitageMovingState: {
+          page: 1,
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -170,7 +193,11 @@ const ListDataMovingRitageBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setDataRitageMovingState({
+      dataRitageMovingState: {
+        page: page,
+      },
+    });
   };
 
   const filter = React.useMemo(() => {
@@ -179,10 +206,15 @@ const ListDataMovingRitageBook = () => {
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        setPage(1);
         const date = formatDate(value, 'YYYY-MM-DD');
-        setDate(date ?? '');
+        setDataRitageMovingState({
+          dataRitageMovingState: {
+            page: 1,
+            filterDate: date ?? '',
+          },
+        });
       },
+      value: filterDate ? new Date(filterDate) : undefined,
     });
     const ritageProblematic = globalSelectNative({
       placeholder: 'chooseRitageStatus',
@@ -198,11 +230,14 @@ const ListDataMovingRitageBook = () => {
         },
       ],
       onChange: (value) => {
-        setPage(1);
-        setIsRitageProblematic(
-          value ? (value === 'true' ? false : true) : null
-        );
+        setDataRitageMovingState({
+          dataRitageMovingState: {
+            page: 1,
+            filterStatus: value,
+          },
+        });
       },
+      value: String(filterStatus),
     });
     const shiftItem = globalSelectNative({
       placeholder: 'chooseShift',
@@ -210,10 +245,16 @@ const ListDataMovingRitageBook = () => {
       searchable: false,
       data: shiftFilterItem,
       onChange: (value) => {
-        setPage(1);
-        setShiftId(value);
+        setDataRitageMovingState({
+          dataRitageMovingState: {
+            page: 1,
+            filterShift: value,
+          },
+        });
       },
+      value: filterShift ? filterShift : undefined,
     });
+
     const heavyEquipmentItem = globalSelectNative({
       placeholder: 'chooseHeavyEquipmentCode',
       label: 'heavyEquipmentCode',
@@ -222,9 +263,16 @@ const ListDataMovingRitageBook = () => {
       onSearchChange: setHeavyEquipmentSeacrhTerm,
       searchValue: heavyEquipmentSeacrhTerm,
       onChange: (value) => {
-        setPage(1);
-        setHeavyEquipmentId(value);
+        setDataRitageMovingState({
+          dataRitageMovingState: {
+            page: 1,
+            filtercompanyHeavyEquipmentId: value,
+          },
+        });
       },
+      value: filtercompanyHeavyEquipmentId
+        ? filtercompanyHeavyEquipmentId
+        : undefined,
     });
 
     const item: InputControllerNativeProps[] = [
@@ -392,7 +440,7 @@ const ListDataMovingRitageBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: page,
+          currentPage: page || 1,
           totalAllData: movingRitagesDataMeta?.totalAllData ?? 0,
           totalData: movingRitagesDataMeta?.totalData ?? 0,
           totalPage: movingRitagesDataMeta?.totalPage ?? 0,
@@ -467,10 +515,23 @@ const ListDataMovingRitageBook = () => {
         data={movingDumpTruckRitagesData}
         meta={movingDumpTruckRitagesDataMeta}
         fetching={movingDumpTruckRitagesDataLoading}
-        page={heavyEquipmentPage}
-        setPage={setHeavyEquipmentPage}
+        page={pageDumptruck || 1}
+        setPage={(v) => {
+          setDataRitageMovingState({
+            dataRitageMovingDumptruckState: {
+              page: v,
+            },
+          });
+        }}
         tabs="moving"
-        setDate={setDateHeavyEquipment}
+        setDate={(v) => {
+          setDataRitageMovingState({
+            dataRitageMovingDumptruckState: {
+              filterDate: v,
+            },
+          });
+        }}
+        date={filterDateDumptruck || null}
         urlDetail="/input-data/production/data-ritage/moving/read/dump-truck"
       />
       <ModalConfirmation

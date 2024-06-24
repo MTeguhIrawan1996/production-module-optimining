@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -29,6 +30,7 @@ import {
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -39,29 +41,37 @@ const ListDataOreRitageBook = () => {
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
+  const [
+    {
+      page,
+      filterDate,
+      filterStatus,
+      filterShift,
+      filtercompanyHeavyEquipmentId,
+    },
+    { page: pageDumptruck, filterDate: filterDateDumptruck },
+    setDataRitageOreState,
+  ] = useControlPanel(
+    (state) => [
+      state.dataRitageOreState,
+      state.dataRitageOreDumptruckState,
+      state.setDataRitageOreState,
+    ],
+    shallow
+  );
   const [tabs] = useQueryState('tabs', queryTypes.string.withDefault('ore'));
-  const [page, setPage] = React.useState<number>(1);
-  const [heavyEquipmentPage, setHeavyEquipmentPage] = React.useState<number>(1);
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
-  const [date, setDate] = React.useState('');
-  const [dateHeavyEquipment, setDateHeavyEquipment] = React.useState('');
-  const [isRitageProblematic, setIsRitageProblematic] = React.useState<
-    boolean | null
-  >(null);
-  const [shiftId, setShiftId] = React.useState<string | null>(null);
+
   const [heavyEquipmentSeacrhTerm, setHeavyEquipmentSeacrhTerm] =
     React.useState<string>('');
   const [heavyEquipmentSearchQuery] = useDebouncedValue<string>(
     heavyEquipmentSeacrhTerm,
     400
-  );
-  const [heavyEquipmentId, setHeavyEquipmentId] = React.useState<string | null>(
-    null
   );
 
   const permissions = useStore(usePermissions, (state) => state.permissions);
@@ -70,7 +80,9 @@ const ListDataOreRitageBook = () => {
   const isPermissionUpdate = permissions?.includes('update-ore-ritage');
   const isPermissionDelete = permissions?.includes('delete-ore-ritage');
   const isPermissionRead = permissions?.includes('read-ore-ritage');
-
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
   /* #   /**=========== Query =========== */
   const { shiftsData } = useReadAllShiftMaster({
     variables: {
@@ -112,9 +124,9 @@ const ListDataOreRitageBook = () => {
   } = useReadAllRitageOreDT({
     variables: {
       limit: 10,
-      page: heavyEquipmentPage,
+      page: pageDumptruck || 1,
       orderDir: 'desc',
-      date: dateHeavyEquipment === '' ? null : dateHeavyEquipment,
+      date: filterDateDumptruck === '' ? null : filterDateDumptruck,
     },
     skip: tabs !== 'ore',
   });
@@ -129,11 +141,17 @@ const ListDataOreRitageBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      date: date === '' ? null : date,
-      shiftId: shiftId === '' ? null : shiftId,
-      isRitageProblematic: isRitageProblematic,
+      date: filterDate === '' ? null : filterDate,
+      shiftId: filterShift === '' ? null : filterShift,
+      isRitageProblematic: filterStatus
+        ? filterStatus === 'true'
+          ? false
+          : true
+        : null,
       companyHeavyEquipmentId:
-        heavyEquipmentId === '' ? null : heavyEquipmentId,
+        filtercompanyHeavyEquipmentId === ''
+          ? null
+          : filtercompanyHeavyEquipmentId,
     },
     skip: tabs !== 'ore',
   });
@@ -142,7 +160,11 @@ const ListDataOreRitageBook = () => {
     onCompleted: () => {
       refetchOreRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1);
+      setDataRitageOreState({
+        dataRitageOreState: {
+          page: 1,
+        },
+      });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -170,7 +192,11 @@ const ListDataOreRitageBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage(page);
+    setDataRitageOreState({
+      dataRitageOreState: {
+        page: page,
+      },
+    });
   };
 
   const filter = React.useMemo(() => {
@@ -179,10 +205,15 @@ const ListDataOreRitageBook = () => {
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        setPage(1);
         const date = formatDate(value, 'YYYY-MM-DD');
-        setDate(date ?? '');
+        setDataRitageOreState({
+          dataRitageOreState: {
+            page: 1,
+            filterDate: date ?? '',
+          },
+        });
       },
+      value: filterDate ? new Date(filterDate) : undefined,
     });
     const ritageProblematic = globalSelectNative({
       placeholder: 'chooseRitageStatus',
@@ -198,11 +229,14 @@ const ListDataOreRitageBook = () => {
         },
       ],
       onChange: (value) => {
-        setPage(1);
-        setIsRitageProblematic(
-          value ? (value === 'true' ? false : true) : null
-        );
+        setDataRitageOreState({
+          dataRitageOreState: {
+            page: 1,
+            filterStatus: value,
+          },
+        });
       },
+      value: String(filterStatus),
     });
     const shiftItem = globalSelectNative({
       placeholder: 'chooseShift',
@@ -210,9 +244,14 @@ const ListDataOreRitageBook = () => {
       searchable: false,
       data: shiftFilterItem,
       onChange: (value) => {
-        setPage(1);
-        setShiftId(value);
+        setDataRitageOreState({
+          dataRitageOreState: {
+            page: 1,
+            filterShift: value,
+          },
+        });
       },
+      value: filterShift ? filterShift : undefined,
     });
     const heavyEquipmentItem = globalSelectNative({
       placeholder: 'chooseHeavyEquipmentCode',
@@ -222,9 +261,16 @@ const ListDataOreRitageBook = () => {
       onSearchChange: setHeavyEquipmentSeacrhTerm,
       searchValue: heavyEquipmentSeacrhTerm,
       onChange: (value) => {
-        setPage(1);
-        setHeavyEquipmentId(value);
+        setDataRitageOreState({
+          dataRitageOreState: {
+            page: 1,
+            filtercompanyHeavyEquipmentId: value,
+          },
+        });
       },
+      value: filtercompanyHeavyEquipmentId
+        ? filtercompanyHeavyEquipmentId
+        : undefined,
     });
 
     const item: InputControllerNativeProps[] = [
@@ -378,7 +424,7 @@ const ListDataOreRitageBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: page,
+          currentPage: page || 1,
           totalAllData: oreRitagesDataMeta?.totalAllData ?? 0,
           totalData: oreRitagesDataMeta?.totalData ?? 0,
           totalPage: oreRitagesDataMeta?.totalPage ?? 0,
@@ -452,10 +498,23 @@ const ListDataOreRitageBook = () => {
         data={oreDumpTruckRitagesData}
         meta={oreDumpTruckRitagesDataMeta}
         fetching={oreDumpTruckRitagesDataLoading}
-        page={heavyEquipmentPage}
-        setPage={setHeavyEquipmentPage}
+        page={pageDumptruck || 1}
+        setPage={(v) => {
+          setDataRitageOreState({
+            dataRitageOreDumptruckState: {
+              page: v,
+            },
+          });
+        }}
         tabs="ore"
-        setDate={setDateHeavyEquipment}
+        setDate={(v) => {
+          setDataRitageOreState({
+            dataRitageOreDumptruckState: {
+              filterDate: v,
+            },
+          });
+        }}
+        date={filterDateDumptruck || null}
         urlDetail="/input-data/production/data-ritage/ore/read/dump-truck"
       />
       <ModalConfirmation

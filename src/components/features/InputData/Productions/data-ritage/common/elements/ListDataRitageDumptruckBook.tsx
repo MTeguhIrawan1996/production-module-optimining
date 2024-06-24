@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -27,14 +28,16 @@ interface IRitageDTProps<T> {
   urlDetail: string;
   fetching?: boolean;
   page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
-  setDate: React.Dispatch<React.SetStateAction<string>>;
+  setPage: (page: number | undefined) => void;
+  setDate: (date: string | null) => void;
+  date: string | null;
 }
 
 export default function ListDataRitageDumptruckBook<
   T extends IDumpTruckRitagesData
 >({
   data,
+  date,
   meta,
   tabs,
   fetching,
@@ -46,6 +49,8 @@ export default function ListDataRitageDumptruckBook<
 }: IRitageDTProps<T>) {
   const router = useRouter();
   const { t } = useTranslation('default');
+  // eslint-disable-next-line no-console
+  console.log('dateDumptruck', date);
 
   const handleSetPage = (newPage: number) => {
     setPage(newPage);
@@ -61,11 +66,12 @@ export default function ListDataRitageDumptruckBook<
         const date = formatDate(value, 'YYYY-MM-DD');
         setDate(date ?? '');
       },
+      value: date ? dayjs(date).toDate() : undefined,
     });
     const item: InputControllerNativeProps[] = [stockpileNameItem];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [date]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
