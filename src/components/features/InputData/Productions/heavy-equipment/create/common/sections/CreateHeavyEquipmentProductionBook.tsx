@@ -12,6 +12,7 @@ import {
   useForm,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
 
@@ -38,12 +39,17 @@ import { secondsDuration } from '@/utils/helper/dateFormat';
 import { dateToString } from '@/utils/helper/dateToString';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { hourDiff, timeToSecond } from '@/utils/helper/hourDiff';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import { ControllerGroup } from '@/types/global';
 
 const CreateHeavyEquipmentProductionBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
+  const [resetHeavyEquipmentProductionState] = useControlPanel(
+    (state) => [state.resetHeavyEquipmentProductionState],
+    shallow
+  );
   const [newWorkStartTime, setNewWorkStartTime] = useDebouncedState<string>(
     '',
     400
@@ -184,6 +190,7 @@ const CreateHeavyEquipmentProductionBook = () => {
         message: t('heavyEquipmentProd.successCreateMessage'),
         icon: <IconCheck />,
       });
+      resetHeavyEquipmentProductionState();
       methods.reset();
       router.push('/input-data/production/data-heavy-equipment');
     },
