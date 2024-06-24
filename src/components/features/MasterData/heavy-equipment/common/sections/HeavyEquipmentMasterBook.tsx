@@ -21,7 +21,10 @@ import { useReadAllHeavyEquipmentMasterData } from '@/services/graphql/query/hea
 import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
 import { useReadAllHeavyEquipmentClass } from '@/services/graphql/query/heavy-equipment-class/useReadAllHeavyEquipmentClass';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
-import useControlPanel from '@/utils/store/useControlPanel';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -152,6 +155,9 @@ const HeavyEquipmentMasterBook = () => {
 
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
+    resetAllSlices(
+      new Set<ISliceName>(['heavyEquipmentSlice'] as ISliceName[])
+    );
   }, []);
 
   const handleDelete = async () => {

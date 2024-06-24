@@ -125,11 +125,32 @@ type ICommonProps = ILocationSliceValue &
   IElementStateValue &
   IElementStateAction;
 
-export const sliceResetFns = new Set<() => void>();
+export type ISliceName =
+  | 'locationSlice'
+  | 'blockSlice'
+  | 'activityPlanSlice'
+  | 'bargingMonitoringSlice'
+  | 'companySlice'
+  | 'elementSlice'
+  | 'frontSlice'
+  | 'heavyEquipmentClassSlice'
+  | 'heavyEquipmentReferenceSlice'
+  | 'heavyEquipmentSlice'
+  | 'humanResourcesSlice'
+  | 'sampleHouseLabSlice'
+  | 'stockpileMonitoringSlice'
+  | 'stockpileSlice'
+  | 'weatherProductionSlice'
+  | 'weeklyPlanSlice'
+  | 'workingHoursPlanSlice';
 
-export const resetAllSlices = () => {
-  sliceResetFns.forEach((resetFn) => {
-    resetFn();
+export const sliceResetFns = new Map<ISliceName, () => void>();
+
+export const resetAllSlices = (excludedSlices: Set<ISliceName> = new Set()) => {
+  sliceResetFns.forEach((resetFn, sliceName) => {
+    if (!excludedSlices.has(sliceName)) {
+      resetFn();
+    }
   });
 };
 

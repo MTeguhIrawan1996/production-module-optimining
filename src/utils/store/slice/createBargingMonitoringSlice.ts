@@ -38,7 +38,8 @@ const initialState: IBargingMonitoringValue = {
 export const createBargingMonitoringSlice: StateCreator<
   IBargingMonitoringValue & IBargingMonitoringAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'bargingMonitoringSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setBargingMonitoringState: (payload) =>

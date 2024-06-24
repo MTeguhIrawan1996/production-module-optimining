@@ -32,7 +32,8 @@ const initialState: IWeatherProductionValue = {
 export const createWeatherProductionSlice: StateCreator<
   IWeatherProductionValue & IWeatherProductionAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'weatherProductionSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setWeatherProductionState: (payload) =>

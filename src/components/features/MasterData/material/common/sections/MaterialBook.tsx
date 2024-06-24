@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard, MantineDataTable } from '@/components/elements';
 
 import { useReadAllMaterialsMaster } from '@/services/graphql/query/material/useReadAllMaterialMaster';
+import { resetAllSlices } from '@/utils/store/useControlPanel';
 
 const MaterialBook = () => {
   // const router = useRouter();
@@ -21,6 +22,10 @@ const MaterialBook = () => {
   // const isPermissionUpdate = permissions?.includes('update-material');
   // const isPermissionDelete = permissions?.includes('delete-material');
   // const isPermissionRead = permissions?.includes('read-material');
+
+  React.useEffect(() => {
+    resetAllSlices();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const {

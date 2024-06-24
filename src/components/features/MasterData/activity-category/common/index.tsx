@@ -11,6 +11,7 @@ import HeavyEquipmentFormulaBook from '@/components/features/MasterData/activity
 import LoseTimeCategoryBook from '@/components/features/MasterData/activity-category/common/sections/LoseTimeCategoryBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
+import { resetAllSlices } from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -44,6 +45,10 @@ const ActivityCategoryMasterPage = () => {
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
+
+  React.useEffect(() => {
+    resetAllSlices();
+  }, []);
 
   const handleChangeTab = (tabs: TabsValue) => {
     setTab(tabs);

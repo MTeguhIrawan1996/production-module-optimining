@@ -29,7 +29,8 @@ const initialState: IHumanResourcesSliceValue = {
 export const createHumanResourcesSlice: StateCreator<
   IHumanResourcesSliceValue & IHumanResourcesSliceAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'humanResourcesSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setSearchHumanResources: (payload) =>

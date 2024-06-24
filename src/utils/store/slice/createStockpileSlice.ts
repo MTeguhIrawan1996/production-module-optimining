@@ -35,7 +35,8 @@ const initialState: IStockpileSliceValue = {
 export const createStockpileSlice: StateCreator<
   IStockpileSliceValue & IStockpileSliceAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'stockpileSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setSearchStockpile: (payload) =>

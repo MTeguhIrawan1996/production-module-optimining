@@ -66,7 +66,8 @@ const initialState: ICompanySliceValue = {
 export const createCompanySlice: StateCreator<
   ICompanySliceValue & ICompanySliceAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'companySlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setCompanyState: (payload) =>

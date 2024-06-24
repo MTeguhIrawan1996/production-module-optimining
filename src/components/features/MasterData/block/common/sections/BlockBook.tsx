@@ -15,7 +15,10 @@ import {
 
 import { useDeleteBlockMaster } from '@/services/graphql/mutation/block/useDeleteBlockMaster';
 import { useReadAllBlocksMaster } from '@/services/graphql/query/block/useReadAllBlockMaster';
-import useControlPanel from '@/utils/store/useControlPanel';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -45,6 +48,7 @@ const BlockBook = () => {
 
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
+    resetAllSlices(new Set<ISliceName>(['blockSlice'] as ISliceName[]));
   }, []);
 
   /* #   /**=========== Query =========== */

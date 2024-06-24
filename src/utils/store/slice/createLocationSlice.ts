@@ -30,7 +30,8 @@ const initialState: ILocationSliceValue = {
 export const createLocationSlice: StateCreator<
   ILocationSliceValue & ILocationSliceAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'locationSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setSearchLocation: (payload) =>

@@ -32,7 +32,8 @@ const initialState: IWeeklyPlanValue = {
 export const createWeeklyPlanSlice: StateCreator<
   IWeeklyPlanValue & IWeeklyPlanAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'weeklyPlanSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setWeeklyPlanState: (payload) =>

@@ -27,7 +27,10 @@ import {
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
-import useControlPanel from '@/utils/store/useControlPanel';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -62,6 +65,9 @@ const StockpileBook = () => {
   const isPermissionRead = permissions?.includes('read-monitoring-stockpile');
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
+    resetAllSlices(
+      new Set<ISliceName>(['stockpileMonitoringSlice'] as ISliceName[])
+    );
   }, []);
 
   /* #   /**=========== Query =========== */

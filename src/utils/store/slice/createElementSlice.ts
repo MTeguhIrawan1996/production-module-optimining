@@ -26,7 +26,8 @@ const initialState: IElementStateValue = {
 export const createElementSlice: StateCreator<
   IElementStateValue & IElementStateAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'elementSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setElementState: (payload) =>

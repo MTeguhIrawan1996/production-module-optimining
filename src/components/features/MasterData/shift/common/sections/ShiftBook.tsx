@@ -15,6 +15,7 @@ import {
 import { useDeleteShiftMaster } from '@/services/graphql/mutation/shift/useDeleteShiftMaster';
 import { useReadAllShiftMaster } from '@/services/graphql/query/shift/useReadAllShiftMaster';
 import { hourFromat } from '@/utils/helper/hourFromat';
+import { resetAllSlices } from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -32,6 +33,9 @@ const ShiftBook = () => {
   const isPermissionUpdate = permissions?.includes('update-shift');
   const isPermissionDelete = permissions?.includes('delete-shift');
   const isPermissionRead = permissions?.includes('read-shift');
+  React.useEffect(() => {
+    resetAllSlices();
+  }, []);
 
   /* #   /**=========== Query =========== */
   const { shiftsData, shiftsDataLoading, refetchShifts, shiftsDataMeta } =

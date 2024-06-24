@@ -15,7 +15,10 @@ import {
 
 import { useDeleteElementMaster } from '@/services/graphql/mutation/element/useDeleteElementMaster';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
-import useControlPanel from '@/utils/store/useControlPanel';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -39,6 +42,7 @@ const ElementBook = () => {
 
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
+    resetAllSlices(new Set<ISliceName>(['elementSlice'] as ISliceName[]));
   }, []);
 
   /* #   /**=========== Query =========== */

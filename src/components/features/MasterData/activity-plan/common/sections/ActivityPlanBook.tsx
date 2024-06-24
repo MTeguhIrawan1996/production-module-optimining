@@ -15,7 +15,10 @@ import {
 
 import { useDeleteActivityPlanMaster } from '@/services/graphql/mutation/activity-plan/useDeleteActivityPlanMaster';
 import { useReadAllActivityPlanMaster } from '@/services/graphql/query/activity-plan/useReadAllActivityPlanMaster';
-import useControlPanel from '@/utils/store/useControlPanel';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -85,6 +88,7 @@ const ActivityPlanBook = () => {
 
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
+    resetAllSlices(new Set<ISliceName>(['activityPlanSlice'] as ISliceName[]));
   }, []);
 
   const handleDelete = async () => {
