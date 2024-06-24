@@ -3,9 +3,9 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -24,6 +24,10 @@ import {
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -37,48 +41,43 @@ const locationIds = [
 
 const ListWeeklyMapBook = () => {
   const router = useRouter();
+  const { t } = useTranslation('default');
   const permissions = useStore(usePermissions, (state) => state.permissions);
-
+  const [
+    { page, search, week, year, mapWeeklyCategory, mapWeeklyLocation },
+    setWeeklyMapProductionState,
+  ] = useControlPanel(
+    (state) => [
+      state.weeklyMapProductionState,
+      state.setWeeklyMapProductionState,
+    ],
+    shallow
+  );
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
+  const [id, setId] = React.useState<string | undefined>(undefined);
+  const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
+    React.useState<boolean>(false);
   const isPermissionCreate = permissions?.includes('create-map-data');
   const isPermissionUpdate = permissions?.includes('update-map-data');
   const isPermissionDelete = permissions?.includes('delete-map-data');
   const isPermissionRead = permissions?.includes('read-map-data');
 
-  const [mapWeeklyPage, setMapWeeklyPage] = useQueryState(
-    'mapWeeklyPage',
-    queryTypes.integer.withDefault(1)
-  );
-  const [mapWeeklyLocation, setMapWeeklyLocation] = React.useState<
-    string | null
-  >(null);
-  const [mapWeeklyYear, setMapWeeklyYear] = React.useState<string | null>(null);
-  const [mapWeeklyWeek, setMapWeeklyWeek] = React.useState<string | null>(null);
-  const [mapWeeklySearch, setMapWeeklySearch] = React.useState<string | null>(
-    null
-  );
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    resetAllSlices(
+      new Set<ISliceName>(['weeklyMapProductionSlice'] as ISliceName[])
+    );
+  }, []);
 
-  const [searchQuery] = useDebouncedValue<string>(
-    (mapWeeklySearch as string) || '',
-    500
-  );
-
-  const { t } = useTranslation('default');
-  const [mapWeeklyCategory, setMapWeeklyCategory] = React.useState<
-    string | null
-  >(null);
-
-  const [id, setId] = React.useState<string | undefined>(undefined);
-  const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
-    React.useState<boolean>(false);
   const { mapData, mapMeta, mapDataLoading, refetchMap } = useReadAllMap({
     variables: {
-      page: mapWeeklyPage || 1,
+      page: page || 1,
       limit: 10,
       search: searchQuery === '' ? null : searchQuery,
       dateType: 'WEEK',
       mapDataCategoryId: mapWeeklyCategory || undefined,
-      year: Number(mapWeeklyYear) === 0 ? undefined : Number(mapWeeklyYear),
-      week: Number(mapWeeklyWeek) === 0 ? undefined : Number(mapWeeklyWeek),
+      year: Number(year) === 0 ? undefined : Number(year),
+      week: Number(week) === 0 ? undefined : Number(week),
       mapDataLocationId: (mapWeeklyLocation as string) || undefined,
     },
     skip: false,
@@ -137,7 +136,7 @@ const ListWeeklyMapBook = () => {
     setId(undefined);
   };
   const handleSetPage = (page: number) => {
-    setMapWeeklyPage(page);
+    setWeeklyMapProductionState({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -146,36 +145,36 @@ const ListWeeklyMapBook = () => {
       label: 'mapType',
       searchable: false,
       data: mapCategoryList,
+      value: mapWeeklyCategory,
       onChange: (v) => {
-        setMapWeeklyCategory(v);
-        setMapWeeklyPage(1);
+        setWeeklyMapProductionState({ page: 1, mapWeeklyCategory: v });
       },
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
       searchable: true,
       onChange: (v) => {
-        setMapWeeklyLocation(v);
-        setMapWeeklyPage(1);
+        setWeeklyMapProductionState({ page: 1, mapWeeklyLocation: v });
       },
+      value: mapWeeklyLocation,
       categoryIds: (locationIds as string[]) || [],
     });
     const yearItem = globalSelectYearNative({
       placeholder: 'year',
       label: 'year',
       searchable: true,
+      value: year ? `${year}` : null,
       onChange: (v) => {
-        setMapWeeklyYear(v);
-        setMapWeeklyPage(1);
+        setWeeklyMapProductionState({ page: 1, year: v ? Number(v) : null });
       },
     });
     const weekItem = globalSelectWeekNative({
       placeholder: 'week',
       label: 'week',
       searchable: true,
+      value: week ? `${week}` : null,
       onChange: (v) => {
-        setMapWeeklyWeek(v);
-        setMapWeeklyPage(1);
+        setWeeklyMapProductionState({ page: 1, week: v ? Number(v) : null });
       },
     });
 
@@ -187,7 +186,7 @@ const ListWeeklyMapBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapCategoryList]);
+  }, [mapCategoryList, mapWeeklyCategory, mapWeeklyLocation, week, year]);
 
   return (
     <DashboardCard
@@ -208,12 +207,13 @@ const ListWeeklyMapBook = () => {
       searchBar={{
         placeholder: t('mapProduction.searchPlaceholder'),
         onChange: (e) => {
-          setMapWeeklySearch(e.target.value);
+          setWeeklyMapProductionState({ search: e.currentTarget.value });
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setMapWeeklyPage(1);
+          setWeeklyMapProductionState({ page: 1 });
         },
+        value: search,
       }}
     >
       <MantineDataTable
@@ -330,7 +330,7 @@ const ListWeeklyMapBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: (mapWeeklyPage as number) || 1,
+          currentPage: (page as number) || 1,
           totalAllData: mapMeta?.totalAllData ?? 0,
           totalData: mapMeta?.totalData ?? 0,
           totalPage: mapMeta?.totalPage ?? 0,
