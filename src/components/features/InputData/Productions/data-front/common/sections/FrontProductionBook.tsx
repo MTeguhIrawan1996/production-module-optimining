@@ -33,12 +33,18 @@ const FrontProductionBook = () => {
 
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
-  const [{ page, search }, setFrontState] = useControlPanel(
-    (state) => [state.frontState, state.setFrontState],
+  const [
+    { page: pagePit, search: searchPit },
+    { page: pageDome, search: searchDome },
+    setFrontState,
+  ] = useControlPanel(
+    (state) => [state.frontPitState, state.frontDomeState, state.setFrontState],
     shallow
   );
 
-  const [searchQuery] = useDebouncedValue<string>(search, 500);
+  const [domeSearchQuery] = useDebouncedValue<string>(searchDome || '', 500);
+
+  const [pitSearchQuery] = useDebouncedValue<string>(searchPit || '', 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
@@ -66,9 +72,9 @@ const FrontProductionBook = () => {
   } = useReadAllFrontProduction({
     variables: {
       limit: 10,
-      page: page,
+      page: params.segment === 'dome' ? pageDome : pagePit,
       orderDir: 'desc',
-      search: searchQuery === '' ? null : searchQuery,
+      search: params.segment === 'dome' ? domeSearchQuery : pitSearchQuery,
       type: params.segment,
     },
   });
@@ -77,9 +83,13 @@ const FrontProductionBook = () => {
     onCompleted: () => {
       refetchfrontProductionData();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setFrontState({
-        page: 1,
-      });
+      if (params.segment === 'pit') {
+        setFrontState({
+          frontPitState: {
+            page: 1,
+          },
+        });
+      }
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -107,9 +117,20 @@ const FrontProductionBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setFrontState({
-      page: page,
-    });
+    if (params.segment === 'pit') {
+      setFrontState({
+        frontPitState: {
+          page: page,
+        },
+      });
+    }
+    if (params.segment === 'dome') {
+      setFrontState({
+        frontDomeState: {
+          page: page,
+        },
+      });
+    }
   };
 
   const handleChangeSegement = (value: string) => {
@@ -208,7 +229,7 @@ const FrontProductionBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: page,
+          currentPage: params.segment === 'pit' ? pagePit || 1 : pageDome || 1,
           totalAllData: frontProductionDataMeta?.totalAllData ?? 0,
           totalData: frontProductionDataMeta?.totalData ?? 0,
           totalPage: frontProductionDataMeta?.totalPage ?? 0,
@@ -217,7 +238,8 @@ const FrontProductionBook = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    page,
+    pageDome,
+    pagePit,
     frontProductionData,
     frontProductionDataLoading,
     isPermissionDelete,
@@ -242,17 +264,40 @@ const FrontProductionBook = () => {
           params.segment ? params.segment.toUpperCase() : ''
         }`,
         onChange: (e) => {
-          setFrontState({
-            search: e.currentTarget.value,
-          });
+          if (params.segment === 'dome') {
+            setFrontState({
+              frontDomeState: {
+                search: e.currentTarget.value,
+              },
+            });
+          } else {
+            setFrontState({
+              frontPitState: {
+                search: e.currentTarget.value,
+              },
+            });
+          }
         },
-        searchQuery: searchQuery,
+        searchQuery:
+          params.segment === 'dome'
+            ? domeSearchQuery || ''
+            : pitSearchQuery || '',
         onSearch: () => {
-          setFrontState({
-            page: 1,
-          });
+          if (params.segment === 'dome') {
+            setFrontState({
+              frontDomeState: {
+                page: 1,
+              },
+            });
+          } else {
+            setFrontState({
+              frontPitState: {
+                page: 1,
+              },
+            });
+          }
         },
-        value: search,
+        value: params.segment === 'dome' ? searchDome : searchPit,
       }}
       segmentedControl={{
         defaultValue: 'pit',
