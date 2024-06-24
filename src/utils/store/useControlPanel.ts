@@ -184,7 +184,13 @@ export type ISliceName =
   | 'stockpileSlice'
   | 'weatherProductionSlice'
   | 'weeklyPlanSlice'
-  | 'workingHoursPlanSlice';
+  | 'workingHoursPlanSlice'
+  | 'ritageOreSlice'
+  | 'ritageOBSlice'
+  | 'ritageBargingSlice'
+  | 'ritageMovingSlice'
+  | 'ritageQuarrySlice'
+  | 'ritageTopSoilSlice';
 
 export const sliceResetFns = new Map<ISliceName, () => void>();
 

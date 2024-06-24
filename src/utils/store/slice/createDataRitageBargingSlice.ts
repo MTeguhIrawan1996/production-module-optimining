@@ -48,7 +48,8 @@ const initialState: IDataRitageBargingSliceValue = {
 export const createDataRitageBargingSlice: StateCreator<
   IDataRitageBargingSliceValue & IDataRitageBargingSliceAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'ritageBargingSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setDataRitageBargingState: (payload) =>

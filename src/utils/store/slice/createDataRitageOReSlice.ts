@@ -46,7 +46,8 @@ const initialState: IDataRitageOreSliceValue = {
 export const createDataRitageOreSlice: StateCreator<
   IDataRitageOreSliceValue & IDataRitageOreSliceAction
 > = (set) => {
-  sliceResetFns.add(() => set(initialState));
+  const sliceName = 'ritageOreSlice';
+  sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
     setDataRitageOreState: (payload) =>

@@ -30,7 +30,10 @@ import {
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
-import useControlPanel from '@/utils/store/useControlPanel';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -82,6 +85,7 @@ const ListDataQuarryRitageBook = () => {
   const isPermissionRead = permissions?.includes('read-quarry-ritage');
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
+    resetAllSlices(new Set<ISliceName>(['ritageQuarrySlice'] as ISliceName[]));
   }, []);
   /* #   /**=========== Query =========== */
   const { shiftsData } = useReadAllShiftMaster({
