@@ -82,6 +82,11 @@ import {
   ILocationSliceValue,
 } from '@/utils/store/slice/createLocationSlice';
 import {
+  createManagementRoleSlice,
+  IManagementRoleStateAction,
+  IManagementRoleStateValue,
+} from '@/utils/store/slice/createManagementRoleSlice';
+import {
   createSampleHouseLabSlice,
   ISampleHouseLabAction,
   ISampleHouseLabValue,
@@ -96,6 +101,11 @@ import {
   IStockpileSliceAction,
   IStockpileSliceValue,
 } from '@/utils/store/slice/createStockpileSlice';
+import {
+  createUserSlice,
+  IUserStateAction,
+  IUserStateValue,
+} from '@/utils/store/slice/createUserSlice';
 import {
   createWeatherProductionSlice,
   IWeatherProductionAction,
@@ -165,7 +175,11 @@ type ICommonProps = ILocationSliceValue &
   IDataRitageBargingSliceValue &
   IDataRitageBargingSliceAction &
   IDataRitageMovingSliceValue &
-  IDataRitageMovingSliceAction;
+  IDataRitageMovingSliceAction &
+  IManagementRoleStateValue &
+  IManagementRoleStateAction &
+  IUserStateValue &
+  IUserStateAction;
 
 export type ISliceName =
   | 'locationSlice'
@@ -190,7 +204,9 @@ export type ISliceName =
   | 'ritageBargingSlice'
   | 'ritageMovingSlice'
   | 'ritageQuarrySlice'
-  | 'ritageTopSoilSlice';
+  | 'ritageTopSoilSlice'
+  | 'managementRoleSlice'
+  | 'userSlice';
 
 export const sliceResetFns = new Map<ISliceName, () => void>();
 
@@ -230,6 +246,8 @@ const useControlPanel = create<ICommonProps>()(
       ...createDataRitageBargingSlice(...a),
       ...createDataRitageMovingSlice(...a),
       ...createDataRitageOreSlice(...a),
+      ...createManagementRoleSlice(...a),
+      ...createUserSlice(...a),
     }),
     {
       name: 'control-panel-storage',
