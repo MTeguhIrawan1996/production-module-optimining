@@ -8,16 +8,21 @@ type IFrontState = {
 };
 
 export type IFrontSliceValue = {
-  frontState: IFrontState;
+  frontPitState: Partial<IFrontState>;
+  frontDomeState: Partial<IFrontState>;
 };
 
 export interface IFrontSliceAction {
-  setFrontState: (payload: Partial<IFrontState>) => void;
+  setFrontState: (payload: Partial<IFrontSliceValue>) => void;
   resetFrontState: () => void;
 }
 
 const initialState: IFrontSliceValue = {
-  frontState: {
+  frontPitState: {
+    page: 1,
+    search: '',
+  },
+  frontDomeState: {
     page: 1,
     search: '',
   },
@@ -32,9 +37,13 @@ export const createFrontSlice: StateCreator<
     ...initialState,
     setFrontState: (payload) =>
       set((state) => ({
-        frontState: {
-          ...state.frontState,
-          ...payload,
+        frontDomeState: {
+          ...state.frontDomeState,
+          ...payload.frontDomeState,
+        },
+        frontPitState: {
+          ...state.frontPitState,
+          ...payload.frontPitState,
         },
       })),
     resetFrontState: () => {

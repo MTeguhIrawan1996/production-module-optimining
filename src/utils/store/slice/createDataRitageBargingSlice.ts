@@ -10,7 +10,7 @@ type IDataRitageBargingState = {
 export type IDataRitageBargingSliceValue = {
   dataRitageBargingState: Partial<
     IDataRitageBargingState & {
-      filterDate: string | null;
+      filterDate: Date | null;
       filterStatus: string | null;
       filterShift: string | null;
       filtercompanyHeavyEquipmentId: string | null;
@@ -18,7 +18,7 @@ export type IDataRitageBargingSliceValue = {
   >;
   dataRitageBargingDumptruckState: Partial<
     IDataRitageBargingState & {
-      filterDate: string | null;
+      filterDate: Date | null;
     }
   >;
 };

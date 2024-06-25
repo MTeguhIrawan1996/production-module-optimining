@@ -10,7 +10,7 @@ type IDataRitageOBState = {
 export type IDataRitageOBSliceValue = {
   dataRitageOBState: Partial<
     IDataRitageOBState & {
-      filterDate: string | null;
+      filterDate: Date | null;
       filterStatus: string | null;
       filterShift: string | null;
       filtercompanyHeavyEquipmentId: string | null;
@@ -18,7 +18,7 @@ export type IDataRitageOBSliceValue = {
   >;
   dataRitageOBDumptruckState: Partial<
     IDataRitageOBState & {
-      filterDate: string | null;
+      filterDate: Date | null;
     }
   >;
 };

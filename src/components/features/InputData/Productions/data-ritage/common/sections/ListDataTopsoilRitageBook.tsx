@@ -86,6 +86,9 @@ const ListDataTopsoilRitageBook = () => {
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
     resetAllSlices(new Set<ISliceName>(['ritageTopSoilSlice'] as ISliceName[]));
+    resetAllSlices(
+      new Set<ISliceName>(['ritageTopSoilDumptruckSlice'] as ISliceName[])
+    );
   }, []);
   /* #   /**=========== Query =========== */
   const { shiftsData } = useReadAllShiftMaster({
@@ -130,7 +133,7 @@ const ListDataTopsoilRitageBook = () => {
       limit: 10,
       page: pageDumptruck || 1,
       orderDir: 'desc',
-      date: filterDateDumptruck === '' ? null : filterDateDumptruck,
+      date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
     },
     skip: tabs !== 'topsoil',
   });
@@ -145,7 +148,7 @@ const ListDataTopsoilRitageBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      date: filterDate === '' ? null : filterDate,
+      date: formatDate(filterDate, 'YYYY-MM-DD') || null,
       shiftId: filterShift === '' ? null : filterShift,
       isRitageProblematic: filterStatus
         ? filterStatus === 'true'
@@ -209,15 +212,14 @@ const ListDataTopsoilRitageBook = () => {
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        const date = formatDate(value, 'YYYY-MM-DD');
         setDataRitageTopsoilState({
           dataRitageTopsoilState: {
             page: 1,
-            filterDate: date ?? '',
+            filterDate: value || null,
           },
         });
       },
-      value: filterDate ? new Date(filterDate) : undefined,
+      value: filterDate,
     });
     const ritageProblematic = globalSelectNative({
       placeholder: 'chooseRitageStatus',
@@ -511,11 +513,12 @@ const ListDataTopsoilRitageBook = () => {
         setDate={(v) => {
           setDataRitageTopsoilState({
             dataRitageTopsoilDumptruckState: {
-              filterDate: v,
+              filterDate: v || null,
+              page: 1,
             },
           });
         }}
-        date={filterDateDumptruck || null}
+        date={filterDateDumptruck || undefined}
         urlDetail="/input-data/production/data-ritage/topsoil/read/dump-truck"
       />
       <ModalConfirmation
