@@ -8,6 +8,8 @@ import { shallow } from 'zustand/shallow';
 import { GlobalTabs, InnerWrapper, RootWrapper } from '@/components/elements';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
+import { usePermissions } from '@/utils/store/usePermissions';
+import useStore from '@/utils/store/useStore';
 
 import ListMonthlyMapBook from './sections/ListMonthlyMapBook';
 import ListQuarterlyMapBook from './sections/ListQuarterlyMapBook';
@@ -17,10 +19,12 @@ import ListYearlyMapBook from './sections/ListYearlyMapBook';
 const MapProductionPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
+  const permissions = useStore(usePermissions, (state) => state.permissions);
   const [tabs, setTabs] = useQueryState(
     'tabs',
     queryTypes.string.withDefault('weekly')
   );
+  const isPremission = permissions?.includes('read-map-data');
 
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
@@ -55,32 +59,32 @@ const MapProductionPage = () => {
             defaultValue: 'weekly',
             value: tabs,
             onTabChange: (value) => handleChangeTab(value),
-            keepMounted: false,
+            keepMounted: true,
           }}
           tabsData={[
             {
               label: 'Mingguan',
               value: 'weekly',
               component: <ListWeeklyMapBook />,
-              isShowItem: true,
+              isShowItem: isPremission,
             },
             {
               label: 'Bulanan',
               value: 'monthly',
               component: <ListMonthlyMapBook />,
-              isShowItem: true,
+              isShowItem: isPremission,
             },
             {
               label: 'Triwulan',
               value: 'quarterly',
               component: <ListQuarterlyMapBook />,
-              isShowItem: true,
+              isShowItem: isPremission,
             },
             {
               label: 'Tahunan',
               value: 'yearly',
               component: <ListYearlyMapBook />,
-              isShowItem: true,
+              isShowItem: isPremission,
             },
           ]}
         />
