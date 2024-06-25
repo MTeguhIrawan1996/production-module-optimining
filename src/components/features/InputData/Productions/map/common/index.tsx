@@ -53,6 +53,7 @@ const MapProductionPage = () => {
         'weeklyMapProductionSlice',
         'monthlyMapProductionSlice',
         'quarterlyMapProductionSlice',
+        'yearlyMapProductionSlice',
       ] as ISliceName[])
     );
   }, []);

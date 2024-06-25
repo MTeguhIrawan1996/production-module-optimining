@@ -142,6 +142,11 @@ import {
   IWHPSliceAction,
   IWHPSliceValue,
 } from '@/utils/store/slice/createWorkingHoursPlanSlice';
+import {
+  createYearlyMapProductionSlice,
+  IYearlyMapProductionStateAction,
+  IYearlyMapProductionStateValue,
+} from '@/utils/store/slice/createYearlyMapProductionSlice';
 
 import {
   createFrontSlice,
@@ -208,7 +213,9 @@ type ICommonProps = ILocationSliceValue &
   IMonthlyMapProductionStateValue &
   IMonthlyMapProductionStateAction &
   IQuarterlyMapProductionStateValue &
-  IQuarterlyMapProductionStateAction;
+  IQuarterlyMapProductionStateAction &
+  IYearlyMapProductionStateValue &
+  IYearlyMapProductionStateAction;
 
 export type ISliceName =
   | 'locationSlice'
@@ -245,6 +252,7 @@ export type ISliceName =
   | 'userSlice'
   | 'monthlyMapProductionSlice'
   | 'weeklyMapProductionSlice'
+  | 'yearlyMapProductionSlice'
   | 'quarterlyMapProductionSlice';
 
 export const sliceResetFns = new Map<ISliceName, () => void>();
@@ -291,6 +299,7 @@ const useControlPanel = create<ICommonProps>()(
       ...createWeeklyMapProductionSlice(...a),
       ...createMonthlyMapProductionSlice(...a),
       ...createQuarterlyMapProductionSlice(...a),
+      ...createYearlyMapProductionSlice(...a),
     }),
     {
       name: 'control-panel-storage',
