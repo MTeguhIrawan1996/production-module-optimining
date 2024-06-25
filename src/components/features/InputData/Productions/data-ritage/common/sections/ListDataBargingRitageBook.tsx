@@ -88,6 +88,9 @@ const ListDataBargingRitageBook = () => {
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
     resetAllSlices(new Set<ISliceName>(['ritageBargingSlice'] as ISliceName[]));
+    resetAllSlices(
+      new Set<ISliceName>(['ritageBargingDumptruckSlice'] as ISliceName[])
+    );
   }, []);
 
   /* #   /**=========== Query =========== */
@@ -133,7 +136,7 @@ const ListDataBargingRitageBook = () => {
       limit: 10,
       page: pageDumptruck,
       orderDir: 'desc',
-      date: filterDateDumptruck === '' ? null : filterDateDumptruck,
+      date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
     },
     skip: tabs !== 'barging',
   });
@@ -148,7 +151,7 @@ const ListDataBargingRitageBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      date: filterDate === '' ? null : filterDate,
+      date: formatDate(filterDate, 'YYYY-MM-DD') || null,
       shiftId: filterShift === '' ? null : filterShift,
       isRitageProblematic: filterStatus
         ? filterStatus === 'true'
@@ -212,15 +215,14 @@ const ListDataBargingRitageBook = () => {
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        const date = formatDate(value, 'YYYY-MM-DD');
         setDataRitageBargingState({
           dataRitageBargingState: {
             page: 1,
-            filterDate: date ?? '',
+            filterDate: value || null,
           },
         });
       },
-      value: filterDate ? new Date(filterDate) : undefined,
+      value: filterDate,
     });
     const ritageProblematic = globalSelectNative({
       placeholder: 'chooseRitageStatus',
@@ -527,11 +529,12 @@ const ListDataBargingRitageBook = () => {
         setDate={(v) => {
           setDataRitageBargingState({
             dataRitageBargingDumptruckState: {
-              filterDate: v,
+              filterDate: v || null,
+              page: 1,
             },
           });
         }}
-        date={filterDateDumptruck || null}
+        date={filterDateDumptruck || undefined}
         urlDetail="/input-data/production/data-ritage/barging/read/dump-truck"
       />
       <ModalConfirmation

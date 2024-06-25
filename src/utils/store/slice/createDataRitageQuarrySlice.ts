@@ -10,7 +10,7 @@ type IDataRitageQuarryState = {
 export type IDataRitageQuarrySliceValue = {
   dataRitageQuarryState: Partial<
     IDataRitageQuarryState & {
-      filterDate: string | null;
+      filterDate: Date | null;
       filterStatus: string | null;
       filterShift: string | null;
       filtercompanyHeavyEquipmentId: string | null;
@@ -18,7 +18,7 @@ export type IDataRitageQuarrySliceValue = {
   >;
   dataRitageQuarryDumptruckState: Partial<
     IDataRitageQuarryState & {
-      filterDate: string | null;
+      filterDate: Date | null;
     }
   >;
 };

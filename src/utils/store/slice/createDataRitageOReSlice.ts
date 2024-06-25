@@ -10,7 +10,7 @@ type IDataRitageOreState = {
 export type IDataRitageOreSliceValue = {
   dataRitageOreState: Partial<
     IDataRitageOreState & {
-      filterDate: string | null;
+      filterDate: Date | null;
       filterStatus: string | null;
       filterShift: string | null;
       filtercompanyHeavyEquipmentId: string | null;
@@ -18,7 +18,7 @@ export type IDataRitageOreSliceValue = {
   >;
   dataRitageOreDumptruckState: Partial<
     IDataRitageOreState & {
-      filterDate: string | null;
+      filterDate: Date | null;
     }
   >;
 };

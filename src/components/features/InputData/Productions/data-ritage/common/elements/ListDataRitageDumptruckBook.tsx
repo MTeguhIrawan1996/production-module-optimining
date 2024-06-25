@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -12,6 +11,7 @@ import {
 
 import { globalDateNative } from '@/utils/constants/Field/native-field';
 import { formatDate } from '@/utils/helper/dateFormat';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 import {
   IDumpTruckRitagesData,
@@ -29,8 +29,8 @@ interface IRitageDTProps<T> {
   fetching?: boolean;
   page: number;
   setPage: (page: number | undefined) => void;
-  setDate: (date: string | null) => void;
-  date: string | null;
+  setDate: (date: Date | null) => void;
+  date: Date | undefined;
 }
 
 export default function ListDataRitageDumptruckBook<
@@ -61,10 +61,9 @@ export default function ListDataRitageDumptruckBook<
       clearable: true,
       onChange: (value) => {
         setPage(1);
-        const date = formatDate(value, 'YYYY-MM-DD');
-        setDate(date ?? '');
+        setDate(value || null);
       },
-      value: date ? dayjs(date).toDate() : undefined,
+      value: date || null,
     });
     const item: InputControllerNativeProps[] = [stockpileNameItem];
     return item;
@@ -165,6 +164,10 @@ export default function ListDataRitageDumptruckBook<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, data, columns, fetching]);
   /* #endregion  /**======== RenderTable =========== */
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   return (
     <DashboardCard

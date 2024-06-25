@@ -10,7 +10,7 @@ type IDataRitageTopsoilState = {
 export type IDataRitageTopsoilSliceValue = {
   dataRitageTopsoilState: Partial<
     IDataRitageTopsoilState & {
-      filterDate: string | null;
+      filterDate: Date | null;
       filterStatus: string | null;
       filterShift: string | null;
       filtercompanyHeavyEquipmentId: string | null;
@@ -18,7 +18,7 @@ export type IDataRitageTopsoilSliceValue = {
   >;
   dataRitageTopsoilDumptruckState: Partial<
     IDataRitageTopsoilState & {
-      filterDate: string | null;
+      filterDate: Date | null;
     }
   >;
 };

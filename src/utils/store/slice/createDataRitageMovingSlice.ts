@@ -10,7 +10,7 @@ type IDataRitageMovingState = {
 export type IDataRitageMovingSliceValue = {
   dataRitageMovingState: Partial<
     IDataRitageMovingState & {
-      filterDate: string | null;
+      filterDate: Date | null;
       filterStatus: string | null;
       filterShift: string | null;
       filtercompanyHeavyEquipmentId: string | null;
@@ -18,7 +18,7 @@ export type IDataRitageMovingSliceValue = {
   >;
   dataRitageMovingDumptruckState: Partial<
     IDataRitageMovingState & {
-      filterDate: string | null;
+      filterDate: Date | null;
     }
   >;
 };

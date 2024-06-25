@@ -214,6 +214,12 @@ export type ISliceName =
   | 'ritageMovingSlice'
   | 'ritageQuarrySlice'
   | 'ritageTopSoilSlice'
+  | 'ritageOreDumptruckSlice'
+  | 'ritageOBDumptruckSlice'
+  | 'ritageBargingDumptruckSlice'
+  | 'ritageMovingDumptruckSlice'
+  | 'ritageQuarryDumptruckSlice'
+  | 'ritageTopSoilDumptruckSlice'
   | 'managementRoleSlice'
   | 'userSlice';
 
