@@ -30,10 +30,7 @@ import {
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
-import useControlPanel, {
-  ISliceName,
-  resetAllSlices,
-} from '@/utils/store/useControlPanel';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -85,13 +82,6 @@ const ListDataObRitageBook = () => {
   const isPermissionUpdate = permissions?.includes('update-overburden-ritage');
   const isPermissionDelete = permissions?.includes('delete-overburden-ritage');
   const isPermissionRead = permissions?.includes('read-overburden-ritage');
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    resetAllSlices(new Set<ISliceName>(['ritageOBSlice'] as ISliceName[]));
-    resetAllSlices(
-      new Set<ISliceName>(['ritageOBDumptruckSlice'] as ISliceName[])
-    );
-  }, []);
   /* #   /**=========== Query =========== */
   const { shiftsData } = useReadAllShiftMaster({
     variables: {
