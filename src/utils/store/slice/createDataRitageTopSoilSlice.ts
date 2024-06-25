@@ -54,8 +54,14 @@ export const createDataRitageTopsoilSlice: StateCreator<
     ...initialState,
     setDataRitageTopsoilState: (payload) =>
       set((state) => ({
-        ...state,
-        ...payload,
+        dataRitageTopsoilState: {
+          ...state.dataRitageTopsoilState,
+          ...payload.dataRitageTopsoilState,
+        },
+        dataRitageTopsoilDumptruckState: {
+          ...state.dataRitageTopsoilDumptruckState,
+          ...payload.dataRitageTopsoilDumptruckState,
+        },
       })),
     resetDataRitageTopsoilState: () => {
       set(initialState);

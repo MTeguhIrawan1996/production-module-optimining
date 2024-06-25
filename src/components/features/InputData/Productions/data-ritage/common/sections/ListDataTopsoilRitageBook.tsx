@@ -92,7 +92,7 @@ const ListDataTopsoilRitageBook = () => {
 
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
     variables: {
-      limit: 15,
+      limit: null,
       search:
         heavyEquipmentSearchQuery === '' ? null : heavyEquipmentSearchQuery,
       isComplete: true,

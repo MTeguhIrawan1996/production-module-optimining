@@ -52,8 +52,14 @@ export const createDataRitageOreSlice: StateCreator<
     ...initialState,
     setDataRitageOreState: (payload) =>
       set((state) => ({
-        ...state,
-        ...payload,
+        dataRitageOreState: {
+          ...state.dataRitageOreState,
+          ...payload.dataRitageOreState,
+        },
+        dataRitageOreDumptruckState: {
+          ...state.dataRitageOreDumptruckState,
+          ...payload.dataRitageOreDumptruckState,
+        },
       })),
     resetDataRitageOreState: () => {
       set(initialState);

@@ -54,8 +54,14 @@ export const createDataRitageMovingSlice: StateCreator<
     ...initialState,
     setDataRitageMovingState: (payload) =>
       set((state) => ({
-        ...state,
-        ...payload,
+        dataRitageMovingState: {
+          ...state.dataRitageMovingState,
+          ...payload.dataRitageMovingState,
+        },
+        dataRitageMovingDumptruckState: {
+          ...state.dataRitageMovingDumptruckState,
+          ...payload.dataRitageMovingDumptruckState,
+        },
       })),
     resetDataRitageMovingState: () => {
       set(initialState);

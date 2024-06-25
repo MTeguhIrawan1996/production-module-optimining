@@ -54,8 +54,14 @@ export const createDataRitageBargingSlice: StateCreator<
     ...initialState,
     setDataRitageBargingState: (payload) =>
       set((state) => ({
-        ...state,
-        ...payload,
+        dataRitageBargingState: {
+          ...state.dataRitageBargingState,
+          ...payload.dataRitageBargingState,
+        },
+        dataRitageBargingDumptruckState: {
+          ...state.dataRitageBargingDumptruckState,
+          ...payload.dataRitageBargingDumptruckState,
+        },
       })),
     resetDataRitageBargingState: () => {
       set(initialState);
