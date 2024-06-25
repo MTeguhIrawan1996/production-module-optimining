@@ -14,6 +14,10 @@ import ListDataQuarryRitageBook from '@/components/features/InputData/Production
 import ListDataTopsoilRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataTopsoilRitageBook';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -44,6 +48,20 @@ const DataRitagePage = () => {
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    resetAllSlices(
+      new Set<ISliceName>([
+        'ritageOreSlice',
+        'ritageOBSlice',
+        'ritageBargingSlice',
+        'ritageMovingSlice',
+        'ritageQuarrySlice',
+        'ritageTopSoilSlice',
+      ] as ISliceName[])
+    );
+  }, []);
 
   const handleChangeTab = (tabs: TabsValue) => {
     setParams({

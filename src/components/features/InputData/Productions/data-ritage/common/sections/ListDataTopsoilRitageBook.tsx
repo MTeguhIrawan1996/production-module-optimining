@@ -30,10 +30,7 @@ import {
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
-import useControlPanel, {
-  ISliceName,
-  resetAllSlices,
-} from '@/utils/store/useControlPanel';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -83,13 +80,6 @@ const ListDataTopsoilRitageBook = () => {
   const isPermissionUpdate = permissions?.includes('update-topsoil-ritage');
   const isPermissionDelete = permissions?.includes('delete-topsoil-ritage');
   const isPermissionRead = permissions?.includes('read-topsoil-ritage');
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    resetAllSlices(new Set<ISliceName>(['ritageTopSoilSlice'] as ISliceName[]));
-    resetAllSlices(
-      new Set<ISliceName>(['ritageTopSoilDumptruckSlice'] as ISliceName[])
-    );
-  }, []);
   /* #   /**=========== Query =========== */
   const { shiftsData } = useReadAllShiftMaster({
     variables: {

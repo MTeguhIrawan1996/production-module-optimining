@@ -3,6 +3,7 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
+import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
@@ -24,10 +25,7 @@ import {
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
-import useControlPanel, {
-  ISliceName,
-  resetAllSlices,
-} from '@/utils/store/useControlPanel';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -43,6 +41,7 @@ const ListWeeklyMapBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
   const permissions = useStore(usePermissions, (state) => state.permissions);
+  const [tabs] = useQueryState('tabs', queryTypes.string.withDefault('weekly'));
   const [
     { page, search, week, year, mapWeeklyCategory, mapWeeklyLocation },
     setWeeklyMapProductionState,
@@ -62,13 +61,6 @@ const ListWeeklyMapBook = () => {
   const isPermissionDelete = permissions?.includes('delete-map-data');
   const isPermissionRead = permissions?.includes('read-map-data');
 
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    resetAllSlices(
-      new Set<ISliceName>(['weeklyMapProductionSlice'] as ISliceName[])
-    );
-  }, []);
-
   const { mapData, mapMeta, mapDataLoading, refetchMap } = useReadAllMap({
     variables: {
       page: page || 1,
@@ -80,13 +72,14 @@ const ListWeeklyMapBook = () => {
       week: Number(week) === 0 ? undefined : Number(week),
       mapDataLocationId: (mapWeeklyLocation as string) || undefined,
     },
-    skip: false,
+    skip: tabs !== 'weekly',
   });
 
   const [executeDelete, { loading }] = useDeleteMap({
     onCompleted: () => {
       refetchMap();
       setIsOpenDeleteConfirmation((prev) => !prev);
+      setWeeklyMapProductionState({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',

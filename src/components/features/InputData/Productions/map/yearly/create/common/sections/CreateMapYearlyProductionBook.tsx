@@ -31,6 +31,7 @@ type FormValues = {
   mapImage: FileWithPath[] | null;
 };
 import { IconCheck, IconX } from '@tabler/icons-react';
+import { shallow } from 'zustand/shallow';
 
 import {
   IMutationMapValues,
@@ -39,6 +40,7 @@ import {
 import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 const CreateMapYearlyProductionBook = () => {
   const { t } = useTranslation('default');
@@ -46,6 +48,10 @@ const CreateMapYearlyProductionBook = () => {
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
+  const [resetYearlyMapProductionState] = useControlPanel(
+    (state) => [state.resetYearlyMapProductionState],
+    shallow
+  );
 
   const [fileId, setFileId] = React.useState<string | null>(null);
   const [mapCategoryList, setMapCategoryList] = React.useState<
@@ -88,6 +94,7 @@ const CreateMapYearlyProductionBook = () => {
         message: t('mapProduction.successYearlyCreateMessage'),
         icon: <IconCheck />,
       });
+      resetYearlyMapProductionState();
       methods.reset();
       router.push('/input-data/production/map?tabs=yearly');
     },

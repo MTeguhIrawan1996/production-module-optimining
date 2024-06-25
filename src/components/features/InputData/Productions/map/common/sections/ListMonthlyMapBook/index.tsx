@@ -1,10 +1,12 @@
 import { Badge } from '@mantine/core';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
+import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -23,7 +25,7 @@ import {
   globalSelectNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
-import { useDebounce } from '@/utils/hooks/useDebounce';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -37,59 +39,49 @@ const locationIds = [
 
 const ListMonthlyMapBook = () => {
   const router = useRouter();
+  const { t } = useTranslation('default');
   const permissions = useStore(usePermissions, (state) => state.permissions);
+  const [tabs] = useQueryState('tabs');
+  const [
+    { page, search, month, year, mapMonthlyCategory, mapMonthlyLocation },
+    setMonthlyMapProductionState,
+  ] = useControlPanel(
+    (state) => [
+      state.monthlyMapProductionState,
+      state.setMonthlyMapProductionState,
+    ],
+    shallow
+  );
 
   const isPermissionCreate = permissions?.includes('create-map-data');
   const isPermissionUpdate = permissions?.includes('update-map-data');
   const isPermissionDelete = permissions?.includes('delete-map-data');
   const isPermissionRead = permissions?.includes('read-map-data');
 
-  const [mapMonthlyPage, setMapMonthlyPage] = useQueryState(
-    'mapMonthlyPage',
-    queryTypes.integer.withDefault(1)
-  );
-  const [mapMonthlyLocation, setMapMonthlyLocation] = React.useState<
-    string | null
-  >(null);
-  const [mapMonthlyYear, setMapMonthlyYear] = React.useState<string | null>(
-    null
-  );
-  const [mapMonthlyMonth, setMapMonthlyMonth] = React.useState<string | null>(
-    null
-  );
-  const [mapMonthlySearch, setMapMonthlySearch] = React.useState<string | null>(
-    null
-  );
-
-  const searchQuery = useDebounce((mapMonthlySearch as string) || '', 500);
-
-  const { t } = useTranslation('default');
-  const [mapMonthlyCategory, setMapMonthlyCategory] = React.useState<
-    string | null
-  >(null);
+  const [searchQuery] = useDebouncedValue(search, 500);
 
   const [id, setId] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
   const { mapData, mapMeta, mapDataLoading, refetchMap } = useReadAllMap({
     variables: {
-      page: mapMonthlyPage || 1,
+      page: page || 1,
       limit: 15,
       search: searchQuery === '' ? null : searchQuery,
       dateType: 'MONTH',
       mapDataCategoryId: mapMonthlyCategory || undefined,
-      year: Number(mapMonthlyYear) === 0 ? undefined : Number(mapMonthlyYear),
-      month:
-        Number(mapMonthlyMonth) === 0 ? undefined : Number(mapMonthlyMonth),
+      year: Number(year) === 0 ? undefined : Number(year),
+      month: Number(month) === 0 ? undefined : Number(month),
       mapDataLocationId: (mapMonthlyLocation as string) || undefined,
     },
-    skip: false,
+    skip: tabs !== 'monthly',
   });
 
   const [executeDelete, { loading }] = useDeleteMap({
     onCompleted: () => {
       refetchMap();
       setIsOpenDeleteConfirmation((prev) => !prev);
+      setMonthlyMapProductionState({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -139,7 +131,7 @@ const ListMonthlyMapBook = () => {
     setId(undefined);
   };
   const handleSetPage = (page: number) => {
-    setMapMonthlyPage(page);
+    setMonthlyMapProductionState({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -148,17 +140,18 @@ const ListMonthlyMapBook = () => {
       label: 'mapType',
       searchable: false,
       data: mapCategoryList,
+      value: mapMonthlyCategory,
       onChange: (v) => {
-        setMapMonthlyCategory(v);
-        setMapMonthlyPage(1);
+        setMonthlyMapProductionState({ page: 1, mapMonthlyCategory: v });
       },
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
       searchable: true,
+      value: mapMonthlyLocation,
+      defaultValue: mapMonthlyLocation,
       onChange: (v) => {
-        setMapMonthlyLocation(v);
-        setMapMonthlyPage(1);
+        setMonthlyMapProductionState({ page: 1, mapMonthlyLocation: v });
       },
       categoryIds: (locationIds as string[]) || [],
     });
@@ -166,18 +159,18 @@ const ListMonthlyMapBook = () => {
       placeholder: 'year',
       label: 'year',
       searchable: true,
+      value: year ? `${year}` : null,
       onChange: (v) => {
-        setMapMonthlyYear(v);
-        setMapMonthlyPage(1);
+        setMonthlyMapProductionState({ page: 1, year: v ? Number(v) : null });
       },
     });
     const monthItem = globalSelectMonthNative({
       placeholder: 'month',
       label: 'month',
       searchable: true,
+      value: month ? `${month}` : null,
       onChange: (v) => {
-        setMapMonthlyMonth(v);
-        setMapMonthlyPage(1);
+        setMonthlyMapProductionState({ page: 1, month: v ? Number(v) : null });
       },
     });
 
@@ -189,7 +182,7 @@ const ListMonthlyMapBook = () => {
     ];
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapCategoryList]);
+  }, [mapCategoryList, mapMonthlyCategory, mapMonthlyLocation, month, year]);
 
   return (
     <DashboardCard
@@ -210,12 +203,13 @@ const ListMonthlyMapBook = () => {
       searchBar={{
         placeholder: t('mapProduction.searchPlaceholder'),
         onChange: (e) => {
-          setMapMonthlySearch(e.target.value);
+          setMonthlyMapProductionState({ search: e.currentTarget.value });
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setMapMonthlyPage(1);
+          setMonthlyMapProductionState({ page: 1 });
         },
+        value: search,
       }}
     >
       <MantineDataTable
@@ -333,7 +327,7 @@ const ListMonthlyMapBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: (mapMonthlyPage as number) || 1,
+          currentPage: (page as number) || 1,
           totalAllData: mapMeta?.totalAllData ?? 0,
           totalData: mapMeta?.totalData ?? 0,
           totalPage: mapMeta?.totalPage ?? 0,

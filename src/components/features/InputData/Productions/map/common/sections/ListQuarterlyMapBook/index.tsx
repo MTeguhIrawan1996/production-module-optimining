@@ -3,9 +3,10 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
+import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -23,6 +24,7 @@ import {
   globalSelectNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -36,65 +38,50 @@ const locationIds = [
 
 const ListQuarterlyMapBook = () => {
   const router = useRouter();
+  const { t } = useTranslation('default');
+  const [tabs] = useQueryState('tabs');
   const permissions = useStore(usePermissions, (state) => state.permissions);
+
+  const [
+    { page, search, quarter, year, mapQuarterlyCategory, mapQuarterlyLocation },
+    setQuarterlyMapProductionState,
+  ] = useControlPanel(
+    (state) => [
+      state.quarterlyMapProductionState,
+      state.setQuarterlyMapProductionState,
+    ],
+    shallow
+  );
 
   const isPermissionCreate = permissions?.includes('create-map-data');
   const isPermissionUpdate = permissions?.includes('update-map-data');
   const isPermissionDelete = permissions?.includes('delete-map-data');
   const isPermissionRead = permissions?.includes('read-map-data');
 
-  const [mapQuarterlyPage, setMapQuarterlyPage] = useQueryState(
-    'mapQuarterlyPage',
-    queryTypes.integer.withDefault(1)
-  );
-  const [mapQuarterlyLocation, setMapQuarterlyLocation] = React.useState<
-    string | null
-  >(null);
-  const [mapQuarterlyYear, setMapQuarterlyYear] = React.useState<string | null>(
-    null
-  );
-  const [mapQuarterlyQuarter, setMapQuarterlyQuarter] = React.useState<
-    string | null
-  >(null);
-  const [mapQuarterlySearch, setMapQuarterlySearch] = React.useState<
-    string | null
-  >(null);
-
-  const [searchQuery] = useDebouncedValue<string>(
-    (mapQuarterlySearch as string) || '',
-    500
-  );
-
-  const { t } = useTranslation('default');
-  const [mapQuarterlyCategory, setMapQuarterlyCategory] = React.useState<
-    string | null
-  >(null);
+  const [searchQuery] = useDebouncedValue<string>(search, 500);
 
   const [id, setId] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
   const { mapData, mapMeta, mapDataLoading, refetchMap } = useReadAllMap({
     variables: {
-      page: mapQuarterlyPage || 1,
+      page: page || 1,
       limit: 10,
       search: searchQuery === '' ? null : searchQuery,
       dateType: 'QUARTER',
       mapDataCategoryId: mapQuarterlyCategory || undefined,
-      year:
-        Number(mapQuarterlyYear) === 0 ? undefined : Number(mapQuarterlyYear),
-      quarter:
-        Number(mapQuarterlyQuarter) === 0
-          ? undefined
-          : Number(mapQuarterlyQuarter),
+      year: Number(year) === 0 ? undefined : Number(year),
+      quarter: Number(quarter) === 0 ? undefined : Number(quarter),
       mapDataLocationId: (mapQuarterlyLocation as string) || undefined,
     },
-    skip: false,
+    skip: tabs !== 'quarterly',
   });
 
   const [executeDelete, { loading }] = useDeleteMap({
     onCompleted: () => {
       refetchMap();
       setIsOpenDeleteConfirmation((prev) => !prev);
+      setQuarterlyMapProductionState({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -144,7 +131,7 @@ const ListQuarterlyMapBook = () => {
     setId(undefined);
   };
   const handleSetPage = (page: number) => {
-    setMapQuarterlyPage(page);
+    setQuarterlyMapProductionState({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -153,17 +140,17 @@ const ListQuarterlyMapBook = () => {
       label: 'mapType',
       searchable: false,
       data: mapCategoryList,
+      value: mapQuarterlyCategory,
       onChange: (v) => {
-        setMapQuarterlyCategory(v);
-        setMapQuarterlyPage(1);
+        setQuarterlyMapProductionState({ page: 1, mapQuarterlyCategory: v });
       },
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
       searchable: true,
+      value: mapQuarterlyLocation,
       onChange: (v) => {
-        setMapQuarterlyLocation(v);
-        setMapQuarterlyPage(1);
+        setQuarterlyMapProductionState({ page: 1, mapQuarterlyLocation: v });
       },
       categoryIds: (locationIds as string[]) || [],
     });
@@ -171,18 +158,21 @@ const ListQuarterlyMapBook = () => {
       placeholder: 'year',
       label: 'year',
       searchable: true,
+      value: year ? `${year}` : null,
       onChange: (v) => {
-        setMapQuarterlyYear(v);
-        setMapQuarterlyPage(1);
+        setQuarterlyMapProductionState({ page: 1, year: v ? Number(v) : null });
       },
     });
     const quarterItem = globalSelectNative({
       placeholder: 'quarterly',
       label: 'quarter',
       searchable: true,
+      value: quarter ? `${quarter}` : null,
       onChange: (v) => {
-        setMapQuarterlyQuarter(v);
-        setMapQuarterlyPage(1);
+        setQuarterlyMapProductionState({
+          page: 1,
+          quarter: v ? Number(v) : null,
+        });
       },
       data: [
         {
@@ -211,8 +201,15 @@ const ListQuarterlyMapBook = () => {
       quarterItem,
     ];
     return item;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapCategoryList]);
+  }, [
+    mapCategoryList,
+    mapQuarterlyCategory,
+    mapQuarterlyLocation,
+    quarter,
+    year,
+  ]);
 
   return (
     <DashboardCard
@@ -233,11 +230,12 @@ const ListQuarterlyMapBook = () => {
       searchBar={{
         placeholder: t('mapProduction.searchPlaceholder'),
         onChange: (e) => {
-          setMapQuarterlySearch(e.target.value);
+          setQuarterlyMapProductionState({ search: e.currentTarget.value });
         },
         searchQuery: searchQuery,
+        value: search,
         onSearch: () => {
-          setMapQuarterlyPage(1);
+          setQuarterlyMapProductionState({ page: 1 });
         },
       }}
     >
@@ -355,7 +353,7 @@ const ListQuarterlyMapBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: (mapQuarterlyPage as number) || 1,
+          currentPage: (page as number) || 1,
           totalAllData: mapMeta?.totalAllData ?? 0,
           totalData: mapMeta?.totalData ?? 0,
           totalPage: mapMeta?.totalPage ?? 0,

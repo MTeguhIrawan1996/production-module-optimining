@@ -24,7 +24,7 @@ const LocationSelectInputNative: React.FC<ILocationNativeProps> = ({
   const { allLocationsData } = useReadAllLocationselect({
     variables: {
       search: searchQuery === '' ? null : searchQuery,
-      limit: 15,
+      limit: null,
       categoryIds: categoryIds && categoryIds.length > 0 ? categoryIds : null,
     },
   });

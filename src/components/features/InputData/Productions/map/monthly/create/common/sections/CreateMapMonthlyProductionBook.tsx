@@ -33,6 +33,7 @@ type FormValues = {
   mapImage: FileWithPath[] | null;
 };
 import { IconCheck, IconX } from '@tabler/icons-react';
+import { shallow } from 'zustand/shallow';
 
 import {
   IMutationMapValues,
@@ -41,6 +42,7 @@ import {
 import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
+import useControlPanel from '@/utils/store/useControlPanel';
 
 const CreateMapMonthlyProductionBook = () => {
   const { t } = useTranslation('default');
@@ -48,6 +50,10 @@ const CreateMapMonthlyProductionBook = () => {
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
+  const [resetMonthlyMapProductionState] = useControlPanel(
+    (state) => [state.resetMonthlyMapProductionState],
+    shallow
+  );
 
   const [fileId, setFileId] = React.useState<string | null>(null);
   const [mapCategoryList, setMapCategoryList] = React.useState<
@@ -90,6 +96,7 @@ const CreateMapMonthlyProductionBook = () => {
         message: t('mapProduction.successMonthlyCreateMessage'),
         icon: <IconCheck />,
       });
+      resetMonthlyMapProductionState();
       methods.reset();
       router.push('/input-data/production/map?tabs=monthly');
     },

@@ -93,6 +93,16 @@ import {
   IManagementRoleStateValue,
 } from '@/utils/store/slice/createManagementRoleSlice';
 import {
+  createMonthlyMapProductionSlice,
+  IMonthlyMapProductionStateAction,
+  IMonthlyMapProductionStateValue,
+} from '@/utils/store/slice/createMonthlyMapProductionSlice';
+import {
+  createQuarterlyMapProductionSlice,
+  IQuarterlyMapProductionStateAction,
+  IQuarterlyMapProductionStateValue,
+} from '@/utils/store/slice/createQuarterlyMapProductionSlice';
+import {
   createSampleHouseLabSlice,
   ISampleHouseLabAction,
   ISampleHouseLabValue,
@@ -132,6 +142,11 @@ import {
   IWHPSliceAction,
   IWHPSliceValue,
 } from '@/utils/store/slice/createWorkingHoursPlanSlice';
+import {
+  createYearlyMapProductionSlice,
+  IYearlyMapProductionStateAction,
+  IYearlyMapProductionStateValue,
+} from '@/utils/store/slice/createYearlyMapProductionSlice';
 
 import {
   createFrontSlice,
@@ -194,7 +209,13 @@ type ICommonProps = ILocationSliceValue &
   IHeavyEquipmentProductionStateValue &
   IHeavyEquipmentProductionStateAction &
   IWeeklyMapProductionStateValue &
-  IWeeklyMapProductionStateAction;
+  IWeeklyMapProductionStateAction &
+  IMonthlyMapProductionStateValue &
+  IMonthlyMapProductionStateAction &
+  IQuarterlyMapProductionStateValue &
+  IQuarterlyMapProductionStateAction &
+  IYearlyMapProductionStateValue &
+  IYearlyMapProductionStateAction;
 
 export type ISliceName =
   | 'locationSlice'
@@ -221,15 +242,12 @@ export type ISliceName =
   | 'ritageMovingSlice'
   | 'ritageQuarrySlice'
   | 'ritageTopSoilSlice'
-  | 'ritageOreDumptruckSlice'
-  | 'ritageOBDumptruckSlice'
-  | 'ritageBargingDumptruckSlice'
-  | 'ritageMovingDumptruckSlice'
-  | 'ritageQuarryDumptruckSlice'
-  | 'ritageTopSoilDumptruckSlice'
   | 'managementRoleSlice'
   | 'userSlice'
-  | 'weeklyMapProductionSlice';
+  | 'monthlyMapProductionSlice'
+  | 'weeklyMapProductionSlice'
+  | 'yearlyMapProductionSlice'
+  | 'quarterlyMapProductionSlice';
 
 export const sliceResetFns = new Map<ISliceName, () => void>();
 
@@ -273,6 +291,9 @@ const useControlPanel = create<ICommonProps>()(
       ...createUserSlice(...a),
       ...createHeavyEquipmentProductionSlice(...a),
       ...createWeeklyMapProductionSlice(...a),
+      ...createMonthlyMapProductionSlice(...a),
+      ...createQuarterlyMapProductionSlice(...a),
+      ...createYearlyMapProductionSlice(...a),
     }),
     {
       name: 'control-panel-storage',

@@ -3,9 +3,10 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
+import { useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -23,6 +24,7 @@ import {
   globalSelectNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -36,56 +38,52 @@ const locationIds = [
 
 const ListYearlyMapBook = () => {
   const router = useRouter();
+  const [tabs] = useQueryState('tabs');
+  const { t } = useTranslation('default');
+
   const permissions = useStore(usePermissions, (state) => state.permissions);
 
   const isPermissionCreate = permissions?.includes('create-map-data');
   const isPermissionUpdate = permissions?.includes('update-map-data');
   const isPermissionDelete = permissions?.includes('delete-map-data');
   const isPermissionRead = permissions?.includes('read-map-data');
-
-  const [mapYearlyPage, setMapYearlyPage] = useQueryState(
-    'mapYearlyPage',
-    queryTypes.integer.withDefault(1)
-  );
-  const [mapYearlyLocation, setMapYearlyLocation] = React.useState<
-    string | null
-  >(null);
-  const [mapYearlyYear, setMapYearlyYear] = React.useState<string | null>(null);
-
-  const [mapYearlySearch, setMapYearlySearch] = React.useState<string | null>(
-    null
+  const [
+    { page, search, year, mapYearlyCategory, mapYearlyLocation },
+    setYearlyMapProductionState,
+  ] = useControlPanel(
+    (state) => [
+      state.yearlyMapProductionState,
+      state.setYearlyMapProductionState,
+    ],
+    shallow
   );
 
   const [searchQuery] = useDebouncedValue<string>(
-    (mapYearlySearch as string) || '',
+    (search as string) || '',
     500
   );
-
-  const { t } = useTranslation('default');
-  const [mapYearlyCategory, setMapYearlyCategory] = React.useState<
-    string | null
-  >(null);
 
   const [id, setId] = React.useState<string | undefined>(undefined);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
   const { mapData, mapMeta, mapDataLoading, refetchMap } = useReadAllMap({
     variables: {
-      page: mapYearlyPage || 1,
+      page: page || 1,
       limit: 10,
       search: searchQuery === '' ? null : searchQuery,
       dateType: 'YEAR',
       mapDataCategoryId: mapYearlyCategory || undefined,
-      year: Number(mapYearlyYear) === 0 ? undefined : Number(mapYearlyYear),
+      year: Number(year) === 0 ? undefined : Number(year),
       mapDataLocationId: (mapYearlyLocation as string) || undefined,
     },
-    skip: false,
+    skip: tabs !== 'yearly',
   });
 
   const [executeDelete, { loading }] = useDeleteMap({
     onCompleted: () => {
       refetchMap();
       setIsOpenDeleteConfirmation((prev) => !prev);
+      setYearlyMapProductionState({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -135,7 +133,7 @@ const ListYearlyMapBook = () => {
     setId(undefined);
   };
   const handleSetPage = (page: number) => {
-    setMapYearlyPage(page);
+    setYearlyMapProductionState({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -144,17 +142,17 @@ const ListYearlyMapBook = () => {
       label: 'mapType',
       searchable: false,
       data: mapCategoryList,
+      value: mapYearlyCategory,
       onChange: (v) => {
-        setMapYearlyCategory(v);
-        setMapYearlyPage(1);
+        setYearlyMapProductionState({ page: 1, mapYearlyCategory: v });
       },
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
       searchable: true,
+      value: mapYearlyLocation,
       onChange: (v) => {
-        setMapYearlyLocation(v);
-        setMapYearlyPage(1);
+        setYearlyMapProductionState({ page: 1, mapYearlyLocation: v });
       },
       categoryIds: (locationIds as string[]) || [],
     });
@@ -162,9 +160,9 @@ const ListYearlyMapBook = () => {
       placeholder: 'year',
       label: 'year',
       searchable: true,
+      value: year ? `${year}` : null,
       onChange: (v) => {
-        setMapYearlyYear(v);
-        setMapYearlyPage(1);
+        setYearlyMapProductionState({ page: 1, year: v ? Number(v) : null });
       },
     });
 
@@ -174,8 +172,9 @@ const ListYearlyMapBook = () => {
       yearItem,
     ];
     return item;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapCategoryList]);
+  }, [mapCategoryList, mapYearlyCategory, mapYearlyLocation, year]);
 
   return (
     <DashboardCard
@@ -196,12 +195,13 @@ const ListYearlyMapBook = () => {
       searchBar={{
         placeholder: t('mapProduction.searchPlaceholder'),
         onChange: (e) => {
-          setMapYearlySearch(e.target.value);
+          setYearlyMapProductionState({ search: e.currentTarget.value });
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setMapYearlyPage(1);
+          setYearlyMapProductionState({ page: 1 });
         },
+        value: search,
       }}
     >
       <MantineDataTable
@@ -314,7 +314,7 @@ const ListYearlyMapBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: (mapYearlyPage as number) || 1,
+          currentPage: (page as number) || 1,
           totalAllData: mapMeta?.totalAllData ?? 0,
           totalData: mapMeta?.totalData ?? 0,
           totalPage: mapMeta?.totalPage ?? 0,

@@ -30,10 +30,7 @@ import {
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
-import useControlPanel, {
-  ISliceName,
-  resetAllSlices,
-} from '@/utils/store/useControlPanel';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -84,14 +81,6 @@ const ListDataBargingRitageBook = () => {
   const isPermissionUpdate = permissions?.includes('update-barging-ritage');
   const isPermissionDelete = permissions?.includes('delete-barging-ritage');
   const isPermissionRead = permissions?.includes('read-barging-ritage');
-
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    resetAllSlices(new Set<ISliceName>(['ritageBargingSlice'] as ISliceName[]));
-    resetAllSlices(
-      new Set<ISliceName>(['ritageBargingDumptruckSlice'] as ISliceName[])
-    );
-  }, []);
 
   /* #   /**=========== Query =========== */
   const { shiftsData } = useReadAllShiftMaster({
