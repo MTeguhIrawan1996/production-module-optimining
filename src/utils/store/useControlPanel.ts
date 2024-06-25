@@ -93,6 +93,11 @@ import {
   IManagementRoleStateValue,
 } from '@/utils/store/slice/createManagementRoleSlice';
 import {
+  createMonthlyMapProductionSlice,
+  IMonthlyMapProductionStateAction,
+  IMonthlyMapProductionStateValue,
+} from '@/utils/store/slice/createMonthlyMapProductionSlice';
+import {
   createSampleHouseLabSlice,
   ISampleHouseLabAction,
   ISampleHouseLabValue,
@@ -194,7 +199,9 @@ type ICommonProps = ILocationSliceValue &
   IHeavyEquipmentProductionStateValue &
   IHeavyEquipmentProductionStateAction &
   IWeeklyMapProductionStateValue &
-  IWeeklyMapProductionStateAction;
+  IWeeklyMapProductionStateAction &
+  IMonthlyMapProductionStateValue &
+  IMonthlyMapProductionStateAction;
 
 export type ISliceName =
   | 'locationSlice'
@@ -223,6 +230,7 @@ export type ISliceName =
   | 'ritageTopSoilSlice'
   | 'managementRoleSlice'
   | 'userSlice'
+  | 'monthlyMapProductionSlice'
   | 'weeklyMapProductionSlice';
 
 export const sliceResetFns = new Map<ISliceName, () => void>();
@@ -267,6 +275,7 @@ const useControlPanel = create<ICommonProps>()(
       ...createUserSlice(...a),
       ...createHeavyEquipmentProductionSlice(...a),
       ...createWeeklyMapProductionSlice(...a),
+      ...createMonthlyMapProductionSlice(...a),
     }),
     {
       name: 'control-panel-storage',

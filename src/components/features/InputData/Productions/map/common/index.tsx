@@ -8,6 +8,10 @@ import { shallow } from 'zustand/shallow';
 import { GlobalTabs, InnerWrapper, RootWrapper } from '@/components/elements';
 
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
+import useControlPanel, {
+  ISliceName,
+  resetAllSlices,
+} from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -41,6 +45,16 @@ const MapProductionPage = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    resetAllSlices(
+      new Set<ISliceName>([
+        'weeklyMapProductionSlice',
+        'monthlyMapProductionSlice',
+      ] as ISliceName[])
+    );
+  }, []);
 
   const handleChangeTab = (tabs: TabsValue) => {
     setTabs(tabs);
