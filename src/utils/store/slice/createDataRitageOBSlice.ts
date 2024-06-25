@@ -52,8 +52,14 @@ export const createDataRitageOBSlice: StateCreator<
     ...initialState,
     setDataRitageOBState: (payload) =>
       set((state) => ({
-        ...state,
-        ...payload,
+        dataRitageOBState: {
+          ...state.dataRitageOBState,
+          ...payload.dataRitageOBState,
+        },
+        dataRitageOBDumptruckState: {
+          ...state.dataRitageOBDumptruckState,
+          ...payload.dataRitageOBDumptruckState,
+        },
       })),
     resetDataRitageOBState: () => {
       set(initialState);

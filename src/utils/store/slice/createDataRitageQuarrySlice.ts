@@ -54,8 +54,14 @@ export const createDataRitageQuarrySlice: StateCreator<
     ...initialState,
     setDataRitageQuarryState: (payload) =>
       set((state) => ({
-        ...state,
-        ...payload,
+        dataRitageQuarryState: {
+          ...state.dataRitageQuarryState,
+          ...payload.dataRitageQuarryState,
+        },
+        dataRitageQuarryDumptruckState: {
+          ...state.dataRitageQuarryDumptruckState,
+          ...payload.dataRitageQuarryDumptruckState,
+        },
       })),
     resetDataRitageQuarryState: () => {
       set(initialState);
