@@ -98,6 +98,11 @@ import {
   IMonthlyMapProductionStateValue,
 } from '@/utils/store/slice/createMonthlyMapProductionSlice';
 import {
+  createQuarterlyMapProductionSlice,
+  IQuarterlyMapProductionStateAction,
+  IQuarterlyMapProductionStateValue,
+} from '@/utils/store/slice/createQuarterlyMapProductionSlice';
+import {
   createSampleHouseLabSlice,
   ISampleHouseLabAction,
   ISampleHouseLabValue,
@@ -201,7 +206,9 @@ type ICommonProps = ILocationSliceValue &
   IWeeklyMapProductionStateValue &
   IWeeklyMapProductionStateAction &
   IMonthlyMapProductionStateValue &
-  IMonthlyMapProductionStateAction;
+  IMonthlyMapProductionStateAction &
+  IQuarterlyMapProductionStateValue &
+  IQuarterlyMapProductionStateAction;
 
 export type ISliceName =
   | 'locationSlice'
@@ -237,7 +244,8 @@ export type ISliceName =
   | 'managementRoleSlice'
   | 'userSlice'
   | 'monthlyMapProductionSlice'
-  | 'weeklyMapProductionSlice';
+  | 'weeklyMapProductionSlice'
+  | 'quarterlyMapProductionSlice';
 
 export const sliceResetFns = new Map<ISliceName, () => void>();
 
@@ -282,6 +290,7 @@ const useControlPanel = create<ICommonProps>()(
       ...createHeavyEquipmentProductionSlice(...a),
       ...createWeeklyMapProductionSlice(...a),
       ...createMonthlyMapProductionSlice(...a),
+      ...createQuarterlyMapProductionSlice(...a),
     }),
     {
       name: 'control-panel-storage',

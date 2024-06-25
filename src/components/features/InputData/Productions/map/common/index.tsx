@@ -52,6 +52,7 @@ const MapProductionPage = () => {
       new Set<ISliceName>([
         'weeklyMapProductionSlice',
         'monthlyMapProductionSlice',
+        'quarterlyMapProductionSlice',
       ] as ISliceName[])
     );
   }, []);
