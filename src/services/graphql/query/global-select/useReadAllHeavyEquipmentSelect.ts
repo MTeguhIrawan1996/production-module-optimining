@@ -116,7 +116,7 @@ export const useReadAllHeavyEquipmentSelect = ({
         return err;
       },
       onCompleted,
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy: 'cache-first',
     }
   );
 

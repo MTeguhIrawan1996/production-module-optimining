@@ -32,7 +32,7 @@ const SelectHeavyEquipmentNative: React.FC<
 
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
     variables: {
-      limit: 15,
+      limit: null,
       search: searchQuery === '' ? null : searchQuery,
       isComplete: true,
       categoryId: categoryId === '' ? null : categoryId,
