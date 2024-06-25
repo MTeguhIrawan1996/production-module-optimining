@@ -109,7 +109,7 @@ const ReadCompanyHumanResourceBook = () => {
   });
   const { employeeDivisionsData } = useReadAllDivision({
     variables: {
-      limit: 15,
+      limit: null,
       search: divisionSearchQuery === '' ? null : divisionSearchQuery,
     },
   });

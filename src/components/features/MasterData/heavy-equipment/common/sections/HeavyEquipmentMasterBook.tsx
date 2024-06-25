@@ -79,13 +79,13 @@ const HeavyEquipmentMasterBook = () => {
   });
   const { brandsData } = useReadAllBrand({
     variables: {
-      limit: 15,
+      limit: null,
       search: brandSearchQuery === '' ? null : brandSearchQuery,
     },
   });
   const { typesData } = useReadAllHeavyEquipmentType({
     variables: {
-      limit: 15,
+      limit: null,
       search: typeSearchQuery === '' ? null : typeSearchQuery,
       brandId: filterBrandId,
     },
@@ -93,19 +93,17 @@ const HeavyEquipmentMasterBook = () => {
   const { heavyEquipmentsData: modelRefrence } =
     useReadAllHeavyEquipmentRefrence({
       variables: {
-        limit: 15,
+        limit: null,
         search: modelSearchQuery === '' ? null : modelSearchQuery,
         brandId: filterBrandId,
         typeId: filterTypeId,
       },
-      fetchPolicy: 'cache-and-network',
     });
   const { heavyEquipmentClassesData } = useReadAllHeavyEquipmentClass({
     variables: {
-      limit: 15,
+      limit: null,
       search: classSearchQuery === '' ? null : classSearchQuery,
     },
-    fetchPolicy: 'cache-and-network',
   });
 
   const [executeDelete, { loading }] = useDeleteMasterHeavyEquipment({

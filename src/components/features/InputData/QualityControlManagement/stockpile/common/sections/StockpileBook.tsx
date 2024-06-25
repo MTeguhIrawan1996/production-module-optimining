@@ -80,7 +80,7 @@ const StockpileBook = () => {
 
   const { allLocationsData } = useReadAllLocationselect({
     variables: {
-      limit: 15,
+      limit: null,
       orderDir: 'desc',
       search: stockpileNameSearchQuery === '' ? null : stockpileNameSearchQuery,
       categoryIds: [`${process.env.NEXT_PUBLIC_STOCKPILE_ID}`],
