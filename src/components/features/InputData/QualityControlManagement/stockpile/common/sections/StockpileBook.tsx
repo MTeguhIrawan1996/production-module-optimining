@@ -17,9 +17,9 @@ import {
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import { useReadAllLocationselect } from '@/services/graphql/query/global-select/useReadAllLocationSelect';
 import {
-  IMonitoringStockpilesData,
-  useReadAllStockpileMonitoring,
-} from '@/services/graphql/query/stockpile-monitoring/useReadAllStockpileMonitoring';
+  IMonitoringStockpilesTableData,
+  useReadAllStockpileMonitoringTable,
+} from '@/services/graphql/query/stockpile-monitoring/useReadAllStockpileMonitoringTable';
 import {
   globalSelectMonthNative,
   globalSelectNative,
@@ -88,11 +88,11 @@ const StockpileBook = () => {
   });
 
   const {
-    monitoringStockpilesData,
-    monitoringStockpilesDataLoading,
-    monitoringStockpilesDataMeta,
-    refetchMonitoringStockpiles,
-  } = useReadAllStockpileMonitoring({
+    monitoringStockpilesTableData,
+    monitoringStockpilesTableDataLoading,
+    monitoringStockpilesTableDataMeta,
+    refetchMonitoringStockpilesTable,
+  } = useReadAllStockpileMonitoringTable({
     variables: {
       limit: 10,
       page: page,
@@ -175,7 +175,7 @@ const StockpileBook = () => {
 
   const renderOtherColumnCallback = React.useCallback(
     (element: IElementsData) => {
-      const column: DataTableColumn<IMonitoringStockpilesData> = {
+      const column: DataTableColumn<IMonitoringStockpilesTableData> = {
         accessor: element.name,
         title: element.name,
         render: ({ ritageSamples }) => {
@@ -197,16 +197,16 @@ const StockpileBook = () => {
     return (
       <MantineDataTable
         tableProps={{
-          records: monitoringStockpilesData,
-          fetching: monitoringStockpilesDataLoading,
+          records: monitoringStockpilesTableData,
+          fetching: monitoringStockpilesTableDataLoading,
           highlightOnHover: true,
           columns: [
             {
               accessor: 'index',
               title: 'No',
               render: (record) =>
-                monitoringStockpilesData &&
-                monitoringStockpilesData.indexOf(record) + 1,
+                monitoringStockpilesTableData &&
+                monitoringStockpilesTableData.indexOf(record) + 1,
               width: 60,
             },
             {
@@ -315,17 +315,17 @@ const StockpileBook = () => {
         paginationProps={{
           setPage: handleSetPage,
           currentPage: page,
-          totalAllData: monitoringStockpilesDataMeta?.totalAllData ?? 0,
-          totalData: monitoringStockpilesDataMeta?.totalData ?? 0,
-          totalPage: monitoringStockpilesDataMeta?.totalPage ?? 0,
+          totalAllData: monitoringStockpilesTableDataMeta?.totalAllData ?? 0,
+          totalData: monitoringStockpilesTableDataMeta?.totalData ?? 0,
+          totalPage: monitoringStockpilesTableDataMeta?.totalPage ?? 0,
         }}
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     page,
-    monitoringStockpilesData,
-    monitoringStockpilesDataLoading,
+    monitoringStockpilesTableData,
+    monitoringStockpilesTableDataLoading,
     isPermissionRead,
     isPermissionUpdate,
   ]);
@@ -341,7 +341,7 @@ const StockpileBook = () => {
         searchQuery: searchQuery,
         onSearch: () => {
           setStockpileMonitoringState({ page: 1 });
-          refetchMonitoringStockpiles({
+          refetchMonitoringStockpilesTable({
             page: 1,
           });
         },
