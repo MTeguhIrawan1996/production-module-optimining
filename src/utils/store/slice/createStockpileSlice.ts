@@ -8,17 +8,13 @@ type IStockpileState = {
 };
 
 export type IStockpileSliceValue = {
-  stockpileState: IStockpileState;
-  stockpileDomeState: IStockpileState;
+  stockpileState: Partial<IStockpileState>;
+  stockpileDomeState: Partial<IStockpileState>;
 };
 
 export interface IStockpileSliceAction {
-  setStockpilePage: (payload: Pick<IStockpileState, 'page'>) => void;
-  setSearchStockpile: (payload: Pick<IStockpileState, 'search'>) => void;
-  setSearchDome: (payload: Pick<IStockpileState, 'search'>) => void;
-  setStockpilePageDome: (payload: Pick<IStockpileState, 'page'>) => void;
-  resetStockpile: () => void;
-  resetStockpileDome: () => void;
+  setStockpileState: (payload: Partial<IStockpileSliceValue>) => void;
+  resetStockpileState: () => void;
 }
 
 const initialState: IStockpileSliceValue = {
@@ -39,47 +35,19 @@ export const createStockpileSlice: StateCreator<
   sliceResetFns.set(sliceName, () => set(initialState));
   return {
     ...initialState,
-    setSearchStockpile: (payload) =>
+    setStockpileState: (payload) =>
       set((state) => ({
-        ...state,
         stockpileState: {
           ...state.stockpileState,
-          search: payload.search,
+          ...payload.stockpileState,
         },
-      })),
-    setStockpilePage: (payload) =>
-      set((state) => ({
-        ...state,
-        stockpileState: {
-          ...state.stockpileState,
-          page: payload.page,
-        },
-      })),
-    setSearchDome: (payload) =>
-      set((state) => ({
-        ...state,
         stockpileDomeState: {
           ...state.stockpileDomeState,
-          search: payload.search,
+          ...payload.stockpileDomeState,
         },
       })),
-    setStockpilePageDome: (payload) =>
-      set((state) => ({
-        ...state,
-        stockpileDomeState: {
-          ...state.stockpileDomeState,
-          page: payload.page,
-        },
-      })),
-    resetStockpile: () =>
-      set((state) => ({
-        ...state,
-        stockpileDomeState: initialState.stockpileState,
-      })),
-    resetStockpileDome: () =>
-      set((state) => ({
-        ...state,
-        stockpileDomeState: initialState.stockpileDomeState,
-      })),
+    resetStockpileState: () => {
+      set(initialState);
+    },
   };
 };
