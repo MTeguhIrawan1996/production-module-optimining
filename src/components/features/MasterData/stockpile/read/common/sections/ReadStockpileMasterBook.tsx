@@ -1,12 +1,12 @@
 import { Divider, Stack, Tabs, Text } from '@mantine/core';
-import { useDebouncedState } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { queryTypes, useQueryState } from 'next-usequerystate';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
@@ -19,6 +19,7 @@ import {
 import { useDeleteStockpileDomeMaster } from '@/services/graphql/mutation/stockpile-master/useDeleteStockpileDomeMaster';
 import { useReadAllStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadAllStockpileDomeMaster';
 import { useReadOneStockpileMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileMaster';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -27,11 +28,13 @@ const ReadStockpileMasterBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
-  const [page, setPage] = useQueryState(
-    'page',
-    queryTypes.integer.withDefault(1)
+
+  const [{ page, search }, setStockpileState] = useControlPanel(
+    (state) => [state.stockpileDomeState, state.setStockpileState],
+    shallow
   );
-  const [searchQuery, setSearchQuery] = useDebouncedState<string>('', 500);
+
+  const [searchQuery] = useDebouncedValue<string>(search || '', 500);
   const [domeId, setDomeId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
@@ -67,9 +70,7 @@ const ReadStockpileMasterBook = () => {
     onCompleted: () => {
       refetchStockpiles();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage(1, {
-        shallow: true,
-      });
+      setStockpileState({ stockpileDomeState: { page: 1 } });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -89,9 +90,7 @@ const ReadStockpileMasterBook = () => {
   /* #endregion  /**======== Query =========== */
 
   const handleSetPage = (page: number) => {
-    setPage(page, {
-      shallow: true,
-    });
+    setStockpileState({ stockpileDomeState: { page } });
   };
 
   const handleDeleteDome = async () => {
@@ -101,6 +100,9 @@ const ReadStockpileMasterBook = () => {
       },
     });
   };
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+  }, []);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -158,7 +160,7 @@ const ReadStockpileMasterBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: page,
+          currentPage: page || 1,
           totalAllData: stockpileDomeMasterMeta?.totalAllData ?? 0,
           totalData: stockpileDomeMasterMeta?.totalData ?? 0,
           totalPage: stockpileDomeMasterMeta?.totalPage ?? 0,
@@ -238,18 +240,21 @@ const ReadStockpileMasterBook = () => {
             }}
             searchBar={{
               onChange: (e) => {
-                setSearchQuery(e.currentTarget.value);
+                setStockpileState({
+                  stockpileDomeState: {
+                    search: e.currentTarget.value,
+                  },
+                });
               },
               searchQuery,
               onSearch: () => {
-                setPage(1, {
-                  shallow: true,
-                });
+                setStockpileState({ stockpileDomeState: { page: 1 } });
                 refetchStockpiles({
                   page: 1,
                 });
               },
               placeholder: t('stockpile.searchDomePlaceholder'),
+              value: search,
             }}
           >
             {renderTable}

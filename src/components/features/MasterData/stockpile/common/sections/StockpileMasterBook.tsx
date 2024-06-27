@@ -26,18 +26,12 @@ const StockpileMasterBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
 
-  const [{ page, search }, setPage, setSearch, setStockpilePageDome] =
-    useControlPanel(
-      (state) => [
-        state.stockpileState,
-        state.setStockpilePage,
-        state.setSearchStockpile,
-        state.setStockpilePageDome,
-      ],
-      shallow
-    );
+  const [{ page, search }, setStockpileState] = useControlPanel(
+    (state) => [state.stockpileState, state.setStockpileState],
+    shallow
+  );
 
-  const [searchQuery] = useDebouncedValue<string>(search, 500);
+  const [searchQuery] = useDebouncedValue<string>(search || '', 500);
 
   const { t } = useTranslation('default');
   const [id, setId] = React.useState<string>('');
@@ -74,7 +68,7 @@ const StockpileMasterBook = () => {
     onCompleted: () => {
       refetchStockpiles();
       setIsOpenDeleteConfirmation((prev) => !prev);
-      setPage({ page: 1 });
+      setStockpileState({ stockpileDomeState: { page: 1 } });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -102,7 +96,7 @@ const StockpileMasterBook = () => {
   };
 
   const handleSetPage = (page: number) => {
-    setPage({ page });
+    setStockpileState({ stockpileState: { page } });
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -139,8 +133,10 @@ const StockpileMasterBook = () => {
                       isPermissionRead
                         ? {
                             onClick: (e) => {
-                              setStockpilePageDome({
-                                page: 1,
+                              setStockpileState({
+                                stockpileDomeState: {
+                                  page: 1,
+                                },
                               });
                               e.stopPropagation();
                               router.push(`/master-data/stockpile/read/${id}`);
@@ -188,7 +184,7 @@ const StockpileMasterBook = () => {
         }}
         paginationProps={{
           setPage: handleSetPage,
-          currentPage: page,
+          currentPage: page || 1,
           totalAllData: stockpilesDataMeta?.totalAllData ?? 0,
           totalData: stockpilesDataMeta?.totalData ?? 0,
           totalPage: stockpilesDataMeta?.totalPage ?? 0,
@@ -220,13 +216,15 @@ const StockpileMasterBook = () => {
       searchBar={{
         placeholder: t('stockpile.searchPlaceholder'),
         onChange: (e) => {
-          setSearch({
-            search: e.currentTarget.value,
+          setStockpileState({
+            stockpileState: {
+              search: e.currentTarget.value,
+            },
           });
         },
         searchQuery: searchQuery,
         onSearch: () => {
-          setPage({ page: 1 });
+          setStockpileState({ stockpileState: { page: 1 } });
         },
         value: search,
       }}
