@@ -8,12 +8,12 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalTabs } from '@/components/elements';
-import DetailSampleData from '@/components/features/InputData/QualityControlManagement/stockpile/read/common/elements/DetailSampleData';
-import DetailStockpileData from '@/components/features/InputData/QualityControlManagement/stockpile/read/common/elements/DetailStockpileData';
+import DetailSampleData from '@/components/features/InputData/QualityControlManagement/stockpile/read/common/ui/DetailSampleData';
+import DetailStockpileData from '@/components/features/InputData/QualityControlManagement/stockpile/read/common/ui/DetailStockpileData';
 
 import { useUpdateIsDeterminedStockpileMonitoring } from '@/services/graphql/mutation/stockpile-monitoring/useIsDeterminedStockpileMonitoring';
 import { useUpdateIsValidateStockpileMonitoring } from '@/services/graphql/mutation/stockpile-monitoring/useIsValidateStockpileMonitoring';
-import { useReadOneStockpileMonitoring } from '@/services/graphql/query/stockpile-monitoring/useReadOneStockpileMonitoring';
+import { useReadOneStockpileMonitoringDetail } from '@/services/graphql/query/stockpile-monitoring/useReadOneStockpileMonitoringDetail';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
@@ -21,11 +21,10 @@ import useStore from '@/utils/store/useStore';
 import { IUpdateStatusValues } from '@/types/global';
 
 const ReadStockpileMonitoringBook = () => {
-  const { t } = useTranslation('default');
   const router = useRouter();
+  const { t } = useTranslation('default');
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
-  const [page, setPage] = React.useState<number>(1);
 
   const methods = useForm<IUpdateStatusValues>({
     resolver: zodResolver(statusValidationSchema),
@@ -36,14 +35,10 @@ const ReadStockpileMonitoringBook = () => {
   });
 
   /* #   /**=========== Query =========== */
-  const { monitoringStockpile, monitoringStockpileLoading } =
-    useReadOneStockpileMonitoring({
+  const { monitoringStockpileDetail, monitoringStockpileDetailLoading } =
+    useReadOneStockpileMonitoringDetail({
       variables: {
         id,
-        limit: 10,
-        page,
-        orderBy: 'createdAt',
-        orderDir: 'desc',
       },
       skip: !router.isReady,
     });
@@ -167,30 +162,26 @@ const ReadStockpileMonitoringBook = () => {
     'validate-monitoring-stockpile'
   );
   const isShowButtonValidation = includesWaiting.includes(
-    monitoringStockpile?.status?.id ?? ''
+    monitoringStockpileDetail?.status?.id ?? ''
   );
   const isShowButtonInvalidation = includesWaiting.includes(
-    monitoringStockpile?.status?.id ?? ''
+    monitoringStockpileDetail?.status?.id ?? ''
   );
 
   const isPermissionDetermination = permissions?.includes(
     'determine-monitoring-stockpile'
   );
   const isShowButtonDetermined = includesValid.includes(
-    monitoringStockpile?.status?.id ?? ''
+    monitoringStockpileDetail?.status?.id ?? ''
   );
   const isShowButtonReject = includesValid.includes(
-    monitoringStockpile?.status?.id ?? ''
+    monitoringStockpileDetail?.status?.id ?? ''
   );
 
   const isPermissionEdit = permissions?.includes('update-monitoring-stockpile');
   const isIncludeDetermination = includesDetermined.includes(
-    monitoringStockpile?.status?.id ?? ''
+    monitoringStockpileDetail?.status?.id ?? ''
   );
-
-  const handleSetPage = (page: number) => {
-    setPage(page);
-  };
 
   return (
     <DashboardCard
@@ -256,7 +247,7 @@ const ReadStockpileMonitoringBook = () => {
           ),
       }}
       shadow="xs"
-      isLoading={monitoringStockpileLoading}
+      isLoading={monitoringStockpileDetailLoading}
       paperStackProps={{
         spacing: 'sm',
       }}
@@ -272,12 +263,8 @@ const ReadStockpileMonitoringBook = () => {
             value: 'stockpileData',
             component: (
               <DetailStockpileData
-                monitoringStockpile={monitoringStockpile}
-                monitoringStockpileLoading={monitoringStockpileLoading}
-                ritageProps={{
-                  handleSetPage,
-                  page,
-                }}
+                monitoringStockpile={monitoringStockpileDetail}
+                monitoringStockpileLoading={monitoringStockpileDetailLoading}
               />
             ),
             isShowItem: true,
@@ -285,9 +272,7 @@ const ReadStockpileMonitoringBook = () => {
           {
             label: 'Data Sampel',
             value: 'sampleData',
-            component: (
-              <DetailSampleData monitoringStockpile={monitoringStockpile} />
-            ),
+            component: <DetailSampleData />,
             isShowItem: true,
           },
         ]}
