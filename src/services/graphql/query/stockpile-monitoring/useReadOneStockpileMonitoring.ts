@@ -38,18 +38,6 @@ export const READ_ONE_STOCKPILE_MONITORING = gql`
         volume
       }
       tonByRitage
-      movings {
-        startAt
-        finishAt
-      }
-      bargings {
-        startAt
-        finishAt
-      }
-      reopens {
-        openAt
-        closeAt
-      }
       desc
       photo {
         id
@@ -222,24 +210,6 @@ export interface IReadOneStockpileMonitoring {
       }[]
     | null;
   tonByRitage: number | null;
-  movings:
-    | {
-        startAt: string | null;
-        finishAt: string | null;
-      }[]
-    | null;
-  bargings:
-    | {
-        startAt: string | null;
-        finishAt: string | null;
-      }[]
-    | null;
-  reopens:
-    | {
-        openAt: string | null;
-        closeAt: string | null;
-      }[]
-    | null;
   desc: string | null;
   photo: Omit<IFile, 'mime' | 'path'> | null;
   samples: ISampleReadOneStockpileMonitoring[];

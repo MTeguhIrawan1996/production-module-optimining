@@ -41,6 +41,12 @@ const ReopenDataTable = () => {
             tableProps={{
               records: monitoringStockpileReopenRitage ?? [],
               fetching: monitoringStockpileReopenRitageLoading,
+              idAccessor: (record) => {
+                const key =
+                  monitoringStockpileReopenRitage &&
+                  monitoringStockpileReopenRitage.indexOf(record) + 1;
+                return `${key}`;
+              },
               defaultColumnProps: {
                 textAlignment: 'left',
                 titleStyle: {
