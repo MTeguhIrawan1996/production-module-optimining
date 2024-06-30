@@ -585,7 +585,7 @@ const UpdateStockpileMonitoringBook = () => {
       });
       const movingFinishDateItem = globalDate({
         name: `movings.${index}.finishDate`,
-        label: 'movingFinishDate',
+        label: 'Selesai Moving',
         withAsterisk: false,
         clearable: true,
         colSpan: 6,

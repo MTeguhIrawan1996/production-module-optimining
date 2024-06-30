@@ -1,51 +1,24 @@
 import { ApolloError, gql, useQuery } from '@apollo/client';
 
-import { GResponse, IGlobalMetaRequest } from '@/types/global';
-
 export const READ_ONE_STOCKPILE_MONITORING_REOPEN = gql`
-  query ReadOneStockpileMonitoringReopen(
-    $id: String!
-    $page: Int
-    $limit: Int
-    $orderBy: String
-    $orderDir: String
-  ) {
-    monitoringStockpileReopenRitage(
-      findAllMonitoringStockpileReopenRitaseInput: {
-        page: $page
-        limit: $limit
-        orderBy: $orderBy
-        orderDir: $orderDir
-        monitoringStockpileId: $id
-      }
-    ) {
-      meta {
-        currentPage
-        totalAllData
-        totalData
-        totalPage
-      }
-      data {
-        id
-        openAt
-        closeAt
-      }
+  query ReadOneStockpileMonitoringReopen($id: String!) {
+    monitoringStockpileReopenRitage(monitoringStockpileId: $id) {
+      openAt
+      closeAt
     }
   }
 `;
 
 interface IReadOneStockpileMonitoringReopen {
-  id: string;
   openAt: string | null;
   closeAt: string | null;
 }
 
 interface IReadOneStockpileMonitoringReopenResponse {
-  monitoringStockpileReopenRitage: GResponse<IReadOneStockpileMonitoringReopen>;
+  monitoringStockpileReopenRitage: IReadOneStockpileMonitoringReopen[];
 }
 
-interface IReadOneStockpileMonitoringReopenRequest
-  extends Partial<IGlobalMetaRequest> {
+interface IReadOneStockpileMonitoringReopenRequest {
   id: string;
 }
 
