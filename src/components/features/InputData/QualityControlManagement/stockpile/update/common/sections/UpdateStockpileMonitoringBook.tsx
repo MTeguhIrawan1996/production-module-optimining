@@ -21,8 +21,10 @@ import {
 import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import { useReadOneSampleHouseLabByNumberSample } from '@/services/graphql/query/sample-house-lab/useReadOneSampleHouseLabByNoSample';
-import { useReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
-import { useReadOneStockpileMonitoring } from '@/services/graphql/query/stockpile-monitoring/useReadOneStockpileMonitoring';
+import { useReadOneStockpileMonitoringDetail } from '@/services/graphql/query/stockpile-monitoring/useReadOneStockpileMonitoringDetail';
+import { useReadOneStockpileMonitoringRitage } from '@/services/graphql/query/stockpile-monitoring/useReadOneStockpileMonitoringRitage';
+import { useReadOneStockpileMonitoringSample } from '@/services/graphql/query/stockpile-monitoring/useReadOneStockpileMonitoringSample';
+import { useReadOneStockpileMonitoringSurvey } from '@/services/graphql/query/stockpile-monitoring/useReadOneStockpileMonitoringSurvey';
 import {
   IMutationStockpile,
   IMutationStockpileStepOne,
@@ -100,7 +102,6 @@ const UpdateStockpileMonitoringBook = () => {
     },
     mode: 'onBlur',
   });
-  const domeId = methods.watch('domeId');
 
   const {
     fields: sampleFields,
@@ -140,15 +141,6 @@ const UpdateStockpileMonitoringBook = () => {
       setOtherElements(other);
     },
   });
-  useReadOneStockpileDomeMaster({
-    variables: {
-      id: domeId as string,
-    },
-    skip: domeId === '' || !domeId,
-    onCompleted: (data) => {
-      methods.setValue('handbookId', data.dome.handBookId);
-    },
-  });
 
   const isOwnElemntsData =
     elementsData && elementsData.length > 0 ? true : false;
@@ -156,9 +148,8 @@ const UpdateStockpileMonitoringBook = () => {
   useReadOneSampleHouseLabByNumberSample({
     variables: {
       sampleNumber: sampleNumber,
-      index: indexOfSample,
     },
-    skip: indexOfSample === null || !isOwnElemntsData,
+    skip: !isOwnElemntsData,
     onCompleted: (data) => {
       const date = stringToDate(
         data.houseSampleAndLabBySampleNumber.sampleDate ?? null
@@ -195,69 +186,109 @@ const UpdateStockpileMonitoringBook = () => {
     },
   });
 
-  const { monitoringStockpile, monitoringStockpileLoading } =
-    useReadOneStockpileMonitoring({
+  const { monitoringStockpileDetail, monitoringStockpileDetailLoading } =
+    useReadOneStockpileMonitoringDetail({
       variables: {
         id,
       },
       skip: !router.isReady || !isOwnElemntsData,
-      onCompleted: ({ monitoringStockpile }) => {
-        // if (!called) {
-        const samples = monitoringStockpile.samples.map((val) => {
-          const elemntsValue = elementsData?.map((o) => {
-            const value = val.sample?.elements.find(
-              (obj) => obj.element.id === o.id
-            );
-            return {
-              elementId: o.id,
-              name: o.name ?? '',
-              value: value?.value ?? '',
-            };
-          });
-          return {
-            date: stringToDate(val.sample?.sampleDate ?? null),
-            sampleTypeId: val.sample?.sampleType.id ?? '',
-            sampleNumber: val.sampleNumber ?? '',
-            isCreatedAfterDetermine: val.isCreatedAfterDetermine ? true : false,
-            elements: elemntsValue ?? [],
-          };
-        });
-        samples.length > 0 ? replace(samples) : replace([]);
-
-        const surveys = monitoringStockpile.tonSurveys?.map((val) => {
-          const date = stringToDate(val.date ?? null);
-          return {
-            date: date,
-            ton: val.ton ?? '',
-            volume: val.volume ?? '',
-          };
-        });
-        replaceSurveyFields(surveys && surveys.length > 0 ? surveys : []);
-        const openDate = stringToDate(monitoringStockpile.openAt ?? null);
-        const closeDate = stringToDate(monitoringStockpile.closeAt ?? null);
-        const openTime = formatDate(monitoringStockpile.openAt, 'HH:mm:ss');
-        const closeTime = formatDate(monitoringStockpile.closeAt, 'HH:mm:ss');
+      onCompleted: ({ monitoringStockpileDetail }) => {
+        const openDate = stringToDate(monitoringStockpileDetail.openAt ?? null);
+        const closeDate = stringToDate(
+          monitoringStockpileDetail.closeAt ?? null
+        );
+        const openTime = formatDate(
+          monitoringStockpileDetail.openAt,
+          'HH:mm:ss'
+        );
+        const closeTime = formatDate(
+          monitoringStockpileDetail.closeAt,
+          'HH:mm:ss'
+        );
         methods.setValue(
           'stockpileId',
-          monitoringStockpile.dome?.stockpile.id ?? ''
+          monitoringStockpileDetail.dome?.stockpile.id ?? ''
         );
-        methods.setValue('domeId', monitoringStockpile.dome?.id ?? '');
+        methods.setValue('domeId', monitoringStockpileDetail.dome?.id ?? '');
+        methods.setValue(
+          'handbookId',
+          monitoringStockpileDetail.dome?.handBookId ?? ''
+        );
         methods.setValue(
           'oreSubMaterialId',
-          monitoringStockpile.material?.id ?? ''
+          monitoringStockpileDetail.material?.id ?? ''
         );
         methods.setValue('openDate', openDate);
         methods.setValue('closeDate', closeDate);
         methods.setValue('openTime', openTime ?? '');
         methods.setValue('closeTime', closeTime ?? '');
-        methods.setValue('tonByRitage', monitoringStockpile.tonByRitage ?? '');
-        methods.setValue('desc', monitoringStockpile.desc ?? '');
-        if (monitoringStockpile.photo) {
-          setServerPhoto([monitoringStockpile.photo]);
+        methods.setValue('desc', monitoringStockpileDetail.desc ?? '');
+        if (monitoringStockpileDetail.photo) {
+          setServerPhoto([monitoringStockpileDetail.photo]);
         }
-        // }
       },
     });
+
+  useReadOneStockpileMonitoringSurvey({
+    variables: {
+      id,
+    },
+    skip: !router.isReady,
+    onCompleted: ({ monitoringStockpileSurvey }) => {
+      const surveys = monitoringStockpileSurvey.data.map((val) => {
+        const date = stringToDate(val.date ?? null);
+        return {
+          date: date,
+          ton: val.ton ?? '',
+          volume: val.volume ?? '',
+        };
+      });
+      replaceSurveyFields(surveys && surveys.length > 0 ? surveys : []);
+    },
+  });
+  useReadOneStockpileMonitoringRitage({
+    variables: {
+      id,
+      limit: 1,
+      page: 1,
+    },
+    skip: !router.isReady,
+    onCompleted: ({ monitoringStockpileOreRitage }) => {
+      methods.setValue(
+        'tonByRitage',
+        monitoringStockpileOreRitage.additional?.tonByRitage ?? ''
+      );
+    },
+  });
+  useReadOneStockpileMonitoringSample({
+    variables: {
+      id,
+    },
+    skip: !router.isReady,
+    onCompleted: ({ monitoringStockpileSamples }) => {
+      const samples = monitoringStockpileSamples.data.map((val) => {
+        const elemntsValue = elementsData?.map((o) => {
+          const value = val.elements.find((obj) => obj.element.id === o.id);
+          return {
+            elementId: o.id,
+            name: o.name ?? '',
+            value: value?.value ?? '',
+          };
+        });
+        return {
+          date: stringToDate(val.sampleDate ?? null),
+          sampleTypeId: val.sampleType.id ?? '',
+          sampleNumber: val.sampleNumber ?? '',
+          isCreatedAfterDetermine: val.monitoringStockpileSample
+            .isCreatedAfterDetermine
+            ? true
+            : false,
+          elements: elemntsValue ?? [],
+        };
+      });
+      samples.length > 0 ? replace(samples) : replace([]);
+    },
+  });
 
   const { mutate, isLoading } = useUpdateStockpileMonitoring({
     onError: (err) => {
@@ -342,7 +373,7 @@ const UpdateStockpileMonitoringBook = () => {
   });
 
   const isDetermination =
-    monitoringStockpile?.status?.id ===
+    monitoringStockpileDetail?.status?.id ===
     process.env.NEXT_PUBLIC_STATUS_DETERMINED;
   /* #endregion  /**======== Query =========== */
 
@@ -478,15 +509,15 @@ const UpdateStockpileMonitoringBook = () => {
   const fieldItemStepOne = React.useMemo(() => {
     const stockpileNameItem = stockpileNameSelect({
       colSpan: 6,
-      defaultValue: monitoringStockpile?.dome?.stockpile.id,
-      labelValue: monitoringStockpile?.dome?.stockpile.name,
+      defaultValue: monitoringStockpileDetail?.dome?.stockpile.id,
+      labelValue: monitoringStockpileDetail?.dome?.stockpile.name,
       disabled: true,
     });
     const domeNameItem = domeNameSelect({
       colSpan: 6,
       disabled: true,
-      defaultValue: monitoringStockpile?.dome?.id,
-      labelValue: monitoringStockpile?.dome?.name,
+      defaultValue: monitoringStockpileDetail?.dome?.id,
+      labelValue: monitoringStockpileDetail?.dome?.name,
     });
     const domeIdItem = globalText({
       name: 'handbookId',
@@ -621,7 +652,7 @@ const UpdateStockpileMonitoringBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monitoringStockpile, surveyGroupItem, serverPhoto]);
+  }, [monitoringStockpileDetail, surveyGroupItem, serverPhoto]);
 
   /* #endregion  /**======== Field =========== */
 
@@ -703,7 +734,7 @@ const UpdateStockpileMonitoringBook = () => {
   /* #endregion  /**======== HandleSubmitFc =========== */
 
   return (
-    <DashboardCard p={0} isLoading={monitoringStockpileLoading}>
+    <DashboardCard p={0} isLoading={monitoringStockpileDetailLoading}>
       <SteperFormGroup
         active={isDetermination ? 1 : active}
         setActive={setActive}
