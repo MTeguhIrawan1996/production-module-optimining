@@ -34,30 +34,6 @@ export const stockpileMonitoringMutationValidation: z.ZodType<IMutationStockpile
           date: zDateValidation,
         })
         .array(),
-      bargings: z
-        .object({
-          startDate: zDateOptionalValidation,
-          startTime: zTimeValidation,
-          finishDate: zDateOptionalValidation,
-          finishTime: zTimeValidation,
-        })
-        .array(),
-      movings: z
-        .object({
-          startDate: zDateOptionalValidation,
-          startTime: zTimeValidation,
-          finishDate: zDateOptionalValidation,
-          finishTime: zTimeValidation,
-        })
-        .array(),
-      reopens: z
-        .object({
-          openDate: zDateOptionalValidation,
-          openTime: zTimeValidation,
-          closeDate: zDateOptionalValidation,
-          closeTime: zTimeValidation,
-        })
-        .array(),
       samples: z
         .object({
           date: zDateOptionalValidation,

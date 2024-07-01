@@ -71,7 +71,7 @@ const WeatherProductionBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      orderBy: 'createdAt',
+      orderBy: 'date',
       search: searchQuery === '' ? null : searchQuery,
       year,
       week,

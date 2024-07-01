@@ -11,24 +11,6 @@ type tonBySurveys = {
   ton: string | number;
   volume: string | number;
 };
-type bargings = {
-  startDate?: Date | null;
-  startTime: string;
-  finishDate?: Date | null;
-  finishTime: string;
-};
-type movings = {
-  startDate?: Date | null;
-  startTime: string;
-  finishDate?: Date | null;
-  finishTime: string;
-};
-type reopens = {
-  openDate?: Date | null;
-  openTime: string;
-  closeDate?: Date | null;
-  closeTime: string;
-};
 type samples = {
   date?: Date | null;
   sampleTypeId: string | null;
@@ -48,9 +30,6 @@ export interface IMutationStockpileStepOne {
   closeTime: string;
   tonSurveys: tonBySurveys[];
   tonByRitage: string | number | null;
-  bargings: bargings[];
-  movings: movings[];
-  reopens: reopens[];
   desc: string;
   photo: FileWithPath[] | null;
 }
@@ -76,9 +55,7 @@ type IPropsRequest = {
       | FileWithPath[]
       | IElementRhf[]
       | tonBySurveys[]
-      | movings[]
-      | samples[]
-      | reopens[];
+      | samples[];
   }[];
   deletePhoto: boolean | null;
 };

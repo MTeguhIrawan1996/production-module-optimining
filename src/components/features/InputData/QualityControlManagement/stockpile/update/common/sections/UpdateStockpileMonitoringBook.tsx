@@ -94,46 +94,8 @@ const UpdateStockpileMonitoringBook = () => {
       closeTime: '',
       tonSurveys: [],
       tonByRitage: '',
-      bargings: [
-        {
-          startDate: undefined,
-          startTime: '',
-          finishDate: undefined,
-          finishTime: '',
-        },
-      ],
-      movings: [
-        {
-          startDate: undefined,
-          startTime: '',
-          finishDate: undefined,
-          finishTime: '',
-        },
-      ],
-      reopens: [
-        {
-          openDate: undefined,
-          openTime: '',
-          closeDate: undefined,
-          closeTime: '',
-        },
-      ],
       desc: '',
-      samples: [
-        // {
-        //   date: undefined,
-        //   sampleTypeId: '',
-        //   sampleNumber: '',
-        //   isCreatedAfterDetermine: true,
-        //   elements: [
-        //     {
-        //       elementId: '',
-        //       name: '',
-        //       value: '',
-        //     },
-        //   ],
-        // },
-      ],
+      samples: [],
       photo: [],
     },
     mode: 'onBlur',
@@ -156,19 +118,6 @@ const UpdateStockpileMonitoringBook = () => {
     append: appendSurveyFields,
   } = useFieldArray({
     name: 'tonSurveys',
-    control: methods.control,
-  });
-  const { fields: movingFields, replace: replaceMovingFields } = useFieldArray({
-    name: 'movings',
-    control: methods.control,
-  });
-  const { fields: bargingFields, replace: replaceBargingFields } =
-    useFieldArray({
-      name: 'bargings',
-      control: methods.control,
-    });
-  const { fields: reopenFields, replace: replaceReopenFields } = useFieldArray({
-    name: 'reopens',
     control: methods.control,
   });
   /* #endregion  /**======== Methods =========== */
@@ -283,73 +232,7 @@ const UpdateStockpileMonitoringBook = () => {
             volume: val.volume ?? '',
           };
         });
-        const movings = monitoringStockpile.movings?.map((val) => {
-          const startDate = stringToDate(val.startAt ?? null);
-          const startTime = formatDate(val.startAt, 'HH:mm:ss');
-          const finishDate = stringToDate(val.finishAt ?? null);
-          const finishTime = formatDate(val.finishAt, 'HH:mm:ss');
-          return {
-            startDate: startDate,
-            startTime: startTime ?? '',
-            finishDate: finishDate,
-            finishTime: finishTime ?? '',
-          };
-        });
-        const bargings = monitoringStockpile.bargings?.map((val) => {
-          const startDate = stringToDate(val.startAt ?? null);
-          const startTime = formatDate(val.startAt, 'HH:mm:ss');
-          const finishDate = stringToDate(val.finishAt ?? null);
-          const finishTime = formatDate(val.finishAt, 'HH:mm:ss');
-          return {
-            startDate: startDate,
-            startTime: startTime ?? '',
-            finishDate: finishDate,
-            finishTime: finishTime ?? '',
-          };
-        });
-        const reopens = monitoringStockpile.reopens?.map((val) => {
-          const openDate = stringToDate(val.openAt ?? null);
-          const openTime = formatDate(val.openAt, 'HH:mm:ss');
-          const closeDate = stringToDate(val.closeAt ?? null);
-          const closeTime = formatDate(val.closeAt, 'HH:mm:ss');
-          return {
-            openDate: openDate,
-            openTime: openTime ?? '',
-            closeDate: closeDate,
-            closeTime: closeTime ?? '',
-          };
-        });
         replaceSurveyFields(surveys && surveys.length > 0 ? surveys : []);
-        replaceMovingFields(
-          movings && movings.length > 0
-            ? movings
-            : {
-                startDate: undefined,
-                startTime: '',
-                finishDate: undefined,
-                finishTime: '',
-              }
-        );
-        replaceBargingFields(
-          bargings && bargings.length > 0
-            ? bargings
-            : {
-                startDate: undefined,
-                startTime: '',
-                finishDate: undefined,
-                finishTime: '',
-              }
-        );
-        replaceReopenFields(
-          reopens && reopens.length > 0
-            ? reopens
-            : {
-                openDate: undefined,
-                openTime: '',
-                closeDate: undefined,
-                closeTime: '',
-              }
-        );
         const openDate = stringToDate(monitoringStockpile.openAt ?? null);
         const closeDate = stringToDate(monitoringStockpile.closeAt ?? null);
         const openTime = formatDate(monitoringStockpile.openAt, 'HH:mm:ss');
@@ -511,177 +394,6 @@ const UpdateStockpileMonitoringBook = () => {
     [surveyFields]
   );
   const surveyGroupItem = surveyFields.map(surveyGroup);
-
-  const bargingGroup = React.useCallback(
-    (
-      val: FieldArrayWithId<IMutationStockpile, 'bargings', 'id'>,
-      index: number
-    ) => {
-      const bargingStartDateItem = globalDate({
-        name: `bargings.${index}.startDate`,
-        label: 'bargingStartDate',
-        withAsterisk: false,
-        clearable: true,
-        colSpan: 6,
-        key: `bargings.${index}.startDate.${val.id}`,
-        disabled: true,
-      });
-      const bargingFinishDateItem = globalDate({
-        name: `bargings.${index}.finishDate`,
-        label: 'bargingFinishDate',
-        withAsterisk: false,
-        clearable: true,
-        colSpan: 6,
-        key: `bargings.${index}.finishDate.${val.id}`,
-        disabled: true,
-      });
-      const bargingStartTimeItem = globalTimeInput({
-        name: `bargings.${index}.startTime`,
-        label: 'bargingStartTime',
-        withAsterisk: false,
-        colSpan: 6,
-        key: `bargings.${index}.startTime.${val.id}`,
-        disabled: true,
-      });
-      const bargingFinishTimeItem = globalTimeInput({
-        name: `bargings.${index}.finishTime`,
-        label: 'bargingFinishTime',
-        withAsterisk: false,
-        colSpan: 6,
-        key: `bargings.${index}.finishTime.${val.id}`,
-        disabled: true,
-      });
-
-      const group: ControllerGroup = {
-        group: t('commonTypography.barging'),
-        enableGroupLabel: true,
-        formControllers: [
-          bargingStartDateItem,
-          bargingFinishDateItem,
-          bargingStartTimeItem,
-          bargingFinishTimeItem,
-        ],
-      };
-      return group;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-  const bargingGroupItem = bargingFields.map(bargingGroup);
-
-  const movingGroup = React.useCallback(
-    (
-      val: FieldArrayWithId<IMutationStockpile, 'movings', 'id'>,
-      index: number
-    ) => {
-      const movingStartDateItem = globalDate({
-        name: `movings.${index}.startDate`,
-        label: 'movingStartDate',
-        withAsterisk: false,
-        clearable: true,
-        colSpan: 6,
-        key: `movings.${index}.startDate.${val.id}`,
-        disabled: true,
-      });
-      const movingFinishDateItem = globalDate({
-        name: `movings.${index}.finishDate`,
-        label: 'movingFinishDate',
-        withAsterisk: false,
-        clearable: true,
-        colSpan: 6,
-        key: `movings.${index}.finishDate.${val.id}`,
-        disabled: true,
-      });
-      const movingStartTimeItem = globalTimeInput({
-        name: `movings.${index}.startTime`,
-        label: 'movingStartTime',
-        withAsterisk: false,
-        colSpan: 6,
-        key: `movings.${index}.startTime.${val.id}`,
-        disabled: true,
-      });
-      const movingFinishTimeItem = globalTimeInput({
-        name: `movings.${index}.finishTime`,
-        label: 'movingFinishTime',
-        withAsterisk: false,
-        colSpan: 6,
-        key: `movings.${index}.finishTime.${val.id}`,
-        disabled: true,
-      });
-
-      const group: ControllerGroup = {
-        group: t('commonTypography.moving'),
-        enableGroupLabel: true,
-        formControllers: [
-          movingStartDateItem,
-          movingFinishDateItem,
-          movingStartTimeItem,
-          movingFinishTimeItem,
-        ],
-      };
-      return group;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-  const movingGroupItem = movingFields.map(movingGroup);
-
-  const reopenGroup = React.useCallback(
-    (
-      val: FieldArrayWithId<IMutationStockpile, 'reopens', 'id'>,
-      index: number
-    ) => {
-      const reopenStartDateItem = globalDate({
-        name: `reopens.${index}.openDate`,
-        label: 'reopenStartDate',
-        withAsterisk: false,
-        clearable: true,
-        colSpan: 6,
-        key: `reopens.${index}.openDate.${val.id}`,
-        disabled: true,
-      });
-      const reopenFinishDateItem = globalDate({
-        name: `reopens.${index}.closeDate`,
-        label: 'reopenCloseDate',
-        withAsterisk: false,
-        clearable: true,
-        colSpan: 6,
-        key: `reopens.${index}.closeDate.${val.id}`,
-        disabled: true,
-      });
-      const reopenStartTimeItem = globalTimeInput({
-        name: `reopens.${index}.openTime`,
-        label: 'reopenStartTime',
-        withAsterisk: false,
-        colSpan: 6,
-        key: `reopens.${index}.openTime.${val.id}`,
-        disabled: true,
-      });
-      const reopenFinishTimeItem = globalTimeInput({
-        name: `reopens.${index}.closeTime`,
-        label: 'reopenCloseTime',
-        withAsterisk: false,
-        colSpan: 6,
-        key: `reopens.${index}.closeTime.${val.id}`,
-        disabled: true,
-      });
-
-      const group: ControllerGroup = {
-        group: t('commonTypography.reopen'),
-        enableGroupLabel: true,
-        formControllers: [
-          reopenStartDateItem,
-          reopenFinishDateItem,
-          reopenStartTimeItem,
-          reopenFinishTimeItem,
-        ],
-      };
-      return group;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-  const reopenGroupItem = reopenFields.map(reopenGroup);
 
   const sampleGroup = React.useCallback(
     (
@@ -897,9 +609,6 @@ const UpdateStockpileMonitoringBook = () => {
         group: t('commonTypography.tonByRitage'),
         formControllers: [tonByRitageItem],
       },
-      ...bargingGroupItem,
-      ...movingGroupItem,
-      ...reopenGroupItem,
       {
         group: t('commonTypography.desc'),
         formControllers: [desc],
@@ -912,14 +621,7 @@ const UpdateStockpileMonitoringBook = () => {
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    monitoringStockpile,
-    surveyGroupItem,
-    bargingGroupItem,
-    movingGroupItem,
-    reopenGroupItem,
-    serverPhoto,
-  ]);
+  }, [monitoringStockpile, surveyGroupItem, serverPhoto]);
 
   /* #endregion  /**======== Field =========== */
 
@@ -952,12 +654,7 @@ const UpdateStockpileMonitoringBook = () => {
 
   const handleSubmitForm: SubmitHandler<IMutationStockpile> = async (data) => {
     const values = objectToArrayValue(data);
-    const dateValue = [
-      'openDate',
-      'closeDate',
-      'bargingStartDate',
-      'bargingFinishDate',
-    ];
+    const dateValue = ['openDate', 'closeDate'];
     const manipulateValue = values.map((val) => {
       if (dateValue.includes(val.name)) {
         const date = dateToString(val.value);
