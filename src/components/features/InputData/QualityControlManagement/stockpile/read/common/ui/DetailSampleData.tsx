@@ -4,12 +4,12 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { MantineDataTable } from '@/components/elements';
+import SampleDataTable from '@/components/features/InputData/QualityControlManagement/stockpile/read/common/elements/SampleDataTable';
 
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import {
   IReadOneStockpileMonitoring,
   IRitageSampleReadOneStockpileMonitoring,
-  ISampleReadOneStockpileMonitoring,
 } from '@/services/graphql/query/stockpile-monitoring/useReadOneStockpileMonitoring';
 import { formatDate } from '@/utils/helper/dateFormat';
 
@@ -31,26 +31,6 @@ const DetailSampleData: React.FC<IDetailSampleDataProps> = ({
     },
     fetchPolicy: 'cache-and-network',
   });
-
-  const renderOtherColumnCallback = React.useCallback(
-    (element: IElementsData) => {
-      const column: DataTableColumn<ISampleReadOneStockpileMonitoring> = {
-        accessor: element.name,
-        title: `${t('commonTypography.rate')} ${element.name}`,
-        render: ({ sample }) => {
-          const value = sample?.elements?.find(
-            (val) => val.element?.id === element.id
-          );
-          return value?.value ?? '-';
-        },
-      };
-      return column;
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  const renderOtherColumn = elementsData?.map(renderOtherColumnCallback);
 
   const renderOtherColumnRitageSampleCallback = React.useCallback(
     (element: IElementsData) => {
@@ -79,70 +59,7 @@ const DetailSampleData: React.FC<IDetailSampleDataProps> = ({
 
   return (
     <>
-      <Stack spacing="sm" mt="sm">
-        <Text fz={24} fw={600} color="brand">
-          {t('commonTypography.stockpileSample')}
-        </Text>
-        <MantineDataTable
-          tableProps={{
-            records: monitoringStockpile?.samples ?? [],
-            scrollAreaProps: {
-              type: 'never',
-            },
-            defaultColumnProps: {
-              textAlignment: 'left',
-              titleStyle: {
-                paddingTop: 0,
-                backgroundColor: 'transparent',
-                border: 'none',
-                fontSize: 18,
-                fontWeight: 600,
-                color: theme.colors.dark[6],
-              },
-              cellsStyle: {
-                border: 'none',
-                fontSize: 16,
-                fontWeight: 400,
-                color: theme.colors.dark[6],
-              },
-              noWrap: false,
-            },
-            columns: [
-              {
-                accessor: 'sampleType',
-                title: t('commonTypography.sampleType'),
-                width: 250,
-                render: ({ sample }) => sample?.sampleType.name ?? '-',
-              },
-              {
-                accessor: 'sampleNumber',
-                title: t('commonTypography.sampleNumber'),
-                render: ({ sample }) => sample?.sampleNumber ?? '-',
-              },
-              {
-                accessor: 'sampleDate',
-                title: t('commonTypography.sampleDate'),
-                render: ({ sample }) => formatDate(sample?.sampleDate) ?? '-',
-              },
-              ...(renderOtherColumn ?? []),
-            ],
-            horizontalSpacing: 15,
-            highlightOnHover: false,
-            withBorder: false,
-            shadow: 'none',
-            minHeight:
-              monitoringStockpile?.samples &&
-              monitoringStockpile?.samples?.length > 0
-                ? 0
-                : 320,
-            borderColor: 'none',
-            rowBorderColor: 'none',
-          }}
-          emptyStateProps={{
-            title: t('commonTypography.dataNotfound'),
-          }}
-        />
-      </Stack>
+      <SampleDataTable elementsData={elementsData} />
       <Divider my="md" />
       <Stack spacing="sm" mt="sm">
         <Text fz={24} fw={600} color="brand">
