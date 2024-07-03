@@ -104,7 +104,7 @@ export const useReadOneStockpileMonitoringRitageSample = ({
     },
     onCompleted: onCompleted,
     skip,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
   });
 
   return {

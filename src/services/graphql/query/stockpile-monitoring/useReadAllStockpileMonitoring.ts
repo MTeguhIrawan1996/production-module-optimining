@@ -73,7 +73,7 @@ export const READ_ALL_STOCKPILE_MONITORING_MASTER = gql`
   }
 `;
 
-export interface IMonitoringStockpilesData {
+interface IMonitoringStockpilesData {
   id: string;
   dome: IReadOneStockpileDomeMaster | null;
   material: {
@@ -107,6 +107,11 @@ interface IMonitoringStockpilesRequest extends IGlobalMetaRequest {
   month: number | null;
   week: number | null;
 }
+
+/**
+ * @deprecated Fungsi ini sudah tidak direkomendasikan untuk digunakan.
+ * Akan dihapus pada versi berikutnya.
+ */
 
 export const useReadAllStockpileMonitoring = ({
   variables,
