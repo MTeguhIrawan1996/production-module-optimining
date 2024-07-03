@@ -129,7 +129,7 @@ export const READ_ONE_STOCKPILE_MONITORING = gql`
   }
 `;
 
-export type IRitageSampleReadOneStockpileMonitoring = {
+type IRitageSampleReadOneStockpileMonitoring = {
   id: string;
   sampleNumber: string | null;
   sampleDate: string | null;
@@ -146,7 +146,7 @@ export type IRitageSampleReadOneStockpileMonitoring = {
   }[];
 };
 
-export type ISampleReadOneStockpileMonitoring = {
+type ISampleReadOneStockpileMonitoring = {
   id: string;
   sampleNumber: string | null;
   sample: {
@@ -190,7 +190,7 @@ interface IRitageData {
   } | null;
 }
 
-export interface IReadOneStockpileMonitoring {
+interface IReadOneStockpileMonitoring {
   id: string;
   dome: IReadOneStockpileDomeMaster | null;
   domeStatus: string | null;
@@ -240,6 +240,11 @@ interface IReadOneStockpileMonitoringRequest
   extends Partial<IGlobalMetaRequest> {
   id: string;
 }
+
+/**
+ * @deprecated Fungsi ini sudah tidak direkomendasikan untuk digunakan.
+ * Akan dihapus pada versi berikutnya.
+ */
 
 export const useReadOneStockpileMonitoring = ({
   variables,
