@@ -1,9 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Divider, ScrollArea, Stack, Text } from '@mantine/core';
+import { Divider, Stack, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCheck } from '@tabler/icons-react';
 import { IconX } from '@tabler/icons-react';
-import { DataTableColumn } from 'mantine-datatable';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -15,19 +14,15 @@ import {
   GlobalHeaderDetail,
   GlobalTabs,
   KeyValueList,
-  MantineDataTable,
 } from '@/components/elements';
 import { IKeyValueItemProps } from '@/components/elements/global/KeyValueList';
+import ShippingDomeDataTable from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/read/common/elements/ShippingDomeDataTable';
+import ShippingRitageDataTable from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/read/common/elements/ShippingRitageDataTable';
 
 import { useUpdateIsDeterminedShippingMonitoring } from '@/services/graphql/mutation/shipping-monitoring/useIsDeterminedShippingMonitoring';
 import { useUpdateIsValidateShippingMonitoring } from '@/services/graphql/mutation/shipping-monitoring/useIsValidateShippingMonitoring';
-import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
-import {
-  IDomesShipping,
-  useReadOneShippingMonitoring,
-} from '@/services/graphql/query/shipping-monitoring/useReadOneShippingMonitoring';
+import { useReadOneShippingMonitoring } from '@/services/graphql/query/shipping-monitoring/useReadOneShippingMonitoring';
 import { statusValidationSchema } from '@/utils/form-validation/status-validation/status-mutation-validation';
-import { formatDate } from '@/utils/helper/dateFormat';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -38,9 +33,6 @@ const ReadShippingMonitoringBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const id = router.query.id as string;
-  const [otherElements, setOtherElements] = React.useState<
-    DataTableColumn<IDomesShipping>[]
-  >([]);
 
   const methods = useForm<IUpdateStatusValues>({
     resolver: zodResolver(statusValidationSchema),
@@ -60,30 +52,6 @@ const ReadShippingMonitoringBook = () => {
       id,
     },
     skip: !router.isReady,
-  });
-
-  useReadAllElementMaster({
-    variables: {
-      limit: null,
-    },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: ({ elements }) => {
-      const value = elements.data.map((element) => {
-        const column: DataTableColumn<IDomesShipping> = {
-          accessor: element.name,
-          title: element.name,
-          render: ({ monitoringStockpile }) => {
-            const output =
-              monitoringStockpile.ritageSamples.additional.averageSamples?.find(
-                (val) => val.id === element.id
-              );
-            return output?.value || '-';
-          },
-        };
-        return column;
-      });
-      setOtherElements(value);
-    },
   });
 
   const [executeUpdateStatus, { loading }] =
@@ -369,102 +337,9 @@ const ReadShippingMonitoringBook = () => {
                     </React.Fragment>
                   );
                 })}
-                <Stack spacing="sm" sx={{ height: 'fit-content' }}>
-                  <Text fz={24} fw={600} color="brand">
-                    {t('commonTypography.listDome')} yang dibarging
-                  </Text>
-                  <ScrollArea.Autosize
-                    mah={540}
-                    offsetScrollbars
-                    type="always"
-                    sx={{
-                      zIndex: 1,
-                    }}
-                  >
-                    <Box sx={{ height: 'fit-content' }}>
-                      <MantineDataTable
-                        tableProps={{
-                          records: monitoringBarging?.domes ?? [],
-                          columns: [
-                            {
-                              accessor: 'name',
-                              title: t('commonTypography.domeName'),
-                              textAlignment: 'left',
-                            },
-                            {
-                              accessor: 'totalRitages',
-                              title: 'Total Ritase Barging',
-                              textAlignment: 'left',
-                            },
-                            {
-                              accessor: 'tonRitages',
-                              title: 'Ton Ritase Barging',
-                              textAlignment: 'left',
-                            },
-                            ...(otherElements ?? []),
-                          ],
-                          shadow: 'none',
-                        }}
-                        emptyStateProps={{
-                          title: t('commonTypography.dataNotfound'),
-                        }}
-                      />
-                    </Box>
-                  </ScrollArea.Autosize>
-                </Stack>
+                <ShippingDomeDataTable />
                 <Divider my="md" />
-                <Stack spacing="sm" sx={{ height: 'fit-content' }}>
-                  <Text fz={24} fw={600} color="brand">
-                    {t('commonTypography.listRitageBarging')}
-                  </Text>
-                  <ScrollArea.Autosize
-                    mah={540}
-                    offsetScrollbars
-                    type="always"
-                    sx={{
-                      zIndex: 1,
-                    }}
-                  >
-                    <Box sx={{ height: 'fit-content' }}>
-                      <MantineDataTable
-                        tableProps={{
-                          records: monitoringBarging?.bargingRitages ?? [],
-                          columns: [
-                            {
-                              accessor: 'heavyEquipmentCode',
-                              title: t('commonTypography.heavyEquipmentCode'),
-                              textAlignment: 'left',
-                              render: ({ companyHeavyEquipment }) =>
-                                companyHeavyEquipment.hullNumber || '-',
-                            },
-                            {
-                              accessor: 'date',
-                              title: t('commonTypography.date'),
-                              textAlignment: 'left',
-                              render: ({ date }) => formatDate(date) || '-',
-                            },
-                            {
-                              accessor: 'shift',
-                              title: t('commonTypography.shift'),
-                              textAlignment: 'left',
-                              render: ({ shift }) => shift.name || '-',
-                            },
-                            {
-                              accessor: 'ton',
-                              title: 'Ton',
-                              textAlignment: 'left',
-                              render: ({ tonByRitage }) => tonByRitage || '-',
-                            },
-                          ],
-                          shadow: 'none',
-                        }}
-                        emptyStateProps={{
-                          title: t('commonTypography.dataNotfound'),
-                        }}
-                      />
-                    </Box>
-                  </ScrollArea.Autosize>
-                </Stack>
+                <ShippingRitageDataTable />
               </>
             ),
             isShowItem: true,

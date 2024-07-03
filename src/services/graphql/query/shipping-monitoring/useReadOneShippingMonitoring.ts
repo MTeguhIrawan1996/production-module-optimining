@@ -9,7 +9,6 @@ export const READ_ONE_SHIPPING_MONITORING = gql`
   query ReadOneShippingMonitoring($id: String!) {
     monitoringBarging(id: $id) {
       id
-      createdAt
       bargeHeavyEquipment {
         id
         hullNumber
@@ -41,36 +40,6 @@ export const READ_ONE_SHIPPING_MONITORING = gql`
       totalRitages
       tonByRitages
       truckFactor
-      bargingRitages {
-        id
-        date
-        tonByRitage
-        shift {
-          id
-          name
-        }
-        companyHeavyEquipment {
-          id
-          hullNumber
-        }
-      }
-      domes {
-        id
-        name
-        totalRitages
-        tonRitages
-        monitoringStockpile {
-          # tonByRitage
-          ritageSamples {
-            additional
-          }
-          # ritages {
-          #   meta {
-          #     totalAllData
-          #   }
-          # }
-        }
-      }
       desc
       status {
         id
@@ -80,34 +49,9 @@ export const READ_ONE_SHIPPING_MONITORING = gql`
   }
 `;
 
-export type IDomesShipping = {
-  id: string;
-  name: string;
-  totalRitages: number | null;
-  tonRitages: number | null;
-  monitoringStockpile: {
-    // tonByRitage: number | null;
-    // ritages: {
-    //   meta: {
-    //     totalAllData: number;
-    //   };
-    // };
-    ritageSamples: {
-      additional: {
-        averageSamples: {
-          id: string;
-          name: string | null;
-          value: number | null;
-        }[];
-      };
-    };
-  };
-};
-
-export interface IReadOneShippingMonitoringData
+interface IReadOneShippingMonitoringData
   extends IReadAllShippingMonitoringData {
   id: string;
-  createdAt: string | null;
   tugboatHeavyEquipment: {
     id: string;
     hullNumber: string;
@@ -117,20 +61,6 @@ export interface IReadOneShippingMonitoringData
   totalRitages: number | null;
   tonByRitages: number | null;
   truckFactor: number | null;
-  bargingRitages: {
-    id: string;
-    date: string;
-    tonByRitage: number | null;
-    shift: {
-      id: string;
-      name: string;
-    };
-    companyHeavyEquipment: {
-      id: string;
-      hullNumber: string;
-    };
-  }[];
-  domes: IDomesShipping[];
   photo: Omit<IFile, 'mime' | 'path'> | null;
   desc: string | null;
 }
