@@ -34,6 +34,10 @@ export const READ_ONE_STOCKPILE_MONITORING_SAMPLE = gql`
           }
           value
         }
+        monitoringStockpileSample {
+          id
+          isCreatedAfterDetermine
+        }
       }
       meta {
         currentPage
@@ -60,6 +64,10 @@ export type ISampleDataStockpileMonitoring = {
     };
     value: number | null;
   }[];
+  monitoringStockpileSample: {
+    id: string;
+    isCreatedAfterDetermine: boolean;
+  };
 };
 
 interface IReadOneStockpileMonitoringSampleResponse {

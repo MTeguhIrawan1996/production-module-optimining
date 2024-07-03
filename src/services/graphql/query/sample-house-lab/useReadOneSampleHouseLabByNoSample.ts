@@ -33,10 +33,6 @@ interface IReadOneSampleHouseLabByNumberSampleResponse {
   houseSampleAndLabBySampleNumber: IHouseSampleAndLabsData;
 }
 
-interface IFakeVariable {
-  index?: number | null;
-}
-
 interface IReadOneSampleHouseLabByNumberSampleRequest {
   sampleNumber: string;
 }
@@ -48,7 +44,7 @@ export const useReadOneSampleHouseLabByNumberSample = ({
   onError,
   fetchPolicy = 'cache-first',
 }: {
-  variables: IReadOneSampleHouseLabByNumberSampleRequest & IFakeVariable;
+  variables: IReadOneSampleHouseLabByNumberSampleRequest;
   skip?: boolean;
   onCompleted?: (data: IReadOneSampleHouseLabByNumberSampleResponse) => void;
   onError?: ({ graphQLErrors }: ApolloError) => void;

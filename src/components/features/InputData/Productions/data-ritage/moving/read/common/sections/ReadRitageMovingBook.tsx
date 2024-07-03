@@ -223,14 +223,14 @@ const ReadRitageMovingBook = () => {
       title={t('ritageMoving.readRitageMoving')}
       updateButton={
         isPermissionEdit && !isIncludeDetermination
-          ? undefined
-          : {
+          ? {
               label: 'Edit',
               onClick: () =>
                 router.push(
                   `/input-data/production/data-ritage/moving/update/${id}`
                 ),
             }
+          : undefined
       }
       validationButton={
         isPermissionValidation && isShowButtonValidation
