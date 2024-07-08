@@ -1,253 +1,107 @@
-import dayjs from 'dayjs';
+/* eslint-disable no-console */
+import Cookies from 'js-cookie';
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
+
+import {
+  CHECK_PERMISSION_USER_MIDLLEWARE,
+  IGetCheckPermissionResponse,
+} from '@/services/graphql/query/auth/useCheckPermission';
+import { checkAccess } from '@/utils/constants/Auth/check-access';
 
 export interface IPermissionAuth {
   id: string;
   slug: string;
 }
 
+const storedLanguage = Cookies.get('language');
+const initialLanguage = storedLanguage || 'id';
+
 export async function middleware(request: NextRequest) {
   const loginPage = new URL(`/auth/signin`, request.url);
   const dashboardPage = new URL('/dashboard', request.url);
   const errorPage = new URL('/500', request.url);
   const notFoundPage = new URL(`/not-found`, request.url);
-
   const { pathname } = request.nextUrl;
+  const cleanedPath = pathname.split('/').slice(0, 3).join('/');
+  const cleanedPath2 = pathname.split('/').slice(0, 4).join('/');
 
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_JWT_SECRET,
   });
 
-  const REST_API_URL = process.env.NEXT_PUBLIC_REST_API_URL;
   const authorization = token
     ? `Bearer ${token?.login?.accessToken?.token}`
     : '';
 
-  try {
-    const response = await fetch(`${REST_API_URL}/auth/profile/permissions`, {
-      method: 'GET',
-      headers: { authorization },
-    });
-    const { data } = await response.json();
-    // eslint-disable-next-line no-console
-    console.log('Success get permission');
+  const objAccess = checkAccess.find(
+    (v) => v.path === cleanedPath || v.path === cleanedPath2
+  );
+  const variable = {
+    moduleSlug: objAccess?.moduleSlug || [],
+  };
 
-    const permission = (data as IPermissionAuth[] | undefined)?.map(
-      (val) => val.slug
-    );
+  const url = new URL(`${process.env.NEXT_PUBLIC_GRAPHQL_API_URL}`);
+  url.searchParams.append('query', CHECK_PERMISSION_USER_MIDLLEWARE);
+  url.searchParams.append('variables', JSON.stringify(variable));
 
-    // // JIKA BELUM LOGIN DAN INGIN AKSES HALAMAN SELAIN AUTH, MAKA AKAN DILEMPAR KE HALAMAN LOGIN
-    if (!pathname.startsWith('/auth') && !permission) {
-      return NextResponse.redirect(loginPage);
-    }
+  console.log('USER AKSES PAGE', { cleanedPath, cleanedPath2 });
 
-    // // JIKA SUDAH LOGIN DAN INGIN AKSES HALAMAN AUTH TANPA LOGOUT MAKA AKAN DIKEMBALIKAN KE HALAMAN DASHBOARD
-    if (pathname.startsWith('/auth') && permission) {
+  // SEMENTARA, `/` DIARAHKAN KE /dashboard
+  if (pathname === '/') {
+    console.log('USER ACCES / REDIRECT TO DASHBOARD');
+    return NextResponse.redirect(dashboardPage);
+  }
+
+  // JIKA TIDAK MEMILIKI TOKEN/BELUM LOGIN DAN INGIN MENGAKSES HALAMAN DIDALAM LOGIN MAKA AKAN DILEMPAR KE LOGIN PAGE
+  if (!pathname.startsWith('/auth') && !token) {
+    console.log('USER NOT LOGIN');
+    return NextResponse.redirect(loginPage);
+  }
+
+  if (token) {
+    // JIKA SUDAH LOGIN DAN INGIN AKSES HALAMAN AUTH TANPA LOGOUT MAKA AKAN DIKEMBALIKAN KE HALAMAN DASHBOARD
+    if (pathname.startsWith('/auth')) {
+      console.log('USER ACCES PAGE LOGIN NOT LOGOUT');
       return NextResponse.redirect(dashboardPage);
     }
 
-    // SEMENTARA, `/` DIARAHKAN KE /dashboard
-    if (pathname === '/') {
-      return NextResponse.redirect(dashboardPage);
-    }
+    console.log('VARIABLE GET', variable);
+    // JIKA ADA TOKEN CEK APAKAH ACCES VALID
+    try {
+      const response = await fetch(url.toString(), {
+        method: 'GET',
+        headers: {
+          'Accept-Language': initialLanguage,
+          Authorization: authorization,
+          'Content-Type': 'application/json',
+        },
+      });
+      const data: IGetCheckPermissionResponse = await response.json();
+      const permission =
+        pathname === '/dashboard'
+          ? ['dashboard']
+          : data.data.checkPermissions.map((val) => val.slug);
 
-    const protectedPaths = [
-      {
-        path: '/dashboard',
-        allowedPermissions: ['all'], // FIXME: siapa yang bisa akses dashboard ?
-      },
-      {
-        path: '/master-data/company',
-        allowedPermissions: ['read-company'],
-      },
-      {
-        path: '/master-data/human-resources',
-        allowedPermissions: ['read-human-resource'],
-      },
-      {
-        path: '/master-data/heavy-equipment',
-        allowedPermissions: ['read-heavy-equipment'],
-      },
-      {
-        path: '/master-data/location',
-        allowedPermissions: ['read-location'],
-      },
-      {
-        path: '/master-data/block',
-        allowedPermissions: ['read-block'],
-      },
-      {
-        path: '/master-data/stockpile',
-        allowedPermissions: ['read-stockpile'],
-      },
-      {
-        path: '/master-data/material',
-        allowedPermissions: ['read-material'],
-      },
-      {
-        path: '/master-data/material',
-        allowedPermissions: ['read-material'],
-      },
-      {
-        path: '/master-data/working-hours-plan',
-        allowedPermissions: ['read-working-hour-plan'],
-      },
-      {
-        path: '/master-data/activity-plan',
-        allowedPermissions: ['read-activity-plan'],
-      },
-      {
-        path: '/master-data/element',
-        allowedPermissions: ['read-element'],
-      },
-      {
-        path: '/master-data/shift',
-        allowedPermissions: ['read-shift'],
-      },
-      {
-        path: '/master-data/factory',
-        allowedPermissions: ['read-factory'],
-      },
-      {
-        path: '/master-data/activity-category',
-        allowedPermissions: [
-          'read-working-hour-plan-category',
-          'read-heavy-equipment-data-formula',
-        ],
-      },
-      {
-        path: '/reference/company-type',
-        allowedPermissions: ['read-company-type'],
-      },
-      {
-        path: '/reference/heavy-equipment-class',
-        allowedPermissions: ['read-heavy-equipment-class'],
-      },
-      {
-        path: '/reference/heavy-equipment',
-        allowedPermissions: ['read-heavy-equipment-reference'],
-      },
-      {
-        path: '/input-data/quality-control-management/stockpile-monitoring',
-        allowedPermissions: ['read-monitoring-stockpile'],
-      },
-      {
-        path: '/input-data/quality-control-management/sample-house-lab',
-        allowedPermissions: ['read-house-sample-and-lab'],
-      },
-      {
-        path: '/input-data/quality-control-management/shipping-monitoring',
-        allowedPermissions: ['read-monitoring-barging'],
-      },
-      {
-        path: '/input-data/production/data-ritage',
-        allowedPermissions: [
-          'read-ore-ritage',
-          'read-overburden-ritage',
-          'read-quarry-ritage',
-          'read-barging-ritage',
-          'read-moving-ritage',
-          'read-topsoil-ritage',
-        ],
-      },
-      {
-        path: '/input-data/production/data-heavy-equipment',
-        allowedPermissions: ['read-heavy-equipment-data'],
-      },
-      {
-        path: '/input-data/production/data-weather',
-        allowedPermissions: ['read-weather-data'],
-      },
-      {
-        path: '/input-data/production/data-front',
-        allowedPermissions: ['read-front-data'],
-      },
-      {
-        path: '/input-data/production/map',
-        allowedPermissions: ['read-map-data'],
-      },
-      {
-        path: '/plan/weekly',
-        allowedPermissions: ['read-weekly-plan'],
-      },
-      {
-        path: '/plan/monthly',
-        allowedPermissions: ['read-monthly-plan'],
-      },
-      // input data-map
-      {
-        path: '/input-data/production/map/weekly/create',
-        allowedPermissions: ['create-map-data'],
-      },
-      {
-        path: '/input-data/production/map/monthly/create',
-        allowedPermissions: ['create-map-data'],
-      },
-      {
-        path: '/input-data/production/map/quarterly/create',
-        allowedPermissions: ['create-map-data'],
-      },
-      {
-        path: '/input-data/production/map/yearly/create',
-        allowedPermissions: ['create-map-data'],
-      },
-      {
-        path: '/input-data/production/map/weekly/update',
-        allowedPermissions: ['update-map-data'],
-      },
-      {
-        path: '/input-data/production/map/monthly/update',
-        allowedPermissions: ['update-map-data'],
-      },
-      {
-        path: '/input-data/production/map/quarterly/update',
-        allowedPermissions: ['update-map-data'],
-      },
-      {
-        path: '/input-data/production/map/yearly/update',
-        allowedPermissions: ['update-map-data'],
-      },
-    ];
+      console.log(permission, 'PERMISSION');
 
-    const matchProtectedPath = protectedPaths.find(
-      (path) => path.path === pathname
-    );
-
-    // JIKA PATH ADALAH PROTECTED PATHS, ...
-    if (matchProtectedPath && token) {
-      console.log('protected path'); // eslint-disable-line
-
-      const now = dayjs().unix();
-
-      const validAccess = matchProtectedPath?.allowedPermissions.some(
-        (allow) => {
-          const permissionWithAll = [...(permission ?? []), 'all'];
-          return permissionWithAll.some((permission) => permission === allow);
-        }
-      );
-      // JIKA TOKEN EXPIRED, LEMPAR KE LOGIN
-      if (now > token.login?.accessToken?.exp) {
-        return NextResponse.next();
-      }
-
-      // JIKA TOKEN TIDAK MEMILIKI HAK AKSES ATAS PATH, ARAHKAN KE /not-found
-      if (!validAccess) {
-        console.log('access invalid'); // eslint-disable-line
+      if (permission.length === 0) {
+        console.log('INVALID ACCESS');
         return NextResponse.redirect(notFoundPage);
       }
+
+      console.log('VALID ACCES');
+      // JIKA TOKEN EXPIRED, PROSES AKAN DILANJUTKAN DAN AKAN OTOMATIS LOGOUT KETIKA MELAKUKAN REQUEST
       return NextResponse.next();
+    } catch (error) {
+      console.log({ error });
+      console.log('ERROR PAGE');
+      return NextResponse.redirect(errorPage);
     }
-
-    // JIKA PATH BUKAN PROTECTED PATHS, LANJUTKAN
-    console.log('unprotected path'); // eslint-disable-line
-
-    return NextResponse.next();
-  } catch (error) {
-    console.log('error | middleware', error); // eslint-disable-line
-    return NextResponse.redirect(errorPage);
   }
+  console.log('RETURN UNPROTECTH PATH');
+  return NextResponse.next();
 }
 
 export const config = {
