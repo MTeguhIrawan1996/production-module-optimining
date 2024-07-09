@@ -134,7 +134,15 @@ const HeavyEquipmentFormulaBook: React.FC<IHeavyEquipmentFormulaBookProps> = ({
   ]);
   /* #endregion  /**======== RenderTable =========== */
 
-  return <DashboardCard>{renderTable}</DashboardCard>;
+  return (
+    <DashboardCard
+      paperStackProps={{
+        spacing: 0,
+      }}
+    >
+      {renderTable}
+    </DashboardCard>
+  );
 };
 
 export default HeavyEquipmentFormulaBook;

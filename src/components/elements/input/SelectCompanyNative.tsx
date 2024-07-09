@@ -2,9 +2,11 @@ import { Select, SelectProps } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { useReadAllCompaniesMasterData } from '@/services/graphql/query/master-data-company/useReadAllMasterDataCompany';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 
 export type ICompanyNativeProps = {
   control: 'select-company-native';
@@ -14,28 +16,43 @@ const SelectCompanyNative: React.FC<ICompanyNativeProps> = ({
   control,
   label = 'company',
   placeholder = 'chooseCompany',
+  name,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [searchQuery] = useDebouncedValue<string>(searchTerm, 400);
+  const [filterDataCommon, setFilterDataCommon] = useFilterDataCommon(
+    (state) => [state.filterDataCommon, state.setFilterDataCommon],
+    shallow
+  );
 
-  const { companiesData } = useReadAllCompaniesMasterData({
+  useReadAllCompaniesMasterData({
     variables: {
       search: searchQuery === '' ? null : searchQuery,
       limit: 15,
+    },
+    onCompleted: (data) => {
+      const yearsItem = data.companies.data.map((val) => {
+        return {
+          id: val.id,
+          name: val.name,
+        };
+      });
+      setFilterDataCommon({ key: name || '', data: yearsItem });
     },
     fetchPolicy: 'cache-and-network',
   });
 
   const { uncombinedItem } = useFilterItems({
-    data: companiesData ?? [],
+    data: filterDataCommon.find((v) => v.key === name)?.data ?? [],
   });
 
   return (
     <Select
       data={uncombinedItem}
       radius="sm"
+      name={name}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
       data-control={control}

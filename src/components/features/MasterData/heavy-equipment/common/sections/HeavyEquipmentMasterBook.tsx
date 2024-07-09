@@ -1,4 +1,3 @@
-import { SelectProps } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -13,6 +12,7 @@ import {
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useDeleteMasterHeavyEquipment } from '@/services/graphql/mutation/master-data-heavy-equipment/useDeleteMasterHeavyEquipment';
 import { useReadAllBrand } from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
@@ -20,6 +20,7 @@ import { useReadAllHeavyEquipmentRefrence } from '@/services/graphql/query/heavy
 import { useReadAllHeavyEquipmentMasterData } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentMasterData';
 import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
 import { useReadAllHeavyEquipmentClass } from '@/services/graphql/query/heavy-equipment-class/useReadAllHeavyEquipmentClass';
+import { normalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel, {
   ISliceName,
@@ -33,7 +34,15 @@ const HeavyEquipmentMasterBook = () => {
   const { t } = useTranslation('default');
 
   const [
-    { page, search, filterBrandId, filterTypeId, filterClassId, filterModelId },
+    {
+      page,
+      search,
+      filterBrandId,
+      filterTypeId,
+      filterClassId,
+      filterModelId,
+      filterBadgeValue,
+    },
     setHeavyEquipmentState,
   ] = useControlPanel(
     (state) => [state.heavyEquipmentState, state.setHeavyEquipmentState],
@@ -71,10 +80,6 @@ const HeavyEquipmentMasterBook = () => {
       orderBy: 'createdAt',
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
-      brandId: filterBrandId,
-      typeId: filterTypeId,
-      referenceId: filterModelId,
-      classId: filterClassId,
     },
   });
   const { brandsData } = useReadAllBrand({
@@ -156,7 +161,17 @@ const HeavyEquipmentMasterBook = () => {
     resetAllSlices(
       new Set<ISliceName>(['heavyEquipmentSlice'] as ISliceName[])
     );
-  }, []);
+    useControlPanel.persist.onFinishHydration(({ heavyEquipmentState }) => {
+      const { filterBrandId, filterClassId, filterModelId, filterTypeId } =
+        heavyEquipmentState;
+      refetchHeavyEquipmentMasterData({
+        brandId: filterBrandId,
+        typeId: filterTypeId,
+        referenceId: filterModelId,
+        classId: filterClassId,
+      });
+    });
+  }, [refetchHeavyEquipmentMasterData]);
 
   const handleDelete = async () => {
     await executeDelete({
@@ -173,81 +188,95 @@ const HeavyEquipmentMasterBook = () => {
   };
 
   const filter = React.useMemo(() => {
-    const item: SelectProps[] = [
-      {
-        onChange: (value) => {
-          setHeavyEquipmentState({
-            page: 1,
-            filterBrandId: value,
-            filterTypeId: null,
-            filterModelId: null,
-          });
+    const item: IFilterButtonProps = {
+      multipleFilter: [
+        {
+          selectItem: {
+            onChange: (value) => {
+              setHeavyEquipmentState({
+                page: 1,
+                filterBrandId: value,
+                filterTypeId: null,
+                filterModelId: null,
+              });
+            },
+            data: brandItems ?? [],
+            label: 'brand',
+            placeholder: 'chooseBrand',
+            searchable: true,
+            nothingFound: null,
+            clearable: true,
+            onSearchChange: setBrandSearchTerm,
+            searchValue: brandSearchTerm,
+            value: filterBrandId,
+          },
+          col: 6,
         },
-        data: brandItems ?? [],
-        label: 'brand',
-        placeholder: 'chooseBrand',
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: setBrandSearchTerm,
-        searchValue: brandSearchTerm,
-        value: filterBrandId,
-      },
-      {
-        onChange: (value) => {
-          setHeavyEquipmentState({
-            page: 1,
-            filterTypeId: value,
-            filterModelId: null,
-          });
+        {
+          selectItem: {
+            onChange: (value) => {
+              setHeavyEquipmentState({
+                page: 1,
+                filterTypeId: value,
+                filterModelId: null,
+              });
+            },
+            value: filterTypeId,
+            data: typeItems ?? [],
+            label: 'type',
+            placeholder: 'chooseType',
+            searchable: true,
+            nothingFound: null,
+            clearable: true,
+            onSearchChange: setTypeSearchTerm,
+            searchValue: typeSearchTerm,
+            disabled: !filterBrandId,
+          },
+          col: 6,
         },
-        value: filterTypeId,
-        data: typeItems ?? [],
-        label: 'type',
-        placeholder: 'chooseType',
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: setTypeSearchTerm,
-        searchValue: typeSearchTerm,
-        disabled: !filterBrandId,
-      },
-      {
-        onChange: (value) => {
-          setHeavyEquipmentState({
-            page: 1,
-            filterModelId: value,
-          });
+        {
+          selectItem: {
+            onChange: (value) => {
+              setHeavyEquipmentState({
+                page: 1,
+                filterModelId: value,
+              });
+            },
+            value: filterModelId,
+            data: modelItems ?? [],
+            label: 'model',
+            placeholder: 'chooseModel',
+            searchable: true,
+            nothingFound: null,
+            clearable: true,
+            onSearchChange: setModelSearchTerm,
+            searchValue: modelSearchTerm,
+            disabled: !filterTypeId,
+          },
+          col: 6,
         },
-        value: filterModelId,
-        data: modelItems ?? [],
-        label: 'model',
-        placeholder: 'chooseModel',
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: setModelSearchTerm,
-        searchValue: modelSearchTerm,
-        disabled: !filterTypeId,
-      },
-      {
-        onChange: (value) => {
-          setHeavyEquipmentState({
-            page: 1,
-            filterClassId: value,
-          });
+        {
+          selectItem: {
+            onChange: (value) => {
+              setHeavyEquipmentState({
+                page: 1,
+                filterClassId: value,
+              });
+            },
+            value: filterClassId,
+            data: classItems ?? [],
+            label: 'class',
+            placeholder: 'chooseClass',
+            searchable: true,
+            nothingFound: null,
+            clearable: true,
+            onSearchChange: setClassSearchTerm,
+            searchValue: classSearchTerm,
+          },
+          col: 6,
         },
-        value: filterClassId,
-        data: classItems ?? [],
-        label: 'class',
-        placeholder: 'chooseClass',
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: setClassSearchTerm,
-        searchValue: classSearchTerm,
-      },
-    ];
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -402,9 +431,52 @@ const HeavyEquipmentMasterBook = () => {
         searchQuery: searchQuery,
         value: search || '',
       }}
-      MultipleFilter={{
-        MultipleFilterData: filter,
-        colSpan: 4,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setHeavyEquipmentState({
+              page: 1,
+              filterBadgeValue: null,
+              filterBrandId: null,
+              filterTypeId: null,
+              filterModelId: null,
+              filterClassId: null,
+            });
+            refetchHeavyEquipmentMasterData({
+              page: 1,
+              brandId: null,
+              typeId: null,
+              referenceId: null,
+              classId: null,
+            });
+          },
+        },
+        value: filterBadgeValue,
+      }}
+      filter={{
+        multipleFilter: filter.multipleFilter,
+        filterButton: {
+          disabled:
+            filterBrandId || filterTypeId || filterModelId || filterClassId
+              ? false
+              : true,
+          onClick: () => {
+            refetchHeavyEquipmentMasterData({
+              page: 1,
+              brandId: filterBrandId,
+              typeId: filterTypeId,
+              referenceId: filterModelId,
+              classId: filterClassId,
+            });
+            const badgeFilterValue = normalizedFilterBadge(
+              filter.multipleFilter || []
+            );
+            setHeavyEquipmentState({
+              page: 1,
+              filterBadgeValue: badgeFilterValue || null,
+            });
+          },
+        },
       }}
     >
       {renderTable}

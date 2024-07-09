@@ -1,4 +1,3 @@
-import { SelectProps } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -15,6 +14,7 @@ import {
   ModalConfirmation,
   SelectionButtonModal,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useDeleteCompanyHeavyEquipment } from '@/services/graphql/mutation/heavy-equipment/useDeleteCompanyHeavyEquipment';
 import { useReadAllBrand } from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
@@ -22,6 +22,7 @@ import { useReadAllHeavyEquipmentRefrence } from '@/services/graphql/query/heavy
 import { useReadAllHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
 import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
 import { useReadAllHeavyEquipmentClass } from '@/services/graphql/query/heavy-equipment-class/useReadAllHeavyEquipmentClass';
+import { normalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel from '@/utils/store/useControlPanel';
 
@@ -30,7 +31,7 @@ const ReadHeavyEquipmentBook = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const [
-    { page, search, brandId, typeId, modelId, classId },
+    { page, search, brandId, typeId, modelId, classId, filterBadgeValue },
     setHeavyEquipmentCompanyState,
   ] = useControlPanel(
     (state) => [
@@ -54,10 +55,6 @@ const ReadHeavyEquipmentBook = () => {
   const [classSearchTerm, setClassSearchTerm] = React.useState<string>('');
   const [classSearchQuery] = useDebouncedValue<string>(classSearchTerm, 400);
 
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-  }, []);
-
   const {
     heavyEquipmentsCompany,
     heavyEquipmentsCompanyMeta,
@@ -70,13 +67,27 @@ const ReadHeavyEquipmentBook = () => {
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
-      brandId,
-      typeId,
-      referenceId: modelId,
-      classId,
       companyId: id,
     },
+    skip: !router.isReady,
   });
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    useControlPanel.persist.onFinishHydration(
+      ({ heavyEquipmentCompanyState }) => {
+        const { brandId, typeId, classId, modelId } =
+          heavyEquipmentCompanyState;
+        refetchHeavyEquipmentCompany({
+          brandId,
+          typeId,
+          referenceId: modelId,
+          classId,
+        });
+      }
+    );
+  }, [refetchHeavyEquipmentCompany]);
+
   const { brandsData } = useReadAllBrand({
     variables: {
       limit: null,
@@ -162,75 +173,87 @@ const ReadHeavyEquipmentBook = () => {
   };
 
   const filter = React.useMemo(() => {
-    const item: SelectProps[] = [
-      {
-        onChange: (value) => {
-          setHeavyEquipmentCompanyState({
-            page: 1,
-            brandId: value,
-            typeId: null,
-            modelId: null,
-          });
+    const item: IFilterButtonProps = {
+      multipleFilter: [
+        {
+          selectItem: {
+            onChange: (value) => {
+              setHeavyEquipmentCompanyState({
+                brandId: value,
+                typeId: null,
+                modelId: null,
+              });
+            },
+            value: brandId,
+            data: brandItems ?? [],
+            label: 'brand',
+            placeholder: 'chooseBrand',
+            searchable: true,
+            nothingFound: null,
+            clearable: true,
+            onSearchChange: setBrandSearchTerm,
+            searchValue: brandSearchTerm,
+          },
+          col: 6,
         },
-        value: brandId,
-        data: brandItems ?? [],
-        label: 'brand',
-        placeholder: 'chooseBrand',
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: setBrandSearchTerm,
-        searchValue: brandSearchTerm,
-      },
-      {
-        onChange: (value) => {
-          setHeavyEquipmentCompanyState({
-            page: 1,
-            typeId: value,
-            modelId: null,
-          });
+        {
+          selectItem: {
+            onChange: (value) => {
+              setHeavyEquipmentCompanyState({
+                typeId: value,
+                modelId: null,
+              });
+            },
+            value: typeId,
+            data: typeItems ?? [],
+            label: 'type',
+            placeholder: 'chooseType',
+            searchable: true,
+            nothingFound: null,
+            clearable: true,
+            onSearchChange: setTypeSearchTerm,
+            searchValue: typeSearchTerm,
+            disabled: !brandId,
+          },
+          col: 6,
         },
-        value: typeId,
-        data: typeItems ?? [],
-        label: 'type',
-        placeholder: 'chooseType',
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: setTypeSearchTerm,
-        searchValue: typeSearchTerm,
-        disabled: !brandId,
-      },
-      {
-        onChange: (value) => {
-          setHeavyEquipmentCompanyState({ page: 1, modelId: value });
+        {
+          selectItem: {
+            onChange: (value) => {
+              setHeavyEquipmentCompanyState({ modelId: value });
+            },
+            value: modelId,
+            data: modelItems ?? [],
+            label: 'model',
+            placeholder: 'chooseModel',
+            searchable: true,
+            nothingFound: null,
+            clearable: true,
+            onSearchChange: setModelSearchTerm,
+            searchValue: modelSearchTerm,
+            disabled: !typeId,
+          },
+          col: 6,
         },
-        value: modelId,
-        data: modelItems ?? [],
-        label: 'model',
-        placeholder: 'chooseModel',
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: setModelSearchTerm,
-        searchValue: modelSearchTerm,
-        disabled: !typeId,
-      },
-      {
-        onChange: (value) => {
-          setHeavyEquipmentCompanyState({ page: 1, classId: value });
+        {
+          selectItem: {
+            onChange: (value) => {
+              setHeavyEquipmentCompanyState({ classId: value });
+            },
+            value: classId,
+            data: classItems ?? [],
+            label: 'class',
+            placeholder: 'chooseClass',
+            searchable: true,
+            nothingFound: null,
+            clearable: true,
+            onSearchChange: setClassSearchTerm,
+            searchValue: classSearchTerm,
+          },
+          col: 6,
         },
-        value: classId,
-        data: classItems ?? [],
-        label: 'class',
-        placeholder: 'chooseClass',
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: setClassSearchTerm,
-        searchValue: classSearchTerm,
-      },
-    ];
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -375,9 +398,49 @@ const ReadHeavyEquipmentBook = () => {
         searchQuery: searchQuery,
         value: search || '',
       }}
-      MultipleFilter={{
-        MultipleFilterData: filter,
-        colSpan: 4,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setHeavyEquipmentCompanyState({
+              page: 1,
+              filterBadgeValue: null,
+              brandId: null,
+              typeId: null,
+              modelId: null,
+              classId: null,
+            });
+            refetchHeavyEquipmentCompany({
+              page: 1,
+              brandId: null,
+              typeId: null,
+              referenceId: null,
+              classId: null,
+            });
+          },
+        },
+        value: filterBadgeValue,
+      }}
+      filter={{
+        multipleFilter: filter.multipleFilter,
+        filterButton: {
+          disabled: brandId || typeId || modelId || classId ? false : true,
+          onClick: () => {
+            refetchHeavyEquipmentCompany({
+              page: 1,
+              brandId,
+              typeId,
+              referenceId: modelId,
+              classId,
+            });
+            const badgeFilterValue = normalizedFilterBadge(
+              filter.multipleFilter || []
+            );
+            setHeavyEquipmentCompanyState({
+              page: 1,
+              filterBadgeValue: badgeFilterValue || null,
+            });
+          },
+        },
       }}
       enebleBackBottomInner={{
         onClick: () => router.push('/master-data/company'),

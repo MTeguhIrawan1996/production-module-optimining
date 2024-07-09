@@ -8,6 +8,7 @@ type IWeeklyPlanState = {
   week: number | null;
   status: string | null;
   companyId: string | null;
+  filterBadgeValue: string[] | null;
 };
 
 export type IWeeklyPlanValue = {
@@ -26,6 +27,7 @@ const initialState: IWeeklyPlanValue = {
     week: null,
     status: null,
     companyId: null,
+    filterBadgeValue: null,
   },
 };
 

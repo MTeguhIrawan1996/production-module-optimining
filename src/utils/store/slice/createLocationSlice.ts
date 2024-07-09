@@ -6,6 +6,7 @@ type ILocationState = {
   page: number;
   categoryId: string | null;
   search: string;
+  filterBadgeValue: string[] | null;
 };
 
 export type ILocationSliceValue = {
@@ -16,6 +17,9 @@ export interface ILocationSliceAction {
   setLoactionPage: (payload: Pick<ILocationState, 'page'>) => void;
   setCategoryId: (payload: Pick<ILocationState, 'categoryId'>) => void;
   setSearchLocation: (payload: Pick<ILocationState, 'search'>) => void;
+  setFilterBadgeLocation: (
+    payload: Pick<ILocationState, 'filterBadgeValue'>
+  ) => void;
   resetLocationState: () => void;
 }
 
@@ -24,6 +28,7 @@ const initialState: ILocationSliceValue = {
     page: 1,
     categoryId: null,
     search: '',
+    filterBadgeValue: null,
   },
 };
 
@@ -53,6 +58,13 @@ export const createLocationSlice: StateCreator<
         locationState: {
           ...state.locationState,
           page: payload.page,
+        },
+      })),
+    setFilterBadgeLocation: (payload) =>
+      set((state) => ({
+        locationState: {
+          ...state.locationState,
+          filterBadgeValue: payload.filterBadgeValue,
         },
       })),
     resetLocationState: () => {

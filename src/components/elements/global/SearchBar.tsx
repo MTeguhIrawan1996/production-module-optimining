@@ -43,10 +43,11 @@ const SearchBar: React.FC<ISerachBar> = ({
         input: {
           paddingLeft: '40px !important',
           backgroundColor: theme.white,
+          borderColor: theme.colors.gray[5],
           '::placeholder': {
             fontWeight: 400,
             fontSize: 14,
-            color: theme.colors.dark[3],
+            color: theme.colors.dark[5],
           },
         },
         icon: {

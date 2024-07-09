@@ -1,4 +1,4 @@
-import { Divider, SelectProps } from '@mantine/core';
+import { Divider } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -15,6 +15,7 @@ import {
   ModalConfirmation,
   SelectionButtonModal,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useDeleteCompanyHumanResource } from '@/services/graphql/mutation/master-data-company/useDeleteCompanyHumanResource';
 import { useReadAllDivision } from '@/services/graphql/query/global-select/useReadAllDivision';
@@ -27,6 +28,7 @@ import {
   formStatusSelect,
   positionSelect,
 } from '@/utils/constants/Field/global-field';
+import { normalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel from '@/utils/store/useControlPanel';
 
@@ -34,8 +36,17 @@ const ReadCompanyHumanResourceBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+
   const [
-    { page, search, divisionId, employeStatusId, formStatus, positionId },
+    {
+      page,
+      search,
+      divisionId,
+      employeStatusId,
+      formStatus,
+      positionId,
+      filterBadgeValue,
+    },
     setHumanResourceCompanyState,
   ] = useControlPanel(
     (state) => [
@@ -44,6 +55,7 @@ const ReadCompanyHumanResourceBook = () => {
     ],
     shallow
   );
+
   const [employeId, setIdEmploye] = React.useState<string>('');
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
@@ -63,10 +75,6 @@ const ReadCompanyHumanResourceBook = () => {
     400
   );
 
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-  }, []);
-
   /* #   /**=========== Query =========== */
   const {
     employeesData,
@@ -81,13 +89,27 @@ const ReadCompanyHumanResourceBook = () => {
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       companyId: id,
-      isComplete: formStatus ? (formStatus === 'true' ? true : false) : null,
-      statusId: employeStatusId,
-      positionId,
-      divisionId,
     },
     skip: !router.isReady,
   });
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    useControlPanel.persist.onFinishHydration(
+      ({ humanResourceCompanyState }) => {
+        refetchEmployees({
+          isComplete: humanResourceCompanyState.formStatus
+            ? humanResourceCompanyState.formStatus === 'true'
+              ? true
+              : false
+            : null,
+          statusId: humanResourceCompanyState.employeStatusId,
+          positionId: humanResourceCompanyState.positionId,
+          divisionId: humanResourceCompanyState.divisionId,
+        });
+      }
+    );
+  }, [refetchEmployees]);
 
   const { employeeStatusesData } = useReadAllEmployeStatus({
     variables: {
@@ -148,7 +170,7 @@ const ReadCompanyHumanResourceBook = () => {
       placeholder: 'chooseDivision',
       value: divisionId,
       onChange: (value) => {
-        setHumanResourceCompanyState({ page: 1, divisionId: value });
+        setHumanResourceCompanyState({ divisionId: value });
       },
     });
     const positionItem = positionSelect({
@@ -158,14 +180,14 @@ const ReadCompanyHumanResourceBook = () => {
       placeholder: 'choosePosition',
       value: positionId,
       onChange: (value) => {
-        setHumanResourceCompanyState({ page: 1, positionId: value });
+        setHumanResourceCompanyState({ positionId: value });
       },
     });
     const employeStatusItem = employeStatusSelect({
       data: employeStatusFilter,
       placeholder: 'chooseEmployeStatus',
       onChange: (value) => {
-        setHumanResourceCompanyState({ page: 1, employeStatusId: value });
+        setHumanResourceCompanyState({ employeStatusId: value });
       },
       value: employeStatusId,
     });
@@ -184,17 +206,19 @@ const ReadCompanyHumanResourceBook = () => {
       value: formStatus,
       onChange: (value) => {
         setHumanResourceCompanyState({
-          page: 1,
           formStatus: value,
         });
       },
     });
-    const item: SelectProps[] = [
-      divisionItem,
-      positionItem,
-      employeStatusItem,
-      formStatusItem,
-    ];
+    const item: IFilterButtonProps = {
+      multipleFilter: [
+        { selectItem: divisionItem, col: 6 },
+        { selectItem: positionItem, col: 6 },
+        { selectItem: employeStatusItem, col: 6 },
+        { selectItem: formStatusItem, col: 6 },
+      ],
+    };
+
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -343,9 +367,57 @@ const ReadCompanyHumanResourceBook = () => {
         },
         placeholder: 'Cari berdasarkan Nama dan NIP',
       }}
-      MultipleFilter={{
-        colSpan: 4,
-        MultipleFilterData: filter,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setHumanResourceCompanyState({
+              page: 1,
+              filterBadgeValue: null,
+              divisionId: null,
+              employeStatusId: null,
+              formStatus: null,
+              positionId: null,
+            });
+            refetchEmployees({
+              page: 1,
+              isComplete: null,
+              statusId: null,
+              positionId: null,
+              divisionId: null,
+            });
+          },
+        },
+        value: filterBadgeValue,
+      }}
+      filter={{
+        multipleFilter: filter.multipleFilter,
+        filterButton: {
+          disabled:
+            formStatus || employeStatusId || positionId || divisionId
+              ? false
+              : true,
+          onClick: () => {
+            refetchEmployees({
+              page: 1,
+              isComplete: formStatus
+                ? formStatus === 'true'
+                  ? true
+                  : false
+                : null,
+              statusId: employeStatusId,
+              positionId,
+              divisionId,
+            });
+
+            const badgeFilterValue = normalizedFilterBadge(
+              filter.multipleFilter || []
+            );
+            setHumanResourceCompanyState({
+              page: 1,
+              filterBadgeValue: badgeFilterValue || null,
+            });
+          },
+        },
       }}
     >
       {renderTable}

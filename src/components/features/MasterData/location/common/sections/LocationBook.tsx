@@ -1,4 +1,3 @@
-import { SelectProps } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -13,10 +12,12 @@ import {
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useDeleteLocationMaster } from '@/services/graphql/mutation/location/useDeleteLocationMaster';
 import { useReadAllLocationCategory } from '@/services/graphql/query/global-select/useReadAllLocationCategory ';
 import { useReadAllLocationsMaster } from '@/services/graphql/query/location/useReadAllLocationMaster';
+import { normalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel, {
   ISliceName,
@@ -29,16 +30,18 @@ const LocationBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const [
-    { page, categoryId, search },
+    { page, categoryId, search, filterBadgeValue },
     setPage,
     setCategoryId,
     setSearchLocation,
+    setFilterBadgeLocation,
   ] = useControlPanel(
     (state) => [
       state.locationState,
       state.setLoactionPage,
       state.setCategoryId,
       state.setSearchLocation,
+      state.setFilterBadgeLocation,
     ],
     shallow
   );
@@ -59,11 +62,6 @@ const LocationBook = () => {
   const isPermissionDelete = permissions?.includes('delete-location');
   const isPermissionRead = permissions?.includes('read-location');
 
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    resetAllSlices(new Set<ISliceName>(['locationSlice'] as ISliceName[]));
-  }, []);
-
   /* #   /**=========== Query =========== */
   const {
     locationsData,
@@ -77,9 +75,20 @@ const LocationBook = () => {
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
-      categoryId,
     },
   });
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    resetAllSlices(new Set<ISliceName>(['locationSlice'] as ISliceName[]));
+    useControlPanel.persist.onFinishHydration(({ locationState }) => {
+      const { categoryId } = locationState;
+      refetchLocations({
+        categoryId,
+      });
+    });
+  }, [refetchLocations]);
+
   const { locationCategoriesdata } = useReadAllLocationCategory({
     variables: {
       limit: 15,
@@ -134,23 +143,27 @@ const LocationBook = () => {
   });
 
   const filter = React.useMemo(() => {
-    const item: SelectProps[] = [
-      {
-        onChange: (value) => {
-          setPage({ page: 1 });
-          setCategoryId({ categoryId: value });
+    const item: IFilterButtonProps = {
+      multipleFilter: [
+        {
+          selectItem: {
+            onChange: (value) => {
+              setCategoryId({ categoryId: value });
+            },
+            data: locationCategoryItems ?? [],
+            value: categoryId,
+            label: 'locationCategory',
+            placeholder: 'chooseLocationCategory',
+            searchable: true,
+            nothingFound: null,
+            clearable: true,
+            onSearchChange: setCatgeorySearchTerm,
+            searchValue: catgeorySearchTerm,
+          },
+          col: 6,
         },
-        data: locationCategoryItems ?? [],
-        value: categoryId,
-        label: 'locationCategory',
-        placeholder: 'chooseLocationCategory',
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: setCatgeorySearchTerm,
-        searchValue: catgeorySearchTerm,
-      },
-    ];
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryId, catgeorySearchTerm, locationCategoryItems]);
@@ -281,9 +294,41 @@ const LocationBook = () => {
           });
         },
       }}
-      MultipleFilter={{
-        MultipleFilterData: filter,
-        colSpan: 4,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setPage({ page: 1 });
+            setCategoryId({ categoryId: null });
+            setFilterBadgeLocation({
+              filterBadgeValue: null,
+            });
+            refetchLocations({
+              page: 1,
+              categoryId: null,
+            });
+          },
+        },
+        value: filterBadgeValue,
+      }}
+      filter={{
+        multipleFilter: filter.multipleFilter,
+        filterButton: {
+          disabled: categoryId ? false : true,
+          onClick: () => {
+            setPage({ page: 1 });
+            refetchLocations({
+              page: 1,
+              categoryId,
+            });
+            const badgeFilterValue = normalizedFilterBadge(
+              filter.multipleFilter || []
+            );
+            setPage({ page: 1 });
+            setFilterBadgeLocation({
+              filterBadgeValue: badgeFilterValue || null,
+            });
+          },
+        },
       }}
     >
       {renderTable}

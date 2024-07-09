@@ -5,6 +5,7 @@ import { sliceResetFns } from '@/utils/store/useControlPanel';
 type ICompanyState = {
   page: number;
   search: string;
+  filterBadgeValue: string[] | null;
 };
 
 type IHeavyEquipmentCompanyState = {
@@ -44,6 +45,7 @@ const initialState: ICompanySliceValue = {
   companyState: {
     page: 1,
     search: '',
+    filterBadgeValue: null,
   },
   heavyEquipmentCompanyState: {
     page: 1,
@@ -52,6 +54,7 @@ const initialState: ICompanySliceValue = {
     classId: null,
     modelId: null,
     typeId: null,
+    filterBadgeValue: null,
   },
   humanResourceCompanyState: {
     page: 1,
@@ -60,6 +63,7 @@ const initialState: ICompanySliceValue = {
     positionId: null,
     employeStatusId: null,
     formStatus: null,
+    filterBadgeValue: null,
   },
 };
 

@@ -1,4 +1,5 @@
 import {
+  Badge,
   Group,
   LoadingOverlay,
   Paper,
@@ -22,6 +23,9 @@ import DeterminedButton, {
 import DownloadButton, {
   IDownloadButtonProps,
 } from '@/components/elements/button/DownloadButton';
+import FilterButton, {
+  IFilterButtonProps,
+} from '@/components/elements/button/FilterButton';
 import NotValidButton, {
   INotValidButtonProps,
 } from '@/components/elements/button/NotValidButton';
@@ -44,6 +48,11 @@ import { InputControllerNativeProps } from '@/types/global';
 
 interface IDashboardCardProps extends PaperProps {
   children: React.ReactNode;
+  filter?: IFilterButtonProps;
+  filterBadge?: {
+    value: string[] | null;
+    resetButton: Omit<IPrimaryButtonProps, 'label'>;
+  };
   title?: string;
   addButton?: IPrimaryButtonProps;
   updateButton?: IPrimaryButtonProps;
@@ -71,6 +80,8 @@ interface IDashboardCardProps extends PaperProps {
 const DashboardCard: React.FC<IDashboardCardProps> = ({
   children,
   title,
+  filter,
+  filterBadge,
   MultipleFilter: MultiFilter,
   enebleBack,
   enebleBackBottomOuter,
@@ -111,7 +122,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
         withBorder={withBorder}
         {...restPaper}
       >
-        <Stack spacing="xl" justify="center" {...paperStackProps}>
+        <Stack spacing="md" justify="center" {...paperStackProps}>
           {enebleBack && (
             <PrimaryButton
               label={t('commonTypography.back')}
@@ -134,14 +145,18 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
               onClick={() => router.back()}
             />
           )}
-          {title || addButton || updateButton ? (
-            <Group position={title ? 'apart' : 'right'}>
-              {title && (
-                <Title order={order} fw={fw} {...restTitleStyle}>
-                  {title}
-                </Title>
-              )}
-              {addButton || updateButton ? (
+          <Group position={title ? 'apart' : 'right'}>
+            {title && (
+              <Title order={order} fw={fw} {...restTitleStyle}>
+                {title}
+              </Title>
+            )}
+            <Stack spacing="xs" w={filter || searchBar ? '100%' : undefined}>
+              <Group position="apart">
+                <Group spacing="xs">
+                  {filter ? <FilterButton {...filter} /> : undefined}
+                  {searchBar && <SearchBar w={440} {...searchBar} />}
+                </Group>
                 <Group spacing="xs">
                   {addButton && (
                     <PrimaryButton
@@ -158,9 +173,38 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
                     />
                   )}
                 </Group>
-              ) : undefined}
-            </Group>
-          ) : null}
+              </Group>
+              {filterBadge && filterBadge.value ? (
+                <Group position="left" spacing="sm" w="100%">
+                  {filterBadge.value.map((v, i) => (
+                    <Badge
+                      key={i}
+                      bg="gray.1"
+                      color="gray"
+                      c="gray.7"
+                      tt="unset"
+                      fw={500}
+                    >
+                      {v}
+                    </Badge>
+                  ))}
+                  <PrimaryButton
+                    label="Reset Filter"
+                    variant="transparent"
+                    color="red"
+                    size="xs"
+                    px={0}
+                    fw={500}
+                    fz={12}
+                    sx={{
+                      color: 'red',
+                    }}
+                    {...filterBadge.resetButton}
+                  />
+                </Group>
+              ) : null}
+            </Stack>
+          </Group>
           {segmentedControl ? (
             <SegmentedControl
               w={220}
@@ -169,7 +213,6 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
               {...segmentedControl}
             />
           ) : null}
-          {searchBar && <SearchBar {...searchBar} />}
           <Stack {...childrenStackProps}>
             {MultiFilter ? <MultipleFilter {...MultiFilter} /> : null}
             {filterDateWithSelect ? (

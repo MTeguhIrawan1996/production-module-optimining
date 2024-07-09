@@ -41,7 +41,7 @@ export const checkAccess = [
   },
   {
     path: '/master-data/element',
-    moduleSlug: [{ slug: 'elemnt' }],
+    moduleSlug: [{ slug: 'element' }],
   },
   {
     path: '/master-data/shift',
