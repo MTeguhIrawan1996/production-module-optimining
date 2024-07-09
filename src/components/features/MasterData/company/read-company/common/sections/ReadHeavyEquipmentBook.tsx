@@ -22,6 +22,7 @@ import { useReadAllHeavyEquipmentRefrence } from '@/services/graphql/query/heavy
 import { useReadAllHeavyEquipmentCompany } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentCompany';
 import { useReadAllHeavyEquipmentType } from '@/services/graphql/query/heavy-equipment/useReadAllHeavyEquipmentType';
 import { useReadAllHeavyEquipmentClass } from '@/services/graphql/query/heavy-equipment-class/useReadAllHeavyEquipmentClass';
+import { normalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel from '@/utils/store/useControlPanel';
 
@@ -30,7 +31,7 @@ const ReadHeavyEquipmentBook = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const [
-    { page, search, brandId, typeId, modelId, classId },
+    { page, search, brandId, typeId, modelId, classId, filterBadgeValue },
     setHeavyEquipmentCompanyState,
   ] = useControlPanel(
     (state) => [
@@ -383,12 +384,33 @@ const ReadHeavyEquipmentBook = () => {
         searchQuery: searchQuery,
         value: search || '',
       }}
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setHeavyEquipmentCompanyState({
+              page: 1,
+              filterBadgeValue: null,
+              brandId: null,
+              typeId: null,
+              modelId: null,
+              classId: null,
+            });
+            refetchHeavyEquipmentCompany({
+              page: 1,
+              brandId: null,
+              typeId: null,
+              referenceId: null,
+              classId: null,
+            });
+          },
+        },
+        value: filterBadgeValue,
+      }}
       filter={{
         multipleFilter: filter.multipleFilter,
         filterButton: {
           disabled: brandId || typeId || modelId || classId ? false : true,
           onClick: () => {
-            setHeavyEquipmentCompanyState({ page: 1 });
             refetchHeavyEquipmentCompany({
               page: 1,
               brandId,
@@ -396,23 +418,14 @@ const ReadHeavyEquipmentBook = () => {
               referenceId: modelId,
               classId,
             });
+            const badgeFilterValue = normalizedFilterBadge(
+              filter.multipleFilter || []
+            );
+            setHeavyEquipmentCompanyState({
+              page: 1,
+              filterBadgeValue: badgeFilterValue || null,
+            });
           },
-        },
-        onCancel: () => {
-          setHeavyEquipmentCompanyState({
-            page: 1,
-            brandId: null,
-            typeId: null,
-            modelId: null,
-            classId: null,
-          });
-          refetchHeavyEquipmentCompany({
-            page: 1,
-            brandId: null,
-            typeId: null,
-            referenceId: null,
-            classId: null,
-          });
         },
       }}
       enebleBackBottomInner={{

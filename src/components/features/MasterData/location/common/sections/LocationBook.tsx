@@ -17,6 +17,7 @@ import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 import { useDeleteLocationMaster } from '@/services/graphql/mutation/location/useDeleteLocationMaster';
 import { useReadAllLocationCategory } from '@/services/graphql/query/global-select/useReadAllLocationCategory ';
 import { useReadAllLocationsMaster } from '@/services/graphql/query/location/useReadAllLocationMaster';
+import { normalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel, {
   ISliceName,
@@ -29,16 +30,18 @@ const LocationBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const [
-    { page, categoryId, search },
+    { page, categoryId, search, filterBadgeValue },
     setPage,
     setCategoryId,
     setSearchLocation,
+    setFilterBadgeLocation,
   ] = useControlPanel(
     (state) => [
       state.locationState,
       state.setLoactionPage,
       state.setCategoryId,
       state.setSearchLocation,
+      state.setFilterBadgeLocation,
     ],
     shallow
   );
@@ -284,6 +287,22 @@ const LocationBook = () => {
           });
         },
       }}
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setPage({ page: 1 });
+            setCategoryId({ categoryId: null });
+            setFilterBadgeLocation({
+              filterBadgeValue: null,
+            });
+            refetchLocations({
+              page: 1,
+              categoryId: null,
+            });
+          },
+        },
+        value: filterBadgeValue,
+      }}
       filter={{
         multipleFilter: filter.multipleFilter,
         filterButton: {
@@ -294,15 +313,14 @@ const LocationBook = () => {
               page: 1,
               categoryId,
             });
+            const badgeFilterValue = normalizedFilterBadge(
+              filter.multipleFilter || []
+            );
+            setPage({ page: 1 });
+            setFilterBadgeLocation({
+              filterBadgeValue: badgeFilterValue || null,
+            });
           },
-        },
-        onCancel: () => {
-          refetchLocations({
-            page: 1,
-            categoryId: null,
-          });
-          setPage({ page: 1 });
-          setCategoryId({ categoryId: null });
         },
       }}
     >

@@ -1,4 +1,5 @@
 import {
+  Badge,
   Group,
   LoadingOverlay,
   Paper,
@@ -48,6 +49,10 @@ import { InputControllerNativeProps } from '@/types/global';
 interface IDashboardCardProps extends PaperProps {
   children: React.ReactNode;
   filter?: IFilterButtonProps;
+  filterBadge?: {
+    value: string[] | null;
+    resetButton: Omit<IPrimaryButtonProps, 'label'>;
+  };
   title?: string;
   addButton?: IPrimaryButtonProps;
   updateButton?: IPrimaryButtonProps;
@@ -76,6 +81,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
   children,
   title,
   filter,
+  filterBadge,
   MultipleFilter: MultiFilter,
   enebleBack,
   enebleBackBottomOuter,
@@ -116,7 +122,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
         withBorder={withBorder}
         {...restPaper}
       >
-        <Stack spacing="xl" justify="center" {...paperStackProps}>
+        <Stack spacing="md" justify="center" {...paperStackProps}>
           {enebleBack && (
             <PrimaryButton
               label={t('commonTypography.back')}
@@ -145,31 +151,59 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
                 {title}
               </Title>
             )}
-            <Group
-              position="apart"
-              w={filter || searchBar ? '100%' : undefined}
-            >
-              <Group spacing="xs">
-                {filter ? <FilterButton {...filter} /> : undefined}
-                {searchBar && <SearchBar w={440} {...searchBar} />}
+            <Stack spacing="xs" w={filter || searchBar ? '100%' : undefined}>
+              <Group position="apart">
+                <Group spacing="xs">
+                  {filter ? <FilterButton {...filter} /> : undefined}
+                  {searchBar && <SearchBar w={440} {...searchBar} />}
+                </Group>
+                <Group spacing="xs">
+                  {addButton && (
+                    <PrimaryButton
+                      // leftIcon={<IconPlus size="20px" />}
+                      label={label ?? ''}
+                      {...rest}
+                    />
+                  )}
+                  {updateButton && (
+                    <PrimaryButton
+                      // leftIcon={<IconPencil size="20px" />}
+                      label={labelUpdateButton}
+                      {...restUpdateButton}
+                    />
+                  )}
+                </Group>
               </Group>
-              <Group spacing="xs">
-                {addButton && (
+              {filterBadge && filterBadge.value ? (
+                <Group position="left" spacing="sm" w="100%">
+                  {filterBadge.value.map((v, i) => (
+                    <Badge
+                      key={i}
+                      bg="gray.1"
+                      color="gray"
+                      c="gray.7"
+                      tt="unset"
+                      fw={500}
+                    >
+                      {v}
+                    </Badge>
+                  ))}
                   <PrimaryButton
-                    // leftIcon={<IconPlus size="20px" />}
-                    label={label ?? ''}
-                    {...rest}
+                    label="Reset Filter"
+                    variant="transparent"
+                    color="red"
+                    size="xs"
+                    px={0}
+                    fw={500}
+                    fz={12}
+                    sx={{
+                      color: 'red',
+                    }}
+                    {...filterBadge.resetButton}
                   />
-                )}
-                {updateButton && (
-                  <PrimaryButton
-                    // leftIcon={<IconPencil size="20px" />}
-                    label={labelUpdateButton}
-                    {...restUpdateButton}
-                  />
-                )}
-              </Group>
-            </Group>
+                </Group>
+              ) : null}
+            </Stack>
           </Group>
           {segmentedControl ? (
             <SegmentedControl

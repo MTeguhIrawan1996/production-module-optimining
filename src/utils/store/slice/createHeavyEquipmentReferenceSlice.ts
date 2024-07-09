@@ -7,6 +7,7 @@ type IHeavyEquipmentReferenceState = {
   search: string;
   brandId: string | null;
   typeId: string | null;
+  filterBadgeValue: string[] | null;
 };
 
 export type IHeavyEquipmentReferenceSliceValue = {
@@ -26,6 +27,7 @@ const initialState: IHeavyEquipmentReferenceSliceValue = {
     search: '',
     brandId: null,
     typeId: null,
+    filterBadgeValue: null,
   },
 };
 

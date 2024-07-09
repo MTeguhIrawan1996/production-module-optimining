@@ -28,6 +28,7 @@ import {
   formStatusSelect,
   positionSelect,
 } from '@/utils/constants/Field/global-field';
+import { normalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel from '@/utils/store/useControlPanel';
 
@@ -37,7 +38,15 @@ const ReadCompanyHumanResourceBook = () => {
   const id = router.query.id as string;
 
   const [
-    { page, search, divisionId, employeStatusId, formStatus, positionId },
+    {
+      page,
+      search,
+      divisionId,
+      employeStatusId,
+      formStatus,
+      positionId,
+      filterBadgeValue,
+    },
     setHumanResourceCompanyState,
   ] = useControlPanel(
     (state) => [
@@ -46,6 +55,7 @@ const ReadCompanyHumanResourceBook = () => {
     ],
     shallow
   );
+
   const [employeId, setIdEmploye] = React.useState<string>('');
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
@@ -343,6 +353,28 @@ const ReadCompanyHumanResourceBook = () => {
         },
         placeholder: 'Cari berdasarkan Nama dan NIP',
       }}
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setHumanResourceCompanyState({
+              page: 1,
+              filterBadgeValue: null,
+              divisionId: null,
+              employeStatusId: null,
+              formStatus: null,
+              positionId: null,
+            });
+            refetchEmployees({
+              page: 1,
+              isComplete: null,
+              statusId: null,
+              positionId: null,
+              divisionId: null,
+            });
+          },
+        },
+        value: filterBadgeValue,
+      }}
       filter={{
         multipleFilter: filter.multipleFilter,
         filterButton: {
@@ -351,7 +383,6 @@ const ReadCompanyHumanResourceBook = () => {
               ? false
               : true,
           onClick: () => {
-            setHumanResourceCompanyState({ page: 1 });
             refetchEmployees({
               page: 1,
               isComplete: formStatus
@@ -363,23 +394,15 @@ const ReadCompanyHumanResourceBook = () => {
               positionId,
               divisionId,
             });
+
+            const badgeFilterValue = normalizedFilterBadge(
+              filter.multipleFilter || []
+            );
+            setHumanResourceCompanyState({
+              page: 1,
+              filterBadgeValue: badgeFilterValue || null,
+            });
           },
-        },
-        onCancel: () => {
-          setHumanResourceCompanyState({
-            page: 1,
-            divisionId: null,
-            employeStatusId: null,
-            formStatus: null,
-            positionId: null,
-          });
-          refetchEmployees({
-            page: 1,
-            divisionId: null,
-            isComplete: null,
-            statusId: null,
-            positionId: null,
-          });
         },
       }}
     >

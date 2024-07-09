@@ -25,7 +25,7 @@ const CompanyTypeBook = () => {
   }, []);
 
   return (
-    <DashboardCard withBorder shadow="xs">
+    <DashboardCard withBorder shadow="xs" paperStackProps={{ spacing: 0 }}>
       <MantineDataTable
         tableProps={{
           defaultColumnProps: {

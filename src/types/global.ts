@@ -499,3 +499,8 @@ export interface IReadFormulaParameter {
     name: string;
   };
 }
+
+export interface ISelectData {
+  label: string;
+  value: string;
+}

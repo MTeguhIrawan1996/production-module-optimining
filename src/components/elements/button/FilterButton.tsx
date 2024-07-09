@@ -10,24 +10,22 @@ import PrimaryButton, {
   IPrimaryButtonProps,
 } from '@/components/elements/button/PrimaryButton';
 
-type IMultipleFilter = {
+export type IMultipleFilter = {
   selectItem: SelectProps;
   col: number;
+  prefix?: string;
 };
 
 export interface IFilterButtonProps {
   multipleFilter?: IMultipleFilter[];
   filterButton?: Omit<IPrimaryButtonProps, 'label'>;
-  onCancel?: () => void;
 }
 
-const FilterButton = ({
-  multipleFilter,
-  filterButton,
-  onCancel,
-}: IFilterButtonProps) => {
+const FilterButton = ({ multipleFilter, filterButton }: IFilterButtonProps) => {
   const { t } = useTranslation('default');
   const [opened, setOpened] = React.useState(false);
+
+  const { onClick: onClickFilter, ...restFilterButton } = filterButton || {};
   const renderSelectItem = React.useCallback(
     ({ selectItem, col }: IMultipleFilter, index: number) => {
       const { label, placeholder, ...rest } = selectItem;
@@ -62,6 +60,7 @@ const FilterButton = ({
       radius="sm"
       opened={opened}
       onChange={setOpened}
+      zIndex={4}
     >
       <Popover.Target>
         <Button
@@ -88,11 +87,17 @@ const FilterButton = ({
               label="Batlkan"
               variant="outline"
               onClick={() => {
-                onCancel?.();
                 setOpened((prev) => !prev);
               }}
             />
-            <PrimaryButton label="Terapkan" {...filterButton} />
+            <PrimaryButton
+              label="Terapkan"
+              onClick={(e) => {
+                setOpened((prev) => !prev);
+                onClickFilter?.(e);
+              }}
+              {...restFilterButton}
+            />
           </Group>
         </Stack>
       </Popover.Dropdown>

@@ -138,7 +138,15 @@ const LoseTimeCategoryBook: React.FC<ILoseTimeCategoryProps> = ({
   ]);
   /* #endregion  /**======== RenderTable =========== */
 
-  return <DashboardCard>{renderTable}</DashboardCard>;
+  return (
+    <DashboardCard
+      paperStackProps={{
+        spacing: 0,
+      }}
+    >
+      {renderTable}
+    </DashboardCard>
+  );
 };
 
 export default LoseTimeCategoryBook;
