@@ -1,4 +1,3 @@
-import { SelectProps } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -13,6 +12,7 @@ import {
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useDeleteLocationMaster } from '@/services/graphql/mutation/location/useDeleteLocationMaster';
 import { useReadAllLocationCategory } from '@/services/graphql/query/global-select/useReadAllLocationCategory ';
@@ -77,7 +77,6 @@ const LocationBook = () => {
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
-      categoryId,
     },
   });
   const { locationCategoriesdata } = useReadAllLocationCategory({
@@ -134,23 +133,27 @@ const LocationBook = () => {
   });
 
   const filter = React.useMemo(() => {
-    const item: SelectProps[] = [
-      {
-        onChange: (value) => {
-          setPage({ page: 1 });
-          setCategoryId({ categoryId: value });
+    const item: IFilterButtonProps = {
+      multipleFilter: [
+        {
+          selectItem: {
+            onChange: (value) => {
+              setCategoryId({ categoryId: value });
+            },
+            data: locationCategoryItems ?? [],
+            value: categoryId,
+            label: 'locationCategory',
+            placeholder: 'chooseLocationCategory',
+            searchable: true,
+            nothingFound: null,
+            clearable: true,
+            onSearchChange: setCatgeorySearchTerm,
+            searchValue: catgeorySearchTerm,
+          },
+          col: 6,
         },
-        data: locationCategoryItems ?? [],
-        value: categoryId,
-        label: 'locationCategory',
-        placeholder: 'chooseLocationCategory',
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: setCatgeorySearchTerm,
-        searchValue: catgeorySearchTerm,
-      },
-    ];
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryId, catgeorySearchTerm, locationCategoryItems]);
@@ -281,9 +284,26 @@ const LocationBook = () => {
           });
         },
       }}
-      MultipleFilter={{
-        MultipleFilterData: filter,
-        colSpan: 4,
+      filter={{
+        multipleFilter: filter.multipleFilter,
+        filterButton: {
+          disabled: categoryId ? false : true,
+          onClick: () => {
+            setPage({ page: 1 });
+            refetchLocations({
+              page: 1,
+              categoryId,
+            });
+          },
+        },
+        onCancel: () => {
+          refetchLocations({
+            page: 1,
+            categoryId: null,
+          });
+          setPage({ page: 1 });
+          setCategoryId({ categoryId: null });
+        },
       }}
     >
       {renderTable}

@@ -12,6 +12,7 @@ const Breadcrumb: React.FC = () => {
   return (
     <MantineBreadcrumbs
       separator={<IconChevronRight size={16} />}
+      display={breadcrumbs.length === 1 ? 'none' : undefined}
       styles={(theme) => ({
         separator: {
           color: theme.colors.dark[6],

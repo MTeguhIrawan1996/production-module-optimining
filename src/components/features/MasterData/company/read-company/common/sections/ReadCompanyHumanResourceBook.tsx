@@ -1,4 +1,4 @@
-import { Divider, SelectProps } from '@mantine/core';
+import { Divider } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -15,6 +15,7 @@ import {
   ModalConfirmation,
   SelectionButtonModal,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useDeleteCompanyHumanResource } from '@/services/graphql/mutation/master-data-company/useDeleteCompanyHumanResource';
 import { useReadAllDivision } from '@/services/graphql/query/global-select/useReadAllDivision';
@@ -34,6 +35,7 @@ const ReadCompanyHumanResourceBook = () => {
   const { t } = useTranslation('default');
   const router = useRouter();
   const id = router.query.id as string;
+
   const [
     { page, search, divisionId, employeStatusId, formStatus, positionId },
     setHumanResourceCompanyState,
@@ -81,10 +83,6 @@ const ReadCompanyHumanResourceBook = () => {
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
       companyId: id,
-      isComplete: formStatus ? (formStatus === 'true' ? true : false) : null,
-      statusId: employeStatusId,
-      positionId,
-      divisionId,
     },
     skip: !router.isReady,
   });
@@ -148,7 +146,7 @@ const ReadCompanyHumanResourceBook = () => {
       placeholder: 'chooseDivision',
       value: divisionId,
       onChange: (value) => {
-        setHumanResourceCompanyState({ page: 1, divisionId: value });
+        setHumanResourceCompanyState({ divisionId: value });
       },
     });
     const positionItem = positionSelect({
@@ -158,14 +156,14 @@ const ReadCompanyHumanResourceBook = () => {
       placeholder: 'choosePosition',
       value: positionId,
       onChange: (value) => {
-        setHumanResourceCompanyState({ page: 1, positionId: value });
+        setHumanResourceCompanyState({ positionId: value });
       },
     });
     const employeStatusItem = employeStatusSelect({
       data: employeStatusFilter,
       placeholder: 'chooseEmployeStatus',
       onChange: (value) => {
-        setHumanResourceCompanyState({ page: 1, employeStatusId: value });
+        setHumanResourceCompanyState({ employeStatusId: value });
       },
       value: employeStatusId,
     });
@@ -184,17 +182,19 @@ const ReadCompanyHumanResourceBook = () => {
       value: formStatus,
       onChange: (value) => {
         setHumanResourceCompanyState({
-          page: 1,
           formStatus: value,
         });
       },
     });
-    const item: SelectProps[] = [
-      divisionItem,
-      positionItem,
-      employeStatusItem,
-      formStatusItem,
-    ];
+    const item: IFilterButtonProps = {
+      multipleFilter: [
+        { selectItem: divisionItem, col: 6 },
+        { selectItem: positionItem, col: 6 },
+        { selectItem: employeStatusItem, col: 6 },
+        { selectItem: formStatusItem, col: 6 },
+      ],
+    };
+
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -343,9 +343,44 @@ const ReadCompanyHumanResourceBook = () => {
         },
         placeholder: 'Cari berdasarkan Nama dan NIP',
       }}
-      MultipleFilter={{
-        colSpan: 4,
-        MultipleFilterData: filter,
+      filter={{
+        multipleFilter: filter.multipleFilter,
+        filterButton: {
+          disabled:
+            formStatus || employeStatusId || positionId || divisionId
+              ? false
+              : true,
+          onClick: () => {
+            setHumanResourceCompanyState({ page: 1 });
+            refetchEmployees({
+              page: 1,
+              isComplete: formStatus
+                ? formStatus === 'true'
+                  ? true
+                  : false
+                : null,
+              statusId: employeStatusId,
+              positionId,
+              divisionId,
+            });
+          },
+        },
+        onCancel: () => {
+          setHumanResourceCompanyState({
+            page: 1,
+            divisionId: null,
+            employeStatusId: null,
+            formStatus: null,
+            positionId: null,
+          });
+          refetchEmployees({
+            page: 1,
+            divisionId: null,
+            isComplete: null,
+            statusId: null,
+            positionId: null,
+          });
+        },
       }}
     >
       {renderTable}

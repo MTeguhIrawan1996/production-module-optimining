@@ -22,6 +22,9 @@ import DeterminedButton, {
 import DownloadButton, {
   IDownloadButtonProps,
 } from '@/components/elements/button/DownloadButton';
+import FilterButton, {
+  IFilterButtonProps,
+} from '@/components/elements/button/FilterButton';
 import NotValidButton, {
   INotValidButtonProps,
 } from '@/components/elements/button/NotValidButton';
@@ -44,6 +47,7 @@ import { InputControllerNativeProps } from '@/types/global';
 
 interface IDashboardCardProps extends PaperProps {
   children: React.ReactNode;
+  filter?: IFilterButtonProps;
   title?: string;
   addButton?: IPrimaryButtonProps;
   updateButton?: IPrimaryButtonProps;
@@ -71,6 +75,7 @@ interface IDashboardCardProps extends PaperProps {
 const DashboardCard: React.FC<IDashboardCardProps> = ({
   children,
   title,
+  filter,
   MultipleFilter: MultiFilter,
   enebleBack,
   enebleBackBottomOuter,
@@ -134,33 +139,38 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
               onClick={() => router.back()}
             />
           )}
-          {title || addButton || updateButton ? (
-            <Group position={title ? 'apart' : 'right'}>
-              {title && (
-                <Title order={order} fw={fw} {...restTitleStyle}>
-                  {title}
-                </Title>
-              )}
-              {addButton || updateButton ? (
-                <Group spacing="xs">
-                  {addButton && (
-                    <PrimaryButton
-                      // leftIcon={<IconPlus size="20px" />}
-                      label={label ?? ''}
-                      {...rest}
-                    />
-                  )}
-                  {updateButton && (
-                    <PrimaryButton
-                      // leftIcon={<IconPencil size="20px" />}
-                      label={labelUpdateButton}
-                      {...restUpdateButton}
-                    />
-                  )}
-                </Group>
-              ) : undefined}
+          <Group position={title ? 'apart' : 'right'}>
+            {title && (
+              <Title order={order} fw={fw} {...restTitleStyle}>
+                {title}
+              </Title>
+            )}
+            <Group
+              position="apart"
+              w={filter || searchBar ? '100%' : undefined}
+            >
+              <Group spacing="xs">
+                {filter ? <FilterButton {...filter} /> : undefined}
+                {searchBar && <SearchBar w={440} {...searchBar} />}
+              </Group>
+              <Group spacing="xs">
+                {addButton && (
+                  <PrimaryButton
+                    // leftIcon={<IconPlus size="20px" />}
+                    label={label ?? ''}
+                    {...rest}
+                  />
+                )}
+                {updateButton && (
+                  <PrimaryButton
+                    // leftIcon={<IconPencil size="20px" />}
+                    label={labelUpdateButton}
+                    {...restUpdateButton}
+                  />
+                )}
+              </Group>
             </Group>
-          ) : null}
+          </Group>
           {segmentedControl ? (
             <SegmentedControl
               w={220}
@@ -169,7 +179,6 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
               {...segmentedControl}
             />
           ) : null}
-          {searchBar && <SearchBar {...searchBar} />}
           <Stack {...childrenStackProps}>
             {MultiFilter ? <MultipleFilter {...MultiFilter} /> : null}
             {filterDateWithSelect ? (

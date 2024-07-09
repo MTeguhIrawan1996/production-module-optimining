@@ -1,4 +1,3 @@
-import { SelectProps } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -15,6 +14,7 @@ import {
   ModalConfirmation,
   SelectionButtonModal,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useDeleteCompanyHeavyEquipment } from '@/services/graphql/mutation/heavy-equipment/useDeleteCompanyHeavyEquipment';
 import { useReadAllBrand } from '@/services/graphql/query/heavy-equipment/useReadAllBrand';
@@ -70,10 +70,6 @@ const ReadHeavyEquipmentBook = () => {
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
-      brandId,
-      typeId,
-      referenceId: modelId,
-      classId,
       companyId: id,
     },
   });
@@ -162,75 +158,87 @@ const ReadHeavyEquipmentBook = () => {
   };
 
   const filter = React.useMemo(() => {
-    const item: SelectProps[] = [
-      {
-        onChange: (value) => {
-          setHeavyEquipmentCompanyState({
-            page: 1,
-            brandId: value,
-            typeId: null,
-            modelId: null,
-          });
+    const item: IFilterButtonProps = {
+      multipleFilter: [
+        {
+          selectItem: {
+            onChange: (value) => {
+              setHeavyEquipmentCompanyState({
+                brandId: value,
+                typeId: null,
+                modelId: null,
+              });
+            },
+            value: brandId,
+            data: brandItems ?? [],
+            label: 'brand',
+            placeholder: 'chooseBrand',
+            searchable: true,
+            nothingFound: null,
+            clearable: true,
+            onSearchChange: setBrandSearchTerm,
+            searchValue: brandSearchTerm,
+          },
+          col: 6,
         },
-        value: brandId,
-        data: brandItems ?? [],
-        label: 'brand',
-        placeholder: 'chooseBrand',
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: setBrandSearchTerm,
-        searchValue: brandSearchTerm,
-      },
-      {
-        onChange: (value) => {
-          setHeavyEquipmentCompanyState({
-            page: 1,
-            typeId: value,
-            modelId: null,
-          });
+        {
+          selectItem: {
+            onChange: (value) => {
+              setHeavyEquipmentCompanyState({
+                typeId: value,
+                modelId: null,
+              });
+            },
+            value: typeId,
+            data: typeItems ?? [],
+            label: 'type',
+            placeholder: 'chooseType',
+            searchable: true,
+            nothingFound: null,
+            clearable: true,
+            onSearchChange: setTypeSearchTerm,
+            searchValue: typeSearchTerm,
+            disabled: !brandId,
+          },
+          col: 6,
         },
-        value: typeId,
-        data: typeItems ?? [],
-        label: 'type',
-        placeholder: 'chooseType',
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: setTypeSearchTerm,
-        searchValue: typeSearchTerm,
-        disabled: !brandId,
-      },
-      {
-        onChange: (value) => {
-          setHeavyEquipmentCompanyState({ page: 1, modelId: value });
+        {
+          selectItem: {
+            onChange: (value) => {
+              setHeavyEquipmentCompanyState({ modelId: value });
+            },
+            value: modelId,
+            data: modelItems ?? [],
+            label: 'model',
+            placeholder: 'chooseModel',
+            searchable: true,
+            nothingFound: null,
+            clearable: true,
+            onSearchChange: setModelSearchTerm,
+            searchValue: modelSearchTerm,
+            disabled: !typeId,
+          },
+          col: 6,
         },
-        value: modelId,
-        data: modelItems ?? [],
-        label: 'model',
-        placeholder: 'chooseModel',
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: setModelSearchTerm,
-        searchValue: modelSearchTerm,
-        disabled: !typeId,
-      },
-      {
-        onChange: (value) => {
-          setHeavyEquipmentCompanyState({ page: 1, classId: value });
+        {
+          selectItem: {
+            onChange: (value) => {
+              setHeavyEquipmentCompanyState({ classId: value });
+            },
+            value: classId,
+            data: classItems ?? [],
+            label: 'class',
+            placeholder: 'chooseClass',
+            searchable: true,
+            nothingFound: null,
+            clearable: true,
+            onSearchChange: setClassSearchTerm,
+            searchValue: classSearchTerm,
+          },
+          col: 6,
         },
-        value: classId,
-        data: classItems ?? [],
-        label: 'class',
-        placeholder: 'chooseClass',
-        searchable: true,
-        nothingFound: null,
-        clearable: true,
-        onSearchChange: setClassSearchTerm,
-        searchValue: classSearchTerm,
-      },
-    ];
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -375,9 +383,37 @@ const ReadHeavyEquipmentBook = () => {
         searchQuery: searchQuery,
         value: search || '',
       }}
-      MultipleFilter={{
-        MultipleFilterData: filter,
-        colSpan: 4,
+      filter={{
+        multipleFilter: filter.multipleFilter,
+        filterButton: {
+          disabled: brandId || typeId || modelId || classId ? false : true,
+          onClick: () => {
+            setHeavyEquipmentCompanyState({ page: 1 });
+            refetchHeavyEquipmentCompany({
+              page: 1,
+              brandId,
+              typeId,
+              referenceId: modelId,
+              classId,
+            });
+          },
+        },
+        onCancel: () => {
+          setHeavyEquipmentCompanyState({
+            page: 1,
+            brandId: null,
+            typeId: null,
+            modelId: null,
+            classId: null,
+          });
+          refetchHeavyEquipmentCompany({
+            page: 1,
+            brandId: null,
+            typeId: null,
+            referenceId: null,
+            classId: null,
+          });
+        },
       }}
       enebleBackBottomInner={{
         onClick: () => router.push('/master-data/company'),

@@ -33,6 +33,7 @@ const InnerWrapper: React.FC<IInnerWrapperProps> = ({
     title,
     fw = 500,
     order = 1,
+    px: pxTitle = 'md',
     size: sizeTitle = 'h2',
     ...rest
   } = titleProps || {};
@@ -55,7 +56,7 @@ const InnerWrapper: React.FC<IInnerWrapperProps> = ({
     <Box component="section" w="100%" px={22}>
       <Container size={size} pt={pt} pb={pb} px={px} {...restContainerProps}>
         {titleProps && (
-          <Title order={order} size={sizeTitle} fw={fw} {...rest}>
+          <Title order={order} size={sizeTitle} px={pxTitle} fw={fw} {...rest}>
             {title}
           </Title>
         )}
