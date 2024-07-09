@@ -9,6 +9,9 @@ import { useTranslation } from 'react-i18next';
 import PrimaryButton, {
   IPrimaryButtonProps,
 } from '@/components/elements/button/PrimaryButton';
+import InputControllerNative from '@/components/elements/form/InputControllerNative';
+
+import { InputControllerNativeProps } from '@/types/global';
 
 export type IMultipleFilter = {
   selectItem: SelectProps;
@@ -16,12 +19,23 @@ export type IMultipleFilter = {
   prefix?: string;
 };
 
+export type IFilterDateWithSelect = {
+  selectItem: InputControllerNativeProps;
+  col: number;
+  prefix?: string;
+};
+
 export interface IFilterButtonProps {
   multipleFilter?: IMultipleFilter[];
+  filterDateWithSelect?: IFilterDateWithSelect[];
   filterButton?: Omit<IPrimaryButtonProps, 'label'>;
 }
 
-const FilterButton = ({ multipleFilter, filterButton }: IFilterButtonProps) => {
+const FilterButton = ({
+  multipleFilter,
+  filterDateWithSelect,
+  filterButton,
+}: IFilterButtonProps) => {
   const { t } = useTranslation('default');
   const [opened, setOpened] = React.useState(false);
 
@@ -81,7 +95,16 @@ const FilterButton = ({ multipleFilter, filterButton }: IFilterButtonProps) => {
           <Text fw={600} fz={18}>
             Filter
           </Text>
-          <Grid>{multipleFilter ? selectItems : undefined}</Grid>
+          <Grid>
+            {multipleFilter ? selectItems : null}
+            {filterDateWithSelect
+              ? filterDateWithSelect?.map(({ selectItem, col }, key) => (
+                  <Grid.Col span={col} key={key}>
+                    <InputControllerNative {...selectItem} />
+                  </Grid.Col>
+                ))
+              : null}
+          </Grid>
           <Group spacing="xs" position="right">
             <PrimaryButton
               label="Batlkan"

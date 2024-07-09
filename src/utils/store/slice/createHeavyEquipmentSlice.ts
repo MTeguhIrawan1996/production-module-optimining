@@ -3,12 +3,13 @@ import { StateCreator } from 'zustand';
 import { sliceResetFns } from '@/utils/store/useControlPanel';
 
 type IHeavyEquipmentState = {
-  page?: number | null;
-  search?: string | null;
-  filterBrandId?: string | null;
-  filterTypeId?: string | null;
-  filterClassId?: string | null;
-  filterModelId?: string | null;
+  page: number | null;
+  search: string | null;
+  filterBrandId: string | null;
+  filterTypeId: string | null;
+  filterClassId: string | null;
+  filterModelId: string | null;
+  filterBadgeValue: string[] | null;
 };
 
 export type IHeavyEquipmentSliceValue = {
@@ -16,7 +17,7 @@ export type IHeavyEquipmentSliceValue = {
 };
 
 export interface IHeavyEquipmentSliceAction {
-  setHeavyEquipmentState: (payload: IHeavyEquipmentState) => void;
+  setHeavyEquipmentState: (payload: Partial<IHeavyEquipmentState>) => void;
   resetHeavyEquipmentState: () => void;
 }
 
@@ -28,6 +29,7 @@ const initialState: IHeavyEquipmentSliceValue = {
     filterTypeId: null,
     filterClassId: null,
     filterModelId: null,
+    filterBadgeValue: null,
   },
 };
 

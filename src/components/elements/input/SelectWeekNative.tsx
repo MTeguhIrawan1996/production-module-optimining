@@ -1,9 +1,11 @@
 import { Select, SelectProps, Text } from '@mantine/core';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { useReadAllWeek2s } from '@/services/graphql/query/global-select/useReadAllWeekSelect';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 
 export type ISelectWeekNativeProps = {
   control: 'select-week-native';
@@ -18,27 +20,34 @@ const SelectWeekNative: React.FC<ISelectWeekNativeProps> = ({
   year = null,
   label = 'week',
   placeholder = 'chooseWeek',
+  name,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
-  const { week2sData } = useReadAllWeek2s({
+  const [filterDataCommon, setFilterDataCommon] = useFilterDataCommon(
+    (state) => [state.filterDataCommon, state.setFilterDataCommon],
+    shallow
+  );
+  useReadAllWeek2s({
     variables: {
       year,
     },
-  });
-
-  const weeksItem = week2sData?.map((val) => {
-    return {
-      name: t('commonTypography.nthWeek', {
-        n: val.week, // week is started by 1 by default
-        ns: 'default',
-      }),
-      id: `${val.week}`,
-    };
+    onCompleted: (data) => {
+      const yearsItem = data.week2s.map((val) => {
+        return {
+          name: t('commonTypography.nthWeek', {
+            n: val.week, // week is started by 1 by default
+            ns: 'default',
+          }),
+          id: `${val.week}`,
+        };
+      });
+      setFilterDataCommon({ key: name || '', data: yearsItem });
+    },
   });
 
   const { uncombinedItem } = useFilterItems({
-    data: weeksItem ?? [],
+    data: filterDataCommon.find((v) => v.key === name)?.data ?? [],
   });
 
   const SelectItem = React.forwardRef<HTMLDivElement, ItemProps>(
@@ -53,6 +62,7 @@ const SelectWeekNative: React.FC<ISelectWeekNativeProps> = ({
     <Select
       data={uncombinedItem}
       radius="sm"
+      name={name}
       itemComponent={SelectItem}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-type IIdAndName = {
+export type IIdAndName = {
   id: string;
   name: string;
 };

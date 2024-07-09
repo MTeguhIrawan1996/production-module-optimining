@@ -12,6 +12,7 @@ import {
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useDeleteWeeklyPlan } from '@/services/graphql/mutation/plan/weekly/useDeleteWeeklyPlan';
 import { useReadAllWeeklyPlan } from '@/services/graphql/query/plan/weekly/useReadAllWeeklyPlan';
@@ -21,14 +22,14 @@ import {
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import { newNormalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
 import useControlPanel, {
   ISliceName,
   resetAllSlices,
 } from '@/utils/store/useControlPanel';
+import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
-
-import { InputControllerNativeProps } from '@/types/global';
 
 const WeeklyPlanBook = () => {
   const router = useRouter();
@@ -36,12 +37,18 @@ const WeeklyPlanBook = () => {
   const [id, setId] = React.useState<string>('');
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     React.useState<boolean>(false);
+  const [filterDataCommon] = useFilterDataCommon(
+    (state) => [state.filterDataCommon],
+    shallow
+  );
 
-  const [{ page, companyId, status, week, year }, setWeeklyPlanState] =
-    useControlPanel(
-      (state) => [state.weeklyPlanState, state.setWeeklyPlanState],
-      shallow
-    );
+  const [
+    { page, companyId, status, week, year, filterBadgeValue },
+    setWeeklyPlanState,
+  ] = useControlPanel(
+    (state) => [state.weeklyPlanState, state.setWeeklyPlanState],
+    shallow
+  );
 
   const permissions = useStore(usePermissions, (state) => state.permissions);
 
@@ -49,11 +56,6 @@ const WeeklyPlanBook = () => {
   const isPermissionUpdate = permissions?.includes('update-weekly-plan');
   const isPermissionDelete = permissions?.includes('delete-weekly-plan');
   const isPermissionRead = permissions?.includes('read-weekly-plan');
-
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    resetAllSlices(new Set<ISliceName>(['weeklyPlanSlice'] as ISliceName[]));
-  }, []);
 
   /* #   /**=========== Query =========== */
   const {
@@ -68,12 +70,21 @@ const WeeklyPlanBook = () => {
       page: page,
       orderDir: 'desc',
       orderBy: 'year',
-      year,
-      week,
-      statusId: status,
-      companyId,
     },
   });
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    resetAllSlices(new Set<ISliceName>(['weeklyPlanSlice'] as ISliceName[]));
+    useControlPanel.persist.onFinishHydration(({ weeklyPlanState }) => {
+      refetchWeeklyPlanData({
+        companyId: weeklyPlanState.companyId,
+        week: weeklyPlanState.week,
+        year: weeklyPlanState.year,
+        statusId: weeklyPlanState.status,
+      });
+    });
+  }, [refetchWeeklyPlanData]);
 
   const [executeDelete, { loading }] = useDeleteWeeklyPlan({
     onCompleted: () => {
@@ -112,9 +123,9 @@ const WeeklyPlanBook = () => {
 
   const filter = React.useMemo(() => {
     const selectYearItem = globalSelectYearNative({
+      name: 'year',
       onChange: (value) => {
         setWeeklyPlanState({
-          page: 1,
           year: value ? Number(value) : null,
           week: null,
         });
@@ -126,28 +137,43 @@ const WeeklyPlanBook = () => {
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
-        setWeeklyPlanState({ page: 1, week: value ? Number(value) : null });
+        setWeeklyPlanState({ week: value ? Number(value) : null });
       },
     });
     const selectStatusItem = globalSelectStatusNative({
       onChange: (value) => {
-        setWeeklyPlanState({ page: 1, status: value });
+        setWeeklyPlanState({ status: value });
       },
       value: status,
     });
     const selectCompanyItem = globalSelectCompanyNative({
       onChange: (value) => {
-        setWeeklyPlanState({ page: 1, companyId: value });
+        setWeeklyPlanState({ companyId: value });
       },
       value: companyId,
     });
 
-    const item: InputControllerNativeProps[] = [
-      selectYearItem,
-      selectWeekItem,
-      selectStatusItem,
-      selectCompanyItem,
-    ];
+    const item: IFilterButtonProps = {
+      filterDateWithSelect: [
+        {
+          selectItem: selectYearItem,
+          col: 6,
+          prefix: 'Tahun:',
+        },
+        {
+          selectItem: selectWeekItem,
+          col: 6,
+        },
+        {
+          selectItem: selectStatusItem,
+          col: 6,
+        },
+        {
+          selectItem: selectCompanyItem,
+          col: 6,
+        },
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, week, status, companyId]);
@@ -267,9 +293,50 @@ const WeeklyPlanBook = () => {
             }
           : undefined
       }
-      filterDateWithSelect={{
-        colSpan: 4,
-        items: filter,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setWeeklyPlanState({
+              page: 1,
+              filterBadgeValue: null,
+              year: null,
+              companyId: null,
+              status: null,
+              week: null,
+            });
+            refetchWeeklyPlanData({
+              page: 1,
+              year: null,
+              companyId: null,
+              statusId: null,
+              week: null,
+            });
+          },
+        },
+        value: filterBadgeValue,
+      }}
+      filter={{
+        filterDateWithSelect: filter.filterDateWithSelect,
+        filterButton: {
+          disabled: status || week || year || companyId ? false : true,
+          onClick: () => {
+            refetchWeeklyPlanData({
+              page: 1,
+              year,
+              week,
+              statusId: status,
+              companyId,
+            });
+            const badgeFilterValue = newNormalizedFilterBadge({
+              filter: filter.filterDateWithSelect || [],
+              data: filterDataCommon,
+            });
+            setWeeklyPlanState({
+              page: 1,
+              filterBadgeValue: badgeFilterValue || null,
+            });
+          },
+        },
       }}
     >
       {renderTable}
