@@ -75,10 +75,6 @@ const ReadCompanyHumanResourceBook = () => {
     400
   );
 
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-  }, []);
-
   /* #   /**=========== Query =========== */
   const {
     employeesData,
@@ -96,6 +92,24 @@ const ReadCompanyHumanResourceBook = () => {
     },
     skip: !router.isReady,
   });
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    useControlPanel.persist.onFinishHydration(
+      ({ humanResourceCompanyState }) => {
+        refetchEmployees({
+          isComplete: humanResourceCompanyState.formStatus
+            ? humanResourceCompanyState.formStatus === 'true'
+              ? true
+              : false
+            : null,
+          statusId: humanResourceCompanyState.employeStatusId,
+          positionId: humanResourceCompanyState.positionId,
+          divisionId: humanResourceCompanyState.divisionId,
+        });
+      }
+    );
+  }, [refetchEmployees]);
 
   const { employeeStatusesData } = useReadAllEmployeStatus({
     variables: {

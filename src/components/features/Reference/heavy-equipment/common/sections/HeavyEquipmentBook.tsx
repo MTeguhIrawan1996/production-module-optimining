@@ -63,13 +63,6 @@ const HeavyEquipmentBook = () => {
     'read-heavy-equipment-reference'
   );
 
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    resetAllSlices(
-      new Set<ISliceName>(['heavyEquipmentReferenceSlice'] as ISliceName[])
-    );
-  }, []);
-
   /* #   /**=========== Query =========== */
   const { brandsData } = useReadAllBrand({
     variables: {
@@ -98,6 +91,23 @@ const HeavyEquipmentBook = () => {
       search: searchQuery === '' ? null : searchQuery,
     },
   });
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    resetAllSlices(
+      new Set<ISliceName>(['heavyEquipmentReferenceSlice'] as ISliceName[])
+    );
+    useControlPanel.persist.onFinishHydration(
+      ({ heavyEquipmentReferenceState }) => {
+        const { brandId, typeId } = heavyEquipmentReferenceState;
+        refetchHeavyEquipments({
+          brandId,
+          typeId,
+        });
+      }
+    );
+  }, [refetchHeavyEquipments]);
+
   const [executeDelete, { loading }] = useDeleteHeavyEquipmentReference({
     onCompleted: () => {
       refetchHeavyEquipments();

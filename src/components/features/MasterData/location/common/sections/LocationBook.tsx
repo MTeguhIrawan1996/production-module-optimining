@@ -62,11 +62,6 @@ const LocationBook = () => {
   const isPermissionDelete = permissions?.includes('delete-location');
   const isPermissionRead = permissions?.includes('read-location');
 
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    resetAllSlices(new Set<ISliceName>(['locationSlice'] as ISliceName[]));
-  }, []);
-
   /* #   /**=========== Query =========== */
   const {
     locationsData,
@@ -82,6 +77,18 @@ const LocationBook = () => {
       search: searchQuery === '' ? null : searchQuery,
     },
   });
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    resetAllSlices(new Set<ISliceName>(['locationSlice'] as ISliceName[]));
+    useControlPanel.persist.onFinishHydration(({ locationState }) => {
+      const { categoryId } = locationState;
+      refetchLocations({
+        categoryId,
+      });
+    });
+  }, [refetchLocations]);
+
   const { locationCategoriesdata } = useReadAllLocationCategory({
     variables: {
       limit: 15,

@@ -55,10 +55,6 @@ const ReadHeavyEquipmentBook = () => {
   const [classSearchTerm, setClassSearchTerm] = React.useState<string>('');
   const [classSearchQuery] = useDebouncedValue<string>(classSearchTerm, 400);
 
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-  }, []);
-
   const {
     heavyEquipmentsCompany,
     heavyEquipmentsCompanyMeta,
@@ -73,7 +69,25 @@ const ReadHeavyEquipmentBook = () => {
       search: searchQuery === '' ? null : searchQuery,
       companyId: id,
     },
+    skip: !router.isReady,
   });
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    useControlPanel.persist.onFinishHydration(
+      ({ heavyEquipmentCompanyState }) => {
+        const { brandId, typeId, classId, modelId } =
+          heavyEquipmentCompanyState;
+        refetchHeavyEquipmentCompany({
+          brandId,
+          typeId,
+          referenceId: modelId,
+          classId,
+        });
+      }
+    );
+  }, [refetchHeavyEquipmentCompany]);
+
   const { brandsData } = useReadAllBrand({
     variables: {
       limit: null,

@@ -80,10 +80,6 @@ const HeavyEquipmentMasterBook = () => {
       orderBy: 'createdAt',
       orderDir: 'desc',
       search: searchQuery === '' ? null : searchQuery,
-      // brandId: filterBrandId,
-      // typeId: filterTypeId,
-      // referenceId: filterModelId,
-      // classId: filterClassId,
     },
   });
   const { brandsData } = useReadAllBrand({
@@ -165,7 +161,17 @@ const HeavyEquipmentMasterBook = () => {
     resetAllSlices(
       new Set<ISliceName>(['heavyEquipmentSlice'] as ISliceName[])
     );
-  }, []);
+    useControlPanel.persist.onFinishHydration(({ heavyEquipmentState }) => {
+      const { filterBrandId, filterClassId, filterModelId, filterTypeId } =
+        heavyEquipmentState;
+      refetchHeavyEquipmentMasterData({
+        brandId: filterBrandId,
+        typeId: filterTypeId,
+        referenceId: filterModelId,
+        classId: filterClassId,
+      });
+    });
+  }, [refetchHeavyEquipmentMasterData]);
 
   const handleDelete = async () => {
     await executeDelete({
