@@ -1,4 +1,3 @@
-import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -15,6 +14,7 @@ import {
   ModalConfirmation,
   SelectionButtonModal,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
 import { useDeleteTopsoilRitage } from '@/services/graphql/mutation/topsoil-ritage/useDeleteTopsoilRitage';
@@ -29,12 +29,14 @@ import {
 } from '@/utils/constants/Field/native-field';
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
+import {
+  newNormalizedFilterBadge,
+  normalizedRandomFilter,
+} from '@/utils/helper/normalizedFilterBadge';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
-
-import { InputControllerNativeProps } from '@/types/global';
 
 const ListDataTopsoilRitageBook = () => {
   const router = useRouter();
@@ -48,8 +50,13 @@ const ListDataTopsoilRitageBook = () => {
       filterStatus,
       filterShift,
       filtercompanyHeavyEquipmentId,
+      filterBadgeValue,
     },
-    { page: pageDumptruck, filterDate: filterDateDumptruck },
+    {
+      page: pageDumptruck,
+      filterDate: filterDateDumptruck,
+      filterBadgeValue: filterBadgeValueDT,
+    },
     setDataRitageTopsoilState,
   ] = useControlPanel(
     (state) => [
@@ -66,13 +73,6 @@ const ListDataTopsoilRitageBook = () => {
     React.useState<boolean>(false);
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
-
-  const [heavyEquipmentSeacrhTerm, setHeavyEquipmentSeacrhTerm] =
-    React.useState<string>('');
-  const [heavyEquipmentSearchQuery] = useDebouncedValue<string>(
-    heavyEquipmentSeacrhTerm,
-    400
-  );
 
   const permissions = useStore(usePermissions, (state) => state.permissions);
 
@@ -93,8 +93,6 @@ const ListDataTopsoilRitageBook = () => {
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
     variables: {
       limit: null,
-      search:
-        heavyEquipmentSearchQuery === '' ? null : heavyEquipmentSearchQuery,
       isComplete: true,
       categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
     },
@@ -118,12 +116,12 @@ const ListDataTopsoilRitageBook = () => {
     topsoilDumpTruckRitagesData,
     topsoilDumpTruckRitagesDataLoading,
     topsoilDumpTruckRitagesDataMeta,
+    refetchTopsoilDumpTruckRitages,
   } = useReadAllRitageTopsoilDT({
     variables: {
       limit: 10,
       page: pageDumptruck || 1,
       orderDir: 'desc',
-      date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
     },
     skip: tabs !== 'topsoil',
   });
@@ -138,20 +136,41 @@ const ListDataTopsoilRitageBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      date: formatDate(filterDate, 'YYYY-MM-DD') || null,
-      shiftId: filterShift === '' ? null : filterShift,
-      isRitageProblematic: filterStatus
-        ? filterStatus === 'true'
-          ? false
-          : true
-        : null,
-      companyHeavyEquipmentId:
-        filtercompanyHeavyEquipmentId === ''
-          ? null
-          : filtercompanyHeavyEquipmentId,
     },
     skip: tabs !== 'topsoil',
   });
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    useControlPanel.persist.onFinishHydration(
+      ({ dataRitageTopsoilState, dataRitageTopsoilDumptruckState }) => {
+        const {
+          filtercompanyHeavyEquipmentId,
+          filterDate,
+          filterShift,
+          filterStatus,
+        } = dataRitageTopsoilState;
+        const { filterDate: filterDateDumptruck } =
+          dataRitageTopsoilDumptruckState;
+        refetchTopsoilRitages({
+          date: formatDate(filterDate, 'YYYY-MM-DD') || null,
+          shiftId: filterShift === '' ? null : filterShift,
+          isRitageProblematic: filterStatus
+            ? filterStatus === 'true'
+              ? false
+              : true
+            : null,
+          companyHeavyEquipmentId:
+            filtercompanyHeavyEquipmentId === ''
+              ? null
+              : filtercompanyHeavyEquipmentId,
+        });
+        refetchTopsoilDumpTruckRitages({
+          date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
+        });
+      }
+    );
+  }, [refetchTopsoilDumpTruckRitages, refetchTopsoilRitages]);
 
   const [executeDelete, { loading }] = useDeleteTopsoilRitage({
     onCompleted: () => {
@@ -191,7 +210,7 @@ const ListDataTopsoilRitageBook = () => {
   const handleSetPage = (page: number) => {
     setDataRitageTopsoilState({
       dataRitageTopsoilState: {
-        page: page,
+        page,
       },
     });
   };
@@ -199,12 +218,12 @@ const ListDataTopsoilRitageBook = () => {
   const filter = React.useMemo(() => {
     const dateItem = globalDateNative({
       label: 'date',
+      name: 'date',
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
         setDataRitageTopsoilState({
           dataRitageTopsoilState: {
-            page: 1,
             filterDate: value || null,
           },
         });
@@ -214,6 +233,7 @@ const ListDataTopsoilRitageBook = () => {
     const ritageProblematic = globalSelectNative({
       placeholder: 'chooseRitageStatus',
       label: 'ritageStatus',
+      name: 'ritageStatus',
       data: [
         {
           label: t('commonTypography.complete'),
@@ -227,7 +247,6 @@ const ListDataTopsoilRitageBook = () => {
       onChange: (value) => {
         setDataRitageTopsoilState({
           dataRitageTopsoilState: {
-            page: 1,
             filterStatus: value,
           },
         });
@@ -237,12 +256,12 @@ const ListDataTopsoilRitageBook = () => {
     const shiftItem = globalSelectNative({
       placeholder: 'chooseShift',
       label: 'shift',
+      name: 'shift',
       searchable: false,
       data: shiftFilterItem,
       onChange: (value) => {
         setDataRitageTopsoilState({
           dataRitageTopsoilState: {
-            page: 1,
             filterShift: value,
           },
         });
@@ -254,12 +273,9 @@ const ListDataTopsoilRitageBook = () => {
       label: 'heavyEquipmentCode',
       searchable: true,
       data: heavyEquipmentItemFilter,
-      onSearchChange: setHeavyEquipmentSeacrhTerm,
-      searchValue: heavyEquipmentSeacrhTerm,
       onChange: (value) => {
         setDataRitageTopsoilState({
           dataRitageTopsoilState: {
-            page: 1,
             filtercompanyHeavyEquipmentId: value,
           },
         });
@@ -269,12 +285,27 @@ const ListDataTopsoilRitageBook = () => {
         : undefined,
     });
 
-    const item: InputControllerNativeProps[] = [
-      dateItem,
-      ritageProblematic,
-      shiftItem,
-      heavyEquipmentItem,
-    ];
+    const item: IFilterButtonProps = {
+      filterDateWithSelect: [
+        {
+          selectItem: dateItem,
+          col: 6,
+        },
+        {
+          selectItem: ritageProblematic,
+          col: 6,
+          prefix: 'Ritase',
+        },
+        {
+          selectItem: shiftItem,
+          col: 6,
+        },
+        {
+          selectItem: heavyEquipmentItem,
+          col: 6,
+        },
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [heavyEquipmentItemFilter, shiftFilterItem]);
@@ -445,46 +476,75 @@ const ListDataTopsoilRitageBook = () => {
             }
           : undefined
       }
-      filterDateWithSelect={{
-        colSpan: 4,
-        items: filter,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setDataRitageTopsoilState({
+              dataRitageTopsoilState: {
+                page: 1,
+                filterBadgeValue: null,
+                filtercompanyHeavyEquipmentId: null,
+                filterShift: null,
+                filterStatus: null,
+                filterDate: null,
+              },
+            });
+            refetchTopsoilRitages({
+              page: 1,
+              shiftId: null,
+              isRitageProblematic: null,
+              companyHeavyEquipmentId: null,
+              date: null,
+            });
+          },
+        },
+        value: filterBadgeValue || null,
       }}
-      downloadButton={[
-        {
-          label: t('ritageTopsoil.downloadTemplateTopsoil'),
-          url: `/topsoil-ritages/file`,
-          fileName: 'template-topsoil',
-          trackDownloadAction: () => {
-            sendGAEvent({
-              event: 'Unduh',
-              params: {
-                category: 'Produksi',
-                subSubCategory:
-                  'Produksi - Data Ritase - Topsoil - Template Input',
-                subCategory: 'Produksi - Data Ritase - Topsoil',
-                account: userAuthData?.email ?? '',
+      filter={{
+        filterDateWithSelect: filter.filterDateWithSelect,
+        filterButton: {
+          disabled:
+            filterShift ||
+            filterStatus ||
+            filtercompanyHeavyEquipmentId ||
+            filterDate
+              ? false
+              : true,
+          onClick: () => {
+            refetchTopsoilRitages({
+              page: 1,
+              date: formatDate(filterDate, 'YYYY-MM-DD') || null,
+              shiftId: filterShift === '' ? null : filterShift,
+              isRitageProblematic: filterStatus
+                ? filterStatus === 'true'
+                  ? false
+                  : true
+                : null,
+              companyHeavyEquipmentId:
+                filtercompanyHeavyEquipmentId === ''
+                  ? null
+                  : filtercompanyHeavyEquipmentId,
+            });
+            const { newData, newfilter } = normalizedRandomFilter({
+              filterDateWithSelect: filter.filterDateWithSelect,
+            });
+
+            const badgeFilterValue = newNormalizedFilterBadge({
+              filter: newfilter || [],
+              data: newData || [],
+            });
+            const date = formatDate(filterDate);
+            setDataRitageTopsoilState({
+              dataRitageTopsoilState: {
+                page: 1,
+                filterBadgeValue: date
+                  ? [date, ...badgeFilterValue]
+                  : badgeFilterValue,
               },
             });
           },
         },
-        {
-          label: t('commonTypography.downloadReference'),
-          url: `/download/references`,
-          fileName: 'referensi-topsoil',
-          trackDownloadAction: () => {
-            sendGAEvent({
-              event: 'Unduh',
-              params: {
-                category: 'Produksi',
-                subSubCategory:
-                  'Produksi - Data Ritase - Topsoil - Template Referensi',
-                subCategory: 'Produksi - Data Ritase - Topsoil',
-                account: userAuthData?.email ?? '',
-              },
-            });
-          },
-        },
-      ]}
+      }}
     >
       {renderTable}
       <ListDataRitageDumptruckBook
@@ -504,12 +564,38 @@ const ListDataTopsoilRitageBook = () => {
           setDataRitageTopsoilState({
             dataRitageTopsoilDumptruckState: {
               filterDate: v || null,
-              page: 1,
             },
           });
         }}
         date={filterDateDumptruck || undefined}
         urlDetail="/input-data/production/data-ritage/topsoil/read/dump-truck"
+        filterBadgeValue={filterBadgeValueDT}
+        onFilter={() => {
+          refetchTopsoilDumpTruckRitages({
+            page: 1,
+            date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
+          });
+          const date = formatDate(filterDateDumptruck);
+          setDataRitageTopsoilState({
+            dataRitageTopsoilDumptruckState: {
+              page: 1,
+              filterBadgeValue: date ? [date] : [],
+            },
+          });
+        }}
+        onReset={() => {
+          setDataRitageTopsoilState({
+            dataRitageTopsoilDumptruckState: {
+              page: 1,
+              filterBadgeValue: null,
+              filterDate: null,
+            },
+          });
+          refetchTopsoilDumpTruckRitages({
+            page: 1,
+            date: null,
+          });
+        }}
       />
       <ModalConfirmation
         isOpenModalConfirmation={isOpenDeleteConfirmation}

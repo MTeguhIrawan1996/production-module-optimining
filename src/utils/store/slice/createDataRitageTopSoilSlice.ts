@@ -5,6 +5,7 @@ import { sliceResetFns } from '@/utils/store/useControlPanel';
 type IDataRitageTopsoilState = {
   page: number;
   search: string;
+  filterBadgeValue: string[] | null;
 };
 
 export type IDataRitageTopsoilSliceValue = {
@@ -38,10 +39,13 @@ const initialState: IDataRitageTopsoilSliceValue = {
     filterStatus: null,
     filterShift: null,
     filtercompanyHeavyEquipmentId: null,
+    filterBadgeValue: null,
   },
   dataRitageTopsoilDumptruckState: {
     page: 1,
     search: '',
+    filterDate: null,
+    filterBadgeValue: null,
   },
 };
 

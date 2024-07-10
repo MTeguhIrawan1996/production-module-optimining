@@ -13,6 +13,7 @@ import ListDataOreRitageBook from '@/components/features/InputData/Productions/d
 import ListDataQuarryRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataQuarryRitageBook';
 import ListDataTopsoilRitageBook from '@/components/features/InputData/Productions/data-ritage/common/sections/ListDataTopsoilRitageBook';
 
+import { useRouterReady } from '@/utils/hooks/useRouterReady';
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 import useControlPanel, {
   ISliceName,
@@ -24,6 +25,7 @@ import useStore from '@/utils/store/useStore';
 const DataRitagePage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
+  const isRouterReady = useRouterReady();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const [params, setParams] = useQueryStates({
     tabs: queryTypes.string.withDefault('ore'),
@@ -69,6 +71,8 @@ const DataRitagePage = () => {
     });
   };
 
+  if (!isRouterReady) return null;
+
   return (
     <RootWrapper>
       <InnerWrapper
@@ -81,7 +85,7 @@ const DataRitagePage = () => {
         <GlobalTabs
           tabs={{
             defaultValue: 'ore',
-            keepMounted: true,
+            keepMounted: false,
             value: params.tabs,
             onTabChange: (value) => handleChangeTab(value),
           }}
