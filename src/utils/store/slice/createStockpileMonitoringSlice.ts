@@ -9,6 +9,7 @@ type IStockpileMonitoringState = {
   year: number | null;
   month: number | null;
   week: number | null;
+  filterBadgeValue: string[] | null;
 };
 
 export type IStockpileMonitoringValue = {
@@ -30,6 +31,7 @@ const initialState: IStockpileMonitoringValue = {
     year: null,
     month: null,
     week: null,
+    filterBadgeValue: null,
   },
 };
 

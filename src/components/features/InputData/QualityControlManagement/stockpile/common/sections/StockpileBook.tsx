@@ -13,49 +13,50 @@ import {
   GlobalKebabButton,
   MantineDataTable,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
-import { useReadAllLocationselect } from '@/services/graphql/query/global-select/useReadAllLocationSelect';
 import {
   IMonitoringStockpilesTableData,
   useReadAllStockpileMonitoringTable,
 } from '@/services/graphql/query/stockpile-monitoring/useReadAllStockpileMonitoringTable';
 import {
+  globalSelectLocationNative,
   globalSelectMonthNative,
-  globalSelectNative,
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
-import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { newNormalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
 import useControlPanel, {
   ISliceName,
   resetAllSlices,
 } from '@/utils/store/useControlPanel';
+import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
-import { IElementsData, InputControllerNativeProps } from '@/types/global';
+import { IElementsData } from '@/types/global';
 
 const StockpileBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
+  const [filterDataCommon] = useFilterDataCommon(
+    (state) => [state.filterDataCommon, state.setFilterDataCommon],
+    shallow
+  );
   const [
-    { page, search, week, year, month, stockpileId },
+    hasHydrated,
+    { page, search, week, year, month, stockpileId, filterBadgeValue },
     setStockpileMonitoringState,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.stockpileMonitoringState,
       state.setStockpileMonitoringState,
     ],
     shallow
   );
   const [searchQuery] = useDebouncedValue<string>(search, 500);
-  const [stockpileNameSerachTerm, setStockpileNameSerachTerm] =
-    React.useState<string>('');
-  const [stockpileNameSearchQuery] = useDebouncedValue<string>(
-    stockpileNameSerachTerm,
-    400
-  );
 
   const permissions = useStore(usePermissions, (state) => state.permissions);
 
@@ -63,12 +64,6 @@ const StockpileBook = () => {
     'update-monitoring-stockpile'
   );
   const isPermissionRead = permissions?.includes('read-monitoring-stockpile');
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    resetAllSlices(
-      new Set<ISliceName>(['stockpileMonitoringSlice'] as ISliceName[])
-    );
-  }, []);
 
   /* #   /**=========== Query =========== */
   const { elementsData } = useReadAllElementMaster({
@@ -76,15 +71,6 @@ const StockpileBook = () => {
       limit: null,
     },
     fetchPolicy: 'cache-and-network',
-  });
-
-  const { allLocationsData } = useReadAllLocationselect({
-    variables: {
-      limit: null,
-      orderDir: 'desc',
-      search: stockpileNameSearchQuery === '' ? null : stockpileNameSearchQuery,
-      categoryIds: [`${process.env.NEXT_PUBLIC_STOCKPILE_ID}`],
-    },
   });
 
   const {
@@ -99,36 +85,45 @@ const StockpileBook = () => {
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
-      stockpileId,
-      year,
-      month,
-      week,
     },
   });
 
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    resetAllSlices(
+      new Set<ISliceName>(['stockpileMonitoringSlice'] as ISliceName[])
+    );
+  }, []);
+
+  React.useEffect(() => {
+    if (hasHydrated) {
+      refetchMonitoringStockpilesTable({
+        stockpileId,
+        year,
+        month,
+        week,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
+
   /* #endregion  /**======== Query =========== */
 
-  const { uncombinedItem: locationItems } = useFilterItems({
-    data: allLocationsData ?? [],
-  });
-
   const filter = React.useMemo(() => {
-    const stockpileNameItem = globalSelectNative({
+    const stockpileNameItem = globalSelectLocationNative({
       label: 'stockpileName',
-      data: locationItems,
+      name: 'stockpileName',
       searchable: true,
-      placeholder: 'chooseStockpileName',
-      onSearchChange: setStockpileNameSerachTerm,
-      searchValue: stockpileNameSerachTerm,
       value: stockpileId,
+      categoryIds: [`${process.env.NEXT_PUBLIC_STOCKPILE_ID}`],
       onChange: (value) => {
-        setStockpileMonitoringState({ page: 1, stockpileId: value });
+        setStockpileMonitoringState({ stockpileId: value });
       },
     });
     const selectYearItem = globalSelectYearNative({
+      name: 'year',
       onChange: (value) => {
         setStockpileMonitoringState({
-          page: 1,
           year: value ? Number(value) : null,
           month: null,
           week: null,
@@ -137,37 +132,52 @@ const StockpileBook = () => {
       value: year ? `${year}` : null,
     });
     const selectMonthItem = globalSelectMonthNative({
+      name: 'month',
       disabled: !year,
       value: month ? `${month}` : null,
       onChange: (value) => {
         setStockpileMonitoringState({
-          page: 1,
           month: value ? Number(value) : null,
           week: null,
         });
       },
     });
     const selectWeekItem = globalSelectWeekNative({
+      name: 'week',
       disabled: !year,
       value: week ? `${week}` : null,
       year: year,
       onChange: (value) => {
         setStockpileMonitoringState({
-          page: 1,
           week: value ? Number(value) : null,
         });
       },
     });
 
-    const item: InputControllerNativeProps[] = [
-      stockpileNameItem,
-      selectYearItem,
-      selectMonthItem,
-      selectWeekItem,
-    ];
+    const item: IFilterButtonProps = {
+      filterDateWithSelect: [
+        {
+          selectItem: stockpileNameItem,
+          col: 6,
+        },
+        {
+          selectItem: selectYearItem,
+          col: 6,
+          prefix: 'Tahun:',
+        },
+        {
+          selectItem: selectMonthItem,
+          col: 6,
+        },
+        {
+          selectItem: selectWeekItem,
+          col: 6,
+        },
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationItems, year, month, week]);
+  }, [stockpileId, year, month, week]);
 
   const handleSetPage = (page: number) => {
     setStockpileMonitoringState({ page });
@@ -347,9 +357,50 @@ const StockpileBook = () => {
         },
         value: search,
       }}
-      filterDateWithSelect={{
-        items: filter,
-        colSpan: 4,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setStockpileMonitoringState({
+              page: 1,
+              filterBadgeValue: null,
+              year: null,
+              week: null,
+              month: null,
+              stockpileId: null,
+            });
+            refetchMonitoringStockpilesTable({
+              page: 1,
+              year: null,
+              week: null,
+              month: null,
+              stockpileId: null,
+            });
+          },
+        },
+        value: filterBadgeValue,
+      }}
+      filter={{
+        filterDateWithSelect: filter.filterDateWithSelect,
+        filterButton: {
+          disabled: stockpileId || month || week || year ? false : true,
+          onClick: () => {
+            refetchMonitoringStockpilesTable({
+              page: 1,
+              year,
+              week,
+              month,
+              stockpileId,
+            });
+            const badgeFilterValue = newNormalizedFilterBadge({
+              filter: filter.filterDateWithSelect || [],
+              data: filterDataCommon,
+            });
+            setStockpileMonitoringState({
+              page: 1,
+              filterBadgeValue: badgeFilterValue || null,
+            });
+          },
+        },
       }}
     >
       {renderTable}

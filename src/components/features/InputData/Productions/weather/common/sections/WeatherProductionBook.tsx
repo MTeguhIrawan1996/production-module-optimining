@@ -135,7 +135,6 @@ const WeatherProductionBook = () => {
       name: 'year',
       onChange: (value) => {
         setWeatherProductionState({
-          page: 1,
           year: value ? Number(value) : null,
           week: null,
         });
@@ -149,7 +148,6 @@ const WeatherProductionBook = () => {
       year: year,
       onChange: (value) => {
         setWeatherProductionState({
-          page: 1,
           week: value ? Number(value) : null,
         });
       },
