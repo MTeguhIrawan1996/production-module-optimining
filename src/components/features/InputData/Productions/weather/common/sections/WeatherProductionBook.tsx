@@ -13,6 +13,7 @@ import {
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useDeleteWeatherProduction } from '@/services/graphql/mutation/weather-production/useDeleteWeatherProduction';
 import { useReadAllWeatherProduction } from '@/services/graphql/query/weather-production/useReadAllWeatherProduction';
@@ -21,26 +22,34 @@ import {
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
+import { newNormalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
 import useControlPanel, {
   ISliceName,
   resetAllSlices,
 } from '@/utils/store/useControlPanel';
+import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
-
-import { InputControllerNativeProps } from '@/types/global';
 
 const WeatherProductionBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const [{ page, search, week, year }, setWeatherProductionState] =
-    useControlPanel(
-      (state) => [
-        state.weatherProductionState,
-        state.setWeatherProductionState,
-      ],
-      shallow
-    );
+  const [filterDataCommon] = useFilterDataCommon(
+    (state) => [state.filterDataCommon],
+    shallow
+  );
+  const [
+    hasHydrated,
+    { page, search, week, year, filterBadgeValue },
+    setWeatherProductionState,
+  ] = useControlPanel(
+    (state) => [
+      state._hasHydrated,
+      state.weatherProductionState,
+      state.setWeatherProductionState,
+    ],
+    shallow
+  );
   const [id, setId] = React.useState<string>('');
   const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -52,13 +61,6 @@ const WeatherProductionBook = () => {
   const isPermissionUpdate = permissions?.includes('update-weather-data');
   const isPermissionDelete = permissions?.includes('delete-weather-data');
   const isPermissionRead = permissions?.includes('read-weather-data');
-
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    resetAllSlices(
-      new Set<ISliceName>(['weatherProductionSlice'] as ISliceName[])
-    );
-  }, []);
 
   /* #   /**=========== Query =========== */
   const {
@@ -73,10 +75,25 @@ const WeatherProductionBook = () => {
       orderDir: 'desc',
       orderBy: 'date',
       search: searchQuery === '' ? null : searchQuery,
-      year,
-      week,
     },
   });
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    resetAllSlices(
+      new Set<ISliceName>(['weatherProductionSlice'] as ISliceName[])
+    );
+  }, []);
+
+  React.useEffect(() => {
+    if (hasHydrated) {
+      refetchWeatherData({
+        week,
+        year,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteWeatherProduction({
     onCompleted: () => {
@@ -115,6 +132,7 @@ const WeatherProductionBook = () => {
 
   const filter = React.useMemo(() => {
     const selectYearItem = globalSelectYearNative({
+      name: 'year',
       onChange: (value) => {
         setWeatherProductionState({
           page: 1,
@@ -125,6 +143,7 @@ const WeatherProductionBook = () => {
       value: year ? `${year}` : null,
     });
     const selectWeekItem = globalSelectWeekNative({
+      name: 'week',
       disabled: !year,
       value: week ? `${week}` : null,
       year: year,
@@ -136,7 +155,19 @@ const WeatherProductionBook = () => {
       },
     });
 
-    const item: InputControllerNativeProps[] = [selectYearItem, selectWeekItem];
+    const item: IFilterButtonProps = {
+      filterDateWithSelect: [
+        {
+          selectItem: selectYearItem,
+          col: 6,
+          prefix: 'Tahun:',
+        },
+        {
+          selectItem: selectWeekItem,
+          col: 6,
+        },
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, week]);
@@ -296,9 +327,44 @@ const WeatherProductionBook = () => {
             }
           : undefined
       }
-      filterDateWithSelect={{
-        colSpan: 3,
-        items: filter,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setWeatherProductionState({
+              page: 1,
+              filterBadgeValue: null,
+              year: null,
+              week: null,
+            });
+            refetchWeatherData({
+              page: 1,
+              year: null,
+              week: null,
+            });
+          },
+        },
+        value: filterBadgeValue,
+      }}
+      filter={{
+        filterDateWithSelect: filter.filterDateWithSelect,
+        filterButton: {
+          disabled: week || year ? false : true,
+          onClick: () => {
+            refetchWeatherData({
+              page: 1,
+              year,
+              week,
+            });
+            const badgeFilterValue = newNormalizedFilterBadge({
+              filter: filter.filterDateWithSelect || [],
+              data: filterDataCommon,
+            });
+            setWeatherProductionState({
+              page: 1,
+              filterBadgeValue: badgeFilterValue || null,
+            });
+          },
+        },
       }}
       searchBar={{
         placeholder: t('weatherProd.searchPlaceholder'),
