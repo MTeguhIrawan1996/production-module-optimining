@@ -5,6 +5,7 @@ import { sliceResetFns } from '@/utils/store/useControlPanel';
 type IDataRitageQuarryState = {
   page: number;
   search: string;
+  filterBadgeValue: string[] | null;
 };
 
 export type IDataRitageQuarrySliceValue = {
@@ -38,10 +39,13 @@ const initialState: IDataRitageQuarrySliceValue = {
     filterStatus: null,
     filterShift: null,
     filtercompanyHeavyEquipmentId: null,
+    filterBadgeValue: null,
   },
   dataRitageQuarryDumptruckState: {
     page: 1,
     search: '',
+    filterDate: null,
+    filterBadgeValue: null,
   },
 };
 

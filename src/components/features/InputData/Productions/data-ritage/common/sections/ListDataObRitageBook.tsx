@@ -482,10 +482,6 @@ const ListDataObRitageBook = () => {
             }
           : undefined
       }
-      // filterDateWithSelect={{
-      //   colSpan: 4,
-      //   items: filter,
-      // }}
       filterBadge={{
         resetButton: {
           onClick: () => {

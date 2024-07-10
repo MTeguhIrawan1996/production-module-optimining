@@ -1,4 +1,3 @@
-import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -15,6 +14,7 @@ import {
   ModalConfirmation,
   SelectionButtonModal,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
 import { useDeleteQuarryRitage } from '@/services/graphql/mutation/quarry-ritage/useDeleteQuarryRitage';
@@ -29,12 +29,14 @@ import {
 } from '@/utils/constants/Field/native-field';
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
+import {
+  newNormalizedFilterBadge,
+  normalizedRandomFilter,
+} from '@/utils/helper/normalizedFilterBadge';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
-
-import { InputControllerNativeProps } from '@/types/global';
 
 const ListDataQuarryRitageBook = () => {
   const router = useRouter();
@@ -48,8 +50,13 @@ const ListDataQuarryRitageBook = () => {
       filterStatus,
       filterShift,
       filtercompanyHeavyEquipmentId,
+      filterBadgeValue,
     },
-    { page: pageDumptruck, filterDate: filterDateDumptruck },
+    {
+      page: pageDumptruck,
+      filterDate: filterDateDumptruck,
+      filterBadgeValue: filterBadgeValueDT,
+    },
     setDataRitageQuarryState,
   ] = useControlPanel(
     (state) => [
@@ -66,13 +73,6 @@ const ListDataQuarryRitageBook = () => {
     React.useState<boolean>(false);
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
-
-  const [heavyEquipmentSeacrhTerm, setHeavyEquipmentSeacrhTerm] =
-    React.useState<string>('');
-  const [heavyEquipmentSearchQuery] = useDebouncedValue<string>(
-    heavyEquipmentSeacrhTerm,
-    400
-  );
 
   const permissions = useStore(usePermissions, (state) => state.permissions);
 
@@ -94,8 +94,6 @@ const ListDataQuarryRitageBook = () => {
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
     variables: {
       limit: null,
-      search:
-        heavyEquipmentSearchQuery === '' ? null : heavyEquipmentSearchQuery,
       isComplete: true,
       categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
     },
@@ -119,12 +117,12 @@ const ListDataQuarryRitageBook = () => {
     quarryDumpTruckRitagesData,
     quarryDumpTruckRitagesDataLoading,
     quarryDumpTruckRitagesDataMeta,
+    refetchQuarryDumpTruckRitages,
   } = useReadAllRitageQuarryDT({
     variables: {
       limit: 10,
       page: pageDumptruck || 1,
       orderDir: 'desc',
-      date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
     },
     skip: tabs !== 'quarry',
   });
@@ -139,20 +137,41 @@ const ListDataQuarryRitageBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      date: formatDate(filterDate, 'YYYY-MM-DD') || null,
-      shiftId: filterShift === '' ? null : filterShift,
-      isRitageProblematic: filterStatus
-        ? filterStatus === 'true'
-          ? false
-          : true
-        : null,
-      companyHeavyEquipmentId:
-        filtercompanyHeavyEquipmentId === ''
-          ? null
-          : filtercompanyHeavyEquipmentId,
     },
     skip: tabs !== 'quarry',
   });
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    useControlPanel.persist.onFinishHydration(
+      ({ dataRitageQuarryState, dataRitageQuarryDumptruckState }) => {
+        const {
+          filtercompanyHeavyEquipmentId,
+          filterDate,
+          filterShift,
+          filterStatus,
+        } = dataRitageQuarryState;
+        const { filterDate: filterDateDumptruck } =
+          dataRitageQuarryDumptruckState;
+        refetchQuarryRitages({
+          date: formatDate(filterDate, 'YYYY-MM-DD') || null,
+          shiftId: filterShift === '' ? null : filterShift,
+          isRitageProblematic: filterStatus
+            ? filterStatus === 'true'
+              ? false
+              : true
+            : null,
+          companyHeavyEquipmentId:
+            filtercompanyHeavyEquipmentId === ''
+              ? null
+              : filtercompanyHeavyEquipmentId,
+        });
+        refetchQuarryDumpTruckRitages({
+          date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
+        });
+      }
+    );
+  }, [refetchQuarryDumpTruckRitages, refetchQuarryRitages]);
 
   const [executeDelete, { loading }] = useDeleteQuarryRitage({
     onCompleted: () => {
@@ -192,7 +211,7 @@ const ListDataQuarryRitageBook = () => {
   const handleSetPage = (page: number) => {
     setDataRitageQuarryState({
       dataRitageQuarryState: {
-        page: page,
+        page,
       },
     });
   };
@@ -200,12 +219,12 @@ const ListDataQuarryRitageBook = () => {
   const filter = React.useMemo(() => {
     const dateItem = globalDateNative({
       label: 'date',
+      name: 'date',
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
         setDataRitageQuarryState({
           dataRitageQuarryState: {
-            page: 1,
             filterDate: value || null,
           },
         });
@@ -215,6 +234,7 @@ const ListDataQuarryRitageBook = () => {
     const ritageProblematic = globalSelectNative({
       placeholder: 'chooseRitageStatus',
       label: 'ritageStatus',
+      name: 'ritageStatus',
       data: [
         {
           label: t('commonTypography.complete'),
@@ -228,7 +248,6 @@ const ListDataQuarryRitageBook = () => {
       onChange: (value) => {
         setDataRitageQuarryState({
           dataRitageQuarryState: {
-            page: 1,
             filterStatus: value,
           },
         });
@@ -238,12 +257,12 @@ const ListDataQuarryRitageBook = () => {
     const shiftItem = globalSelectNative({
       placeholder: 'chooseShift',
       label: 'shift',
+      name: 'shift',
       searchable: false,
       data: shiftFilterItem,
       onChange: (value) => {
         setDataRitageQuarryState({
           dataRitageQuarryState: {
-            page: 1,
             filterShift: value,
           },
         });
@@ -255,12 +274,9 @@ const ListDataQuarryRitageBook = () => {
       label: 'heavyEquipmentCode',
       searchable: true,
       data: heavyEquipmentItemFilter,
-      onSearchChange: setHeavyEquipmentSeacrhTerm,
-      searchValue: heavyEquipmentSeacrhTerm,
       onChange: (value) => {
         setDataRitageQuarryState({
           dataRitageQuarryState: {
-            page: 1,
             filtercompanyHeavyEquipmentId: value,
           },
         });
@@ -270,12 +286,27 @@ const ListDataQuarryRitageBook = () => {
         : undefined,
     });
 
-    const item: InputControllerNativeProps[] = [
-      dateItem,
-      ritageProblematic,
-      shiftItem,
-      heavyEquipmentItem,
-    ];
+    const item: IFilterButtonProps = {
+      filterDateWithSelect: [
+        {
+          selectItem: dateItem,
+          col: 6,
+        },
+        {
+          selectItem: ritageProblematic,
+          col: 6,
+          prefix: 'Ritase',
+        },
+        {
+          selectItem: shiftItem,
+          col: 6,
+        },
+        {
+          selectItem: heavyEquipmentItem,
+          col: 6,
+        },
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [heavyEquipmentItemFilter, shiftFilterItem]);
@@ -450,46 +481,75 @@ const ListDataQuarryRitageBook = () => {
             }
           : undefined
       }
-      filterDateWithSelect={{
-        colSpan: 4,
-        items: filter,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setDataRitageQuarryState({
+              dataRitageQuarryState: {
+                page: 1,
+                filterBadgeValue: null,
+                filtercompanyHeavyEquipmentId: null,
+                filterShift: null,
+                filterStatus: null,
+                filterDate: null,
+              },
+            });
+            refetchQuarryRitages({
+              page: 1,
+              shiftId: null,
+              isRitageProblematic: null,
+              companyHeavyEquipmentId: null,
+              date: null,
+            });
+          },
+        },
+        value: filterBadgeValue || null,
       }}
-      downloadButton={[
-        {
-          label: t('ritageQuarry.downloadTemplateQuarry'),
-          url: `/quarry-ritages/file`,
-          fileName: 'template-quarry',
-          trackDownloadAction: () => {
-            sendGAEvent({
-              event: 'Unduh',
-              params: {
-                category: 'Produksi',
-                subSubCategory:
-                  'Produksi - Data Ritase - Quarry - Template Input',
-                subCategory: 'Produksi - Data Ritase - Quarry',
-                account: userAuthData?.email ?? '',
+      filter={{
+        filterDateWithSelect: filter.filterDateWithSelect,
+        filterButton: {
+          disabled:
+            filterShift ||
+            filterStatus ||
+            filtercompanyHeavyEquipmentId ||
+            filterDate
+              ? false
+              : true,
+          onClick: () => {
+            refetchQuarryRitages({
+              page: 1,
+              date: formatDate(filterDate, 'YYYY-MM-DD') || null,
+              shiftId: filterShift === '' ? null : filterShift,
+              isRitageProblematic: filterStatus
+                ? filterStatus === 'true'
+                  ? false
+                  : true
+                : null,
+              companyHeavyEquipmentId:
+                filtercompanyHeavyEquipmentId === ''
+                  ? null
+                  : filtercompanyHeavyEquipmentId,
+            });
+            const { newData, newfilter } = normalizedRandomFilter({
+              filterDateWithSelect: filter.filterDateWithSelect,
+            });
+
+            const badgeFilterValue = newNormalizedFilterBadge({
+              filter: newfilter || [],
+              data: newData || [],
+            });
+            const date = formatDate(filterDate);
+            setDataRitageQuarryState({
+              dataRitageQuarryState: {
+                page: 1,
+                filterBadgeValue: date
+                  ? [date, ...badgeFilterValue]
+                  : badgeFilterValue,
               },
             });
           },
         },
-        {
-          label: t('commonTypography.downloadReference'),
-          url: `/download/references`,
-          fileName: 'referensi-quarry',
-          trackDownloadAction: () => {
-            sendGAEvent({
-              event: 'Unduh',
-              params: {
-                category: 'Produksi',
-                subSubCategory:
-                  'Produksi - Data Ritase - Quarry - Template Referensi',
-                subCategory: 'Produksi - Data Ritase - Quarry',
-                account: userAuthData?.email ?? '',
-              },
-            });
-          },
-        },
-      ]}
+      }}
     >
       {renderTable}
       <ListDataRitageDumptruckBook
@@ -509,12 +569,38 @@ const ListDataQuarryRitageBook = () => {
           setDataRitageQuarryState({
             dataRitageQuarryDumptruckState: {
               filterDate: v || null,
-              page: 1,
             },
           });
         }}
         date={filterDateDumptruck || undefined}
         urlDetail="/input-data/production/data-ritage/quarry/read/dump-truck"
+        filterBadgeValue={filterBadgeValueDT}
+        onFilter={() => {
+          refetchQuarryDumpTruckRitages({
+            page: 1,
+            date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
+          });
+          const date = formatDate(filterDateDumptruck);
+          setDataRitageQuarryState({
+            dataRitageQuarryDumptruckState: {
+              page: 1,
+              filterBadgeValue: date ? [date] : [],
+            },
+          });
+        }}
+        onReset={() => {
+          setDataRitageQuarryState({
+            dataRitageQuarryDumptruckState: {
+              page: 1,
+              filterBadgeValue: null,
+              filterDate: null,
+            },
+          });
+          refetchQuarryDumpTruckRitages({
+            page: 1,
+            date: null,
+          });
+        }}
       />
       <ModalConfirmation
         isOpenModalConfirmation={isOpenDeleteConfirmation}
