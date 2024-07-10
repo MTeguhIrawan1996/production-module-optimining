@@ -75,6 +75,7 @@ const DataRitagePage = () => {
         titleProps={{
           title: t('commonTypography.dataRitage'),
           mb: 'md',
+          px: 0,
         }}
       >
         <GlobalTabs

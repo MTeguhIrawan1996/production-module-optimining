@@ -145,6 +145,14 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
               onClick={() => router.back()}
             />
           )}
+          {segmentedControl ? (
+            <SegmentedControl
+              w={220}
+              size="sm"
+              radius={4}
+              {...segmentedControl}
+            />
+          ) : null}
           <Group position={title ? 'apart' : 'right'}>
             {title && (
               <Title order={order} fw={fw} {...restTitleStyle}>
@@ -175,7 +183,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
                 </Group>
               </Group>
               {filterBadge && filterBadge.value ? (
-                <Group position="left" spacing="sm" w="100%">
+                <Group position="left" spacing={6} w="100%">
                   {filterBadge.value.map((v, i) => (
                     <Badge
                       key={i}
@@ -205,14 +213,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
               ) : null}
             </Stack>
           </Group>
-          {segmentedControl ? (
-            <SegmentedControl
-              w={220}
-              size="sm"
-              radius={4}
-              {...segmentedControl}
-            />
-          ) : null}
+
           <Stack {...childrenStackProps}>
             {MultiFilter ? <MultipleFilter {...MultiFilter} /> : null}
             {filterDateWithSelect ? (
@@ -229,7 +230,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
               </SimpleGrid>
             ) : null}
             {downloadButton && downloadButton.length > 0 ? (
-              <Group>
+              <Group px="md">
                 {downloadButton.map((obj, i) => (
                   <DownloadButton
                     leftIcon={<IconDownload size="20px" />}

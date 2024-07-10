@@ -1,4 +1,3 @@
-/* eslint-disable unused-imports/no-unused-vars */
 import { Select, SelectProps } from '@mantine/core';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +18,7 @@ const SelectInputNative: React.FC<ISelectInputNativeProps> = ({
   return (
     <Select
       radius="sm"
+      name={name}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
       data-control={control}
