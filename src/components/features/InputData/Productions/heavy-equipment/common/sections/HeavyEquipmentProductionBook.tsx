@@ -14,6 +14,7 @@ import {
   ModalConfirmation,
   SelectionButtonModal,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useDeleteHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useDeleteHeavyEquipmentProduction';
 import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
@@ -28,19 +29,21 @@ import useControlPanel, {
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
-import { InputControllerNativeProps } from '@/types/global';
-
 const HeavyEquipmentProductionBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
-  const [{ page, search, date }, setHeavyEquipmentProductionState] =
-    useControlPanel(
-      (state) => [
-        state.heavyEquipmentProductionState,
-        state.setHeavyEquipmentProductionState,
-      ],
-      shallow
-    );
+  const [
+    hasHydrated,
+    { page, search, date, filterBadgeValue },
+    setHeavyEquipmentProductionState,
+  ] = useControlPanel(
+    (state) => [
+      state._hasHydrated,
+      state.heavyEquipmentProductionState,
+      state.setHeavyEquipmentProductionState,
+    ],
+    shallow
+  );
   const [id, setId] = React.useState<string>('');
   const [searchQuery] = useDebouncedValue<string>(search, 500);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -64,12 +67,6 @@ const HeavyEquipmentProductionBook = () => {
     'delete-heavy-equipment-data'
   );
   const isPermissionRead = permissions?.includes('read-heavy-equipment-data');
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    resetAllSlices(
-      new Set<ISliceName>(['heavyEquipmentProductionSlice'] as ISliceName[])
-    );
-  }, []);
 
   /* #   /**=========== Query =========== */
   const dateFormat = formatDate(date, 'YYYY-MM-DD');
@@ -85,9 +82,24 @@ const HeavyEquipmentProductionBook = () => {
       orderDir: 'desc',
       orderBy: 'createdAt',
       search: searchQuery === '' ? null : searchQuery,
-      date: dateFormat || null,
     },
   });
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    resetAllSlices(
+      new Set<ISliceName>(['heavyEquipmentProductionSlice'] as ISliceName[])
+    );
+  }, []);
+
+  React.useEffect(() => {
+    if (hasHydrated) {
+      refetchHeavyEquipmentData({
+        date: dateFormat || null,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteHeavyEquipmentProduction({
     onCompleted: () => {
@@ -127,15 +139,23 @@ const HeavyEquipmentProductionBook = () => {
   const filter = React.useMemo(() => {
     const dateItem = globalDateNative({
       label: 'date',
+      name: 'date',
       placeholder: 'chooseDate',
       clearable: true,
       value: date,
       onChange: (value) => {
-        setHeavyEquipmentProductionState({ page: 1, date: value || null });
+        setHeavyEquipmentProductionState({ date: value || null });
       },
     });
 
-    const item: InputControllerNativeProps[] = [dateItem];
+    const item: IFilterButtonProps = {
+      filterDateWithSelect: [
+        {
+          selectItem: dateItem,
+          col: 6,
+        },
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
@@ -310,9 +330,38 @@ const HeavyEquipmentProductionBook = () => {
             }
           : undefined
       }
-      filterDateWithSelect={{
-        colSpan: 3,
-        items: filter,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setHeavyEquipmentProductionState({
+              date: null,
+              filterBadgeValue: null,
+            });
+            refetchHeavyEquipmentData({
+              page: 1,
+              date: null,
+            });
+          },
+        },
+        value: filterBadgeValue || null,
+      }}
+      filter={{
+        filterDateWithSelect: filter.filterDateWithSelect,
+        filterButton: {
+          disabled: date ? false : true,
+          onClick: () => {
+            refetchHeavyEquipmentData({
+              page: 1,
+              date: dateFormat || null,
+            });
+
+            const newDate = formatDate(date);
+            setHeavyEquipmentProductionState({
+              page: 1,
+              filterBadgeValue: newDate ? [newDate] : [],
+            });
+          },
+        },
       }}
       searchBar={{
         placeholder: t('heavyEquipmentProd.searchPlaceholder'),
