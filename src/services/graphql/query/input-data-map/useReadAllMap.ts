@@ -132,8 +132,8 @@ export const useReadAllMap = ({
   });
 
   return {
-    mapData: mapData?.mapDatas.data,
-    mapMeta: mapData?.mapDatas.meta,
+    mapData: mapData?.mapDatas?.data,
+    mapMeta: mapData?.mapDatas?.meta,
     mapDataLoading,
     refetchMap: refetch,
   };

@@ -9,6 +9,7 @@ type IQuarterlyMapProductionState = {
   mapQuarterlyLocation: string | null;
   year: number | null;
   quarter: number | null;
+  filterBadgeValue: string[] | null;
 };
 
 export type IQuarterlyMapProductionStateValue = {
@@ -30,6 +31,7 @@ const initialState: IQuarterlyMapProductionStateValue = {
     mapQuarterlyLocation: null,
     year: null,
     quarter: null,
+    filterBadgeValue: null,
   },
 };
 

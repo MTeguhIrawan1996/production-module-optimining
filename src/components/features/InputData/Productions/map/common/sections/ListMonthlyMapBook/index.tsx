@@ -15,6 +15,7 @@ import {
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useDeleteMap } from '@/services/graphql/mutation/input-data-map/useDeleteMap';
 import { useReadAllMap } from '@/services/graphql/query/input-data-map/useReadAllMap';
@@ -25,11 +26,12 @@ import {
   globalSelectNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import { newNormalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
+import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel from '@/utils/store/useControlPanel';
+import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
-
-import { InputControllerNativeProps } from '@/types/global';
 
 const locationIds = [
   process.env.NEXT_PUBLIC_GRID_ID,
@@ -42,11 +44,25 @@ const ListMonthlyMapBook = () => {
   const { t } = useTranslation('default');
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const [tabs] = useQueryState('tabs');
+  const [filterDataCommon, setFilterDataCommon] = useFilterDataCommon(
+    (state) => [state.filterDataCommon, state.setFilterDataCommon],
+    shallow
+  );
   const [
-    { page, search, month, year, mapMonthlyCategory, mapMonthlyLocation },
+    hasHydrated,
+    {
+      page,
+      search,
+      month,
+      year,
+      mapMonthlyCategory,
+      mapMonthlyLocation,
+      filterBadgeValue,
+    },
     setMonthlyMapProductionState,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.monthlyMapProductionState,
       state.setMonthlyMapProductionState,
     ],
@@ -69,13 +85,21 @@ const ListMonthlyMapBook = () => {
       limit: 15,
       search: searchQuery === '' ? null : searchQuery,
       dateType: 'MONTH',
-      mapDataCategoryId: mapMonthlyCategory || undefined,
-      year: Number(year) === 0 ? undefined : Number(year),
-      month: Number(month) === 0 ? undefined : Number(month),
-      mapDataLocationId: (mapMonthlyLocation as string) || undefined,
     },
     skip: tabs !== 'monthly',
   });
+
+  React.useEffect(() => {
+    if (hasHydrated) {
+      refetchMap({
+        mapDataCategoryId: mapMonthlyCategory || undefined,
+        year: Number(year) === 0 ? undefined : Number(year),
+        month: Number(month) === 0 ? undefined : Number(month),
+        mapDataLocationId: (mapMonthlyLocation as string) || undefined,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteMap({
     onCompleted: () => {
@@ -99,27 +123,23 @@ const ListMonthlyMapBook = () => {
     },
   });
 
-  const [mapCategoryList, setMapCategoryList] = React.useState<
-    Array<{
-      label: string;
-      value: string;
-    }>
-  >([]);
-
   useReadAllMapCategory({
     variables: {
       limit: 100,
     },
     onCompleted: (data) => {
-      setMapCategoryList(
-        data?.mapDataCategories.data.map((item) => {
-          return {
-            label: item.name,
-            value: item.id,
-          };
-        }) || []
-      );
+      const item = data.mapDataCategories.data.map((val) => {
+        return {
+          name: val.name || '',
+          id: val.id,
+        };
+      });
+      setFilterDataCommon({ key: 'mapType', data: item });
     },
+  });
+
+  const { uncombinedItem } = useFilterItems({
+    data: filterDataCommon.find((v) => v.key === 'mapType')?.data ?? [],
   });
 
   const handleDelete = async () => {
@@ -138,51 +158,70 @@ const ListMonthlyMapBook = () => {
     const mapTypeItem = globalSelectNative({
       placeholder: 'chooseMapType',
       label: 'mapType',
+      name: 'mapType',
       searchable: false,
-      data: mapCategoryList,
+      data: uncombinedItem,
       value: mapMonthlyCategory,
       onChange: (v) => {
-        setMonthlyMapProductionState({ page: 1, mapMonthlyCategory: v });
+        setMonthlyMapProductionState({ mapMonthlyCategory: v });
       },
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
+      name: 'location',
       searchable: true,
       value: mapMonthlyLocation,
-      defaultValue: mapMonthlyLocation,
       onChange: (v) => {
-        setMonthlyMapProductionState({ page: 1, mapMonthlyLocation: v });
+        setMonthlyMapProductionState({ mapMonthlyLocation: v });
       },
       categoryIds: (locationIds as string[]) || [],
     });
     const yearItem = globalSelectYearNative({
       placeholder: 'year',
       label: 'year',
+      name: 'year',
       searchable: true,
       value: year ? `${year}` : null,
       onChange: (v) => {
-        setMonthlyMapProductionState({ page: 1, year: v ? Number(v) : null });
+        setMonthlyMapProductionState({ year: v ? Number(v) : null });
       },
     });
     const monthItem = globalSelectMonthNative({
       placeholder: 'month',
       label: 'month',
+      name: 'month',
       searchable: true,
       value: month ? `${month}` : null,
       onChange: (v) => {
-        setMonthlyMapProductionState({ page: 1, month: v ? Number(v) : null });
+        setMonthlyMapProductionState({ month: v ? Number(v) : null });
       },
     });
 
-    const item: InputControllerNativeProps[] = [
-      mapTypeItem,
-      locationItem,
-      yearItem,
-      monthItem,
-    ];
+    const item: IFilterButtonProps = {
+      filterDateWithSelect: [
+        {
+          selectItem: mapTypeItem,
+          col: 6,
+        },
+        {
+          selectItem: locationItem,
+          col: 6,
+          prefix: 'Lokasi:',
+        },
+        {
+          selectItem: yearItem,
+          col: 6,
+          prefix: 'Tahun:',
+        },
+        {
+          selectItem: monthItem,
+          col: 6,
+        },
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapCategoryList, mapMonthlyCategory, mapMonthlyLocation, month, year]);
+  }, [uncombinedItem, mapMonthlyCategory, mapMonthlyLocation, month, year]);
 
   return (
     <DashboardCard
@@ -196,9 +235,53 @@ const ListMonthlyMapBook = () => {
             }
           : undefined
       }
-      filterDateWithSelect={{
-        colSpan: 4,
-        items: filter,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setMonthlyMapProductionState({
+              page: 1,
+              filterBadgeValue: null,
+              year: null,
+              month: null,
+              mapMonthlyCategory: null,
+              mapMonthlyLocation: null,
+            });
+            refetchMap({
+              page: 1,
+              mapDataCategoryId: undefined,
+              year: undefined,
+              month: undefined,
+              mapDataLocationId: undefined,
+            });
+          },
+        },
+        value: filterBadgeValue,
+      }}
+      filter={{
+        filterDateWithSelect: filter.filterDateWithSelect,
+        filterButton: {
+          disabled:
+            mapMonthlyCategory || mapMonthlyLocation || month || year
+              ? false
+              : true,
+          onClick: () => {
+            refetchMap({
+              page: 1,
+              mapDataCategoryId: mapMonthlyCategory || undefined,
+              year: Number(year) === 0 ? undefined : Number(year),
+              month: Number(month) === 0 ? undefined : Number(month),
+              mapDataLocationId: (mapMonthlyLocation as string) || undefined,
+            });
+            const badgeFilterValue = newNormalizedFilterBadge({
+              filter: filter.filterDateWithSelect || [],
+              data: filterDataCommon,
+            });
+            setMonthlyMapProductionState({
+              page: 1,
+              filterBadgeValue: badgeFilterValue || null,
+            });
+          },
+        },
       }}
       searchBar={{
         placeholder: t('mapProduction.searchPlaceholder'),

@@ -9,6 +9,7 @@ type IWeeklyMapProductionState = {
   mapWeeklyLocation: string | null;
   year: number | null;
   week: number | null;
+  filterBadgeValue: string[] | null;
 };
 
 export type IWeeklyMapProductionStateValue = {
@@ -30,6 +31,7 @@ const initialState: IWeeklyMapProductionStateValue = {
     mapWeeklyLocation: null,
     week: null,
     year: null,
+    filterBadgeValue: null,
   },
 };
 

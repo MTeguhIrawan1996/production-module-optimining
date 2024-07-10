@@ -15,6 +15,7 @@ import {
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useDeleteMap } from '@/services/graphql/mutation/input-data-map/useDeleteMap';
 import { useReadAllMap } from '@/services/graphql/query/input-data-map/useReadAllMap';
@@ -25,11 +26,12 @@ import {
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import { newNormalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
+import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel from '@/utils/store/useControlPanel';
+import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
-
-import { InputControllerNativeProps } from '@/types/global';
 
 const locationIds = [
   process.env.NEXT_PUBLIC_GRID_ID,
@@ -42,11 +44,25 @@ const ListWeeklyMapBook = () => {
   const { t } = useTranslation('default');
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const [tabs] = useQueryState('tabs', queryTypes.string.withDefault('weekly'));
+  const [filterDataCommon, setFilterDataCommon] = useFilterDataCommon(
+    (state) => [state.filterDataCommon, state.setFilterDataCommon],
+    shallow
+  );
   const [
-    { page, search, week, year, mapWeeklyCategory, mapWeeklyLocation },
+    hasHydrated,
+    {
+      page,
+      search,
+      week,
+      year,
+      mapWeeklyCategory,
+      mapWeeklyLocation,
+      filterBadgeValue,
+    },
     setWeeklyMapProductionState,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.weeklyMapProductionState,
       state.setWeeklyMapProductionState,
     ],
@@ -67,13 +83,21 @@ const ListWeeklyMapBook = () => {
       limit: 10,
       search: searchQuery === '' ? null : searchQuery,
       dateType: 'WEEK',
-      mapDataCategoryId: mapWeeklyCategory || undefined,
-      year: Number(year) === 0 ? undefined : Number(year),
-      week: Number(week) === 0 ? undefined : Number(week),
-      mapDataLocationId: (mapWeeklyLocation as string) || undefined,
     },
     skip: tabs !== 'weekly',
   });
+
+  React.useEffect(() => {
+    if (hasHydrated) {
+      refetchMap({
+        mapDataCategoryId: mapWeeklyCategory || undefined,
+        year: Number(year) === 0 ? undefined : Number(year),
+        week: Number(week) === 0 ? undefined : Number(week),
+        mapDataLocationId: (mapWeeklyLocation as string) || undefined,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteMap({
     onCompleted: () => {
@@ -97,27 +121,23 @@ const ListWeeklyMapBook = () => {
     },
   });
 
-  const [mapCategoryList, setMapCategoryList] = React.useState<
-    Array<{
-      label: string;
-      value: string;
-    }>
-  >([]);
-
   useReadAllMapCategory({
     variables: {
       limit: 100,
     },
     onCompleted: (data) => {
-      setMapCategoryList(
-        data?.mapDataCategories.data.map((item) => {
-          return {
-            label: item.name,
-            value: item.id,
-          };
-        }) || []
-      );
+      const item = data.mapDataCategories.data.map((val) => {
+        return {
+          name: val.name || '',
+          id: val.id,
+        };
+      });
+      setFilterDataCommon({ key: 'mapType', data: item });
     },
+  });
+
+  const { uncombinedItem } = useFilterItems({
+    data: filterDataCommon.find((v) => v.key === 'mapType')?.data ?? [],
   });
 
   const handleDelete = async () => {
@@ -134,20 +154,22 @@ const ListWeeklyMapBook = () => {
 
   const filter = React.useMemo(() => {
     const mapTypeItem = globalSelectNative({
+      name: 'mapType',
       placeholder: 'chooseMapType',
       label: 'mapType',
       searchable: false,
-      data: mapCategoryList,
+      data: uncombinedItem,
       value: mapWeeklyCategory,
       onChange: (v) => {
-        setWeeklyMapProductionState({ page: 1, mapWeeklyCategory: v });
+        setWeeklyMapProductionState({ mapWeeklyCategory: v });
       },
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
+      name: 'location',
       searchable: true,
       onChange: (v) => {
-        setWeeklyMapProductionState({ page: 1, mapWeeklyLocation: v });
+        setWeeklyMapProductionState({ mapWeeklyLocation: v });
       },
       value: mapWeeklyLocation,
       categoryIds: (locationIds as string[]) || [],
@@ -155,31 +177,49 @@ const ListWeeklyMapBook = () => {
     const yearItem = globalSelectYearNative({
       placeholder: 'year',
       label: 'year',
+      name: 'year',
       searchable: true,
       value: year ? `${year}` : null,
       onChange: (v) => {
-        setWeeklyMapProductionState({ page: 1, year: v ? Number(v) : null });
+        setWeeklyMapProductionState({ year: v ? Number(v) : null });
       },
     });
     const weekItem = globalSelectWeekNative({
       placeholder: 'week',
       label: 'week',
+      name: 'week',
       searchable: true,
       value: week ? `${week}` : null,
       onChange: (v) => {
-        setWeeklyMapProductionState({ page: 1, week: v ? Number(v) : null });
+        setWeeklyMapProductionState({ week: v ? Number(v) : null });
       },
     });
 
-    const item: InputControllerNativeProps[] = [
-      mapTypeItem,
-      locationItem,
-      yearItem,
-      weekItem,
-    ];
+    const item: IFilterButtonProps = {
+      filterDateWithSelect: [
+        {
+          selectItem: mapTypeItem,
+          col: 6,
+        },
+        {
+          selectItem: locationItem,
+          col: 6,
+          prefix: 'Lokasi:',
+        },
+        {
+          selectItem: yearItem,
+          col: 6,
+          prefix: 'Tahun:',
+        },
+        {
+          selectItem: weekItem,
+          col: 6,
+        },
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapCategoryList, mapWeeklyCategory, mapWeeklyLocation, week, year]);
+  }, [uncombinedItem, mapWeeklyCategory, mapWeeklyLocation, week, year]);
 
   return (
     <DashboardCard
@@ -193,9 +233,53 @@ const ListWeeklyMapBook = () => {
             }
           : undefined
       }
-      filterDateWithSelect={{
-        colSpan: 4,
-        items: filter,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setWeeklyMapProductionState({
+              page: 1,
+              filterBadgeValue: null,
+              year: null,
+              week: null,
+              mapWeeklyCategory: null,
+              mapWeeklyLocation: null,
+            });
+            refetchMap({
+              page: 1,
+              mapDataCategoryId: undefined,
+              year: undefined,
+              week: undefined,
+              mapDataLocationId: undefined,
+            });
+          },
+        },
+        value: filterBadgeValue,
+      }}
+      filter={{
+        filterDateWithSelect: filter.filterDateWithSelect,
+        filterButton: {
+          disabled:
+            mapWeeklyCategory || mapWeeklyLocation || week || year
+              ? false
+              : true,
+          onClick: () => {
+            refetchMap({
+              page: 1,
+              mapDataCategoryId: mapWeeklyCategory || undefined,
+              year: Number(year) === 0 ? undefined : Number(year),
+              week: Number(week) === 0 ? undefined : Number(week),
+              mapDataLocationId: (mapWeeklyLocation as string) || undefined,
+            });
+            const badgeFilterValue = newNormalizedFilterBadge({
+              filter: filter.filterDateWithSelect || [],
+              data: filterDataCommon,
+            });
+            setWeeklyMapProductionState({
+              page: 1,
+              filterBadgeValue: badgeFilterValue || null,
+            });
+          },
+        },
       }}
       searchBar={{
         placeholder: t('mapProduction.searchPlaceholder'),

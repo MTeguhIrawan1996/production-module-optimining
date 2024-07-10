@@ -7,6 +7,7 @@ import { shallow } from 'zustand/shallow';
 
 import { GlobalTabs, InnerWrapper, RootWrapper } from '@/components/elements';
 
+import { useRouterReady } from '@/utils/hooks/useRouterReady';
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 import useControlPanel, {
   ISliceName,
@@ -23,6 +24,7 @@ import ListYearlyMapBook from './sections/ListYearlyMapBook';
 const MapProductionPage = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
+  const isRouterReady = useRouterReady();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const [tabs, setTabs] = useQueryState(
     'tabs',
@@ -62,12 +64,15 @@ const MapProductionPage = () => {
     setTabs(tabs);
   };
 
+  if (!isRouterReady) return null;
+
   return (
     <RootWrapper>
       <InnerWrapper
         titleProps={{
           title: t('commonTypography.map'),
           mb: 'md',
+          px: 0,
         }}
       >
         <GlobalTabs
@@ -75,7 +80,7 @@ const MapProductionPage = () => {
             defaultValue: 'weekly',
             value: tabs,
             onTabChange: (value) => handleChangeTab(value),
-            keepMounted: true,
+            keepMounted: false,
           }}
           tabsData={[
             {

@@ -8,6 +8,7 @@ type IYearlyMapProductionState = {
   mapYearlyCategory: string | null;
   mapYearlyLocation: string | null;
   year: number | null;
+  filterBadgeValue: string[] | null;
 };
 
 export type IYearlyMapProductionStateValue = {
@@ -28,6 +29,7 @@ const initialState: IYearlyMapProductionStateValue = {
     mapYearlyCategory: null,
     mapYearlyLocation: null,
     year: null,
+    filterBadgeValue: null,
   },
 };
 

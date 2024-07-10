@@ -98,6 +98,7 @@ const MonthlyPlanBook = () => {
     });
   };
 
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const filter = React.useMemo(() => {
     const selectYearItem = globalSelectYearNative({
       onChange: (value) => {
@@ -238,10 +239,6 @@ const MonthlyPlanBook = () => {
       addButton={{
         label: t('monthlyPlan.create'),
         onClick: () => router.push('/plan/monthly/create'),
-      }}
-      filterDateWithSelect={{
-        colSpan: 4,
-        items: filter,
       }}
     >
       {renderTable}
