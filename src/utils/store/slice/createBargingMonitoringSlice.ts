@@ -10,6 +10,7 @@ type IBargingMonitoringState = {
   year: number | null;
   month: number | null;
   week: number | null;
+  filterBadgeValue: string[] | null;
 };
 
 export type IBargingMonitoringValue = {
@@ -32,6 +33,7 @@ const initialState: IBargingMonitoringValue = {
     year: null,
     month: null,
     week: null,
+    filterBadgeValue: null,
   },
 };
 

@@ -1,10 +1,11 @@
 import { Select, SelectProps } from '@mantine/core';
-import { useDebouncedValue } from '@mantine/hooks';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import { useReadAllHeavyEquipmentSelect } from '@/services/graphql/query/global-select/useReadAllHeavyEquipmentSelect';
 import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 
 export type ISelectHeavyEquipmentNativeProps = {
   control: 'select-heavy-equipment-native';
@@ -24,30 +25,37 @@ const SelectHeavyEquipmentNative: React.FC<
   defaultValue,
   value,
   categoryId = null,
+  name,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
-  const [searchTerm, setSearchTerm] = React.useState<string>('');
-  const [searchQuery] = useDebouncedValue<string>(searchTerm, 400);
+  // const [searchTerm, setSearchTerm] = React.useState<string>('');
+  // const [searchQuery] = useDebouncedValue<string>(searchTerm, 400);
+  const [filterDataCommon, setFilterDataCommon] = useFilterDataCommon(
+    (state) => [state.filterDataCommon, state.setFilterDataCommon],
+    shallow
+  );
 
-  const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
+  useReadAllHeavyEquipmentSelect({
     variables: {
       limit: null,
-      search: searchQuery === '' ? null : searchQuery,
+      // search: searchQuery === '' ? null : searchQuery,
       isComplete: true,
       categoryId: categoryId === '' ? null : categoryId,
     },
-  });
-
-  const heavyEquipmentItem = heavyEquipmentSelect?.map((val) => {
-    return {
-      name: val.hullNumber ?? '',
-      id: val.id ?? '',
-    };
+    onCompleted: (data) => {
+      const item = data.companyHeavyEquipments.data.map((val) => {
+        return {
+          name: val.hullNumber || '',
+          id: val.id,
+        };
+      });
+      setFilterDataCommon({ key: name || '', data: item });
+    },
   });
 
   const { uncombinedItem } = useCombineFilterItems({
-    data: heavyEquipmentItem ?? [],
+    data: filterDataCommon.find((v) => v.key === name)?.data ?? [],
     combinedId: defaultValue ?? '',
     combinedName: labelValue,
   });
@@ -56,12 +64,13 @@ const SelectHeavyEquipmentNative: React.FC<
     <Select
       value={value}
       radius="sm"
+      name={name}
       data={uncombinedItem}
       defaultValue={defaultValue}
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
-      onSearchChange={setSearchTerm}
-      searchValue={searchTerm}
+      // onSearchChange={setSearchTerm}
+      // searchValue={searchTerm}
       data-control={control}
       placeholder={t('commonTypography.chooseHeavyEquipmentCode', {
         ns: 'default',
