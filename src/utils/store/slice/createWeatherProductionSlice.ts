@@ -7,6 +7,7 @@ type IWeatherProductionState = {
   search: string;
   year: number | null;
   week: number | null;
+  filterBadgeValue: string[] | null;
 };
 
 export type IWeatherProductionValue = {
@@ -26,6 +27,7 @@ const initialState: IWeatherProductionValue = {
     search: '',
     year: null,
     week: null,
+    filterBadgeValue: null,
   },
 };
 

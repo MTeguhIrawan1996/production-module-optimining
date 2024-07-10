@@ -15,6 +15,7 @@ import {
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useDeleteMap } from '@/services/graphql/mutation/input-data-map/useDeleteMap';
 import { useReadAllMap } from '@/services/graphql/query/input-data-map/useReadAllMap';
@@ -24,11 +25,15 @@ import {
   globalSelectNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import {
+  newNormalizedFilterBadge,
+  normalizedRandomFilter,
+} from '@/utils/helper/normalizedFilterBadge';
+import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel from '@/utils/store/useControlPanel';
+import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
-
-import { InputControllerNativeProps } from '@/types/global';
 
 const locationIds = [
   process.env.NEXT_PUBLIC_GRID_ID,
@@ -41,12 +46,25 @@ const ListQuarterlyMapBook = () => {
   const { t } = useTranslation('default');
   const [tabs] = useQueryState('tabs');
   const permissions = useStore(usePermissions, (state) => state.permissions);
-
+  const [filterDataCommon, setFilterDataCommon] = useFilterDataCommon(
+    (state) => [state.filterDataCommon, state.setFilterDataCommon],
+    shallow
+  );
   const [
-    { page, search, quarter, year, mapQuarterlyCategory, mapQuarterlyLocation },
+    hasHydrated,
+    {
+      page,
+      search,
+      quarter,
+      year,
+      mapQuarterlyCategory,
+      mapQuarterlyLocation,
+      filterBadgeValue,
+    },
     setQuarterlyMapProductionState,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.quarterlyMapProductionState,
       state.setQuarterlyMapProductionState,
     ],
@@ -69,13 +87,21 @@ const ListQuarterlyMapBook = () => {
       limit: 10,
       search: searchQuery === '' ? null : searchQuery,
       dateType: 'QUARTER',
-      mapDataCategoryId: mapQuarterlyCategory || undefined,
-      year: Number(year) === 0 ? undefined : Number(year),
-      quarter: Number(quarter) === 0 ? undefined : Number(quarter),
-      mapDataLocationId: (mapQuarterlyLocation as string) || undefined,
     },
     skip: tabs !== 'quarterly',
   });
+
+  React.useEffect(() => {
+    if (hasHydrated) {
+      refetchMap({
+        mapDataCategoryId: mapQuarterlyCategory || undefined,
+        year: Number(year) === 0 ? undefined : Number(year),
+        quarter: Number(quarter) === 0 ? undefined : Number(quarter),
+        mapDataLocationId: (mapQuarterlyLocation as string) || undefined,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteMap({
     onCompleted: () => {
@@ -99,27 +125,23 @@ const ListQuarterlyMapBook = () => {
     },
   });
 
-  const [mapCategoryList, setMapCategoryList] = React.useState<
-    Array<{
-      label: string;
-      value: string;
-    }>
-  >([]);
-
   useReadAllMapCategory({
     variables: {
       limit: 100,
     },
     onCompleted: (data) => {
-      setMapCategoryList(
-        data?.mapDataCategories.data.map((item) => {
-          return {
-            label: item.name,
-            value: item.id,
-          };
-        }) || []
-      );
+      const item = data.mapDataCategories.data.map((val) => {
+        return {
+          name: val.name || '',
+          id: val.id,
+        };
+      });
+      setFilterDataCommon({ key: 'mapType', data: item });
     },
+  });
+
+  const { uncombinedItem } = useFilterItems({
+    data: filterDataCommon.find((v) => v.key === 'mapType')?.data ?? [],
   });
 
   const handleDelete = async () => {
@@ -138,39 +160,42 @@ const ListQuarterlyMapBook = () => {
     const mapTypeItem = globalSelectNative({
       placeholder: 'chooseMapType',
       label: 'mapType',
+      name: 'mapType',
       searchable: false,
-      data: mapCategoryList,
+      data: uncombinedItem,
       value: mapQuarterlyCategory,
       onChange: (v) => {
-        setQuarterlyMapProductionState({ page: 1, mapQuarterlyCategory: v });
+        setQuarterlyMapProductionState({ mapQuarterlyCategory: v });
       },
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
+      name: 'location',
       searchable: true,
       value: mapQuarterlyLocation,
       onChange: (v) => {
-        setQuarterlyMapProductionState({ page: 1, mapQuarterlyLocation: v });
+        setQuarterlyMapProductionState({ mapQuarterlyLocation: v });
       },
       categoryIds: (locationIds as string[]) || [],
     });
     const yearItem = globalSelectYearNative({
       placeholder: 'year',
       label: 'year',
+      name: 'year',
       searchable: true,
       value: year ? `${year}` : null,
       onChange: (v) => {
-        setQuarterlyMapProductionState({ page: 1, year: v ? Number(v) : null });
+        setQuarterlyMapProductionState({ year: v ? Number(v) : null });
       },
     });
     const quarterItem = globalSelectNative({
       placeholder: 'quarterly',
       label: 'quarter',
+      name: 'quarter',
       searchable: true,
       value: quarter ? `${quarter}` : null,
       onChange: (v) => {
         setQuarterlyMapProductionState({
-          page: 1,
           quarter: v ? Number(v) : null,
         });
       },
@@ -194,17 +219,34 @@ const ListQuarterlyMapBook = () => {
       ],
     });
 
-    const item: InputControllerNativeProps[] = [
-      mapTypeItem,
-      locationItem,
-      yearItem,
-      quarterItem,
-    ];
+    const item: IFilterButtonProps = {
+      filterDateWithSelect: [
+        {
+          selectItem: mapTypeItem,
+          col: 6,
+        },
+        {
+          selectItem: locationItem,
+          col: 6,
+          prefix: 'Lokasi:',
+        },
+        {
+          selectItem: yearItem,
+          col: 6,
+          prefix: 'Tahun:',
+        },
+        {
+          selectItem: quarterItem,
+          col: 6,
+          prefix: 'Triwulan:',
+        },
+      ],
+    };
     return item;
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    mapCategoryList,
+    uncombinedItem,
     mapQuarterlyCategory,
     mapQuarterlyLocation,
     quarter,
@@ -223,9 +265,58 @@ const ListQuarterlyMapBook = () => {
             }
           : undefined
       }
-      filterDateWithSelect={{
-        colSpan: 4,
-        items: filter,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setQuarterlyMapProductionState({
+              page: 1,
+              filterBadgeValue: null,
+              year: null,
+              quarter: null,
+              mapQuarterlyCategory: null,
+              mapQuarterlyLocation: null,
+            });
+            refetchMap({
+              page: 1,
+              mapDataCategoryId: undefined,
+              year: undefined,
+              quarter: undefined,
+              mapDataLocationId: undefined,
+            });
+          },
+        },
+        value: filterBadgeValue,
+      }}
+      filter={{
+        filterDateWithSelect: filter.filterDateWithSelect,
+        filterButton: {
+          disabled:
+            mapQuarterlyCategory || mapQuarterlyLocation || quarter || year
+              ? false
+              : true,
+          onClick: () => {
+            refetchMap({
+              page: 1,
+              mapDataCategoryId: mapQuarterlyCategory || undefined,
+              year: Number(year) === 0 ? undefined : Number(year),
+              quarter: Number(quarter) === 0 ? undefined : Number(quarter),
+              mapDataLocationId: (mapQuarterlyLocation as string) || undefined,
+            });
+            const { newData } = normalizedRandomFilter({
+              filter: filter.filterDateWithSelect || [],
+              excludesNameFilter: ['mapType', 'location', 'year'],
+            });
+
+            const badgeFilterValue = newNormalizedFilterBadge({
+              filter: filter.filterDateWithSelect || [],
+              data: [...filterDataCommon, ...newData],
+            });
+            setQuarterlyMapProductionState({
+              page: 1,
+              filterBadgeValue: badgeFilterValue || null,
+            });
+          },
+        },
       }}
       searchBar={{
         placeholder: t('mapProduction.searchPlaceholder'),

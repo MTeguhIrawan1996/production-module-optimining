@@ -6,7 +6,6 @@ import {
   PaperProps,
   SegmentedControl,
   SegmentedControlProps,
-  SimpleGrid,
   Stack,
   StackProps,
   Title,
@@ -38,13 +37,7 @@ import RejectButton, {
 import ValidationButton, {
   IValidationButtonProps,
 } from '@/components/elements/button/ValidationButton';
-import InputControllerNative from '@/components/elements/form/InputControllerNative';
-import MultipleFilter, {
-  IMultipleFilterProps,
-} from '@/components/elements/global/MultipleFilter';
 import SearchBar, { ISerachBar } from '@/components/elements/global/SearchBar';
-
-import { InputControllerNativeProps } from '@/types/global';
 
 interface IDashboardCardProps extends PaperProps {
   children: React.ReactNode;
@@ -65,11 +58,6 @@ interface IDashboardCardProps extends PaperProps {
   rejectButton?: IRejectButtonProps;
   isLoading?: boolean;
   searchBar?: ISerachBar;
-  MultipleFilter?: IMultipleFilterProps;
-  filterDateWithSelect?: {
-    colSpan?: number;
-    items: InputControllerNativeProps[];
-  };
   paperStackProps?: StackProps;
   childrenStackProps?: StackProps;
   titleStyle?: TitleProps;
@@ -82,7 +70,6 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
   title,
   filter,
   filterBadge,
-  MultipleFilter: MultiFilter,
   enebleBack,
   enebleBackBottomOuter,
   enebleBackBottomInner,
@@ -102,7 +89,6 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
   p = 'md',
   titleStyle,
   downloadButton,
-  filterDateWithSelect,
   segmentedControl,
   ...restPaper
 }) => {
@@ -145,6 +131,14 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
               onClick={() => router.back()}
             />
           )}
+          {segmentedControl ? (
+            <SegmentedControl
+              w={220}
+              size="sm"
+              radius={4}
+              {...segmentedControl}
+            />
+          ) : null}
           <Group position={title ? 'apart' : 'right'}>
             {title && (
               <Title order={order} fw={fw} {...restTitleStyle}>
@@ -175,7 +169,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
                 </Group>
               </Group>
               {filterBadge && filterBadge.value ? (
-                <Group position="left" spacing="sm" w="100%">
+                <Group position="left" spacing={6} w="100%">
                   {filterBadge.value.map((v, i) => (
                     <Badge
                       key={i}
@@ -205,31 +199,10 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
               ) : null}
             </Stack>
           </Group>
-          {segmentedControl ? (
-            <SegmentedControl
-              w={220}
-              size="sm"
-              radius={4}
-              {...segmentedControl}
-            />
-          ) : null}
+
           <Stack {...childrenStackProps}>
-            {MultiFilter ? <MultipleFilter {...MultiFilter} /> : null}
-            {filterDateWithSelect ? (
-              <SimpleGrid
-                cols={filterDateWithSelect.colSpan ?? 3}
-                breakpoints={[
-                  { maxWidth: 'sm', cols: 1 },
-                  { maxWidth: 'md', cols: 2 },
-                ]}
-              >
-                {filterDateWithSelect.items.map((val, key) => (
-                  <InputControllerNative {...val} key={key} />
-                ))}
-              </SimpleGrid>
-            ) : null}
             {downloadButton && downloadButton.length > 0 ? (
-              <Group>
+              <Group px="md">
                 {downloadButton.map((obj, i) => (
                   <DownloadButton
                     leftIcon={<IconDownload size="20px" />}

@@ -1,4 +1,3 @@
-import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -15,6 +14,7 @@ import {
   ModalConfirmation,
   SelectionButtonModal,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
 import { useDeleteMovingRitage } from '@/services/graphql/mutation/moving-ritage/useDeleteMovingRitage';
@@ -29,31 +29,39 @@ import {
 } from '@/utils/constants/Field/native-field';
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
+import {
+  newNormalizedFilterBadge,
+  normalizedRandomFilter,
+} from '@/utils/helper/normalizedFilterBadge';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
-
-import { InputControllerNativeProps } from '@/types/global';
 
 const ListDataMovingRitageBook = () => {
   const router = useRouter();
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
-
   const [
+    hasHydrated,
     {
       page,
       filterDate,
       filterStatus,
       filterShift,
       filtercompanyHeavyEquipmentId,
+      filterBadgeValue,
     },
-    { page: pageDumptruck, filterDate: filterDateDumptruck },
+    {
+      page: pageDumptruck,
+      filterDate: filterDateDumptruck,
+      filterBadgeValue: filterBadgeValueDT,
+    },
     setDataRitageMovingState,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.dataRitageMovingState,
       state.dataRitageMovingDumptruckState,
       state.setDataRitageMovingState,
@@ -67,13 +75,6 @@ const ListDataMovingRitageBook = () => {
     React.useState<boolean>(false);
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
-
-  const [heavyEquipmentSeacrhTerm, setHeavyEquipmentSeacrhTerm] =
-    React.useState<string>('');
-  const [heavyEquipmentSearchQuery] = useDebouncedValue<string>(
-    heavyEquipmentSeacrhTerm,
-    400
-  );
 
   const permissions = useStore(usePermissions, (state) => state.permissions);
 
@@ -95,8 +96,6 @@ const ListDataMovingRitageBook = () => {
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
     variables: {
       limit: null,
-      search:
-        heavyEquipmentSearchQuery === '' ? null : heavyEquipmentSearchQuery,
       isComplete: true,
       categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
     },
@@ -120,12 +119,12 @@ const ListDataMovingRitageBook = () => {
     movingDumpTruckRitagesData,
     movingDumpTruckRitagesDataLoading,
     movingDumpTruckRitagesDataMeta,
+    refetchmovingDumpTruckRitages,
   } = useReadAllRitageMovingDT({
     variables: {
       limit: 10,
       page: pageDumptruck,
       orderDir: 'desc',
-      date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
     },
     skip: tabs !== 'moving',
   });
@@ -140,20 +139,31 @@ const ListDataMovingRitageBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      date: formatDate(filterDate, 'YYYY-MM-DD') || null,
-      shiftId: filterShift === '' ? null : filterShift,
-      isRitageProblematic: filterStatus
-        ? filterStatus === 'true'
-          ? false
-          : true
-        : null,
-      companyHeavyEquipmentId:
-        filtercompanyHeavyEquipmentId === ''
-          ? null
-          : filtercompanyHeavyEquipmentId,
     },
     skip: tabs !== 'moving',
   });
+
+  React.useEffect(() => {
+    if (hasHydrated) {
+      refetchMovingRitages({
+        date: formatDate(filterDate, 'YYYY-MM-DD') || null,
+        shiftId: filterShift === '' ? null : filterShift,
+        isRitageProblematic: filterStatus
+          ? filterStatus === 'true'
+            ? false
+            : true
+          : null,
+        companyHeavyEquipmentId:
+          filtercompanyHeavyEquipmentId === ''
+            ? null
+            : filtercompanyHeavyEquipmentId,
+      });
+      refetchmovingDumpTruckRitages({
+        date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteMovingRitage({
     onCompleted: () => {
@@ -193,7 +203,7 @@ const ListDataMovingRitageBook = () => {
   const handleSetPage = (page: number) => {
     setDataRitageMovingState({
       dataRitageMovingState: {
-        page: page,
+        page,
       },
     });
   };
@@ -201,12 +211,12 @@ const ListDataMovingRitageBook = () => {
   const filter = React.useMemo(() => {
     const dateItem = globalDateNative({
       label: 'date',
+      name: 'date',
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
         setDataRitageMovingState({
           dataRitageMovingState: {
-            page: 1,
             filterDate: value || null,
           },
         });
@@ -216,6 +226,7 @@ const ListDataMovingRitageBook = () => {
     const ritageProblematic = globalSelectNative({
       placeholder: 'chooseRitageStatus',
       label: 'ritageStatus',
+      name: 'ritageStatus',
       data: [
         {
           label: t('commonTypography.complete'),
@@ -229,22 +240,21 @@ const ListDataMovingRitageBook = () => {
       onChange: (value) => {
         setDataRitageMovingState({
           dataRitageMovingState: {
-            page: 1,
             filterStatus: value,
           },
         });
       },
-      value: String(filterStatus),
+      value: filterStatus ? String(filterStatus) : null,
     });
     const shiftItem = globalSelectNative({
       placeholder: 'chooseShift',
       label: 'shift',
+      name: 'shift',
       searchable: false,
       data: shiftFilterItem,
       onChange: (value) => {
         setDataRitageMovingState({
           dataRitageMovingState: {
-            page: 1,
             filterShift: value,
           },
         });
@@ -255,14 +265,12 @@ const ListDataMovingRitageBook = () => {
     const heavyEquipmentItem = globalSelectNative({
       placeholder: 'chooseHeavyEquipmentCode',
       label: 'heavyEquipmentCode',
+      name: 'heavyEquipmentCode',
       searchable: true,
       data: heavyEquipmentItemFilter,
-      onSearchChange: setHeavyEquipmentSeacrhTerm,
-      searchValue: heavyEquipmentSeacrhTerm,
       onChange: (value) => {
         setDataRitageMovingState({
           dataRitageMovingState: {
-            page: 1,
             filtercompanyHeavyEquipmentId: value,
           },
         });
@@ -272,12 +280,27 @@ const ListDataMovingRitageBook = () => {
         : undefined,
     });
 
-    const item: InputControllerNativeProps[] = [
-      dateItem,
-      ritageProblematic,
-      shiftItem,
-      heavyEquipmentItem,
-    ];
+    const item: IFilterButtonProps = {
+      filterDateWithSelect: [
+        {
+          selectItem: dateItem,
+          col: 6,
+        },
+        {
+          selectItem: ritageProblematic,
+          col: 6,
+          prefix: 'Ritase',
+        },
+        {
+          selectItem: shiftItem,
+          col: 6,
+        },
+        {
+          selectItem: heavyEquipmentItem,
+          col: 6,
+        },
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [heavyEquipmentItemFilter, shiftFilterItem]);
@@ -466,46 +489,76 @@ const ListDataMovingRitageBook = () => {
             }
           : undefined
       }
-      filterDateWithSelect={{
-        colSpan: 4,
-        items: filter,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setDataRitageMovingState({
+              dataRitageMovingState: {
+                page: 1,
+                filterBadgeValue: null,
+                filtercompanyHeavyEquipmentId: null,
+                filterShift: null,
+                filterStatus: null,
+                filterDate: null,
+              },
+            });
+            refetchMovingRitages({
+              page: 1,
+              shiftId: null,
+              isRitageProblematic: null,
+              companyHeavyEquipmentId: null,
+              date: null,
+            });
+          },
+        },
+        value: filterBadgeValue || null,
       }}
-      downloadButton={[
-        {
-          label: t('ritageMoving.downloadTemplateMoving'),
-          url: `/moving-ritages/file`,
-          fileName: 'template-moving',
-          trackDownloadAction: () => {
-            sendGAEvent({
-              event: 'Unduh',
-              params: {
-                category: 'Produksi',
-                subSubCategory:
-                  'Produksi - Data Ritase - Moving - Template Input',
-                subCategory: 'Produksi - Data Ritase - Moving',
-                account: userAuthData?.email ?? '',
+      filter={{
+        filterDateWithSelect: filter.filterDateWithSelect,
+        filterButton: {
+          disabled:
+            filterShift ||
+            filterStatus ||
+            filtercompanyHeavyEquipmentId ||
+            filterDate
+              ? false
+              : true,
+          onClick: () => {
+            refetchMovingRitages({
+              page: 1,
+              date: formatDate(filterDate, 'YYYY-MM-DD') || null,
+              shiftId: filterShift === '' ? null : filterShift,
+              isRitageProblematic: filterStatus
+                ? filterStatus === 'true'
+                  ? false
+                  : true
+                : null,
+              companyHeavyEquipmentId:
+                filtercompanyHeavyEquipmentId === ''
+                  ? null
+                  : filtercompanyHeavyEquipmentId,
+            });
+            const { newData, newfilter } = normalizedRandomFilter({
+              filter: filter.filterDateWithSelect || [],
+              excludesNameFilter: ['date'],
+            });
+
+            const badgeFilterValue = newNormalizedFilterBadge({
+              filter: newfilter || [],
+              data: newData || [],
+            });
+            const date = formatDate(filterDate);
+            setDataRitageMovingState({
+              dataRitageMovingState: {
+                page: 1,
+                filterBadgeValue: date
+                  ? [date, ...badgeFilterValue]
+                  : badgeFilterValue,
               },
             });
           },
         },
-        {
-          label: t('commonTypography.downloadReference'),
-          url: `/download/references`,
-          fileName: 'referensi-moving',
-          trackDownloadAction: () => {
-            sendGAEvent({
-              event: 'Unduh',
-              params: {
-                category: 'Produksi',
-                subSubCategory:
-                  'Produksi - Data Ritase - Moving - Template Referensi',
-                subCategory: 'Produksi - Data Ritase - Moving',
-                account: userAuthData?.email ?? '',
-              },
-            });
-          },
-        },
-      ]}
+      }}
     >
       {renderTable}
       <ListDataRitageDumptruckBook
@@ -525,12 +578,38 @@ const ListDataMovingRitageBook = () => {
           setDataRitageMovingState({
             dataRitageMovingDumptruckState: {
               filterDate: v || null,
-              page: 1,
             },
           });
         }}
         date={filterDateDumptruck || undefined}
         urlDetail="/input-data/production/data-ritage/moving/read/dump-truck"
+        filterBadgeValue={filterBadgeValueDT}
+        onFilter={() => {
+          refetchmovingDumpTruckRitages({
+            page: 1,
+            date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
+          });
+          const date = formatDate(filterDateDumptruck);
+          setDataRitageMovingState({
+            dataRitageMovingDumptruckState: {
+              page: 1,
+              filterBadgeValue: date ? [date] : [],
+            },
+          });
+        }}
+        onReset={() => {
+          setDataRitageMovingState({
+            dataRitageMovingDumptruckState: {
+              page: 1,
+              filterBadgeValue: null,
+              filterDate: null,
+            },
+          });
+          refetchmovingDumpTruckRitages({
+            page: 1,
+            date: null,
+          });
+        }}
       />
       <ModalConfirmation
         isOpenModalConfirmation={isOpenDeleteConfirmation}

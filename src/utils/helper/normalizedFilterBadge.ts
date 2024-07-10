@@ -37,8 +37,8 @@ export const normalizedFilterBadge = (data: IMultipleFilter[]) => {
 };
 
 export const newNormalizedFilterBadge = ({
-  data,
   filter,
+  data,
 }: INewNormalizedFilterbadge) => {
   const newFilter = filter.map((v) => {
     const value = {
@@ -52,13 +52,48 @@ export const newNormalizedFilterBadge = ({
   const badgeFilter = newFilter?.reduce<string[]>((acc: string[], curr) => {
     if (curr.value) {
       const currentData = curr.data.find((v) => v.id === curr.value);
-      acc.push(
-        curr.prefix
-          ? `${curr.prefix} ${currentData?.name || ''}`
-          : currentData?.name || ''
-      );
+      if (currentData && currentData.name) {
+        acc.push(
+          curr.prefix
+            ? `${curr.prefix} ${currentData?.name || ''}`
+            : currentData?.name || ''
+        );
+      }
     }
     return acc;
   }, []);
   return badgeFilter;
+};
+
+type INormalizedRandomFilter = {
+  filter: IFilterDateWithSelect[];
+  excludesNameFilter: string[];
+};
+
+export const normalizedRandomFilter = ({
+  filter,
+  excludesNameFilter,
+}: INormalizedRandomFilter) => {
+  const newfilter = filter.filter(
+    (o) => !excludesNameFilter.includes(o.selectItem.name || '')
+  );
+
+  const newData = newfilter
+    ?.flatMap((v) => v.selectItem)
+    .map((o: any) => {
+      const newData = o.data.map((obj: ISelectData) => ({
+        id: obj.value,
+        name: obj.label,
+      }));
+      const value = {
+        key: o.name || '',
+        data: newData,
+      };
+      return value;
+    });
+
+  return {
+    newfilter,
+    newData,
+  };
 };

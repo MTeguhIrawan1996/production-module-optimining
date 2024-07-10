@@ -9,6 +9,7 @@ type IMonthlyMapProductionState = {
   mapMonthlyLocation: string | null;
   year: number | null;
   month: number | null;
+  filterBadgeValue: string[] | null;
 };
 
 export type IMonthlyMapProductionStateValue = {
@@ -30,6 +31,7 @@ const initialState: IMonthlyMapProductionStateValue = {
     mapMonthlyLocation: null,
     year: null,
     month: null,
+    filterBadgeValue: null,
   },
 };
 

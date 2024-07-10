@@ -15,6 +15,7 @@ import {
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { useDeleteMap } from '@/services/graphql/mutation/input-data-map/useDeleteMap';
 import { useReadAllMap } from '@/services/graphql/query/input-data-map/useReadAllMap';
@@ -24,11 +25,12 @@ import {
   globalSelectNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import { newNormalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
+import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel from '@/utils/store/useControlPanel';
+import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
-
-import { InputControllerNativeProps } from '@/types/global';
 
 const locationIds = [
   process.env.NEXT_PUBLIC_GRID_ID,
@@ -47,11 +49,24 @@ const ListYearlyMapBook = () => {
   const isPermissionUpdate = permissions?.includes('update-map-data');
   const isPermissionDelete = permissions?.includes('delete-map-data');
   const isPermissionRead = permissions?.includes('read-map-data');
+  const [filterDataCommon, setFilterDataCommon] = useFilterDataCommon(
+    (state) => [state.filterDataCommon, state.setFilterDataCommon],
+    shallow
+  );
   const [
-    { page, search, year, mapYearlyCategory, mapYearlyLocation },
+    hasHydrated,
+    {
+      page,
+      search,
+      year,
+      mapYearlyCategory,
+      mapYearlyLocation,
+      filterBadgeValue,
+    },
     setYearlyMapProductionState,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.yearlyMapProductionState,
       state.setYearlyMapProductionState,
     ],
@@ -72,12 +87,20 @@ const ListYearlyMapBook = () => {
       limit: 10,
       search: searchQuery === '' ? null : searchQuery,
       dateType: 'YEAR',
-      mapDataCategoryId: mapYearlyCategory || undefined,
-      year: Number(year) === 0 ? undefined : Number(year),
-      mapDataLocationId: (mapYearlyLocation as string) || undefined,
     },
     skip: tabs !== 'yearly',
   });
+
+  React.useEffect(() => {
+    if (hasHydrated) {
+      refetchMap({
+        mapDataCategoryId: mapYearlyCategory || undefined,
+        year: Number(year) === 0 ? undefined : Number(year),
+        mapDataLocationId: (mapYearlyLocation as string) || undefined,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteMap({
     onCompleted: () => {
@@ -101,27 +124,23 @@ const ListYearlyMapBook = () => {
     },
   });
 
-  const [mapCategoryList, setMapCategoryList] = React.useState<
-    Array<{
-      label: string;
-      value: string;
-    }>
-  >([]);
-
   useReadAllMapCategory({
     variables: {
       limit: 100,
     },
     onCompleted: (data) => {
-      setMapCategoryList(
-        data?.mapDataCategories.data.map((item) => {
-          return {
-            label: item.name,
-            value: item.id,
-          };
-        }) || []
-      );
+      const item = data.mapDataCategories.data.map((val) => {
+        return {
+          name: val.name || '',
+          id: val.id,
+        };
+      });
+      setFilterDataCommon({ key: 'mapType', data: item });
     },
+  });
+
+  const { uncombinedItem } = useFilterItems({
+    data: filterDataCommon.find((v) => v.key === 'mapType')?.data ?? [],
   });
 
   const handleDelete = async () => {
@@ -140,41 +159,57 @@ const ListYearlyMapBook = () => {
     const mapTypeItem = globalSelectNative({
       placeholder: 'chooseMapType',
       label: 'mapType',
+      name: 'mapType',
       searchable: false,
-      data: mapCategoryList,
+      data: uncombinedItem,
       value: mapYearlyCategory,
       onChange: (v) => {
-        setYearlyMapProductionState({ page: 1, mapYearlyCategory: v });
+        setYearlyMapProductionState({ mapYearlyCategory: v });
       },
     });
     const locationItem = globalSelectLocationNative({
       label: 'location',
+      name: 'location',
       searchable: true,
       value: mapYearlyLocation,
       onChange: (v) => {
-        setYearlyMapProductionState({ page: 1, mapYearlyLocation: v });
+        setYearlyMapProductionState({ mapYearlyLocation: v });
       },
       categoryIds: (locationIds as string[]) || [],
     });
     const yearItem = globalSelectYearNative({
       placeholder: 'year',
       label: 'year',
+      name: 'year',
       searchable: true,
       value: year ? `${year}` : null,
       onChange: (v) => {
-        setYearlyMapProductionState({ page: 1, year: v ? Number(v) : null });
+        setYearlyMapProductionState({ year: v ? Number(v) : null });
       },
     });
 
-    const item: InputControllerNativeProps[] = [
-      mapTypeItem,
-      locationItem,
-      yearItem,
-    ];
+    const item: IFilterButtonProps = {
+      filterDateWithSelect: [
+        {
+          selectItem: mapTypeItem,
+          col: 6,
+        },
+        {
+          selectItem: locationItem,
+          col: 6,
+          prefix: 'Lokasi:',
+        },
+        {
+          selectItem: yearItem,
+          col: 6,
+          prefix: 'Tahun:',
+        },
+      ],
+    };
     return item;
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapCategoryList, mapYearlyCategory, mapYearlyLocation, year]);
+  }, [uncombinedItem, mapYearlyCategory, mapYearlyLocation, year]);
 
   return (
     <DashboardCard
@@ -188,9 +223,49 @@ const ListYearlyMapBook = () => {
             }
           : undefined
       }
-      filterDateWithSelect={{
-        colSpan: 4,
-        items: filter,
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setYearlyMapProductionState({
+              page: 1,
+              filterBadgeValue: null,
+              year: null,
+              mapYearlyCategory: null,
+              mapYearlyLocation: null,
+            });
+            refetchMap({
+              page: 1,
+              mapDataCategoryId: undefined,
+              year: undefined,
+              mapDataLocationId: undefined,
+            });
+          },
+        },
+        value: filterBadgeValue,
+      }}
+      filter={{
+        filterDateWithSelect: filter.filterDateWithSelect,
+        filterButton: {
+          disabled:
+            mapYearlyCategory || mapYearlyLocation || year ? false : true,
+          onClick: () => {
+            refetchMap({
+              page: 1,
+              mapDataCategoryId: mapYearlyCategory || undefined,
+              year: Number(year) === 0 ? undefined : Number(year),
+              mapDataLocationId: (mapYearlyLocation as string) || undefined,
+            });
+
+            const badgeFilterValue = newNormalizedFilterBadge({
+              filter: filter.filterDateWithSelect || [],
+              data: filterDataCommon,
+            });
+            setYearlyMapProductionState({
+              page: 1,
+              filterBadgeValue: badgeFilterValue || null,
+            });
+          },
+        },
       }}
       searchBar={{
         placeholder: t('mapProduction.searchPlaceholder'),

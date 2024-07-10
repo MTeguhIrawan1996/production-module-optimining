@@ -8,17 +8,12 @@ import {
   GlobalKebabButton,
   MantineDataTable,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 
 import { globalDateNative } from '@/utils/constants/Field/native-field';
 import { formatDate } from '@/utils/helper/dateFormat';
-import useControlPanel from '@/utils/store/useControlPanel';
 
-import {
-  IDumpTruckRitagesData,
-  IMeta,
-  InputControllerNativeProps,
-  ITabs,
-} from '@/types/global';
+import { IDumpTruckRitagesData, IMeta, ITabs } from '@/types/global';
 
 interface IRitageDTProps<T> {
   data?: T[];
@@ -28,9 +23,12 @@ interface IRitageDTProps<T> {
   urlDetail: string;
   fetching?: boolean;
   page: number;
+  date: Date | undefined;
+  filterBadgeValue?: string[] | null;
   setPage: (page: number | undefined) => void;
   setDate: (date: Date | null) => void;
-  date: Date | undefined;
+  onFilter?: () => void;
+  onReset?: () => void;
 }
 
 export default function ListDataRitageDumptruckBook<
@@ -42,10 +40,13 @@ export default function ListDataRitageDumptruckBook<
   tabs,
   fetching,
   urlDetail,
-  setDate,
   columns,
-  setPage,
   page,
+  filterBadgeValue,
+  onFilter,
+  onReset,
+  setPage,
+  setDate,
 }: IRitageDTProps<T>) {
   const router = useRouter();
   const { t } = useTranslation('default');
@@ -55,17 +56,24 @@ export default function ListDataRitageDumptruckBook<
   };
 
   const filter = React.useMemo(() => {
-    const stockpileNameItem = globalDateNative({
+    const dateItem = globalDateNative({
       label: 'date',
+      name: 'date',
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
-        setPage(1);
         setDate(value || null);
       },
       value: date || null,
     });
-    const item: InputControllerNativeProps[] = [stockpileNameItem];
+    const item: IFilterButtonProps = {
+      filterDateWithSelect: [
+        {
+          selectItem: dateItem,
+          col: 6,
+        },
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
@@ -165,19 +173,28 @@ export default function ListDataRitageDumptruckBook<
   }, [page, data, columns, fetching]);
   /* #endregion  /**======== RenderTable =========== */
 
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-  }, []);
-
   return (
     <DashboardCard
       title={t('commonTypography.dataRitageDumpTruck')}
-      filterDateWithSelect={{
-        colSpan: 3,
-        items: filter,
-      }}
       p={0}
       py="lg"
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            onReset?.();
+          },
+        },
+        value: filterBadgeValue || null,
+      }}
+      filter={{
+        filterDateWithSelect: filter.filterDateWithSelect,
+        filterButton: {
+          disabled: date ? false : true,
+          onClick: () => {
+            onFilter?.();
+          },
+        },
+      }}
     >
       {renderTable}
     </DashboardCard>

@@ -6,6 +6,7 @@ type IHeavyEquipmentProductionState = {
   page: number;
   search: string;
   date: Date | null;
+  filterBadgeValue: string[] | null;
 };
 
 export type IHeavyEquipmentProductionStateValue = {
@@ -24,6 +25,7 @@ const initialState: IHeavyEquipmentProductionStateValue = {
     page: 1,
     search: '',
     date: null,
+    filterBadgeValue: null,
   },
 };
 
