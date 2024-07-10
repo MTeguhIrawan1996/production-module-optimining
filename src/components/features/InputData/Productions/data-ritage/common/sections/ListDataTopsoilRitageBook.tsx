@@ -44,6 +44,7 @@ const ListDataTopsoilRitageBook = () => {
     fetchPolicy: 'cache-first',
   });
   const [
+    hasHydrated,
     {
       page,
       filterDate,
@@ -60,6 +61,7 @@ const ListDataTopsoilRitageBook = () => {
     setDataRitageTopsoilState,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.dataRitageTopsoilState,
       state.dataRitageTopsoilDumptruckState,
       state.setDataRitageTopsoilState,
@@ -141,36 +143,26 @@ const ListDataTopsoilRitageBook = () => {
   });
 
   React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    useControlPanel.persist.onFinishHydration(
-      ({ dataRitageTopsoilState, dataRitageTopsoilDumptruckState }) => {
-        const {
-          filtercompanyHeavyEquipmentId,
-          filterDate,
-          filterShift,
-          filterStatus,
-        } = dataRitageTopsoilState;
-        const { filterDate: filterDateDumptruck } =
-          dataRitageTopsoilDumptruckState;
-        refetchTopsoilRitages({
-          date: formatDate(filterDate, 'YYYY-MM-DD') || null,
-          shiftId: filterShift === '' ? null : filterShift,
-          isRitageProblematic: filterStatus
-            ? filterStatus === 'true'
-              ? false
-              : true
-            : null,
-          companyHeavyEquipmentId:
-            filtercompanyHeavyEquipmentId === ''
-              ? null
-              : filtercompanyHeavyEquipmentId,
-        });
-        refetchTopsoilDumpTruckRitages({
-          date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
-        });
-      }
-    );
-  }, [refetchTopsoilDumpTruckRitages, refetchTopsoilRitages]);
+    if (hasHydrated) {
+      refetchTopsoilRitages({
+        date: formatDate(filterDate, 'YYYY-MM-DD') || null,
+        shiftId: filterShift === '' ? null : filterShift,
+        isRitageProblematic: filterStatus
+          ? filterStatus === 'true'
+            ? false
+            : true
+          : null,
+        companyHeavyEquipmentId:
+          filtercompanyHeavyEquipmentId === ''
+            ? null
+            : filtercompanyHeavyEquipmentId,
+      });
+      refetchTopsoilDumpTruckRitages({
+        date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteTopsoilRitage({
     onCompleted: () => {

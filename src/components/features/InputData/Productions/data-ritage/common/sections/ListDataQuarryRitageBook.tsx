@@ -44,6 +44,7 @@ const ListDataQuarryRitageBook = () => {
     fetchPolicy: 'cache-first',
   });
   const [
+    hasHydrated,
     {
       page,
       filterDate,
@@ -60,6 +61,7 @@ const ListDataQuarryRitageBook = () => {
     setDataRitageQuarryState,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.dataRitageQuarryState,
       state.dataRitageQuarryDumptruckState,
       state.setDataRitageQuarryState,
@@ -142,36 +144,26 @@ const ListDataQuarryRitageBook = () => {
   });
 
   React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    useControlPanel.persist.onFinishHydration(
-      ({ dataRitageQuarryState, dataRitageQuarryDumptruckState }) => {
-        const {
-          filtercompanyHeavyEquipmentId,
-          filterDate,
-          filterShift,
-          filterStatus,
-        } = dataRitageQuarryState;
-        const { filterDate: filterDateDumptruck } =
-          dataRitageQuarryDumptruckState;
-        refetchQuarryRitages({
-          date: formatDate(filterDate, 'YYYY-MM-DD') || null,
-          shiftId: filterShift === '' ? null : filterShift,
-          isRitageProblematic: filterStatus
-            ? filterStatus === 'true'
-              ? false
-              : true
-            : null,
-          companyHeavyEquipmentId:
-            filtercompanyHeavyEquipmentId === ''
-              ? null
-              : filtercompanyHeavyEquipmentId,
-        });
-        refetchQuarryDumpTruckRitages({
-          date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
-        });
-      }
-    );
-  }, [refetchQuarryDumpTruckRitages, refetchQuarryRitages]);
+    if (hasHydrated) {
+      refetchQuarryRitages({
+        date: formatDate(filterDate, 'YYYY-MM-DD') || null,
+        shiftId: filterShift === '' ? null : filterShift,
+        isRitageProblematic: filterStatus
+          ? filterStatus === 'true'
+            ? false
+            : true
+          : null,
+        companyHeavyEquipmentId:
+          filtercompanyHeavyEquipmentId === ''
+            ? null
+            : filtercompanyHeavyEquipmentId,
+      });
+      refetchQuarryDumpTruckRitages({
+        date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteQuarryRitage({
     onCompleted: () => {

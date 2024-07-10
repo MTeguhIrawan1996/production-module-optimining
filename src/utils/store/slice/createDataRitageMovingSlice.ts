@@ -5,6 +5,7 @@ import { sliceResetFns } from '@/utils/store/useControlPanel';
 type IDataRitageMovingState = {
   page: number;
   search: string;
+  filterBadgeValue: string[] | null;
 };
 
 export type IDataRitageMovingSliceValue = {
@@ -38,10 +39,13 @@ const initialState: IDataRitageMovingSliceValue = {
     filterStatus: null,
     filterShift: null,
     filtercompanyHeavyEquipmentId: null,
+    filterBadgeValue: null,
   },
   dataRitageMovingDumptruckState: {
     page: 1,
     search: '',
+    filterDate: null,
+    filterBadgeValue: null,
   },
 };
 

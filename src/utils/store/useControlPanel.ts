@@ -83,6 +83,11 @@ import {
   IHumanResourcesSliceValue,
 } from '@/utils/store/slice/createHumanResourcesSlice';
 import {
+  createHydrationSlice,
+  IHydrationStateAction,
+  IHydrationStateValue,
+} from '@/utils/store/slice/createHydrationSlice';
+import {
   createLocationSlice,
   ILocationSliceAction,
   ILocationSliceValue,
@@ -154,7 +159,9 @@ import {
   IFrontSliceValue,
 } from './slice/createFrontSlice';
 
-type ICommonProps = ILocationSliceValue &
+type ICommonProps = IHydrationStateValue &
+  IHydrationStateAction &
+  ILocationSliceValue &
   ILocationSliceAction &
   IBlockSliceValue &
   IBlockSliceAction &
@@ -262,7 +269,7 @@ export const resetAllSlices = (excludedSlices: Set<ISliceName> = new Set()) => {
 const useControlPanel = create<ICommonProps>()(
   persist(
     (...a) => ({
-      _hasHydrated: false,
+      ...createHydrationSlice(...a),
       ...createLocationSlice(...a),
       ...createBlockSlice(...a),
       ...createWHPSlice(...a),
@@ -304,16 +311,15 @@ const useControlPanel = create<ICommonProps>()(
           )
         ),
       skipHydration: true,
-      onRehydrateStorage: (_) => {
-        return (stateAfterRehydrate) => {
-          const stateString = JSON.stringify(stateAfterRehydrate);
-          const newState = JSON.parse(stateString, (_, value) => {
-            const isDateString = z.string().datetime().safeParse(value);
-            if (isDateString.success) return new Date(isDateString.data);
-            return value;
-          });
-          useControlPanel.setState(newState);
-        };
+      onRehydrateStorage: () => (state) => {
+        const stateString = JSON.stringify(state);
+        const newState = JSON.parse(stateString, (_, value) => {
+          const isDateString = z.string().datetime().safeParse(value);
+          if (isDateString.success) return new Date(isDateString.data);
+          return value;
+        });
+        useControlPanel.setState(newState);
+        state?.setHasHydrated(true);
       },
     }
   )

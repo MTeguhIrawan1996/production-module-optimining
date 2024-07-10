@@ -45,6 +45,7 @@ const ListDataObRitageBook = () => {
   });
 
   const [
+    hasHydrated,
     {
       page,
       filterDate,
@@ -61,6 +62,7 @@ const ListDataObRitageBook = () => {
     setDataRitageOBState,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.dataRitageOBState,
       state.dataRitageOBDumptruckState,
       state.setDataRitageOBState,
@@ -142,35 +144,26 @@ const ListDataObRitageBook = () => {
   });
 
   React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    useControlPanel.persist.onFinishHydration(
-      ({ dataRitageOBState, dataRitageOBDumptruckState }) => {
-        const {
-          filtercompanyHeavyEquipmentId,
-          filterDate,
-          filterShift,
-          filterStatus,
-        } = dataRitageOBState;
-        const { filterDate: filterDateDumptruck } = dataRitageOBDumptruckState;
-        refetchOverburdenRitages({
-          date: formatDate(filterDate, 'YYYY-MM-DD') || null,
-          shiftId: filterShift === '' ? null : filterShift,
-          isRitageProblematic: filterStatus
-            ? filterStatus === 'true'
-              ? false
-              : true
-            : null,
-          companyHeavyEquipmentId:
-            filtercompanyHeavyEquipmentId === ''
-              ? null
-              : filtercompanyHeavyEquipmentId,
-        });
-        refetchOverburdenDumpTruckRitages({
-          date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
-        });
-      }
-    );
-  }, [refetchOverburdenDumpTruckRitages, refetchOverburdenRitages]);
+    if (hasHydrated) {
+      refetchOverburdenRitages({
+        date: formatDate(filterDate, 'YYYY-MM-DD') || null,
+        shiftId: filterShift === '' ? null : filterShift,
+        isRitageProblematic: filterStatus
+          ? filterStatus === 'true'
+            ? false
+            : true
+          : null,
+        companyHeavyEquipmentId:
+          filtercompanyHeavyEquipmentId === ''
+            ? null
+            : filtercompanyHeavyEquipmentId,
+      });
+      refetchOverburdenDumpTruckRitages({
+        date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteOverburdenRitage({
     onCompleted: () => {

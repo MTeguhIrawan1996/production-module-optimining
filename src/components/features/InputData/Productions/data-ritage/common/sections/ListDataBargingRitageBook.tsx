@@ -44,6 +44,7 @@ const ListDataBargingRitageBook = () => {
     fetchPolicy: 'cache-first',
   });
   const [
+    hasHydrated,
     {
       page,
       filterDate,
@@ -60,6 +61,7 @@ const ListDataBargingRitageBook = () => {
     setDataRitageBargingState,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.dataRitageBargingState,
       state.dataRitageBargingDumptruckState,
       state.setDataRitageBargingState,
@@ -143,36 +145,26 @@ const ListDataBargingRitageBook = () => {
   });
 
   React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    useControlPanel.persist.onFinishHydration(
-      ({ dataRitageBargingState, dataRitageBargingDumptruckState }) => {
-        const {
-          filtercompanyHeavyEquipmentId,
-          filterDate,
-          filterShift,
-          filterStatus,
-        } = dataRitageBargingState;
-        const { filterDate: filterDateDumptruck } =
-          dataRitageBargingDumptruckState;
-        refetchBargingRitages({
-          date: formatDate(filterDate, 'YYYY-MM-DD') || null,
-          shiftId: filterShift === '' ? null : filterShift,
-          isRitageProblematic: filterStatus
-            ? filterStatus === 'true'
-              ? false
-              : true
-            : null,
-          companyHeavyEquipmentId:
-            filtercompanyHeavyEquipmentId === ''
-              ? null
-              : filtercompanyHeavyEquipmentId,
-        });
-        refetchBargingDumpTruckRitages({
-          date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
-        });
-      }
-    );
-  }, [refetchBargingDumpTruckRitages, refetchBargingRitages]);
+    if (hasHydrated) {
+      refetchBargingRitages({
+        date: formatDate(filterDate, 'YYYY-MM-DD') || null,
+        shiftId: filterShift === '' ? null : filterShift,
+        isRitageProblematic: filterStatus
+          ? filterStatus === 'true'
+            ? false
+            : true
+          : null,
+        companyHeavyEquipmentId:
+          filtercompanyHeavyEquipmentId === ''
+            ? null
+            : filtercompanyHeavyEquipmentId,
+      });
+      refetchBargingDumpTruckRitages({
+        date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteBargingRitage({
     onCompleted: () => {

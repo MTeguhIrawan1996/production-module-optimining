@@ -44,6 +44,7 @@ const ListDataOreRitageBook = () => {
     fetchPolicy: 'cache-first',
   });
   const [
+    hasHydrated,
     {
       page,
       filterDate,
@@ -60,6 +61,7 @@ const ListDataOreRitageBook = () => {
     setDataRitageOreState,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.dataRitageOreState,
       state.dataRitageOreDumptruckState,
       state.setDataRitageOreState,
@@ -141,35 +143,26 @@ const ListDataOreRitageBook = () => {
     skip: tabs !== 'ore',
   });
   React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    useControlPanel.persist.onFinishHydration(
-      ({ dataRitageOreState, dataRitageOreDumptruckState }) => {
-        const {
-          filtercompanyHeavyEquipmentId,
-          filterDate,
-          filterShift,
-          filterStatus,
-        } = dataRitageOreState;
-        const { filterDate: filterDateDumptruck } = dataRitageOreDumptruckState;
-        refetchOreRitages({
-          date: formatDate(filterDate, 'YYYY-MM-DD') || null,
-          shiftId: filterShift === '' ? null : filterShift,
-          isRitageProblematic: filterStatus
-            ? filterStatus === 'true'
-              ? false
-              : true
-            : null,
-          companyHeavyEquipmentId:
-            filtercompanyHeavyEquipmentId === ''
-              ? null
-              : filtercompanyHeavyEquipmentId,
-        });
-        refetchOreDumpTruckRitages({
-          date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
-        });
-      }
-    );
-  }, [refetchOreRitages, refetchOreDumpTruckRitages]);
+    if (hasHydrated) {
+      refetchOreRitages({
+        date: formatDate(filterDate, 'YYYY-MM-DD') || null,
+        shiftId: filterShift === '' ? null : filterShift,
+        isRitageProblematic: filterStatus
+          ? filterStatus === 'true'
+            ? false
+            : true
+          : null,
+        companyHeavyEquipmentId:
+          filtercompanyHeavyEquipmentId === ''
+            ? null
+            : filtercompanyHeavyEquipmentId,
+      });
+      refetchOreDumpTruckRitages({
+        date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteOreRitage({
     onCompleted: () => {
