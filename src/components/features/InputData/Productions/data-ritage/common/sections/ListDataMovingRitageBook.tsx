@@ -244,7 +244,7 @@ const ListDataMovingRitageBook = () => {
           },
         });
       },
-      value: String(filterStatus),
+      value: filterStatus ? String(filterStatus) : null,
     });
     const shiftItem = globalSelectNative({
       placeholder: 'chooseShift',
@@ -539,7 +539,8 @@ const ListDataMovingRitageBook = () => {
                   : filtercompanyHeavyEquipmentId,
             });
             const { newData, newfilter } = normalizedRandomFilter({
-              filterDateWithSelect: filter.filterDateWithSelect,
+              filter: filter.filterDateWithSelect || [],
+              excludesNameFilter: ['date'],
             });
 
             const badgeFilterValue = newNormalizedFilterBadge({

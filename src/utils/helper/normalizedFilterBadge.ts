@@ -1,5 +1,4 @@
 import {
-  IFilterButtonProps,
   IFilterDateWithSelect,
   IMultipleFilter,
 } from '@/components/elements/button/FilterButton';
@@ -38,8 +37,8 @@ export const normalizedFilterBadge = (data: IMultipleFilter[]) => {
 };
 
 export const newNormalizedFilterBadge = ({
-  data,
   filter,
+  data,
 }: INewNormalizedFilterbadge) => {
   const newFilter = filter.map((v) => {
     const value = {
@@ -66,10 +65,19 @@ export const newNormalizedFilterBadge = ({
   return badgeFilter;
 };
 
+type INormalizedRandomFilter = {
+  filter: IFilterDateWithSelect[];
+  excludesNameFilter: string[];
+};
+
 export const normalizedRandomFilter = ({
-  filterDateWithSelect,
-}: Pick<IFilterButtonProps, 'filterDateWithSelect'>) => {
-  const newfilter = filterDateWithSelect?.filter((o) => 'data' in o.selectItem);
+  filter,
+  excludesNameFilter,
+}: INormalizedRandomFilter) => {
+  const newfilter = filter.filter(
+    (o) => !excludesNameFilter.includes(o.selectItem.name || '')
+  );
+
   const newData = newfilter
     ?.flatMap((v) => v.selectItem)
     .map((o: any) => {
