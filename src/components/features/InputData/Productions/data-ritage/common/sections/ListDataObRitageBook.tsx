@@ -1,4 +1,3 @@
-import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
@@ -15,6 +14,7 @@ import {
   ModalConfirmation,
   SelectionButtonModal,
 } from '@/components/elements';
+import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 import ListDataRitageDumptruckBook from '@/components/features/InputData/Productions/data-ritage/common/elements/ListDataRitageDumptruckBook';
 
 import { useDeleteOverburdenRitage } from '@/services/graphql/mutation/ob-ritage/useDeleteObRitage';
@@ -29,12 +29,14 @@ import {
 } from '@/utils/constants/Field/native-field';
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
+import {
+  newNormalizedFilterBadge,
+  normalizedRandomFilter,
+} from '@/utils/helper/normalizedFilterBadge';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
-
-import { InputControllerNativeProps } from '@/types/global';
 
 const ListDataObRitageBook = () => {
   const router = useRouter();
@@ -49,8 +51,13 @@ const ListDataObRitageBook = () => {
       filterStatus,
       filterShift,
       filtercompanyHeavyEquipmentId,
+      filterBadgeValue,
     },
-    { page: pageDumptruck, filterDate: filterDateDumptruck },
+    {
+      page: pageDumptruck,
+      filterDate: filterDateDumptruck,
+      filterBadgeValue: filterBadgeValueDT,
+    },
     setDataRitageOBState,
   ] = useControlPanel(
     (state) => [
@@ -68,14 +75,6 @@ const ListDataObRitageBook = () => {
     React.useState<boolean>(false);
   const [isOpenSelectionModal, setIsOpenSelectionModal] =
     React.useState<boolean>(false);
-
-  const [heavyEquipmentSeacrhTerm, setHeavyEquipmentSeacrhTerm] =
-    React.useState<string>('');
-  const [heavyEquipmentSearchQuery] = useDebouncedValue<string>(
-    heavyEquipmentSeacrhTerm,
-    400
-  );
-
   const permissions = useStore(usePermissions, (state) => state.permissions);
 
   const isPermissionCreate = permissions?.includes('create-overburden-ritage');
@@ -95,8 +94,6 @@ const ListDataObRitageBook = () => {
   const { heavyEquipmentSelect } = useReadAllHeavyEquipmentSelect({
     variables: {
       limit: null,
-      search:
-        heavyEquipmentSearchQuery === '' ? null : heavyEquipmentSearchQuery,
       isComplete: true,
       categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
     },
@@ -120,12 +117,12 @@ const ListDataObRitageBook = () => {
     overburdenDumpTruckRitagesData,
     overburdenDumpTruckRitagesDataLoading,
     overburdenDumpTruckRitagesDataMeta,
+    refetchOverburdenDumpTruckRitages,
   } = useReadAllRitageObDT({
     variables: {
       limit: 10,
       page: pageDumptruck,
       orderDir: 'desc',
-      date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
     },
     skip: tabs !== 'ob',
   });
@@ -140,20 +137,40 @@ const ListDataObRitageBook = () => {
       limit: 10,
       page: page,
       orderDir: 'desc',
-      date: formatDate(filterDate, 'YYYY-MM-DD') || null,
-      shiftId: filterShift === '' ? null : filterShift,
-      isRitageProblematic: filterStatus
-        ? filterStatus === 'true'
-          ? false
-          : true
-        : null,
-      companyHeavyEquipmentId:
-        filtercompanyHeavyEquipmentId === ''
-          ? null
-          : filtercompanyHeavyEquipmentId,
     },
     skip: tabs !== 'ob',
   });
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    useControlPanel.persist.onFinishHydration(
+      ({ dataRitageOBState, dataRitageOBDumptruckState }) => {
+        const {
+          filtercompanyHeavyEquipmentId,
+          filterDate,
+          filterShift,
+          filterStatus,
+        } = dataRitageOBState;
+        const { filterDate: filterDateDumptruck } = dataRitageOBDumptruckState;
+        refetchOverburdenRitages({
+          date: formatDate(filterDate, 'YYYY-MM-DD') || null,
+          shiftId: filterShift === '' ? null : filterShift,
+          isRitageProblematic: filterStatus
+            ? filterStatus === 'true'
+              ? false
+              : true
+            : null,
+          companyHeavyEquipmentId:
+            filtercompanyHeavyEquipmentId === ''
+              ? null
+              : filtercompanyHeavyEquipmentId,
+        });
+        refetchOverburdenDumpTruckRitages({
+          date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
+        });
+      }
+    );
+  }, [refetchOverburdenDumpTruckRitages, refetchOverburdenRitages]);
 
   const [executeDelete, { loading }] = useDeleteOverburdenRitage({
     onCompleted: () => {
@@ -162,10 +179,6 @@ const ListDataObRitageBook = () => {
       setDataRitageOBState({
         dataRitageOBState: {
           page: 1,
-          filterDate: null,
-          filterStatus: null,
-          filterShift: null,
-          filtercompanyHeavyEquipmentId: null,
         },
       });
       notifications.show({
@@ -205,12 +218,12 @@ const ListDataObRitageBook = () => {
   const filter = React.useMemo(() => {
     const dateItem = globalDateNative({
       label: 'date',
+      name: 'date',
       placeholder: 'chooseDate',
       clearable: true,
       onChange: (value) => {
         setDataRitageOBState({
           dataRitageOBState: {
-            page: 1,
             filterDate: value || null,
           },
         });
@@ -220,6 +233,7 @@ const ListDataObRitageBook = () => {
     const ritageProblematic = globalSelectNative({
       placeholder: 'chooseRitageStatus',
       label: 'ritageStatus',
+      name: 'ritageStatus',
       data: [
         {
           label: t('commonTypography.complete'),
@@ -233,7 +247,6 @@ const ListDataObRitageBook = () => {
       onChange: (value) => {
         setDataRitageOBState({
           dataRitageOBState: {
-            page: 1,
             filterStatus: value,
           },
         });
@@ -243,12 +256,12 @@ const ListDataObRitageBook = () => {
     const shiftItem = globalSelectNative({
       placeholder: 'chooseShift',
       label: 'shift',
+      name: 'shift',
       searchable: false,
       data: shiftFilterItem,
       onChange: (value) => {
         setDataRitageOBState({
           dataRitageOBState: {
-            page: 1,
             filterShift: value,
           },
         });
@@ -258,14 +271,12 @@ const ListDataObRitageBook = () => {
     const heavyEquipmentItem = globalSelectNative({
       placeholder: 'chooseHeavyEquipmentCode',
       label: 'heavyEquipmentCode',
+      name: 'heavyEquipmentCode',
       searchable: true,
       data: heavyEquipmentItemFilter,
-      onSearchChange: setHeavyEquipmentSeacrhTerm,
-      searchValue: heavyEquipmentSeacrhTerm,
       onChange: (value) => {
         setDataRitageOBState({
           dataRitageOBState: {
-            page: 1,
             filtercompanyHeavyEquipmentId: value,
           },
         });
@@ -275,12 +286,27 @@ const ListDataObRitageBook = () => {
         : undefined,
     });
 
-    const item: InputControllerNativeProps[] = [
-      dateItem,
-      ritageProblematic,
-      shiftItem,
-      heavyEquipmentItem,
-    ];
+    const item: IFilterButtonProps = {
+      filterDateWithSelect: [
+        {
+          selectItem: dateItem,
+          col: 6,
+        },
+        {
+          selectItem: ritageProblematic,
+          col: 6,
+          prefix: 'Ritase',
+        },
+        {
+          selectItem: shiftItem,
+          col: 6,
+        },
+        {
+          selectItem: heavyEquipmentItem,
+          col: 6,
+        },
+      ],
+    };
     return item;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [heavyEquipmentItemFilter, shiftFilterItem]);
@@ -456,45 +482,79 @@ const ListDataObRitageBook = () => {
             }
           : undefined
       }
-      filterDateWithSelect={{
-        colSpan: 4,
-        items: filter,
+      // filterDateWithSelect={{
+      //   colSpan: 4,
+      //   items: filter,
+      // }}
+      filterBadge={{
+        resetButton: {
+          onClick: () => {
+            setDataRitageOBState({
+              dataRitageOBState: {
+                page: 1,
+                filterBadgeValue: null,
+                filtercompanyHeavyEquipmentId: null,
+                filterShift: null,
+                filterStatus: null,
+                filterDate: null,
+              },
+            });
+            refetchOverburdenRitages({
+              page: 1,
+              shiftId: null,
+              isRitageProblematic: null,
+              companyHeavyEquipmentId: null,
+              date: null,
+            });
+          },
+        },
+        value: filterBadgeValue || null,
       }}
-      downloadButton={[
-        {
-          label: t('ritageOb.downloadTemplateOb'),
-          url: `/overburden-ritages/file`,
-          fileName: 'template-ob',
-          trackDownloadAction: () => {
-            sendGAEvent({
-              event: 'Unduh',
-              params: {
-                category: 'Produksi',
-                subSubCategory: 'Produksi - Data Ritase - OB - Template Input',
-                subCategory: 'Produksi - Data Ritase - OB',
-                account: userAuthData?.email ?? '',
+      filter={{
+        filterDateWithSelect: filter.filterDateWithSelect,
+        filterButton: {
+          disabled:
+            filterShift ||
+            filterStatus ||
+            filtercompanyHeavyEquipmentId ||
+            filterDate
+              ? false
+              : true,
+          onClick: () => {
+            refetchOverburdenRitages({
+              page: 1,
+              date: formatDate(filterDate, 'YYYY-MM-DD') || null,
+              shiftId: filterShift === '' ? null : filterShift,
+              isRitageProblematic: filterStatus
+                ? filterStatus === 'true'
+                  ? false
+                  : true
+                : null,
+              companyHeavyEquipmentId:
+                filtercompanyHeavyEquipmentId === ''
+                  ? null
+                  : filtercompanyHeavyEquipmentId,
+            });
+            const { newData, newfilter } = normalizedRandomFilter({
+              filterDateWithSelect: filter.filterDateWithSelect,
+            });
+
+            const badgeFilterValue = newNormalizedFilterBadge({
+              filter: newfilter || [],
+              data: newData || [],
+            });
+            const date = formatDate(filterDate);
+            setDataRitageOBState({
+              dataRitageOBState: {
+                page: 1,
+                filterBadgeValue: date
+                  ? [date, ...badgeFilterValue]
+                  : badgeFilterValue,
               },
             });
           },
         },
-        {
-          label: t('commonTypography.downloadReference'),
-          url: `/download/references`,
-          fileName: 'referensi-ob',
-          trackDownloadAction: () => {
-            sendGAEvent({
-              event: 'Unduh',
-              params: {
-                category: 'Produksi',
-                subSubCategory:
-                  'Produksi - Data Ritase - OB - Template Referensi',
-                subCategory: 'Produksi - Data Ritase - OB',
-                account: userAuthData?.email ?? '',
-              },
-            });
-          },
-        },
-      ]}
+      }}
     >
       {renderTable}
       <ListDataRitageDumptruckBook
@@ -514,12 +574,38 @@ const ListDataObRitageBook = () => {
           setDataRitageOBState({
             dataRitageOBDumptruckState: {
               filterDate: v || null,
-              page: 1,
             },
           });
         }}
         date={filterDateDumptruck || undefined}
         urlDetail="/input-data/production/data-ritage/ob/read/dump-truck"
+        filterBadgeValue={filterBadgeValueDT}
+        onFilter={() => {
+          refetchOverburdenDumpTruckRitages({
+            page: 1,
+            date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
+          });
+          const date = formatDate(filterDateDumptruck);
+          setDataRitageOBState({
+            dataRitageOBDumptruckState: {
+              page: 1,
+              filterBadgeValue: date ? [date] : [],
+            },
+          });
+        }}
+        onReset={() => {
+          setDataRitageOBState({
+            dataRitageOBDumptruckState: {
+              page: 1,
+              filterBadgeValue: null,
+              filterDate: null,
+            },
+          });
+          refetchOverburdenDumpTruckRitages({
+            page: 1,
+            date: null,
+          });
+        }}
       />
       <ModalConfirmation
         isOpenModalConfirmation={isOpenDeleteConfirmation}

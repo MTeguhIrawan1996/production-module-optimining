@@ -14,11 +14,13 @@ export type IDataRitageOBSliceValue = {
       filterStatus: string | null;
       filterShift: string | null;
       filtercompanyHeavyEquipmentId: string | null;
+      filterBadgeValue: string[] | null;
     }
   >;
   dataRitageOBDumptruckState: Partial<
     IDataRitageOBState & {
       filterDate: Date | null;
+      filterBadgeValue: string[] | null;
     }
   >;
 };
@@ -36,10 +38,13 @@ const initialState: IDataRitageOBSliceValue = {
     filterStatus: null,
     filterShift: null,
     filtercompanyHeavyEquipmentId: null,
+    filterBadgeValue: null,
   },
   dataRitageOBDumptruckState: {
     page: 1,
     search: '',
+    filterDate: null,
+    filterBadgeValue: null,
   },
 };
 

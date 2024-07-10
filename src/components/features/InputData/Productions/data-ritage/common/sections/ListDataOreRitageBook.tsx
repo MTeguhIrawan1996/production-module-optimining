@@ -34,10 +34,7 @@ import {
   normalizedRandomFilter,
 } from '@/utils/helper/normalizedFilterBadge';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
-import useControlPanel, {
-  ISliceName,
-  resetAllSlices,
-} from '@/utils/store/useControlPanel';
+import useControlPanel from '@/utils/store/useControlPanel';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
@@ -145,7 +142,6 @@ const ListDataOreRitageBook = () => {
   });
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
-    resetAllSlices(new Set<ISliceName>(['ritageOreSlice'] as ISliceName[]));
     useControlPanel.persist.onFinishHydration(
       ({ dataRitageOreState, dataRitageOreDumptruckState }) => {
         const {
