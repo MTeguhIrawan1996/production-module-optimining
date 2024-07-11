@@ -1,10 +1,12 @@
 import { z } from 'zod';
 
+import { IBargingDomePlanValue } from '@/services/graphql/mutation/plan/weekly/useCreateBargingDomePlan';
 import { IBargingTargetPlanValue } from '@/services/graphql/mutation/plan/weekly/useCreateBargingTargetPlan';
 import {
   zOptionalNumber,
   zOptionalString,
   zRequiredNumber,
+  zRequiredSelectInput,
 } from '@/utils/form-validation/global';
 
 export const weeklyBargingTargetPlanMutationValidation: z.ZodType<IBargingTargetPlanValue> =
@@ -48,10 +50,9 @@ export const weeklyBargingTargetPlanMutationValidation: z.ZodType<IBargingTarget
           .array(),
       })
       .array(),
-    bargingDomePlans: z
-      .object({
-        id: zOptionalString.nullable(),
-        domeId: zOptionalString.nullable(),
-      })
-      .array(),
+  });
+
+export const weeklyBargingDomePlanMutationValidation: z.ZodType<IBargingDomePlanValue> =
+  z.object({
+    domeId: zRequiredSelectInput,
   });

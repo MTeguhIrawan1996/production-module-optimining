@@ -28,7 +28,7 @@ const GlobalModal: React.FunctionComponent<IGlobalModalProps> = ({
     <Modal.Root
       opened={isOpenModal}
       onClose={actionModal}
-      radius="xs"
+      radius="md"
       size={modalSize}
     >
       <Modal.Overlay opacity={0.2} />

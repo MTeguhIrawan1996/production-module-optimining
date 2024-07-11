@@ -9,9 +9,6 @@ import { shallow } from 'zustand/shallow';
 
 import CommonMonthlyPlanInformation from '@/components/elements/book/monthly-plan/ui/CommonMonthlyPlanInformation';
 import InputMonthlyTableBargingTargetPlan from '@/components/elements/book/monthly-plan/ui/InputMonthlyTableBargingTargetPlan';
-import InputGroupDome, {
-  IInputGroupDomeProps,
-} from '@/components/elements/book/weekly-plan/input/InputGroupDome';
 import DashboardCard from '@/components/elements/card/DashboardCard';
 import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
 
@@ -59,12 +56,12 @@ const MutationMonthlyBargingTargetPlanBook = ({
           weeklyBargingTargets: [],
         },
       ],
-      bargingDomePlans: [
-        {
-          id: null,
-          domeId: null,
-        },
-      ],
+      // bargingDomePlans: [
+      //   {
+      //     id: null,
+      //     domeId: null,
+      //   },
+      // ],
     },
     mode: 'onBlur',
   });
@@ -75,16 +72,16 @@ const MutationMonthlyBargingTargetPlanBook = ({
     control: methods.control,
     keyName: 'bargingTargetPlanId',
   });
-  const {
-    fields: bargingDomePlanFields,
-    append: bargingDomePlanAppend,
-    remove: bargingDomePlanRemove,
-    // replace: bargingDomePlanReplace,
-  } = useFieldArray({
-    name: 'bargingDomePlans',
-    control: methods.control,
-    keyName: 'bargingDomePlanId',
-  });
+  // const {
+  //   fields: bargingDomePlanFields,
+  //   append: bargingDomePlanAppend,
+  //   remove: bargingDomePlanRemove,
+  //   // replace: bargingDomePlanReplace,
+  // } = useFieldArray({
+  //   name: 'bargingDomePlans',
+  //   control: methods.control,
+  //   keyName: 'bargingDomePlanId',
+  // });
 
   const { materialsData, materialsDataLoading } = useReadAllMaterialsMaster({
     variables: {
@@ -203,29 +200,29 @@ const MutationMonthlyBargingTargetPlanBook = ({
   });
 
   const fieldRhf = React.useMemo(() => {
-    const domeGroup: IInputGroupDomeProps[] = bargingDomePlanFields.map(
-      (obj, i) => ({
-        bargingDomePlanIndex: i,
-        uniqKey: obj.bargingDomePlanId,
-        tabs: tabs,
-        addButtonOuter:
-          i === 0
-            ? {
-                onClick: () => {
-                  bargingDomePlanAppend({
-                    id: null,
-                    domeId: '',
-                  });
-                },
-              }
-            : undefined,
-        deleteButtonInner: {
-          onClick: () => {
-            bargingDomePlanFields.length > 1 ? bargingDomePlanRemove(i) : null;
-          },
-        },
-      })
-    );
+    // const domeGroup: IInputGroupDomeProps[] = bargingDomePlanFields.map(
+    //   (obj, i) => ({
+    //     bargingDomePlanIndex: i,
+    //     uniqKey: obj.bargingDomePlanId,
+    //     tabs: tabs,
+    //     addButtonOuter:
+    //       i === 0
+    //         ? {
+    //             onClick: () => {
+    //               bargingDomePlanAppend({
+    //                 id: null,
+    //                 domeId: '',
+    //               });
+    //             },
+    //           }
+    //         : undefined,
+    //     deleteButtonInner: {
+    //       onClick: () => {
+    //         bargingDomePlanFields.length > 1 ? bargingDomePlanRemove(i) : null;
+    //       },
+    //     },
+    //   })
+    // );
 
     const field: ControllerGroup[] = [
       {
@@ -238,7 +235,8 @@ const MutationMonthlyBargingTargetPlanBook = ({
               <Grid.Col span={12}>
                 <InputMonthlyTableBargingTargetPlan />
               </Grid.Col>
-              {domeGroup.map(
+              {/* TABLE BARGING DOME */}
+              {/* {domeGroup.map(
                 ({ bargingDomePlanIndex, uniqKey, ...restDome }) => (
                   <Grid.Col
                     span={12}
@@ -251,7 +249,7 @@ const MutationMonthlyBargingTargetPlanBook = ({
                     />
                   </Grid.Col>
                 )
-              )}
+              )} */}
             </>
           );
         },
@@ -260,7 +258,7 @@ const MutationMonthlyBargingTargetPlanBook = ({
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bargingDomePlanFields, tabs]);
+  }, [tabs]);
 
   const handleSubmitForm: SubmitHandler<
     IMonthlyBargingTargetPlanValue

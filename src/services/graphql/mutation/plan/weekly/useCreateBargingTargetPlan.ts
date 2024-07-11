@@ -4,13 +4,11 @@ export const CREATE_WEEKLY_BARGING_TARGET_PLAN = gql`
   mutation CreateWeeklyBargingTargetPlan(
     $weeklyPlanId: String
     $bargingTargetPlans: [UpdateWeeklyBargingTargetPlan!]
-    $bargingDomePlans: [UpdateBargingDomePlan!]
   ) {
     updateWeeklyBargingPlan(
       updateWeeklyBargingPlanDto: {
         weeklyPlanId: $weeklyPlanId
         bargingTargetPlans: $bargingTargetPlans
-        bargingDomePlans: $bargingDomePlans
       }
     ) {
       id
@@ -32,20 +30,13 @@ export interface IBargingTargetPlan {
   weeklyBargingTargets: IWeeklyBargingTarget[];
 }
 
-export interface IBargingDomePlan {
-  id?: string | null;
-  domeId: string | null;
-}
-
 export interface IBargingTargetPlanValue {
   bargingTargetPlans: IBargingTargetPlan[];
-  bargingDomePlans: IBargingDomePlan[];
 }
 
 type ICreateWeeklyBargingTargetPlanRequest = {
   weeklyPlanId: string;
   bargingTargetPlans: IBargingTargetPlan[];
-  bargingDomePlans: IBargingDomePlan[];
 };
 
 interface ICreateWeeklyBargingTargetPlanResponse {

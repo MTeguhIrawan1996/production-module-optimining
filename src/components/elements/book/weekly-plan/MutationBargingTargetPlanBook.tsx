@@ -9,16 +9,13 @@ import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
-import InputGroupDome, {
-  IInputGroupDomeProps,
-} from '@/components/elements/book/weekly-plan/input/InputGroupDome';
+import InputTableBargingTargetPlan from '@/components/elements/book/weekly-plan/input/InputTableBargingTargetPlan';
+import WeeklyTableBrgingDome from '@/components/elements/book/weekly-plan/table/WeeklyTableBargingDome';
 import CommonWeeklyPlanInformation from '@/components/elements/book/weekly-plan/ui/CommonWeeklyPlanInformation';
-import InputTableBargingTargetPlan from '@/components/elements/book/weekly-plan/ui/InputTableBargingTargetPlan';
 import DashboardCard from '@/components/elements/card/DashboardCard';
 import GlobalFormGroup from '@/components/elements/form/GlobalFormGroup';
 
 import {
-  IBargingDomePlan,
   IBargingTargetPlan,
   IBargingTargetPlanValue,
   IWeeklyBargingTarget,
@@ -64,12 +61,6 @@ const MutationBargingTargetPlanBook = ({
           weeklyBargingTargets: bargingTarget,
         },
       ],
-      bargingDomePlans: [
-        {
-          id: null,
-          domeId: null,
-        },
-      ],
     },
     mode: 'onBlur',
   });
@@ -78,16 +69,6 @@ const MutationBargingTargetPlanBook = ({
     name: 'bargingTargetPlans',
     control: methods.control,
     keyName: 'bargingTargetPlanId',
-  });
-  const {
-    fields: bargingDomePlanFields,
-    append: bargingDomePlanAppend,
-    remove: bargingDomePlanRemove,
-    replace: bargingDomePlanReplace,
-  } = useFieldArray({
-    name: 'bargingDomePlans',
-    control: methods.control,
-    keyName: 'bargingDomePlanId',
   });
 
   const { materialsData } = useReadAllMaterialsMaster({
@@ -116,54 +97,42 @@ const MutationBargingTargetPlanBook = ({
     },
   });
 
-  const { weeklyBargingTargetPlanDataLoading } = useReadOneBargingTargetPlan({
-    variables: {
-      weeklyPlanId: id,
-    },
-    skip: !materialsData || tabs !== 'bargingTargetPlan',
-    onCompleted: (data) => {
-      if (
-        data.weeklyBargingPlan &&
-        data.weeklyBargingPlan.bargingTargetPlans.length > 0
-      ) {
-        data.weeklyBargingPlan.bargingTargetPlans.forEach((val) => {
-          const newWeeklyBargingTargets: IWeeklyBargingTarget[] =
-            val.weeklyBargingTargets.map((wObj) => {
-              return {
-                id: wObj.id || null,
-                day: wObj.day,
-                rate: wObj.rate || '',
-                ton: wObj.ton || '',
-              };
-            });
-          const bargingTargetPlanIndex = bargingTargetPlanFields.findIndex(
-            (item) => item.materialId === val.material.id
-          );
-          methods.setValue(
-            `bargingTargetPlans.${bargingTargetPlanIndex}.id`,
-            val.id
-          );
-          methods.setValue(
-            `bargingTargetPlans.${bargingTargetPlanIndex}.weeklyBargingTargets`,
-            newWeeklyBargingTargets
-          );
-        });
-      }
-      if (
-        data.weeklyBargingPlan &&
-        data.weeklyBargingPlan.bargingDomePlans.data.length > 0
-      ) {
-        const newBargingDomePlans: IBargingDomePlan[] =
-          data.weeklyBargingPlan.bargingDomePlans.data.map((val) => {
-            return {
-              id: val.id,
-              domeId: val.dome.id,
-            };
+  const { weeklyBargingTargetPlanData, weeklyBargingTargetPlanDataLoading } =
+    useReadOneBargingTargetPlan({
+      variables: {
+        weeklyPlanId: id,
+      },
+      skip: !materialsData || tabs !== 'bargingTargetPlan',
+      onCompleted: (data) => {
+        if (
+          data.weeklyBargingPlan &&
+          data.weeklyBargingPlan.bargingTargetPlans.length > 0
+        ) {
+          data.weeklyBargingPlan.bargingTargetPlans.forEach((val) => {
+            const newWeeklyBargingTargets: IWeeklyBargingTarget[] =
+              val.weeklyBargingTargets.map((wObj) => {
+                return {
+                  id: wObj.id || null,
+                  day: wObj.day,
+                  rate: wObj.rate || '',
+                  ton: wObj.ton || '',
+                };
+              });
+            const bargingTargetPlanIndex = bargingTargetPlanFields.findIndex(
+              (item) => item.materialId === val.material.id
+            );
+            methods.setValue(
+              `bargingTargetPlans.${bargingTargetPlanIndex}.id`,
+              val.id
+            );
+            methods.setValue(
+              `bargingTargetPlans.${bargingTargetPlanIndex}.weeklyBargingTargets`,
+              newWeeklyBargingTargets
+            );
           });
-        bargingDomePlanReplace(newBargingDomePlans);
-      }
-    },
-  });
+        }
+      },
+    });
 
   const [executeUpdate, { loading }] = useCreateWeeklyBargingTargetPlan({
     onCompleted: () => {
@@ -201,30 +170,6 @@ const MutationBargingTargetPlanBook = ({
   });
 
   const fieldRhf = React.useMemo(() => {
-    const domeGroup: IInputGroupDomeProps[] = bargingDomePlanFields.map(
-      (obj, i) => ({
-        bargingDomePlanIndex: i,
-        uniqKey: obj.bargingDomePlanId,
-        tabs: tabs,
-        addButtonOuter:
-          i === 0
-            ? {
-                onClick: () => {
-                  bargingDomePlanAppend({
-                    id: null,
-                    domeId: '',
-                  });
-                },
-              }
-            : undefined,
-        deleteButtonInner: {
-          onClick: () => {
-            bargingDomePlanFields.length > 1 ? bargingDomePlanRemove(i) : null;
-          },
-        },
-      })
-    );
-
     const field: ControllerGroup[] = [
       {
         group: t('commonTypography.bargingTargetPlan'),
@@ -238,21 +183,15 @@ const MutationBargingTargetPlanBook = ({
                   isLoading={weeklyBargingTargetPlanDataLoading}
                 />
               </Grid.Col>
-              {domeGroup.map(
-                ({ tabs, bargingDomePlanIndex, uniqKey, ...restDome }) => (
-                  <Grid.Col
-                    span={12}
-                    key={`${bargingDomePlanIndex}.${uniqKey}`}
-                  >
-                    <InputGroupDome
-                      bargingDomePlanIndex={bargingDomePlanIndex}
-                      tabs={tabs}
-                      isLoading={weeklyBargingTargetPlanDataLoading}
-                      {...restDome}
-                    />
-                  </Grid.Col>
-                )
-              )}
+              <Grid.Col span={12} mt="sm">
+                <WeeklyTableBrgingDome
+                  pageType={mutationType}
+                  labelProps={{
+                    fw: 500,
+                    fz: 16,
+                  }}
+                />
+              </Grid.Col>
             </>
           );
         },
@@ -261,7 +200,7 @@ const MutationBargingTargetPlanBook = ({
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bargingDomePlanFields, tabs, weeklyBargingTargetPlanDataLoading]);
+  }, [weeklyBargingTargetPlanData, tabs, weeklyBargingTargetPlanDataLoading]);
 
   const handleSubmitForm: SubmitHandler<IBargingTargetPlanValue> = async (
     data
@@ -286,13 +225,11 @@ const MutationBargingTargetPlanBook = ({
         };
       })
       .filter((v) => v.weeklyBargingTargets.length > 0);
-    const newBargingDomePlans = data.bargingDomePlans.filter((v) => v.domeId);
 
     await executeUpdate({
       variables: {
         weeklyPlanId: id,
         bargingTargetPlans: newBargingTargetPlans,
-        bargingDomePlans: newBargingDomePlans,
       },
     });
   };

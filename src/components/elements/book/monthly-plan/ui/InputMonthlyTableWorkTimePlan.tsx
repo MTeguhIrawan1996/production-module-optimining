@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import DisplayLoseTimeAndEffectiveWork from '@/components/elements/book/weekly-plan/ui/DisplayLoseTimeAndEffectiveWork';
+import DisplayLoseTimeAndEffectiveWork from '@/components/elements/book/weekly-plan/input/DisplayLoseTimeAndEffectiveWork';
 import MantineDataTable from '@/components/elements/dataTable/MantineDataTable';
 import FormController from '@/components/elements/form/FormController';
 
