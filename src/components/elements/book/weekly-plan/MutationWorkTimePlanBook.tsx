@@ -9,8 +9,8 @@ import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { DashboardCard, GlobalFormGroup } from '@/components/elements';
+import InputTableWorkTimePlan from '@/components/elements/book/weekly-plan/input/InputTableWorkTimePlan';
 import CommonWeeklyPlanInformation from '@/components/elements/book/weekly-plan/ui/CommonWeeklyPlanInformation';
-import InputTableWorkTimePlan from '@/components/elements/book/weekly-plan/ui/InputTableWorkTimePlan';
 
 import {
   IWorkTimeDay,
