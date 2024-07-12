@@ -3,6 +3,7 @@ import type { ColorScheme } from '@mantine/core';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { theme } from 'mantine';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
@@ -103,6 +104,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                 />
               </MantineProvider>
             </RealViewportProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </ApolloProvider>
       </SessionProvider>

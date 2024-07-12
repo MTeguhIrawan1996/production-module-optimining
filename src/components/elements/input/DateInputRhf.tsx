@@ -21,7 +21,7 @@ const DateInputRhf: React.FC<IDateInputProps> = ({
   valueFormat = 'DD MMMM YYYY',
   placeholder = 'DD MMMM YYYY',
   label,
-  maxDate = new Date(),
+  maxDate,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');

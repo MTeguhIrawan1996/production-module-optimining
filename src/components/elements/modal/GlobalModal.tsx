@@ -14,6 +14,7 @@ interface IGlobalModalProps {
   actionModal: () => void;
   label?: string;
   modalSize?: MantineNumberSize;
+  centered?: boolean;
 }
 
 const GlobalModal: React.FunctionComponent<IGlobalModalProps> = ({
@@ -23,6 +24,7 @@ const GlobalModal: React.FunctionComponent<IGlobalModalProps> = ({
   isOpenModal,
   label,
   modalSize = '100%',
+  centered,
 }) => {
   return (
     <Modal.Root
@@ -30,6 +32,7 @@ const GlobalModal: React.FunctionComponent<IGlobalModalProps> = ({
       onClose={actionModal}
       radius="md"
       size={modalSize}
+      centered={centered}
     >
       <Modal.Overlay opacity={0.2} />
       <Modal.Content>

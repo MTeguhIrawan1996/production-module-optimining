@@ -1,23 +1,28 @@
-import { Select, SelectProps, Text } from '@mantine/core';
+import { Select, SelectProps, Stack, Text } from '@mantine/core';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
 import { useReadAllWeek2s } from '@/services/graphql/query/global-select/useReadAllWeekSelect';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 
 export type ISelectWeekNativeProps = {
   control: 'select-week-native';
   year?: number | null;
+  month?: number | null;
 } & Omit<SelectProps, 'data' | 'onSearchChange' | 'searchValue'>;
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   label: string;
+  endDate: string;
+  startDate: string;
 }
 
 const SelectWeekNative: React.FC<ISelectWeekNativeProps> = ({
   control,
   year = null,
+  month = null,
   label = 'week',
   placeholder = 'chooseWeek',
   name,
@@ -31,15 +36,18 @@ const SelectWeekNative: React.FC<ISelectWeekNativeProps> = ({
   useReadAllWeek2s({
     variables: {
       year,
+      month,
     },
     onCompleted: (data) => {
       const yearsItem = data.week2s.map((val) => {
         return {
+          id: `${val.week}`,
           name: t('commonTypography.nthWeek', {
             n: val.week, // week is started by 1 by default
             ns: 'default',
           }),
-          id: `${val.week}`,
+          startDate: val.detail.startDate,
+          endDate: val.detail.startDate,
         };
       });
       setFilterDataCommon({ key: name || '', data: yearsItem });
@@ -51,9 +59,14 @@ const SelectWeekNative: React.FC<ISelectWeekNativeProps> = ({
   });
 
   const SelectItem = React.forwardRef<HTMLDivElement, ItemProps>(
-    ({ label, ...others }: ItemProps, ref) => (
+    ({ endDate, startDate, label, ...others }: ItemProps, ref) => (
       <div ref={ref} {...others}>
-        <Text size="sm">{label}</Text>
+        <Stack spacing={2}>
+          <Text size="sm">{label}</Text>
+          <Text size="xs" opacity={0.65}>
+            {formatDate(startDate, 'DD MMM')} - {formatDate(endDate, 'DD MMM')}
+          </Text>
+        </Stack>
       </div>
     )
   );

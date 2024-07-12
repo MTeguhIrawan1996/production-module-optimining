@@ -63,6 +63,7 @@ interface IDashboardCardProps extends PaperProps {
   titleStyle?: TitleProps;
   downloadButton?: IDownloadButtonProps[];
   segmentedControl?: SegmentedControlProps;
+  otherButton?: React.ReactNode;
 }
 
 const DashboardCard: React.FC<IDashboardCardProps> = ({
@@ -90,6 +91,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
   titleStyle,
   downloadButton,
   segmentedControl,
+  otherButton,
   ...restPaper
 }) => {
   const router = useRouter();
@@ -152,6 +154,7 @@ const DashboardCard: React.FC<IDashboardCardProps> = ({
                   {searchBar && <SearchBar w={440} {...searchBar} />}
                 </Group>
                 <Group spacing="xs">
+                  {otherButton && otherButton}
                   {addButton && (
                     <PrimaryButton
                       // leftIcon={<IconPlus size="20px" />}

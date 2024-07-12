@@ -6,7 +6,10 @@ import {
   SelectArriveBargeNative,
   SelectCompanyNative,
   SelectHeavyEquipmentNative,
+  SelectInputMaterialNative,
   SelectInputNative,
+  SelectInputPeriodNative,
+  SelectInputShiftNative,
   SelectMonthNative,
   SelectStatusNative,
   SelectWeekNative,
@@ -39,6 +42,12 @@ const InputControllerNative: React.FC<InputControllerNativeProps> = (props) => {
       return <SelectCompanyNative {...props} />;
     case 'select-location-native':
       return <LocationSelectInputNative {...props} />;
+    case 'select-period-native':
+      return <SelectInputPeriodNative {...props} />;
+    case 'select-shift-native':
+      return <SelectInputShiftNative {...props} />;
+    case 'select-material-native':
+      return <SelectInputMaterialNative {...props} />;
     default:
       return null;
   }

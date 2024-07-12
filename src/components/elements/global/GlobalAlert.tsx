@@ -3,7 +3,7 @@ import { IconAlertCircle } from '@tabler/icons-react';
 import * as React from 'react';
 
 interface IGlobalAlertProps extends Omit<AlertProps, 'children'> {
-  description: string;
+  description: React.ReactNode;
 }
 
 const GlobalAlert: React.FunctionComponent<IGlobalAlertProps> = ({
