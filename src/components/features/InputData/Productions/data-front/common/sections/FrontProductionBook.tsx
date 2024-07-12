@@ -828,7 +828,7 @@ const FrontProductionBook = () => {
         resetButton: {
           onClick: () => {
             segment.page?.set(1);
-            segment.period?.set(null);
+            segment.period?.set('DATE_RANGE');
             segment.startDate?.set(null);
             segment.endDate?.set(null);
             segment.shiftId?.set(null);
