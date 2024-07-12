@@ -190,6 +190,7 @@ const ListWeeklyMapBook = () => {
       name: 'week',
       searchable: true,
       value: week ? `${week}` : null,
+      year: year,
       onChange: (v) => {
         setWeeklyMapProductionState({ week: v ? Number(v) : null });
       },

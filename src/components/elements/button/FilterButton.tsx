@@ -23,6 +23,7 @@ export type IFilterDateWithSelect = {
   selectItem: InputControllerNativeProps;
   col: number;
   prefix?: string;
+  otherElement?: () => React.ReactNode;
 };
 
 export interface IFilterButtonProps {
@@ -68,7 +69,7 @@ const FilterButton = ({
 
   return (
     <Popover
-      width={600}
+      width={550}
       position="bottom-start"
       shadow="md"
       radius="sm"
@@ -91,18 +92,27 @@ const FilterButton = ({
         </Button>
       </Popover.Target>
       <Popover.Dropdown p="sm">
-        <Stack>
+        <Stack spacing="xs">
           <Text fw={600} fz={18}>
             Filter
           </Text>
-          <Grid>
+          <Grid gutter="xs">
             {multipleFilter ? selectItems : null}
             {filterDateWithSelect
-              ? filterDateWithSelect?.map(({ selectItem, col }, key) => (
-                  <Grid.Col span={col} key={key}>
-                    <InputControllerNative {...selectItem} />
-                  </Grid.Col>
-                ))
+              ? filterDateWithSelect?.map(
+                  ({ selectItem, col, otherElement }, key) => (
+                    <React.Fragment key={`${selectItem.name}.${key}`}>
+                      <Grid.Col span={col}>
+                        <InputControllerNative {...selectItem} />
+                      </Grid.Col>
+                      {otherElement ? (
+                        <Grid.Col span={12} py={0}>
+                          {otherElement()}
+                        </Grid.Col>
+                      ) : null}
+                    </React.Fragment>
+                  )
+                )
               : null}
           </Grid>
           <Group spacing="xs" position="right">

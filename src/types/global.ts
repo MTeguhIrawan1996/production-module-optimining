@@ -52,8 +52,12 @@ import { ICompanyNativeProps } from '@/components/elements/input/SelectCompanyNa
 import { ISelectCompanyRhfProps } from '@/components/elements/input/SelectCompanyRhf';
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
 import { ISelectHeavyEquipmentNativeProps } from '@/components/elements/input/SelectHeavyEquipmentNative';
+import { ISelectMaterialNativeProps } from '@/components/elements/input/SelectInputMaterialNative';
 import { ISelectInputNativeProps } from '@/components/elements/input/SelectInputNative';
+import { ISelectInputPeriodNatvie } from '@/components/elements/input/SelectInputPeriodNative';
+import { ISelectInputQuarterNatvie } from '@/components/elements/input/SelectInputQuarterNative';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
+import { ISelectShiftNativeProps } from '@/components/elements/input/SelectInputShiftNative';
 import { ISelectMapTypeRhfProps } from '@/components/elements/input/SelectMapType';
 import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
 import { ISelectMonthRhfProps } from '@/components/elements/input/SelectMonthRhf';
@@ -166,7 +170,11 @@ export type InputControllerNativeProps =
   | IStatusNativeProps
   | ICompanyNativeProps
   | ISelectWeekNativeProps
-  | ILocationNativeProps;
+  | ISelectInputQuarterNatvie
+  | ILocationNativeProps
+  | ISelectInputPeriodNatvie
+  | ISelectShiftNativeProps
+  | ISelectMaterialNativeProps;
 
 export type ControllerGroup = {
   group: string;

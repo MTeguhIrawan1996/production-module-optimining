@@ -3,7 +3,11 @@ import { ILocationNativeProps } from '@/components/elements/input/LocationSelect
 import { IArriveBargeNativeProps } from '@/components/elements/input/SelectArriveBargeNative';
 import { ICompanyNativeProps } from '@/components/elements/input/SelectCompanyNative';
 import { ISelectHeavyEquipmentNativeProps } from '@/components/elements/input/SelectHeavyEquipmentNative';
+import { ISelectMaterialNativeProps } from '@/components/elements/input/SelectInputMaterialNative';
 import { ISelectInputNativeProps } from '@/components/elements/input/SelectInputNative';
+import { ISelectInputPeriodNatvie } from '@/components/elements/input/SelectInputPeriodNative';
+import { ISelectInputQuarterNatvie } from '@/components/elements/input/SelectInputQuarterNative';
+import { ISelectShiftNativeProps } from '@/components/elements/input/SelectInputShiftNative';
 import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
 import { IStatusNativeProps } from '@/components/elements/input/SelectStatusNative';
 import { ISelectWeekNativeProps } from '@/components/elements/input/SelectWeekNative';
@@ -70,6 +74,21 @@ export const globalSelectWeekNative = ({
 }: Partial<ISelectWeekNativeProps>) => {
   const field: InputControllerNativeProps = {
     control: 'select-week-native',
+    name,
+    searchable,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectQuarterNative = ({
+  name = 'quarter',
+  searchable = false,
+  clearable = true,
+  ...rest
+}: Partial<ISelectInputQuarterNatvie>) => {
+  const field: InputControllerNativeProps = {
+    control: 'select-quarter-native',
     name,
     searchable,
     clearable,
@@ -167,6 +186,49 @@ export const globalSelectLocationNative = ({
     control: 'select-location-native',
     name,
     searchable,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectPeriodNative = ({
+  name = 'period',
+  searchable = false,
+  clearable = true,
+  ...rest
+}: Partial<ISelectInputPeriodNatvie>) => {
+  const field: InputControllerNativeProps = {
+    control: 'select-period-native',
+    name,
+    searchable,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectShiftNative = ({
+  name = 'shift',
+  searchable = false,
+  clearable = true,
+  ...rest
+}: Partial<ISelectShiftNativeProps>) => {
+  const field: InputControllerNativeProps = {
+    control: 'select-shift-native',
+    name,
+    searchable,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectMaterialNative = ({
+  name = 'shift',
+  clearable = true,
+  ...rest
+}: Partial<ISelectMaterialNativeProps>) => {
+  const field: InputControllerNativeProps = {
+    control: 'select-material-native',
+    name,
     clearable,
     ...rest,
   };

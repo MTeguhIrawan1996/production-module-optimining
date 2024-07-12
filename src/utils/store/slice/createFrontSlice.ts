@@ -2,14 +2,26 @@ import { StateCreator } from 'zustand';
 
 import { sliceResetFns } from '@/utils/store/useControlPanel';
 
-type IFrontState = {
+export type IFrontState = {
   page: number;
   search: string;
+  period: string | null;
+  week: number | null;
+  month: number | null;
+  quarter: number | null;
+  year: number | null;
+  pitId: string | null;
+  domeId: string | null;
+  shiftId: string | null;
+  materialId: string | null;
+  startDate: Date | null;
+  endDate: Date | null;
+  filterBadgeValue: string[] | null;
 };
 
 export type IFrontSliceValue = {
-  frontPitState: Partial<IFrontState>;
-  frontDomeState: Partial<IFrontState>;
+  frontPitState: Partial<Omit<IFrontState, 'domeId'>>;
+  frontDomeState: Partial<Omit<IFrontState, 'pitId' | 'materialId'>>;
 };
 
 export interface IFrontSliceAction {
@@ -21,10 +33,31 @@ const initialState: IFrontSliceValue = {
   frontPitState: {
     page: 1,
     search: '',
+    period: 'DATE_RANGE',
+    week: null,
+    month: null,
+    quarter: null,
+    year: null,
+    pitId: null,
+    shiftId: null,
+    materialId: null,
+    startDate: null,
+    endDate: null,
+    filterBadgeValue: null,
   },
   frontDomeState: {
     page: 1,
     search: '',
+    period: 'DATE_RANGE',
+    week: null,
+    month: null,
+    year: null,
+    quarter: null,
+    domeId: null,
+    shiftId: null,
+    startDate: null,
+    endDate: null,
+    filterBadgeValue: null,
   },
 };
 

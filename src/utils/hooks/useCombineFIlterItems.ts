@@ -16,10 +16,11 @@ export const useCombineFilterItems = <T extends IIdAndName>({
   combinedId,
   combinedName,
 }: IProps<T>) => {
-  const renderItems = React.useCallback((value: T) => {
+  const renderItems = React.useCallback(({ id, name, ...rest }: T) => {
     return {
-      label: value.name,
-      value: value.id,
+      value: id,
+      label: name,
+      ...rest,
     };
   }, []);
   const Items = data
@@ -41,10 +42,11 @@ export const useCombineFilterItems = <T extends IIdAndName>({
 export const useFilterItems = <T extends IIdAndName>({
   data,
 }: Pick<IProps<T>, 'data'>) => {
-  const renderItems = React.useCallback((value: T) => {
+  const renderItems = React.useCallback(({ id, name, ...rest }: T) => {
     return {
-      label: value.name,
-      value: value.id,
+      value: id,
+      label: name,
+      ...rest,
     };
   }, []);
 

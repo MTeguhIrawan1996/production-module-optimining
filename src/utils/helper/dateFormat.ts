@@ -13,6 +13,7 @@ export const formatDate = (
   value: string | Date | undefined | null,
   format?:
     | 'DD'
+    | 'DD MMM'
     | 'LL'
     | 'LTS'
     | 'YYYY-MM-DD'
