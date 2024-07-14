@@ -21,6 +21,7 @@ import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 import DownloadButtonFront from '@/components/features/InputData/Productions/data-front/common/elements/DownloadButtonFront';
 
 import { useDeleteFrontProduction } from '@/services/graphql/mutation/front-production/useDeleteFrontProduction';
+import { useReadAllCommonDownload } from '@/services/graphql/query/download/useReadAllCommonDownload';
 import { useReadAllFrontProduction } from '@/services/graphql/query/front-production/useReadAllFrontProduction';
 import {
   globalDateNative,
@@ -786,6 +787,17 @@ const FrontProductionBook = () => {
 
     return true;
   };
+
+  useReadAllCommonDownload({
+    variable: {
+      entity: 'FRONT_PIT',
+      timeFilterType: 'DATE_RANGE',
+    },
+    onSuccess: (data) => {
+      // eslint-disable-next-line no-console
+      console.log(data);
+    },
+  });
 
   return (
     <DashboardCard
