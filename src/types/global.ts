@@ -55,6 +55,7 @@ import { ISelectHeavyEquipmentNativeProps } from '@/components/elements/input/Se
 import { ISelectMaterialNativeProps } from '@/components/elements/input/SelectInputMaterialNative';
 import { ISelectInputNativeProps } from '@/components/elements/input/SelectInputNative';
 import { ISelectInputPeriodNatvie } from '@/components/elements/input/SelectInputPeriodNative';
+import { ISelectInputPeriodRhf } from '@/components/elements/input/SelectInputPeriodRhf';
 import { ISelectInputQuarterNatvie } from '@/components/elements/input/SelectInputQuarterNative';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISelectShiftNativeProps } from '@/components/elements/input/SelectInputShiftNative';
@@ -158,7 +159,8 @@ export type ControllerProps =
   | IWeatherConditionSelectInputRhfProps
   | ISelectMapTypeRhfProps
   | ISelectActivityTypePlanRhfProps
-  | IMultipleSelectMapLocationRhfProps;
+  | IMultipleSelectMapLocationRhfProps
+  | ISelectInputPeriodRhf;
 
 export type InputControllerNativeProps =
   | IDateInputNativeProps

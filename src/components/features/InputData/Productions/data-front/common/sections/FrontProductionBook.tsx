@@ -21,6 +21,7 @@ import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 import DownloadButtonFront from '@/components/features/InputData/Productions/data-front/common/elements/DownloadButtonFront';
 
 import { useDeleteFrontProduction } from '@/services/graphql/mutation/front-production/useDeleteFrontProduction';
+import { useReadAllCommonDownload } from '@/services/graphql/query/download/useReadAllCommonDownload';
 import { useReadAllFrontProduction } from '@/services/graphql/query/front-production/useReadAllFrontProduction';
 import {
   globalDateNative,
@@ -559,76 +560,52 @@ const FrontProductionBook = () => {
       },
     });
 
-    const periodDateRange =
-      segment.period?.value === 'DATE_RANGE'
-        ? [
-            {
-              selectItem: startDateItem,
-              col: 6,
-            },
-            {
-              selectItem: endDateItem,
-              col: 6,
-              otherElement: () => (
-                <GlobalAlert
-                  description={
-                    <Text fw={500} color="orange.4">
-                      Maksimal Rentang Waktu Dalam 30 Hari
-                    </Text>
-                  }
-                  color="orange.5"
-                  mt="xs"
-                  py={4}
-                />
-              ),
-            },
-          ]
-        : [];
+    const periodDateRange = [
+      {
+        selectItem: startDateItem,
+        col: 6,
+      },
+      {
+        selectItem: endDateItem,
+        col: 6,
+        otherElement: () => (
+          <GlobalAlert
+            description={
+              <Text fw={500} color="orange.4">
+                Maksimal Rentang Waktu Dalam 30 Hari
+              </Text>
+            }
+            color="orange.5"
+            mt="xs"
+            py={4}
+          />
+        ),
+      },
+    ];
 
-    const periodYear =
-      segment.period?.value === 'YEAR'
-        ? [
-            {
-              selectItem: yearItem,
-              col: 12,
-              prefix: 'Tahun:',
-            },
-          ]
-        : [];
+    const periodYear = [
+      {
+        selectItem: yearItem,
+        col: segment.period?.value === 'YEAR' ? 12 : 6,
+        prefix: 'Tahun:',
+      },
+    ];
 
-    const periodMoth =
-      segment.period?.value === 'MONTH'
-        ? [
-            {
-              selectItem: yearItem,
-              col: 6,
-              prefix: 'Tahun:',
-            },
-            {
-              selectItem: monthItem,
-              col: 6,
-            },
-          ]
-        : [];
+    const periodMoth = [
+      ...periodYear,
+      {
+        selectItem: monthItem,
+        col: 6,
+      },
+    ];
 
-    const periodWeek =
-      segment.period?.value === 'WEEK'
-        ? [
-            {
-              selectItem: yearItem,
-              col: 6,
-              prefix: 'Tahun:',
-            },
-            {
-              selectItem: monthItem,
-              col: 6,
-            },
-            {
-              selectItem: weekItem,
-              col: 12,
-            },
-          ]
-        : [];
+    const periodWeek = [
+      ...periodMoth,
+      {
+        selectItem: weekItem,
+        col: 12,
+      },
+    ];
 
     const materialFilter = [
       {
@@ -643,10 +620,10 @@ const FrontProductionBook = () => {
         col: 12,
         prefix: 'Periode:',
       },
-      ...periodDateRange,
-      ...periodYear,
-      ...periodMoth,
-      ...periodWeek,
+      ...(segment.period.value === 'DATE_RANGE' ? periodDateRange : []),
+      ...(segment.period.value === 'YEAR' ? periodYear : []),
+      ...(segment.period.value === 'MONTH' ? periodMoth : []),
+      ...(segment.period.value === 'WEEK' ? periodWeek : []),
       {
         selectItem: locationItem,
         col: 6,
@@ -811,7 +788,16 @@ const FrontProductionBook = () => {
     return true;
   };
 
-  if (!router.isReady) return null;
+  useReadAllCommonDownload({
+    variable: {
+      entity: 'FRONT_PIT',
+      timeFilterType: 'DATE_RANGE',
+    },
+    onSuccess: (data) => {
+      // eslint-disable-next-line no-console
+      console.log(data);
+    },
+  });
 
   return (
     <DashboardCard
@@ -823,7 +809,9 @@ const FrontProductionBook = () => {
             }
           : undefined
       }
-      otherButton={<DownloadButtonFront label="Download" />}
+      otherButton={
+        <DownloadButtonFront params={newParams.segment} label="Download" />
+      }
       filterBadge={{
         resetButton: {
           onClick: () => {
@@ -935,6 +923,7 @@ const FrontProductionBook = () => {
         value: params.segment === 'dome' ? searchDome : searchPit,
       }}
       segmentedControl={{
+        defaultValue: 'pit',
         value: newParams.segment || 'pit',
         onChange: handleChangeSegement,
         data: [

@@ -9,15 +9,26 @@ import PrimaryButton, {
 import FormController from '@/components/elements/form/FormController';
 import GlobalModal from '@/components/elements/modal/GlobalModal';
 
+import { ControllerProps } from '@/types/global';
+
+export type IDownloadFields = {
+  otherElement?: () => React.ReactNode;
+  element: ControllerProps;
+};
+
 export type IDownloadDataButtonProps = {
   methods: UseFormReturn<any>;
   submitForm: SubmitHandler<any>;
+  fields: IDownloadFields[];
+  isDibaledDownload?: boolean;
   // trackDownloadAction?: () => void;
 } & IPrimaryButtonProps;
 
 const PrimaryDownloadDataButton: React.FC<IDownloadDataButtonProps> = ({
   methods,
   submitForm,
+  fields,
+  isDibaledDownload,
   ...rest
 }) => {
   const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
@@ -49,16 +60,21 @@ const PrimaryDownloadDataButton: React.FC<IDownloadDataButtonProps> = ({
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(submitForm)}>
             <Grid gutter="xs">
-              <Grid.Col span={12}>
-                <FormController
-                  control="domename-select-input"
-                  name="domeId"
-                  label="period"
-                  withAsterisk
-                  clearable
-                  searchable
-                />
-              </Grid.Col>
+              {fields.map(({ element, otherElement }, index) => {
+                const { key, name, colSpan, ...rest } = element;
+                return (
+                  <React.Fragment key={key ? key : `${index}.`}>
+                    <Grid.Col span={colSpan}>
+                      <FormController name={name} {...rest} />
+                    </Grid.Col>
+                    {otherElement ? (
+                      <Grid.Col span={12} py={0}>
+                        {otherElement()}
+                      </Grid.Col>
+                    ) : null}
+                  </React.Fragment>
+                );
+              })}
             </Grid>
             <Group mt="sm" spacing="xs" position="right">
               <PrimaryButton
@@ -69,9 +85,10 @@ const PrimaryDownloadDataButton: React.FC<IDownloadDataButtonProps> = ({
                 onClick={handleCloseModal}
               />
               <PrimaryButton
-                label="Simpan"
+                label="Unduh"
                 type="button"
                 onClick={handleConfirmation}
+                disabled={isDibaledDownload}
                 // loading={loading}
               />
             </Group>

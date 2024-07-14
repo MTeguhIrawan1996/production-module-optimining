@@ -56,6 +56,7 @@ const SelectWeekNative: React.FC<ISelectWeekNativeProps> = ({
 
   const { uncombinedItem } = useFilterItems({
     data: filterDataCommon.find((v) => v.key === name)?.data ?? [],
+    withRest: true,
   });
 
   const SelectItem = React.forwardRef<HTMLDivElement, ItemProps>(
