@@ -559,76 +559,52 @@ const FrontProductionBook = () => {
       },
     });
 
-    const periodDateRange =
-      segment.period?.value === 'DATE_RANGE'
-        ? [
-            {
-              selectItem: startDateItem,
-              col: 6,
-            },
-            {
-              selectItem: endDateItem,
-              col: 6,
-              otherElement: () => (
-                <GlobalAlert
-                  description={
-                    <Text fw={500} color="orange.4">
-                      Maksimal Rentang Waktu Dalam 30 Hari
-                    </Text>
-                  }
-                  color="orange.5"
-                  mt="xs"
-                  py={4}
-                />
-              ),
-            },
-          ]
-        : [];
+    const periodDateRange = [
+      {
+        selectItem: startDateItem,
+        col: 6,
+      },
+      {
+        selectItem: endDateItem,
+        col: 6,
+        otherElement: () => (
+          <GlobalAlert
+            description={
+              <Text fw={500} color="orange.4">
+                Maksimal Rentang Waktu Dalam 30 Hari
+              </Text>
+            }
+            color="orange.5"
+            mt="xs"
+            py={4}
+          />
+        ),
+      },
+    ];
 
-    const periodYear =
-      segment.period?.value === 'YEAR'
-        ? [
-            {
-              selectItem: yearItem,
-              col: 12,
-              prefix: 'Tahun:',
-            },
-          ]
-        : [];
+    const periodYear = [
+      {
+        selectItem: yearItem,
+        col: segment.period?.value === 'YEAR' ? 12 : 6,
+        prefix: 'Tahun:',
+      },
+    ];
 
-    const periodMoth =
-      segment.period?.value === 'MONTH'
-        ? [
-            {
-              selectItem: yearItem,
-              col: 6,
-              prefix: 'Tahun:',
-            },
-            {
-              selectItem: monthItem,
-              col: 6,
-            },
-          ]
-        : [];
+    const periodMoth = [
+      ...periodYear,
+      {
+        selectItem: monthItem,
+        col: 6,
+      },
+    ];
 
-    const periodWeek =
-      segment.period?.value === 'WEEK'
-        ? [
-            {
-              selectItem: yearItem,
-              col: 6,
-              prefix: 'Tahun:',
-            },
-            {
-              selectItem: monthItem,
-              col: 6,
-            },
-            {
-              selectItem: weekItem,
-              col: 12,
-            },
-          ]
-        : [];
+    const periodWeek = [
+      ...periodMoth,
+      {
+        selectItem: weekItem,
+        col: 12,
+      },
+    ];
 
     const materialFilter = [
       {
@@ -643,10 +619,10 @@ const FrontProductionBook = () => {
         col: 12,
         prefix: 'Periode:',
       },
-      ...periodDateRange,
-      ...periodYear,
-      ...periodMoth,
-      ...periodWeek,
+      ...(segment.period.value === 'DATE_RANGE' ? periodDateRange : []),
+      ...(segment.period.value === 'YEAR' ? periodYear : []),
+      ...(segment.period.value === 'MONTH' ? periodMoth : []),
+      ...(segment.period.value === 'WEEK' ? periodWeek : []),
       {
         selectItem: locationItem,
         col: 6,
@@ -811,8 +787,6 @@ const FrontProductionBook = () => {
     return true;
   };
 
-  if (!router.isReady) return null;
-
   return (
     <DashboardCard
       addButton={
@@ -823,7 +797,9 @@ const FrontProductionBook = () => {
             }
           : undefined
       }
-      otherButton={<DownloadButtonFront label="Download" />}
+      otherButton={
+        <DownloadButtonFront params={newParams.segment} label="Download" />
+      }
       filterBadge={{
         resetButton: {
           onClick: () => {
@@ -935,6 +911,7 @@ const FrontProductionBook = () => {
         value: params.segment === 'dome' ? searchDome : searchPit,
       }}
       segmentedControl={{
+        defaultValue: 'pit',
         value: newParams.segment || 'pit',
         onChange: handleChangeSegement,
         data: [

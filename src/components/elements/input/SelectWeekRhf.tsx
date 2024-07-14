@@ -1,4 +1,4 @@
-import { Select, SelectProps } from '@mantine/core';
+import { Select, SelectProps, Stack } from '@mantine/core';
 import { Text } from '@mantine/core';
 import * as React from 'react';
 import { useController } from 'react-hook-form';
@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
 import { useReadAllWeek2s } from '@/services/graphql/query/global-select/useReadAllWeekSelect';
+import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 
 import { CommonProps } from '@/types/global';
@@ -22,6 +23,8 @@ export type ISelectWeekRhfProps = {
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   label: string;
+  endDate: string;
+  startDate: string;
 }
 
 const SelectWeekRhf: React.FC<ISelectWeekRhfProps> = ({
@@ -47,22 +50,30 @@ const SelectWeekRhf: React.FC<ISelectWeekRhfProps> = ({
 
   const weeksItem = week2sData?.map((val) => {
     return {
+      id: `${val.week}`,
       name: t('commonTypography.nthWeek', {
         n: val.week, // week is started by 1 by default
         ns: 'default',
       }),
-      id: `${val.week}`,
+      startDate: val.detail.startDate,
+      endDate: val.detail.startDate,
     };
   });
 
   const { uncombinedItem } = useFilterItems({
     data: weeksItem ?? [],
+    withRest: true,
   });
 
   const SelectItem = React.forwardRef<HTMLDivElement, ItemProps>(
-    ({ label, ...others }: ItemProps, ref) => (
+    ({ endDate, startDate, label, ...others }: ItemProps, ref) => (
       <div ref={ref} {...others}>
-        <Text size="sm">{label}</Text>
+        <Stack spacing={2}>
+          <Text size="sm">{label}</Text>
+          <Text size="xs" opacity={0.65}>
+            {formatDate(startDate, 'DD MMM')} - {formatDate(endDate, 'DD MMM')}
+          </Text>
+        </Stack>
       </div>
     )
   );

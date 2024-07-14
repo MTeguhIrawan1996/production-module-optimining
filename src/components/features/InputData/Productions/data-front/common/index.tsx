@@ -6,10 +6,12 @@ import { shallow } from 'zustand/shallow';
 import { InnerWrapper, RootWrapper } from '@/components/elements';
 import FrontProductionBook from '@/components/features/InputData/Productions/data-front/common/sections/FrontProductionBook';
 
+import { useRouterReady } from '@/utils/hooks/useRouterReady';
 import { useBreadcrumbs } from '@/utils/store/useBreadcrumbs';
 
 const FrontProductionPage = () => {
   const router = useRouter();
+  const isRouterReady = useRouterReady();
   const { t } = useTranslation('default');
   const [setBreadcrumbs] = useBreadcrumbs(
     (state) => [state.setBreadcrumbs],
@@ -25,6 +27,8 @@ const FrontProductionPage = () => {
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
+
+  if (!isRouterReady) return null;
 
   return (
     <RootWrapper>

@@ -30,6 +30,7 @@ import { ISelectActivityTypePlanRhfProps } from '@/components/elements/input/Sel
 import { IArriveBargeRhfProps } from '@/components/elements/input/SelectArriveBargeRhf';
 import { ISelectCompanyRhfProps } from '@/components/elements/input/SelectCompanyRhf';
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
+import { ISelectInputPeriodRhf } from '@/components/elements/input/SelectInputPeriodRhf';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISelectMapTypeRhfProps } from '@/components/elements/input/SelectMapType';
 import { ISelectMonthRhfProps } from '@/components/elements/input/SelectMonthRhf';
@@ -1270,6 +1271,25 @@ export const globalSelectActivityTypePlanRhf = ({
     searchable,
     clearable,
     withAsterisk,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectPeriodRhf = ({
+  name = 'period',
+  label,
+  searchable = false,
+  clearable = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectInputPeriodRhf>) => {
+  const field: ControllerProps = {
+    control: 'select-period-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
     colSpan,
     ...rest,
   };
