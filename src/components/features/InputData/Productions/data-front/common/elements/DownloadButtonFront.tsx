@@ -4,6 +4,7 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { shallow } from 'zustand/shallow';
 
 import { GlobalAlert, PrimaryDownloadDataButton } from '@/components/elements';
 import {
@@ -32,6 +33,7 @@ import { dateToString } from '@/utils/helper/dateToString';
 import dayjs from '@/utils/helper/dayjs.config';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
+import { useDownloadTaskStore } from '@/utils/store/useDownloadStore';
 
 interface IDownloadButtonFrontProps
   extends Omit<
@@ -51,6 +53,11 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
+
+  const [downloadPanel, setDownloadTaskStore] = useDownloadTaskStore(
+    (state) => [state.downloadPanel, state.setDownloadTaskStore],
+    shallow
+  );
 
   const defaultValues = {
     period: 'DATE_RANGE',
@@ -77,7 +84,15 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
   const isValid = methods.formState.isValid;
 
   const [executeCreate, { loading }] = useDownloadTask({
-    onCompleted: () => {
+    onCompleted: ({ createDownloadTasks }) => {
+      setDownloadTaskStore({
+        downloadPanel: {
+          downloadIds: [
+            ...(downloadPanel.downloadIds ? downloadPanel.downloadIds : []),
+            createDownloadTasks.id,
+          ],
+        },
+      });
       const segmentObj = {
         pit: 'PIT',
         dome: 'DOME',

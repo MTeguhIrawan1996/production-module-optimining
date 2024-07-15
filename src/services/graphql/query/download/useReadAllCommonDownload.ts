@@ -69,6 +69,7 @@ interface IReadAllCommonDownloadResponse {
 interface IReadAllFrontProductionRequest extends IGlobalMetaRequest {
   entity: string | null;
   timeFilterType: string | null;
+  downloadIds: string[];
 }
 
 export const useReadAllCommonDownload = ({
@@ -82,7 +83,8 @@ export const useReadAllCommonDownload = ({
 }) => {
   const { client } = getClient();
 
-  const { entity, timeFilterType } = variable;
+  const { downloadIds, entity, timeFilterType, limit } = variable;
+  const isActive = downloadIds && downloadIds?.length >= 1;
 
   return useQuery<IReadAllCommonDownloadResponse>({
     queryFn: async () => {
@@ -94,6 +96,7 @@ export const useReadAllCommonDownload = ({
         variables: {
           entity,
           timeFilterType,
+          limit,
         },
       });
       return response.data;
@@ -101,12 +104,12 @@ export const useReadAllCommonDownload = ({
     onSuccess: onSuccess,
     onError: onError,
     queryKey: ['commonDownload', { entity, timeFilterType }],
-    enabled: !!entity,
+    enabled: isActive,
     refetchInterval: (data) => {
       if (data?.findDownloadTasks.meta.totalAllData === 0) {
         return false;
       }
-      return 1500;
+      return 3000;
     },
   });
 };
