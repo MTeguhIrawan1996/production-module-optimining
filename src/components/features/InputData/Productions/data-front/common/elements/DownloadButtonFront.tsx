@@ -1,5 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Text } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -9,7 +11,11 @@ import {
   IDownloadFields,
 } from '@/components/elements/button/PrimaryDownloadDataButton';
 
-import { IDownloadFrontProductionValues } from '@/services/graphql/mutation/front-production/useDownloadFrontProduction';
+import {
+  IDownloadFrontProductionValues,
+  useDownloadTask,
+} from '@/services/graphql/mutation/download/useDownloadTask';
+import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
 import {
   globalDate,
   globalSelectMonthRhf,
@@ -21,7 +27,10 @@ import {
 } from '@/utils/constants/Field/global-field';
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { downloadFrontProductionValidation } from '@/utils/form-validation/front-production/front-production-validation';
+import { sendGAEvent } from '@/utils/helper/analytics';
+import { dateToString } from '@/utils/helper/dateToString';
 import dayjs from '@/utils/helper/dayjs.config';
+import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
 interface IDownloadButtonFrontProps
@@ -38,6 +47,11 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
   defaultValuesState,
   ...rest
 }) => {
+  const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
+  const { userAuthData } = useReadAuthUser({
+    fetchPolicy: 'cache-first',
+  });
+
   const defaultValues = {
     period: 'DATE_RANGE',
     startDate: null,
@@ -61,6 +75,50 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
   const year = methods.watch('year');
   const month = methods.watch('month');
   const isValid = methods.formState.isValid;
+
+  const [executeCreate, { loading }] = useDownloadTask({
+    onCompleted: () => {
+      const segmentObj = {
+        pit: 'PIT',
+        dome: 'DOME',
+      };
+      sendGAEvent({
+        event: 'Unduh',
+        params: {
+          category: 'Produksi',
+          subCategory: 'Produksi - Front',
+          subSubCategory: `Produksi - Front - ${segmentObj[params]}`,
+          account: userAuthData?.email ?? '',
+        },
+      });
+      notifications.show({
+        color: 'green',
+        title: 'Proses Donwload berhasil',
+        message: `Data front ${segmentObj[params]} sedang diproses`,
+        icon: <IconCheck />,
+      });
+      setIsOpenModal((prev) => !prev);
+      methods.reset();
+    },
+    onError: (error) => {
+      if (error.graphQLErrors) {
+        const errorArry =
+          errorBadRequestField<IDownloadFrontProductionValues>(error);
+        if (errorArry.length) {
+          errorArry.forEach(({ name, type, message }) => {
+            methods.setError(name, { type, message });
+          });
+          return;
+        }
+        notifications.show({
+          color: 'red',
+          title: 'Proses Donwload gagal',
+          message: error.message,
+          icon: <IconX />,
+        });
+      }
+    },
+  });
 
   const fieldRhf = React.useMemo(() => {
     const values = objectToArrayValue(defaultValues);
@@ -237,14 +295,32 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
 
   const handleSubmitForm: SubmitHandler<
     IDownloadFrontProductionValues
-    // eslint-disable-next-line unused-imports/no-unused-vars
   > = async (data) => {
-    // await executeUpdate({
-    //   variables: {
-    //     weeklyPlanId: id,
-    //     domeId: data.domeId,
-    //   },
-    // });
+    const startDate = dateToString(data.startDate || null);
+    const endDate = dateToString(data.startDate || null);
+
+    const segmentObj = {
+      pit: 'PIT',
+      dome: 'DOME',
+    };
+    await executeCreate({
+      variables: {
+        entity: `FRONT_${segmentObj[params]}`,
+        timeFilterType: data.period === 'DATE_RANGE' ? data.period : 'PERIOD',
+        timeFilter: {
+          startDate: startDate,
+          endDate: endDate,
+          year: data.year ? Number(data.year) : undefined,
+          month: data.month ? Number(data.month) : undefined,
+          week: data.week ? Number(data.week) : undefined,
+        },
+        columnFilter: {
+          materialId: data.materialId || undefined,
+          shiftId: data.shiftId || undefined,
+          pitId: data.locationId || undefined,
+        },
+      },
+    });
   };
 
   const handleSetValue = () => {
@@ -264,6 +340,9 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
       fields={fieldRhf}
       isDibaledDownload={!isValid}
       handleSetDefaultValue={handleSetValue}
+      isOpenModal={isOpenModal}
+      setIsOpenModal={setIsOpenModal}
+      isLoadingSubmit={loading}
       {...rest}
     />
   );

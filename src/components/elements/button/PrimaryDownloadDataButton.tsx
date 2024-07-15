@@ -27,11 +27,14 @@ export type IDownloadFields = {
 
 export type IDownloadDataButtonProps = {
   methods: UseFormReturn<any>;
-  submitForm: SubmitHandler<any>;
   fields: IDownloadFields[];
   isDibaledDownload?: boolean;
   period?: string;
+  isOpenModal?: boolean;
+  isLoadingSubmit?: boolean;
   handleSetDefaultValue?: () => void;
+  submitForm: SubmitHandler<any>;
+  setIsOpenModal?: React.Dispatch<React.SetStateAction<boolean>>;
   // trackDownloadAction?: () => void;
 } & IPrimaryButtonProps;
 
@@ -42,21 +45,23 @@ const PrimaryDownloadDataButton: React.FC<IDownloadDataButtonProps> = ({
   fields,
   isDibaledDownload,
   period,
+  setIsOpenModal,
+  isLoadingSubmit,
+  isOpenModal,
   ...rest
 }) => {
-  const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
   const [isOpenAlert, setIsOpenAlert] = React.useState<boolean>(false);
 
   const handleOpenModal = () => {
     if (period !== 'YEAR') {
       handleSetDefaultValue?.();
-      setIsOpenModal((prev) => !prev);
+      setIsOpenModal?.((prev) => !prev);
       return;
     }
     setIsOpenAlert((prev) => !prev);
   };
   const handleCloseModal = () => {
-    setIsOpenModal((prev) => !prev);
+    setIsOpenModal?.((prev) => !prev);
     methods.reset();
   };
 
@@ -75,7 +80,7 @@ const PrimaryDownloadDataButton: React.FC<IDownloadDataButtonProps> = ({
       />
       <GlobalModal
         actionModal={handleCloseModal}
-        isOpenModal={isOpenModal}
+        isOpenModal={isOpenModal || false}
         label="Download"
         modalSize="lg"
         centered
@@ -110,9 +115,9 @@ const PrimaryDownloadDataButton: React.FC<IDownloadDataButtonProps> = ({
               <PrimaryButton
                 label="Unduh"
                 type="button"
+                loading={isLoadingSubmit}
                 onClick={handleConfirmation}
                 disabled={isDibaledDownload}
-                // loading={loading}
               />
             </Group>
           </form>
