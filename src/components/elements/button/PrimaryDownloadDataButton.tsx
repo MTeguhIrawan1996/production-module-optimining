@@ -1,5 +1,14 @@
-import { Grid, Group } from '@mantine/core';
-import { IconDownload } from '@tabler/icons-react';
+import {
+  Grid,
+  Group,
+  Modal,
+  rem,
+  Stack,
+  ThemeIcon,
+  Title,
+} from '@mantine/core';
+import { Text } from '@mantine/core';
+import { IconDownload, IconX } from '@tabler/icons-react';
 import * as React from 'react';
 import { FormProvider, SubmitHandler, UseFormReturn } from 'react-hook-form';
 
@@ -21,20 +30,34 @@ export type IDownloadDataButtonProps = {
   submitForm: SubmitHandler<any>;
   fields: IDownloadFields[];
   isDibaledDownload?: boolean;
+  period?: string;
+  handleSetDefaultValue?: () => void;
   // trackDownloadAction?: () => void;
 } & IPrimaryButtonProps;
 
 const PrimaryDownloadDataButton: React.FC<IDownloadDataButtonProps> = ({
   methods,
   submitForm,
+  handleSetDefaultValue,
   fields,
   isDibaledDownload,
+  period,
   ...rest
 }) => {
   const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
+  const [isOpenAlert, setIsOpenAlert] = React.useState<boolean>(false);
+
+  const handleOpenModal = () => {
+    if (period !== 'YEAR') {
+      handleSetDefaultValue?.();
+      setIsOpenModal((prev) => !prev);
+      return;
+    }
+    setIsOpenAlert((prev) => !prev);
+  };
   const handleCloseModal = () => {
     setIsOpenModal((prev) => !prev);
-    // methods.reset();
+    methods.reset();
   };
 
   const handleConfirmation = () => {
@@ -47,7 +70,7 @@ const PrimaryDownloadDataButton: React.FC<IDownloadDataButtonProps> = ({
         variant="outline"
         leftIcon={<IconDownload size="20px" />}
         fw={500}
-        onClick={handleCloseModal}
+        onClick={handleOpenModal}
         {...rest}
       />
       <GlobalModal
@@ -95,6 +118,48 @@ const PrimaryDownloadDataButton: React.FC<IDownloadDataButtonProps> = ({
           </form>
         </FormProvider>
       </GlobalModal>
+      <Modal
+        onClose={() => setIsOpenAlert((prev) => !prev)}
+        withCloseButton={false}
+        opened={isOpenAlert}
+        size="auto"
+        centered
+        styles={{
+          body: {
+            padding: 8,
+          },
+        }}
+      >
+        <Stack
+          justify="center"
+          align="center"
+          spacing="xs"
+          py="sm"
+          px="xs"
+          w={400}
+        >
+          <Stack align="center" spacing="xs">
+            <ThemeIcon radius="100%" color="red" size={rem('2.2rem')}>
+              <IconX width="80%" height="80%" />
+            </ThemeIcon>
+            <Title order={1} size="h6" color="gray.8" fw={700}>
+              Download Gagal
+            </Title>
+          </Stack>
+          <Text color="gray.6" fz={12} ta="center">
+            Periode data tahunan tidak dapat didownload, silakan ganti ke
+            periode yang lain
+          </Text>
+          <PrimaryButton
+            label="Konfirmasi"
+            fullWidth
+            variant="outline"
+            color="gray"
+            fw={500}
+            onClick={() => setIsOpenAlert((prev) => !prev)}
+          />
+        </Stack>
+      </Modal>
     </>
   );
 };

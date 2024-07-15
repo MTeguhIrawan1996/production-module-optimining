@@ -21,7 +21,6 @@ import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 import DownloadButtonFront from '@/components/features/InputData/Productions/data-front/common/elements/DownloadButtonFront';
 
 import { useDeleteFrontProduction } from '@/services/graphql/mutation/front-production/useDeleteFrontProduction';
-import { useReadAllCommonDownload } from '@/services/graphql/query/download/useReadAllCommonDownload';
 import { useReadAllFrontProduction } from '@/services/graphql/query/front-production/useReadAllFrontProduction';
 import {
   globalDateNative,
@@ -486,6 +485,7 @@ const FrontProductionBook = () => {
       value: segment.month.value ? `${segment.month.value}` : null,
       onChange: (value) => {
         segment.month?.set(value ? Number(value) : null);
+        segment.week?.set(null);
       },
     });
 
@@ -493,7 +493,7 @@ const FrontProductionBook = () => {
       placeholder: 'week',
       label: 'week',
       name: 'week',
-      searchable: true,
+      searchable: false,
       withAsterisk: true,
       year: segment.year.value,
       month: segment.month.value,
@@ -788,16 +788,16 @@ const FrontProductionBook = () => {
     return true;
   };
 
-  useReadAllCommonDownload({
-    variable: {
-      entity: 'FRONT_PIT',
-      timeFilterType: 'DATE_RANGE',
-    },
-    onSuccess: (data) => {
-      // eslint-disable-next-line no-console
-      console.log(data);
-    },
-  });
+  // useReadAllCommonDownload({
+  //   variable: {
+  //     entity: 'FRONT_PIT',
+  //     timeFilterType: 'DATE_RANGE',
+  //   },
+  //   onSuccess: (data) => {
+  //     // eslint-disable-next-line no-console
+  //     console.log(data);
+  //   },
+  // });
 
   return (
     <DashboardCard
@@ -810,7 +810,25 @@ const FrontProductionBook = () => {
           : undefined
       }
       otherButton={
-        <DownloadButtonFront params={newParams.segment} label="Download" />
+        <DownloadButtonFront
+          params={newParams.segment}
+          label="Download"
+          period={segment.period.value || undefined}
+          defaultValuesState={{
+            period: segment.period.value || null,
+            startDate: segment.startDate.value || null,
+            endDate: segment.endDate.value || null,
+            year: segment.year.value ? `${segment.year.value}` : null,
+            month: segment.month.value ? `${segment.month.value}` : null,
+            week: segment.week.value ? `${segment.week.value}` : null,
+            shiftId: segment.shiftId.value || null,
+            locationId: segment.location.value || null,
+            materialId:
+              newParams.segment === 'pit'
+                ? segmentConditionalFilter.pit.materialId.value
+                : null,
+          }}
+        />
       }
       filterBadge={{
         resetButton: {

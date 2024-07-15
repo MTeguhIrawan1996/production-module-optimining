@@ -14,6 +14,7 @@ export type ISelectYearRhfProps = {
   control: 'select-year-rhf';
   name: string;
   skipQuery?: boolean;
+  withErrorState?: boolean;
 } & Omit<SelectProps, 'data' | 'onSearchChange' | 'searchValue'> &
   CommonProps;
 
@@ -23,6 +24,7 @@ const SelectYearRhf: React.FC<ISelectYearRhfProps> = ({
   placeholder = 'chooseYear',
   name,
   skipQuery = false,
+  withErrorState = true,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -57,10 +59,12 @@ const SelectYearRhf: React.FC<ISelectYearRhfProps> = ({
           : undefined
       }
       error={
-        fieldState &&
-        fieldState.error && (
-          <FieldErrorMessage>{fieldState.error.message}</FieldErrorMessage>
-        )
+        withErrorState
+          ? fieldState &&
+            fieldState.error && (
+              <FieldErrorMessage>{fieldState.error.message}</FieldErrorMessage>
+            )
+          : undefined
       }
       {...rest}
     />

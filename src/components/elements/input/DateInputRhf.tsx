@@ -12,6 +12,7 @@ import { CommonProps } from '@/types/global';
 export type IDateInputProps = {
   control: 'date-input';
   name: string;
+  withErrorState?: boolean;
 } & Omit<DatePickerInputProps, 'name'> &
   CommonProps;
 
@@ -22,6 +23,7 @@ const DateInputRhf: React.FC<IDateInputProps> = ({
   placeholder = 'DD MMMM YYYY',
   label,
   maxDate,
+  withErrorState = true,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -52,10 +54,12 @@ const DateInputRhf: React.FC<IDateInputProps> = ({
         },
       })}
       error={
-        fieldState &&
-        fieldState.error && (
-          <FieldErrorMessage>{fieldState.error.message}</FieldErrorMessage>
-        )
+        withErrorState
+          ? fieldState &&
+            fieldState.error && (
+              <FieldErrorMessage>{fieldState.error.message}</FieldErrorMessage>
+            )
+          : undefined
       }
       {...rest}
     />

@@ -15,6 +15,7 @@ export type ISelectMonthRhfProps = {
   control: 'select-month-rhf';
   name: string;
   skipQuery?: boolean;
+  withErrorState?: boolean;
 } & Omit<SelectProps, 'data' | 'onSearchChange' | 'searchValue'> &
   CommonProps;
 
@@ -24,6 +25,7 @@ const SelectMonthRhf: React.FC<ISelectMonthRhfProps> = ({
   placeholder = 'chooseMonth',
   name,
   skipQuery = false,
+  withErrorState = true,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -61,10 +63,12 @@ const SelectMonthRhf: React.FC<ISelectMonthRhfProps> = ({
           : undefined
       }
       error={
-        fieldState &&
-        fieldState.error && (
-          <FieldErrorMessage>{fieldState.error.message}</FieldErrorMessage>
-        )
+        withErrorState
+          ? fieldState &&
+            fieldState.error && (
+              <FieldErrorMessage>{fieldState.error.message}</FieldErrorMessage>
+            )
+          : undefined
       }
       {...rest}
     />

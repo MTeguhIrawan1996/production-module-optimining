@@ -26,6 +26,7 @@ import {
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { downloadFrontProductionValidation } from '@/utils/form-validation/front-production/front-production-validation';
 import dayjs from '@/utils/helper/dayjs.config';
+import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 
 interface IDownloadButtonFrontProps
   extends Omit<
@@ -33,28 +34,32 @@ interface IDownloadButtonFrontProps
     'methods' | 'submitForm' | 'fields' | 'isDibaledDownload'
   > {
   params: string;
+  defaultValuesState: Partial<IDownloadFrontProductionValues>;
 }
 
 const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
   params,
+  defaultValuesState,
   ...rest
 }) => {
   const [open, setOpen] = React.useState<boolean>(false);
 
+  const defaultValues = {
+    period: 'DATE_RANGE',
+    startDate: null,
+    endDate: null,
+    year: null,
+    month: null,
+    week: null,
+    shiftId: null,
+    locationId: null,
+    materialId: null,
+  };
+
   const methods = useForm<IDownloadFrontProductionValues>({
     resolver: zodResolver(downloadFrontProductionValidation),
-    defaultValues: {
-      period: 'DATE_RANGE',
-      startDate: null,
-      endDate: null,
-      year: null,
-      month: null,
-      shiftId: null,
-      week: null,
-      locationId: null,
-      materialId: null,
-    },
-    mode: 'onBlur',
+    defaultValues: defaultValues,
+    mode: 'onTouched',
   });
 
   const startDate = methods.watch('startDate');
@@ -64,6 +69,8 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
   const isValid = methods.formState.isValid;
 
   const fieldRhf = React.useMemo(() => {
+    const values = objectToArrayValue(defaultValues);
+
     const maxEndDate = dayjs(startDate || undefined)
       .add(dayjs.duration({ days: 29 }))
       .toDate();
@@ -72,14 +79,29 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
       name: 'period',
       label: 'period',
       clearable: false,
+      onChange: (value) => {
+        methods.setValue('period', value);
+        values
+          .filter((v) => v.name !== 'period')
+          .forEach((o) => {
+            methods.setValue(o.name, null);
+          });
+        methods.trigger(undefined);
+      },
     });
     const startDateItem = globalDate({
       label: 'startDate2',
       name: 'startDate',
       clearable: true,
       withAsterisk: true,
+      withErrorState: false,
       popoverProps: {
         withinPortal: true,
+      },
+      onChange: (value) => {
+        methods.setValue('startDate', value || null);
+        methods.setValue('endDate', null);
+        methods.trigger(undefined);
       },
     });
     const endDateItem = globalDate({
@@ -88,6 +110,7 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
       clearable: true,
       disabled: !startDate,
       withAsterisk: true,
+      withErrorState: false,
       maxDate: maxEndDate,
       minDate: startDate || undefined,
       popoverProps: {
@@ -100,6 +123,13 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
       label: 'year',
       withAsterisk: true,
       withinPortal: true,
+      withErrorState: false,
+      onChange: (value) => {
+        methods.setValue('year', value || null);
+        methods.setValue('month', null);
+        methods.setValue('week', null);
+        methods.trigger(undefined);
+      },
     });
     const monthItem = globalSelectMonthRhf({
       colSpan: 6,
@@ -107,13 +137,20 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
       label: 'month',
       withAsterisk: true,
       withinPortal: true,
+      withErrorState: false,
       disabled: !year,
+      onChange: (value) => {
+        methods.setValue('month', value || null);
+        methods.setValue('week', null);
+        methods.trigger(undefined);
+      },
     });
     const weekItem = globalSelectWeekRhf({
       colSpan: period === 'WEEK' ? 12 : 6,
       name: 'week',
       label: 'week',
       disabled: !year,
+      withErrorState: false,
       year: year ? Number(year) : null,
       month: month ? Number(month) : null,
       withAsterisk: true,
@@ -201,7 +238,8 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
     ];
 
     return field;
-  }, [startDate, year, month, params, period]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startDate, year, period, month, params]);
 
   const handleSubmitForm: SubmitHandler<
     IDownloadFrontProductionValues
@@ -216,6 +254,16 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
     // });
   };
 
+  const handleSetValue = () => {
+    const values = objectToArrayValue(defaultValuesState);
+    values.forEach((v) => {
+      methods.setValue(v.name, v.value || null);
+    });
+    methods.trigger(undefined, {
+      shouldFocus: true,
+    });
+  };
+
   return (
     <>
       <PrimaryDownloadDataButton
@@ -223,6 +271,7 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
         submitForm={handleSubmitForm}
         fields={fieldRhf}
         isDibaledDownload={!isValid}
+        handleSetDefaultValue={handleSetValue}
         {...rest}
       />
       <DownloadPanel open={open} setOpen={() => setOpen((prev) => !prev)} />

@@ -10,7 +10,8 @@ import {
   ThemeIcon,
   Transition,
 } from '@mantine/core';
-import { IconCheck, IconChevronDown, IconX } from '@tabler/icons-react';
+import { IconChevronUp } from '@tabler/icons-react';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import * as React from 'react';
 
 interface IDownloadPanelProps {
@@ -59,10 +60,10 @@ const DownloadPanel: React.FunctionComponent<IDownloadPanelProps> = ({
                       Download 3 Item
                     </Text>
                     <Group spacing="xs">
-                      <IconChevronDown
+                      <IconChevronUp
                         size="1.5rem"
                         style={{
-                          transform: value ? `rotate(-180deg)` : 'none',
+                          transform: value ? `rotate(180deg)` : 'none',
                           transition: 'transform 300ms ease',
                         }}
                       />
