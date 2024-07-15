@@ -146,6 +146,8 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
       name: 'period',
       label: 'period',
       clearable: false,
+      withErrorState: false,
+      withAsterisk: true,
       onChange: (value) => {
         methods.setValue('period', value);
         values

@@ -33,7 +33,7 @@ const initialState: IFrontSliceValue = {
   frontPitState: {
     page: 1,
     search: '',
-    period: 'DATE_RANGE',
+    period: null,
     week: null,
     month: null,
     quarter: null,
@@ -48,7 +48,7 @@ const initialState: IFrontSliceValue = {
   frontDomeState: {
     page: 1,
     search: '',
-    period: 'DATE_RANGE',
+    period: null,
     week: null,
     month: null,
     year: null,

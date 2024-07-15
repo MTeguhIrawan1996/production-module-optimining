@@ -141,22 +141,25 @@ const DownloadPanel = () => {
                             </Tooltip>
                           </Box>
                           <Group spacing="xs">
-                            {value.status === 'progress' && (
-                              <>
-                                <Loader color="gray.5" size="sm" />
-                                <IconX size="1.5rem" />
-                              </>
-                            )}
+                            {value.status === 'progress' ||
+                              value.status === 'active' ||
+                              (value.status === 'waiting' && (
+                                <>
+                                  <Loader color="gray.5" size="sm" />
+                                  <IconX size="1.5rem" />
+                                </>
+                              ))}
                             {value.status === 'completed' && (
                               <ThemeIcon size="sm" radius="xl">
                                 <IconCheck />
                               </ThemeIcon>
                             )}
-                            {value.status === 'failed' && (
-                              <ThemeIcon size="sm" radius="xl" color="red">
-                                <IconX />
-                              </ThemeIcon>
-                            )}
+                            {value.status === 'failed' ||
+                              (value.status === 'stalled' && (
+                                <ThemeIcon size="sm" radius="xl" color="red">
+                                  <IconX />
+                                </ThemeIcon>
+                              ))}
                           </Group>
                         </Group>
                       );
