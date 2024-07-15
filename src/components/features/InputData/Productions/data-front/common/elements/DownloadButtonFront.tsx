@@ -3,11 +3,7 @@ import { Text } from '@mantine/core';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import {
-  DownloadPanel,
-  GlobalAlert,
-  PrimaryDownloadDataButton,
-} from '@/components/elements';
+import { GlobalAlert, PrimaryDownloadDataButton } from '@/components/elements';
 import {
   IDownloadDataButtonProps,
   IDownloadFields,
@@ -42,8 +38,6 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
   defaultValuesState,
   ...rest
 }) => {
-  const [open, setOpen] = React.useState<boolean>(false);
-
   const defaultValues = {
     period: 'DATE_RANGE',
     startDate: null,
@@ -245,7 +239,6 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
     IDownloadFrontProductionValues
     // eslint-disable-next-line unused-imports/no-unused-vars
   > = async (data) => {
-    setOpen((prev) => !prev);
     // await executeUpdate({
     //   variables: {
     //     weeklyPlanId: id,
@@ -265,17 +258,14 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
   };
 
   return (
-    <>
-      <PrimaryDownloadDataButton
-        methods={methods}
-        submitForm={handleSubmitForm}
-        fields={fieldRhf}
-        isDibaledDownload={!isValid}
-        handleSetDefaultValue={handleSetValue}
-        {...rest}
-      />
-      <DownloadPanel open={open} setOpen={() => setOpen((prev) => !prev)} />
-    </>
+    <PrimaryDownloadDataButton
+      methods={methods}
+      submitForm={handleSubmitForm}
+      fields={fieldRhf}
+      isDibaledDownload={!isValid}
+      handleSetDefaultValue={handleSetValue}
+      {...rest}
+    />
   );
 };
 

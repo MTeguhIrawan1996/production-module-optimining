@@ -788,17 +788,6 @@ const FrontProductionBook = () => {
     return true;
   };
 
-  // useReadAllCommonDownload({
-  //   variable: {
-  //     entity: 'FRONT_PIT',
-  //     timeFilterType: 'DATE_RANGE',
-  //   },
-  //   onSuccess: (data) => {
-  //     // eslint-disable-next-line no-console
-  //     console.log(data);
-  //   },
-  // });
-
   return (
     <DashboardCard
       addButton={

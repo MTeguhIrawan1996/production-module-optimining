@@ -1,3 +1,4 @@
+import { ActionIcon } from '@mantine/core';
 import {
   Accordion,
   Affix,
@@ -14,15 +15,22 @@ import { IconChevronUp } from '@tabler/icons-react';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import * as React from 'react';
 
-interface IDownloadPanelProps {
-  open: boolean;
-  setOpen: () => void;
-}
+import { useReadAllCommonDownload } from '@/services/graphql/query/download/useReadAllCommonDownload';
 
-const DownloadPanel: React.FunctionComponent<IDownloadPanelProps> = ({
-  open,
-}) => {
-  const [value, setValue] = React.useState<string | null>(null);
+const DownloadPanel = () => {
+  const [open, setOpen] = React.useState<boolean>(true);
+  const [value, setValue] = React.useState<string | null>('customization');
+
+  useReadAllCommonDownload({
+    variable: {
+      entity: 'FRONT_PIT',
+      timeFilterType: 'DATE_RANGE',
+    },
+    onSuccess: (data) => {
+      // eslint-disable-next-line no-console
+      console.log(data);
+    },
+  });
   return (
     <Affix position={{ bottom: rem(20), right: rem(20) }}>
       <Transition transition="slide-up" mounted={open}>
@@ -67,7 +75,15 @@ const DownloadPanel: React.FunctionComponent<IDownloadPanelProps> = ({
                           transition: 'transform 300ms ease',
                         }}
                       />
-                      <IconX size="1.5rem" />
+                      <ActionIcon
+                        component="span"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpen((prev) => !prev);
+                        }}
+                      >
+                        <IconX size="1.5rem" />
+                      </ActionIcon>
                     </Group>
                   </Group>
                 </Accordion.Control>

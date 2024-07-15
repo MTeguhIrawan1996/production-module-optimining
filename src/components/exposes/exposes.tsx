@@ -3,6 +3,7 @@ import * as Pages from '../features'; // Assuming all pages are in this director
 
 // Wrap each Pages with providers and export it
 
+export * from './download';
 export * from './plan';
 
 export const ActivityCategoryMasterPage = () => (
