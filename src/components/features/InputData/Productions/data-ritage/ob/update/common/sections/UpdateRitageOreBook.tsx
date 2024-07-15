@@ -552,7 +552,7 @@ const UpdateRitageObBook = () => {
       },
     ];
 
-    isRitageProblematic ? field : field[1].formControllers.splice(8, 1);
+    isRitageProblematic ? field : field[1].formControllers.splice(7, 1);
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps

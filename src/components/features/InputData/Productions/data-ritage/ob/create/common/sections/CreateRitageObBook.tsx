@@ -223,14 +223,6 @@ const CreateRitageObBook = () => {
       disabled: true,
       includeIds: [`${process.env.NEXT_PUBLIC_MATERIAL_OB_ID}`],
     });
-    // const materialSubItem = materialSelect({
-    //   colSpan: 6,
-    //   name: 'subMaterialId',
-    //   label: 'subMaterial',
-    //   withAsterisk: true,
-    //   parentId: `${process.env.NEXT_PUBLIC_MATERIAL_OB_ID}`,
-    //   isHaveParent: null,
-    // });
     const fromTime = globalTimeInput({
       name: 'fromTime',
       label: 'fromTime',
@@ -402,7 +394,6 @@ const CreateRitageObBook = () => {
           toCheckerPosition,
           shiftItem,
           materialItem,
-          // materialSubItem,
           hullNumber,
           hullNumberSubstitution,
           weatherItem,
@@ -449,7 +440,7 @@ const CreateRitageObBook = () => {
       },
     ];
 
-    isRitageProblematic ? field : field[1].formControllers.splice(8, 1);
+    isRitageProblematic ? field : field[1].formControllers.splice(7, 1);
 
     return field;
     // eslint-disable-next-line react-hooks/exhaustive-deps
