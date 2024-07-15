@@ -14,7 +14,7 @@ export const ritageQuarryMutationValidation: z.ZodType<IMutationRitageQuarry> =
   z
     .object({
       date: zDateValidation,
-      checkerFromId: zRequiredSelectInput,
+      checkerFromId: zOptionalString.nullable(),
       checkerFromPosition: zOptionalString,
       checkerToId: zOptionalString.nullable(),
       checkerToPosition: zOptionalString,

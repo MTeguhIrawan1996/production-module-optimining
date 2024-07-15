@@ -14,7 +14,7 @@ export const ritageTopsoilMutationValidation: z.ZodType<IMutationRitageTopsoil> 
   z
     .object({
       date: zDateValidation,
-      checkerFromId: zRequiredSelectInput,
+      checkerFromId: zOptionalString.nullable(),
       checkerFromPosition: zOptionalString,
       checkerToId: zOptionalString.nullable(),
       checkerToPosition: zOptionalString,

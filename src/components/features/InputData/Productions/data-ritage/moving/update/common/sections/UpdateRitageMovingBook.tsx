@@ -215,7 +215,7 @@ const UpdateRitageMovingBook = () => {
       colSpan: 6,
       name: 'checkerFromId',
       label: 'fromCheckerName',
-      withAsterisk: true,
+      withAsterisk: false,
       positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
       defaultValue: movingRitage?.checkerFrom?.id,
       labelValue: movingRitage?.checkerFrom?.humanResource?.name,
