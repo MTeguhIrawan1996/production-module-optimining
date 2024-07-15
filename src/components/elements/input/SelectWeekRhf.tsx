@@ -18,6 +18,7 @@ export type ISelectWeekRhfProps = {
   year?: number | null;
   month?: number | null;
   skipQuery?: boolean;
+  withErrorState?: boolean;
 } & Omit<SelectProps, 'data' | 'onSearchChange' | 'searchValue'> &
   CommonProps;
 
@@ -35,6 +36,7 @@ const SelectWeekRhf: React.FC<ISelectWeekRhfProps> = ({
   placeholder = 'chooseWeek',
   name,
   skipQuery = false,
+  withErrorState = true,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -56,7 +58,7 @@ const SelectWeekRhf: React.FC<ISelectWeekRhfProps> = ({
         ns: 'default',
       }),
       startDate: val.detail.startDate,
-      endDate: val.detail.startDate,
+      endDate: val.detail.endDate,
     };
   });
 
@@ -94,10 +96,12 @@ const SelectWeekRhf: React.FC<ISelectWeekRhfProps> = ({
           : undefined
       }
       error={
-        fieldState &&
-        fieldState.error && (
-          <FieldErrorMessage>{fieldState.error.message}</FieldErrorMessage>
-        )
+        withErrorState
+          ? fieldState &&
+            fieldState.error && (
+              <FieldErrorMessage>{fieldState.error.message}</FieldErrorMessage>
+            )
+          : undefined
       }
       {...rest}
     />

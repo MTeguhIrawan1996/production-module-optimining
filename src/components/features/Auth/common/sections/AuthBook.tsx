@@ -14,6 +14,7 @@ import { ILogin, useLogin } from '@/services/next-auth/login/useLogin';
 import authField from '@/utils/constants/Field/auth-field';
 import { authValidationSchema } from '@/utils/form-validation/auth/auth-validation';
 import useControlPanel from '@/utils/store/useControlPanel';
+import { useDownloadTaskStore } from '@/utils/store/useDownloadStore';
 import { usePermissions } from '@/utils/store/usePermissions';
 
 import { IErrorResponseExtensionNextAuth } from '@/types/global';
@@ -23,6 +24,7 @@ const AuthBook = () => {
   const { t } = useTranslation('default');
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { setPermissions } = usePermissions();
+  const { resetDownloadTaskStore } = useDownloadTaskStore();
 
   const methods = useForm<ILogin>({
     resolver: zodResolver(authValidationSchema),
@@ -73,6 +75,7 @@ const AuthBook = () => {
 
   React.useEffect(() => {
     setPermissions([]);
+    resetDownloadTaskStore();
     useControlPanel.persist.clearStorage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

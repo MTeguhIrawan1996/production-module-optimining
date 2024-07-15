@@ -12,6 +12,7 @@ import { CommonProps } from '@/types/global';
 export type ISelectInputPeriodRhf = {
   control: 'select-period-rhf';
   name: string;
+  withErrorState?: boolean;
 } & Omit<
   SelectProps,
   'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
@@ -22,6 +23,7 @@ const SelectInputPeriodRhf: React.FC<ISelectInputPeriodRhf> = ({
   control,
   label = 'period',
   name,
+  withErrorState,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
@@ -60,10 +62,12 @@ const SelectInputPeriodRhf: React.FC<ISelectInputPeriodRhf> = ({
       })}
       label={label ? t(`components.field.${label}`) : null}
       error={
-        fieldState &&
-        fieldState.error && (
-          <FieldErrorMessage>{fieldState.error.message}</FieldErrorMessage>
-        )
+        withErrorState
+          ? fieldState &&
+            fieldState.error && (
+              <FieldErrorMessage>{fieldState.error.message}</FieldErrorMessage>
+            )
+          : undefined
       }
       {...rest}
     />

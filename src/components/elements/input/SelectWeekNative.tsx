@@ -47,7 +47,7 @@ const SelectWeekNative: React.FC<ISelectWeekNativeProps> = ({
             ns: 'default',
           }),
           startDate: val.detail.startDate,
-          endDate: val.detail.startDate,
+          endDate: val.detail.endDate,
         };
       });
       setFilterDataCommon({ key: name || '', data: yearsItem });

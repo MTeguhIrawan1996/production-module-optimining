@@ -2,6 +2,8 @@ import { Stack, StackProps } from '@mantine/core';
 import i18n from 'i18n';
 import * as React from 'react';
 
+import DownloadPanel from '@/components/elements/global/DownloadPanel';
+
 interface IRootWrapperProps {
   children: React.ReactNode;
   stackProps?: StackProps;
@@ -9,6 +11,7 @@ interface IRootWrapperProps {
 
 const RootWrapper: React.FC<IRootWrapperProps> = ({ children, stackProps }) => {
   const { spacing = 'md', pb = 'lg' } = stackProps || {};
+
   React.useEffect(() => {
     // i18n.init();
     i18n.changeLanguage('id');
@@ -22,6 +25,7 @@ const RootWrapper: React.FC<IRootWrapperProps> = ({ children, stackProps }) => {
       {...stackProps}
     >
       {children}
+      <DownloadPanel />
     </Stack>
   );
 };

@@ -19,8 +19,13 @@ export const READ_ALL_FRONT_PRODUCTION = gql`
     $search: String
     $orderBy: String
     $orderDir: String
-    $date: String
+    $shiftId: String
+    $pitId: String
+    $materialId: String
+    $domeId: String
     $type: String
+    $timeFilterType: TimeFilterTypeDownloadEnum
+    $timeFilter: JSON
   ) {
     frontDatas(
       findAllFrontDataInput: {
@@ -29,8 +34,13 @@ export const READ_ALL_FRONT_PRODUCTION = gql`
         search: $search
         orderBy: $orderBy
         orderDir: $orderDir
-        date: $date
+        shiftId: $shiftId
+        pitId: $pitId
+        materialId: $materialId
+        domeId: $domeId
         type: $type
+        timeFilterType: $timeFilterType
+        timeFilter: $timeFilter
       }
     ) {
       meta {
@@ -118,6 +128,18 @@ interface IReadAllFrontProductionResponse {
 interface IReadAllFrontProductionRequest extends IGlobalMetaRequest {
   date: string | null;
   type: string | null;
+  timeFilterType: string | null;
+  timeFilter: {
+    startDate?: string | null;
+    endDate?: string;
+    year?: number;
+    week?: number;
+    month?: number;
+  };
+  shiftId: string | null;
+  pitId: string | null;
+  materialId: string | null;
+  domeId: string | null;
 }
 
 interface ISimpleKeyType {
@@ -160,6 +182,7 @@ export const useReadAllFrontProduction = ({
     },
     onCompleted,
     fetchPolicy,
+    notifyOnNetworkStatusChange: true,
   });
 
   const simplifiedData: ISimpleKeyType[] | undefined =

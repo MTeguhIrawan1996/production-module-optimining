@@ -13,7 +13,7 @@ import {
 export const ritageOreMutationValidation: z.ZodType<IMutationRitageOre> = z
   .object({
     date: zDateValidation,
-    checkerFromId: zRequiredSelectInput,
+    checkerFromId: zOptionalString.nullable(),
     checkerFromPosition: zOptionalString,
     checkerToId: zOptionalString.nullable(),
     checkerToPosition: zOptionalString,

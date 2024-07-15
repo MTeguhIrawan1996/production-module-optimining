@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
+import { IDownloadFrontProductionValues } from '@/services/graphql/mutation/download/useDownloadTask';
 import { IMutationFrontProductionValues } from '@/services/graphql/mutation/front-production/useCreateFrontProduction';
-import { IDownloadFrontProductionValues } from '@/services/graphql/mutation/front-production/useDownloadFrontProduction';
 import {
   zDateOptionalValidation,
   zDateValidation,

@@ -21,7 +21,6 @@ import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
 import DownloadButtonFront from '@/components/features/InputData/Productions/data-front/common/elements/DownloadButtonFront';
 
 import { useDeleteFrontProduction } from '@/services/graphql/mutation/front-production/useDeleteFrontProduction';
-import { useReadAllCommonDownload } from '@/services/graphql/query/download/useReadAllCommonDownload';
 import { useReadAllFrontProduction } from '@/services/graphql/query/front-production/useReadAllFrontProduction';
 import {
   globalDateNative,
@@ -62,6 +61,7 @@ const FrontProductionBook = () => {
     shallow
   );
   const [
+    hasHydrated,
     {
       page: pagePit,
       search: searchPit,
@@ -93,7 +93,12 @@ const FrontProductionBook = () => {
     },
     setFrontState,
   ] = useControlPanel(
-    (state) => [state.frontPitState, state.frontDomeState, state.setFrontState],
+    (state) => [
+      state._hasHydrated,
+      state.frontPitState,
+      state.frontDomeState,
+      state.setFrontState,
+    ],
     shallow
   );
 
@@ -110,11 +115,6 @@ const FrontProductionBook = () => {
   const isPermissionUpdate = permissions?.includes('update-front-data');
   const isPermissionDelete = permissions?.includes('delete-front-data');
   const isPermissionRead = permissions?.includes('read-front-data');
-
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    resetAllSlices(new Set<ISliceName>(['frontSlice'] as ISliceName[]));
-  }, []);
 
   const segmentConditionalFilter = React.useMemo(() => {
     const value: ISegmentConditional = {
@@ -400,6 +400,50 @@ const FrontProductionBook = () => {
     },
   });
 
+  const startDateString = formatDate(
+    segment.startDate.value || null,
+    'YYYY-MM-DD'
+  );
+  const endDateString = formatDate(segment.endDate.value || null, 'YYYY-MM-DD');
+
+  const defaultRefatch = {
+    page: 1,
+    timeFilterType: segment.period.value
+      ? segment.period.value === 'DATE_RANGE'
+        ? segment.period.value
+        : 'PERIOD'
+      : undefined,
+    timeFilter: {
+      startDate: startDateString || undefined,
+      endDate: endDateString || undefined,
+      year: segment.year.value ? Number(segment.year.value) : undefined,
+      week: segment.week.value ? Number(segment.week.value) : undefined,
+      month: segment.month.value ? Number(segment.month.value) : undefined,
+    },
+    shiftId: segment.shiftId.value || undefined,
+    pitId:
+      newParams.segment === 'pit'
+        ? segment.location.value || undefined
+        : undefined,
+    materialId: segmentConditionalFilter.pit.materialId.value || undefined,
+    domeId:
+      newParams.segment === 'dome'
+        ? segment.location.value || undefined
+        : undefined,
+  };
+
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    resetAllSlices(new Set<ISliceName>(['frontSlice'] as ISliceName[]));
+  }, []);
+
+  React.useEffect(() => {
+    if (hasHydrated) {
+      refetchfrontProductionData({ ...defaultRefatch });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
+
   const [executeDelete, { loading }] = useDeleteFrontProduction({
     onCompleted: () => {
       refetchfrontProductionData();
@@ -486,6 +530,7 @@ const FrontProductionBook = () => {
       value: segment.month.value ? `${segment.month.value}` : null,
       onChange: (value) => {
         segment.month?.set(value ? Number(value) : null);
+        segment.week?.set(null);
       },
     });
 
@@ -493,7 +538,7 @@ const FrontProductionBook = () => {
       placeholder: 'week',
       label: 'week',
       name: 'week',
-      searchable: true,
+      searchable: false,
       withAsterisk: true,
       year: segment.year.value,
       month: segment.month.value,
@@ -788,17 +833,6 @@ const FrontProductionBook = () => {
     return true;
   };
 
-  useReadAllCommonDownload({
-    variable: {
-      entity: 'FRONT_PIT',
-      timeFilterType: 'DATE_RANGE',
-    },
-    onSuccess: (data) => {
-      // eslint-disable-next-line no-console
-      console.log(data);
-    },
-  });
-
   return (
     <DashboardCard
       addButton={
@@ -810,13 +844,31 @@ const FrontProductionBook = () => {
           : undefined
       }
       otherButton={
-        <DownloadButtonFront params={newParams.segment} label="Download" />
+        <DownloadButtonFront
+          params={newParams.segment}
+          label="Download"
+          period={segment.period.value || undefined}
+          defaultValuesState={{
+            period: segment.period.value || 'DATE_RANGE',
+            startDate: segment.startDate.value || null,
+            endDate: segment.endDate.value || null,
+            year: segment.year.value ? `${segment.year.value}` : null,
+            month: segment.month.value ? `${segment.month.value}` : null,
+            week: segment.week.value ? `${segment.week.value}` : null,
+            shiftId: segment.shiftId.value || null,
+            locationId: segment.location.value || null,
+            materialId:
+              newParams.segment === 'pit'
+                ? segmentConditionalFilter.pit.materialId.value
+                : null,
+          }}
+        />
       }
       filterBadge={{
         resetButton: {
           onClick: () => {
             segment.page?.set(1);
-            segment.period?.set('DATE_RANGE');
+            segment.period?.set(null);
             segment.startDate?.set(null);
             segment.endDate?.set(null);
             segment.shiftId?.set(null);
@@ -828,13 +880,21 @@ const FrontProductionBook = () => {
             if (newParams.segment === 'pit') {
               segmentConditionalFilter.pit.materialId.set(null);
             }
-            // refetchBargingRitages({
-            //   page: 1,
-            //   shiftId: null,
-            //   isRitageProblematic: null,
-            //   companyHeavyEquipmentId: null,
-            //   date: null,
-            // });
+            refetchfrontProductionData({
+              page: 1,
+              timeFilterType: undefined,
+              timeFilter: {
+                startDate: undefined,
+                endDate: undefined,
+                year: undefined,
+                week: undefined,
+                month: undefined,
+              },
+              shiftId: undefined,
+              pitId: undefined,
+              materialId: undefined,
+              domeId: undefined,
+            });
           },
         },
         value: segment.filterBadgeValue?.value || null,
@@ -844,20 +904,9 @@ const FrontProductionBook = () => {
         filterButton: {
           disabled: isDisabled(),
           onClick: () => {
-            // refetchBargingRitages({
-            //   page: 1,
-            //   date: formatDate(filterDate, 'YYYY-MM-DD') || null,
-            //   shiftId: filterShift === '' ? null : filterShift,
-            //   isRitageProblematic: filterStatus
-            //     ? filterStatus === 'true'
-            //       ? false
-            //       : true
-            //     : null,
-            //   companyHeavyEquipmentId:
-            //     filtercompanyHeavyEquipmentId === ''
-            //       ? null
-            //       : filtercompanyHeavyEquipmentId,
-            // });
+            refetchfrontProductionData({
+              ...defaultRefatch,
+            });
             const badgeFilterValue = newNormalizedFilterBadge({
               filter: filter.filterDateWithSelect || [],
               data: filterDataCommon || [],

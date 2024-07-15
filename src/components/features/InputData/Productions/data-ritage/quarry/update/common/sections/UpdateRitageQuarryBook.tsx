@@ -240,7 +240,7 @@ const UpdateRitageQuarryBook = () => {
       colSpan: 6,
       name: 'checkerFromId',
       label: 'fromCheckerName',
-      withAsterisk: true,
+      withAsterisk: false,
       positionId: `${process.env.NEXT_PUBLIC_EMPLOYEE_CHECKER_ID}`,
       defaultValue: quarryRitage?.checkerFrom?.id,
       labelValue: quarryRitage?.checkerFrom?.humanResource?.name,
