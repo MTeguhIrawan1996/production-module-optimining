@@ -34,6 +34,19 @@ export interface IDownloadFrontProductionValues {
   materialId: string | null;
 }
 
+export interface IDownloadRitageProductionValues {
+  period: string | null;
+  startDate?: Date | null;
+  endDate?: Date | null;
+  year: string | null;
+  month: string | null;
+  week: string | null;
+  locationId: string | null;
+  shiftId: string | null;
+  heavyEquipmentCode: string | null;
+  ritageStatus: string | null;
+}
+
 type IDownloadTaskRequest = {
   entity: string | null;
   timeFilterType: string | null;

@@ -17,7 +17,11 @@ import { IconCheck, IconX } from '@tabler/icons-react';
 import * as React from 'react';
 import { shallow } from 'zustand/shallow';
 
-import { useReadAllCommonDownload } from '@/services/graphql/query/download/useReadAllCommonDownload';
+import { useCancelDownloadTask } from '@/services/graphql/mutation/download/useCancelDownloadTask';
+import {
+  IReadAllDownloadData,
+  useReadAllCommonDownload,
+} from '@/services/graphql/query/download/useReadAllCommonDownload';
 import { downloadTaskFn } from '@/utils/helper/downloadTask';
 import { useDownloadTaskStore } from '@/utils/store/useDownloadStore';
 
@@ -27,6 +31,13 @@ const DownloadPanel = () => {
     (state) => [state.downloadPanel, state.setDownloadTaskStore],
     shallow
   );
+
+  const [currentData, setCurrentData] = React.useState<IReadAllDownloadData[]>(
+    []
+  );
+  const runningStatus = ['progress', 'active', 'waiting'];
+  const complated = ['completed'];
+  const failed = ['failed'];
 
   const { data, isFetching } = useReadAllCommonDownload({
     variable: {
@@ -48,46 +59,81 @@ const DownloadPanel = () => {
           },
         });
       }
+      const allTask = data.findDownloadTasks.data;
+      setCurrentData(allTask);
 
-      const tasksComplated = data.findDownloadTasks.data.filter(
-        (v) => v.status === 'completed'
-      );
-
-      for (const task of tasksComplated) {
-        await downloadTaskFn(task.filePath);
-        notifications.show({
-          color: 'green',
-          title: 'Proses Download berhasil',
-          message: `Data ${task.entity} sedang didownload` /* Fix Me Name File */,
-          icon: <IconCheck />,
-        });
-
-        if (downloadIds) {
-          const index = downloadIds && downloadIds.indexOf(task.id);
-          // Hapus ID dari downloadIds setelah berhasil diunduh
-          const newDownloadIds = [...downloadIds];
-          newDownloadIds.splice(index, 1);
-
-          setDownloadTaskStore({
-            downloadPanel: {
-              downloadIds: newDownloadIds,
-            },
+      for (const task of allTask) {
+        if (runningStatus.includes(task.status)) {
+          return;
+        }
+        if (complated.includes(task.status)) {
+          await downloadTaskFn(task.filePath);
+          notifications.show({
+            color: 'green',
+            title: 'Proses Download berhasil',
+            message: `Data ${task.entity} sedang didownload` /* Fix Me Name File */,
+            icon: <IconCheck />,
           });
+
+          if (downloadIds) {
+            const index = downloadIds && downloadIds.indexOf(task.id);
+            // Hapus ID dari downloadIds setelah berhasil diunduh
+            const newDownloadIds = [...downloadIds];
+            newDownloadIds.splice(index, 1);
+
+            setDownloadTaskStore({
+              downloadPanel: {
+                downloadIds: newDownloadIds,
+              },
+            });
+          }
+        }
+        if (failed.includes(task.status)) {
+          notifications.show({
+            color: 'red',
+            title: 'Proses download gagal',
+            message: `Data ${task.entity} gagal didownload` /* Fix Me Name File */,
+            icon: <IconX />,
+          });
+
+          if (downloadIds) {
+            const index = downloadIds && downloadIds.indexOf(task.id);
+            // Hapus ID dari downloadIds setelah berhasil diunduh
+            const newDownloadIds = [...downloadIds];
+            newDownloadIds.splice(index, 1);
+
+            setDownloadTaskStore({
+              downloadPanel: {
+                downloadIds: newDownloadIds,
+              },
+            });
+          }
         }
       }
     },
   });
 
-  React.useEffect(() => {
-    if (!data) {
+  const [execute] = useCancelDownloadTask({});
+
+  const handleCancelDownload = async (id: string) => {
+    await execute({
+      variables: {
+        id,
+      },
+    });
+    if (downloadIds) {
+      const index = downloadIds && downloadIds.indexOf(id);
+      // Hapus ID dari downloadIds setelah berhasil diunduh
+      const newDownloadIds = [...downloadIds];
+      newDownloadIds.splice(index, 1);
+
       setDownloadTaskStore({
         downloadPanel: {
-          isOpen: false,
+          downloadIds: newDownloadIds,
         },
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  };
 
   return (
     <Affix position={{ bottom: rem(20), right: rem(20) }}>
@@ -152,7 +198,7 @@ const DownloadPanel = () => {
                 </Accordion.Control>
                 <Accordion.Panel>
                   <Stack spacing="sm">
-                    {data?.findDownloadTasks.data.map((value) => {
+                    {currentData.map((value) => {
                       const parts = value.filePath?.split('/');
                       const fileName =
                         (parts && parts[parts.length - 1]) ||
@@ -167,26 +213,32 @@ const DownloadPanel = () => {
                             </Tooltip>
                           </Box>
                           <Group spacing="xs">
-                            {(isFetching ||
-                              value.status === 'progress' ||
-                              value.status === 'active' ||
-                              value.status === 'waiting') && (
-                              <>
-                                <Loader color="gray.5" size="sm" />
-                                <IconX size="1.5rem" />
-                              </>
-                            )}
+                            {isFetching &&
+                              runningStatus.includes(value.status) && (
+                                <>
+                                  <Loader color="gray.5" size="sm" />
+                                  <ActionIcon
+                                    component="span"
+                                    onClick={() =>
+                                      handleCancelDownload(value.id)
+                                    }
+                                  >
+                                    <IconX size="1.5rem" />
+                                  </ActionIcon>
+                                </>
+                              )}
+
                             {value.status === 'completed' && (
                               <ThemeIcon size="sm" radius="xl">
                                 <IconCheck />
                               </ThemeIcon>
                             )}
-                            {value.status === 'failed' ||
-                              (value.status === 'stalled' && (
-                                <ThemeIcon size="sm" radius="xl" color="red">
-                                  <IconX />
-                                </ThemeIcon>
-                              ))}
+                            {(value.status === 'failed' ||
+                              value.status === 'stalled') && (
+                              <ThemeIcon size="sm" radius="xl" color="red">
+                                <IconX />
+                              </ThemeIcon>
+                            )}
                           </Group>
                         </Group>
                       );
