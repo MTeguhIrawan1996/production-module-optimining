@@ -112,6 +112,7 @@ export const useReadAllCommonDownload = ({
     onError: onError,
     queryKey: ['commonDownload', { ids }],
     enabled: isActive,
+    refetchIntervalInBackground: true,
     refetchInterval: (data) => {
       onRefatch?.(data);
       if (!data) {

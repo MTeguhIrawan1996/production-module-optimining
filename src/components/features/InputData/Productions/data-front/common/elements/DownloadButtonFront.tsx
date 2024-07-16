@@ -29,7 +29,7 @@ import {
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
 import { downloadFrontProductionValidation } from '@/utils/form-validation/front-production/front-production-validation';
 import { sendGAEvent } from '@/utils/helper/analytics';
-import { dateToString } from '@/utils/helper/dateToString';
+import { formatDate } from '@/utils/helper/dateFormat';
 import dayjs from '@/utils/helper/dayjs.config';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
@@ -313,8 +313,8 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
   const handleSubmitForm: SubmitHandler<
     IDownloadFrontProductionValues
   > = async (data) => {
-    const startDate = dateToString(data.startDate || null);
-    const endDate = dateToString(data.startDate || null);
+    const startDate = formatDate(data.startDate, 'YYYY-MM-DD');
+    const endDate = formatDate(data.endDate, 'YYYY-DD-MM');
 
     const segmentObj = {
       pit: 'PIT',
@@ -325,8 +325,8 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
         entity: `FRONT_${segmentObj[params]}`,
         timeFilterType: data.period === 'DATE_RANGE' ? data.period : 'PERIOD',
         timeFilter: {
-          startDate: startDate,
-          endDate: endDate,
+          startDate: startDate || undefined,
+          endDate: endDate || undefined,
           year: data.year ? Number(data.year) : undefined,
           month: data.month ? Number(data.month) : undefined,
           week: data.week ? Number(data.week) : undefined,

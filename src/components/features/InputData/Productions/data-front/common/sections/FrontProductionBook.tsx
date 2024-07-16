@@ -407,7 +407,6 @@ const FrontProductionBook = () => {
   const endDateString = formatDate(segment.endDate.value || null, 'YYYY-MM-DD');
 
   const defaultRefatch = {
-    page: 1,
     timeFilterType: segment.period.value
       ? segment.period.value === 'DATE_RANGE'
         ? segment.period.value
@@ -905,6 +904,7 @@ const FrontProductionBook = () => {
           disabled: isDisabled(),
           onClick: () => {
             refetchfrontProductionData({
+              page: 1,
               ...defaultRefatch,
             });
             const badgeFilterValue = newNormalizedFilterBadge({
