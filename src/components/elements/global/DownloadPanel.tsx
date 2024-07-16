@@ -11,6 +11,7 @@ import {
   ThemeIcon,
   Transition,
 } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { IconChevronUp } from '@tabler/icons-react';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import * as React from 'react';
@@ -22,24 +23,25 @@ import { useDownloadTaskStore } from '@/utils/store/useDownloadStore';
 
 const DownloadPanel = () => {
   const [value, setValue] = React.useState<string | null>('customization');
-  const [downloadPanel, setDownloadTaskStore] = useDownloadTaskStore(
+  const [{ downloadIds, isOpen }, setDownloadTaskStore] = useDownloadTaskStore(
     (state) => [state.downloadPanel, state.setDownloadTaskStore],
     shallow
   );
 
-  const { data } = useReadAllCommonDownload({
+  const { data, isFetching } = useReadAllCommonDownload({
     variable: {
-      entity: 'FRONT_PIT',
-      timeFilterType: 'DATE_RANGE',
-      limit: 2,
-      downloadIds: downloadPanel.downloadIds || [],
+      ids: downloadIds || [],
+    },
+    onError: () => {
+      notifications.show({
+        color: 'red',
+        title: 'Download Gagal',
+        message: 'Terjadi Kesalahan',
+        icon: <IconX />,
+      });
     },
     onSuccess: async (data) => {
-      if (
-        downloadPanel.downloadIds &&
-        downloadPanel.downloadIds?.length >= 1 &&
-        !downloadPanel.isOpen
-      ) {
+      if (downloadIds && downloadIds?.length >= 1 && !isOpen) {
         setDownloadTaskStore({
           downloadPanel: {
             isOpen: true,
@@ -51,23 +53,45 @@ const DownloadPanel = () => {
         (v) => v.status === 'completed'
       );
 
-      const temporaryId: string[] = [];
-
       for (const task of tasksComplated) {
         await downloadTaskFn(task.filePath);
-        temporaryId.push(task.id);
-        setDownloadTaskStore({
-          downloadPanel: {
-            downloadIds: [],
-          },
+        notifications.show({
+          color: 'green',
+          title: 'Proses Download berhasil',
+          message: `Data ${task.entity} sedang didownload` /* Fix Me Name File */,
+          icon: <IconCheck />,
         });
+
+        if (downloadIds) {
+          const index = downloadIds && downloadIds.indexOf(task.id);
+          // Hapus ID dari downloadIds setelah berhasil diunduh
+          const newDownloadIds = [...downloadIds];
+          newDownloadIds.splice(index, 1);
+
+          setDownloadTaskStore({
+            downloadPanel: {
+              downloadIds: newDownloadIds,
+            },
+          });
+        }
       }
     },
   });
 
+  React.useEffect(() => {
+    if (!data) {
+      setDownloadTaskStore({
+        downloadPanel: {
+          isOpen: false,
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
   return (
     <Affix position={{ bottom: rem(20), right: rem(20) }}>
-      <Transition transition="slide-up" mounted={downloadPanel.isOpen || false}>
+      <Transition transition="slide-up" mounted={isOpen || false}>
         {(transitionStyles) => (
           <Paper shadow="xs" p={0} radius="md" w={400} style={transitionStyles}>
             <Accordion
@@ -129,8 +153,10 @@ const DownloadPanel = () => {
                 <Accordion.Panel>
                   <Stack spacing="sm">
                     {data?.findDownloadTasks.data.map((value) => {
-                      const parts = value.filePath.split('/');
-                      const fileName = parts[parts.length - 1];
+                      const parts = value.filePath?.split('/');
+                      const fileName =
+                        (parts && parts[parts.length - 1]) ||
+                        '-'; /* Fix Me name file */
                       return (
                         <Group noWrap position="apart" key={value.id}>
                           <Box w="50%">
@@ -141,14 +167,15 @@ const DownloadPanel = () => {
                             </Tooltip>
                           </Box>
                           <Group spacing="xs">
-                            {value.status === 'progress' ||
+                            {(isFetching ||
+                              value.status === 'progress' ||
                               value.status === 'active' ||
-                              (value.status === 'waiting' && (
-                                <>
-                                  <Loader color="gray.5" size="sm" />
-                                  <IconX size="1.5rem" />
-                                </>
-                              ))}
+                              value.status === 'waiting') && (
+                              <>
+                                <Loader color="gray.5" size="sm" />
+                                <IconX size="1.5rem" />
+                              </>
+                            )}
                             {value.status === 'completed' && (
                               <ThemeIcon size="sm" radius="xl">
                                 <IconCheck />

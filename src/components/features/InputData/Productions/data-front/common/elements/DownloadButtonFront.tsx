@@ -108,7 +108,7 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
       });
       notifications.show({
         color: 'green',
-        title: 'Proses Donwload berhasil',
+        title: 'Proses Download berhasil',
         message: `Data front ${segmentObj[params]} sedang diproses`,
         icon: <IconCheck />,
       });
