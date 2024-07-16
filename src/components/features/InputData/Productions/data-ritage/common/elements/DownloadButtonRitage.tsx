@@ -324,10 +324,18 @@ export default function DownloadButtonRitage<T>({
     IDownloadRitageProductionValues
   > = async (data) => {
     const startDate = formatDate(data.startDate, 'YYYY-MM-DD');
-    const endDate = formatDate(data.startDate, 'YYYY-MM-DD');
+    const endDate = formatDate(data.endDate, 'YYYY-MM-DD');
+    const ritageObj = {
+      Ore: {
+        entity: 'RITAGE_ORE',
+      },
+      OB: {
+        entity: 'RITAGE_OVERBURDEN',
+      },
+    };
     await executeCreate({
       variables: {
-        entity: `RITAGE_ORE`,
+        entity: ritageObj[ritage].entity,
         timeFilterType: data.period === 'DATE_RANGE' ? data.period : 'PERIOD',
         timeFilter: {
           startDate: startDate || undefined,
