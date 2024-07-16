@@ -24,8 +24,9 @@ export const READ_ALL_COMMON_DOWNLOAD = gql`
   query ReadAllCommonDownload(
     $page: Int
     $limit: Int
-    $entity: EntityDownloadEnum!
-    $timeFilterType: TimeFilterTypeDownloadEnum!
+    $entity: EntityDownloadEnum
+    $timeFilterType: TimeFilterTypeDownloadEnum
+    $ids: [String!]
   ) {
     findDownloadTasks(
       findDownloadTasksInput: {
@@ -33,6 +34,7 @@ export const READ_ALL_COMMON_DOWNLOAD = gql`
         limit: $limit
         entity: $entity
         timeFilterType: $timeFilterType
+        ids: $ids
       }
     ) {
       meta {
@@ -59,7 +61,7 @@ export interface IReadAllDownloadData {
   progress: number;
   status: string;
   message: string | null;
-  filePath: string;
+  filePath: string | null;
 }
 
 interface IReadAllCommonDownloadResponse {
@@ -69,22 +71,24 @@ interface IReadAllCommonDownloadResponse {
 interface IReadAllFrontProductionRequest extends IGlobalMetaRequest {
   entity: string | null;
   timeFilterType: string | null;
-  downloadIds: string[];
+  ids: string[];
 }
 
 export const useReadAllCommonDownload = ({
   variable,
   onSuccess,
+  onRefatch,
   onError,
 }: {
   variable: Partial<IReadAllFrontProductionRequest>;
   onSuccess?: (data: IReadAllCommonDownloadResponse) => void;
+  onRefatch?: (data: IReadAllCommonDownloadResponse | undefined) => void;
   onError?: any;
 }) => {
   const { client } = getClient();
 
-  const { downloadIds, entity, timeFilterType, limit } = variable;
-  const isActive = downloadIds && downloadIds?.length >= 1;
+  const { ids, entity, timeFilterType, limit } = variable;
+  const isActive = ids && ids?.length >= 1;
 
   return useQuery<IReadAllCommonDownloadResponse>({
     queryFn: async () => {
@@ -97,15 +101,22 @@ export const useReadAllCommonDownload = ({
           entity,
           timeFilterType,
           limit,
+          ids,
         },
+        fetchPolicy: 'network-only',
+        notifyOnNetworkStatusChange: true,
       });
       return response.data;
     },
     onSuccess: onSuccess,
     onError: onError,
-    queryKey: ['commonDownload', { entity, timeFilterType }],
+    queryKey: ['commonDownload', { ids }],
     enabled: isActive,
     refetchInterval: (data) => {
+      onRefatch?.(data);
+      if (!data) {
+        return false;
+      }
       if (data?.findDownloadTasks.meta.totalAllData === 0) {
         return false;
       }
