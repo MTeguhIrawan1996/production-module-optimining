@@ -17,6 +17,7 @@ import { IconCheck, IconX } from '@tabler/icons-react';
 import * as React from 'react';
 import { shallow } from 'zustand/shallow';
 
+import { useCancelDownloadTask } from '@/services/graphql/mutation/download/useCancelDownloadTask';
 import {
   IReadAllDownloadData,
   useReadAllCommonDownload,
@@ -112,6 +113,28 @@ const DownloadPanel = () => {
     },
   });
 
+  const [execute] = useCancelDownloadTask({});
+
+  const handleCancelDownload = async (id: string) => {
+    await execute({
+      variables: {
+        id,
+      },
+    });
+    if (downloadIds) {
+      const index = downloadIds && downloadIds.indexOf(id);
+      // Hapus ID dari downloadIds setelah berhasil diunduh
+      const newDownloadIds = [...downloadIds];
+      newDownloadIds.splice(index, 1);
+
+      setDownloadTaskStore({
+        downloadPanel: {
+          downloadIds: newDownloadIds,
+        },
+      });
+    }
+  };
+
   return (
     <Affix position={{ bottom: rem(20), right: rem(20) }}>
       <Transition transition="slide-up" mounted={isOpen || false}>
@@ -194,9 +217,17 @@ const DownloadPanel = () => {
                               runningStatus.includes(value.status) && (
                                 <>
                                   <Loader color="gray.5" size="sm" />
-                                  <IconX size="1.5rem" />
+                                  <ActionIcon
+                                    component="span"
+                                    onClick={() =>
+                                      handleCancelDownload(value.id)
+                                    }
+                                  >
+                                    <IconX size="1.5rem" />
+                                  </ActionIcon>
                                 </>
                               )}
+
                             {value.status === 'completed' && (
                               <ThemeIcon size="sm" radius="xl">
                                 <IconCheck />
