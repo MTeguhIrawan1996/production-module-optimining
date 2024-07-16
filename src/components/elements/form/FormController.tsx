@@ -46,6 +46,7 @@ import {
   SelectFactoryRhf,
   SelectInputPeriodRhf,
   SelectInputRhf,
+  SelectInputStatusRitageRhf,
   SelectMapTypeRhf,
   SelectMonthRhf,
   SelectNewHeavyEquipmentReferenceInputRhf,
@@ -192,6 +193,8 @@ const FormController: React.FC<ControllerProps> = (props) => {
       return <SelectNewHeavyEquipmentReferenceInputRhf {...props} />;
     case 'select-period-rhf':
       return <SelectInputPeriodRhf {...props} />;
+    case 'select-status-ritage-rhf':
+      return <SelectInputStatusRitageRhf {...props} />;
     default:
       return null;
   }

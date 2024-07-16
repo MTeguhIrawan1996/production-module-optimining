@@ -9,6 +9,7 @@ import {
   SelectInputMaterialNative,
   SelectInputNative,
   SelectInputPeriodNative,
+  SelectInputRitageStatusNative,
   SelectInputShiftNative,
   SelectMonthNative,
   SelectStatusNative,
@@ -48,6 +49,8 @@ const InputControllerNative: React.FC<InputControllerNativeProps> = (props) => {
       return <SelectInputShiftNative {...props} />;
     case 'select-material-native':
       return <SelectInputMaterialNative {...props} />;
+    case 'select-ritage-status-native':
+      return <SelectInputRitageStatusNative {...props} />;
     default:
       return null;
   }

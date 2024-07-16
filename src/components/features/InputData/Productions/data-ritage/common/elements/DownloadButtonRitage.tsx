@@ -4,6 +4,7 @@ import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import * as React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { ZodType, ZodTypeDef } from 'zod';
 import { shallow } from 'zustand/shallow';
 
 import { GlobalAlert, PrimaryDownloadDataButton } from '@/components/elements';
@@ -13,7 +14,8 @@ import {
 } from '@/components/elements/button/PrimaryDownloadDataButton';
 
 import {
-  IDownloadFrontProductionValues,
+  IDownloadOreProductionValues,
+  IDownloadRitageProductionValues,
   useDownloadTask,
 } from '@/services/graphql/mutation/download/useDownloadTask';
 import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
@@ -21,13 +23,13 @@ import {
   globalDate,
   globalSelectMonthRhf,
   globalSelectPeriodRhf,
+  globalSelectRitageStatusRhf,
   globalSelectWeekRhf,
   globalSelectYearRhf,
+  heavyEquipmentSelect,
   locationSelect,
-  materialSelect,
 } from '@/utils/constants/Field/global-field';
 import { shiftSelect } from '@/utils/constants/Field/sample-house-field';
-import { downloadFrontProductionValidation } from '@/utils/form-validation/front-production/front-production-validation';
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
 import dayjs from '@/utils/helper/dayjs.config';
@@ -35,20 +37,22 @@ import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 import { useDownloadTaskStore } from '@/utils/store/useDownloadStore';
 
-interface IDownloadButtonFrontProps
+interface IDownloadButtonRitageProps<T>
   extends Omit<
     IDownloadDataButtonProps,
     'methods' | 'submitForm' | 'fields' | 'isDibaledDownload'
   > {
-  params: string;
-  defaultValuesState: Partial<IDownloadFrontProductionValues>;
+  ritage: 'Ore' | 'OB' | 'Quarry' | 'Barging' | 'Topsoil' | 'Moving';
+  defaultValuesState: Partial<IDownloadRitageProductionValues>;
+  reslover: ZodType<T, ZodTypeDef, T>;
 }
 
-const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
-  params,
+export default function DownloadButtonRitage<T>({
   defaultValuesState,
+  ritage,
+  reslover,
   ...rest
-}) => {
+}: IDownloadButtonRitageProps<T>) {
   const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
@@ -59,7 +63,11 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
     shallow
   );
 
-  const defaultValues = {
+  const oreDefaultValues: IDownloadOreProductionValues = {
+    locationId: null,
+  };
+
+  const defaultValues: IDownloadRitageProductionValues = {
     period: 'DATE_RANGE',
     startDate: null,
     endDate: null,
@@ -67,12 +75,13 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
     month: null,
     week: null,
     shiftId: null,
-    locationId: null,
-    materialId: null,
+    heavyEquipmentCode: null,
+    ritageStatus: null,
+    ...oreDefaultValues,
   };
 
-  const methods = useForm<IDownloadFrontProductionValues>({
-    resolver: zodResolver(downloadFrontProductionValidation),
+  const methods = useForm<IDownloadRitageProductionValues>({
+    resolver: zodResolver(reslover),
     defaultValues: defaultValues,
     mode: 'onTouched',
   });
@@ -93,23 +102,19 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
           ],
         },
       });
-      const segmentObj = {
-        pit: 'PIT',
-        dome: 'DOME',
-      };
       sendGAEvent({
         event: 'Unduh',
         params: {
           category: 'Produksi',
-          subCategory: 'Produksi - Front',
-          subSubCategory: `Produksi - Front - ${segmentObj[params]}`,
+          subCategory: `Produksi - Data Ritase - ${ritage}`,
+          subSubCategory: '',
           account: userAuthData?.email ?? '',
         },
       });
       notifications.show({
         color: 'green',
-        title: 'Proses Download berhasil',
-        message: `Data front ${segmentObj[params]} sedang diproses`,
+        title: 'Proses download berhasil',
+        message: `Data ritase sedang diproses`,
         icon: <IconCheck />,
       });
       setIsOpenModal((prev) => !prev);
@@ -118,7 +123,7 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
     onError: (error) => {
       if (error.graphQLErrors) {
         const errorArry =
-          errorBadRequestField<IDownloadFrontProductionValues>(error);
+          errorBadRequestField<IDownloadRitageProductionValues>(error);
         if (errorArry.length) {
           errorArry.forEach(({ name, type, message }) => {
             methods.setError(name, { type, message });
@@ -127,7 +132,7 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
         }
         notifications.show({
           color: 'red',
-          title: 'Proses Donwload gagal',
+          title: 'Proses donwload gagal',
           message: error.message,
           icon: <IconX />,
         });
@@ -228,31 +233,30 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
     const locationItem = locationSelect({
       colSpan: 6,
       name: 'locationId',
-      label: params,
+      label: 'pit',
       limit: null,
       withAsterisk: false,
-      categoryIds:
-        params === 'pit'
-          ? [`${process.env.NEXT_PUBLIC_PIT_ID}`]
-          : [`${process.env.NEXT_PUBLIC_DOME_ID}`],
+      skipSearchQuery: true,
+      categoryIds: [`${process.env.NEXT_PUBLIC_PIT_ID}`],
     });
     const shiftItem = shiftSelect({
       colSpan: 6,
       name: 'shiftId',
       withAsterisk: false,
     });
-    const materialItem = materialSelect({
-      colSpan: 12,
-      name: 'materialId',
-      label: 'material',
-      withAsterisk: false,
+    const ritageProblematic = globalSelectRitageStatusRhf({
+      label: 'ritageStatus',
+      name: 'ritageStatus',
     });
-
-    const showMaterial = [
-      {
-        element: materialItem,
-      },
-    ];
+    const heavyEquipmentCodeItem = heavyEquipmentSelect({
+      colSpan: 6,
+      name: 'heavyEquipmentCode',
+      label: 'heavyEquipmentCode',
+      withAsterisk: false,
+      limit: null,
+      skipSearchQuery: true,
+      categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
+    });
 
     const showRangeDate = [
       {
@@ -298,31 +302,40 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
       ...(period === 'MONTH' ? showMonth : []),
       ...(period === 'WEEK' ? showWeek : []),
       {
-        element: locationItem,
-      },
-      {
         element: shiftItem,
       },
-      ...(params === 'pit' ? showMaterial : []),
+      {
+        element: ritageProblematic,
+      },
+      {
+        element: heavyEquipmentCodeItem,
+      },
+      {
+        element: locationItem,
+      },
     ];
 
     return field;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startDate, year, period, month, params]);
+  }, [startDate, year, period, month]);
 
   const handleSubmitForm: SubmitHandler<
-    IDownloadFrontProductionValues
+    IDownloadRitageProductionValues
   > = async (data) => {
     const startDate = formatDate(data.startDate, 'YYYY-MM-DD');
     const endDate = formatDate(data.endDate, 'YYYY-MM-DD');
-
-    const segmentObj = {
-      pit: 'PIT',
-      dome: 'DOME',
+    const ritageObj = {
+      Ore: {
+        entity: 'RITAGE_ORE',
+      },
+      OB: {
+        entity: 'RITAGE_OVERBURDEN',
+      },
     };
     await executeCreate({
       variables: {
-        entity: `FRONT_${segmentObj[params]}`,
+        entity: ritageObj[ritage].entity,
         timeFilterType: data.period === 'DATE_RANGE' ? data.period : 'PERIOD',
         timeFilter: {
           startDate: startDate || undefined,
@@ -332,9 +345,14 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
           week: data.week ? Number(data.week) : undefined,
         },
         columnFilter: {
-          materialId: data.materialId || undefined,
           shiftId: data.shiftId || undefined,
           pitId: data.locationId || undefined,
+          companyHeavyEquipmentId: data.heavyEquipmentCode || undefined,
+          isRitageProblematic: data.ritageStatus
+            ? data.ritageStatus === 'true'
+              ? false
+              : true
+            : undefined,
         },
       },
     });
@@ -363,6 +381,4 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
       {...rest}
     />
   );
-};
-
-export default DownloadButtonFront;
+}

@@ -36,10 +36,10 @@ const DownloadPanel = () => {
     []
   );
   const runningStatus = ['progress', 'active', 'waiting'];
-  const complated = ['completed'];
-  const failed = ['failed'];
+  const complatedStatus = ['completed'];
+  const errorStatus = ['failed', 'stalled', 'removed', 'canceled'];
 
-  const { data, isFetching } = useReadAllCommonDownload({
+  const { data } = useReadAllCommonDownload({
     variable: {
       ids: downloadIds || [],
     },
@@ -60,13 +60,23 @@ const DownloadPanel = () => {
         });
       }
       const allTask = data.findDownloadTasks.data;
-      setCurrentData(allTask);
 
       for (const task of allTask) {
         if (runningStatus.includes(task.status)) {
-          return;
+          setCurrentData((prev) => {
+            const prevWitoutCurrentStatus = prev.filter(
+              (o) => o.id !== task.id
+            );
+            return [...prevWitoutCurrentStatus, task];
+          });
         }
-        if (complated.includes(task.status)) {
+        if (complatedStatus.includes(task.status)) {
+          setCurrentData((prev) => {
+            const prevWitoutCurrentStatus = prev.filter(
+              (o) => o.id !== task.id
+            );
+            return [...prevWitoutCurrentStatus, task];
+          });
           await downloadTaskFn(task.filePath);
           notifications.show({
             color: 'green',
@@ -88,7 +98,13 @@ const DownloadPanel = () => {
             });
           }
         }
-        if (failed.includes(task.status)) {
+        if (errorStatus.includes(task.status)) {
+          setCurrentData((prev) => {
+            const prevWitoutCurrentStatus = prev.filter(
+              (o) => o.id !== task.id
+            );
+            return [...prevWitoutCurrentStatus, task];
+          });
           notifications.show({
             color: 'red',
             title: 'Proses download gagal',
@@ -121,7 +137,12 @@ const DownloadPanel = () => {
         id,
       },
     });
-    if (downloadIds) {
+    setCurrentData((prev) => {
+      return prev.map((task) =>
+        task.id === id ? { ...task, status: 'canceled' } : task
+      );
+    });
+    if (downloadIds && downloadIds.length > 1) {
       const index = downloadIds && downloadIds.indexOf(id);
       // Hapus ID dari downloadIds setelah berhasil diunduh
       const newDownloadIds = [...downloadIds];
@@ -134,6 +155,18 @@ const DownloadPanel = () => {
       });
     }
   };
+
+  React.useEffect(() => {
+    if (downloadIds && downloadIds?.length === 0) {
+      setCurrentData([]);
+      setDownloadTaskStore({
+        downloadPanel: {
+          isOpen: false,
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Affix position={{ bottom: rem(20), right: rem(20) }}>
@@ -184,6 +217,7 @@ const DownloadPanel = () => {
                         component="span"
                         onClick={(e) => {
                           e.stopPropagation();
+                          setCurrentData([]);
                           setDownloadTaskStore({
                             downloadPanel: {
                               isOpen: false,
@@ -213,28 +247,23 @@ const DownloadPanel = () => {
                             </Tooltip>
                           </Box>
                           <Group spacing="xs">
-                            {isFetching &&
-                              runningStatus.includes(value.status) && (
-                                <>
-                                  <Loader color="gray.5" size="sm" />
-                                  <ActionIcon
-                                    component="span"
-                                    onClick={() =>
-                                      handleCancelDownload(value.id)
-                                    }
-                                  >
-                                    <IconX size="1.5rem" />
-                                  </ActionIcon>
-                                </>
-                              )}
-
+                            {runningStatus.includes(value.status) && (
+                              <Loader color="gray.5" size="sm" />
+                            )}
+                            {value.status === 'progress' && (
+                              <ActionIcon
+                                component="span"
+                                onClick={() => handleCancelDownload(value.id)}
+                              >
+                                <IconX size="1.5rem" />
+                              </ActionIcon>
+                            )}
                             {value.status === 'completed' && (
                               <ThemeIcon size="sm" radius="xl">
                                 <IconCheck />
                               </ThemeIcon>
                             )}
-                            {(value.status === 'failed' ||
-                              value.status === 'stalled') && (
+                            {errorStatus.includes(value.status) && (
                               <ThemeIcon size="sm" radius="xl" color="red">
                                 <IconX />
                               </ThemeIcon>

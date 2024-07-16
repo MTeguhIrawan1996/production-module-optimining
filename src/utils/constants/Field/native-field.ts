@@ -7,6 +7,7 @@ import { ISelectMaterialNativeProps } from '@/components/elements/input/SelectIn
 import { ISelectInputNativeProps } from '@/components/elements/input/SelectInputNative';
 import { ISelectInputPeriodNatvie } from '@/components/elements/input/SelectInputPeriodNative';
 import { ISelectInputQuarterNatvie } from '@/components/elements/input/SelectInputQuarterNative';
+import { ISelectInputRitageStatusNatvie } from '@/components/elements/input/SelectInputRitageStatusNative';
 import { ISelectShiftNativeProps } from '@/components/elements/input/SelectInputShiftNative';
 import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
 import { IStatusNativeProps } from '@/components/elements/input/SelectStatusNative';
@@ -228,6 +229,19 @@ export const globalSelectMaterialNative = ({
 }: Partial<ISelectMaterialNativeProps>) => {
   const field: InputControllerNativeProps = {
     control: 'select-material-native',
+    name,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectRitageStatusNative = ({
+  name = 'ritageStatus',
+  clearable = true,
+  ...rest
+}: Partial<ISelectInputRitageStatusNatvie>) => {
+  const field: InputControllerNativeProps = {
+    control: 'select-ritage-status-native',
     name,
     clearable,
     ...rest,

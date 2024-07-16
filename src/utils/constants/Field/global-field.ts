@@ -32,6 +32,7 @@ import { ISelectCompanyRhfProps } from '@/components/elements/input/SelectCompan
 import { ISelectFactoryRhfProps } from '@/components/elements/input/SelectFactoryRhf';
 import { ISelectInputPeriodRhf } from '@/components/elements/input/SelectInputPeriodRhf';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
+import { ISelectInputStatusRitageRhf } from '@/components/elements/input/SelectInputRitageStatusRhf';
 import { ISelectMapTypeRhfProps } from '@/components/elements/input/SelectMapType';
 import { ISelectMonthRhfProps } from '@/components/elements/input/SelectMonthRhf';
 import { ISelectNewHeavyEquipmentReferenceRhfProps } from '@/components/elements/input/SelectNewHeavyEquipmentReferenceInputRhf';
@@ -1286,6 +1287,25 @@ export const globalSelectPeriodRhf = ({
 }: Partial<ISelectInputPeriodRhf>) => {
   const field: ControllerProps = {
     control: 'select-period-rhf',
+    name,
+    label,
+    searchable,
+    clearable,
+    colSpan,
+    ...rest,
+  };
+  return field;
+};
+export const globalSelectRitageStatusRhf = ({
+  name = 'ritageStatus',
+  label,
+  searchable = false,
+  clearable = true,
+  colSpan = 6,
+  ...rest
+}: Partial<ISelectInputStatusRitageRhf>) => {
+  const field: ControllerProps = {
+    control: 'select-status-ritage-rhf',
     name,
     label,
     searchable,

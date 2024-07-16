@@ -18,7 +18,6 @@ export const READ_ALL_RITAGE_ORE = gql`
   query ReadAllRitageOre(
     $page: Int
     $limit: Int
-    $date: String
     $orderBy: String
     $orderDir: String
     $shiftId: String
@@ -29,7 +28,6 @@ export const READ_ALL_RITAGE_ORE = gql`
       findAllOreRitageInput: {
         page: $page
         limit: $limit
-        date: $date
         orderBy: $orderBy
         orderDir: $orderDir
         shiftId: $shiftId
@@ -93,7 +91,6 @@ interface IOreRitagesResponse {
 
 interface IOreRitagesRequest
   extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
-  date?: string | null;
   shiftId?: string | null;
   isRitageProblematic?: boolean | null;
   companyHeavyEquipmentId?: string | null;
@@ -117,6 +114,7 @@ export const useReadAllRitageOre = ({
   } = useQuery<IOreRitagesResponse, IOreRitagesRequest>(READ_ALL_RITAGE_ORE, {
     variables: variables,
     skip: skip,
+    notifyOnNetworkStatusChange: true,
     onError: (err: ApolloError) => {
       return err;
     },

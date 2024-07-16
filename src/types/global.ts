@@ -58,6 +58,8 @@ import { ISelectInputPeriodNatvie } from '@/components/elements/input/SelectInpu
 import { ISelectInputPeriodRhf } from '@/components/elements/input/SelectInputPeriodRhf';
 import { ISelectInputQuarterNatvie } from '@/components/elements/input/SelectInputQuarterNative';
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
+import { ISelectInputRitageStatusNatvie } from '@/components/elements/input/SelectInputRitageStatusNative';
+import { ISelectInputStatusRitageRhf } from '@/components/elements/input/SelectInputRitageStatusRhf';
 import { ISelectShiftNativeProps } from '@/components/elements/input/SelectInputShiftNative';
 import { ISelectMapTypeRhfProps } from '@/components/elements/input/SelectMapType';
 import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
@@ -160,7 +162,8 @@ export type ControllerProps =
   | ISelectMapTypeRhfProps
   | ISelectActivityTypePlanRhfProps
   | IMultipleSelectMapLocationRhfProps
-  | ISelectInputPeriodRhf;
+  | ISelectInputPeriodRhf
+  | ISelectInputStatusRitageRhf;
 
 export type InputControllerNativeProps =
   | IDateInputNativeProps
@@ -176,7 +179,8 @@ export type InputControllerNativeProps =
   | ILocationNativeProps
   | ISelectInputPeriodNatvie
   | ISelectShiftNativeProps
-  | ISelectMaterialNativeProps;
+  | ISelectMaterialNativeProps
+  | ISelectInputRitageStatusNatvie;
 
 export type ControllerGroup = {
   group: string;

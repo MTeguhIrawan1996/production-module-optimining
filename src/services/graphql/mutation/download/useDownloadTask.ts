@@ -34,18 +34,22 @@ export interface IDownloadFrontProductionValues {
   materialId: string | null;
 }
 
-export interface IDownloadRitageProductionValues {
+export interface IDownloadOreProductionValues {
+  locationId: string | null;
+}
+export interface IDownloadRitageCommonValue {
   period: string | null;
   startDate?: Date | null;
   endDate?: Date | null;
   year: string | null;
   month: string | null;
   week: string | null;
-  locationId: string | null;
   shiftId: string | null;
   heavyEquipmentCode: string | null;
   ritageStatus: string | null;
 }
+export type IDownloadRitageProductionValues = IDownloadRitageCommonValue &
+  IDownloadOreProductionValues;
 
 type IDownloadTaskRequest = {
   entity: string | null;
@@ -61,6 +65,8 @@ type IDownloadTaskRequest = {
     shiftId?: string | null;
     pitId?: string | null;
     materialId?: string | null;
+    isRitageProblematic?: boolean | null;
+    companyHeavyEquipmentId?: string | null;
   };
 };
 
