@@ -3,44 +3,39 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 
-import { useReadAllShiftMaster } from '@/services/graphql/query/shift/useReadAllShiftMaster';
 import { useCombineFilterItems } from '@/utils/hooks/useCombineFIlterItems';
 import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 
-export type ISelectShiftNativeProps = {
-  control: 'select-shift-native';
-  skip?: boolean;
-} & Omit<SelectProps, 'data' | 'onSearchChange' | 'searchValue'>;
+export type ISelectInputRitageStatusNatvie = {
+  control: 'select-ritage-status-native';
+} & Omit<
+  SelectProps,
+  'data' | 'onSearchChange' | 'searchValue' | 'placeholder'
+>;
 
-const SelectInputShiftNative: React.FC<ISelectShiftNativeProps> = ({
-  control,
-  label = 'shift',
-  name,
-  skip = false,
-  ...rest
-}) => {
+const SelectInputRitageStatusNative: React.FC<
+  ISelectInputRitageStatusNatvie
+> = ({ control, label = 'ritageStatus', name, ...rest }) => {
   const { t } = useTranslation('allComponents');
   const [filterDataCommon, setFilterDataCommon] = useFilterDataCommon(
     (state) => [state.filterDataCommon, state.setFilterDataCommon],
     shallow
   );
-  useReadAllShiftMaster({
-    variables: {
-      limit: null,
-      orderDir: 'desc',
-      orderBy: 'createdAt',
-    },
-    skip,
-    onCompleted: (data) => {
-      const item = data.shifts.data.map((val) => {
-        return {
-          name: val.name,
-          id: val.id,
-        };
-      });
-      setFilterDataCommon({ key: name || '', data: item });
-    },
-  });
+
+  React.useEffect(() => {
+    const data = [
+      {
+        id: 'true',
+        name: t('commonTypography.complete', { ns: 'default' }),
+      },
+      {
+        id: 'false',
+        name: t('commonTypography.unComplete', { ns: 'default' }),
+      },
+    ];
+    setFilterDataCommon({ key: name || '', data });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name]);
 
   const { uncombinedItem } = useCombineFilterItems({
     data: filterDataCommon.find((v) => v.key === name)?.data ?? [],
@@ -54,7 +49,7 @@ const SelectInputShiftNative: React.FC<ISelectShiftNativeProps> = ({
       labelProps={{ style: { fontWeight: 400, fontSize: 16, marginBottom: 8 } }}
       descriptionProps={{ style: { fontWeight: 400, fontSize: 14 } }}
       data-control={control}
-      placeholder={t('commonTypography.chooseShift', {
+      placeholder={t('commonTypography.chooseRitageStatus', {
         ns: 'default',
       })}
       label={label ? t(`components.field.${label}`) : null}
@@ -63,4 +58,4 @@ const SelectInputShiftNative: React.FC<ISelectShiftNativeProps> = ({
   );
 };
 
-export default SelectInputShiftNative;
+export default SelectInputRitageStatusNative;

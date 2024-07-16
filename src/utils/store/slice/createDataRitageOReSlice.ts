@@ -10,7 +10,13 @@ type IDataRitageOreState = {
 export type IDataRitageOreSliceValue = {
   dataRitageOreState: Partial<
     IDataRitageOreState & {
-      filterDate: Date | null;
+      period: string | null;
+      startDate: Date | null;
+      endDate: Date | null;
+      year: number | null;
+      week: number | null;
+      month: number | null;
+      locationId: string | null;
       filterStatus: string | null;
       filterShift: string | null;
       filtercompanyHeavyEquipmentId: string | null;
@@ -34,7 +40,13 @@ const initialState: IDataRitageOreSliceValue = {
   dataRitageOreState: {
     page: 1,
     search: '',
-    filterDate: null,
+    period: null,
+    startDate: null,
+    endDate: null,
+    year: null,
+    month: null,
+    week: null,
+    locationId: null,
     filterStatus: null,
     filterShift: null,
     filtercompanyHeavyEquipmentId: null,

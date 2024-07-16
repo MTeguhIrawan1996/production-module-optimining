@@ -589,7 +589,7 @@ const FrontProductionBook = () => {
     const shiftItem = globalSelectShiftNative({
       label: 'shift',
       name: 'shiftId',
-      searchable: true,
+      searchable: false,
       onChange: (value) => {
         segment.shiftId?.set(value || null);
       },
@@ -812,8 +812,8 @@ const FrontProductionBook = () => {
 
   const isDisabled = () => {
     if (segment.period?.value === 'DATE_RANGE') {
-      const { startDate } = segment;
-      return !(startDate && startDate.value);
+      const { endDate } = segment;
+      return !(endDate && endDate.value);
     }
 
     if (segment.period?.value === 'YEAR') {

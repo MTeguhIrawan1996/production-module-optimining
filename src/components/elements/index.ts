@@ -98,6 +98,8 @@ import SelectInputPeriodNative from '@/components/elements/input/SelectInputPeri
 import SelectInputPeriodRhf from '@/components/elements/input/SelectInputPeriodRhf';
 import SelectInputQuarterNative from '@/components/elements/input/SelectInputQuarterNative';
 import SelectInputRhf from '@/components/elements/input/SelectInputRhf';
+import SelectInputRitageStatusNative from '@/components/elements/input/SelectInputRitageStatusNative';
+import SelectInputStatusRitageRhf from '@/components/elements/input/SelectInputRitageStatusRhf';
 import SelectInputShiftNative from '@/components/elements/input/SelectInputShiftNative';
 import SelectMapTypeRhf from '@/components/elements/input/SelectMapType';
 import SelectMonthNative from '@/components/elements/input/SelectMonthNative';
@@ -255,7 +257,9 @@ export {
   SelectInputPeriodRhf,
   SelectInputQuarterNative,
   SelectInputRhf,
+  SelectInputRitageStatusNative,
   SelectInputShiftNative,
+  SelectInputStatusRitageRhf,
   SelectionButtonModal,
   SelectMapTypeRhf,
   SelectMonthNative,

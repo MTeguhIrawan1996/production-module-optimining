@@ -37,9 +37,9 @@ const DownloadPanel = () => {
   );
   const runningStatus = ['progress', 'active', 'waiting'];
   const complated = ['completed'];
-  const failed = ['failed'];
+  const error = ['failed', 'stalled'];
 
-  const { data, isFetching } = useReadAllCommonDownload({
+  const { data } = useReadAllCommonDownload({
     variable: {
       ids: downloadIds || [],
     },
@@ -88,7 +88,7 @@ const DownloadPanel = () => {
             });
           }
         }
-        if (failed.includes(task.status)) {
+        if (error.includes(task.status)) {
           notifications.show({
             color: 'red',
             title: 'Proses download gagal',
@@ -134,6 +134,17 @@ const DownloadPanel = () => {
       });
     }
   };
+
+  React.useEffect(() => {
+    if (downloadIds && downloadIds?.length === 0) {
+      setDownloadTaskStore({
+        downloadPanel: {
+          isOpen: false,
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Affix position={{ bottom: rem(20), right: rem(20) }}>
@@ -213,20 +224,17 @@ const DownloadPanel = () => {
                             </Tooltip>
                           </Box>
                           <Group spacing="xs">
-                            {isFetching &&
-                              runningStatus.includes(value.status) && (
-                                <>
-                                  <Loader color="gray.5" size="sm" />
-                                  <ActionIcon
-                                    component="span"
-                                    onClick={() =>
-                                      handleCancelDownload(value.id)
-                                    }
-                                  >
-                                    <IconX size="1.5rem" />
-                                  </ActionIcon>
-                                </>
-                              )}
+                            {runningStatus.includes(value.status) && (
+                              <>
+                                <Loader color="gray.5" size="sm" />
+                                <ActionIcon
+                                  component="span"
+                                  onClick={() => handleCancelDownload(value.id)}
+                                >
+                                  <IconX size="1.5rem" />
+                                </ActionIcon>
+                              </>
+                            )}
 
                             {value.status === 'completed' && (
                               <ThemeIcon size="sm" radius="xl">
@@ -234,7 +242,8 @@ const DownloadPanel = () => {
                               </ThemeIcon>
                             )}
                             {(value.status === 'failed' ||
-                              value.status === 'stalled') && (
+                              value.status === 'stalled' ||
+                              value.status === 'canceled') && (
                               <ThemeIcon size="sm" radius="xl" color="red">
                                 <IconX />
                               </ThemeIcon>
