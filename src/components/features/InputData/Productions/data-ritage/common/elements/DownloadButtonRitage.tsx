@@ -14,6 +14,7 @@ import {
 } from '@/components/elements/button/PrimaryDownloadDataButton';
 
 import {
+  IDownloadBargingProductionValues,
   IDownloadOreProductionValues,
   IDownloadRitageProductionValues,
   useDownloadTask,
@@ -37,13 +38,15 @@ import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 import { useDownloadTaskStore } from '@/utils/store/useDownloadStore';
 
+import { IRitageConditional, RitageType } from '@/types/ritageProduction';
+
 interface IDownloadButtonRitageProps<T>
   extends Omit<
     IDownloadDataButtonProps,
     'methods' | 'submitForm' | 'fields' | 'isDibaledDownload'
   > {
-  ritage: 'Ore' | 'OB' | 'Quarry' | 'Barging' | 'Topsoil' | 'Moving';
-  defaultValuesState: Partial<IDownloadRitageProductionValues>;
+  ritage: RitageType;
+  defaultValuesState?: Partial<IDownloadRitageProductionValues>;
   reslover: ZodType<T, ZodTypeDef, T>;
 }
 
@@ -66,8 +69,45 @@ export default function DownloadButtonRitage<T>({
   const oreDefaultValues: IDownloadOreProductionValues = {
     locationId: null,
   };
+  const bargingDefaultValues: IDownloadBargingProductionValues = {
+    stockpileId: null,
+    domeId: null,
+  };
 
-  const defaultValues: IDownloadRitageProductionValues = {
+  const ritageConditional: IRitageConditional = {
+    ore: {
+      label: 'Ore',
+      entity: 'RITAGE_ORE',
+      defaultValues: oreDefaultValues,
+    },
+    ob: {
+      label: 'Overburden',
+      entity: 'RITAGE_OVERBURDEN',
+      defaultValues: oreDefaultValues,
+    },
+    quarry: {
+      label: 'Quarry',
+      entity: 'RITAGE_QUARRY',
+      defaultValues: oreDefaultValues,
+    },
+    barging: {
+      label: 'Barging',
+      entity: 'RITAGE_BARGING',
+      defaultValues: bargingDefaultValues,
+    },
+    topsoil: {
+      label: 'Topsoil',
+      entity: 'RITAGE_TOPSOIL',
+      defaultValues: undefined,
+    },
+    moving: {
+      label: 'Moving',
+      entity: 'RITAGE_MOVING',
+      defaultValues: undefined,
+    },
+  };
+
+  const defaultValues = {
     period: 'DATE_RANGE',
     startDate: null,
     endDate: null,
@@ -77,7 +117,9 @@ export default function DownloadButtonRitage<T>({
     shiftId: null,
     heavyEquipmentCode: null,
     ritageStatus: null,
-    ...oreDefaultValues,
+    ...(ritageConditional[ritage].defaultValues
+      ? ritageConditional[ritage].defaultValues
+      : {}),
   };
 
   const methods = useForm<IDownloadRitageProductionValues>({
@@ -106,14 +148,14 @@ export default function DownloadButtonRitage<T>({
         event: 'Unduh',
         params: {
           category: 'Produksi',
-          subCategory: `Produksi - Data Ritase - ${ritage}`,
+          subCategory: `Produksi - Data Ritase - ${ritageConditional[ritage].label}`,
           subSubCategory: '',
           account: userAuthData?.email ?? '',
         },
       });
       notifications.show({
         color: 'green',
-        title: 'Proses download berhasil',
+        title: 'Download berhasil',
         message: `Data ritase sedang diproses`,
         icon: <IconCheck />,
       });
@@ -132,7 +174,7 @@ export default function DownloadButtonRitage<T>({
         }
         notifications.show({
           color: 'red',
-          title: 'Proses donwload gagal',
+          title: 'Download gagal',
           message: error.message,
           icon: <IconX />,
         });
@@ -152,7 +194,7 @@ export default function DownloadButtonRitage<T>({
       label: 'period',
       clearable: false,
       withErrorState: false,
-      withAsterisk: true,
+      withAsterisk: false,
       onChange: (value) => {
         methods.setValue('period', value);
         values
@@ -233,11 +275,29 @@ export default function DownloadButtonRitage<T>({
     const locationItem = locationSelect({
       colSpan: 6,
       name: 'locationId',
-      label: 'pit',
+      label: ritage === 'quarry' ? 'fromLocation' : 'pit',
       limit: null,
       withAsterisk: false,
       skipSearchQuery: true,
       categoryIds: [`${process.env.NEXT_PUBLIC_PIT_ID}`],
+    });
+    const stockPileItem = locationSelect({
+      colSpan: 6,
+      name: 'stockpileId',
+      label: 'stockpile',
+      limit: null,
+      withAsterisk: false,
+      skipSearchQuery: true,
+      categoryIds: [`${process.env.NEXT_PUBLIC_STOCKPILE_ID}`],
+    });
+    const domeItem = locationSelect({
+      colSpan: 12,
+      name: 'domeId',
+      label: 'dome',
+      limit: null,
+      withAsterisk: false,
+      skipSearchQuery: true,
+      categoryIds: [`${process.env.NEXT_PUBLIC_DOME_ID}`],
     });
     const shiftItem = shiftSelect({
       colSpan: 6,
@@ -249,7 +309,7 @@ export default function DownloadButtonRitage<T>({
       name: 'ritageStatus',
     });
     const heavyEquipmentCodeItem = heavyEquipmentSelect({
-      colSpan: 6,
+      colSpan: ritage === 'moving' || ritage === 'topsoil' ? 12 : 6,
       name: 'heavyEquipmentCode',
       label: 'heavyEquipmentCode',
       withAsterisk: false,
@@ -294,6 +354,23 @@ export default function DownloadButtonRitage<T>({
       },
     ];
 
+    const showLocation = [
+      {
+        element: locationItem,
+      },
+    ];
+    const showLocationBarging = [
+      {
+        element: stockPileItem,
+      },
+      {
+        element: domeItem,
+      },
+    ];
+
+    const itemLocation: RitageType[] = ['ob', 'ore', 'quarry'];
+    const itemLocationBarging: RitageType[] = ['barging'];
+
     const field: IDownloadFields[] = [
       {
         element: periodItem,
@@ -310,9 +387,8 @@ export default function DownloadButtonRitage<T>({
       {
         element: heavyEquipmentCodeItem,
       },
-      {
-        element: locationItem,
-      },
+      ...(itemLocation.includes(ritage) ? showLocation : []),
+      ...(itemLocationBarging.includes(ritage) ? showLocationBarging : []),
     ];
 
     return field;
@@ -325,17 +401,23 @@ export default function DownloadButtonRitage<T>({
   > = async (data) => {
     const startDate = formatDate(data.startDate, 'YYYY-MM-DD');
     const endDate = formatDate(data.endDate, 'YYYY-MM-DD');
-    const ritageObj = {
-      Ore: {
-        entity: 'RITAGE_ORE',
-      },
-      OB: {
-        entity: 'RITAGE_OVERBURDEN',
-      },
+    const oreObKeys: RitageType[] = ['ore', 'ob'];
+    const quarryKeys: RitageType[] = ['quarry'];
+    const bargingKeys: RitageType[] = ['barging'];
+    const oreObColumnFilter = {
+      pitId: data.locationId || undefined,
     };
+    const quarryColumnFilter = {
+      fromPitId: data.locationId || undefined,
+    };
+    const bargingColumnFilter = {
+      stockpileId: data.stockpileId || undefined,
+      domeId: data.domeId || undefined,
+    };
+
     await executeCreate({
       variables: {
-        entity: ritageObj[ritage].entity,
+        entity: ritageConditional[ritage].entity,
         timeFilterType: data.period === 'DATE_RANGE' ? data.period : 'PERIOD',
         timeFilter: {
           startDate: startDate || undefined,
@@ -346,26 +428,30 @@ export default function DownloadButtonRitage<T>({
         },
         columnFilter: {
           shiftId: data.shiftId || undefined,
-          pitId: data.locationId || undefined,
           companyHeavyEquipmentId: data.heavyEquipmentCode || undefined,
           isRitageProblematic: data.ritageStatus
             ? data.ritageStatus === 'true'
               ? false
               : true
             : undefined,
+          ...(oreObKeys.includes(ritage) ? oreObColumnFilter : {}),
+          ...(quarryKeys.includes(ritage) ? quarryColumnFilter : {}),
+          ...(bargingKeys.includes(ritage) ? bargingColumnFilter : {}),
         },
       },
     });
   };
 
   const handleSetValue = () => {
-    const values = objectToArrayValue(defaultValuesState);
-    values.forEach((v) => {
-      methods.setValue(v.name, v.value || null);
-    });
-    methods.trigger(undefined, {
-      shouldFocus: true,
-    });
+    if (defaultValuesState) {
+      const values = objectToArrayValue(defaultValuesState);
+      values.forEach((v) => {
+        methods.setValue(v.name, v.value || null);
+      });
+      methods.trigger(undefined, {
+        shouldFocus: true,
+      });
+    }
   };
 
   return (

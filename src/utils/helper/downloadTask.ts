@@ -16,7 +16,7 @@ const validateAndDownloadFile = async (href) => {
   link?.parentNode?.removeChild(link);
 
   // Berikan waktu agar browser dapat memulai unduhan sebelum melanjutkan
-  return new Promise((resolve) => setTimeout(resolve, 2000)); // Penundaan 2 detik
+  return new Promise((resolve) => setTimeout(resolve, 3000)); // Penundaan 2 detik
 };
 
 export const downloadTaskFn = async (href) => {

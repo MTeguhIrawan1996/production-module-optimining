@@ -39,7 +39,7 @@ const DownloadPanel = () => {
   const complatedStatus = ['completed'];
   const errorStatus = ['failed', 'stalled', 'removed', 'canceled'];
 
-  const { data } = useReadAllCommonDownload({
+  useReadAllCommonDownload({
     variable: {
       ids: downloadIds || [],
     },
@@ -77,11 +77,10 @@ const DownloadPanel = () => {
             );
             return [...prevWitoutCurrentStatus, task];
           });
-          await downloadTaskFn(task.filePath);
           notifications.show({
             color: 'green',
-            title: 'Proses Download berhasil',
-            message: `Data ${task.entity} sedang didownload` /* Fix Me Name File */,
+            title: 'Download berhasil',
+            message: `Data ${task.entity} berhasil didownload` /* Fix Me Name File */,
             icon: <IconCheck />,
           });
 
@@ -97,6 +96,9 @@ const DownloadPanel = () => {
               },
             });
           }
+          if (downloadIds && downloadIds?.includes(task.id)) {
+            await downloadTaskFn(task.filePath);
+          }
         }
         if (errorStatus.includes(task.status)) {
           setCurrentData((prev) => {
@@ -107,7 +109,7 @@ const DownloadPanel = () => {
           });
           notifications.show({
             color: 'red',
-            title: 'Proses download gagal',
+            title: 'Download gagal',
             message: `Data ${task.entity} gagal didownload` /* Fix Me Name File */,
             icon: <IconX />,
           });
@@ -202,8 +204,7 @@ const DownloadPanel = () => {
                 <Accordion.Control>
                   <Group noWrap position="apart">
                     <Text fw={600} fz={18}>
-                      Download {data?.findDownloadTasks.meta.totalData || '-'}{' '}
-                      Item
+                      Download {currentData.length || '-'} Item
                     </Text>
                     <Group spacing="xs">
                       <IconChevronUp

@@ -81,6 +81,7 @@ export const useReadAllRitageOreDT = ({
       },
       onCompleted,
       fetchPolicy,
+      notifyOnNetworkStatusChange: true,
     }
   );
 

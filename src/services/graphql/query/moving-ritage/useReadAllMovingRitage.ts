@@ -139,6 +139,7 @@ export const useReadAllRitageMoving = ({
       },
       onCompleted,
       fetchPolicy,
+      notifyOnNetworkStatusChange: true,
     }
   );
 

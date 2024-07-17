@@ -101,6 +101,7 @@
       "companyCode": "Kode Perusahaan",
       "locationId": "ID Lokasi",
       "locationCategory": "Kategori Lokasi",
+      "fromLocation": "Lokasi Asal",
       "locationName": "Nama Lokasi",
       "material": "Material",
       "fleet": "Fleet",

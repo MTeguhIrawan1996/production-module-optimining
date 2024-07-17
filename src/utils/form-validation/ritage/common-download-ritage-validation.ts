@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { IDownloadRitageProductionValues } from '@/services/graphql/mutation/download/useDownloadTask';
+import { IDownloadRitageCommonValue } from '@/services/graphql/mutation/download/useDownloadTask';
 import {
   zDateOptionalValidation,
   zOptionalString,
@@ -20,7 +20,7 @@ export const commonDownloadRitageValidation = z.object({
 });
 
 export const validatePeriod = (
-  arg: IDownloadRitageProductionValues,
+  arg: IDownloadRitageCommonValue,
   ctx: z.RefinementCtx
 ) => {
   if (arg.period === 'DATE_RANGE') {

@@ -113,6 +113,7 @@ export const useReadAllCommonDownload = ({
     queryKey: ['commonDownload', { ids }],
     enabled: isActive,
     refetchIntervalInBackground: true,
+    cacheTime: 0,
     refetchInterval: (data) => {
       onRefatch?.(data);
       if (!data) {
@@ -121,7 +122,7 @@ export const useReadAllCommonDownload = ({
       if (data?.findDownloadTasks.meta.totalAllData === 0) {
         return false;
       }
-      return 3000;
+      return 2000;
     },
   });
 };

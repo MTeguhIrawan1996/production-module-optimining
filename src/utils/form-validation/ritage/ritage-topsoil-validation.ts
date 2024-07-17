@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { IDownloadRitageCommonValue } from '@/services/graphql/mutation/download/useDownloadTask';
 import { IMutationRitageTopsoil } from '@/services/restapi/ritage-productions/topsoil/useCreateRitageTopsoil';
 import {
   zDateValidation,
@@ -9,6 +10,10 @@ import {
   zRequiredSelectInput,
   zRequiredString,
 } from '@/utils/form-validation/global';
+import {
+  commonDownloadRitageValidation,
+  validatePeriod,
+} from '@/utils/form-validation/ritage/common-download-ritage-validation';
 
 export const ritageTopsoilMutationValidation: z.ZodType<IMutationRitageTopsoil> =
   z
@@ -58,3 +63,8 @@ export const ritageTopsoilMutationValidation: z.ZodType<IMutationRitageTopsoil> 
         return z.NEVER; // The return value is not used, but we need to return something to satisfy the typing
       }
     });
+
+export const downloadTopsoilProductionValidation: z.ZodType<IDownloadRitageCommonValue> =
+  commonDownloadRitageValidation.superRefine((arg, ctx) => {
+    validatePeriod(arg, ctx);
+  });

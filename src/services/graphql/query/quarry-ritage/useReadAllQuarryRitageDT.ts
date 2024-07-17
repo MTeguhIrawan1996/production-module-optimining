@@ -81,6 +81,7 @@ export const useReadAllRitageQuarryDT = ({
       },
       onCompleted,
       fetchPolicy,
+      notifyOnNetworkStatusChange: true,
     }
   );
 

@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+import {
+  IDownloadBargingProductionValues,
+  IDownloadRitageCommonValue,
+} from '@/services/graphql/mutation/download/useDownloadTask';
 import { IMutationRitageBarging } from '@/services/restapi/ritage-productions/barging/useCreateRitageBarging';
 import {
   zDateValidation,
@@ -9,6 +13,10 @@ import {
   zRequiredSelectInput,
   zRequiredString,
 } from '@/utils/form-validation/global';
+import {
+  commonDownloadRitageValidation,
+  validatePeriod,
+} from '@/utils/form-validation/ritage/common-download-ritage-validation';
 
 export const ritageBargingMutationValidation: z.ZodType<IMutationRitageBarging> =
   z
@@ -58,3 +66,15 @@ export const ritageBargingMutationValidation: z.ZodType<IMutationRitageBarging> 
         return z.NEVER; // The return value is not used, but we need to return something to satisfy the typing
       }
     });
+
+export const downloadBargingProductionValidation: z.ZodType<
+  IDownloadRitageCommonValue & IDownloadBargingProductionValues
+> = z
+  .object({
+    stockpileId: zOptionalString.nullable(),
+    domeId: zOptionalString.nullable(),
+  })
+  .merge(commonDownloadRitageValidation)
+  .superRefine((arg, ctx) => {
+    validatePeriod(arg, ctx);
+  });
