@@ -18,6 +18,7 @@ export interface IRitageConditional {
   quarry: ICommon;
   barging: ICommon;
   topsoil: ICommon;
+  moving: ICommon;
 }
 
 export type RitageType = keyof IRitageConditional;

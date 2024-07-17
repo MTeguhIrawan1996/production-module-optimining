@@ -86,7 +86,6 @@ export const useReadAllCommonDownload = ({
   onError?: any;
 }) => {
   const { client } = getClient();
-  const MINUTE = 1000 * 60;
 
   const { ids, entity, timeFilterType, limit } = variable;
   const isActive = ids && ids?.length >= 1;
@@ -114,7 +113,7 @@ export const useReadAllCommonDownload = ({
     queryKey: ['commonDownload', { ids }],
     enabled: isActive,
     refetchIntervalInBackground: true,
-    cacheTime: 1 * MINUTE,
+    cacheTime: 0,
     refetchInterval: (data) => {
       onRefatch?.(data);
       if (!data) {
@@ -123,7 +122,7 @@ export const useReadAllCommonDownload = ({
       if (data?.findDownloadTasks.meta.totalAllData === 0) {
         return false;
       }
-      return 3000;
+      return 2000;
     },
   });
 };

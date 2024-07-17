@@ -100,6 +100,11 @@ export default function DownloadButtonRitage<T>({
       entity: 'RITAGE_TOPSOIL',
       defaultValues: undefined,
     },
+    moving: {
+      label: 'Moving',
+      entity: 'RITAGE_MOVING',
+      defaultValues: undefined,
+    },
   };
 
   const defaultValues = {
@@ -150,7 +155,7 @@ export default function DownloadButtonRitage<T>({
       });
       notifications.show({
         color: 'green',
-        title: 'Proses download berhasil',
+        title: 'Download berhasil',
         message: `Data ritase sedang diproses`,
         icon: <IconCheck />,
       });
@@ -169,7 +174,7 @@ export default function DownloadButtonRitage<T>({
         }
         notifications.show({
           color: 'red',
-          title: 'Proses donwload gagal',
+          title: 'Download gagal',
           message: error.message,
           icon: <IconX />,
         });
@@ -286,7 +291,7 @@ export default function DownloadButtonRitage<T>({
       categoryIds: [`${process.env.NEXT_PUBLIC_STOCKPILE_ID}`],
     });
     const domeItem = locationSelect({
-      colSpan: 6,
+      colSpan: 12,
       name: 'domeId',
       label: 'dome',
       limit: null,
@@ -304,7 +309,7 @@ export default function DownloadButtonRitage<T>({
       name: 'ritageStatus',
     });
     const heavyEquipmentCodeItem = heavyEquipmentSelect({
-      colSpan: 6,
+      colSpan: ritage === 'moving' || ritage === 'topsoil' ? 12 : 6,
       name: 'heavyEquipmentCode',
       label: 'heavyEquipmentCode',
       withAsterisk: false,

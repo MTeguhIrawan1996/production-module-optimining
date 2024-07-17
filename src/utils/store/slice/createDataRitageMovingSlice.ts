@@ -11,7 +11,12 @@ type IDataRitageMovingState = {
 export type IDataRitageMovingSliceValue = {
   dataRitageMovingState: Partial<
     IDataRitageMovingState & {
-      filterDate: Date | null;
+      period: string | null;
+      startDate: Date | null;
+      endDate: Date | null;
+      year: number | null;
+      week: number | null;
+      month: number | null;
       filterStatus: string | null;
       filterShift: string | null;
       filtercompanyHeavyEquipmentId: string | null;
@@ -35,7 +40,12 @@ const initialState: IDataRitageMovingSliceValue = {
   dataRitageMovingState: {
     page: 1,
     search: '',
-    filterDate: null,
+    period: null,
+    startDate: null,
+    endDate: null,
+    year: null,
+    month: null,
+    week: null,
     filterStatus: null,
     filterShift: null,
     filtercompanyHeavyEquipmentId: null,

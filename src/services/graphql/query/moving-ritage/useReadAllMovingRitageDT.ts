@@ -81,6 +81,7 @@ export const useReadAllRitageMovingDT = ({
       },
       onCompleted,
       fetchPolicy,
+      notifyOnNetworkStatusChange: true,
     }
   );
 
