@@ -37,12 +37,14 @@ import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 import { useDownloadTaskStore } from '@/utils/store/useDownloadStore';
 
+import { RitageType } from '@/types/ritageProduction';
+
 interface IDownloadButtonRitageProps<T>
   extends Omit<
     IDownloadDataButtonProps,
     'methods' | 'submitForm' | 'fields' | 'isDibaledDownload'
   > {
-  ritage: 'Ore' | 'OB' | 'Quarry' | 'Barging' | 'Topsoil' | 'Moving';
+  ritage: RitageType;
   defaultValuesState: Partial<IDownloadRitageProductionValues>;
   reslover: ZodType<T, ZodTypeDef, T>;
 }
@@ -62,6 +64,21 @@ export default function DownloadButtonRitage<T>({
     (state) => [state.downloadPanel, state.setDownloadTaskStore],
     shallow
   );
+
+  const ritageConditional = {
+    Ore: {
+      entity: 'RITAGE_ORE',
+      locationLabel: 'pit',
+    },
+    OB: {
+      entity: 'RITAGE_OVERBURDEN',
+      locationLabel: 'pit',
+    },
+    Quarry: {
+      entity: 'RITAGE_QUARRY',
+      locationLabel: 'fromLocation',
+    },
+  };
 
   const oreDefaultValues: IDownloadOreProductionValues = {
     locationId: null,
@@ -152,7 +169,7 @@ export default function DownloadButtonRitage<T>({
       label: 'period',
       clearable: false,
       withErrorState: false,
-      withAsterisk: true,
+      withAsterisk: false,
       onChange: (value) => {
         methods.setValue('period', value);
         values
@@ -233,7 +250,7 @@ export default function DownloadButtonRitage<T>({
     const locationItem = locationSelect({
       colSpan: 6,
       name: 'locationId',
-      label: 'pit',
+      label: ritageConditional[ritage].locationLabel,
       limit: null,
       withAsterisk: false,
       skipSearchQuery: true,
@@ -325,17 +342,17 @@ export default function DownloadButtonRitage<T>({
   > = async (data) => {
     const startDate = formatDate(data.startDate, 'YYYY-MM-DD');
     const endDate = formatDate(data.endDate, 'YYYY-MM-DD');
-    const ritageObj = {
-      Ore: {
-        entity: 'RITAGE_ORE',
-      },
-      OB: {
-        entity: 'RITAGE_OVERBURDEN',
-      },
+    const showPits: RitageType[] = ['Ore', 'OB'];
+    const showFromLocation: RitageType[] = ['Quarry'];
+    const pitObj = {
+      pitId: data.locationId || undefined,
+    };
+    const formLocationObj = {
+      fromPitId: data.locationId || undefined,
     };
     await executeCreate({
       variables: {
-        entity: ritageObj[ritage].entity,
+        entity: ritageConditional[ritage].entity,
         timeFilterType: data.period === 'DATE_RANGE' ? data.period : 'PERIOD',
         timeFilter: {
           startDate: startDate || undefined,
@@ -346,7 +363,8 @@ export default function DownloadButtonRitage<T>({
         },
         columnFilter: {
           shiftId: data.shiftId || undefined,
-          pitId: data.locationId || undefined,
+          ...(showPits.includes(ritage) ? pitObj : {}),
+          ...(showFromLocation.includes(ritage) ? formLocationObj : {}),
           companyHeavyEquipmentId: data.heavyEquipmentCode || undefined,
           isRitageProblematic: data.ritageStatus
             ? data.ritageStatus === 'true'

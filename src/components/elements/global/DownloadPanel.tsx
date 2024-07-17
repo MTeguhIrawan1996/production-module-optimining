@@ -39,7 +39,7 @@ const DownloadPanel = () => {
   const complatedStatus = ['completed'];
   const errorStatus = ['failed', 'stalled', 'removed', 'canceled'];
 
-  const { data } = useReadAllCommonDownload({
+  useReadAllCommonDownload({
     variable: {
       ids: downloadIds || [],
     },
@@ -202,8 +202,7 @@ const DownloadPanel = () => {
                 <Accordion.Control>
                   <Group noWrap position="apart">
                     <Text fw={600} fz={18}>
-                      Download {data?.findDownloadTasks.meta.totalData || '-'}{' '}
-                      Item
+                      Download {currentData.length || '-'} Item
                     </Text>
                     <Group spacing="xs">
                       <IconChevronUp

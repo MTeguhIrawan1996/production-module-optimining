@@ -18,7 +18,6 @@ export const READ_ALL_RITAGE_QUARRY = gql`
   query ReadAllRitageQuarry(
     $page: Int
     $limit: Int
-    $date: String
     $orderBy: String
     $orderDir: String
     $shiftId: String
@@ -29,7 +28,6 @@ export const READ_ALL_RITAGE_QUARRY = gql`
       findAllQuarryRitageInput: {
         page: $page
         limit: $limit
-        date: $date
         orderBy: $orderBy
         orderDir: $orderDir
         shiftId: $shiftId
@@ -96,7 +94,6 @@ interface IQuarryRitagesResponse {
 
 interface IQuarryRitagesRequest
   extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
-  date?: string | null;
   shiftId?: string | null;
   isRitageProblematic?: boolean | null;
   companyHeavyEquipmentId?: string | null;
@@ -127,6 +124,7 @@ export const useReadAllRitageQuarry = ({
       onError,
       onCompleted,
       fetchPolicy,
+      notifyOnNetworkStatusChange: true,
     }
   );
 
