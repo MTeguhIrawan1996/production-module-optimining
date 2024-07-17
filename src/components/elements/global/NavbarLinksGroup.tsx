@@ -89,6 +89,9 @@ const NavbarLinksGroup: React.FC<INavbarLinksGroupProps> = ({
                   [classes.linkActive]:
                     item.href === cleanedPath || item.href === cleanedPathSub,
                 })}
+                nextLinkProps={{
+                  prefetch: false,
+                }}
                 href={item.href ?? ''}
                 key={`${item.label} + ${i}`}
                 label={t(`sideBar.${item.label}`)}

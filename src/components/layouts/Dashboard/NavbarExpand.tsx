@@ -80,6 +80,7 @@ const NavbarExpand: React.FC<IProps> = ({
                 })}
                 href={item.href ?? ''}
                 key={item.label}
+                prefetch={false}
               >
                 <Icon
                   icon={item.icon || ''}

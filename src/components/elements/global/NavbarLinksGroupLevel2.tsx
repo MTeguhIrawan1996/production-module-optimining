@@ -75,6 +75,9 @@ const NavbarLinksGroupLevel2: React.FC<INavbarLinksGroupLevel2Props> = ({
                 key={`${item.label} + ${i}`}
                 label={t(`sideBar.${item.label}`)}
                 fz="sm"
+                nextLinkProps={{
+                  prefetch: false,
+                }}
               />
             );
           })}
