@@ -92,7 +92,7 @@ export default function DownloadButtonRitage<T>({
     },
     barging: {
       label: 'Barging',
-      entity: 'RITAGE_QUARRY',
+      entity: 'RITAGE_BARGING',
       defaultValues: bargingDefaultValues,
     },
   };
