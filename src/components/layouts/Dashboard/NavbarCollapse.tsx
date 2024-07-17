@@ -35,7 +35,7 @@ const NavbarCollapse: React.FC<IProps> = ({ menuItems, styles }) => {
         <NavbarCollapseLinksGroup {...item} key={i} />
       ) : (
         <Tooltip label={t(`sideBar.${item.label}`)} position="right" key={i}>
-          <Link href={item.href ?? '/'}>
+          <Link href={item.href ?? '/'} prefetch={false}>
             <ActionIcon
               radius="md"
               w={40}

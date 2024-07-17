@@ -19,7 +19,11 @@ const NavbarCollapseLinksGroupLevel2: React.FC<IMenuItem> = ({
 
   const renderItems = subMenu?.map((item, i) => {
     return (
-      <Link href={item.href ?? ''} key={`${item.label} + ${i}`}>
+      <Link
+        href={item.href ?? ''}
+        key={`${item.label} + ${i}`}
+        prefetch={false}
+      >
         <Menu.Item
           className={cx(classes.item, {
             [classes.linkActive]: item.href === cleanedPath2,
