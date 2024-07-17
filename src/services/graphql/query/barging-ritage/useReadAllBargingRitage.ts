@@ -138,6 +138,7 @@ export const useReadAllRitageBarging = ({
       },
       onCompleted,
       fetchPolicy,
+      notifyOnNetworkStatusChange: true,
     }
   );
 

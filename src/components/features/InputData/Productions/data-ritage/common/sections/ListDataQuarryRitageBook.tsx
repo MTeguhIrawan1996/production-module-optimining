@@ -634,6 +634,8 @@ const ListDataQuarryRitageBook = () => {
     return true;
   };
 
+  const isApply = filterBadgeValue && filterBadgeValue?.length >= 1;
+
   return (
     <DashboardCard
       addButton={
@@ -646,22 +648,26 @@ const ListDataQuarryRitageBook = () => {
       }
       otherButton={
         <DownloadButtonRitage
-          ritage="Quarry"
+          ritage="quarry"
           label="Download"
           reslover={downloadOreProductionValidation}
-          period={period || undefined}
-          defaultValuesState={{
-            period: period || 'DATE_RANGE',
-            startDate: startDate || null,
-            endDate: endDate || null,
-            year: year ? `${year}` : null,
-            month: month ? `${month}` : null,
-            week: week ? `${week}` : null,
-            shiftId: filterShift || null,
-            heavyEquipmentCode: filtercompanyHeavyEquipmentId || null,
-            ritageStatus: filterStatus,
-            locationId: locationId || null,
-          }}
+          period={isApply ? period || undefined : undefined}
+          defaultValuesState={
+            isApply
+              ? {
+                  period: period || 'DATE_RANGE',
+                  startDate: startDate || null,
+                  endDate: endDate || null,
+                  year: year ? `${year}` : null,
+                  month: month ? `${month}` : null,
+                  week: week ? `${week}` : null,
+                  shiftId: filterShift || null,
+                  heavyEquipmentCode: filtercompanyHeavyEquipmentId || null,
+                  ritageStatus: filterStatus,
+                  locationId: locationId || null,
+                }
+              : undefined
+          }
         />
       }
       filterBadge={{

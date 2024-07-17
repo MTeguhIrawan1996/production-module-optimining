@@ -1,6 +1,9 @@
 import { z } from 'zod';
 
-import { IDownloadRitageProductionValues } from '@/services/graphql/mutation/download/useDownloadTask';
+import {
+  IDownloadOreProductionValues,
+  IDownloadRitageCommonValue,
+} from '@/services/graphql/mutation/download/useDownloadTask';
 import { IMutationRitageOre } from '@/services/restapi/ritage-productions/ore/useCreateRitageOre';
 import {
   zDateValidation,
@@ -77,12 +80,13 @@ export const ritageOreMutationValidation: z.ZodType<IMutationRitageOre> = z
     }
   });
 
-export const downloadOreProductionValidation: z.ZodType<IDownloadRitageProductionValues> =
-  z
-    .object({
-      locationId: zOptionalString.nullable(),
-    })
-    .merge(commonDownloadRitageValidation)
-    .superRefine((arg, ctx) => {
-      validatePeriod(arg, ctx);
-    });
+export const downloadOreProductionValidation: z.ZodType<
+  IDownloadRitageCommonValue & IDownloadOreProductionValues
+> = z
+  .object({
+    locationId: zOptionalString.nullable(),
+  })
+  .merge(commonDownloadRitageValidation)
+  .superRefine((arg, ctx) => {
+    validatePeriod(arg, ctx);
+  });

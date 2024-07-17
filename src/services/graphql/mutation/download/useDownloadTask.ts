@@ -37,6 +37,10 @@ export interface IDownloadFrontProductionValues {
 export interface IDownloadOreProductionValues {
   locationId: string | null;
 }
+export interface IDownloadBargingProductionValues {
+  stockpileId: string | null;
+  domeId: string | null;
+}
 export interface IDownloadRitageCommonValue {
   period: string | null;
   startDate?: Date | null;
@@ -49,7 +53,8 @@ export interface IDownloadRitageCommonValue {
   ritageStatus: string | null;
 }
 export type IDownloadRitageProductionValues = IDownloadRitageCommonValue &
-  IDownloadOreProductionValues;
+  IDownloadOreProductionValues &
+  IDownloadBargingProductionValues;
 
 type IDownloadTaskRequest = {
   entity: string | null;
@@ -63,10 +68,13 @@ type IDownloadTaskRequest = {
   };
   columnFilter: {
     shiftId?: string | null;
-    pitId?: string | null;
-    materialId?: string | null;
     isRitageProblematic?: boolean | null;
     companyHeavyEquipmentId?: string | null;
+    pitId?: string | null;
+    fromPitId?: string | null;
+    stockpileId?: string | null;
+    domeId?: string | null;
+    materialId?: string | null;
   };
 };
 

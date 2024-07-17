@@ -1,16 +1,22 @@
+import {
+  IDownloadBargingProductionValues,
+  IDownloadOreProductionValues,
+} from '@/services/graphql/mutation/download/useDownloadTask';
+
+type IDefaultValue =
+  | IDownloadOreProductionValues
+  | IDownloadBargingProductionValues;
+
+type ICommon = {
+  label: string;
+  entity: string;
+  defaultValues: IDefaultValue;
+};
 export interface IRitageConditional {
-  Ore: {
-    entity: string;
-    locationLabel: string;
-  };
-  OB: {
-    entity: string;
-    locationLabel: string;
-  };
-  Quarry: {
-    entity: string;
-    locationLabel: string;
-  };
+  ore: ICommon;
+  ob: ICommon;
+  quarry: ICommon;
+  barging: ICommon;
 }
 
 export type RitageType = keyof IRitageConditional;

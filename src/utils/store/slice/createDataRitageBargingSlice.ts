@@ -11,7 +11,14 @@ type IDataRitageBargingState = {
 export type IDataRitageBargingSliceValue = {
   dataRitageBargingState: Partial<
     IDataRitageBargingState & {
-      filterDate: Date | null;
+      period: string | null;
+      startDate: Date | null;
+      endDate: Date | null;
+      year: number | null;
+      week: number | null;
+      month: number | null;
+      stockpileId: string | null;
+      domeId: string | null;
       filterStatus: string | null;
       filterShift: string | null;
       filtercompanyHeavyEquipmentId: string | null;
@@ -35,7 +42,14 @@ const initialState: IDataRitageBargingSliceValue = {
   dataRitageBargingState: {
     page: 1,
     search: '',
-    filterDate: null,
+    period: null,
+    startDate: null,
+    endDate: null,
+    year: null,
+    month: null,
+    week: null,
+    stockpileId: null,
+    domeId: null,
     filterStatus: null,
     filterShift: null,
     filtercompanyHeavyEquipmentId: null,
