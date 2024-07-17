@@ -325,7 +325,7 @@ const ListDataBargingRitageBook = () => {
       label: 'shift',
       name: 'shiftId',
       searchable: false,
-      skip: tabs !== 'quarry',
+      skip: tabs !== 'barging',
       onChange: (value) => {
         setDataRitageBargingState({
           dataRitageBargingState: {
@@ -338,7 +338,7 @@ const ListDataBargingRitageBook = () => {
     const heavyEquipmentItem = globalSelectHeavyEquipmentNative({
       name: 'heavyEquipmentCode',
       label: 'heavyEquipmentCode',
-      skip: tabs !== 'querry',
+      skip: tabs !== 'barging',
       categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       onChange: (value) => {
         setDataRitageBargingState({

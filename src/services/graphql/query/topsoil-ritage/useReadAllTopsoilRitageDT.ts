@@ -81,6 +81,7 @@ export const useReadAllRitageTopsoilDT = ({
       },
       onCompleted,
       fetchPolicy,
+      notifyOnNetworkStatusChange: true,
     }
   );
 

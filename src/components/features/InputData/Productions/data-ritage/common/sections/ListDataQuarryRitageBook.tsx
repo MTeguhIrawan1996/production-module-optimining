@@ -337,7 +337,7 @@ const ListDataQuarryRitageBook = () => {
     const heavyEquipmentItem = globalSelectHeavyEquipmentNative({
       name: 'heavyEquipmentCode',
       label: 'heavyEquipmentCode',
-      skip: tabs !== 'querry',
+      skip: tabs !== 'quarry',
       categoryId: `${process.env.NEXT_PUBLIC_DUMP_TRUCK_ID}`,
       onChange: (value) => {
         setDataRitageQuarryState({

@@ -95,6 +95,11 @@ export default function DownloadButtonRitage<T>({
       entity: 'RITAGE_BARGING',
       defaultValues: bargingDefaultValues,
     },
+    topsoil: {
+      label: 'Topsoil',
+      entity: 'RITAGE_TOPSOIL',
+      defaultValues: undefined,
+    },
   };
 
   const defaultValues = {
@@ -107,7 +112,9 @@ export default function DownloadButtonRitage<T>({
     shiftId: null,
     heavyEquipmentCode: null,
     ritageStatus: null,
-    ...ritageConditional[ritage].defaultValues,
+    ...(ritageConditional[ritage].defaultValues
+      ? ritageConditional[ritage].defaultValues
+      : {}),
   };
 
   const methods = useForm<IDownloadRitageProductionValues>({
