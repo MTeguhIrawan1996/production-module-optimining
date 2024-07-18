@@ -7,35 +7,42 @@ import {
 
 import { IShiftsData } from '@/services/graphql/query/shift/useReadAllShiftMaster';
 
-import { GResponse, IGlobalMetaRequest, IStatus } from '@/types/global';
+import {
+  GResponse,
+  IGlobalMetaRequest,
+  IGlobalTimeFIlter,
+  IStatus,
+} from '@/types/global';
 
 export const READ_ALL_HEAVY_EQUIPMENT_PRODUCTION = gql`
   query ReadAllHeavyEquipmentProduction(
     $page: Int
     $limit: Int
     $search: String
-    $date: String
     $orderBy: String
     $orderDir: String
     $shiftId: String
-    $statusId: String
-    $foremanId: String
-    $operatorId: String
+    # $statusId: String
+    # $foremanId: String
+    # $operatorId: String
     $companyHeavyEquipmentId: String
+    $timeFilterType: TimeFilterTypeDownloadEnum
+    $timeFilter: JSON
   ) {
     heavyEquipmentDatas(
       findAllHeavyEquipmentDataInput: {
         page: $page
         limit: $limit
-        date: $date
         orderBy: $orderBy
         search: $search
         orderDir: $orderDir
         shiftId: $shiftId
-        statusId: $statusId
-        foremanId: $foremanId
-        operatorId: $operatorId
+        # statusId: $statusId
+        # foremanId: $foremanId
+        # operatorId: $operatorId
         companyHeavyEquipmentId: $companyHeavyEquipmentId
+        timeFilterType: $timeFilterType
+        timeFilter: $timeFilter
       }
     ) {
       meta {
@@ -135,14 +142,12 @@ interface IReadAllHeavyEquipmentProductionResponse {
   heavyEquipmentDatas: GResponse<IReadAllHeavyEquipmentProductionData>;
 }
 
-interface IReadAllHeavyEquipmentProductionRequest
-  extends Partial<IGlobalMetaRequest> {
-  date?: string | null;
-  shiftId?: string | null;
-  statusId?: string | null;
-  foremanId?: string | null;
-  operatorId?: string | null;
-  companyHeavyEquipmentId?: string | null;
+export interface IReadAllHeavyEquipmentProductionRequest
+  extends IGlobalMetaRequest {
+  shiftId: string | null;
+  companyHeavyEquipmentId: string | null;
+  timeFilterType: 'DATE_RANGE' | 'PERIOD' | null;
+  timeFilter: Partial<IGlobalTimeFIlter>;
 }
 
 export const useReadAllHeavyEquipmentProduction = ({
@@ -151,7 +156,7 @@ export const useReadAllHeavyEquipmentProduction = ({
   skip,
   fetchPolicy = 'cache-first',
 }: {
-  variables?: IReadAllHeavyEquipmentProductionRequest;
+  variables?: Partial<IReadAllHeavyEquipmentProductionRequest>;
   onCompleted?: (data: IReadAllHeavyEquipmentProductionResponse) => void;
   skip?: boolean;
   fetchPolicy?: WatchQueryFetchPolicy;
@@ -162,7 +167,7 @@ export const useReadAllHeavyEquipmentProduction = ({
     refetch,
   } = useQuery<
     IReadAllHeavyEquipmentProductionResponse,
-    IReadAllHeavyEquipmentProductionRequest
+    Partial<IReadAllHeavyEquipmentProductionRequest>
   >(READ_ALL_HEAVY_EQUIPMENT_PRODUCTION, {
     variables: variables,
     skip: skip,
@@ -171,6 +176,7 @@ export const useReadAllHeavyEquipmentProduction = ({
     },
     onCompleted,
     fetchPolicy,
+    notifyOnNetworkStatusChange: true,
   });
 
   return {

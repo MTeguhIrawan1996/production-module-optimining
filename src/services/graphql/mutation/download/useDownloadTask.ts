@@ -23,16 +23,23 @@ export const MUTATION_DOWNLOAD_TASK = gql`
   }
 `;
 
-export interface IDownloadFrontProductionValues {
+export interface ICommonTimeFilter {
   period: string | null;
   startDate?: Date | null;
   endDate?: Date | null;
   year: string | null;
   month: string | null;
   week: string | null;
+}
+
+export interface IDownloadFrontProductionValues extends ICommonTimeFilter {
   locationId: string | null;
   shiftId: string | null;
   materialId: string | null;
+}
+export interface IDownloadHEProductionValues extends ICommonTimeFilter {
+  shiftId: string | null;
+  companyHeavyEquipmentId: string | null;
 }
 
 export interface IDownloadOreProductionValues {
@@ -42,13 +49,7 @@ export interface IDownloadBargingProductionValues {
   stockpileId: string | null;
   domeId: string | null;
 }
-export interface IDownloadRitageCommonValue {
-  period: string | null;
-  startDate?: Date | null;
-  endDate?: Date | null;
-  year: string | null;
-  month: string | null;
-  week: string | null;
+export interface IDownloadRitageCommonValue extends ICommonTimeFilter {
   shiftId: string | null;
   heavyEquipmentCode: string | null;
   ritageStatus: string | null;

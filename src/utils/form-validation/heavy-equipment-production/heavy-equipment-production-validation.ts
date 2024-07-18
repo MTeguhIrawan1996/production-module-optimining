@@ -1,7 +1,10 @@
 import { z } from 'zod';
 
+import { IDownloadHEProductionValues } from '@/services/graphql/mutation/download/useDownloadTask';
 import { IMutationHeavyEquipmentDataProdValues } from '@/services/graphql/mutation/heavy-equipment-production/useCreateHeavyEquipmentProduction';
 import {
+  validatePeriod,
+  zDateOptionalValidation,
   zDateValidation,
   zOptionalNumber,
   zOptionalString,
@@ -77,4 +80,20 @@ export const heavyEquipmentProductionMutationValidation: z.ZodType<IMutationHeav
         }
         return z.NEVER; // The return value is not used, but we need to return something to satisfy the typing
       }
+    });
+
+export const downloadHEProductionValidation: z.ZodType<IDownloadHEProductionValues> =
+  z
+    .object({
+      period: zRequiredSelectInput,
+      startDate: zDateOptionalValidation,
+      endDate: zDateOptionalValidation,
+      year: zOptionalString.nullable(),
+      month: zOptionalString.nullable(),
+      week: zOptionalString.nullable(),
+      shiftId: zOptionalString.nullable(),
+      companyHeavyEquipmentId: zOptionalString.nullable(),
+    })
+    .superRefine((arg, ctx) => {
+      validatePeriod(arg, ctx);
     });
