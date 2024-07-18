@@ -101,9 +101,9 @@ interface IQuarryRitagesResponse {
 
 export interface IQuarryRitagesRequest
   extends Omit<IGlobalMetaRequest, 'search'> {
-  shiftId?: string | null;
-  isRitageProblematic?: boolean | null;
-  companyHeavyEquipmentId?: string | null;
+  shiftId: string | null;
+  isRitageProblematic: boolean | null;
+  companyHeavyEquipmentId: string | null;
   fromPitId: string | null;
   timeFilterType: 'DATE_RANGE' | 'PERIOD' | null;
   timeFilter: Partial<IGlobalTimeFIlter>;

@@ -22,7 +22,10 @@ import ListDataRitageDumptruckBook from '@/components/features/InputData/Product
 
 import { useDeleteMovingRitage } from '@/services/graphql/mutation/moving-ritage/useDeleteMovingRitage';
 import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
-import { useReadAllRitageMoving } from '@/services/graphql/query/moving-ritage/useReadAllMovingRitage';
+import {
+  IReadAllRitageMovingRequest,
+  useReadAllRitageMoving,
+} from '@/services/graphql/query/moving-ritage/useReadAllMovingRitage';
 import { useReadAllRitageMovingDT } from '@/services/graphql/query/moving-ritage/useReadAllMovingRitageDT';
 import {
   globalDateNative,
@@ -100,17 +103,29 @@ const ListDataMovingRitageBook = () => {
 
   /* #   /**=========== Query =========== */
 
-  const defaultRefatchMoving = {
-    shiftId: filterShift === '' ? null : filterShift,
+  const startDateString = formatDate(startDate || null, 'YYYY-MM-DD');
+  const endDateString = formatDate(endDate || null, 'YYYY-MM-DD');
+
+  const defaultRefatchMoving: Partial<IReadAllRitageMovingRequest> = {
+    shiftId: filterShift || null,
     isRitageProblematic: filterStatus
       ? filterStatus === 'true'
         ? false
         : true
       : null,
-    companyHeavyEquipmentId:
-      filtercompanyHeavyEquipmentId === ''
-        ? null
-        : filtercompanyHeavyEquipmentId,
+    companyHeavyEquipmentId: filtercompanyHeavyEquipmentId || null,
+    timeFilterType: period
+      ? period === 'DATE_RANGE'
+        ? period
+        : 'PERIOD'
+      : undefined,
+    timeFilter: {
+      startDate: startDateString || undefined,
+      endDate: endDateString || undefined,
+      year: year ? Number(year) : undefined,
+      week: week ? Number(week) : undefined,
+      month: month ? Number(month) : undefined,
+    },
   };
 
   const {
@@ -668,6 +683,12 @@ const ListDataMovingRitageBook = () => {
             setDataRitageMovingState({
               dataRitageMovingState: {
                 page: 1,
+                period: null,
+                startDate: null,
+                endDate: null,
+                year: null,
+                month: null,
+                week: null,
                 filterBadgeValue: null,
                 filtercompanyHeavyEquipmentId: null,
                 filterShift: null,
@@ -679,7 +700,8 @@ const ListDataMovingRitageBook = () => {
               shiftId: null,
               isRitageProblematic: null,
               companyHeavyEquipmentId: null,
-              date: null,
+              timeFilter: undefined,
+              timeFilterType: undefined,
             });
           },
         },

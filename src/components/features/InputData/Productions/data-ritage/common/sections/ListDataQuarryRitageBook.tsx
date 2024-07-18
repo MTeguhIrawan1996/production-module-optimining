@@ -676,6 +676,13 @@ const ListDataQuarryRitageBook = () => {
             setDataRitageQuarryState({
               dataRitageQuarryState: {
                 page: 1,
+                period: null,
+                startDate: null,
+                endDate: null,
+                year: null,
+                month: null,
+                week: null,
+                fromPitId: null,
                 filterBadgeValue: null,
                 filtercompanyHeavyEquipmentId: null,
                 filterShift: null,
@@ -687,6 +694,9 @@ const ListDataQuarryRitageBook = () => {
               shiftId: null,
               isRitageProblematic: null,
               companyHeavyEquipmentId: null,
+              fromPitId: null,
+              timeFilter: undefined,
+              timeFilterType: undefined,
             });
           },
         },

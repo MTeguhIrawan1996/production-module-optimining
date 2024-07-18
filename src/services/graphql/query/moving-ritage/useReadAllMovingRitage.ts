@@ -12,6 +12,7 @@ import {
   GResponse,
   ICommonRitagesData,
   IGlobalMetaRequest,
+  IGlobalTimeFIlter,
 } from '@/types/global';
 
 export const READ_ALL_RITAGE_MOVING = gql`
@@ -24,6 +25,8 @@ export const READ_ALL_RITAGE_MOVING = gql`
     $shiftId: String
     $companyHeavyEquipmentId: String
     $isRitageProblematic: Boolean
+    $timeFilterType: TimeFilterTypeDownloadEnum
+    $timeFilter: JSON
   ) {
     movingRitages(
       findAllMovingRitageInput: {
@@ -35,6 +38,8 @@ export const READ_ALL_RITAGE_MOVING = gql`
         shiftId: $shiftId
         companyHeavyEquipmentId: $companyHeavyEquipmentId
         isRitageProblematic: $isRitageProblematic
+        timeFilterType: $timeFilterType
+        timeFilter: $timeFilter
       }
     ) {
       meta {
@@ -106,12 +111,13 @@ interface IReadAllRitageMovingResponse {
   movingRitages: GResponse<ICommonRitagesData<IOtherProps>>;
 }
 
-interface IReadAllRitageMovingRequest
-  extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
-  date?: string | null;
-  shiftId?: string | null;
-  isRitageProblematic?: boolean | null;
-  companyHeavyEquipmentId?: string | null;
+export interface IReadAllRitageMovingRequest
+  extends Omit<IGlobalMetaRequest, 'search'> {
+  shiftId: string | null;
+  isRitageProblematic: boolean | null;
+  companyHeavyEquipmentId: string | null;
+  timeFilterType: 'DATE_RANGE' | 'PERIOD' | null;
+  timeFilter: Partial<IGlobalTimeFIlter>;
 }
 
 export const useReadAllRitageMoving = ({
@@ -120,7 +126,7 @@ export const useReadAllRitageMoving = ({
   skip,
   fetchPolicy = 'cache-first',
 }: {
-  variables?: IReadAllRitageMovingRequest;
+  variables?: Partial<IReadAllRitageMovingRequest>;
   onCompleted?: (data: IReadAllRitageMovingResponse) => void;
   skip?: boolean;
   fetchPolicy?: WatchQueryFetchPolicy;
@@ -129,19 +135,19 @@ export const useReadAllRitageMoving = ({
     data: movingRitagesData,
     loading: movingRitagesDataLoading,
     refetch,
-  } = useQuery<IReadAllRitageMovingResponse, IReadAllRitageMovingRequest>(
-    READ_ALL_RITAGE_MOVING,
-    {
-      variables: variables,
-      skip: skip,
-      onError: (err: ApolloError) => {
-        return err;
-      },
-      onCompleted,
-      fetchPolicy,
-      notifyOnNetworkStatusChange: true,
-    }
-  );
+  } = useQuery<
+    IReadAllRitageMovingResponse,
+    Partial<IReadAllRitageMovingRequest>
+  >(READ_ALL_RITAGE_MOVING, {
+    variables: variables,
+    skip: skip,
+    onError: (err: ApolloError) => {
+      return err;
+    },
+    onCompleted,
+    fetchPolicy,
+    notifyOnNetworkStatusChange: true,
+  });
 
   return {
     movingRitagesData: movingRitagesData?.movingRitages.data,

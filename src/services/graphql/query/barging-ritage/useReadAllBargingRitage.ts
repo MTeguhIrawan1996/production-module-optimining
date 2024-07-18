@@ -13,6 +13,7 @@ import {
   GResponse,
   ICommonRitagesData,
   IGlobalMetaRequest,
+  IGlobalTimeFIlter,
 } from '@/types/global';
 
 export const READ_ALL_RITAGE_BARGING = gql`
@@ -23,8 +24,12 @@ export const READ_ALL_RITAGE_BARGING = gql`
     $orderBy: String
     $orderDir: String
     $shiftId: String
+    $stockpileId: String
+    $domeId: String
     $companyHeavyEquipmentId: String
     $isRitageProblematic: Boolean
+    $timeFilterType: TimeFilterTypeDownloadEnum
+    $timeFilter: JSON
   ) {
     bargingRitages(
       findAllBargingRitageInput: {
@@ -34,8 +39,12 @@ export const READ_ALL_RITAGE_BARGING = gql`
         orderBy: $orderBy
         orderDir: $orderDir
         shiftId: $shiftId
+        stockpileId: $stockpileId
+        domeId: $domeId
         companyHeavyEquipmentId: $companyHeavyEquipmentId
         isRitageProblematic: $isRitageProblematic
+        timeFilterType: $timeFilterType
+        timeFilter: $timeFilter
       }
     ) {
       meta {
@@ -105,12 +114,15 @@ interface IBargingRitagesResponse {
   bargingRitages: GResponse<ICommonRitagesData<IOtherProps>>;
 }
 
-interface IBargingRitagesRequest
-  extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
-  date?: string | null;
-  shiftId?: string | null;
-  isRitageProblematic?: boolean | null;
-  companyHeavyEquipmentId?: string | null;
+export interface IBargingRitagesRequest
+  extends Omit<IGlobalMetaRequest, 'search'> {
+  shiftId: string | null;
+  stockpileId: string | null;
+  domeId: string | null;
+  isRitageProblematic: boolean | null;
+  companyHeavyEquipmentId: string | null;
+  timeFilterType: 'DATE_RANGE' | 'PERIOD' | null;
+  timeFilter: Partial<IGlobalTimeFIlter>;
 }
 
 export const useReadAllRitageBarging = ({
@@ -119,7 +131,7 @@ export const useReadAllRitageBarging = ({
   skip,
   fetchPolicy = 'cache-first',
 }: {
-  variables?: IBargingRitagesRequest;
+  variables?: Partial<IBargingRitagesRequest>;
   onCompleted?: (data: IBargingRitagesResponse) => void;
   skip?: boolean;
   fetchPolicy?: WatchQueryFetchPolicy;
@@ -128,7 +140,7 @@ export const useReadAllRitageBarging = ({
     data: bargingRitagesData,
     loading: bargingRitagesDataLoading,
     refetch,
-  } = useQuery<IBargingRitagesResponse, IBargingRitagesRequest>(
+  } = useQuery<IBargingRitagesResponse, Partial<IBargingRitagesRequest>>(
     READ_ALL_RITAGE_BARGING,
     {
       variables: variables,

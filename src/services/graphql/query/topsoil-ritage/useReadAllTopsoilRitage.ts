@@ -12,6 +12,7 @@ import {
   GResponse,
   ICommonRitagesData,
   IGlobalMetaRequest,
+  IGlobalTimeFIlter,
 } from '@/types/global';
 
 export const READ_ALL_RITAGE_TOPSOIL = gql`
@@ -23,6 +24,8 @@ export const READ_ALL_RITAGE_TOPSOIL = gql`
     $shiftId: String
     $companyHeavyEquipmentId: String
     $isRitageProblematic: Boolean
+    $timeFilterType: TimeFilterTypeDownloadEnum
+    $timeFilter: JSON
   ) {
     topsoilRitages(
       findAllTopsoilRitageInput: {
@@ -33,6 +36,8 @@ export const READ_ALL_RITAGE_TOPSOIL = gql`
         shiftId: $shiftId
         companyHeavyEquipmentId: $companyHeavyEquipmentId
         isRitageProblematic: $isRitageProblematic
+        timeFilterType: $timeFilterType
+        timeFilter: $timeFilter
       }
     ) {
       meta {
@@ -87,11 +92,13 @@ interface ITopsoilRitagesResponse {
   topsoilRitages: GResponse<ICommonRitagesData<IOtherQuaryRitgaeProps>>;
 }
 
-interface ITopsoilRitagesRequest
-  extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
-  shiftId?: string | null;
-  isRitageProblematic?: boolean | null;
-  companyHeavyEquipmentId?: string | null;
+export interface ITopsoilRitagesRequest
+  extends Omit<IGlobalMetaRequest, 'search'> {
+  shiftId: string | null;
+  isRitageProblematic: boolean | null;
+  companyHeavyEquipmentId: string | null;
+  timeFilterType: 'DATE_RANGE' | 'PERIOD' | null;
+  timeFilter: Partial<IGlobalTimeFIlter>;
 }
 
 export const useReadAllRitageTopsoil = ({
@@ -101,7 +108,7 @@ export const useReadAllRitageTopsoil = ({
   skip,
   fetchPolicy = 'cache-first',
 }: {
-  variables?: ITopsoilRitagesRequest;
+  variables?: Partial<ITopsoilRitagesRequest>;
   onCompleted?: (data: ITopsoilRitagesResponse) => void;
   onError?: ({ graphQLErrors }: ApolloError) => void;
   skip?: boolean;
@@ -111,7 +118,7 @@ export const useReadAllRitageTopsoil = ({
     data: topsoilRitagesData,
     loading: topsoilRitagesDataLoading,
     refetch,
-  } = useQuery<ITopsoilRitagesResponse, ITopsoilRitagesRequest>(
+  } = useQuery<ITopsoilRitagesResponse, Partial<ITopsoilRitagesRequest>>(
     READ_ALL_RITAGE_TOPSOIL,
     {
       variables: variables,

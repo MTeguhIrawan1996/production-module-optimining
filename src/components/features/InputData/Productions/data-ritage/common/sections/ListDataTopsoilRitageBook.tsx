@@ -22,7 +22,10 @@ import ListDataRitageDumptruckBook from '@/components/features/InputData/Product
 
 import { useDeleteTopsoilRitage } from '@/services/graphql/mutation/topsoil-ritage/useDeleteTopsoilRitage';
 import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
-import { useReadAllRitageTopsoil } from '@/services/graphql/query/topsoil-ritage/useReadAllTopsoilRitage';
+import {
+  ITopsoilRitagesRequest,
+  useReadAllRitageTopsoil,
+} from '@/services/graphql/query/topsoil-ritage/useReadAllTopsoilRitage';
 import { useReadAllRitageTopsoilDT } from '@/services/graphql/query/topsoil-ritage/useReadAllTopsoilRitageDT';
 import {
   globalDateNative,
@@ -101,17 +104,29 @@ const ListDataTopsoilRitageBook = () => {
   const isPermissionRead = permissions?.includes('read-topsoil-ritage');
   /* #   /**=========== Query =========== */
 
-  const defaultRefatchTopsoil = {
-    shiftId: filterShift === '' ? null : filterShift,
+  const startDateString = formatDate(startDate || null, 'YYYY-MM-DD');
+  const endDateString = formatDate(endDate || null, 'YYYY-MM-DD');
+
+  const defaultRefatchTopsoil: Partial<ITopsoilRitagesRequest> = {
+    shiftId: filterShift || null,
     isRitageProblematic: filterStatus
       ? filterStatus === 'true'
         ? false
         : true
       : null,
-    companyHeavyEquipmentId:
-      filtercompanyHeavyEquipmentId === ''
-        ? null
-        : filtercompanyHeavyEquipmentId,
+    companyHeavyEquipmentId: filtercompanyHeavyEquipmentId || null,
+    timeFilterType: period
+      ? period === 'DATE_RANGE'
+        ? period
+        : 'PERIOD'
+      : undefined,
+    timeFilter: {
+      startDate: startDateString || undefined,
+      endDate: endDateString || undefined,
+      year: year ? Number(year) : undefined,
+      week: week ? Number(week) : undefined,
+      month: month ? Number(month) : undefined,
+    },
   };
 
   const {
@@ -651,6 +666,12 @@ const ListDataTopsoilRitageBook = () => {
             setDataRitageTopsoilState({
               dataRitageTopsoilState: {
                 page: 1,
+                period: null,
+                startDate: null,
+                endDate: null,
+                year: null,
+                month: null,
+                week: null,
                 filterBadgeValue: null,
                 filtercompanyHeavyEquipmentId: null,
                 filterShift: null,
@@ -662,6 +683,8 @@ const ListDataTopsoilRitageBook = () => {
               shiftId: null,
               isRitageProblematic: null,
               companyHeavyEquipmentId: null,
+              timeFilter: undefined,
+              timeFilterType: undefined,
             });
           },
         },

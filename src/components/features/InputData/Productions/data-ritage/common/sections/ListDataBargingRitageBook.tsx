@@ -22,7 +22,10 @@ import ListDataRitageDumptruckBook from '@/components/features/InputData/Product
 
 import { useDeleteBargingRitage } from '@/services/graphql/mutation/barging-ritage/useDeleteBargingRitage';
 import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
-import { useReadAllRitageBarging } from '@/services/graphql/query/barging-ritage/useReadAllBargingRitage';
+import {
+  IBargingRitagesRequest,
+  useReadAllRitageBarging,
+} from '@/services/graphql/query/barging-ritage/useReadAllBargingRitage';
 import { useReadAllRitageBargingDT } from '@/services/graphql/query/barging-ritage/useReadAllBargingRitageDT';
 import {
   globalDateNative,
@@ -102,18 +105,32 @@ const ListDataBargingRitageBook = () => {
   const isPermissionDelete = permissions?.includes('delete-barging-ritage');
   const isPermissionRead = permissions?.includes('read-barging-ritage');
 
+  const startDateString = formatDate(startDate || null, 'YYYY-MM-DD');
+  const endDateString = formatDate(endDate || null, 'YYYY-MM-DD');
+
   /* #   /**=========== Query =========== */
-  const defaultRefatchBarging = {
-    shiftId: filterShift === '' ? null : filterShift,
+  const defaultRefatchBarging: Partial<IBargingRitagesRequest> = {
+    shiftId: filterShift || null,
     isRitageProblematic: filterStatus
       ? filterStatus === 'true'
         ? false
         : true
       : null,
-    companyHeavyEquipmentId:
-      filtercompanyHeavyEquipmentId === ''
-        ? null
-        : filtercompanyHeavyEquipmentId,
+    companyHeavyEquipmentId: filtercompanyHeavyEquipmentId || null,
+    stockpileId: stockpileId || null,
+    domeId: stockpileId || null,
+    timeFilterType: period
+      ? period === 'DATE_RANGE'
+        ? period
+        : 'PERIOD'
+      : undefined,
+    timeFilter: {
+      startDate: startDateString || undefined,
+      endDate: endDateString || undefined,
+      year: year ? Number(year) : undefined,
+      week: week ? Number(week) : undefined,
+      month: month ? Number(month) : undefined,
+    },
   };
 
   const {
@@ -706,6 +723,14 @@ const ListDataBargingRitageBook = () => {
             setDataRitageBargingState({
               dataRitageBargingState: {
                 page: 1,
+                period: null,
+                startDate: null,
+                endDate: null,
+                year: null,
+                month: null,
+                week: null,
+                stockpileId: null,
+                domeId: null,
                 filterBadgeValue: null,
                 filtercompanyHeavyEquipmentId: null,
                 filterShift: null,
@@ -717,7 +742,10 @@ const ListDataBargingRitageBook = () => {
               shiftId: null,
               isRitageProblematic: null,
               companyHeavyEquipmentId: null,
-              date: null,
+              stockpileId: null,
+              domeId: null,
+              timeFilter: undefined,
+              timeFilterType: undefined,
             });
           },
         },

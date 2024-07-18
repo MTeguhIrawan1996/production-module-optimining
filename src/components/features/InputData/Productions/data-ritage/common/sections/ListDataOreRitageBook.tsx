@@ -108,16 +108,13 @@ const ListDataOreRitageBook = () => {
   const endDateString = formatDate(endDate || null, 'YYYY-MM-DD');
 
   const defaultRefatchOre: Partial<IOreRitagesRequest> = {
-    shiftId: filterShift === '' ? null : filterShift,
+    shiftId: filterShift || null,
     isRitageProblematic: filterStatus
       ? filterStatus === 'true'
         ? false
         : true
       : null,
-    companyHeavyEquipmentId:
-      filtercompanyHeavyEquipmentId === ''
-        ? null
-        : filtercompanyHeavyEquipmentId,
+    companyHeavyEquipmentId: filtercompanyHeavyEquipmentId || null,
     fromPitId: fromPitId || null,
     timeFilterType: period
       ? period === 'DATE_RANGE'
@@ -695,6 +692,13 @@ const ListDataOreRitageBook = () => {
             setDataRitageOreState({
               dataRitageOreState: {
                 page: 1,
+                period: null,
+                startDate: null,
+                endDate: null,
+                year: null,
+                month: null,
+                week: null,
+                fromPitId: null,
                 filterBadgeValue: null,
                 filtercompanyHeavyEquipmentId: null,
                 filterShift: null,
@@ -706,6 +710,9 @@ const ListDataOreRitageBook = () => {
               shiftId: null,
               isRitageProblematic: null,
               companyHeavyEquipmentId: null,
+              fromPitId: null,
+              timeFilter: undefined,
+              timeFilterType: undefined,
             });
           },
         },
