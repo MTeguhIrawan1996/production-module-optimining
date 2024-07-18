@@ -1,3 +1,4 @@
+import { Text } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -8,20 +9,30 @@ import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
+  GlobalAlert,
   GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
 import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
+import DownloadButtonWeatherProd from '@/components/features/InputData/Productions/weather/common/elements/DownloadButtonHeavyEquipmentProd';
 
 import { useDeleteWeatherProduction } from '@/services/graphql/mutation/weather-production/useDeleteWeatherProduction';
-import { useReadAllWeatherProduction } from '@/services/graphql/query/weather-production/useReadAllWeatherProduction';
 import {
+  IReadAllWeatherProductionRequest,
+  useReadAllWeatherProduction,
+} from '@/services/graphql/query/weather-production/useReadAllWeatherProduction';
+import {
+  globalDateNative,
+  globalSelectMonthNative,
+  globalSelectPeriodNative,
+  globalSelectShiftNative,
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
 import { formatDate, secondsDuration } from '@/utils/helper/dateFormat';
+import dayjs from '@/utils/helper/dayjs.config';
 import { newNormalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
 import useControlPanel, {
   ISliceName,
@@ -40,7 +51,18 @@ const WeatherProductionBook = () => {
   );
   const [
     hasHydrated,
-    { page, search, week, year, filterBadgeValue },
+    {
+      page,
+      search,
+      period,
+      startDate,
+      endDate,
+      year,
+      month,
+      week,
+      shiftId,
+      filterBadgeValue,
+    },
     setWeatherProductionState,
   ] = useControlPanel(
     (state) => [
@@ -61,6 +83,26 @@ const WeatherProductionBook = () => {
   const isPermissionUpdate = permissions?.includes('update-weather-data');
   const isPermissionDelete = permissions?.includes('delete-weather-data');
   const isPermissionRead = permissions?.includes('read-weather-data');
+
+  const startDateString = formatDate(startDate || null, 'YYYY-MM-DD');
+  const endDateString = formatDate(endDate || null, 'YYYY-MM-DD');
+
+  const defaultRefetchWeatherProduction: Partial<IReadAllWeatherProductionRequest> =
+    {
+      shiftId: shiftId || null,
+      timeFilterType: period
+        ? period === 'DATE_RANGE'
+          ? period
+          : 'PERIOD'
+        : undefined,
+      timeFilter: {
+        startDate: startDateString || undefined,
+        endDate: endDateString || undefined,
+        year: year ? Number(year) : undefined,
+        week: week ? Number(week) : undefined,
+        month: month ? Number(month) : undefined,
+      },
+    };
 
   /* #   /**=========== Query =========== */
   const {
@@ -88,8 +130,7 @@ const WeatherProductionBook = () => {
   React.useEffect(() => {
     if (hasHydrated) {
       refetchWeatherData({
-        week,
-        year,
+        ...defaultRefetchWeatherProduction,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -131,44 +172,188 @@ const WeatherProductionBook = () => {
   };
 
   const filter = React.useMemo(() => {
-    const selectYearItem = globalSelectYearNative({
+    const maxEndDate = dayjs(startDate || undefined)
+      .add(dayjs.duration({ days: 29 }))
+      .toDate();
+    const periodItem = globalSelectPeriodNative({
+      label: 'period',
+      name: 'period',
+      clearable: true,
+      onChange: (value) => {
+        setWeatherProductionState({
+          period: value,
+          startDate: null,
+          endDate: null,
+          year: null,
+          month: null,
+          shiftId: null,
+        });
+      },
+      value: period,
+    });
+    const startDateItem = globalDateNative({
+      label: 'startDate2',
+      name: 'startDate',
+      placeholder: 'chooseDate',
+      clearable: true,
+      withAsterisk: true,
+      onChange: (value) => {
+        setWeatherProductionState({
+          startDate: value || null,
+          endDate: null,
+        });
+      },
+      value: startDate,
+    });
+    const endDateItem = globalDateNative({
+      label: 'endDate2',
+      name: 'endDate',
+      placeholder: 'chooseDate',
+      clearable: true,
+      disabled: !startDate,
+      withAsterisk: true,
+      maxDate: maxEndDate,
+      minDate: startDate || undefined,
+      onChange: (value) => {
+        setWeatherProductionState({
+          endDate: value || null,
+        });
+      },
+      value: endDate,
+    });
+
+    const yearItem = globalSelectYearNative({
       name: 'year',
+      withAsterisk: true,
       onChange: (value) => {
         setWeatherProductionState({
           year: value ? Number(value) : null,
+          month: null,
           week: null,
         });
       },
       value: year ? `${year}` : null,
     });
-    const selectWeekItem = globalSelectWeekNative({
-      name: 'week',
+
+    const monthItem = globalSelectMonthNative({
+      placeholder: 'month',
+      label: 'month',
+      name: 'month',
+      withAsterisk: true,
       disabled: !year,
-      value: week ? `${week}` : null,
+      value: month ? `${month}` : null,
+      onChange: (value) => {
+        setWeatherProductionState({
+          month: value ? Number(value) : null,
+          week: null,
+        });
+      },
+    });
+
+    const weekItem = globalSelectWeekNative({
+      placeholder: 'week',
+      label: 'week',
+      name: 'week',
+      searchable: false,
+      withAsterisk: true,
       year: year,
+      month: month,
+      value: week ? `${week}` : null,
       onChange: (value) => {
         setWeatherProductionState({
           week: value ? Number(value) : null,
         });
       },
     });
+    const shiftItem = globalSelectShiftNative({
+      label: 'shift',
+      name: 'shiftId',
+      searchable: false,
+      onChange: (value) => {
+        setWeatherProductionState({
+          shiftId: value,
+        });
+      },
+      value: shiftId,
+    });
+
+    const periodDateRange = [
+      {
+        selectItem: startDateItem,
+        col: 6,
+      },
+      {
+        selectItem: endDateItem,
+        col: 6,
+        otherElement: () => (
+          <GlobalAlert
+            description={
+              <Text fw={500} color="orange.4">
+                Maksimal Rentang Waktu Dalam 30 Hari
+              </Text>
+            }
+            color="orange.5"
+            mt="xs"
+            py={4}
+          />
+        ),
+      },
+    ];
+
+    const periodYear = [
+      {
+        selectItem: yearItem,
+        col: period === 'YEAR' ? 12 : 6,
+        prefix: 'Tahun:',
+      },
+    ];
+
+    const periodMoth = [
+      ...periodYear,
+      {
+        selectItem: monthItem,
+        col: 6,
+      },
+    ];
+
+    const periodWeek = [
+      ...periodMoth,
+      {
+        selectItem: weekItem,
+        col: 12,
+      },
+    ];
 
     const item: IFilterButtonProps = {
       filterDateWithSelect: [
         {
-          selectItem: selectYearItem,
-          col: 6,
-          prefix: 'Tahun:',
+          selectItem: periodItem,
+          col: 12,
+          prefix: 'Periode:',
         },
+        ...(period === 'DATE_RANGE' ? periodDateRange : []),
+        ...(period === 'YEAR' ? periodYear : []),
+        ...(period === 'MONTH' ? periodMoth : []),
+        ...(period === 'WEEK' ? periodWeek : []),
         {
-          selectItem: selectWeekItem,
-          col: 6,
+          selectItem: shiftItem,
+          col: 12,
         },
       ],
     };
     return item;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year, week]);
+  }, [
+    filterDataCommon,
+    endDate,
+    month,
+    period,
+    shiftId,
+    startDate,
+    week,
+    year,
+  ]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -314,6 +499,26 @@ const WeatherProductionBook = () => {
   ]);
   /* #endregion  /**======== RenderTable =========== */
 
+  const isDisabled = () => {
+    if (period === 'DATE_RANGE') {
+      return !endDate;
+    }
+
+    if (period === 'YEAR') {
+      return !year;
+    }
+    if (period === 'MONTH') {
+      return !month;
+    }
+    if (period === 'WEEK') {
+      return !week;
+    }
+
+    return true;
+  };
+
+  const isApply = filterBadgeValue && filterBadgeValue?.length >= 1;
+
   return (
     <DashboardCard
       addButton={
@@ -325,19 +530,44 @@ const WeatherProductionBook = () => {
             }
           : undefined
       }
+      otherButton={
+        <DownloadButtonWeatherProd
+          label="Download"
+          period={isApply ? period || undefined : undefined}
+          defaultValuesState={
+            isApply /* Check isAplly by filter badge length */
+              ? {
+                  period: period || 'DATE_RANGE',
+                  startDate: startDate || null,
+                  endDate: endDate || null,
+                  year: year ? `${year}` : null,
+                  month: month ? `${month}` : null,
+                  week: week ? `${week}` : null,
+                  shiftId: shiftId || null,
+                }
+              : undefined
+          }
+        />
+      }
       filterBadge={{
         resetButton: {
           onClick: () => {
             setWeatherProductionState({
               page: 1,
-              filterBadgeValue: null,
+              period: null,
+              startDate: null,
+              endDate: null,
               year: null,
+              month: null,
               week: null,
+              shiftId: null,
+              filterBadgeValue: null,
             });
             refetchWeatherData({
               page: 1,
-              year: null,
-              week: null,
+              shiftId: null,
+              timeFilter: undefined,
+              timeFilterType: undefined,
             });
           },
         },
@@ -346,20 +576,33 @@ const WeatherProductionBook = () => {
       filter={{
         filterDateWithSelect: filter.filterDateWithSelect,
         filterButton: {
-          disabled: week || year ? false : true,
+          disabled: isDisabled(),
           onClick: () => {
             refetchWeatherData({
               page: 1,
-              year,
-              week,
+              ...defaultRefetchWeatherProduction,
             });
             const badgeFilterValue = newNormalizedFilterBadge({
               filter: filter.filterDateWithSelect || [],
-              data: filterDataCommon,
+              data: filterDataCommon || [],
             });
+            const newStartDate = formatDate(startDate);
+            const newEndDate = formatDate(endDate);
+            const dateBadgeValue = [`${newStartDate} - ${newEndDate}`];
+
+            const rangePeriod =
+              period === 'DATE_RANGE'
+                ? [
+                    ...badgeFilterValue.slice(0, 1),
+                    ...dateBadgeValue,
+                    ...badgeFilterValue.slice(1),
+                  ]
+                : [];
+
             setWeatherProductionState({
               page: 1,
-              filterBadgeValue: badgeFilterValue || null,
+              filterBadgeValue:
+                rangePeriod.length >= 1 ? rangePeriod : badgeFilterValue,
             });
           },
         },

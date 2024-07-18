@@ -7,7 +7,12 @@ import {
 
 import { ILocationsData } from '@/services/graphql/query/location/useReadAllLocationMaster';
 
-import { GResponse, IGlobalMetaRequest, IStatus } from '@/types/global';
+import {
+  GResponse,
+  IGlobalMetaRequest,
+  IGlobalTimeFIlter,
+  IStatus,
+} from '@/types/global';
 
 export const READ_ALL_WEATHER_PRODUCTION = gql`
   query ReadAllWeatherProduction(
@@ -16,8 +21,9 @@ export const READ_ALL_WEATHER_PRODUCTION = gql`
     $search: String
     $orderBy: String
     $orderDir: String
-    $year: Float
-    $week: Float
+    $shiftId: String
+    $timeFilterType: TimeFilterTypeDownloadEnum
+    $timeFilter: JSON
   ) {
     weatherDatas(
       findAllWeatherDataInput: {
@@ -26,8 +32,9 @@ export const READ_ALL_WEATHER_PRODUCTION = gql`
         search: $search
         orderBy: $orderBy
         orderDir: $orderDir
-        year: $year
-        week: $week
+        shiftId: $shiftId
+        timeFilterType: $timeFilterType
+        timeFilter: $timeFilter
       }
     ) {
       meta {
@@ -76,9 +83,10 @@ interface IReadAllWeatherProductionResponse {
   weatherDatas: GResponse<IReadAllWeatherProductionData>;
 }
 
-interface IReadAllWeatherProductionRequest extends IGlobalMetaRequest {
-  year: number | null;
-  week: number | null;
+export interface IReadAllWeatherProductionRequest extends IGlobalMetaRequest {
+  shiftId: string | null;
+  timeFilterType: 'DATE_RANGE' | 'PERIOD' | null;
+  timeFilter: Partial<IGlobalTimeFIlter>;
 }
 
 export const useReadAllWeatherProduction = ({
@@ -107,6 +115,7 @@ export const useReadAllWeatherProduction = ({
     },
     onCompleted,
     fetchPolicy,
+    notifyOnNetworkStatusChange: true,
   });
 
   return {

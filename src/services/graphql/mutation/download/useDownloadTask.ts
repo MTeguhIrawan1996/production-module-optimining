@@ -41,6 +41,9 @@ export interface IDownloadHEProductionValues extends ICommonTimeFilter {
   shiftId: string | null;
   companyHeavyEquipmentId: string | null;
 }
+export interface IDownloadWeatherProductionValues extends ICommonTimeFilter {
+  shiftId: string | null;
+}
 
 export interface IDownloadOreProductionValues {
   fromPitId: string | null;
