@@ -141,7 +141,7 @@ const ListDataBargingRitageBook = () => {
   } = useReadAllRitageBargingDT({
     variables: {
       limit: 10,
-      page: pageDumptruck,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'barging',
@@ -155,7 +155,7 @@ const ListDataBargingRitageBook = () => {
   } = useReadAllRitageBarging({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'barging',
@@ -164,9 +164,11 @@ const ListDataBargingRitageBook = () => {
   React.useEffect(() => {
     if (hasHydrated) {
       refetchBargingRitages({
+        page,
         ...defaultRefatchBarging,
       });
       refetchBargingDumpTruckRitages({
+        page: pageDumptruck,
         date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
       });
     }
@@ -175,13 +177,13 @@ const ListDataBargingRitageBook = () => {
 
   const [executeDelete, { loading }] = useDeleteBargingRitage({
     onCompleted: () => {
-      refetchBargingRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setDataRitageBargingState({
         dataRitageBargingState: {
           page: 1,
         },
       });
+      refetchBargingRitages({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -214,6 +216,7 @@ const ListDataBargingRitageBook = () => {
         page,
       },
     });
+    refetchBargingRitages({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -473,7 +476,7 @@ const ListDataBargingRitageBook = () => {
         },
         {
           selectItem: domeItem,
-          col: 6,
+          col: 12,
         },
       ],
     };
@@ -799,6 +802,9 @@ const ListDataBargingRitageBook = () => {
             dataRitageBargingDumptruckState: {
               page: v,
             },
+          });
+          refetchBargingDumpTruckRitages({
+            page: v,
           });
         }}
         fetching={bargingDumpTruckRitagesDataLoading}

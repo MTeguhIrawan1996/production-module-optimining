@@ -38,6 +38,7 @@ const ReadCompanyHumanResourceBook = () => {
   const id = router.query.id as string;
 
   const [
+    hasHydrated,
     {
       page,
       search,
@@ -50,6 +51,7 @@ const ReadCompanyHumanResourceBook = () => {
     setHumanResourceCompanyState,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.humanResourceCompanyState,
       state.setHumanResourceCompanyState,
     ],
@@ -84,10 +86,9 @@ const ReadCompanyHumanResourceBook = () => {
   } = useReadAllCompanyEmploye({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
       orderBy: 'createdAt',
-      search: searchQuery === '' ? null : searchQuery,
       companyId: id,
     },
     skip: !router.isReady,
@@ -95,21 +96,20 @@ const ReadCompanyHumanResourceBook = () => {
 
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
-    useControlPanel.persist.onFinishHydration(
-      ({ humanResourceCompanyState }) => {
-        refetchEmployees({
-          isComplete: humanResourceCompanyState.formStatus
-            ? humanResourceCompanyState.formStatus === 'true'
-              ? true
-              : false
-            : null,
-          statusId: humanResourceCompanyState.employeStatusId,
-          positionId: humanResourceCompanyState.positionId,
-          divisionId: humanResourceCompanyState.divisionId,
-        });
-      }
-    );
-  }, [refetchEmployees]);
+  }, []);
+
+  React.useEffect(() => {
+    if (hasHydrated && router.isReady) {
+      refetchEmployees({
+        page: page,
+        isComplete: formStatus ? (formStatus === 'true' ? true : false) : null,
+        statusId: employeStatusId,
+        positionId: positionId,
+        divisionId: divisionId,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated, router]);
 
   const { employeeStatusesData } = useReadAllEmployeStatus({
     variables: {
@@ -141,9 +141,9 @@ const ReadCompanyHumanResourceBook = () => {
 
   const [executeDelete, { loading }] = useDeleteCompanyHumanResource({
     onCompleted: () => {
-      refetchEmployees();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setHumanResourceCompanyState({ page: 1 });
+      refetchEmployees({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -239,6 +239,7 @@ const ReadCompanyHumanResourceBook = () => {
 
   const handleSetPage = (page: number) => {
     setHumanResourceCompanyState({ page });
+    refetchEmployees({ page });
   };
 
   /* #   /**=========== RenderTable =========== */
@@ -363,6 +364,7 @@ const ReadCompanyHumanResourceBook = () => {
           setHumanResourceCompanyState({ page: 1 });
           refetchEmployees({
             page: 1,
+            search: searchQuery === '' ? null : searchQuery,
           });
         },
         placeholder: 'Cari berdasarkan Nama dan NIP',

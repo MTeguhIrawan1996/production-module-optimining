@@ -137,7 +137,7 @@ const ListDataTopsoilRitageBook = () => {
   } = useReadAllRitageTopsoilDT({
     variables: {
       limit: 10,
-      page: pageDumptruck || 1,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'topsoil',
@@ -151,7 +151,7 @@ const ListDataTopsoilRitageBook = () => {
   } = useReadAllRitageTopsoil({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'topsoil',
@@ -160,9 +160,11 @@ const ListDataTopsoilRitageBook = () => {
   React.useEffect(() => {
     if (hasHydrated) {
       refetchTopsoilRitages({
+        page,
         ...defaultRefatchTopsoil,
       });
       refetchTopsoilDumpTruckRitages({
+        page: pageDumptruck,
         date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
       });
     }
@@ -171,12 +173,14 @@ const ListDataTopsoilRitageBook = () => {
 
   const [executeDelete, { loading }] = useDeleteTopsoilRitage({
     onCompleted: () => {
-      refetchTopsoilRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setDataRitageTopsoilState({
         dataRitageTopsoilState: {
           page: 1,
         },
+      });
+      refetchTopsoilRitages({
+        page: 1,
       });
       notifications.show({
         color: 'green',
@@ -209,6 +213,9 @@ const ListDataTopsoilRitageBook = () => {
       dataRitageTopsoilState: {
         page,
       },
+    });
+    refetchTopsoilRitages({
+      page,
     });
   };
 
@@ -739,6 +746,9 @@ const ListDataTopsoilRitageBook = () => {
             dataRitageTopsoilDumptruckState: {
               page: v,
             },
+          });
+          refetchTopsoilDumpTruckRitages({
+            page: v,
           });
         }}
         tabs="topsoil"

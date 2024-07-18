@@ -107,6 +107,7 @@ export const useReadAllWeeklyPlan = ({
       },
       onCompleted,
       fetchPolicy: 'cache-first',
+      notifyOnNetworkStatusChange: true,
     }
   );
 

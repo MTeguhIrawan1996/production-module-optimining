@@ -138,7 +138,7 @@ const ListDataOreRitageBook = () => {
   } = useReadAllRitageOreDT({
     variables: {
       limit: 10,
-      page: pageDumptruck || 1,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'ore',
@@ -152,7 +152,7 @@ const ListDataOreRitageBook = () => {
   } = useReadAllRitageOre({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'ore',
@@ -160,9 +160,11 @@ const ListDataOreRitageBook = () => {
   React.useEffect(() => {
     if (hasHydrated) {
       refetchOreRitages({
+        page,
         ...defaultRefatchOre,
       });
       refetchOreDumpTruckRitages({
+        page: pageDumptruck,
         date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
       });
     }
@@ -171,13 +173,13 @@ const ListDataOreRitageBook = () => {
 
   const [executeDelete, { loading }] = useDeleteOreRitage({
     onCompleted: () => {
-      refetchOreRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setDataRitageOreState({
         dataRitageOreState: {
           page: 1,
         },
       });
+      refetchOreRitages({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -210,6 +212,7 @@ const ListDataOreRitageBook = () => {
         page,
       },
     });
+    refetchOreRitages({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -768,6 +771,9 @@ const ListDataOreRitageBook = () => {
             dataRitageOreDumptruckState: {
               page: v,
             },
+          });
+          refetchOreDumpTruckRitages({
+            page: v,
           });
         }}
         tabs="ore"

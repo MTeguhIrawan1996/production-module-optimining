@@ -139,6 +139,7 @@ export const useReadAllHeavyEquipmentCompany = ({
       },
       onCompleted,
       fetchPolicy,
+      notifyOnNetworkStatusChange: true,
     }
   );
 

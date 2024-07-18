@@ -136,7 +136,7 @@ const ListDataMovingRitageBook = () => {
   } = useReadAllRitageMovingDT({
     variables: {
       limit: 10,
-      page: pageDumptruck,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'moving',
@@ -150,7 +150,7 @@ const ListDataMovingRitageBook = () => {
   } = useReadAllRitageMoving({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'moving',
@@ -159,9 +159,11 @@ const ListDataMovingRitageBook = () => {
   React.useEffect(() => {
     if (hasHydrated) {
       refetchMovingRitages({
+        page,
         ...defaultRefatchMoving,
       });
       refetchmovingDumpTruckRitages({
+        page: pageDumptruck,
         date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
       });
     }
@@ -170,13 +172,13 @@ const ListDataMovingRitageBook = () => {
 
   const [executeDelete, { loading }] = useDeleteMovingRitage({
     onCompleted: () => {
-      refetchMovingRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setDataRitageMovingState({
         dataRitageMovingState: {
           page: 1,
         },
       });
+      refetchMovingRitages({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -209,6 +211,7 @@ const ListDataMovingRitageBook = () => {
         page,
       },
     });
+    refetchMovingRitages({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -757,6 +760,7 @@ const ListDataMovingRitageBook = () => {
               page: v,
             },
           });
+          refetchmovingDumpTruckRitages({ page: v });
         }}
         tabs="moving"
         setDate={(v) => {

@@ -113,10 +113,9 @@ const WeatherProductionBook = () => {
   } = useReadAllWeatherProduction({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
       orderBy: 'date',
-      search: searchQuery === '' ? null : searchQuery,
     },
   });
 
@@ -130,6 +129,7 @@ const WeatherProductionBook = () => {
   React.useEffect(() => {
     if (hasHydrated) {
       refetchWeatherData({
+        page,
         ...defaultRefetchWeatherProduction,
       });
     }
@@ -138,9 +138,9 @@ const WeatherProductionBook = () => {
 
   const [executeDelete, { loading }] = useDeleteWeatherProduction({
     onCompleted: () => {
-      refetchWeatherData();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setWeatherProductionState({ page: 1 });
+      refetchWeatherData({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -169,6 +169,7 @@ const WeatherProductionBook = () => {
 
   const handleSetPage = (page: number) => {
     setWeatherProductionState({ page });
+    refetchWeatherData({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -616,7 +617,7 @@ const WeatherProductionBook = () => {
         searchQuery: searchQuery,
         onSearch: () => {
           setWeatherProductionState({ page: 1 });
-          refetchWeatherData({ page: 1 });
+          refetchWeatherData({ page: 1, search: searchQuery || null });
         },
         value: search,
       }}

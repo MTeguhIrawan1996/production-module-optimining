@@ -124,7 +124,7 @@ const ListDataQuarryRitageBook = () => {
   } = useReadAllRitageQuarryDT({
     variables: {
       limit: 10,
-      page: pageDumptruck || 1,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'quarry',
@@ -138,7 +138,7 @@ const ListDataQuarryRitageBook = () => {
   } = useReadAllRitageQuarry({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'quarry',
@@ -147,9 +147,11 @@ const ListDataQuarryRitageBook = () => {
   React.useEffect(() => {
     if (hasHydrated) {
       refetchQuarryRitages({
+        page,
         ...defaultRefatchQuarry,
       });
       refetchQuarryDumpTruckRitages({
+        page: pageDumptruck,
         date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
       });
     }
@@ -158,13 +160,13 @@ const ListDataQuarryRitageBook = () => {
 
   const [executeDelete, { loading }] = useDeleteQuarryRitage({
     onCompleted: () => {
-      refetchQuarryRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setDataRitageQuarryState({
         dataRitageQuarryState: {
           page: 1,
         },
       });
+      refetchQuarryRitages({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -197,6 +199,7 @@ const ListDataQuarryRitageBook = () => {
         page,
       },
     });
+    refetchQuarryRitages({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -751,6 +754,9 @@ const ListDataQuarryRitageBook = () => {
             dataRitageQuarryDumptruckState: {
               page: v,
             },
+          });
+          refetchQuarryDumpTruckRitages({
+            page: v,
           });
         }}
         tabs="quarry"

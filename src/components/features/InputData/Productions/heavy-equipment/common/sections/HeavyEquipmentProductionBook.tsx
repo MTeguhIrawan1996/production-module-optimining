@@ -132,10 +132,9 @@ const HeavyEquipmentProductionBook = () => {
   } = useReadAllHeavyEquipmentProduction({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
       orderBy: 'createdAt',
-      search: searchQuery === '' ? null : searchQuery,
     },
   });
 
@@ -149,6 +148,7 @@ const HeavyEquipmentProductionBook = () => {
   React.useEffect(() => {
     if (hasHydrated) {
       refetchHeavyEquipmentData({
+        page,
         ...defaultRefatchHEProduction,
       });
     }
@@ -157,9 +157,9 @@ const HeavyEquipmentProductionBook = () => {
 
   const [executeDelete, { loading }] = useDeleteHeavyEquipmentProduction({
     onCompleted: () => {
-      refetchHeavyEquipmentData();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setHeavyEquipmentProductionState({ page: 1 });
+      refetchHeavyEquipmentData({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -188,6 +188,7 @@ const HeavyEquipmentProductionBook = () => {
 
   const handleSetPage = (page: number) => {
     setHeavyEquipmentProductionState({ page });
+    refetchHeavyEquipmentData({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -673,6 +674,7 @@ const HeavyEquipmentProductionBook = () => {
           setHeavyEquipmentProductionState({ page: 1 });
           refetchHeavyEquipmentData({
             page: 1,
+            search: searchQuery || null,
           });
         },
         value: search,

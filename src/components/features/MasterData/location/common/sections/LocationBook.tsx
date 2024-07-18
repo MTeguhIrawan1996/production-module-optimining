@@ -30,6 +30,7 @@ const LocationBook = () => {
   const router = useRouter();
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const [
+    hasHydrated,
     { page, categoryId, search, filterBadgeValue },
     setPage,
     setCategoryId,
@@ -37,6 +38,7 @@ const LocationBook = () => {
     setFilterBadgeLocation,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.locationState,
       state.setLoactionPage,
       state.setCategoryId,
@@ -71,23 +73,27 @@ const LocationBook = () => {
   } = useReadAllLocationsMaster({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
       orderBy: 'createdAt',
-      search: searchQuery === '' ? null : searchQuery,
     },
   });
 
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
     resetAllSlices(new Set<ISliceName>(['locationSlice'] as ISliceName[]));
-    useControlPanel.persist.onFinishHydration(({ locationState }) => {
-      const { categoryId } = locationState;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    if (hasHydrated) {
       refetchLocations({
+        page: page,
         categoryId,
       });
-    });
-  }, [refetchLocations]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const { locationCategoriesdata } = useReadAllLocationCategory({
     variables: {
@@ -105,9 +111,9 @@ const LocationBook = () => {
 
   const [executeDelete, { loading }] = useDeleteLocationMaster({
     onCompleted: () => {
-      refetchLocations();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setPage({ page: 1 });
+      refetchLocations({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -136,6 +142,9 @@ const LocationBook = () => {
 
   const handleSetPage = (page: number) => {
     setPage({ page });
+    refetchLocations({
+      page,
+    });
   };
 
   const { uncombinedItem: locationCategoryItems } = useFilterItems({
@@ -291,6 +300,7 @@ const LocationBook = () => {
           setPage({ page: 1 });
           refetchLocations({
             page: 1,
+            search: searchQuery === '' ? null : searchQuery,
           });
         },
       }}
@@ -323,7 +333,6 @@ const LocationBook = () => {
             const badgeFilterValue = normalizedFilterBadge(
               filter.multipleFilter || []
             );
-            setPage({ page: 1 });
             setFilterBadgeLocation({
               filterBadgeValue: badgeFilterValue || null,
             });

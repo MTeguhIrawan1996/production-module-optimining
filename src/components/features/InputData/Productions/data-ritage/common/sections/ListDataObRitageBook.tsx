@@ -143,7 +143,7 @@ const ListDataObRitageBook = () => {
   } = useReadAllRitageObDT({
     variables: {
       limit: 10,
-      page: pageDumptruck,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'ob',
@@ -157,7 +157,7 @@ const ListDataObRitageBook = () => {
   } = useReadAllRitageOB({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'ob',
@@ -166,9 +166,11 @@ const ListDataObRitageBook = () => {
   React.useEffect(() => {
     if (hasHydrated) {
       refetchOverburdenRitages({
+        page,
         ...defaultRefatchOb,
       });
       refetchOverburdenDumpTruckRitages({
+        page: pageDumptruck,
         date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
       });
     }
@@ -177,13 +179,13 @@ const ListDataObRitageBook = () => {
 
   const [executeDelete, { loading }] = useDeleteOverburdenRitage({
     onCompleted: () => {
-      refetchOverburdenRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setDataRitageOBState({
         dataRitageOBState: {
           page: 1,
         },
       });
+      refetchOverburdenRitages({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -216,6 +218,7 @@ const ListDataObRitageBook = () => {
         page: page,
       },
     });
+    refetchOverburdenRitages({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -771,6 +774,9 @@ const ListDataObRitageBook = () => {
             dataRitageOBDumptruckState: {
               page: v,
             },
+          });
+          refetchOverburdenDumpTruckRitages({
+            page: v,
           });
         }}
         tabs="ob"

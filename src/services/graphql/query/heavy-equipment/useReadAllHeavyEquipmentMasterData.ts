@@ -118,6 +118,7 @@ export const useReadAllHeavyEquipmentMasterData = ({
     },
     onCompleted,
     fetchPolicy,
+    notifyOnNetworkStatusChange: true,
   });
 
   return {

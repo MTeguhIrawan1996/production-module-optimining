@@ -88,6 +88,7 @@ export const useReadAllLocationsMaster = ({
       },
       onCompleted,
       fetchPolicy,
+      notifyOnNetworkStatusChange: true,
     }
   );
 

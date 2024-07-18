@@ -31,10 +31,12 @@ const ReadHeavyEquipmentBook = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const [
+    hasHydrated,
     { page, search, brandId, typeId, modelId, classId, filterBadgeValue },
     setHeavyEquipmentCompanyState,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.heavyEquipmentCompanyState,
       state.setHeavyEquipmentCompanyState,
     ],
@@ -63,10 +65,9 @@ const ReadHeavyEquipmentBook = () => {
   } = useReadAllHeavyEquipmentCompany({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
       orderBy: 'createdAt',
-      search: searchQuery === '' ? null : searchQuery,
       companyId: id,
     },
     skip: !router.isReady,
@@ -74,19 +75,21 @@ const ReadHeavyEquipmentBook = () => {
 
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
-    useControlPanel.persist.onFinishHydration(
-      ({ heavyEquipmentCompanyState }) => {
-        const { brandId, typeId, classId, modelId } =
-          heavyEquipmentCompanyState;
-        refetchHeavyEquipmentCompany({
-          brandId,
-          typeId,
-          referenceId: modelId,
-          classId,
-        });
-      }
-    );
-  }, [refetchHeavyEquipmentCompany]);
+  }, []);
+
+  React.useEffect(() => {
+    if (hasHydrated && router.isReady) {
+      refetchHeavyEquipmentCompany({
+        page: page,
+        brandId,
+        typeId,
+        referenceId: modelId,
+        classId,
+        companyId: id,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated, router]);
 
   const { brandsData } = useReadAllBrand({
     variables: {
@@ -119,9 +122,9 @@ const ReadHeavyEquipmentBook = () => {
 
   const [executeDelete, { loading }] = useDeleteCompanyHeavyEquipment({
     onCompleted: () => {
-      refetchHeavyEquipmentCompany();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setHeavyEquipmentCompanyState({ page: 1 });
+      refetchHeavyEquipmentCompany({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -170,6 +173,7 @@ const ReadHeavyEquipmentBook = () => {
 
   const handleSetPage = (page: number) => {
     setHeavyEquipmentCompanyState({ page });
+    refetchHeavyEquipmentCompany({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -393,6 +397,7 @@ const ReadHeavyEquipmentBook = () => {
           setHeavyEquipmentCompanyState({ page: 1 });
           refetchHeavyEquipmentCompany({
             page: 1,
+            search: searchQuery === '' ? null : searchQuery,
           });
         },
         searchQuery: searchQuery,
