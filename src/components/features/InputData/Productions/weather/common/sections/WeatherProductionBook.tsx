@@ -16,7 +16,7 @@ import {
   ModalConfirmation,
 } from '@/components/elements';
 import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
-import DownloadButtonWeatherProd from '@/components/features/InputData/Productions/weather/common/elements/DownloadButtonHeavyEquipmentProd';
+import DownloadButtonWeatherProd from '@/components/features/InputData/Productions/weather/common/elements/DownloadButtonWeatherProd';
 
 import { useDeleteWeatherProduction } from '@/services/graphql/mutation/weather-production/useDeleteWeatherProduction';
 import {
@@ -256,6 +256,7 @@ const WeatherProductionBook = () => {
       name: 'week',
       searchable: false,
       withAsterisk: true,
+      disabled: !month,
       year: year,
       month: month,
       value: week ? `${week}` : null,

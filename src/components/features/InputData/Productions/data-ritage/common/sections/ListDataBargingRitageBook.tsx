@@ -315,6 +315,7 @@ const ListDataBargingRitageBook = () => {
       name: 'week',
       searchable: false,
       withAsterisk: true,
+      disabled: !month,
       year: year,
       month: month,
       value: week ? `${week}` : null,

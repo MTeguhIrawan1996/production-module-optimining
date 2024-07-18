@@ -539,6 +539,7 @@ const FrontProductionBook = () => {
       name: 'week',
       searchable: false,
       withAsterisk: true,
+      disabled: !segment.month?.value,
       year: segment.year.value,
       month: segment.month.value,
       value: segment.week.value ? `${segment.week.value}` : null,

@@ -313,6 +313,7 @@ const ListDataOreRitageBook = () => {
       withAsterisk: true,
       year: year,
       month: month,
+      disabled: !month,
       value: week ? `${week}` : null,
       onChange: (value) => {
         setDataRitageOreState({
