@@ -6,6 +6,7 @@ import {
 } from '@/services/graphql/mutation/download/useDownloadTask';
 import { IMutationRitageOre } from '@/services/restapi/ritage-productions/ore/useCreateRitageOre';
 import {
+  validatePeriod,
   zDateValidation,
   zImageArrayOptional,
   zOptionalString,
@@ -13,10 +14,7 @@ import {
   zRequiredSelectInput,
   zRequiredString,
 } from '@/utils/form-validation/global';
-import {
-  commonDownloadRitageValidation,
-  validatePeriod,
-} from '@/utils/form-validation/ritage/common-download-ritage-validation';
+import { commonDownloadRitageValidation } from '@/utils/form-validation/ritage/common-download-ritage-validation';
 
 export const ritageOreMutationValidation: z.ZodType<IMutationRitageOre> = z
   .object({
@@ -84,7 +82,7 @@ export const downloadOreProductionValidation: z.ZodType<
   IDownloadRitageCommonValue & IDownloadOreProductionValues
 > = z
   .object({
-    locationId: zOptionalString.nullable(),
+    fromPitId: zOptionalString.nullable(),
   })
   .merge(commonDownloadRitageValidation)
   .superRefine((arg, ctx) => {

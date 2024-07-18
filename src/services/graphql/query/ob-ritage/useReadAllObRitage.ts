@@ -12,6 +12,7 @@ import {
   GResponse,
   ICommonRitagesData,
   IGlobalMetaRequest,
+  IGlobalTimeFIlter,
 } from '@/types/global';
 
 export const READ_ALL_RITAGE_OB = gql`
@@ -23,6 +24,9 @@ export const READ_ALL_RITAGE_OB = gql`
     $shiftId: String
     $companyHeavyEquipmentId: String
     $isRitageProblematic: Boolean
+    $fromPitId: String
+    $timeFilterType: TimeFilterTypeDownloadEnum
+    $timeFilter: JSON
   ) {
     overburdenRitages(
       findAllOverburdenRitageInput: {
@@ -33,6 +37,9 @@ export const READ_ALL_RITAGE_OB = gql`
         shiftId: $shiftId
         companyHeavyEquipmentId: $companyHeavyEquipmentId
         isRitageProblematic: $isRitageProblematic
+        fromPitId: $fromPitId
+        timeFilterType: $timeFilterType
+        timeFilter: $timeFilter
       }
     ) {
       meta {
@@ -92,11 +99,14 @@ interface IOverburdenRitagesResponse {
   overburdenRitages: GResponse<ICommonRitagesData<IOtherProps>>;
 }
 
-interface IOverburdenRitagesRequest
-  extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
-  shiftId?: string | null;
-  isRitageProblematic?: boolean | null;
-  companyHeavyEquipmentId?: string | null;
+export interface IOverburdenRitagesRequest
+  extends Omit<IGlobalMetaRequest, 'search'> {
+  shiftId: string | null;
+  isRitageProblematic: boolean | null;
+  companyHeavyEquipmentId: string | null;
+  fromPitId: string | null;
+  timeFilterType: 'DATE_RANGE' | 'PERIOD' | null;
+  timeFilter: Partial<IGlobalTimeFIlter>;
 }
 
 export const useReadAllRitageOB = ({
@@ -106,7 +116,7 @@ export const useReadAllRitageOB = ({
   skip,
   fetchPolicy = 'cache-first',
 }: {
-  variables?: IOverburdenRitagesRequest;
+  variables?: Partial<IOverburdenRitagesRequest>;
   onCompleted?: (data: IOverburdenRitagesResponse) => void;
   onError?: ({ graphQLErrors }: ApolloError) => void;
   skip?: boolean;
@@ -116,7 +126,7 @@ export const useReadAllRitageOB = ({
     data: overburdenRitagesData,
     loading: overburdenRitagesDataLoading,
     refetch,
-  } = useQuery<IOverburdenRitagesResponse, IOverburdenRitagesRequest>(
+  } = useQuery<IOverburdenRitagesResponse, Partial<IOverburdenRitagesRequest>>(
     READ_ALL_RITAGE_OB,
     {
       variables: variables,

@@ -66,7 +66,7 @@ const ListDataQuarryRitageBook = () => {
       year,
       month,
       week,
-      locationId,
+      fromPitId,
       filterStatus,
       filterShift,
       filtercompanyHeavyEquipmentId,
@@ -124,7 +124,7 @@ const ListDataQuarryRitageBook = () => {
   } = useReadAllRitageQuarryDT({
     variables: {
       limit: 10,
-      page: pageDumptruck || 1,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'quarry',
@@ -138,7 +138,7 @@ const ListDataQuarryRitageBook = () => {
   } = useReadAllRitageQuarry({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'quarry',
@@ -147,9 +147,11 @@ const ListDataQuarryRitageBook = () => {
   React.useEffect(() => {
     if (hasHydrated) {
       refetchQuarryRitages({
+        page,
         ...defaultRefatchQuarry,
       });
       refetchQuarryDumpTruckRitages({
+        page: pageDumptruck,
         date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
       });
     }
@@ -158,13 +160,13 @@ const ListDataQuarryRitageBook = () => {
 
   const [executeDelete, { loading }] = useDeleteQuarryRitage({
     onCompleted: () => {
-      refetchQuarryRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setDataRitageQuarryState({
         dataRitageQuarryState: {
           page: 1,
         },
       });
+      refetchQuarryRitages({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -197,6 +199,7 @@ const ListDataQuarryRitageBook = () => {
         page,
       },
     });
+    refetchQuarryRitages({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -216,7 +219,7 @@ const ListDataQuarryRitageBook = () => {
             year: null,
             month: null,
             week: null,
-            locationId: null,
+            fromPitId: null,
             filterStatus: null,
             filterShift: null,
             filtercompanyHeavyEquipmentId: null,
@@ -297,6 +300,7 @@ const ListDataQuarryRitageBook = () => {
       name: 'week',
       searchable: false,
       withAsterisk: true,
+      disabled: !month,
       year: year,
       month: month,
       value: week ? `${week}` : null,
@@ -348,18 +352,18 @@ const ListDataQuarryRitageBook = () => {
       },
       value: filtercompanyHeavyEquipmentId,
     });
-    const locationItem = globalSelectLocationNative({
+    const fromPitItem = globalSelectLocationNative({
       label: 'fromLocation',
-      name: 'location',
+      name: 'fromPitId',
       searchable: true,
       onChange: (value) => {
         setDataRitageQuarryState({
           dataRitageQuarryState: {
-            locationId: value || null,
+            fromPitId: value || null,
           },
         });
       },
-      value: locationId,
+      value: fromPitId,
       categoryIds: [`${process.env.NEXT_PUBLIC_PIT_ID}`],
     });
 
@@ -435,7 +439,7 @@ const ListDataQuarryRitageBook = () => {
           col: 6,
         },
         {
-          selectItem: locationItem,
+          selectItem: fromPitItem,
           col: 6,
         },
       ],
@@ -447,7 +451,7 @@ const ListDataQuarryRitageBook = () => {
     filterShift,
     filterStatus,
     filtercompanyHeavyEquipmentId,
-    locationId,
+    fromPitId,
     month,
     period,
     startDate,
@@ -664,7 +668,7 @@ const ListDataQuarryRitageBook = () => {
                   shiftId: filterShift || null,
                   heavyEquipmentCode: filtercompanyHeavyEquipmentId || null,
                   ritageStatus: filterStatus,
-                  locationId: locationId || null,
+                  fromPitId: fromPitId || null,
                 }
               : undefined
           }
@@ -676,6 +680,13 @@ const ListDataQuarryRitageBook = () => {
             setDataRitageQuarryState({
               dataRitageQuarryState: {
                 page: 1,
+                period: null,
+                startDate: null,
+                endDate: null,
+                year: null,
+                month: null,
+                week: null,
+                fromPitId: null,
                 filterBadgeValue: null,
                 filtercompanyHeavyEquipmentId: null,
                 filterShift: null,
@@ -687,6 +698,9 @@ const ListDataQuarryRitageBook = () => {
               shiftId: null,
               isRitageProblematic: null,
               companyHeavyEquipmentId: null,
+              fromPitId: null,
+              timeFilter: undefined,
+              timeFilterType: undefined,
             });
           },
         },
@@ -740,6 +754,9 @@ const ListDataQuarryRitageBook = () => {
             dataRitageQuarryDumptruckState: {
               page: v,
             },
+          });
+          refetchQuarryDumpTruckRitages({
+            page: v,
           });
         }}
         tabs="quarry"

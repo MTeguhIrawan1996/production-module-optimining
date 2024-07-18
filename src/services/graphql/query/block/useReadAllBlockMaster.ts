@@ -74,6 +74,7 @@ export const useReadAllBlocksMaster = ({
       },
       onCompleted,
       fetchPolicy,
+      notifyOnNetworkStatusChange: true,
     }
   );
 

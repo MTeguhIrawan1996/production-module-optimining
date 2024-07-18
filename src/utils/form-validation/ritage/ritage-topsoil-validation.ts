@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { IDownloadRitageCommonValue } from '@/services/graphql/mutation/download/useDownloadTask';
 import { IMutationRitageTopsoil } from '@/services/restapi/ritage-productions/topsoil/useCreateRitageTopsoil';
 import {
+  validatePeriod,
   zDateValidation,
   zImageArrayOptional,
   zOptionalString,
@@ -10,10 +11,7 @@ import {
   zRequiredSelectInput,
   zRequiredString,
 } from '@/utils/form-validation/global';
-import {
-  commonDownloadRitageValidation,
-  validatePeriod,
-} from '@/utils/form-validation/ritage/common-download-ritage-validation';
+import { commonDownloadRitageValidation } from '@/utils/form-validation/ritage/common-download-ritage-validation';
 
 export const ritageTopsoilMutationValidation: z.ZodType<IMutationRitageTopsoil> =
   z

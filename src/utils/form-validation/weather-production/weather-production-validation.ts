@@ -1,7 +1,10 @@
 import { z } from 'zod';
 
+import { IDownloadWeatherProductionValues } from '@/services/graphql/mutation/download/useDownloadTask';
 import { IMutationWeatherProductionValues } from '@/services/graphql/mutation/weather-production/useCreateWeatherProduction';
 import {
+  validatePeriod,
+  zDateOptionalValidation,
   zDateValidation,
   zOptionalNumber,
   zOptionalString,
@@ -25,3 +28,18 @@ export const weatherProductionMutationValidation: z.ZodType<IMutationWeatherProd
       })
       .array(),
   });
+
+export const downloadWeatherProductionValidation: z.ZodType<IDownloadWeatherProductionValues> =
+  z
+    .object({
+      period: zRequiredSelectInput,
+      startDate: zDateOptionalValidation,
+      endDate: zDateOptionalValidation,
+      year: zOptionalString.nullable(),
+      month: zOptionalString.nullable(),
+      week: zOptionalString.nullable(),
+      shiftId: zOptionalString.nullable(),
+    })
+    .superRefine((arg, ctx) => {
+      validatePeriod(arg, ctx);
+    });

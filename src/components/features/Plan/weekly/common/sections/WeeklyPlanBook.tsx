@@ -43,10 +43,15 @@ const WeeklyPlanBook = () => {
   );
 
   const [
+    hasHydrated,
     { page, companyId, status, week, year, filterBadgeValue },
     setWeeklyPlanState,
   ] = useControlPanel(
-    (state) => [state.weeklyPlanState, state.setWeeklyPlanState],
+    (state) => [
+      state._hasHydrated,
+      state.weeklyPlanState,
+      state.setWeeklyPlanState,
+    ],
     shallow
   );
 
@@ -67,7 +72,7 @@ const WeeklyPlanBook = () => {
   } = useReadAllWeeklyPlan({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
       orderBy: 'year',
     },
@@ -76,21 +81,26 @@ const WeeklyPlanBook = () => {
   React.useEffect(() => {
     useControlPanel.persist.rehydrate();
     resetAllSlices(new Set<ISliceName>(['weeklyPlanSlice'] as ISliceName[]));
-    useControlPanel.persist.onFinishHydration(({ weeklyPlanState }) => {
+  }, []);
+
+  React.useEffect(() => {
+    if (hasHydrated) {
       refetchWeeklyPlanData({
-        companyId: weeklyPlanState.companyId,
-        week: weeklyPlanState.week,
-        year: weeklyPlanState.year,
-        statusId: weeklyPlanState.status,
+        page,
+        companyId,
+        week,
+        year,
+        statusId: status,
       });
-    });
-  }, [refetchWeeklyPlanData]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteWeeklyPlan({
     onCompleted: () => {
-      refetchWeeklyPlanData();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setWeeklyPlanState({ page: 1 });
+      refetchWeeklyPlanData({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -119,6 +129,7 @@ const WeeklyPlanBook = () => {
 
   const handleSetPage = (page: number) => {
     setWeeklyPlanState({ page });
+    refetchWeeklyPlanData({ page });
   };
 
   const filter = React.useMemo(() => {

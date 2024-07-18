@@ -34,6 +34,7 @@ const HeavyEquipmentMasterBook = () => {
   const { t } = useTranslation('default');
 
   const [
+    hasHydrated,
     {
       page,
       search,
@@ -45,7 +46,11 @@ const HeavyEquipmentMasterBook = () => {
     },
     setHeavyEquipmentState,
   ] = useControlPanel(
-    (state) => [state.heavyEquipmentState, state.setHeavyEquipmentState],
+    (state) => [
+      state._hasHydrated,
+      state.heavyEquipmentState,
+      state.setHeavyEquipmentState,
+    ],
     shallow
   );
 
@@ -76,10 +81,9 @@ const HeavyEquipmentMasterBook = () => {
   } = useReadAllHeavyEquipmentMasterData({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderBy: 'createdAt',
       orderDir: 'desc',
-      search: searchQuery === '' ? null : searchQuery,
     },
   });
   const { brandsData } = useReadAllBrand({
@@ -111,13 +115,33 @@ const HeavyEquipmentMasterBook = () => {
     },
   });
 
+  React.useEffect(() => {
+    useControlPanel.persist.rehydrate();
+    resetAllSlices(
+      new Set<ISliceName>(['heavyEquipmentSlice'] as ISliceName[])
+    );
+  }, []);
+
+  React.useEffect(() => {
+    if (hasHydrated) {
+      refetchHeavyEquipmentMasterData({
+        page,
+        brandId: filterBrandId,
+        typeId: filterTypeId,
+        referenceId: filterModelId,
+        classId: filterClassId,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
+
   const [executeDelete, { loading }] = useDeleteMasterHeavyEquipment({
     onCompleted: () => {
-      refetchHeavyEquipmentMasterData();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setHeavyEquipmentState({
         page: 1,
       });
+      refetchHeavyEquipmentMasterData({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -156,23 +180,6 @@ const HeavyEquipmentMasterBook = () => {
     data: heavyEquipmentClassesData ?? [],
   });
 
-  React.useEffect(() => {
-    useControlPanel.persist.rehydrate();
-    resetAllSlices(
-      new Set<ISliceName>(['heavyEquipmentSlice'] as ISliceName[])
-    );
-    useControlPanel.persist.onFinishHydration(({ heavyEquipmentState }) => {
-      const { filterBrandId, filterClassId, filterModelId, filterTypeId } =
-        heavyEquipmentState;
-      refetchHeavyEquipmentMasterData({
-        brandId: filterBrandId,
-        typeId: filterTypeId,
-        referenceId: filterModelId,
-        classId: filterClassId,
-      });
-    });
-  }, [refetchHeavyEquipmentMasterData]);
-
   const handleDelete = async () => {
     await executeDelete({
       variables: {
@@ -185,6 +192,7 @@ const HeavyEquipmentMasterBook = () => {
     setHeavyEquipmentState({
       page: page,
     });
+    refetchHeavyEquipmentMasterData({ page: page });
   };
 
   const filter = React.useMemo(() => {
@@ -426,6 +434,7 @@ const HeavyEquipmentMasterBook = () => {
           });
           refetchHeavyEquipmentMasterData({
             page: 1,
+            search: searchQuery === '' ? null : searchQuery,
           });
         },
         searchQuery: searchQuery,

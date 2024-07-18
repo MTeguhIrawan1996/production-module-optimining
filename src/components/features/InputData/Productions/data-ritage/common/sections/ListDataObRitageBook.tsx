@@ -22,7 +22,10 @@ import ListDataRitageDumptruckBook from '@/components/features/InputData/Product
 
 import { useDeleteOverburdenRitage } from '@/services/graphql/mutation/ob-ritage/useDeleteObRitage';
 import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
-import { useReadAllRitageOB } from '@/services/graphql/query/ob-ritage/useReadAllObRitage';
+import {
+  IOverburdenRitagesRequest,
+  useReadAllRitageOB,
+} from '@/services/graphql/query/ob-ritage/useReadAllObRitage';
 import { useReadAllRitageObDT } from '@/services/graphql/query/ob-ritage/useReadAllObRitageDT';
 import {
   globalDateNative,
@@ -66,7 +69,7 @@ const ListDataObRitageBook = () => {
       year,
       month,
       week,
-      locationId,
+      fromPitId,
       filterStatus,
       filterShift,
       filtercompanyHeavyEquipmentId,
@@ -103,7 +106,10 @@ const ListDataObRitageBook = () => {
   const isPermissionRead = permissions?.includes('read-overburden-ritage');
   /* #   /**=========== Query =========== */
 
-  const defaultRefatchOb = {
+  const startDateString = formatDate(startDate || null, 'YYYY-MM-DD');
+  const endDateString = formatDate(endDate || null, 'YYYY-MM-DD');
+
+  const defaultRefatchOb: Partial<IOverburdenRitagesRequest> = {
     shiftId: filterShift === '' ? null : filterShift,
     isRitageProblematic: filterStatus
       ? filterStatus === 'true'
@@ -114,6 +120,19 @@ const ListDataObRitageBook = () => {
       filtercompanyHeavyEquipmentId === ''
         ? null
         : filtercompanyHeavyEquipmentId,
+    fromPitId: fromPitId || null,
+    timeFilterType: period
+      ? period === 'DATE_RANGE'
+        ? period
+        : 'PERIOD'
+      : undefined,
+    timeFilter: {
+      startDate: startDateString || undefined,
+      endDate: endDateString || undefined,
+      year: year ? Number(year) : undefined,
+      week: week ? Number(week) : undefined,
+      month: month ? Number(month) : undefined,
+    },
   };
 
   const {
@@ -124,7 +143,7 @@ const ListDataObRitageBook = () => {
   } = useReadAllRitageObDT({
     variables: {
       limit: 10,
-      page: pageDumptruck,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'ob',
@@ -138,7 +157,7 @@ const ListDataObRitageBook = () => {
   } = useReadAllRitageOB({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
     },
     skip: tabs !== 'ob',
@@ -147,9 +166,11 @@ const ListDataObRitageBook = () => {
   React.useEffect(() => {
     if (hasHydrated) {
       refetchOverburdenRitages({
+        page,
         ...defaultRefatchOb,
       });
       refetchOverburdenDumpTruckRitages({
+        page: pageDumptruck,
         date: formatDate(filterDateDumptruck, 'YYYY-MM-DD') || null,
       });
     }
@@ -158,13 +179,13 @@ const ListDataObRitageBook = () => {
 
   const [executeDelete, { loading }] = useDeleteOverburdenRitage({
     onCompleted: () => {
-      refetchOverburdenRitages();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setDataRitageOBState({
         dataRitageOBState: {
           page: 1,
         },
       });
+      refetchOverburdenRitages({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -197,6 +218,7 @@ const ListDataObRitageBook = () => {
         page: page,
       },
     });
+    refetchOverburdenRitages({ page });
   };
 
   const filter = React.useMemo(() => {
@@ -216,7 +238,7 @@ const ListDataObRitageBook = () => {
             year: null,
             month: null,
             week: null,
-            locationId: null,
+            fromPitId: null,
             filterStatus: null,
             filterShift: null,
             filtercompanyHeavyEquipmentId: null,
@@ -297,6 +319,7 @@ const ListDataObRitageBook = () => {
       name: 'week',
       searchable: false,
       withAsterisk: true,
+      disabled: !month,
       year: year,
       month: month,
       value: week ? `${week}` : null,
@@ -348,18 +371,18 @@ const ListDataObRitageBook = () => {
       },
       value: filtercompanyHeavyEquipmentId,
     });
-    const locationItem = globalSelectLocationNative({
+    const fromPitItem = globalSelectLocationNative({
       label: 'pit',
-      name: 'location',
+      name: 'fromPitId',
       searchable: true,
       onChange: (value) => {
         setDataRitageOBState({
           dataRitageOBState: {
-            locationId: value || null,
+            fromPitId: value || null,
           },
         });
       },
-      value: locationId,
+      value: fromPitId,
       categoryIds: [`${process.env.NEXT_PUBLIC_PIT_ID}`],
     });
 
@@ -435,7 +458,7 @@ const ListDataObRitageBook = () => {
           col: 6,
         },
         {
-          selectItem: locationItem,
+          selectItem: fromPitItem,
           col: 6,
         },
       ],
@@ -447,7 +470,7 @@ const ListDataObRitageBook = () => {
     filterShift,
     filterStatus,
     filtercompanyHeavyEquipmentId,
-    locationId,
+    fromPitId,
     month,
     period,
     startDate,
@@ -665,7 +688,7 @@ const ListDataObRitageBook = () => {
                   shiftId: filterShift || null,
                   heavyEquipmentCode: filtercompanyHeavyEquipmentId || null,
                   ritageStatus: filterStatus,
-                  locationId: locationId || null,
+                  fromPitId: fromPitId || null,
                 }
               : undefined
           }
@@ -677,6 +700,13 @@ const ListDataObRitageBook = () => {
             setDataRitageOBState({
               dataRitageOBState: {
                 page: 1,
+                period: null,
+                startDate: null,
+                endDate: null,
+                year: null,
+                month: null,
+                week: null,
+                fromPitId: null,
                 filterBadgeValue: null,
                 filtercompanyHeavyEquipmentId: null,
                 filterShift: null,
@@ -688,6 +718,9 @@ const ListDataObRitageBook = () => {
               shiftId: null,
               isRitageProblematic: null,
               companyHeavyEquipmentId: null,
+              fromPitId: null,
+              timeFilter: undefined,
+              timeFilterType: undefined,
             });
           },
         },
@@ -741,6 +774,9 @@ const ListDataObRitageBook = () => {
             dataRitageOBDumptruckState: {
               page: v,
             },
+          });
+          refetchOverburdenDumpTruckRitages({
+            page: v,
           });
         }}
         tabs="ob"

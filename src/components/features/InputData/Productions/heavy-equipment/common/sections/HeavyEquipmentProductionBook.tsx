@@ -1,3 +1,4 @@
+import { Text } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -8,6 +9,7 @@ import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
+  GlobalAlert,
   GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
@@ -15,26 +17,57 @@ import {
   SelectionButtonModal,
 } from '@/components/elements';
 import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
+import DownloadButtonHeavyEquipmentProd from '@/components/features/InputData/Productions/heavy-equipment/common/elements/DownloadButtonHeavyEquipmentProd';
 
 import { useDeleteHeavyEquipmentProduction } from '@/services/graphql/mutation/heavy-equipment-production/useDeleteHeavyEquipmentProduction';
 import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
-import { useReadAllHeavyEquipmentProduction } from '@/services/graphql/query/heavy-equipment-production/useReadAllHeavyEquipmentProduction';
-import { globalDateNative } from '@/utils/constants/Field/native-field';
+import {
+  IReadAllHeavyEquipmentProductionRequest,
+  useReadAllHeavyEquipmentProduction,
+} from '@/services/graphql/query/heavy-equipment-production/useReadAllHeavyEquipmentProduction';
+import {
+  globalDateNative,
+  globalSelectHeavyEquipmentNative,
+  globalSelectMonthNative,
+  globalSelectPeriodNative,
+  globalSelectShiftNative,
+  globalSelectWeekNative,
+  globalSelectYearNative,
+} from '@/utils/constants/Field/native-field';
 import { sendGAEvent } from '@/utils/helper/analytics';
 import { formatDate } from '@/utils/helper/dateFormat';
+import dayjs from '@/utils/helper/dayjs.config';
+import { newNormalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
 import useControlPanel, {
   ISliceName,
   resetAllSlices,
 } from '@/utils/store/useControlPanel';
+import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 import { usePermissions } from '@/utils/store/usePermissions';
 import useStore from '@/utils/store/useStore';
 
 const HeavyEquipmentProductionBook = () => {
   const router = useRouter();
   const { t } = useTranslation('default');
+  const [filterDataCommon] = useFilterDataCommon(
+    (state) => [state.filterDataCommon],
+    shallow
+  );
   const [
     hasHydrated,
-    { page, search, date, filterBadgeValue },
+    {
+      page,
+      search,
+      period,
+      startDate,
+      endDate,
+      year,
+      month,
+      week,
+      shiftId,
+      companyHeavyEquipmentId,
+      filterBadgeValue,
+    },
     setHeavyEquipmentProductionState,
   ] = useControlPanel(
     (state) => [
@@ -69,7 +102,28 @@ const HeavyEquipmentProductionBook = () => {
   const isPermissionRead = permissions?.includes('read-heavy-equipment-data');
 
   /* #   /**=========== Query =========== */
-  const dateFormat = formatDate(date, 'YYYY-MM-DD');
+
+  const startDateString = formatDate(startDate || null, 'YYYY-MM-DD');
+  const endDateString = formatDate(endDate || null, 'YYYY-MM-DD');
+
+  const defaultRefatchHEProduction: Partial<IReadAllHeavyEquipmentProductionRequest> =
+    {
+      shiftId: shiftId || null,
+      companyHeavyEquipmentId: companyHeavyEquipmentId || null,
+      timeFilterType: period
+        ? period === 'DATE_RANGE'
+          ? period
+          : 'PERIOD'
+        : undefined,
+      timeFilter: {
+        startDate: startDateString || undefined,
+        endDate: endDateString || undefined,
+        year: year ? Number(year) : undefined,
+        week: week ? Number(week) : undefined,
+        month: month ? Number(month) : undefined,
+      },
+    };
+
   const {
     heavyEquipmentData,
     heavyEquipmentDataLoading,
@@ -78,10 +132,9 @@ const HeavyEquipmentProductionBook = () => {
   } = useReadAllHeavyEquipmentProduction({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
       orderBy: 'createdAt',
-      search: searchQuery === '' ? null : searchQuery,
     },
   });
 
@@ -95,7 +148,8 @@ const HeavyEquipmentProductionBook = () => {
   React.useEffect(() => {
     if (hasHydrated) {
       refetchHeavyEquipmentData({
-        date: dateFormat || null,
+        page,
+        ...defaultRefatchHEProduction,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -103,9 +157,9 @@ const HeavyEquipmentProductionBook = () => {
 
   const [executeDelete, { loading }] = useDeleteHeavyEquipmentProduction({
     onCompleted: () => {
-      refetchHeavyEquipmentData();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setHeavyEquipmentProductionState({ page: 1 });
+      refetchHeavyEquipmentData({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -134,31 +188,211 @@ const HeavyEquipmentProductionBook = () => {
 
   const handleSetPage = (page: number) => {
     setHeavyEquipmentProductionState({ page });
+    refetchHeavyEquipmentData({ page });
   };
 
   const filter = React.useMemo(() => {
-    const dateItem = globalDateNative({
-      label: 'date',
-      name: 'date',
+    const maxEndDate = dayjs(startDate || undefined)
+      .add(dayjs.duration({ days: 29 }))
+      .toDate();
+    const periodItem = globalSelectPeriodNative({
+      label: 'period',
+      name: 'period',
+      clearable: true,
+      onChange: (value) => {
+        setHeavyEquipmentProductionState({
+          period: value,
+          startDate: null,
+          endDate: null,
+          year: null,
+          month: null,
+          shiftId: null,
+          companyHeavyEquipmentId: null,
+        });
+      },
+      value: period,
+    });
+    const startDateItem = globalDateNative({
+      label: 'startDate2',
+      name: 'startDate',
       placeholder: 'chooseDate',
       clearable: true,
-      value: date,
+      withAsterisk: true,
       onChange: (value) => {
-        setHeavyEquipmentProductionState({ date: value || null });
+        setHeavyEquipmentProductionState({
+          startDate: value || null,
+          endDate: null,
+        });
+      },
+      value: startDate,
+    });
+    const endDateItem = globalDateNative({
+      label: 'endDate2',
+      name: 'endDate',
+      placeholder: 'chooseDate',
+      clearable: true,
+      disabled: !startDate,
+      withAsterisk: true,
+      maxDate: maxEndDate,
+      minDate: startDate || undefined,
+      onChange: (value) => {
+        setHeavyEquipmentProductionState({
+          endDate: value || null,
+        });
+      },
+      value: endDate,
+    });
+
+    const yearItem = globalSelectYearNative({
+      name: 'year',
+      withAsterisk: true,
+      onChange: (value) => {
+        setHeavyEquipmentProductionState({
+          year: value ? Number(value) : null,
+          month: null,
+          week: null,
+        });
+      },
+      value: year ? `${year}` : null,
+    });
+
+    const monthItem = globalSelectMonthNative({
+      placeholder: 'month',
+      label: 'month',
+      name: 'month',
+      withAsterisk: true,
+      disabled: !year,
+      value: month ? `${month}` : null,
+      onChange: (value) => {
+        setHeavyEquipmentProductionState({
+          month: value ? Number(value) : null,
+          week: null,
+        });
       },
     });
+
+    const weekItem = globalSelectWeekNative({
+      placeholder: 'week',
+      label: 'week',
+      name: 'week',
+      searchable: false,
+      withAsterisk: true,
+      disabled: !month,
+      year: year,
+      month: month,
+      value: week ? `${week}` : null,
+      onChange: (value) => {
+        setHeavyEquipmentProductionState({
+          week: value ? Number(value) : null,
+        });
+      },
+    });
+    const shiftItem = globalSelectShiftNative({
+      label: 'shift',
+      name: 'shiftId',
+      searchable: false,
+      onChange: (value) => {
+        setHeavyEquipmentProductionState({
+          shiftId: value,
+        });
+      },
+      value: shiftId,
+    });
+    const heavyEquipmentItem = globalSelectHeavyEquipmentNative({
+      name: 'heavyEquipmentCode',
+      label: 'heavyEquipmentCode',
+      skip: filterDataCommon.some((v) => v.key === 'heavyEquipmentCode'),
+      onChange: (value) => {
+        setHeavyEquipmentProductionState({
+          companyHeavyEquipmentId: value,
+        });
+      },
+      value: companyHeavyEquipmentId,
+    });
+
+    const periodDateRange = [
+      {
+        selectItem: startDateItem,
+        col: 6,
+      },
+      {
+        selectItem: endDateItem,
+        col: 6,
+        otherElement: () => (
+          <GlobalAlert
+            description={
+              <Text fw={500} color="orange.4">
+                Maksimal Rentang Waktu Dalam 30 Hari
+              </Text>
+            }
+            color="orange.5"
+            mt="xs"
+            py={4}
+          />
+        ),
+      },
+    ];
+
+    const periodYear = [
+      {
+        selectItem: yearItem,
+        col: period === 'YEAR' ? 12 : 6,
+        prefix: 'Tahun:',
+      },
+    ];
+
+    const periodMoth = [
+      ...periodYear,
+      {
+        selectItem: monthItem,
+        col: 6,
+      },
+    ];
+
+    const periodWeek = [
+      ...periodMoth,
+      {
+        selectItem: weekItem,
+        col: 12,
+      },
+    ];
 
     const item: IFilterButtonProps = {
       filterDateWithSelect: [
         {
-          selectItem: dateItem,
+          selectItem: periodItem,
+          col: 12,
+          prefix: 'Periode:',
+        },
+        ...(period === 'DATE_RANGE' ? periodDateRange : []),
+        ...(period === 'YEAR' ? periodYear : []),
+        ...(period === 'MONTH' ? periodMoth : []),
+        ...(period === 'WEEK' ? periodWeek : []),
+        {
+          selectItem: shiftItem,
+          col: 6,
+        },
+
+        {
+          selectItem: heavyEquipmentItem,
           col: 6,
         },
       ],
     };
     return item;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date]);
+  }, [
+    filterDataCommon,
+    companyHeavyEquipmentId,
+    endDate,
+    month,
+    period,
+    shiftId,
+    startDate,
+    week,
+    year,
+  ]);
 
   /* #   /**=========== RenderTable =========== */
   const renderTable = React.useMemo(() => {
@@ -320,6 +554,26 @@ const HeavyEquipmentProductionBook = () => {
   ]);
   /* #endregion  /**======== RenderTable =========== */
 
+  const isDisabled = () => {
+    if (period === 'DATE_RANGE') {
+      return !endDate;
+    }
+
+    if (period === 'YEAR') {
+      return !year;
+    }
+    if (period === 'MONTH') {
+      return !month;
+    }
+    if (period === 'WEEK') {
+      return !week;
+    }
+
+    return true;
+  };
+
+  const isApply = filterBadgeValue && filterBadgeValue?.length >= 1;
+
   return (
     <DashboardCard
       addButton={
@@ -330,16 +584,47 @@ const HeavyEquipmentProductionBook = () => {
             }
           : undefined
       }
+      otherButton={
+        <DownloadButtonHeavyEquipmentProd
+          label="Download"
+          period={isApply ? period || undefined : undefined}
+          defaultValuesState={
+            isApply /* Check isAplly by filter badge length */
+              ? {
+                  period: period || 'DATE_RANGE',
+                  startDate: startDate || null,
+                  endDate: endDate || null,
+                  year: year ? `${year}` : null,
+                  month: month ? `${month}` : null,
+                  week: week ? `${week}` : null,
+                  shiftId: shiftId || null,
+                  companyHeavyEquipmentId: companyHeavyEquipmentId || null,
+                }
+              : undefined
+          }
+        />
+      }
       filterBadge={{
         resetButton: {
           onClick: () => {
             setHeavyEquipmentProductionState({
-              date: null,
+              page: 1,
+              period: null,
+              startDate: null,
+              endDate: null,
+              year: null,
+              month: null,
+              week: null,
+              companyHeavyEquipmentId: null,
+              shiftId: null,
               filterBadgeValue: null,
             });
             refetchHeavyEquipmentData({
               page: 1,
-              date: null,
+              shiftId: null,
+              companyHeavyEquipmentId: null,
+              timeFilter: undefined,
+              timeFilterType: undefined,
             });
           },
         },
@@ -348,17 +633,33 @@ const HeavyEquipmentProductionBook = () => {
       filter={{
         filterDateWithSelect: filter.filterDateWithSelect,
         filterButton: {
-          disabled: date ? false : true,
+          disabled: isDisabled(),
           onClick: () => {
             refetchHeavyEquipmentData({
               page: 1,
-              date: dateFormat || null,
+              ...defaultRefatchHEProduction,
             });
+            const badgeFilterValue = newNormalizedFilterBadge({
+              filter: filter.filterDateWithSelect || [],
+              data: filterDataCommon || [],
+            });
+            const newStartDate = formatDate(startDate);
+            const newEndDate = formatDate(endDate);
+            const dateBadgeValue = [`${newStartDate} - ${newEndDate}`];
 
-            const newDate = formatDate(date);
+            const rangePeriod =
+              period === 'DATE_RANGE'
+                ? [
+                    ...badgeFilterValue.slice(0, 1),
+                    ...dateBadgeValue,
+                    ...badgeFilterValue.slice(1),
+                  ]
+                : [];
+
             setHeavyEquipmentProductionState({
               page: 1,
-              filterBadgeValue: newDate ? [newDate] : [],
+              filterBadgeValue:
+                rangePeriod.length >= 1 ? rangePeriod : badgeFilterValue,
             });
           },
         },
@@ -373,6 +674,7 @@ const HeavyEquipmentProductionBook = () => {
           setHeavyEquipmentProductionState({ page: 1 });
           refetchHeavyEquipmentData({
             page: 1,
+            search: searchQuery || null,
           });
         },
         value: search,

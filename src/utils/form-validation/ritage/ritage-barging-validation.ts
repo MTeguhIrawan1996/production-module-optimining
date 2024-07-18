@@ -6,6 +6,7 @@ import {
 } from '@/services/graphql/mutation/download/useDownloadTask';
 import { IMutationRitageBarging } from '@/services/restapi/ritage-productions/barging/useCreateRitageBarging';
 import {
+  validatePeriod,
   zDateValidation,
   zImageArrayOptional,
   zOptionalString,
@@ -13,10 +14,7 @@ import {
   zRequiredSelectInput,
   zRequiredString,
 } from '@/utils/form-validation/global';
-import {
-  commonDownloadRitageValidation,
-  validatePeriod,
-} from '@/utils/form-validation/ritage/common-download-ritage-validation';
+import { commonDownloadRitageValidation } from '@/utils/form-validation/ritage/common-download-ritage-validation';
 
 export const ritageBargingMutationValidation: z.ZodType<IMutationRitageBarging> =
   z

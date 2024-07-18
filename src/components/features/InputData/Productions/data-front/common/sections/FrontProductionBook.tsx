@@ -393,9 +393,8 @@ const FrontProductionBook = () => {
   } = useReadAllFrontProduction({
     variables: {
       limit: 10,
-      page: segment.page?.value,
+      page: 1,
       orderDir: 'desc',
-      search: newParams.segment === 'dome' ? domeSearchQuery : pitSearchQuery,
       type: newParams.segment,
     },
   });
@@ -438,16 +437,19 @@ const FrontProductionBook = () => {
 
   React.useEffect(() => {
     if (hasHydrated) {
-      refetchfrontProductionData({ ...defaultRefatch });
+      refetchfrontProductionData({
+        page: segment.page?.value,
+        ...defaultRefatch,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteFrontProduction({
     onCompleted: () => {
-      refetchfrontProductionData();
       setIsOpenDeleteConfirmation((prev) => !prev);
       segment.page?.set(1);
+      refetchfrontProductionData({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -476,6 +478,7 @@ const FrontProductionBook = () => {
 
   const handleSetPage = (page: number) => {
     segment.page?.set(page);
+    refetchfrontProductionData({ page });
   };
 
   const handleChangeSegement = (value: string) => {
@@ -539,6 +542,7 @@ const FrontProductionBook = () => {
       name: 'week',
       searchable: false,
       withAsterisk: true,
+      disabled: !segment.month?.value,
       year: segment.year.value,
       month: segment.month.value,
       value: segment.week.value ? `${segment.week.value}` : null,
@@ -961,11 +965,17 @@ const FrontProductionBook = () => {
                 page: 1,
               },
             });
+            refetchfrontProductionData({
+              search: domeSearchQuery || null,
+            });
           } else {
             setFrontState({
               frontPitState: {
                 page: 1,
               },
+            });
+            refetchfrontProductionData({
+              search: pitSearchQuery || null,
             });
           }
         },

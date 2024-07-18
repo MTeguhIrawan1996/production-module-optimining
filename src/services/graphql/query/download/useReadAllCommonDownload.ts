@@ -46,6 +46,7 @@ export const READ_ALL_COMMON_DOWNLOAD = gql`
       data {
         id
         entity
+        name
         progress
         status
         message
@@ -58,6 +59,7 @@ export const READ_ALL_COMMON_DOWNLOAD = gql`
 export interface IReadAllDownloadData {
   id: string;
   entity: string;
+  name: string;
   progress: number;
   status: string;
   message: string | null;

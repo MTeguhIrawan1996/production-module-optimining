@@ -5,7 +5,14 @@ import { sliceResetFns } from '@/utils/store/useControlPanel';
 type IHeavyEquipmentProductionState = {
   page: number;
   search: string;
-  date: Date | null;
+  period: string | null;
+  startDate: Date | null;
+  endDate: Date | null;
+  year: number | null;
+  week: number | null;
+  month: number | null;
+  shiftId: string | null;
+  companyHeavyEquipmentId: string | null;
   filterBadgeValue: string[] | null;
 };
 
@@ -24,7 +31,14 @@ const initialState: IHeavyEquipmentProductionStateValue = {
   heavyEquipmentProductionState: {
     page: 1,
     search: '',
-    date: null,
+    period: null,
+    startDate: null,
+    endDate: null,
+    year: null,
+    month: null,
+    week: null,
+    shiftId: null,
+    companyHeavyEquipmentId: null,
     filterBadgeValue: null,
   },
 };

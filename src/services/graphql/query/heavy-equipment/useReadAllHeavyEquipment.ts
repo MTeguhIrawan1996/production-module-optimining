@@ -103,6 +103,7 @@ export const useReadAllHeavyEquipmentRefrence = ({
       },
       onCompleted,
       fetchPolicy,
+      notifyOnNetworkStatusChange: true,
     }
   );
 

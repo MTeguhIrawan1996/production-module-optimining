@@ -32,10 +32,12 @@ const HeavyEquipmentBook = () => {
   const { t } = useTranslation('default');
   const permissions = useStore(usePermissions, (state) => state.permissions);
   const [
+    hasHydrated,
     { page, search, brandId, typeId, filterBadgeValue },
     setHeavyEquipmentReferenceState,
   ] = useControlPanel(
     (state) => [
+      state._hasHydrated,
       state.heavyEquipmentReferenceState,
       state.setHeavyEquipmentReferenceState,
     ],
@@ -85,10 +87,9 @@ const HeavyEquipmentBook = () => {
   } = useReadAllHeavyEquipmentRefrence({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
       orderBy: 'createdAt',
-      search: searchQuery === '' ? null : searchQuery,
     },
   });
 
@@ -97,22 +98,25 @@ const HeavyEquipmentBook = () => {
     resetAllSlices(
       new Set<ISliceName>(['heavyEquipmentReferenceSlice'] as ISliceName[])
     );
-    useControlPanel.persist.onFinishHydration(
-      ({ heavyEquipmentReferenceState }) => {
-        const { brandId, typeId } = heavyEquipmentReferenceState;
-        refetchHeavyEquipments({
-          brandId,
-          typeId,
-        });
-      }
-    );
-  }, [refetchHeavyEquipments]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    if (hasHydrated) {
+      refetchHeavyEquipments({
+        page,
+        brandId,
+        typeId,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   const [executeDelete, { loading }] = useDeleteHeavyEquipmentReference({
     onCompleted: () => {
-      refetchHeavyEquipments();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setHeavyEquipmentReferenceState({ page: 1 });
+      refetchHeavyEquipments({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -200,6 +204,7 @@ const HeavyEquipmentBook = () => {
   };
   const handleSetPage = (page: number) => {
     setHeavyEquipmentReferenceState({ page });
+    refetchHeavyEquipments({ page });
   };
   /* #endregion  /**======== HandleClickFc =========== */
 
@@ -322,7 +327,10 @@ const HeavyEquipmentBook = () => {
         searchQuery,
         onSearch: () => {
           setHeavyEquipmentReferenceState({ page: 1 });
-          refetchHeavyEquipments({ page: 1 });
+          refetchHeavyEquipments({
+            page: 1,
+            search: searchQuery === '' ? null : searchQuery,
+          });
         },
         placeholder: t('heavyEquipment.searchPlaceholder'),
         value: search,

@@ -124,6 +124,7 @@ export const useReadAllCompanyEmploye = ({
       },
       onCompleted,
       fetchPolicy,
+      notifyOnNetworkStatusChange: true,
     }
   );
 
