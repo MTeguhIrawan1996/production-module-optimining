@@ -518,3 +518,11 @@ export interface ISelectData {
   label: string;
   value: string;
 }
+
+export interface IGlobalTimeFIlter {
+  startDate: string | null;
+  endDate: string;
+  year: number;
+  week: number;
+  month: number;
+}

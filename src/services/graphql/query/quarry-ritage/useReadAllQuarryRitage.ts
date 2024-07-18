@@ -12,6 +12,7 @@ import {
   GResponse,
   ICommonRitagesData,
   IGlobalMetaRequest,
+  IGlobalTimeFIlter,
 } from '@/types/global';
 
 export const READ_ALL_RITAGE_QUARRY = gql`
@@ -23,6 +24,9 @@ export const READ_ALL_RITAGE_QUARRY = gql`
     $shiftId: String
     $companyHeavyEquipmentId: String
     $isRitageProblematic: Boolean
+    $fromPitId: String
+    $timeFilterType: TimeFilterTypeDownloadEnum
+    $timeFilter: JSON
   ) {
     quarryRitages(
       findAllQuarryRitageInput: {
@@ -33,6 +37,9 @@ export const READ_ALL_RITAGE_QUARRY = gql`
         shiftId: $shiftId
         companyHeavyEquipmentId: $companyHeavyEquipmentId
         isRitageProblematic: $isRitageProblematic
+        fromPitId: $fromPitId
+        timeFilterType: $timeFilterType
+        timeFilter: $timeFilter
       }
     ) {
       meta {
@@ -92,11 +99,14 @@ interface IQuarryRitagesResponse {
   quarryRitages: GResponse<ICommonRitagesData<IOtherQuaryRitgaeProps>>;
 }
 
-interface IQuarryRitagesRequest
-  extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
+export interface IQuarryRitagesRequest
+  extends Omit<IGlobalMetaRequest, 'search'> {
   shiftId?: string | null;
   isRitageProblematic?: boolean | null;
   companyHeavyEquipmentId?: string | null;
+  fromPitId: string | null;
+  timeFilterType: 'DATE_RANGE' | 'PERIOD' | null;
+  timeFilter: Partial<IGlobalTimeFIlter>;
 }
 
 export const useReadAllRitageQuarry = ({
@@ -106,7 +116,7 @@ export const useReadAllRitageQuarry = ({
   skip,
   fetchPolicy = 'cache-first',
 }: {
-  variables?: IQuarryRitagesRequest;
+  variables?: Partial<IQuarryRitagesRequest>;
   onCompleted?: (data: IQuarryRitagesResponse) => void;
   onError?: ({ graphQLErrors }: ApolloError) => void;
   skip?: boolean;
@@ -116,7 +126,7 @@ export const useReadAllRitageQuarry = ({
     data: quarryRitagesData,
     loading: quarryRitagesDataLoading,
     refetch,
-  } = useQuery<IQuarryRitagesResponse, IQuarryRitagesRequest>(
+  } = useQuery<IQuarryRitagesResponse, Partial<IQuarryRitagesRequest>>(
     READ_ALL_RITAGE_QUARRY,
     {
       variables: variables,

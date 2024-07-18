@@ -22,7 +22,10 @@ import ListDataRitageDumptruckBook from '@/components/features/InputData/Product
 
 import { useDeleteOreRitage } from '@/services/graphql/mutation/ore-ritage/useDeleteOreRitage';
 import { useReadAuthUser } from '@/services/graphql/query/auth/useReadAuthUser';
-import { useReadAllRitageOre } from '@/services/graphql/query/ore-ritage/useReadAllOreRitage';
+import {
+  IOreRitagesRequest,
+  useReadAllRitageOre,
+} from '@/services/graphql/query/ore-ritage/useReadAllOreRitage';
 import { useReadAllRitageOreDT } from '@/services/graphql/query/ore-ritage/useReadAllOreRitageDT';
 import {
   globalDateNative,
@@ -60,7 +63,7 @@ const ListDataOreRitageBook = () => {
       year,
       month,
       week,
-      locationId,
+      fromPitId,
       filterStatus,
       filterShift,
       filtercompanyHeavyEquipmentId,
@@ -101,7 +104,10 @@ const ListDataOreRitageBook = () => {
   const isPermissionRead = permissions?.includes('read-ore-ritage');
   /* #   /**=========== Query =========== */
 
-  const defaultRefatchOre = {
+  const startDateString = formatDate(startDate || null, 'YYYY-MM-DD');
+  const endDateString = formatDate(endDate || null, 'YYYY-MM-DD');
+
+  const defaultRefatchOre: Partial<IOreRitagesRequest> = {
     shiftId: filterShift === '' ? null : filterShift,
     isRitageProblematic: filterStatus
       ? filterStatus === 'true'
@@ -112,6 +118,19 @@ const ListDataOreRitageBook = () => {
       filtercompanyHeavyEquipmentId === ''
         ? null
         : filtercompanyHeavyEquipmentId,
+    fromPitId: fromPitId || null,
+    timeFilterType: period
+      ? period === 'DATE_RANGE'
+        ? period
+        : 'PERIOD'
+      : undefined,
+    timeFilter: {
+      startDate: startDateString || undefined,
+      endDate: endDateString || undefined,
+      year: year ? Number(year) : undefined,
+      week: week ? Number(week) : undefined,
+      month: month ? Number(month) : undefined,
+    },
   };
 
   const {
@@ -213,7 +232,7 @@ const ListDataOreRitageBook = () => {
             year: null,
             month: null,
             week: null,
-            locationId: null,
+            fromPitId: null,
             filterStatus: null,
             filterShift: null,
             filtercompanyHeavyEquipmentId: null,
@@ -347,18 +366,18 @@ const ListDataOreRitageBook = () => {
       },
       value: filtercompanyHeavyEquipmentId,
     });
-    const locationItem = globalSelectLocationNative({
+    const fromPitItem = globalSelectLocationNative({
       label: 'pit',
-      name: 'location',
+      name: 'fromPitId',
       searchable: true,
       onChange: (value) => {
         setDataRitageOreState({
           dataRitageOreState: {
-            locationId: value || null,
+            fromPitId: value || null,
           },
         });
       },
-      value: locationId,
+      value: fromPitId,
       categoryIds: [`${process.env.NEXT_PUBLIC_PIT_ID}`],
     });
 
@@ -434,7 +453,7 @@ const ListDataOreRitageBook = () => {
           col: 6,
         },
         {
-          selectItem: locationItem,
+          selectItem: fromPitItem,
           col: 6,
         },
       ],
@@ -446,7 +465,7 @@ const ListDataOreRitageBook = () => {
     filterShift,
     filterStatus,
     filtercompanyHeavyEquipmentId,
-    locationId,
+    fromPitId,
     month,
     period,
     startDate,
@@ -664,7 +683,7 @@ const ListDataOreRitageBook = () => {
                   shiftId: filterShift || null,
                   heavyEquipmentCode: filtercompanyHeavyEquipmentId || null,
                   ritageStatus: filterStatus,
-                  locationId: locationId || null,
+                  fromPitId: fromPitId || null,
                 }
               : undefined
           }

@@ -18,6 +18,7 @@ export const MUTATION_DOWNLOAD_TASK = gql`
       id
       entity
       timeFilterType
+      name
     }
   }
 `;
@@ -35,7 +36,7 @@ export interface IDownloadFrontProductionValues {
 }
 
 export interface IDownloadOreProductionValues {
-  locationId: string | null;
+  fromPitId: string | null;
 }
 export interface IDownloadBargingProductionValues {
   stockpileId: string | null;
@@ -82,6 +83,7 @@ interface IDownloadTaskResponse {
   createDownloadTasks: {
     id: string;
     entity: string;
+    name: string;
     timeFilterType: string | null;
   };
 }

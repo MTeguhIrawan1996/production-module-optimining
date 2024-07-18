@@ -17,7 +17,7 @@ export type IDataRitageQuarrySliceValue = {
       year: number | null;
       week: number | null;
       month: number | null;
-      locationId: string | null;
+      fromPitId: string | null;
       filterStatus: string | null;
       filterShift: string | null;
       filtercompanyHeavyEquipmentId: string | null;
@@ -47,7 +47,7 @@ const initialState: IDataRitageQuarrySliceValue = {
     year: null,
     month: null,
     week: null,
-    locationId: null,
+    fromPitId: null,
     filterStatus: null,
     filterShift: null,
     filtercompanyHeavyEquipmentId: null,

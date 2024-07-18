@@ -51,7 +51,7 @@ const DownloadPanel = () => {
         icon: <IconX />,
       });
     },
-    onSuccess: async (data) => {
+    onSuccess: async ({ findDownloadTasks }) => {
       if (downloadIds && downloadIds?.length >= 1 && !isOpen) {
         setDownloadTaskStore({
           downloadPanel: {
@@ -59,7 +59,7 @@ const DownloadPanel = () => {
           },
         });
       }
-      const allTask = data.findDownloadTasks.data;
+      const allTask = findDownloadTasks.data;
 
       for (const task of allTask) {
         if (runningStatus.includes(task.status)) {
@@ -80,7 +80,7 @@ const DownloadPanel = () => {
           notifications.show({
             color: 'green',
             title: 'Download berhasil',
-            message: `Data ${task.entity} berhasil didownload` /* Fix Me Name File */,
+            message: `Data ${task.name} berhasil didownload` /* Fix Me Name File */,
             icon: <IconCheck />,
           });
 
@@ -110,7 +110,7 @@ const DownloadPanel = () => {
           notifications.show({
             color: 'red',
             title: 'Download gagal',
-            message: `Data ${task.entity} gagal didownload` /* Fix Me Name File */,
+            message: `Data ${task.name} gagal didownload` /* Fix Me Name File */,
             icon: <IconX />,
           });
 
@@ -234,10 +234,7 @@ const DownloadPanel = () => {
                 <Accordion.Panel>
                   <Stack spacing="sm">
                     {currentData.map((value) => {
-                      const parts = value.filePath?.split('/');
-                      const fileName =
-                        (parts && parts[parts.length - 1]) ||
-                        '-'; /* Fix Me name file */
+                      const fileName = value.name || '-';
                       return (
                         <Group noWrap position="apart" key={value.id}>
                           <Box w="50%">

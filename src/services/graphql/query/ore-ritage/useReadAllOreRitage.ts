@@ -12,6 +12,7 @@ import {
   GResponse,
   ICommonRitagesData,
   IGlobalMetaRequest,
+  IGlobalTimeFIlter,
 } from '@/types/global';
 
 export const READ_ALL_RITAGE_ORE = gql`
@@ -23,6 +24,9 @@ export const READ_ALL_RITAGE_ORE = gql`
     $shiftId: String
     $companyHeavyEquipmentId: String
     $isRitageProblematic: Boolean
+    $fromPitId: String
+    $timeFilterType: TimeFilterTypeDownloadEnum
+    $timeFilter: JSON
   ) {
     oreRitages(
       findAllOreRitageInput: {
@@ -33,6 +37,9 @@ export const READ_ALL_RITAGE_ORE = gql`
         shiftId: $shiftId
         companyHeavyEquipmentId: $companyHeavyEquipmentId
         isRitageProblematic: $isRitageProblematic
+        fromPitId: $fromPitId
+        timeFilterType: $timeFilterType
+        timeFilter: $timeFilter
       }
     ) {
       meta {
@@ -89,11 +96,13 @@ interface IOreRitagesResponse {
   oreRitages: GResponse<ICommonRitagesData<IOtherProps>>;
 }
 
-interface IOreRitagesRequest
-  extends Partial<Omit<IGlobalMetaRequest, 'search'>> {
-  shiftId?: string | null;
-  isRitageProblematic?: boolean | null;
-  companyHeavyEquipmentId?: string | null;
+export interface IOreRitagesRequest extends Omit<IGlobalMetaRequest, 'search'> {
+  shiftId: string | null;
+  isRitageProblematic: boolean | null;
+  companyHeavyEquipmentId: string | null;
+  fromPitId: string | null;
+  timeFilterType: 'DATE_RANGE' | 'PERIOD' | null;
+  timeFilter: Partial<IGlobalTimeFIlter>;
 }
 
 export const useReadAllRitageOre = ({
@@ -102,7 +111,7 @@ export const useReadAllRitageOre = ({
   skip,
   fetchPolicy = 'cache-first',
 }: {
-  variables?: IOreRitagesRequest;
+  variables?: Partial<IOreRitagesRequest>;
   onCompleted?: (data: IOreRitagesResponse) => void;
   skip?: boolean;
   fetchPolicy?: WatchQueryFetchPolicy;
@@ -111,16 +120,19 @@ export const useReadAllRitageOre = ({
     data: oreRitagesData,
     loading: oreRitagesDataLoading,
     refetch,
-  } = useQuery<IOreRitagesResponse, IOreRitagesRequest>(READ_ALL_RITAGE_ORE, {
-    variables: variables,
-    skip: skip,
-    notifyOnNetworkStatusChange: true,
-    onError: (err: ApolloError) => {
-      return err;
-    },
-    onCompleted,
-    fetchPolicy,
-  });
+  } = useQuery<IOreRitagesResponse, Partial<IOreRitagesRequest>>(
+    READ_ALL_RITAGE_ORE,
+    {
+      variables: variables,
+      skip: skip,
+      notifyOnNetworkStatusChange: true,
+      onError: (err: ApolloError) => {
+        return err;
+      },
+      onCompleted,
+      fetchPolicy,
+    }
+  );
 
   return {
     oreRitagesData: oreRitagesData?.oreRitages.data,

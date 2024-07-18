@@ -66,7 +66,7 @@ const ListDataQuarryRitageBook = () => {
       year,
       month,
       week,
-      locationId,
+      fromPitId,
       filterStatus,
       filterShift,
       filtercompanyHeavyEquipmentId,
@@ -216,7 +216,7 @@ const ListDataQuarryRitageBook = () => {
             year: null,
             month: null,
             week: null,
-            locationId: null,
+            fromPitId: null,
             filterStatus: null,
             filterShift: null,
             filtercompanyHeavyEquipmentId: null,
@@ -348,18 +348,18 @@ const ListDataQuarryRitageBook = () => {
       },
       value: filtercompanyHeavyEquipmentId,
     });
-    const locationItem = globalSelectLocationNative({
+    const fromPitItem = globalSelectLocationNative({
       label: 'fromLocation',
-      name: 'location',
+      name: 'fromPitId',
       searchable: true,
       onChange: (value) => {
         setDataRitageQuarryState({
           dataRitageQuarryState: {
-            locationId: value || null,
+            fromPitId: value || null,
           },
         });
       },
-      value: locationId,
+      value: fromPitId,
       categoryIds: [`${process.env.NEXT_PUBLIC_PIT_ID}`],
     });
 
@@ -435,7 +435,7 @@ const ListDataQuarryRitageBook = () => {
           col: 6,
         },
         {
-          selectItem: locationItem,
+          selectItem: fromPitItem,
           col: 6,
         },
       ],
@@ -447,7 +447,7 @@ const ListDataQuarryRitageBook = () => {
     filterShift,
     filterStatus,
     filtercompanyHeavyEquipmentId,
-    locationId,
+    fromPitId,
     month,
     period,
     startDate,
@@ -664,7 +664,7 @@ const ListDataQuarryRitageBook = () => {
                   shiftId: filterShift || null,
                   heavyEquipmentCode: filtercompanyHeavyEquipmentId || null,
                   ritageStatus: filterStatus,
-                  locationId: locationId || null,
+                  fromPitId: fromPitId || null,
                 }
               : undefined
           }

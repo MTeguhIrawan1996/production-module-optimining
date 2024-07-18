@@ -67,7 +67,7 @@ export default function DownloadButtonRitage<T>({
   );
 
   const oreDefaultValues: IDownloadOreProductionValues = {
-    locationId: null,
+    fromPitId: null,
   };
   const bargingDefaultValues: IDownloadBargingProductionValues = {
     stockpileId: null,
@@ -156,7 +156,7 @@ export default function DownloadButtonRitage<T>({
       notifications.show({
         color: 'green',
         title: 'Download berhasil',
-        message: `Data ritase sedang diproses`,
+        message: `Data ritase ${ritageConditional[ritage].label} sedang diproses`,
         icon: <IconCheck />,
       });
       setIsOpenModal((prev) => !prev);
@@ -272,9 +272,9 @@ export default function DownloadButtonRitage<T>({
       withAsterisk: true,
       withinPortal: true,
     });
-    const locationItem = locationSelect({
+    const fromPitItem = locationSelect({
       colSpan: 6,
-      name: 'locationId',
+      name: 'fromPitId',
       label: ritage === 'quarry' ? 'fromLocation' : 'pit',
       limit: null,
       withAsterisk: false,
@@ -356,7 +356,7 @@ export default function DownloadButtonRitage<T>({
 
     const showLocation = [
       {
-        element: locationItem,
+        element: fromPitItem,
       },
     ];
     const showLocationBarging = [
@@ -401,14 +401,10 @@ export default function DownloadButtonRitage<T>({
   > = async (data) => {
     const startDate = formatDate(data.startDate, 'YYYY-MM-DD');
     const endDate = formatDate(data.endDate, 'YYYY-MM-DD');
-    const oreObKeys: RitageType[] = ['ore', 'ob'];
-    const quarryKeys: RitageType[] = ['quarry'];
+    const otherMaterialKeys: RitageType[] = ['ore', 'ob', 'quarry'];
     const bargingKeys: RitageType[] = ['barging'];
-    const oreObColumnFilter = {
-      pitId: data.locationId || undefined,
-    };
-    const quarryColumnFilter = {
-      fromPitId: data.locationId || undefined,
+    const otherColumnFilter = {
+      fromPitId: data.fromPitId || undefined,
     };
     const bargingColumnFilter = {
       stockpileId: data.stockpileId || undefined,
@@ -434,8 +430,7 @@ export default function DownloadButtonRitage<T>({
               ? false
               : true
             : undefined,
-          ...(oreObKeys.includes(ritage) ? oreObColumnFilter : {}),
-          ...(quarryKeys.includes(ritage) ? quarryColumnFilter : {}),
+          ...(otherMaterialKeys.includes(ritage) ? otherColumnFilter : {}),
           ...(bargingKeys.includes(ritage) ? bargingColumnFilter : {}),
         },
       },

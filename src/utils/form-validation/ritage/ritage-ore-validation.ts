@@ -84,7 +84,7 @@ export const downloadOreProductionValidation: z.ZodType<
   IDownloadRitageCommonValue & IDownloadOreProductionValues
 > = z
   .object({
-    locationId: zOptionalString.nullable(),
+    fromPitId: zOptionalString.nullable(),
   })
   .merge(commonDownloadRitageValidation)
   .superRefine((arg, ctx) => {
