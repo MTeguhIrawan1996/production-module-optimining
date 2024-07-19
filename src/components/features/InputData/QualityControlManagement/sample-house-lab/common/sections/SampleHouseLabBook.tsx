@@ -55,7 +55,6 @@ const SampleHouseLabBook = () => {
     {
       page,
       search,
-
       period,
       startDate,
       endDate,

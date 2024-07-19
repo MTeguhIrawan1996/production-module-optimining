@@ -24,12 +24,10 @@ const LocationSelectInputNative: React.FC<ILocationNativeProps> = ({
     (state) => [state.filterDataCommon, state.setFilterDataCommon],
     shallow
   );
-  // const [searchTerm, setSearchTerm] = React.useState<string>('');
-  // const [searchQuery] = useDebouncedValue<string>(searchTerm, 400);
 
   useReadAllLocationselect({
     variables: {
-      // search: searchQuery === '' ? null : searchQuery,
+      orderDir: 'desc',
       limit: null,
       categoryIds: categoryIds && categoryIds.length > 0 ? categoryIds : null,
     },

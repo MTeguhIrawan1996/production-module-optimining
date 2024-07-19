@@ -5,11 +5,14 @@ import { sliceResetFns } from '@/utils/store/useControlPanel';
 type IBargingMonitoringState = {
   page: number;
   search: string;
-  bargeHeavyEquipmentId: string | null;
-  factoryCategoryId: string | null;
+  period: string | null;
+  startDate: Date | null;
+  endDate: Date | null;
   year: number | null;
   month: number | null;
   week: number | null;
+  bargeHeavyEquipmentId: string | null;
+  factoryCategoryId: string | null;
   filterBadgeValue: string[] | null;
 };
 
@@ -28,11 +31,14 @@ const initialState: IBargingMonitoringValue = {
   bargingMonitoringState: {
     page: 1,
     search: '',
-    bargeHeavyEquipmentId: null,
-    factoryCategoryId: null,
+    period: null,
+    startDate: null,
+    endDate: null,
     year: null,
     month: null,
     week: null,
+    bargeHeavyEquipmentId: null,
+    factoryCategoryId: null,
     filterBadgeValue: null,
   },
 };

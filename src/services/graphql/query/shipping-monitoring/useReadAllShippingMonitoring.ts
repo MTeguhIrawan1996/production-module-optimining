@@ -8,7 +8,12 @@ import {
 import { formatDate } from '@/utils/helper/dateFormat';
 import { simpleOtherColumn } from '@/utils/helper/simpleOtherColumn';
 
-import { GResponse, IGlobalMetaRequest, IStatus } from '@/types/global';
+import {
+  GResponse,
+  IGlobalMetaRequest,
+  IGlobalTimeFIlter,
+  IStatus,
+} from '@/types/global';
 
 export const READ_ALL_SHIPPING_MONITORING = gql`
   query ReadAllShippingMonitoring(
@@ -19,9 +24,8 @@ export const READ_ALL_SHIPPING_MONITORING = gql`
     $orderDir: String
     $bargeHeavyEquipmentId: String
     $factoryCategoryId: String
-    $year: Float
-    $month: Float
-    $week: Float
+    $timeFilterType: TimeFilterTypeDownloadEnum
+    $timeFilter: JSON
   ) {
     monitoringBargings(
       findAllMonitoringBargingInput: {
@@ -32,9 +36,8 @@ export const READ_ALL_SHIPPING_MONITORING = gql`
         orderDir: $orderDir
         bargeHeavyEquipmentId: $bargeHeavyEquipmentId
         factoryCategoryId: $factoryCategoryId
-        year: $year
-        month: $month
-        week: $week
+        timeFilterType: $timeFilterType
+        timeFilter: $timeFilter
       }
     ) {
       meta {
@@ -96,12 +99,11 @@ interface IReadAllShippingMonitoringResponse {
   monitoringBargings: GResponse<IReadAllShippingMonitoringData>;
 }
 
-interface IReadAllShippingMonitoringRequest extends IGlobalMetaRequest {
-  year: number | null;
-  month: number | null;
-  week: number | null;
+export interface IReadAllShippingMonitoringRequest extends IGlobalMetaRequest {
   factoryCategoryId: string | null;
   bargeHeavyEquipmentId: string | null;
+  timeFilterType: 'DATE_RANGE' | 'PERIOD' | null;
+  timeFilter: Partial<IGlobalTimeFIlter>;
 }
 
 interface ISimpleKeyType {
@@ -142,6 +144,7 @@ export const useReadAllShippingMonitoring = ({
     },
     onCompleted,
     fetchPolicy,
+    notifyOnNetworkStatusChange: true,
   });
 
   const simplifiedData: ISimpleKeyType[] | undefined =
