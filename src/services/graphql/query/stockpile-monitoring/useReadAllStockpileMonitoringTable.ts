@@ -7,7 +7,12 @@ import {
 
 import { IReadOneStockpileDomeMaster } from '@/services/graphql/query/stockpile-master/useReadOneStockpileDomeMaster';
 
-import { GResponse, IGlobalMetaRequest, IStatus } from '@/types/global';
+import {
+  GResponse,
+  IGlobalMetaRequest,
+  IGlobalTimeFIlter,
+  IStatus,
+} from '@/types/global';
 
 export const READ_ALL_STOCKPILE_MONITORING_TABLE = gql`
   query ReadAllStockpileMonitoringTable(
@@ -17,10 +22,8 @@ export const READ_ALL_STOCKPILE_MONITORING_TABLE = gql`
     $orderBy: String
     $orderDir: String
     $stockpileId: String
-    $year: Float
-    $month: Float
-    $week: Float
-    $domeStatus: String
+    $timeFilterType: TimeFilterTypeDownloadEnum
+    $timeFilter: JSON
   ) {
     monitoringStockpilesTable(
       findAllMonitoringStockpileInput: {
@@ -30,10 +33,8 @@ export const READ_ALL_STOCKPILE_MONITORING_TABLE = gql`
         orderBy: $orderBy
         orderDir: $orderDir
         stockpileId: $stockpileId
-        year: $year
-        month: $month
-        week: $week
-        domeStatus: $domeStatus
+        timeFilterType: $timeFilterType
+        timeFilter: $timeFilter
       }
     ) {
       meta {
@@ -101,11 +102,10 @@ interface IMonitoringStockpilesTableResponse {
   monitoringStockpilesTable: GResponse<IMonitoringStockpilesTableData>;
 }
 
-interface IMonitoringStockpilesTableRequest extends IGlobalMetaRequest {
+export interface IMonitoringStockpilesTableRequest extends IGlobalMetaRequest {
   stockpileId: string | null;
-  year: number | null;
-  month: number | null;
-  week: number | null;
+  timeFilterType: 'DATE_RANGE' | 'PERIOD' | null;
+  timeFilter: Partial<IGlobalTimeFIlter>;
 }
 
 export const useReadAllStockpileMonitoringTable = ({
@@ -134,6 +134,7 @@ export const useReadAllStockpileMonitoringTable = ({
     },
     onCompleted,
     fetchPolicy,
+    notifyOnNetworkStatusChange: true,
   });
 
   return {

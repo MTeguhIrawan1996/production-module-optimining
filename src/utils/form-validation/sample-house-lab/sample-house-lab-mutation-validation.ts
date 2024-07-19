@@ -1,7 +1,9 @@
 import { z } from 'zod';
 
+import { IDownloadSampleHouseLabValues } from '@/services/graphql/mutation/download/useDownloadTask';
 import { IMutationSampleHousePlanValues } from '@/services/restapi/sample-house-plan/useCreateSampleHousePlan';
 import {
+  validatePeriod,
   zDateOptionalValidation,
   zDateValidation,
   zImageArrayOptional,
@@ -92,4 +94,20 @@ export const sampleHouseLabMutationValidation: z.ZodType<IMutationSampleHousePla
 
         return z.NEVER; // The return value is not used, but we need to return something to satisfy the typing
       }
+    });
+
+export const downloadSampleHouseLabValidation: z.ZodType<IDownloadSampleHouseLabValues> =
+  z
+    .object({
+      period: zRequiredSelectInput,
+      startDate: zDateOptionalValidation,
+      endDate: zDateOptionalValidation,
+      year: zOptionalString.nullable(),
+      month: zOptionalString.nullable(),
+      week: zOptionalString.nullable(),
+      shiftId: zOptionalString.nullable(),
+      sampleTypeId: zOptionalString.nullable(),
+    })
+    .superRefine((arg, ctx) => {
+      validatePeriod(arg, ctx);
     });

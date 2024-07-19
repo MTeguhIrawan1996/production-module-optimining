@@ -45,9 +45,11 @@ interface ISampleTypesResponse {
 export const useReadAllSampleType = ({
   variables,
   onCompleted,
+  skip,
 }: {
   variables?: Partial<IGlobalMetaRequest>;
   onCompleted?: (data: ISampleTypesResponse) => void;
+  skip?: boolean;
 }) => {
   const { data: sampleTypesdata, loading: sampleTypesLoading } = useQuery<
     ISampleTypesResponse,
@@ -59,6 +61,7 @@ export const useReadAllSampleType = ({
     },
     onCompleted,
     fetchPolicy: 'cache-first',
+    skip,
   });
 
   return {

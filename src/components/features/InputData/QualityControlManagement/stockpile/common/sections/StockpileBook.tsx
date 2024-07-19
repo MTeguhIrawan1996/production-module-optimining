@@ -1,4 +1,4 @@
-import { rem } from '@mantine/core';
+import { rem, Text } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { IconPencil } from '@tabler/icons-react';
 import { DataTableColumn } from 'mantine-datatable';
@@ -9,23 +9,30 @@ import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
+  GlobalAlert,
   GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
 } from '@/components/elements';
 import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
+import DownloadButtonStockpileMonitoring from '@/components/features/InputData/QualityControlManagement/stockpile/common/elements/DownloadButtonStockpileMonitoring';
 
 import { useReadAllElementMaster } from '@/services/graphql/query/element/useReadAllElementMaster';
 import {
   IMonitoringStockpilesTableData,
+  IMonitoringStockpilesTableRequest,
   useReadAllStockpileMonitoringTable,
 } from '@/services/graphql/query/stockpile-monitoring/useReadAllStockpileMonitoringTable';
 import {
+  globalDateNative,
   globalSelectLocationNative,
   globalSelectMonthNative,
+  globalSelectPeriodNative,
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import { formatDate } from '@/utils/helper/dateFormat';
+import dayjs from '@/utils/helper/dayjs.config';
 import { newNormalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
 import useControlPanel, {
   ISliceName,
@@ -46,7 +53,18 @@ const StockpileBook = () => {
   );
   const [
     hasHydrated,
-    { page, search, week, year, month, stockpileId, filterBadgeValue },
+    {
+      page,
+      search,
+      period,
+      startDate,
+      endDate,
+      week,
+      year,
+      month,
+      stockpileId,
+      filterBadgeValue,
+    },
     setStockpileMonitoringState,
   ] = useControlPanel(
     (state) => [
@@ -65,6 +83,26 @@ const StockpileBook = () => {
   );
   const isPermissionRead = permissions?.includes('read-monitoring-stockpile');
 
+  const startDateString = formatDate(startDate || null, 'YYYY-MM-DD');
+  const endDateString = formatDate(endDate || null, 'YYYY-MM-DD');
+
+  const defaultRefetchStockpileMonitoring: Partial<IMonitoringStockpilesTableRequest> =
+    {
+      stockpileId: stockpileId || null,
+      timeFilterType: period
+        ? period === 'DATE_RANGE'
+          ? period
+          : 'PERIOD'
+        : undefined,
+      timeFilter: {
+        startDate: startDateString || undefined,
+        endDate: endDateString || undefined,
+        year: year ? Number(year) : undefined,
+        week: week ? Number(week) : undefined,
+        month: month ? Number(month) : undefined,
+      },
+    };
+
   /* #   /**=========== Query =========== */
   const { elementsData } = useReadAllElementMaster({
     variables: {
@@ -81,10 +119,9 @@ const StockpileBook = () => {
   } = useReadAllStockpileMonitoringTable({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
       orderBy: 'createdAt',
-      search: searchQuery === '' ? null : searchQuery,
     },
   });
 
@@ -98,10 +135,8 @@ const StockpileBook = () => {
   React.useEffect(() => {
     if (hasHydrated) {
       refetchMonitoringStockpilesTable({
-        stockpileId,
-        year,
-        month,
-        week,
+        page,
+        ...defaultRefetchStockpileMonitoring,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,18 +145,59 @@ const StockpileBook = () => {
   /* #endregion  /**======== Query =========== */
 
   const filter = React.useMemo(() => {
-    const stockpileNameItem = globalSelectLocationNative({
-      label: 'stockpileName',
-      name: 'stockpileName',
-      searchable: true,
-      value: stockpileId,
-      categoryIds: [`${process.env.NEXT_PUBLIC_STOCKPILE_ID}`],
+    const maxEndDate = dayjs(startDate || undefined)
+      .add(dayjs.duration({ days: 29 }))
+      .toDate();
+    const periodItem = globalSelectPeriodNative({
+      label: 'period',
+      name: 'period',
+      clearable: true,
       onChange: (value) => {
-        setStockpileMonitoringState({ stockpileId: value });
+        setStockpileMonitoringState({
+          period: value,
+          startDate: null,
+          endDate: null,
+          year: null,
+          month: null,
+          stockpileId: null,
+        });
       },
+      value: period,
     });
-    const selectYearItem = globalSelectYearNative({
+    const startDateItem = globalDateNative({
+      label: 'startDate2',
+      name: 'startDate',
+      placeholder: 'chooseDate',
+      clearable: true,
+      withAsterisk: true,
+      onChange: (value) => {
+        setStockpileMonitoringState({
+          startDate: value || null,
+          endDate: null,
+        });
+      },
+      value: startDate,
+    });
+    const endDateItem = globalDateNative({
+      label: 'endDate2',
+      name: 'endDate',
+      placeholder: 'chooseDate',
+      clearable: true,
+      disabled: !startDate,
+      withAsterisk: true,
+      maxDate: maxEndDate,
+      minDate: startDate || undefined,
+      onChange: (value) => {
+        setStockpileMonitoringState({
+          endDate: value || null,
+        });
+      },
+      value: endDate,
+    });
+
+    const yearItem = globalSelectYearNative({
       name: 'year',
+      withAsterisk: true,
       onChange: (value) => {
         setStockpileMonitoringState({
           year: value ? Number(value) : null,
@@ -131,8 +207,11 @@ const StockpileBook = () => {
       },
       value: year ? `${year}` : null,
     });
-    const selectMonthItem = globalSelectMonthNative({
+    const monthItem = globalSelectMonthNative({
+      placeholder: 'month',
+      label: 'month',
       name: 'month',
+      withAsterisk: true,
       disabled: !year,
       value: month ? `${month}` : null,
       onChange: (value) => {
@@ -142,11 +221,16 @@ const StockpileBook = () => {
         });
       },
     });
-    const selectWeekItem = globalSelectWeekNative({
+    const weekItem = globalSelectWeekNative({
+      placeholder: 'week',
+      label: 'week',
       name: 'week',
+      searchable: false,
+      withAsterisk: true,
+      year: year,
+      month: month,
       disabled: !year,
       value: week ? `${week}` : null,
-      year: year,
       onChange: (value) => {
         setStockpileMonitoringState({
           week: value ? Number(value) : null,
@@ -154,33 +238,89 @@ const StockpileBook = () => {
       },
     });
 
+    const stockpileNameItem = globalSelectLocationNative({
+      label: 'stockpile',
+      name: 'stockpileId',
+      searchable: true,
+      value: stockpileId,
+      categoryIds: [`${process.env.NEXT_PUBLIC_STOCKPILE_ID}`],
+      onChange: (value) => {
+        setStockpileMonitoringState({ stockpileId: value });
+      },
+    });
+
+    const periodDateRange = [
+      {
+        selectItem: startDateItem,
+        col: 6,
+      },
+      {
+        selectItem: endDateItem,
+        col: 6,
+        otherElement: () => (
+          <GlobalAlert
+            description={
+              <Text fw={500} color="orange.4">
+                Maksimal Rentang Waktu Dalam 30 Hari
+              </Text>
+            }
+            color="orange.5"
+            mt="xs"
+            py={4}
+          />
+        ),
+      },
+    ];
+
+    const periodYear = [
+      {
+        selectItem: yearItem,
+        col: period === 'YEAR' ? 12 : 6,
+        prefix: 'Tahun:',
+      },
+    ];
+
+    const periodMoth = [
+      ...periodYear,
+      {
+        selectItem: monthItem,
+        col: 6,
+      },
+    ];
+
+    const periodWeek = [
+      ...periodMoth,
+      {
+        selectItem: weekItem,
+        col: 12,
+      },
+    ];
+
     const item: IFilterButtonProps = {
       filterDateWithSelect: [
         {
+          selectItem: periodItem,
+          col: 12,
+          prefix: 'Periode:',
+        },
+        ...(period === 'DATE_RANGE' ? periodDateRange : []),
+        ...(period === 'YEAR' ? periodYear : []),
+        ...(period === 'MONTH' ? periodMoth : []),
+        ...(period === 'WEEK' ? periodWeek : []),
+        {
           selectItem: stockpileNameItem,
-          col: 6,
-        },
-        {
-          selectItem: selectYearItem,
-          col: 6,
-          prefix: 'Tahun:',
-        },
-        {
-          selectItem: selectMonthItem,
-          col: 6,
-        },
-        {
-          selectItem: selectWeekItem,
-          col: 6,
+          col: 12,
         },
       ],
     };
     return item;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stockpileId, year, month, week]);
+  }, [startDate, period, endDate, year, month, week, stockpileId]);
 
   const handleSetPage = (page: number) => {
     setStockpileMonitoringState({ page });
+    refetchMonitoringStockpilesTable({ page });
   };
 
   const renderOtherColumnCallback = React.useCallback(
@@ -341,6 +481,26 @@ const StockpileBook = () => {
   ]);
   /* #endregion  /**======== RenderTable =========== */
 
+  const isDisabled = () => {
+    const otherValue = [stockpileId];
+    if (period === 'DATE_RANGE') {
+      return !endDate;
+    }
+    if (period === 'YEAR') {
+      return !year;
+    }
+    if (period === 'MONTH') {
+      return !month;
+    }
+    if (period === 'WEEK') {
+      return !week;
+    }
+
+    return !otherValue.some((v) => typeof v === 'string');
+  };
+
+  const isApply = filterBadgeValue && filterBadgeValue?.length >= 1;
+
   return (
     <DashboardCard
       searchBar={{
@@ -353,27 +513,49 @@ const StockpileBook = () => {
           setStockpileMonitoringState({ page: 1 });
           refetchMonitoringStockpilesTable({
             page: 1,
+            search: searchQuery || null,
           });
         },
         value: search,
       }}
+      otherButton={
+        <DownloadButtonStockpileMonitoring
+          label="Download"
+          period={isApply ? period || undefined : undefined}
+          defaultValuesState={
+            isApply /* Check isAplly by filter badge length */
+              ? {
+                  period: period || 'DATE_RANGE',
+                  startDate: startDate || null,
+                  endDate: endDate || null,
+                  year: year ? `${year}` : null,
+                  month: month ? `${month}` : null,
+                  week: week ? `${week}` : null,
+                  stockpileId: stockpileId || null,
+                }
+              : undefined
+          }
+        />
+      }
       filterBadge={{
         resetButton: {
           onClick: () => {
             setStockpileMonitoringState({
               page: 1,
-              filterBadgeValue: null,
+              period: null,
+              startDate: null,
+              endDate: null,
               year: null,
-              week: null,
               month: null,
+              week: null,
               stockpileId: null,
+              filterBadgeValue: null,
             });
             refetchMonitoringStockpilesTable({
               page: 1,
-              year: null,
-              week: null,
-              month: null,
               stockpileId: null,
+              timeFilter: undefined,
+              timeFilterType: undefined,
             });
           },
         },
@@ -382,22 +564,33 @@ const StockpileBook = () => {
       filter={{
         filterDateWithSelect: filter.filterDateWithSelect,
         filterButton: {
-          disabled: stockpileId || month || week || year ? false : true,
+          disabled: isDisabled(),
           onClick: () => {
             refetchMonitoringStockpilesTable({
               page: 1,
-              year,
-              week,
-              month,
-              stockpileId,
+              ...defaultRefetchStockpileMonitoring,
             });
             const badgeFilterValue = newNormalizedFilterBadge({
               filter: filter.filterDateWithSelect || [],
-              data: filterDataCommon,
+              data: filterDataCommon || [],
             });
+            const newStartDate = formatDate(startDate);
+            const newEndDate = formatDate(endDate);
+            const dateBadgeValue = [`${newStartDate} - ${newEndDate}`];
+
+            const rangePeriod =
+              period === 'DATE_RANGE'
+                ? [
+                    ...badgeFilterValue.slice(0, 1),
+                    ...dateBadgeValue,
+                    ...badgeFilterValue.slice(1),
+                  ]
+                : [];
+
             setStockpileMonitoringState({
               page: 1,
-              filterBadgeValue: badgeFilterValue || null,
+              filterBadgeValue:
+                rangePeriod.length >= 1 ? rangePeriod : badgeFilterValue,
             });
           },
         },

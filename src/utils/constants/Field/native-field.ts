@@ -8,6 +8,7 @@ import { ISelectInputNativeProps } from '@/components/elements/input/SelectInput
 import { ISelectInputPeriodNatvie } from '@/components/elements/input/SelectInputPeriodNative';
 import { ISelectInputQuarterNatvie } from '@/components/elements/input/SelectInputQuarterNative';
 import { ISelectInputRitageStatusNatvie } from '@/components/elements/input/SelectInputRitageStatusNative';
+import { ISelectInputSampleTypeNativeProps } from '@/components/elements/input/SelectInputSampleTypeNative';
 import { ISelectShiftNativeProps } from '@/components/elements/input/SelectInputShiftNative';
 import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
 import { IStatusNativeProps } from '@/components/elements/input/SelectStatusNative';
@@ -242,6 +243,20 @@ export const globalSelectRitageStatusNative = ({
 }: Partial<ISelectInputRitageStatusNatvie>) => {
   const field: InputControllerNativeProps = {
     control: 'select-ritage-status-native',
+    name,
+    clearable,
+    ...rest,
+  };
+  return field;
+};
+
+export const globalSelectSampleTypeNative = ({
+  name = 'sampleTypeId',
+  clearable = true,
+  ...rest
+}: Partial<ISelectInputSampleTypeNativeProps>) => {
+  const field: InputControllerNativeProps = {
+    control: 'select-input-sample-type-native',
     name,
     clearable,
     ...rest,
