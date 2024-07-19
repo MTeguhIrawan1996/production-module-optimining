@@ -616,10 +616,14 @@ const ListDataTopsoilRitageBook = () => {
   /* #endregion  /**======== RenderTable =========== */
 
   const isDisabled = () => {
+    const otherValue = [
+      filterShift,
+      filterStatus,
+      filtercompanyHeavyEquipmentId,
+    ];
     if (period === 'DATE_RANGE') {
       return !endDate;
     }
-
     if (period === 'YEAR') {
       return !year;
     }
@@ -629,8 +633,7 @@ const ListDataTopsoilRitageBook = () => {
     if (period === 'WEEK') {
       return !week;
     }
-
-    return true;
+    return !otherValue.some((v) => typeof v === 'string');
   };
 
   const isApply = filterBadgeValue && filterBadgeValue?.length >= 1;

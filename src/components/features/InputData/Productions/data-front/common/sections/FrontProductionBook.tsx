@@ -815,25 +815,29 @@ const FrontProductionBook = () => {
   /* #endregion  /**======== RenderTable =========== */
 
   const isDisabled = () => {
-    if (segment.period?.value === 'DATE_RANGE') {
-      const { endDate } = segment;
+    const { period, endDate, year, month, week, shiftId, location } = segment;
+    const otherValue = [
+      shiftId.value,
+      location.value,
+      newParams.segment === 'pit'
+        ? segmentConditionalFilter.pit.materialId.value
+        : null,
+    ];
+
+    if (period?.value === 'DATE_RANGE') {
       return !(endDate && endDate.value);
     }
-
-    if (segment.period?.value === 'YEAR') {
-      const { year } = segment;
+    if (period?.value === 'YEAR') {
       return !(year && year.value);
     }
-    if (segment.period?.value === 'MONTH') {
-      const { month } = segment;
+    if (period?.value === 'MONTH') {
       return !(month && month.value);
     }
-    if (segment.period?.value === 'WEEK') {
-      const { week } = segment;
+    if (period?.value === 'WEEK') {
       return !(week && week.value);
     }
 
-    return true;
+    return !otherValue.some((v) => typeof v === 'string');
   };
 
   return (
