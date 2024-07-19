@@ -502,6 +502,8 @@ const WeatherProductionBook = () => {
   /* #endregion  /**======== RenderTable =========== */
 
   const isDisabled = () => {
+    const otherValue = [shiftId];
+
     if (period === 'DATE_RANGE') {
       return !endDate;
     }
@@ -516,7 +518,7 @@ const WeatherProductionBook = () => {
       return !week;
     }
 
-    return true;
+    return !otherValue.some((v) => typeof v === 'string');
   };
 
   const isApply = filterBadgeValue && filterBadgeValue?.length >= 1;

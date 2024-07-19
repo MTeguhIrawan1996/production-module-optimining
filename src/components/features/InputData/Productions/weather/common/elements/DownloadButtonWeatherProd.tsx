@@ -137,7 +137,7 @@ export default function DownloadButtonWeatherProd({
       label: 'period',
       clearable: false,
       withErrorState: false,
-      withAsterisk: false,
+      withAsterisk: true,
       onChange: (value) => {
         methods.setValue('period', value);
         values

@@ -299,7 +299,7 @@ const CreateRitageBargingBook = () => {
       name: 'bargingId',
       label: 'toBarging',
       withAsterisk: false,
-      categoryIds: [`${process.env.NEXT_PUBLIC_BARGING_ID}`],
+      categoryIds: [`${process.env.NEXT_PUBLIC_HARBOR_ID}`],
     });
     const bargeCodeItem = heavyEquipmentSelect({
       colSpan: 6,

@@ -641,10 +641,15 @@ const ListDataObRitageBook = () => {
   /* #endregion  /**======== RenderTable =========== */
 
   const isDisabled = () => {
+    const otherValue = [
+      filterShift,
+      filterStatus,
+      filtercompanyHeavyEquipmentId,
+      fromPitId,
+    ];
     if (period === 'DATE_RANGE') {
       return !endDate;
     }
-
     if (period === 'YEAR') {
       return !year;
     }
@@ -655,7 +660,7 @@ const ListDataObRitageBook = () => {
       return !week;
     }
 
-    return true;
+    return !otherValue.some((v) => typeof v === 'string');
   };
 
   const isApply = filterBadgeValue && filterBadgeValue?.length >= 1;
