@@ -292,7 +292,7 @@ export default function DownloadButtonSampleHouseLab({
 
     await executeCreate({
       variables: {
-        entity: 'SAMPLE_HOUSE_AND_LAB' /* FIX ME UPDATE BE */,
+        entity: 'RUMAH_SAMPEL',
         timeFilterType: data.period === 'DATE_RANGE' ? data.period : 'PERIOD',
         timeFilter: {
           startDate: startDate || undefined,
