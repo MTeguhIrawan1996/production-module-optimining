@@ -286,7 +286,7 @@ export default function DownloadButtonStockpileMonitoring({
 
     await executeCreate({
       variables: {
-        entity: 'STOCKPILE_MONITORING' /* FIX ME UPDATE BE */,
+        entity: 'MONITORING_STOCKPILE',
         timeFilterType: data.period === 'DATE_RANGE' ? data.period : 'PERIOD',
         timeFilter: {
           startDate: startDate || undefined,
