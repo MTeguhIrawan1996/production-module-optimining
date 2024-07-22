@@ -5,6 +5,15 @@ import { sliceResetFns } from '@/utils/store/useControlPanel';
 type ISampleHouseLabState = {
   page: number;
   search: string;
+  period: string | null;
+  startDate: Date | null;
+  endDate: Date | null;
+  year: number | null;
+  month: number | null;
+  week: number | null;
+  sampleTypeId: string | null;
+  shiftId: string | null;
+  filterBadgeValue: string[] | null;
 };
 
 export type ISampleHouseLabValue = {
@@ -20,6 +29,15 @@ const initialState: ISampleHouseLabValue = {
   sampleHouseLabState: {
     page: 1,
     search: '',
+    period: null,
+    startDate: null,
+    endDate: null,
+    year: null,
+    month: null,
+    week: null,
+    sampleTypeId: null,
+    shiftId: null,
+    filterBadgeValue: null,
   },
 };
 

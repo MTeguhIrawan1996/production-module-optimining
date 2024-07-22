@@ -28,7 +28,6 @@ export const shiftSelect = ({
 export const sampleTypeSelect = ({
   name = 'sampleTypeId',
   label = 'sampleType',
-  searchable = true,
   clearable = true,
   withAsterisk = true,
   colSpan = 6,
@@ -38,7 +37,6 @@ export const sampleTypeSelect = ({
     control: 'sample-type-select-input',
     name,
     label,
-    searchable,
     clearable,
     withAsterisk,
     colSpan,

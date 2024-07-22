@@ -1,7 +1,9 @@
 import { z } from 'zod';
 
+import { IDownloadShippingMonitoringValues } from '@/services/graphql/mutation/download/useDownloadTask';
 import { IMutationShippingMonitoringValues } from '@/services/restapi/shipping-monitoring/useCreateShippingMonitoring';
 import {
+  validatePeriod,
   zDateOptionalValidation,
   zImageArrayOptional,
   zOptionalNumber,
@@ -50,4 +52,20 @@ export const shippingMonitoringMutationValidation: z.ZodType<IMutationShippingMo
         }
         return z.NEVER; // The return value is not used, but we need to return something to satisfy the typing
       }
+    });
+
+export const downloadShippingMonitoringValidation: z.ZodType<IDownloadShippingMonitoringValues> =
+  z
+    .object({
+      period: zRequiredSelectInput,
+      startDate: zDateOptionalValidation,
+      endDate: zDateOptionalValidation,
+      year: zOptionalString.nullable(),
+      month: zOptionalString.nullable(),
+      week: zOptionalString.nullable(),
+      bargeHeavyEquipmentId: zOptionalString.nullable(),
+      factoryCategoryId: zOptionalString.nullable(),
+    })
+    .superRefine((arg, ctx) => {
+      validatePeriod(arg, ctx);
     });

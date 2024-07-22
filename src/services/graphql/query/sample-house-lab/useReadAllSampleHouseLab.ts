@@ -9,6 +9,7 @@ import {
   GResponse,
   IElementWithValue,
   IGlobalMetaRequest,
+  IGlobalTimeFIlter,
   IStatus,
 } from '@/types/global';
 
@@ -19,6 +20,10 @@ export const READ_ALL_SAMPLE_HOUSE_LAB = gql`
     $search: String
     $orderBy: String
     $orderDir: String
+    $sampleTypeId: String
+    $shiftId: String
+    $timeFilterType: TimeFilterTypeDownloadEnum
+    $timeFilter: JSON
   ) {
     houseSampleAndLabs(
       findAllHouseSampleAndLabInput: {
@@ -27,6 +32,10 @@ export const READ_ALL_SAMPLE_HOUSE_LAB = gql`
         search: $search
         orderBy: $orderBy
         orderDir: $orderDir
+        sampleTypeId: $sampleTypeId
+        shiftId: $shiftId
+        timeFilterType: $timeFilterType
+        timeFilter: $timeFilter
       }
     ) {
       meta {
@@ -144,13 +153,20 @@ interface IHouseSampleAndLabsResponse {
   houseSampleAndLabs: GResponse<IHouseSampleAndLabsData>;
 }
 
+export interface IHouseSampleAndLabsRequest extends IGlobalMetaRequest {
+  sampleTypeId: string | null;
+  shiftId: string | null;
+  timeFilterType: 'DATE_RANGE' | 'PERIOD' | null;
+  timeFilter: Partial<IGlobalTimeFIlter>;
+}
+
 export const useReadAllSampleHouseLab = ({
   variables,
   onCompleted,
   skip,
   fetchPolicy = 'cache-first',
 }: {
-  variables?: Partial<IGlobalMetaRequest>;
+  variables?: Partial<IHouseSampleAndLabsRequest>;
   onCompleted?: (data: IHouseSampleAndLabsResponse) => void;
   skip?: boolean;
   fetchPolicy?: WatchQueryFetchPolicy;
@@ -159,18 +175,19 @@ export const useReadAllSampleHouseLab = ({
     data: houseSampleAndLabsData,
     loading: houseSampleAndLabsDataLoading,
     refetch,
-  } = useQuery<IHouseSampleAndLabsResponse, Partial<IGlobalMetaRequest>>(
-    READ_ALL_SAMPLE_HOUSE_LAB,
-    {
-      variables: variables,
-      skip: skip,
-      onError: (err: ApolloError) => {
-        return err;
-      },
-      onCompleted,
-      fetchPolicy,
-    }
-  );
+  } = useQuery<
+    IHouseSampleAndLabsResponse,
+    Partial<IHouseSampleAndLabsRequest>
+  >(READ_ALL_SAMPLE_HOUSE_LAB, {
+    variables: variables,
+    skip: skip,
+    onError: (err: ApolloError) => {
+      return err;
+    },
+    onCompleted,
+    fetchPolicy,
+    notifyOnNetworkStatusChange: true,
+  });
 
   return {
     houseSampleAndLabsData: houseSampleAndLabsData?.houseSampleAndLabs.data,

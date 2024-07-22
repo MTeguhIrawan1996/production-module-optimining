@@ -96,7 +96,7 @@ const DownloadPanel = () => {
           notifications.show({
             color: 'green',
             title: 'Download berhasil',
-            message: `Data ${task.name} berhasil didownload` /* Fix Me Name File */,
+            message: `Data ${task.name} berhasil didownload`,
             icon: <IconCheck />,
           });
         }
@@ -110,7 +110,7 @@ const DownloadPanel = () => {
           notifications.show({
             color: 'red',
             title: 'Download gagal',
-            message: `Data ${task.name} gagal didownload` /* Fix Me Name File */,
+            message: `Data ${task.name} gagal didownload`,
             icon: <IconX />,
           });
 

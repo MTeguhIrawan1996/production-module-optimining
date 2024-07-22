@@ -1,7 +1,9 @@
 import { z } from 'zod';
 
+import { IDownloadStockpileMonitoringValues } from '@/services/graphql/mutation/download/useDownloadTask';
 import { IMutationStockpile } from '@/services/restapi/stockpile-monitoring/useUpdateStockpileMonitoring';
 import {
+  validatePeriod,
   zDateOptionalValidation,
   zDateValidation,
   zImageArrayOptional,
@@ -61,4 +63,19 @@ export const stockpileMonitoringMutationValidation: z.ZodType<IMutationStockpile
         });
         return z.NEVER;
       }
+    });
+
+export const downloadStockpileMonitoringValidation: z.ZodType<IDownloadStockpileMonitoringValues> =
+  z
+    .object({
+      period: zRequiredSelectInput,
+      startDate: zDateOptionalValidation,
+      endDate: zDateOptionalValidation,
+      year: zOptionalString.nullable(),
+      month: zOptionalString.nullable(),
+      week: zOptionalString.nullable(),
+      stockpileId: zOptionalString.nullable(),
+    })
+    .superRefine((arg, ctx) => {
+      validatePeriod(arg, ctx);
     });

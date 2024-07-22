@@ -60,6 +60,7 @@ import { ISelectInputQuarterNatvie } from '@/components/elements/input/SelectInp
 import { ISelectInputRhfProps } from '@/components/elements/input/SelectInputRhf';
 import { ISelectInputRitageStatusNatvie } from '@/components/elements/input/SelectInputRitageStatusNative';
 import { ISelectInputStatusRitageRhf } from '@/components/elements/input/SelectInputRitageStatusRhf';
+import { ISelectInputSampleTypeNativeProps } from '@/components/elements/input/SelectInputSampleTypeNative';
 import { ISelectShiftNativeProps } from '@/components/elements/input/SelectInputShiftNative';
 import { ISelectMapTypeRhfProps } from '@/components/elements/input/SelectMapType';
 import { ISelectMonthNativeProps } from '@/components/elements/input/SelectMonthNative';
@@ -180,7 +181,8 @@ export type InputControllerNativeProps =
   | ISelectInputPeriodNatvie
   | ISelectShiftNativeProps
   | ISelectMaterialNativeProps
-  | ISelectInputRitageStatusNatvie;
+  | ISelectInputRitageStatusNatvie
+  | ISelectInputSampleTypeNativeProps;
 
 export type ControllerGroup = {
   group: string;

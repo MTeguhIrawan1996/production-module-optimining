@@ -1,3 +1,4 @@
+import { Text } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -8,22 +9,31 @@ import { shallow } from 'zustand/shallow';
 
 import {
   DashboardCard,
+  GlobalAlert,
   GlobalBadgeStatus,
   GlobalKebabButton,
   MantineDataTable,
   ModalConfirmation,
 } from '@/components/elements';
 import { IFilterButtonProps } from '@/components/elements/button/FilterButton';
+import DownloadButtonShippingMonitoring from '@/components/features/InputData/QualityControlManagement/shipping-monitoring/common/elements/DownloadButtonShippingMonitoring';
 
 import { useDeleteShippingMonitoring } from '@/services/graphql/mutation/shipping-monitoring/useDeleteShippingMonitoring';
-import { useReadAllShippingMonitoring } from '@/services/graphql/query/shipping-monitoring/useReadAllShippingMonitoring';
 import {
+  IReadAllShippingMonitoringRequest,
+  useReadAllShippingMonitoring,
+} from '@/services/graphql/query/shipping-monitoring/useReadAllShippingMonitoring';
+import {
+  globalDateNative,
   globalSelectArriveBargeNative,
   globalSelectHeavyEquipmentNative,
   globalSelectMonthNative,
+  globalSelectPeriodNative,
   globalSelectWeekNative,
   globalSelectYearNative,
 } from '@/utils/constants/Field/native-field';
+import { formatDate } from '@/utils/helper/dateFormat';
+import dayjs from '@/utils/helper/dayjs.config';
 import { newNormalizedFilterBadge } from '@/utils/helper/normalizedFilterBadge';
 import useControlPanel, {
   ISliceName,
@@ -45,11 +55,14 @@ const ShippingMonitoringBook = () => {
     {
       page,
       search,
-      bargeHeavyEquipmentId,
-      factoryCategoryId,
+      period,
+      startDate,
+      endDate,
+      week,
       year,
       month,
-      week,
+      bargeHeavyEquipmentId,
+      factoryCategoryId,
       filterBadgeValue,
     },
     setBargingMonitoringState,
@@ -74,6 +87,27 @@ const ShippingMonitoringBook = () => {
   const isPermissionRead = permissions?.includes('read-monitoring-barging');
 
   /* #   /**=========== Query =========== */
+  const startDateString = formatDate(startDate || null, 'YYYY-MM-DD');
+  const endDateString = formatDate(endDate || null, 'YYYY-MM-DD');
+
+  const defaultRefetchShippingMonitoring: Partial<IReadAllShippingMonitoringRequest> =
+    {
+      bargeHeavyEquipmentId: bargeHeavyEquipmentId || null,
+      factoryCategoryId: factoryCategoryId || null,
+      timeFilterType: period
+        ? period === 'DATE_RANGE'
+          ? period
+          : 'PERIOD'
+        : undefined,
+      timeFilter: {
+        startDate: startDateString || undefined,
+        endDate: endDateString || undefined,
+        year: year ? Number(year) : undefined,
+        week: week ? Number(week) : undefined,
+        month: month ? Number(month) : undefined,
+      },
+    };
+
   const {
     monitoringBargingData,
     monitoringBargingOtherColumn,
@@ -83,9 +117,8 @@ const ShippingMonitoringBook = () => {
   } = useReadAllShippingMonitoring({
     variables: {
       limit: 10,
-      page: page,
+      page: 1,
       orderDir: 'desc',
-      search: searchQuery === '' ? null : searchQuery,
     },
   });
 
@@ -99,11 +132,8 @@ const ShippingMonitoringBook = () => {
   React.useEffect(() => {
     if (hasHydrated) {
       refetchMonitoringBargingData({
-        factoryCategoryId,
-        bargeHeavyEquipmentId,
-        year,
-        month,
-        week,
+        page,
+        ...defaultRefetchShippingMonitoring,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,9 +141,9 @@ const ShippingMonitoringBook = () => {
 
   const [executeDelete, { loading }] = useDeleteShippingMonitoring({
     onCompleted: () => {
-      refetchMonitoringBargingData();
       setIsOpenDeleteConfirmation((prev) => !prev);
       setBargingMonitoringState({ page: 1 });
+      refetchMonitoringBargingData({ page: 1 });
       notifications.show({
         color: 'green',
         title: 'Selamat',
@@ -142,9 +172,102 @@ const ShippingMonitoringBook = () => {
 
   const handleSetPage = (page: number) => {
     setBargingMonitoringState({ page });
+    refetchMonitoringBargingData({ page });
   };
 
   const filter = React.useMemo(() => {
+    const maxEndDate = dayjs(startDate || undefined)
+      .add(dayjs.duration({ days: 29 }))
+      .toDate();
+    const periodItem = globalSelectPeriodNative({
+      label: 'period',
+      name: 'period',
+      clearable: true,
+      onChange: (value) => {
+        setBargingMonitoringState({
+          period: value,
+          startDate: null,
+          endDate: null,
+          year: null,
+          month: null,
+          bargeHeavyEquipmentId: null,
+          factoryCategoryId: null,
+        });
+      },
+      value: period,
+    });
+    const startDateItem = globalDateNative({
+      label: 'startDate2',
+      name: 'startDate',
+      placeholder: 'chooseDate',
+      clearable: true,
+      withAsterisk: true,
+      onChange: (value) => {
+        setBargingMonitoringState({
+          startDate: value || null,
+          endDate: null,
+        });
+      },
+      value: startDate,
+    });
+    const endDateItem = globalDateNative({
+      label: 'endDate2',
+      name: 'endDate',
+      placeholder: 'chooseDate',
+      clearable: true,
+      disabled: !startDate,
+      withAsterisk: true,
+      maxDate: maxEndDate,
+      minDate: startDate || undefined,
+      onChange: (value) => {
+        setBargingMonitoringState({
+          endDate: value || null,
+        });
+      },
+      value: endDate,
+    });
+    const yearItem = globalSelectYearNative({
+      name: 'year',
+      withAsterisk: true,
+      onChange: (value) => {
+        setBargingMonitoringState({
+          year: value ? Number(value) : null,
+          month: null,
+          week: null,
+        });
+      },
+      value: year ? `${year}` : null,
+    });
+    const monthItem = globalSelectMonthNative({
+      placeholder: 'month',
+      label: 'month',
+      name: 'month',
+      withAsterisk: true,
+      disabled: !year,
+      value: month ? `${month}` : null,
+      onChange: (value) => {
+        setBargingMonitoringState({
+          month: value ? Number(value) : null,
+          week: null,
+        });
+      },
+    });
+    const weekItem = globalSelectWeekNative({
+      placeholder: 'week',
+      label: 'week',
+      name: 'week',
+      searchable: false,
+      withAsterisk: true,
+      year: year,
+      month: month,
+      disabled: !year,
+      value: week ? `${week}` : null,
+      onChange: (value) => {
+        setBargingMonitoringState({
+          week: value ? Number(value) : null,
+        });
+      },
+    });
     const bargeCodeItem = globalSelectHeavyEquipmentNative({
       name: 'bargeHeavyEquipmentId',
       categoryId: `${process.env.NEXT_PUBLIC_BARGE_ID}`,
@@ -164,61 +287,71 @@ const ShippingMonitoringBook = () => {
       },
       value: factoryCategoryId,
     });
-    const selectYearItem = globalSelectYearNative({
-      name: 'year',
-      onChange: (value) => {
-        setBargingMonitoringState({
-          year: value ? Number(value) : null,
-          month: null,
-          week: null,
-        });
+
+    const periodDateRange = [
+      {
+        selectItem: startDateItem,
+        col: 6,
       },
-      value: year ? `${year}` : null,
-    });
-    const selectMonthItem = globalSelectMonthNative({
-      name: 'month',
-      disabled: !year,
-      value: month ? `${month}` : null,
-      onChange: (value) => {
-        setBargingMonitoringState({
-          month: value ? Number(value) : null,
-        });
+      {
+        selectItem: endDateItem,
+        col: 6,
+        otherElement: () => (
+          <GlobalAlert
+            description={
+              <Text fw={500} color="orange.4">
+                Maksimal Rentang Waktu Dalam 30 Hari
+              </Text>
+            }
+            color="orange.5"
+            mt="xs"
+            py={4}
+          />
+        ),
       },
-    });
-    const selectWeekItem = globalSelectWeekNative({
-      name: 'week',
-      disabled: !year,
-      value: week ? `${week}` : null,
-      year: year,
-      onChange: (value) => {
-        setBargingMonitoringState({
-          week: value ? Number(value) : null,
-        });
+    ];
+
+    const periodYear = [
+      {
+        selectItem: yearItem,
+        col: period === 'YEAR' ? 12 : 6,
+        prefix: 'Tahun:',
       },
-    });
+    ];
+
+    const periodMoth = [
+      ...periodYear,
+      {
+        selectItem: monthItem,
+        col: 6,
+      },
+    ];
+
+    const periodWeek = [
+      ...periodMoth,
+      {
+        selectItem: weekItem,
+        col: 12,
+      },
+    ];
 
     const item: IFilterButtonProps = {
       filterDateWithSelect: [
         {
-          selectItem: bargeCodeItem,
-          col: 6,
+          selectItem: periodItem,
+          col: 12,
+          prefix: 'Periode:',
         },
+        ...(period === 'DATE_RANGE' ? periodDateRange : []),
+        ...(period === 'YEAR' ? periodYear : []),
+        ...(period === 'MONTH' ? periodMoth : []),
+        ...(period === 'WEEK' ? periodWeek : []),
         {
           selectItem: arriveItem,
           col: 6,
-          prefix: 'Tujuan:',
         },
         {
-          selectItem: selectYearItem,
-          col: 6,
-          prefix: 'Tahun:',
-        },
-        {
-          selectItem: selectMonthItem,
-          col: 6,
-        },
-        {
-          selectItem: selectWeekItem,
+          selectItem: bargeCodeItem,
           col: 6,
         },
       ],
@@ -340,6 +473,26 @@ const ShippingMonitoringBook = () => {
   ]);
   /* #endregion  /**======== RenderTable =========== */
 
+  const isDisabled = () => {
+    const otherValue = [bargeHeavyEquipmentId, factoryCategoryId];
+    if (period === 'DATE_RANGE') {
+      return !endDate;
+    }
+    if (period === 'YEAR') {
+      return !year;
+    }
+    if (period === 'MONTH') {
+      return !month;
+    }
+    if (period === 'WEEK') {
+      return !week;
+    }
+
+    return !otherValue.some((v) => typeof v === 'string');
+  };
+
+  const isApply = filterBadgeValue && filterBadgeValue?.length >= 1;
+
   return (
     <DashboardCard
       addButton={
@@ -353,25 +506,47 @@ const ShippingMonitoringBook = () => {
             }
           : undefined
       }
+      otherButton={
+        <DownloadButtonShippingMonitoring
+          label="Download"
+          period={isApply ? period || undefined : undefined}
+          defaultValuesState={
+            isApply /* Check isAplly by filter badge length */
+              ? {
+                  period: period || 'DATE_RANGE',
+                  startDate: startDate || null,
+                  endDate: endDate || null,
+                  year: year ? `${year}` : null,
+                  month: month ? `${month}` : null,
+                  week: week ? `${week}` : null,
+                  bargeHeavyEquipmentId: bargeHeavyEquipmentId || null,
+                  factoryCategoryId: factoryCategoryId || null,
+                }
+              : undefined
+          }
+        />
+      }
       filterBadge={{
         resetButton: {
           onClick: () => {
             setBargingMonitoringState({
               page: 1,
-              filterBadgeValue: null,
+              period: null,
+              startDate: null,
+              endDate: null,
               year: null,
-              week: null,
               month: null,
+              week: null,
               factoryCategoryId: null,
               bargeHeavyEquipmentId: null,
+              filterBadgeValue: null,
             });
             refetchMonitoringBargingData({
               page: 1,
-              year: null,
-              week: null,
-              month: null,
               factoryCategoryId: null,
               bargeHeavyEquipmentId: null,
+              timeFilter: undefined,
+              timeFilterType: undefined,
             });
           },
         },
@@ -380,26 +555,33 @@ const ShippingMonitoringBook = () => {
       filter={{
         filterDateWithSelect: filter.filterDateWithSelect,
         filterButton: {
-          disabled:
-            bargeHeavyEquipmentId || factoryCategoryId || month || week || year
-              ? false
-              : true,
+          disabled: isDisabled(),
           onClick: () => {
             refetchMonitoringBargingData({
               page: 1,
-              year,
-              week,
-              month,
-              factoryCategoryId,
-              bargeHeavyEquipmentId,
+              ...defaultRefetchShippingMonitoring,
             });
             const badgeFilterValue = newNormalizedFilterBadge({
               filter: filter.filterDateWithSelect || [],
-              data: filterDataCommon,
+              data: filterDataCommon || [],
             });
+            const newStartDate = formatDate(startDate);
+            const newEndDate = formatDate(endDate);
+            const dateBadgeValue = [`${newStartDate} - ${newEndDate}`];
+
+            const rangePeriod =
+              period === 'DATE_RANGE'
+                ? [
+                    ...badgeFilterValue.slice(0, 1),
+                    ...dateBadgeValue,
+                    ...badgeFilterValue.slice(1),
+                  ]
+                : [];
+
             setBargingMonitoringState({
               page: 1,
-              filterBadgeValue: badgeFilterValue || null,
+              filterBadgeValue:
+                rangePeriod.length >= 1 ? rangePeriod : badgeFilterValue,
             });
           },
         },

@@ -5,6 +5,9 @@ import { sliceResetFns } from '@/utils/store/useControlPanel';
 type IStockpileMonitoringState = {
   page: number;
   search: string;
+  period: string | null;
+  startDate: Date | null;
+  endDate: Date | null;
   stockpileId: string | null;
   year: number | null;
   month: number | null;
@@ -27,6 +30,9 @@ const initialState: IStockpileMonitoringValue = {
   stockpileMonitoringState: {
     page: 1,
     search: '',
+    period: null,
+    startDate: null,
+    endDate: null,
     stockpileId: null,
     year: null,
     month: null,

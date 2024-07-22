@@ -44,13 +44,25 @@ export interface IDownloadHEProductionValues extends ICommonTimeFilter {
 export interface IDownloadWeatherProductionValues extends ICommonTimeFilter {
   shiftId: string | null;
 }
-
-export interface IDownloadOreProductionValues {
-  fromPitId: string | null;
+export interface IDownloadStockpileMonitoringValues extends ICommonTimeFilter {
+  stockpileId: string | null;
 }
+export interface IDownloadSampleHouseLabValues extends ICommonTimeFilter {
+  sampleTypeId: string | null;
+  shiftId: string | null;
+}
+export interface IDownloadShippingMonitoringValues extends ICommonTimeFilter {
+  bargeHeavyEquipmentId: string | null;
+  factoryCategoryId: string | null;
+}
+
 export interface IDownloadBargingProductionValues {
   stockpileId: string | null;
   domeId: string | null;
+}
+
+export interface IDownloadOreProductionValues {
+  fromPitId: string | null;
 }
 export interface IDownloadRitageCommonValue extends ICommonTimeFilter {
   shiftId: string | null;
@@ -80,6 +92,9 @@ type IDownloadTaskRequest = {
     stockpileId?: string | null;
     domeId?: string | null;
     materialId?: string | null;
+    sampleTypeId?: string | null;
+    bargeHeavyEquipmentId?: string | null;
+    factoryCategoryId?: string | null;
   };
 };
 
