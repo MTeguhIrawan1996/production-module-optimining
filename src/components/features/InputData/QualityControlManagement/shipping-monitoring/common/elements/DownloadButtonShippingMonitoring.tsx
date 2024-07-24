@@ -295,7 +295,7 @@ export default function DownloadButtonShippingMonitoring({
 
     await executeCreate({
       variables: {
-        entity: 'BARGING_MONITORING' /* FIX ME UPDATE BE */,
+        entity: 'MONITORING_PENGAPALAN',
         timeFilterType: data.period === 'DATE_RANGE' ? data.period : 'PERIOD',
         timeFilter: {
           startDate: startDate || undefined,
