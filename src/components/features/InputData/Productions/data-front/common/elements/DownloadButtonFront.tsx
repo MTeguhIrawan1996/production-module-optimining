@@ -34,6 +34,7 @@ import dayjs from '@/utils/helper/dayjs.config';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 import { useDownloadTaskStore } from '@/utils/store/useDownloadStore';
+import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 
 interface IDownloadButtonFrontProps
   extends Omit<
@@ -50,6 +51,11 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
   ...rest
 }) => {
   const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
+  const [filterDataCommon] = useFilterDataCommon(
+    (state) => [state.filterDataCommon],
+    shallow
+  );
+
   const { userAuthData } = useReadAuthUser({
     fetchPolicy: 'cache-first',
   });
@@ -81,6 +87,7 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
   const period = methods.watch('period');
   const year = methods.watch('year');
   const month = methods.watch('month');
+  const week = methods.watch('week');
   const isValid = methods.formState.isValid;
 
   const [executeCreate, { loading }] = useDownloadTask({
@@ -134,6 +141,24 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
       }
     },
   });
+
+  React.useEffect(() => {
+    const weekDataState: any = filterDataCommon
+      .find((v) => v.key === 'weekRhf')
+      ?.data.find((o) => o.id === week);
+
+    if (weekDataState && weekDataState.endDate) {
+      const dateCurrentWeek = dayjs(weekDataState?.endDate);
+      const currentMonthByWeek = dateCurrentWeek.month() + 1;
+
+      methods.setValue(
+        'month',
+        currentMonthByWeek ? `${currentMonthByWeek}` : null
+      );
+      methods.trigger(undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [week, filterDataCommon]);
 
   const fieldRhf = React.useMemo(() => {
     const values = objectToArrayValue(defaultValues);
@@ -218,6 +243,7 @@ const DownloadButtonFront: React.FC<IDownloadButtonFrontProps> = ({
       colSpan: period === 'WEEK' ? 12 : 6,
       name: 'week',
       label: 'week',
+      stateKey: 'weekRhf',
       disabled: !year,
       withErrorState: false,
       year: year ? Number(year) : null,

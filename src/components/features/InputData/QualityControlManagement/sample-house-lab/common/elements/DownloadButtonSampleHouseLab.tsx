@@ -35,6 +35,7 @@ import dayjs from '@/utils/helper/dayjs.config';
 import { errorBadRequestField } from '@/utils/helper/errorBadRequestField';
 import { objectToArrayValue } from '@/utils/helper/objectToArrayValue';
 import { useDownloadTaskStore } from '@/utils/store/useDownloadStore';
+import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 
 interface IDownloadButtonSampleHouseLabProps
   extends Omit<
@@ -55,6 +56,10 @@ export default function DownloadButtonSampleHouseLab({
 
   const [downloadPanel, setDownloadTaskStore] = useDownloadTaskStore(
     (state) => [state.downloadPanel, state.setDownloadTaskStore],
+    shallow
+  );
+  const [filterDataCommon] = useFilterDataCommon(
+    (state) => [state.filterDataCommon],
     shallow
   );
 
@@ -79,6 +84,7 @@ export default function DownloadButtonSampleHouseLab({
   const period = methods.watch('period');
   const year = methods.watch('year');
   const month = methods.watch('month');
+  const week = methods.watch('week');
   const isValid = methods.formState.isValid;
 
   const [executeCreate, { loading }] = useDownloadTask({
@@ -128,6 +134,24 @@ export default function DownloadButtonSampleHouseLab({
       }
     },
   });
+
+  React.useEffect(() => {
+    const weekDataState: any = filterDataCommon
+      .find((v) => v.key === 'weekRhf')
+      ?.data.find((o) => o.id === week);
+
+    if (weekDataState && weekDataState.endDate) {
+      const dateCurrentWeek = dayjs(weekDataState?.endDate);
+      const currentMonthByWeek = dateCurrentWeek.month() + 1;
+
+      methods.setValue(
+        'month',
+        currentMonthByWeek ? `${currentMonthByWeek}` : null
+      );
+      methods.trigger(undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [week, filterDataCommon]);
 
   const fieldRhf = React.useMemo(() => {
     const values = objectToArrayValue(defaultValues);
@@ -212,6 +236,7 @@ export default function DownloadButtonSampleHouseLab({
       colSpan: period === 'WEEK' ? 12 : 6,
       name: 'week',
       label: 'week',
+      stateKey: 'weekRhf',
       disabled: !year,
       withErrorState: false,
       year: year ? Number(year) : null,
