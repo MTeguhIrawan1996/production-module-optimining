@@ -1219,6 +1219,7 @@ export const globalSelectWeekRhf = ({
   clearable = true,
   withAsterisk = true,
   colSpan = 6,
+  stateKey = 'weekRhf',
   ...rest
 }: Partial<ISelectWeekRhfProps>) => {
   const field: ControllerProps = {
@@ -1229,6 +1230,7 @@ export const globalSelectWeekRhf = ({
     clearable,
     withAsterisk,
     colSpan,
+    stateKey,
     ...rest,
   };
   return field;

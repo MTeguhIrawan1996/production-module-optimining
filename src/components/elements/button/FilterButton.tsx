@@ -117,7 +117,7 @@ const FilterButton = ({
           </Grid>
           <Group spacing="xs" position="right">
             <PrimaryButton
-              label="Batlkan"
+              label="Batalkan"
               variant="outline"
               onClick={() => {
                 setOpened((prev) => !prev);

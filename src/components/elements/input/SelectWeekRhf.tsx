@@ -3,12 +3,14 @@ import { Text } from '@mantine/core';
 import * as React from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { shallow } from 'zustand/shallow';
 
 import FieldErrorMessage from '@/components/elements/global/FieldErrorMessage';
 
 import { useReadAllWeek2s } from '@/services/graphql/query/global-select/useReadAllWeekSelect';
 import { formatDate } from '@/utils/helper/dateFormat';
 import { useFilterItems } from '@/utils/hooks/useCombineFIlterItems';
+import { useFilterDataCommon } from '@/utils/store/useFilterDataCommon';
 
 import { CommonProps } from '@/types/global';
 
@@ -19,6 +21,7 @@ export type ISelectWeekRhfProps = {
   month?: number | null;
   skipQuery?: boolean;
   withErrorState?: boolean;
+  stateKey?: string;
 } & Omit<SelectProps, 'data' | 'onSearchChange' | 'searchValue'> &
   CommonProps;
 
@@ -37,33 +40,40 @@ const SelectWeekRhf: React.FC<ISelectWeekRhfProps> = ({
   name,
   skipQuery = false,
   withErrorState = true,
+  stateKey,
   ...rest
 }) => {
   const { t } = useTranslation('allComponents');
   const { field, fieldState } = useController({ name });
+  const [filterDataCommon, setFilterDataCommon] = useFilterDataCommon(
+    (state) => [state.filterDataCommon, state.setFilterDataCommon],
+    shallow
+  );
 
-  const { week2sData } = useReadAllWeek2s({
+  useReadAllWeek2s({
     variables: {
       year,
       month,
     },
+    onCompleted: (data) => {
+      const yearsItem = data.week2s.map((val) => {
+        return {
+          id: `${val.week}`,
+          name: t('commonTypography.nthWeek', {
+            n: val.week, // week is started by 1 by default
+            ns: 'default',
+          }),
+          startDate: val.detail.startDate,
+          endDate: val.detail.endDate,
+        };
+      });
+      setFilterDataCommon({ key: stateKey || '', data: yearsItem });
+    },
     skip: skipQuery,
   });
 
-  const weeksItem = week2sData?.map((val) => {
-    return {
-      id: `${val.week}`,
-      name: t('commonTypography.nthWeek', {
-        n: val.week, // week is started by 1 by default
-        ns: 'default',
-      }),
-      startDate: val.detail.startDate,
-      endDate: val.detail.endDate,
-    };
-  });
-
   const { uncombinedItem } = useFilterItems({
-    data: weeksItem ?? [],
+    data: filterDataCommon.find((v) => v.key === stateKey)?.data ?? [],
     withRest: true,
   });
 
